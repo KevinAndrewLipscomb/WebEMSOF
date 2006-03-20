@@ -171,7 +171,15 @@ end;
 procedure TWebForm_profile.Button_submit_Click(sender: System.Object; e: System.EventArgs);
 var
   BdpCommand_update_profile: borland.data.provider.BdpCommand;
+  //IpHostEntry: System.Net.IpHostEntry;
 begin
+  //
+  // See if the domain part of the given email address actually resolves.
+  //
+  //IpHostEntry := Dns.Resolve(TextBox_contact_person_email_address.Text);
+  //
+  // Commit the displayed data to the database.
+  //
   BdpCommand_update_profile := borland.data.provider.bdpcommand.Create
     (
     'UPDATE response_agency '
