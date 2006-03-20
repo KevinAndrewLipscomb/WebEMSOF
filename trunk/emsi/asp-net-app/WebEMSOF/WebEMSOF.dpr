@@ -8,7 +8,6 @@ library WebEMSOF;
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.XML.dll'}
 {%AspMarkupContainer 'Global.asax'}
 {%AspMarkupContainer 'login.aspx'}
-{$R 'login.TWebForm_login.resources' 'login.resx'}
 {%DelphiDotNetAssemblyCompiler 'c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Provider.dll'}
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll'}
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Design.dll'}
@@ -18,8 +17,6 @@ library WebEMSOF;
 {%AspMarkupContainer 'account_overview.aspx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%AspMarkupContainer 'profile.aspx'}
-{$R 'account_overview.TWebForm_account_overview.resources' 'account_overview.resx'}
-{$R 'profile.TWebForm_profile.resources' 'profile.resx'}
 
 uses
   System.Reflection,
