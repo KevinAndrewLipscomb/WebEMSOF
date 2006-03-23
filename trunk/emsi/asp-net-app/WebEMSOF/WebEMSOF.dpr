@@ -17,6 +17,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'account_overview.aspx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%AspMarkupContainer 'profile.aspx'}
+{$R 'new_password.TWebForm_new_password.resources' 'new_password.resx'}
 
 uses
   System.Reflection,

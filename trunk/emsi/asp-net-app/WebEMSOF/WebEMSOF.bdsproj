@@ -208,6 +208,7 @@
       <File FileName="account_overview.aspx" ContainerId="AspMarkupContainer" ModuleName="account_overview"/>
       <File FileName="ModelSupport_WebEMSOF\default.txaPackage" ContainerId="TogetherDiagram" ModuleName="default"/>
       <File FileName="profile.aspx" ContainerId="AspMarkupContainer" ModuleName="profile"/>
+      <File FileName="new_password.resx" ContainerId="ResXCompiler" ModuleName="new_password" Parent="new_password.pas"/>
       <File FileName="" ContainerId="" ModuleName="System.Reflection"/>
       <File FileName="" ContainerId="" ModuleName="System.Runtime.CompilerServices"/>
       <File FileName="Global.pas" ContainerId="PascalCompiler" ModuleName="Global" Parent="Global.asax"/>
