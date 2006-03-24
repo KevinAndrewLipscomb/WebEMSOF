@@ -14,7 +14,7 @@
       <p>
         <ASP:Label id="Label_account_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
 <p></p>
-      <p>A temporary password has been sent to your service's WebEMSOF primary email address.&nbsp; Please log in again after you receive it.&nbsp; You will then have to pick a permanent password that you are likely to remember.</p>
+      <p>A temporary password has been sent to your service's WebEMSOF primary email address.&nbsp; Please log in again after you receive it.&nbsp; You will receive further instructions at that time.</p>
       <p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder></p>

@@ -18,6 +18,8 @@ library WebEMSOF;
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%AspMarkupContainer 'profile.aspx'}
 {$R 'new_password.TWebForm_new_password.resources' 'new_password.resx'}
+{$R 'account_overview.TWebForm_account_overview.resources' 'account_overview.resx'}
+{$R 'profile.TWebForm_profile.resources' 'profile.resx'}
 
 uses
   System.Reflection,
@@ -27,7 +29,8 @@ uses
   AppCommon in 'AppCommon.pas',
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
   account_overview in 'account_overview.pas' {account_overview.TWebForm_account_overview: System.Web.UI.Page},
-  profile in 'profile.pas' {profile.TWebForm_profile: System.Web.UI.Page};
+  profile in 'profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
+  Vault in 'Vault.pas';
 
 //
 // General Information about an assembly is controlled through the following

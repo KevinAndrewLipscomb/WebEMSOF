@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon,
-  Borland.Data.Provider, system.web.mail;
+  Borland.Data.Provider, system.web.mail, Vault;
 
 type
   TWebForm_new_password = class(System.Web.UI.Page)
@@ -22,7 +22,6 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_account_name: System.Web.UI.WebControls.Label;
-    BdpConnection1: Borland.Data.Provider.BdpConnection;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -39,33 +38,35 @@ implementation
 /// </summary>
 procedure TWebForm_new_password.InitializeComponent;
 begin
-  Self.BdpConnection1 := Borland.Data.Provider.BdpConnection.Create;
-  // 
-  // BdpConnection1
-  // 
-  Self.BdpConnection1.ConnectionOptions := 'transaction isolation=ReadCommit' +
-  'ted';
-  Self.BdpConnection1.ConnectionString := 'assembly=CoreLab.Bdp.MySql, Versi' +
-  'on=2.70.1.2500, Culture=neutral, PublicKeyToken=09af7300eec23701;vendorcl' +
-  'ient=libmysql.dll;grow on demand=True;database=kalipso;username=kalipso;m' +
-  'ax pool size=100;password=egalmess;provider=MySQL (Core Lab);hostname=db4' +
-  'free.org';
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
 procedure TWebForm_new_password.Page_Load(sender: System.Object; e: System.EventArgs);
+const
+  NEW_LINE: string = #10;
 var
+  Object_affiliate_num: system.object;
+  BdpCommand_get_affiliate_num: borland.data.provider.BdpCommand;
   BdPCommand_temporarify_password: borland.data.provider.bdpcommand;
   BdpCommand_get_email_address: borland.data.provider.BdpCommand;
-  MailMessage_new_password: system.web.mail.MailMessage;
   temporary_password: string[8];
 begin
   Title.InnerText := 'WebEMSOF - new_password';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
-    Label_account_name.Text := session.Item['account'].ToString;
+    AppCommon.BdpConnection.Open;
+    Label_account_name.Text := session.Item['account_descriptor'].ToString;
+    //
+    // Prepare a BdpCommand to get the appropriate affiliate_num.
+    //
+    BdpCommand_get_affiliate_num := borland.data.provider.bdpcommand.Create
+      (
+      'select affiliate_num from emsof_sponsorship where id = "' + session.Item['emsof_sponsorship_id'].ToString + '"',
+      AppCommon.BdpConnection
+      );
+    Object_affiliate_num := BdpCommand_get_affiliate_num.ExecuteScalar;
     //
     // Build a suitably-random password string.
     //
@@ -78,8 +79,8 @@ begin
       'update response_agency '
       + 'set encoded_password=sha("' + temporary_password + '"),'
       +   'be_stale_password=TRUE '
-      + 'where id="' + session.Item['id'].ToString + '"',
-      BdpConnection1
+      + 'where affiliate_num="' + Object_affiliate_num.ToString + '"',
+      AppCommon.BdpConnection
       );
     BdpCommand_temporarify_password.ExecuteNonQuery;
     //
@@ -87,20 +88,26 @@ begin
     //
     BdpCommand_get_email_address := borland.data.provider.bdpcommand.Create
       (
-      'select webemsof_primary_email_address from response_agency where id ="' + session.Item['id'].ToString + '"',
-      BdpConnection1
+      'select webemsof_primary_email_address from response_agency where affiliate_num ="' + Object_affiliate_num.ToString + '"',
+      AppCommon.BdpConnection
       );
-    MailMessage_new_password := system.web.mail.mailmessage.Create;
-    MailMessage_new_password.&To := BdpCommand_get_email_address.ExecuteScalar.ToString;
-    MailMessage_new_password.Subject := 'WebEMSOF temp password';
-    MailMessage_new_password.Body :=
-      'Someone (possibly you) requested a new WebEMSOF password for the ' + session.Item['account'].ToString + ' account.  Please '
-      + 'log into WebEMSOF using the following credentials.  You will then have to pick a permanent password that you are likely '
-      + 'to remember.'
-      + '   Account:  ' + session.Item['account'].ToString
-      + '   Password: ' + temporary_password;
-    SmtpMail.Send(MailMessage_new_password);
+    smtpmail.SmtpServer := 'mail.messagingengine.com';
+    smtpmail.Send
+      (
+      'WebEMSOF',
+      BdpCommand_get_email_address.ExecuteScalar.ToString,
+      'WebEMSOF temp password',
+      'Someone (possibly you) requested a new WebEMSOF password for the ' + session.Item['account_descriptor'].ToString
+      + ' account.  Please log into WebEMSOF using the following credentials.  You will receive further instructions at that time.'
+      + NEW_LINE
+      + NEW_LINE
+      + '   Account:  ' + session.Item['account_descriptor'].ToString + NEW_LINE
+      + '   Password: ' + temporary_password + NEW_LINE
+      + NEW_LINE
+      + '-- WebEMSOF'
+      );
     //
+    AppCommon.BdpConnection.Close;
     end;
 end;
 

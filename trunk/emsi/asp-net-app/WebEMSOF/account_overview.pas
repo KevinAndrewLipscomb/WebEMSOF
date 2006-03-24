@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   System.Data.Common, Borland.Data.Provider, System.Globalization, 
-  Borland.Data.Common;
+  Borland.Data.Common, Vault;
 
 type
   TWebForm_account_overview = class(System.Web.UI.Page)
@@ -32,7 +32,6 @@ type
     Label_last_fy_request_value: System.Web.UI.WebControls.Label;
     Label_this_fy_request_value: System.Web.UI.WebControls.Label;
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    BdpConnection1: Borland.Data.Provider.BdpConnection;
     LinkButton_profile_action: System.Web.UI.WebControls.LinkButton;
     Label_this_fy_row_leader: System.Web.UI.WebControls.Label;
     Label_last_fy_row_leader: System.Web.UI.WebControls.Label;
@@ -52,18 +51,7 @@ implementation
 /// </summary>
 procedure TWebForm_account_overview.InitializeComponent;
 begin
-  Self.BdpConnection1 := Borland.Data.Provider.BdpConnection.Create;
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
-  // 
-  // BdpConnection1
-  // 
-  Self.BdpConnection1.ConnectionOptions := 'transaction isolation=ReadCommit' +
-  'ted';
-  Self.BdpConnection1.ConnectionString := 'assembly=CoreLab.Bdp.MySql, Versi' +
-  'on=2.70.1.2500, Culture=neutral, PublicKeyToken=09af7300eec23701;vendorcl' +
-  'ient=libmysql.dll;grow on demand=True;database=kalipso;username=kalipso;m' +
-  'ax pool size=100;password=egalmess;provider=MySQL (Core Lab);min pool siz' +
-  'e=0;hostname=db4free.org';
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -93,9 +81,9 @@ begin
       (
       'select be_profile_valid from response_agency JOIN emsof_sponsorship using (affiliate_num) '
       + 'where emsof_sponsorship.id = "' + session.Item['emsof_sponsorship_id'].ToString + '"'
-      ,bdpConnection1
+      ,AppCommon.BdpConnection
       );
-    BdpConnection1.Open;
+    AppCommon.BdpConnection.Open;
     if bdpCommand_get_profile_status.ExecuteScalar.ToString = '0' then
       begin
       Label_profile_status.Text := 'Not saved.';
@@ -111,7 +99,7 @@ begin
       bdpCommand_get_max_fiscal_year_id := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
-        bdpConnection1
+        AppCommon.BdpConnection
         );
       max_fiscal_year_id_obj := bdpCommand_get_max_fiscal_year_id.ExecuteScalar;
       //
@@ -127,7 +115,7 @@ begin
         +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_request.id) '
         +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['emsof_sponsorship_id'].ToString + '" '
         +    'and emsof_request.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
-        bdpConnection1
+        AppCommon.BdpConnection
         );
       bdpDataReader_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
       if bdpDataReader_last_fy_request_attributes.Read then
@@ -154,7 +142,7 @@ begin
         +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_request.id) '
         +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['emsof_sponsorship_id'].ToString + '" '
         +    'and emsof_request.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
-        bdpConnection1
+        AppCommon.BdpConnection
         );
       bdpDataReader_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
       if bdpDataReader_this_fy_request_attributes.Read then
@@ -170,7 +158,7 @@ begin
         LinkButton_this_fy_request_action.Text := 'Start';
         end;
       end;
-    bdpConnection1.Close;
+    AppCommon.BdpConnection.Close;
     end;
 end;
 
