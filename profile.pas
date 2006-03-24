@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   Borland.Data.Common, Borland.Data.Provider, System.Globalization, 
-  System.Data.Common;
+  System.Data.Common, Vault;
 
 type
   TWebForm_profile = class(System.Web.UI.Page)
@@ -31,7 +31,6 @@ type
     CheckBox_bls_amb: System.Web.UI.WebControls.CheckBox;
     CheckBox_qrs: System.Web.UI.WebControls.CheckBox;
     TextBox_address_line_1: System.Web.UI.WebControls.TextBox;
-    BdpConnection1: Borland.Data.Provider.BdpConnection;
     Label_affiliate_num: System.Web.UI.WebControls.Label;
     TextBox_service_name: System.Web.UI.WebControls.TextBox;
     TextBox_address_line_2: System.Web.UI.WebControls.TextBox;
@@ -70,18 +69,7 @@ implementation
 /// </summary>
 procedure TWebForm_profile.InitializeComponent;
 begin
-  Self.BdpConnection1 := Borland.Data.Provider.BdpConnection.Create;
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
-  // 
-  // BdpConnection1
-  // 
-  Self.BdpConnection1.ConnectionOptions := 'transaction isolation=ReadCommit' +
-  'ted';
-  Self.BdpConnection1.ConnectionString := 'assembly=CoreLab.Bdp.MySql, Versi' +
-  'on=2.70.1.2500, Culture=neutral, PublicKeyToken=09af7300eec23701;vendorcl' +
-  'ient=libmysql.dll;grow on demand=True;database=kalipso;username=kalipso;m' +
-  'ax pool size=100;password=egalmess;provider=MySQL (Core Lab);min pool siz' +
-  'e=0;hostname=db4free.org';
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -97,7 +85,7 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
-    BdpConnection1.Open;
+    AppCommon.BdpConnection.Open;
     //
     // Set Label_service_name
     //
@@ -108,7 +96,7 @@ begin
     BdpCommand_get_affiliate_num := borland.data.provider.BdpCommand.Create
       (
       'SELECT affiliate_num FROM emsof_sponsorship WHERE id = ' + session.Item['emsof_sponsorship_id'].ToString,
-      bdpConnection1
+      AppCommon.BdpConnection
       );
     affiliate_num_obj := BdpCommand_get_affiliate_num.ExecuteScalar;
     Label_affiliate_num.Text := affiliate_num_obj.ToString;
@@ -134,7 +122,7 @@ begin
       + 'contact_person_phone_num '
       + 'FROM response_agency '
       + 'WHERE affiliate_num = "' + affiliate_num_obj.ToString + '"',
-      BdpConnection1
+      AppCommon.BdpConnection
       );
     BdpDataReader_profile := BdpCommand_get_profile.ExecuteReader;
     BdpDataReader_profile.Read;
@@ -155,7 +143,7 @@ begin
     TextBox_contact_person_name.Text := BdpDataReader_profile.GetString(13);
     TextBox_contact_person_phone_num.Text := BdpDataReader_profile.GetString(14);
     //
-    BdPConnection1.Close;
+    AppCommon.BdpConnection.Close;
     end;
 end;
 
@@ -200,7 +188,7 @@ begin
     +   'contact_person_phone_num = "' + TextBox_contact_person_phone_num.Text + '",'
     +   'be_profile_valid = 1 '
     + 'WHERE affiliate_num = "' + Label_affiliate_num.Text + '"',
-    BdpConnection1
+    AppCommon.BdpConnection
     );
   BdpCommand_update_profile.Connection.Open;
   BdpCommand_update_profile.ExecuteNonQuery;

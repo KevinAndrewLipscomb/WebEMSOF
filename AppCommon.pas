@@ -3,13 +3,18 @@ unit AppCommon;
 interface
 
   uses
-    system.Web.UI.WebControls;
+    borland.data.provider,
+    system.Web.UI.WebControls,
+    vault;
 
-   procedure PopulatePlaceHolders
-     (
-     var precontent: System.Web.Ui.WebControls.PlaceHolder;
-     var postcontent: System.Web.Ui.WebControls.PlaceHolder
-     );
+  var
+    BdpConnection: borland.data.provider.bdpconnection;
+
+  procedure PopulatePlaceHolders
+    (
+    var precontent: System.Web.Ui.WebControls.PlaceHolder;
+    var postcontent: System.Web.Ui.WebControls.PlaceHolder
+    );
 
 implementation
 
@@ -71,4 +76,12 @@ implementation
   PopulatePostcontent(postcontent);
   end;
 
+begin
+BdpConnection := borland.data.provider.bdpconnection.Create;
+BdpConnection.ConnectionOptions := 'transaction isolation=ReadCommitted';
+BdpConnection.ConnectionString := 'assembly=CoreLab.Bdp.MySql, Versi' +
+  'on=2.70.1.2500, Culture=neutral, PublicKeyToken=09af7300eec23701;vendorcl' +
+  'ient=libmysql.dll;grow on demand=True;database=kalipso;username=kalipso;m' +
+  'ax pool size=100;password=' + Vault.Password + ';provider=MySQL (Core Lab);min pool siz' +
+  'e=0;hostname=db4free.org';
 end.

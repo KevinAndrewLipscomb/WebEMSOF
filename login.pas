@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   AppCommon, Borland.Data.Provider, System.Globalization, 
-  System.Data.SqlClient, System.Data.Common;
+  System.Data.SqlClient, System.Data.Common, Vault;
 
 type
   TWebForm_login = class(System.Web.UI.Page)
@@ -31,7 +31,6 @@ type
     DropDownList_account_descriptor: System.Web.UI.WebControls.DropDownList;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    bdpConnection1: Borland.Data.Provider.BdpConnection;
     Button_new_password: System.Web.UI.WebControls.Button;
     RangeValidator_account: System.Web.UI.WebControls.RangeValidator;
     procedure OnInit(e: EventArgs); override;
@@ -50,21 +49,9 @@ implementation
 /// </summary>
 procedure TWebForm_login.InitializeComponent;
 begin
-  Self.bdpConnection1 := Borland.Data.Provider.BdpConnection.Create;
   Include(Self.DropDownList_account_descriptor.SelectedIndexChanged, Self.DropDownList_account_descriptor_SelectedIndexChanged);
   Include(Self.TextBox_password.TextChanged, Self.Button_log_in_Click);
   Include(Self.Button_new_password.Click, Self.Button_new_password_Click);
-  // 
-  // bdpConnection1
-  // 
-  Self.bdpConnection1.ConnectionOptions := 'transaction isolation=ReadCommit' +
-  'ted';
-  Self.bdpConnection1.ConnectionString := 'assembly=CoreLab.Bdp.MySql, Versi' +
-  'on=2.70.1.2500, Culture=neutral, PublicKeyToken=09af7300eec23701;vendorcl' +
-  'ient=libmysql.dll;grow on demand=True;database=kalipso;username=kalipso;m' +
-  'ax pool size=100;password=egalmess;provider=MySQL (Core Lab);min pool siz' +
-  'e=0;hostname=db4free.org';
-  //
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -78,6 +65,7 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    AppCommon.BdpConnection.Open;
     invalid_credentials_warning.Visible := FALSE;
     //
     // Load DropDownList_account
@@ -91,9 +79,8 @@ begin
       +   'JOIN county_code_name_map ON ( emsof_sponsorship.county_code = county_code_name_map.code ) '
       +     'JOIN response_agency ON (emsof_sponsorship.affiliate_num = response_agency.affiliate_num) '
       + 'ORDER BY account',
-      bdpConnection1
+      AppCommon.BdpConnection
       );
-    bdpCommand_get_account_descriptors.Connection.Open;
     BdpDataReader_account_descriptors := bdpCommand_get_account_descriptors.ExecuteReader;
     while bdpDataReader_account_descriptors.Read do
       DropDownList_account_descriptor.Items.Add
@@ -104,7 +91,7 @@ begin
           BdpDataReader_account_descriptors['id'].ToString
           )
         );
-    bdpCommand_get_account_descriptors.Connection.Close;
+    AppCommon.BdpConnection.Close;
     end;
 end;
 
@@ -140,11 +127,11 @@ begin
     'SELECT be_stale_password FROM emsof_sponsorship JOIN response_agency using (affiliate_num) '
     +  'where emsof_sponsorship.id="' + DropDownList_account_descriptor.SelectedValue + '" '
     +     'and encoded_password=sha("' + TextBox_password.Text + '")'
-    ,bdpConnection1
+    ,AppCommon.BdpConnection
     );
-  bdpCommand_match_account.Connection.Open;
+  AppCommon.BdpConnection.Open;
   be_stale_password_obj := bdpCommand_match_account.ExecuteScalar;
-  bdpCommand_match_account.Connection.Close;
+  AppCommon.BdpConnection.Close;
   if be_stale_password_obj <> nil then
     if be_stale_password_obj.ToString = '0' then
       server.Transfer('account_overview.aspx')
