@@ -70,7 +70,7 @@ begin
     //
     // Build a suitably-random password string.
     //
-    temporary_password := System.Guid.NewGuid.ToString.Substring(1,8);
+    temporary_password := System.Guid.NewGuid.ToString.Substring(0,8);
     //
     // Make the password string the service's new temporary password, and set the stale flag to force an immediate password change.
     //
@@ -91,18 +91,22 @@ begin
       'select webemsof_primary_email_address from response_agency where affiliate_num ="' + Object_affiliate_num.ToString + '"',
       AppCommon.BdpConnection
       );
-    smtpmail.SmtpServer := 'mail.messagingengine.com';
+    smtpmail.SmtpServer := 'smtp.east.cox.net';
     smtpmail.Send
       (
-      'WebEMSOF',
+      appcommon.SENDER_EMAIL_ADDRESS,
       BdpCommand_get_email_address.ExecuteScalar.ToString,
       'WebEMSOF temp password',
-      'Someone (possibly you) requested a new WebEMSOF password for the ' + session.Item['account_descriptor'].ToString
-      + ' account.  Please log into WebEMSOF using the following credentials.  You will receive further instructions at that time.'
-      + NEW_LINE
+      'Someone (possibly you) requested a new password for the ' + session.Item['account_descriptor'].ToString + ' account on the '
+      + 'WebEMSOF system.  Please log into WebEMSOF using the following credentials.  You will receive further instructions at '
+      + 'that time.' + NEW_LINE
       + NEW_LINE
       + '   Account:  ' + session.Item['account_descriptor'].ToString + NEW_LINE
       + '   Password: ' + temporary_password + NEW_LINE
+      + NEW_LINE
+      + 'The WebEMSOF login page is located at:' + NEW_LINE
+      + NEW_LINE
+      + '   http://' + appcommon.HOST_DOMAIN_NAME + '/WebEMSOF/login.aspx' + NEW_LINE
       + NEW_LINE
       + '-- WebEMSOF'
       );

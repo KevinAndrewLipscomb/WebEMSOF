@@ -17,9 +17,21 @@ library WebEMSOF;
 {%AspMarkupContainer 'account_overview.aspx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%AspMarkupContainer 'profile.aspx'}
-{$R 'new_password.TWebForm_new_password.resources' 'new_password.resx'}
-{$R 'account_overview.TWebForm_account_overview.resources' 'account_overview.resx'}
-{$R 'profile.TWebForm_profile.resources' 'profile.resx'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\login\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\Global\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\profile\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\new_password\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\account_overview\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\login\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\Global\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\account_overview\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\profile\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\new_password\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txvpck'}
 
 uses
   System.Reflection,
