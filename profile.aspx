@@ -98,13 +98,6 @@
                         <ASP:TextBox id="TextBox_contact_person_phone_num" runat="server" maxlength="10"></ASP:TextBox></td>
                       <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_contact_person_phone_num" runat="server" errormessage="Contact person's phone number is required." controltovalidate="TextBox_contact_person_phone_num" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_contact_person_phone_num" runat="server" errormessage="Invalid phone number." controltovalidate="TextBox_contact_person_phone_num" validationexpression="\d{10}" font-bold="True">!ERR!</ASP:RegularExpressionValidator></td>
       </tr>
-      <tr>
-		<td nowrap="true">
-                        <p align="right">Contact person's email address:</p></td>
-        <td>
-                        <ASP:TextBox id="TextBox_contact_person_email_address" runat="server" maxlength="255"></ASP:TextBox></td>
-                      <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_contact_person_email_address" runat="server" errormessage="Contact person's email address is required." controltovalidate="TextBox_contact_person_email_address" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_contact_person_email_address" runat="server" errormessage="Invalid contact person's email address." validationexpression="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" controltovalidate="TextBox_contact_person_email_address" font-bold="True">!ERR!</ASP:RegularExpressionValidator></td>
-      </tr>
                     <tr>
                       <td></td>
                       <td>

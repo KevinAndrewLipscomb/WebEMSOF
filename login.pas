@@ -70,15 +70,16 @@ begin
     //
     // Load DropDownList_account
     //
-    DropDownList_account_descriptor.Items.Add(listitem.Create('-- Select --',''));
+    DropDownList_account_descriptor.Items.Add(listitem.Create('-- Select --','0'));
     bdpCommand_get_account_descriptors := Borland.Data.Provider.BdpCommand.Create
       (
-      'SELECT emsof_sponsorship.id,'
-      + 'concat(response_agency.name," (", county_code_name_map.name,")") AS account '
-      + 'FROM emsof_sponsorship '
-      +   'JOIN county_code_name_map ON ( emsof_sponsorship.county_code = county_code_name_map.code ) '
-      +     'JOIN response_agency ON (emsof_sponsorship.affiliate_num = response_agency.affiliate_num) '
-      + 'ORDER BY account',
+      'SELECT emsof_sponsorship_webemsof_account.emsof_sponsorship_id,'
+      + 'concat(response_agency_profile.name," (", county_code_name_map.name,")") AS account_descriptor '
+      + 'FROM emsof_sponsorship_webemsof_account '
+      +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_sponsorship_webemsof_account.emsof_sponsorship_id) '
+      +     'JOIN county_code_name_map ON (county_code_name_map.code = emsof_sponsorship.county_code) '
+      +       'JOIN response_agency_profile using (affiliate_num) '
+      + 'ORDER BY account_descriptor',
       AppCommon.BdpConnection
       );
     BdpDataReader_account_descriptors := bdpCommand_get_account_descriptors.ExecuteReader;
@@ -87,8 +88,8 @@ begin
         (
         listitem.Create
           (
-          BdpDataReader_account_descriptors['account'].ToString,
-          BdpDataReader_account_descriptors['id'].ToString
+          BdpDataReader_account_descriptors['account_descriptor'].ToString,
+          BdpDataReader_account_descriptors['emsof_sponsorship_id'].ToString
           )
         );
     AppCommon.BdpConnection.Close;
@@ -107,7 +108,7 @@ end;
 procedure TWebForm_login.DropDownList_account_descriptor_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Add('emsof_sponsorship_id',DropDownList_account_descriptor.SelectedValue);
+  session.Add('account_id',DropDownList_account_descriptor.SelectedValue);
   session.Add('account_descriptor',DropDownList_account_descriptor.SelectedItem.Text);
 end;
 
@@ -124,8 +125,8 @@ var
 begin
   bdpCommand_match_account := Borland.Data.Provider.BdpCommand.Create
     (
-    'SELECT be_stale_password FROM emsof_sponsorship JOIN response_agency using (affiliate_num) '
-    +  'where emsof_sponsorship.id="' + DropDownList_account_descriptor.SelectedValue + '" '
+    'SELECT be_stale_password FROM emsof_sponsorship_webemsof_account '
+    +  'where emsof_sponsorship_webemsof_account.emsof_sponsorship_id="' + DropDownList_account_descriptor.SelectedValue + '" '
     +     'and encoded_password=sha("' + TextBox_password.Text + '")'
     ,AppCommon.BdpConnection
     );

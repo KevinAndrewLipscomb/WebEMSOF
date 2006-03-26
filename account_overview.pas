@@ -16,6 +16,9 @@ type
   strict private
     procedure InitializeComponent;
     procedure LinkButton_profile_action_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_account_attributes_Click(sender: System.Object; 
+      e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -31,10 +34,11 @@ type
     Label_this_fy_request_status: System.Web.UI.WebControls.Label;
     Label_last_fy_request_value: System.Web.UI.WebControls.Label;
     Label_this_fy_request_value: System.Web.UI.WebControls.Label;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_profile_action: System.Web.UI.WebControls.LinkButton;
     Label_this_fy_row_leader: System.Web.UI.WebControls.Label;
     Label_last_fy_row_leader: System.Web.UI.WebControls.Label;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -52,6 +56,8 @@ implementation
 procedure TWebForm_account_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_account_attributes_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -79,8 +85,8 @@ begin
     //
     bdpCommand_get_profile_status := borland.data.provider.bdpCommand.Create
       (
-      'select be_profile_valid from response_agency JOIN emsof_sponsorship using (affiliate_num) '
-      + 'where emsof_sponsorship.id = "' + session.Item['emsof_sponsorship_id'].ToString + '"'
+      'select be_valid_profile from response_agency_profile JOIN emsof_sponsorship using (affiliate_num) '
+      + 'where emsof_sponsorship.id = "' + session.Item['account_id'].ToString + '"'
       ,AppCommon.BdpConnection
       );
     AppCommon.BdpConnection.Open;
@@ -113,7 +119,7 @@ begin
         + 'FROM request_status_code_description_map '
         +   'JOIN emsof_request on (emsof_request.status_code = request_status_code_description_map.code)'
         +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_request.id) '
-        +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['emsof_sponsorship_id'].ToString + '" '
+        +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['account_id'].ToString + '" '
         +    'and emsof_request.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
         AppCommon.BdpConnection
         );
@@ -140,7 +146,7 @@ begin
         + 'FROM request_status_code_description_map '
         +   'JOIN emsof_request on (emsof_request.status_code = request_status_code_description_map.code)'
         +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_request.id) '
-        +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['emsof_sponsorship_id'].ToString + '" '
+        +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['account_id'].ToString + '" '
         +    'and emsof_request.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
         AppCommon.BdpConnection
         );
@@ -169,6 +175,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_account_overview.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_account_overview.LinkButton_change_account_attributes_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_account_overview.LinkButton_profile_action_Click(sender: System.Object;

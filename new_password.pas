@@ -22,6 +22,7 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_account_name: System.Web.UI.WebControls.Label;
+    Label_email_address: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -44,12 +45,13 @@ end;
 
 procedure TWebForm_new_password.Page_Load(sender: System.Object; e: System.EventArgs);
 const
-  NEW_LINE: string = #10;
+  NEW_LINE = #10;
+type
+  byte_array_type = array of byte;
 var
-  Object_affiliate_num: system.object;
-  BdpCommand_get_affiliate_num: borland.data.provider.BdpCommand;
   BdPCommand_temporarify_password: borland.data.provider.bdpcommand;
   BdpCommand_get_email_address: borland.data.provider.BdpCommand;
+  Object_email_address: system.Object;
   temporary_password: string[8];
 begin
   Title.InnerText := 'WebEMSOF - new_password';
@@ -59,15 +61,6 @@ begin
     AppCommon.BdpConnection.Open;
     Label_account_name.Text := session.Item['account_descriptor'].ToString;
     //
-    // Prepare a BdpCommand to get the appropriate affiliate_num.
-    //
-    BdpCommand_get_affiliate_num := borland.data.provider.bdpcommand.Create
-      (
-      'select affiliate_num from emsof_sponsorship where id = "' + session.Item['emsof_sponsorship_id'].ToString + '"',
-      AppCommon.BdpConnection
-      );
-    Object_affiliate_num := BdpCommand_get_affiliate_num.ExecuteScalar;
-    //
     // Build a suitably-random password string.
     //
     temporary_password := System.Guid.NewGuid.ToString.Substring(0,8);
@@ -76,10 +69,10 @@ begin
     //
     BdpCommand_temporarify_password := borland.data.provider.bdpcommand.Create
       (
-      'update response_agency '
+      'update emsof_sponsorship_webemsof_account '
       + 'set encoded_password=sha("' + temporary_password + '"),'
       +   'be_stale_password=TRUE '
-      + 'where affiliate_num="' + Object_affiliate_num.ToString + '"',
+      + 'where emsof_sponsorship_id=' + session.Item['account_id'].ToString,
       AppCommon.BdpConnection
       );
     BdpCommand_temporarify_password.ExecuteNonQuery;
@@ -88,18 +81,20 @@ begin
     //
     BdpCommand_get_email_address := borland.data.provider.bdpcommand.Create
       (
-      'select webemsof_primary_email_address from response_agency where affiliate_num ="' + Object_affiliate_num.ToString + '"',
+      'select password_reset_email_address from emsof_sponsorship_webemsof_account '
+      + 'where emsof_sponsorship_id ="' + session.Item['account_id'].ToString + '"',
       AppCommon.BdpConnection
       );
+    Object_email_address := BdpCommand_get_email_address.ExecuteScalar;
     smtpmail.SmtpServer := 'smtp.east.cox.net';
     smtpmail.Send
       (
       appcommon.SENDER_EMAIL_ADDRESS,
-      BdpCommand_get_email_address.ExecuteScalar.ToString,
+      Object_email_address.ToString,
       'WebEMSOF temp password',
-      'Someone (possibly you) requested a new password for the ' + session.Item['account_descriptor'].ToString + ' account on the '
-      + 'WebEMSOF system.  Please log into WebEMSOF using the following credentials.  You will receive further instructions at '
-      + 'that time.' + NEW_LINE
+      'Someone at the host known as ' + request.UserHostName + ' (possibly you) requested a new password for the '
+      + session.Item['account_descriptor'].ToString + ' account on the WebEMSOF system.  Please log into WebEMSOF using the '
+      + 'following credentials.  You will receive further instructions at that time.' + NEW_LINE
       + NEW_LINE
       + '   Account:  ' + session.Item['account_descriptor'].ToString + NEW_LINE
       + '   Password: ' + temporary_password + NEW_LINE
@@ -110,6 +105,10 @@ begin
       + NEW_LINE
       + '-- WebEMSOF'
       );
+    //
+    // Set Label_email_address.
+    //
+    Label_email_address.Text := Object_email_address.ToString;
     //
     AppCommon.BdpConnection.Close;
     end;
