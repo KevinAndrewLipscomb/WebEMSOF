@@ -1,0 +1,94 @@
+
+unit change_password;
+
+interface
+
+uses
+  System.Collections, System.ComponentModel,
+  System.Data, System.Drawing, System.Web, System.Web.SessionState,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider;
+
+type
+  TWebForm_change_password = class(System.Web.UI.Page)
+  {$REGION 'Designer Managed Code'}
+  strict private
+    procedure InitializeComponent;
+    procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
+  {$ENDREGION}
+  strict private
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+  strict protected
+    Title: System.Web.UI.HtmlControls.HtmlGenericControl;
+    PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
+    PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
+    Label_account_descriptor: System.Web.UI.WebControls.Label;
+    Button_submit: System.Web.UI.WebControls.Button;
+    TextBox_nominal_password: System.Web.UI.WebControls.TextBox;
+    TextBox_confirmation_password: System.Web.UI.WebControls.TextBox;
+    RequiredFieldValidator_nominal_password: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_confirmation_password: System.Web.UI.WebControls.RequiredFieldValidator;
+    CompareValidator1: System.Web.UI.WebControls.CompareValidator;
+    procedure OnInit(e: EventArgs); override;
+  private
+    { Private Declarations }
+  public
+    { Public Declarations }
+  end;
+
+implementation
+
+{$REGION 'Designer Managed Code'}
+/// <summary>
+/// Required method for Designer support -- do not modify
+/// the contents of this method with the code editor.
+/// </summary>
+procedure TWebForm_change_password.InitializeComponent;
+begin
+  Include(Self.Button_submit.Click, Self.Button_submit_Click);
+  Include(Self.Load, Self.Page_Load);
+end;
+{$ENDREGION}
+
+procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
+begin
+  Title.InnerText := 'WebEMSOF - change_password';
+  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  if not IsPostback then
+    begin
+    Label_account_descriptor.Text := session.Item['account_descriptor'].ToString;
+    end;
+end;
+
+procedure TWebForm_change_password.OnInit(e: EventArgs);
+begin
+  //
+  // Required for Designer support
+  //
+  InitializeComponent;
+  inherited OnInit(e);
+end;
+
+procedure TWebForm_change_password.Button_submit_Click(sender: System.Object;
+  e: System.EventArgs);
+var
+  BdpCommand_update_account: borland.data.provider.BdpCommand;
+begin
+  //
+  // Commit the data to the database.
+  //
+  BdpCommand_update_account := borland.data.provider.bdpcommand.Create
+    (
+    'UPDATE emsof_sponsorship_webemsof_account '
+    + 'SET encoded_password = sha("' + TextBox_nominal_password.Text + '"),'
+    +   'be_stale_password = FALSE '
+    + 'WHERE emsof_sponsorship_id = "' + session.Item['account_id'].ToString + '"',
+    AppCommon.BdpConnection
+    );
+  AppCommon.BdpConnection.Open;
+  BdpCommand_update_account.ExecuteNonQuery;
+  AppCommon.BdpConnection.Close;
+  server.Transfer('account_overview.aspx');
+end;
+
+end.
+

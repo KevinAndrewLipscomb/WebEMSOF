@@ -35,7 +35,7 @@
                                               runat="server">
                             </asp:dropdownlist>
                           </td>
-                          <td><ASP:RangeValidator id="RangeValidator_account" runat="server" errormessage="Please select an account." font-bold="True" controltovalidate="DropDownList_account_descriptor" minimumvalue="1" maximumvalue="MAXINT">!ERR!</ASP:RangeValidator>
+                          <td><ASP:RangeValidator id="RangeValidator_account" runat="server" errormessage="Please select an account." font-bold="True" controltovalidate="DropDownList_account_descriptor" minimumvalue="1" maximumvalue="65535">!ERR!</ASP:RangeValidator>
                           </td>
                         </tr>
                       </tbody>

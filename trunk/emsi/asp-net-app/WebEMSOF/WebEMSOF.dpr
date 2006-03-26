@@ -15,23 +15,10 @@ library WebEMSOF;
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\mscorlib.dll'}
 {%AspMarkupContainer 'new_password.aspx'}
 {%AspMarkupContainer 'account_overview.aspx'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%AspMarkupContainer 'profile.aspx'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\login\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\Global\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\profile\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\new_password\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\account_overview\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\login\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\Global\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\account_overview\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\profile\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\new_password\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
+{%AspMarkupContainer 'change_password.aspx'}
+{%AspMarkupContainer 'change_email_address.aspx'}
 
 uses
   System.Reflection,
@@ -42,7 +29,9 @@ uses
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
   account_overview in 'account_overview.pas' {account_overview.TWebForm_account_overview: System.Web.UI.Page},
   profile in 'profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
-  Vault in 'Vault.pas';
+  Vault in 'Vault.pas',
+  change_password in 'change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
+  change_email_address in 'change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following

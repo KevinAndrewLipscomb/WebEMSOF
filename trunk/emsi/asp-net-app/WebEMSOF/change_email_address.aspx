@@ -1,0 +1,48 @@
+<%@ Page language="c#" Debug="true" Codebehind="change_email_address.pas" AutoEventWireup="false" Inherits="change_email_address.TWebForm_change_email_address" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+	<title id="Title" runat="server"></title>
+  </head>
+
+  <body>
+     <form runat="server">
+      <asp:placeholder id="PlaceHolder_precontent" runat="server">
+      </asp:placeholder>
+<p>
+        <ASP:Label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
+<p>
+        <table cellspacing="0" cellpadding="0" width="%" border="1">
+            <tr><td>
+                <table cellspacing="0" cellpadding="5" width="%" border="0">
+    <tr>
+      <td>
+                        <p align="right">Enter the email_address you would prefer to use for this system:</p></td>
+      <td>
+						<ASP:TextBox id="TextBox_nominal_email_address" runat="server"></ASP:TextBox></td>
+	  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_nominal_email_address" runat="server" font-bold="True" errormessage="Please enter a nominal email address." controltovalidate="TextBox_nominal_email_address">!ERR!</ASP:RequiredFieldValidator></td>
+	</tr>
+	<tr>
+	  <td>
+						<p align="right">Re-enter your prefered email_address to avoid typographical errors:</p></td>
+	  <td>
+						<ASP:TextBox id="TextBox_confirmation_email_address" runat="server"></ASP:TextBox></td>
+	  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_confirmation_email_address" runat="server" font-bold="True" errormessage="Please enter a confirmation email address." controltovalidate="TextBox_confirmation_email_address">!ERR!</ASP:RequiredFieldValidator>
+                        <ASP:CompareValidator id="CompareValidator1" runat="server" font-bold="True" errormessage="Nominal and confirmation email addresss must match.  Please try again." controltovalidate="TextBox_confirmation_email_address"
+                                              controltocompare="TextBox_nominal_email_address">!ERR!</ASP:CompareValidator></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+                        <ASP:Button id="Button_submit" runat="server" text="Submit"></ASP:Button></td>
+      <td></td>
+    </tr>
+                </table></td>
+            </tr>
+        </table></p>
+    <asp:placeholder id="PlaceHolder_postcontent" runat="server">
+    </asp:placeholder>
+     </form>
+  </body>
+</html>

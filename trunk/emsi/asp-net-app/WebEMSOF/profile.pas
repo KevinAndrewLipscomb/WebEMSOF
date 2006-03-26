@@ -36,23 +36,20 @@ type
     TextBox_address_line_2: System.Web.UI.WebControls.TextBox;
     TextBox_zip_code: System.Web.UI.WebControls.TextBox;
     TextBox_federal_tax_id_num: System.Web.UI.WebControls.TextBox;
-    TextBox_contact_person_name: System.Web.UI.WebControls.TextBox;
     TextBox_contact_person_phone_num: System.Web.UI.WebControls.TextBox;
-    TextBox_contact_person_email_address: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_service_name: System.Web.UI.WebControls.RequiredFieldValidator;
     TextBox_city: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_address_line_1: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_city: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_zip_code: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_federal_tax_id_num: System.Web.UI.WebControls.RequiredFieldValidator;
-    RequiredFieldValidator_contact_person_name: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_contact_person_phone_num: System.Web.UI.WebControls.RequiredFieldValidator;
-    RequiredFieldValidator_contact_person_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
     Button_submit: System.Web.UI.WebControls.Button;
-    RegularExpressionValidator_contact_person_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_federal_tax_id_num: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_zip_code: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_contact_person_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    TextBox_contact_person_name: System.Web.UI.WebControls.TextBox;
+    RequiredFieldValidator_contact_person_name: System.Web.UI.WebControls.RequiredFieldValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -95,7 +92,7 @@ begin
     //
     BdpCommand_get_affiliate_num := borland.data.provider.BdpCommand.Create
       (
-      'SELECT affiliate_num FROM emsof_sponsorship WHERE id = ' + session.Item['emsof_sponsorship_id'].ToString,
+      'SELECT affiliate_num FROM emsof_sponsorship WHERE id = ' + session.Item['account_id'].ToString,
       AppCommon.BdpConnection
       );
     affiliate_num_obj := BdpCommand_get_affiliate_num.ExecuteScalar;
@@ -106,7 +103,6 @@ begin
     BdpCommand_get_profile := borland.data.provider.BdpCommand.Create
       (
       'SELECT name,'
-      + 'webemsof_primary_email_address,'
       + 'be_qrs,'
       + 'be_bls_amb,'
       + 'be_als_amb,'
@@ -120,7 +116,7 @@ begin
       + 'federal_tax_id_num,'
       + 'contact_person_name,'
       + 'contact_person_phone_num '
-      + 'FROM response_agency '
+      + 'FROM response_agency_profile '
       + 'WHERE affiliate_num = "' + affiliate_num_obj.ToString + '"',
       AppCommon.BdpConnection
       );
@@ -128,20 +124,19 @@ begin
     BdpDataReader_profile.Read;
     //
     TextBox_service_name.Text := BdpDataReader_profile.GetString(0);
-    TextBox_contact_person_email_address.Text := BdpDataReader_profile.GetString(1);
-    CheckBox_qrs.Checked := Boolean(BdpDataReader_profile.GetInt16(2));
-    CheckBox_bls_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(3));
-    CheckBox_als_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(4));
-    CheckBox_als_squad.Checked := Boolean(BdpDataReader_profile.GetInt16(5));
-    CheckBox_air_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(6));
-    CheckBox_rescue.Checked := Boolean(BdpDataReader_profile.GetInt16(7));
-    TextBox_address_line_1.Text := BdpDataReader_profile.GetString(8);
-    TextBox_address_line_2.Text := BdpDataReader_profile.GetString(9);
-    TextBox_city.Text := BdpDataReader_profile.GetString(10);
-    TextBox_zip_code.Text := BdpDataReader_profile.GetString(11);
-    TextBox_federal_tax_id_num.Text := BdpDataReader_profile.GetString(12);
-    TextBox_contact_person_name.Text := BdpDataReader_profile.GetString(13);
-    TextBox_contact_person_phone_num.Text := BdpDataReader_profile.GetString(14);
+    CheckBox_qrs.Checked := Boolean(BdpDataReader_profile.GetInt16(1));
+    CheckBox_bls_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(2));
+    CheckBox_als_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(3));
+    CheckBox_als_squad.Checked := Boolean(BdpDataReader_profile.GetInt16(4));
+    CheckBox_air_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(5));
+    CheckBox_rescue.Checked := Boolean(BdpDataReader_profile.GetInt16(6));
+    TextBox_address_line_1.Text := BdpDataReader_profile.GetString(7);
+    TextBox_address_line_2.Text := BdpDataReader_profile.GetString(8);
+    TextBox_city.Text := BdpDataReader_profile.GetString(9);
+    TextBox_zip_code.Text := BdpDataReader_profile.GetString(10);
+    TextBox_federal_tax_id_num.Text := BdpDataReader_profile.GetString(11);
+    TextBox_contact_person_name.Text := BdpDataReader_profile.GetString(12);
+    TextBox_contact_person_phone_num.Text := BdpDataReader_profile.GetString(13);
     //
     AppCommon.BdpConnection.Close;
     end;
@@ -170,9 +165,8 @@ begin
   //
   BdpCommand_update_profile := borland.data.provider.bdpcommand.Create
     (
-    'UPDATE response_agency '
+    'UPDATE response_agency_profile '
     + 'SET name = "' + TextBox_service_name.Text + '",'
-    +   'webemsof_primary_email_address = "' + TextBox_contact_person_email_address.Text + '",'
     +   'be_qrs = ' + CheckBox_qrs.Checked.ToString + ','
     +   'be_bls_amb = ' + CheckBox_bls_amb.Checked.ToString + ','
     +   'be_als_amb = ' + CheckBox_als_amb.Checked.ToString + ','
@@ -186,13 +180,13 @@ begin
     +   'federal_tax_id_num = "' + TextBox_federal_tax_id_num.Text + '",'
     +   'contact_person_name = "' + TextBox_contact_person_name.Text + '",'
     +   'contact_person_phone_num = "' + TextBox_contact_person_phone_num.Text + '",'
-    +   'be_profile_valid = 1 '
+    +   'be_valid_profile = TRUE '
     + 'WHERE affiliate_num = "' + Label_affiliate_num.Text + '"',
     AppCommon.BdpConnection
     );
-  BdpCommand_update_profile.Connection.Open;
+  AppCommon.BdpConnection.Open;
   BdpCommand_update_profile.ExecuteNonQuery;
-  BdpCommand_update_profile.Connection.Close;
+  AppCommon.BdpConnection.Close;
   server.Transfer('account_overview.aspx');
 end;
 

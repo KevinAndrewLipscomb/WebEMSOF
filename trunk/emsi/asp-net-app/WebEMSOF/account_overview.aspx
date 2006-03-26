@@ -43,7 +43,7 @@
                         </div></td>
                 </tr>
                 <tr>
-                  <td><ASP:Label id="Label_last_fy_row_leader" runat="server" visible="False">Your request for <strong>last</strong> fiscal year:</ASP:Label></td>
+                  <td><ASP:Label id="Label_last_fy_row_leader" runat="server" visible="False">Your request for <strong>last</strong> fiscal year is:</ASP:Label></td>
                   <td>
                     <div align="center">
                       <ASP:Label id="Label_last_fy_request_status" runat="server" font-bold="True"></ASP:Label>
@@ -58,7 +58,7 @@
                         </div></td>
                 </tr>
                 <tr>
-                  <td><ASP:Label id="Label_this_fy_row_leader" runat="server" visible="False">Your request for <strong>this</strong> fiscal year:</ASP:Label></td>
+                  <td><ASP:Label id="Label_this_fy_row_leader" runat="server" visible="False">Your request for <strong>this</strong> fiscal year is:</ASP:Label></td>
                   <td>
                     <div align="center">
                       <ASP:Label id="Label_this_fy_request_status" runat="server" font-bold="True"></ASP:Label>
@@ -76,8 +76,8 @@
           </tr>
         </table>
       </p>
-      <p>
-        <ASP:LinkButton id="LinkButton_change_password" runat="server">Change password</ASP:LinkButton>
+      <p>Change WebEMSOF 
+        <ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
       </p>
       <p></p>
       <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
