@@ -43,7 +43,8 @@
                         </div></td>
                 </tr>
                 <tr>
-                  <td><ASP:Label id="Label_last_fy_row_leader" runat="server" visible="False">Your request for <strong>last</strong> fiscal year is:</ASP:Label></td>
+                  <td><ASP:Label id="Label_last_fy_row_leader" runat="server" visible="False">Your request for <strong>last</strong> fiscal year is:</ASP:Label>
+                        <ASP:Label id="Label_last_fy_request_id" runat="server" visible="False"></ASP:Label></td>
                   <td>
                     <div align="center">
                       <ASP:Label id="Label_last_fy_request_status" runat="server" font-bold="True"></ASP:Label>
@@ -58,7 +59,8 @@
                         </div></td>
                 </tr>
                 <tr>
-                  <td><ASP:Label id="Label_this_fy_row_leader" runat="server" visible="False">Your request for <strong>this</strong> fiscal year is:</ASP:Label></td>
+                  <td><ASP:Label id="Label_this_fy_row_leader" runat="server" visible="False">Your request for <strong>this</strong> fiscal year is:</ASP:Label>
+                        <ASP:Label id="Label_this_fy_request_id" runat="server" visible="False"></ASP:Label></td>
                   <td>
                     <div align="center">
                       <ASP:Label id="Label_this_fy_request_status" runat="server" font-bold="True"></ASP:Label>

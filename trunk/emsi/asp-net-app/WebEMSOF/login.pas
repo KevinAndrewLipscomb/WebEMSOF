@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   AppCommon, Borland.Data.Provider, System.Globalization, 
-  System.Data.SqlClient, System.Data.Common, Vault;
+  System.Data.SqlClient, System.Data.Common, system.configuration;
 
 type
   TWebForm_login = class(System.Web.UI.Page)
@@ -61,7 +61,7 @@ var
   bdpCommand_get_account_descriptors: Borland.Data.Provider.BdpCommand;
   BdpDataReader_account_descriptors: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := 'WebEMSOF - login';
+  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
@@ -108,7 +108,9 @@ end;
 procedure TWebForm_login.DropDownList_account_descriptor_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
+  session.Remove('account_id');
   session.Add('account_id',DropDownList_account_descriptor.SelectedValue);
+  session.Remove('account_descriptor');
   session.Add('account_descriptor',DropDownList_account_descriptor.SelectedItem.Text);
 end;
 
