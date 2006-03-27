@@ -29,7 +29,6 @@ uses
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
   account_overview in 'account_overview.pas' {account_overview.TWebForm_account_overview: System.Web.UI.Page},
   profile in 'profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
-  Vault in 'Vault.pas',
   change_password in 'change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
   change_email_address in 'change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page};
 

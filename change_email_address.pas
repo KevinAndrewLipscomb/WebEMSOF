@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration;
 
 type
   TWebForm_change_email_address = class(System.Web.UI.Page)
@@ -54,7 +54,7 @@ var
   BdpCommand_get_email_address: borland.data.provider.BdpCommand;
   Object_email_address: system.Object;
 begin
-  Title.InnerText := 'WebEMSOF - change_email_address';
+  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin

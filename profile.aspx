@@ -13,7 +13,8 @@
       </asp:placeholder></p>
       <p>
         <ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
-<p><strong>WebEMSOF profile</strong></p>
+<p><strong>
+          <ASP:Label id="Label_application_name" runat="server"></ASP:Label> profile</strong></p>
 <p>
         <table cellspacing="0" cellpadding="0" width="%" border="1">
             <tr><td>
