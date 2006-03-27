@@ -21,6 +21,8 @@ type
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_this_fy_request_action_Click(sender: System.Object; 
       e: System.EventArgs);
+    procedure LinkButton_last_fy_request_action_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -41,6 +43,8 @@ type
     Label_last_fy_row_leader: System.Web.UI.WebControls.Label;
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
+    Label_last_fy_request_id: System.Web.UI.WebControls.Label;
+    Label_this_fy_request_id: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -58,6 +62,7 @@ implementation
 procedure TWebForm_account_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
+  Include(Self.LinkButton_last_fy_request_action.Click, Self.LinkButton_last_fy_request_action_Click);
   Include(Self.LinkButton_this_fy_request_action.Click, Self.LinkButton_this_fy_request_action_Click);
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_account_attributes_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
@@ -117,7 +122,8 @@ begin
       Label_last_fy_row_leader.Visible := TRUE;
       bdpCommand_get_last_fy_request_attributes := borland.data.provider.BdpCommand.Create
         (
-        'SELECT request_status_code_description_map.description,'
+        'SELECT emsof_request.id,'
+        + 'request_status_code_description_map.description,'
         + 'emsof_request.value '
         + 'FROM request_status_code_description_map '
         +   'JOIN emsof_request on (emsof_request.status_code = request_status_code_description_map.code)'
@@ -129,12 +135,14 @@ begin
       bdpDataReader_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
       if bdpDataReader_last_fy_request_attributes.Read then
         begin
-        Label_last_fy_request_status.Text := bdpDataReader_last_fy_request_attributes.GetString(0) + '.';
-        Label_last_fy_request_value.Text := bdpDataReader_last_fy_request_attributes.GetString(1);
+        Label_last_fy_request_id.Text := bdpDataReader_last_fy_request_attributes.GetString(0);
+        Label_last_fy_request_status.Text := bdpDataReader_last_fy_request_attributes.GetString(1) + '.';
+        Label_last_fy_request_value.Text := bdpDataReader_last_fy_request_attributes.GetString(2);
         LinkButton_last_fy_request_action.Text := 'Review';
         end
       else
         begin
+        Label_last_fy_request_id.Text := '0';
         Label_last_fy_request_status.Text := 'Blank.';
         Label_last_fy_request_value.Text := '--';
         end;
@@ -144,7 +152,8 @@ begin
       Label_this_fy_row_leader.Visible := TRUE;
       bdpCommand_get_this_fy_request_attributes := borland.data.provider.BdpCommand.Create
         (
-        'SELECT request_status_code_description_map.description,'
+        'SELECT emsof_request.id,'
+        + 'request_status_code_description_map.description,'
         + 'emsof_request.value '
         + 'FROM request_status_code_description_map '
         +   'JOIN emsof_request on (emsof_request.status_code = request_status_code_description_map.code)'
@@ -156,12 +165,14 @@ begin
       bdpDataReader_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
       if bdpDataReader_this_fy_request_attributes.Read then
         begin
-        Label_this_fy_request_status.Text := bdpDataReader_this_fy_request_attributes.GetString(0) + '.';
-        Label_this_fy_request_value.Text := bdpDataReader_this_fy_request_attributes.GetString(1);
+        Label_this_fy_request_id.Text := bdpDataReader_this_fy_request_attributes.GetString(0);
+        Label_this_fy_request_status.Text := bdpDataReader_this_fy_request_attributes.GetString(1) + '.';
+        Label_this_fy_request_value.Text := bdpDataReader_this_fy_request_attributes.GetString(2);
         LinkButton_this_fy_request_action.Text := 'Review';
         end
       else
         begin
+        Label_this_fy_request_id.Text := '0';
         Label_this_fy_request_status.Text := 'Blank.';
         Label_this_fy_request_value.Text := '--';
         LinkButton_this_fy_request_action.Text := 'Start';
@@ -180,10 +191,24 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_account_overview.LinkButton_last_fy_request_action_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('emsof_request_id');
+  session.Add('emsof_request_id',Label_last_fy_request_id.Text);
+  session.Remove('relative_fy');
+  session.Add('relative_fy','LAST');
+  server.Transfer('request_overview.aspx');
+end;
+
 procedure TWebForm_account_overview.LinkButton_this_fy_request_action_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-
+  session.Remove('emsof_request_id');
+  session.Add('emsof_request_id',Label_this_fy_request_id.Text);
+  session.Remove('relative_fy');
+  session.Add('relative_fy','THIS');
+  server.Transfer('request_overview.aspx');
 end;
 
 procedure TWebForm_account_overview.LinkButton_change_email_address_Click(sender: System.Object;
