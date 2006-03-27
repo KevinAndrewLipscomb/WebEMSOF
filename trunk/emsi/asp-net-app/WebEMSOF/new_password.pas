@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon,
-  Borland.Data.Provider, system.web.mail, Vault;
+  Borland.Data.Provider, system.web.mail, system.configuration;
 
 type
   TWebForm_new_password = class(System.Web.UI.Page)
@@ -44,8 +44,6 @@ end;
 {$ENDREGION}
 
 procedure TWebForm_new_password.Page_Load(sender: System.Object; e: System.EventArgs);
-const
-  NEW_LINE = #10;
 type
   byte_array_type = array of byte;
 var
@@ -54,7 +52,7 @@ var
   Object_email_address: system.Object;
   temporary_password: string[8];
 begin
-  Title.InnerText := 'WebEMSOF - new_password';
+  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
@@ -86,24 +84,26 @@ begin
       AppCommon.BdpConnection
       );
     Object_email_address := BdpCommand_get_email_address.ExecuteScalar;
-    smtpmail.SmtpServer := 'smtp.east.cox.net';
+    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      appcommon.SENDER_EMAIL_ADDRESS,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       Object_email_address.ToString,
-      'WebEMSOF temp password',
+      ConfigurationSettings.AppSettings['application_name'] + ' temp password',
       'Someone at the host known as ' + request.UserHostName + ' (possibly you) requested a new password for the '
-      + session.Item['account_descriptor'].ToString + ' account on the WebEMSOF system.  Please log into WebEMSOF using the '
+      + session.Item['account_descriptor'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
+      + ' system.  Please log into ' + ConfigurationSettings.AppSettings['application_name'] + ' using the '
       + 'following credentials.  You will receive further instructions at that time.' + NEW_LINE
       + NEW_LINE
       + '   Account:  ' + session.Item['account_descriptor'].ToString + NEW_LINE
       + '   Password: ' + temporary_password + NEW_LINE
       + NEW_LINE
-      + 'The WebEMSOF login page is located at:' + NEW_LINE
+      + 'The ' + ConfigurationSettings.AppSettings['application_name'] + ' login page is located at:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + appcommon.HOST_DOMAIN_NAME + '/WebEMSOF/login.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + '/login.aspx' + NEW_LINE
       + NEW_LINE
-      + '-- WebEMSOF'
+      + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
     // Set Label_email_address.

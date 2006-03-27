@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   System.Data.Common, Borland.Data.Provider, System.Globalization, 
-  Borland.Data.Common, Vault;
+  Borland.Data.Common, system.configuration;
 
 type
   TWebForm_account_overview = class(System.Web.UI.Page)
@@ -19,6 +19,8 @@ type
     procedure LinkButton_change_account_attributes_Click(sender: System.Object; 
       e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_this_fy_request_action_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -56,6 +58,7 @@ implementation
 procedure TWebForm_account_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
+  Include(Self.LinkButton_this_fy_request_action.Click, Self.LinkButton_this_fy_request_action_Click);
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_account_attributes_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Load, Self.Page_Load);
@@ -72,7 +75,7 @@ var
   bdpCommand_get_this_fy_request_attributes: borland.data.Provider.bdpcommand;
   bdpDataReader_this_fy_request_attributes: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := 'WebEMSOF - account_overview';
+  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
@@ -175,6 +178,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_account_overview.LinkButton_this_fy_request_action_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+
 end;
 
 procedure TWebForm_account_overview.LinkButton_change_email_address_Click(sender: System.Object;

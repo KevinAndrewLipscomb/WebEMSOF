@@ -4,12 +4,11 @@ interface
 
   uses
     borland.data.provider,
-    system.Web.UI.WebControls,
-    vault;
+    system.configuration,
+    system.Web.UI.WebControls;
 
   const
-    HOST_DOMAIN_NAME = 'localhost';
-    SENDER_EMAIL_ADDRESS = '"WebEMSOF" <kevin.lipscomb@kvrs.org>';
+    NEW_LINE = #10;
 
   var
     BdpConnection: borland.data.provider.bdpconnection;
@@ -55,7 +54,7 @@ implementation
       +     '</td>'
       +   '</tr>'
       + '</table>'
-      + '<h1>TUTORIAL EXERCISE 1 system</h1>'; //WebEMSOF system</h1>';
+      + '<h1>' + ConfigurationSettings.AppSettings['application_name'] + ' system</h1>';
     precontent.Controls.Add(literal);
     validation_summary_control := System.Web.Ui.WebControls.ValidationSummary.Create;
     precontent.Controls.Add(validation_summary_control);
@@ -83,9 +82,5 @@ implementation
 begin
 BdpConnection := borland.data.provider.bdpconnection.Create;
 BdpConnection.ConnectionOptions := 'transaction isolation=ReadCommitted';
-BdpConnection.ConnectionString := 'assembly=CoreLab.Bdp.MySql, Versi' +
-  'on=2.70.1.2500, Culture=neutral, PublicKeyToken=09af7300eec23701;vendorcl' +
-  'ient=libmysql.dll;grow on demand=True;database=kalipso;username=kalipso;m' +
-  'ax pool size=100;password=' + vault.PASSWORD + ';provider=MySQL (Core Lab);min pool siz' +
-  'e=0;hostname=db4free.org';
+BdpConnection.ConnectionString := ConfigurationSettings.AppSettings['bdp_connection_string'];
 end.

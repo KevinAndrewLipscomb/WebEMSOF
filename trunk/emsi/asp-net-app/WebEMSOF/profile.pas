@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   Borland.Data.Common, Borland.Data.Provider, System.Globalization, 
-  System.Data.Common, Vault;
+  System.Data.Common, system.configuration;
 
 type
   TWebForm_profile = class(System.Web.UI.Page)
@@ -50,6 +50,7 @@ type
     RegularExpressionValidator_contact_person_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
     TextBox_contact_person_name: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_contact_person_name: System.Web.UI.WebControls.RequiredFieldValidator;
+    Label_application_name: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -78,7 +79,7 @@ var
   BdpCommand_get_profile: borland.data.provider.BdpCommand;
   BdpDataReader_profile: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := 'WebEMSOF - template_std';
+  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - template_std';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
@@ -87,6 +88,10 @@ begin
     // Set Label_service_name
     //
     Label_service_name.Text := session.Item['account_descriptor'].ToString;
+    //
+    // Set Label_application_name
+    //
+    Label_application_name.Text := ConfigurationSettings.AppSettings['application_name'];
     //
     // Get affiliate_num and set Label_affiliate_num
     //
