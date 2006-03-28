@@ -69,7 +69,7 @@ begin
     BdpCommand_get_email_address := borland.data.provider.BdpCommand.Create
       (
       'SELECT password_reset_email_address '
-      + 'FROM webemsof_account_master '
+      + 'FROM service_user '
       + 'WHERE id = "' + session.Item['account_id'].ToString + '"',
       AppCommon.BdpConnection
       );
@@ -100,7 +100,7 @@ begin
   //
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
-    'UPDATE webemsof_account_master '
+    'UPDATE service_user '
     + 'SET password_reset_email_address = "' + TextBox_nominal_email_address.Text + '"'
     + 'WHERE id = "' + session.Item['account_id'].ToString + '"',
     AppCommon.BdpConnection

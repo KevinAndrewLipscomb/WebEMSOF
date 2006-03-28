@@ -17,7 +17,7 @@ type
     procedure InitializeComponent;
     procedure Button_log_in_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_new_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure DropDownList_account_descriptor_SelectedIndexChanged(sender: System.Object;
+    procedure DropDownList_service_SelectedIndexChanged(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -28,11 +28,11 @@ type
     TextBox_password: System.Web.UI.WebControls.TextBox;
     Button_log_in: System.Web.UI.WebControls.Button;
     CheckBox_keep_me_logged_in: System.Web.UI.WebControls.CheckBox;
-    DropDownList_account_descriptor: System.Web.UI.WebControls.DropDownList;
+    DropDownList_service: System.Web.UI.WebControls.DropDownList;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Button_new_password: System.Web.UI.WebControls.Button;
-    RangeValidator_account: System.Web.UI.WebControls.RangeValidator;
+    RangeValidator_service: System.Web.UI.WebControls.RangeValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -49,7 +49,7 @@ implementation
 /// </summary>
 procedure TWebForm_login.InitializeComponent;
 begin
-  Include(Self.DropDownList_account_descriptor.SelectedIndexChanged, Self.DropDownList_account_descriptor_SelectedIndexChanged);
+  Include(Self.DropDownList_service.SelectedIndexChanged, Self.DropDownList_service_SelectedIndexChanged);
   Include(Self.TextBox_password.TextChanged, Self.Button_log_in_Click);
   Include(Self.Button_new_password.Click, Self.Button_new_password_Click);
   Include(Self.Load, Self.Page_Load);
@@ -58,8 +58,8 @@ end;
 
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdpCommand_get_account_descriptors: Borland.Data.Provider.BdpCommand;
-  BdpDataReader_account_descriptors: borland.data.provider.BdpDataReader;
+  bdpCommand_get_services: Borland.Data.Provider.BdpCommand;
+  BdpDataReader_services: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -70,26 +70,20 @@ begin
     //
     // Load DropDownList_account
     //
-    DropDownList_account_descriptor.Items.Add(listitem.Create('-- Select --','0'));
-    bdpCommand_get_account_descriptors := Borland.Data.Provider.BdpCommand.Create
+    DropDownList_service.Items.Add(listitem.Create('-- Select --','0'));
+    bdpCommand_get_services := Borland.Data.Provider.BdpCommand.Create
       (
-      'SELECT webemsof_account_master.id,'
-      + 'concat(service.name," (", county_code_name_map.name,")") AS account_descriptor '
-      + 'FROM webemsof_account_master '
-      +   'JOIN webemsof_account_detail using (id) '
-      +     'JOIN county_code_name_map ON (county_code_name_map.code = webemsof_account_detail.county_code) '
-      +       'JOIN service using (affiliate_num) '
-      + 'ORDER BY account_descriptor',
+      'SELECT id,name FROM service_user JOIN service using (id) ORDER BY name',
       AppCommon.BdpConnection
       );
-    BdpDataReader_account_descriptors := bdpCommand_get_account_descriptors.ExecuteReader;
-    while bdpDataReader_account_descriptors.Read do
-      DropDownList_account_descriptor.Items.Add
+    BdpDataReader_services := bdpCommand_get_services.ExecuteReader;
+    while bdpDataReader_services.Read do
+      DropDownList_service.Items.Add
         (
         listitem.Create
           (
-          BdpDataReader_account_descriptors['account_descriptor'].ToString,
-          BdpDataReader_account_descriptors['id'].ToString
+          BdpDataReader_services['name'].ToString,
+          BdpDataReader_services['id'].ToString
           )
         );
     AppCommon.BdpConnection.Close;
@@ -105,13 +99,13 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_login.DropDownList_account_descriptor_SelectedIndexChanged(sender: System.Object;
+procedure TWebForm_login.DropDownList_service_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('account_id');
-  session.Add('account_id',DropDownList_account_descriptor.SelectedValue);
-  session.Remove('account_descriptor');
-  session.Add('account_descriptor',DropDownList_account_descriptor.SelectedItem.Text);
+  session.Remove('service_user_id');
+  session.Add('service_user_id',DropDownList_service.SelectedValue);
+  session.Remove('service_name');
+  session.Add('service_name',DropDownList_service.SelectedItem.Text);
 end;
 
 procedure TWebForm_login.Button_new_password_Click(sender: System.Object;
@@ -127,8 +121,8 @@ var
 begin
   bdpCommand_match_account := Borland.Data.Provider.BdpCommand.Create
     (
-    'SELECT be_stale_password FROM webemsof_account_master '
-    +  'where webemsof_account_master.id="' + DropDownList_account_descriptor.SelectedValue + '" '
+    'SELECT be_stale_password FROM service_user '
+    +  'where id="' + DropDownList_service.SelectedValue + '" '
     +     'and encoded_password=sha("' + TextBox_password.Text + '")'
     ,AppCommon.BdpConnection
     );
@@ -141,7 +135,7 @@ begin
     else
       server.Transfer('change_password.aspx')
   else // be_stale_password_obj = nil
-    if DropDownList_account_descriptor.SelectedIndex <> 0 then
+    if DropDownList_service.SelectedIndex <> 0 then
       invalid_credentials_warning.Visible := TRUE;
   end;
 

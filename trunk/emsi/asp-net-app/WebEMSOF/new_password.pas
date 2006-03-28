@@ -67,7 +67,7 @@ begin
     //
     BdpCommand_temporarify_password := borland.data.provider.bdpcommand.Create
       (
-      'update webemsof_account_master '
+      'update service_user '
       + 'set encoded_password=sha("' + temporary_password + '"),'
       +   'be_stale_password=TRUE '
       + 'where id=' + session.Item['account_id'].ToString,
@@ -79,7 +79,7 @@ begin
     //
     BdpCommand_get_email_address := borland.data.provider.bdpcommand.Create
       (
-      'select password_reset_email_address from webemsof_account_master '
+      'select password_reset_email_address from service_user '
       + 'where id ="' + session.Item['account_id'].ToString + '"',
       AppCommon.BdpConnection
       );
