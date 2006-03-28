@@ -87,14 +87,13 @@ begin
     //
     // Set Label_service_name
     //
-    Label_service_name.Text := session.Item['account_descriptor'].ToString;
+    Label_service_name.Text := session.Item['service_name'].ToString;
     //
     // Set Label_profile_status
     //
     bdpCommand_get_profile_status := borland.data.provider.bdpCommand.Create
       (
-      'select be_valid_profile from service JOIN webemsof_account_detail using (affiliate_num) '
-      + 'where webemsof_account_detail.id = "' + session.Item['account_id'].ToString + '"'
+      'select be_valid_profile from service where id = "' + session.Item['service_user_id'].ToString + '"'
       ,AppCommon.BdpConnection
       );
     AppCommon.BdpConnection.Open;
@@ -127,7 +126,7 @@ begin
         + 'emsof_request_master.value '
         + 'FROM emsof_request_master '
         +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
-        +  'WHERE emsof_request_master.webemsof_account_id = "' + session.Item['account_id'].ToString + '" '
+        +  'WHERE emsof_request_master.county_dictated_appropriation_id = "' + session.Item['account_id'].ToString + '" '
         +    'and emsof_request_master.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
         AppCommon.BdpConnection
         );

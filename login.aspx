@@ -23,7 +23,7 @@
               <tbody>
                 <tr>
                   <td>
-                    <p align="right">Account:
+                    <p align="right">Service:
                     </p>
                   </td>
                   <td>
@@ -31,11 +31,11 @@
                       <tbody>
                         <tr>
                           <td>
-                            <asp:dropdownlist id="DropDownList_account_descriptor" 
+                            <asp:dropdownlist id="DropDownList_service" 
                                               runat="server">
                             </asp:dropdownlist>
                           </td>
-                          <td><ASP:RangeValidator id="RangeValidator_account" runat="server" errormessage="Please select an account." font-bold="True" controltovalidate="DropDownList_account_descriptor" minimumvalue="1" maximumvalue="65535">!ERR!</ASP:RangeValidator>
+                          <td><ASP:RangeValidator id="RangeValidator_service" runat="server" errormessage="Please select a service." font-bold="True" controltovalidate="DropDownList_service" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator>
                           </td>
                         </tr>
                       </tbody>

@@ -78,7 +78,7 @@ begin
   //
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
-    'UPDATE webemsof_account_master '
+    'UPDATE service_user '
     + 'SET encoded_password = sha("' + TextBox_nominal_password.Text + '"),'
     +   'be_stale_password = FALSE '
     + 'WHERE id = "' + session.Item['account_id'].ToString + '"',

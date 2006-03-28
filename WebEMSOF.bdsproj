@@ -216,6 +216,7 @@
       <File FileName="change_password.aspx" ContainerId="AspMarkupContainer" ModuleName="change_password"/>
       <File FileName="change_email_address.aspx" ContainerId="AspMarkupContainer" ModuleName="change_email_address"/>
       <File FileName="request_overview.aspx" ContainerId="AspMarkupContainer" ModuleName="request_overview"/>
+      <File FileName="service_appropriation.aspx" ContainerId="AspMarkupContainer" ModuleName="service_appropriation"/>
       <File FileName="" ContainerId="" ModuleName="System.Reflection"/>
       <File FileName="" ContainerId="" ModuleName="System.Runtime.CompilerServices"/>
       <File FileName="Global.pas" ContainerId="PascalCompiler" ModuleName="Global" Parent="Global.asax"/>
@@ -227,6 +228,7 @@
       <File FileName="change_password.pas" ContainerId="PascalCompiler" ModuleName="change_password" Parent="change_password.aspx"/>
       <File FileName="change_email_address.pas" ContainerId="PascalCompiler" ModuleName="change_email_address" Parent="change_email_address.aspx"/>
       <File FileName="request_overview.pas" ContainerId="PascalCompiler" ModuleName="request_overview" Parent="request_overview.aspx"/>
+      <File FileName="service_appropriation.pas" ContainerId="PascalCompiler" ModuleName="service_appropriation" Parent="service_appropriation.aspx"/>
     </FileList>
   </DelphiDotNet.Personality>
 	<ModelSupport>True</ModelSupport>
