@@ -93,8 +93,8 @@ begin
     //
     bdpCommand_get_profile_status := borland.data.provider.bdpCommand.Create
       (
-      'select be_valid_profile from response_agency_profile JOIN emsof_sponsorship using (affiliate_num) '
-      + 'where emsof_sponsorship.id = "' + session.Item['account_id'].ToString + '"'
+      'select be_valid_profile from service JOIN webemsof_account_detail using (affiliate_num) '
+      + 'where webemsof_account_detail.id = "' + session.Item['account_id'].ToString + '"'
       ,AppCommon.BdpConnection
       );
     AppCommon.BdpConnection.Open;
@@ -122,14 +122,13 @@ begin
       Label_last_fy_row_leader.Visible := TRUE;
       bdpCommand_get_last_fy_request_attributes := borland.data.provider.BdpCommand.Create
         (
-        'SELECT emsof_request.id,'
+        'SELECT emsof_request_master.id,'
         + 'request_status_code_description_map.description,'
-        + 'emsof_request.value '
-        + 'FROM request_status_code_description_map '
-        +   'JOIN emsof_request on (emsof_request.status_code = request_status_code_description_map.code)'
-        +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_request.id) '
-        +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['account_id'].ToString + '" '
-        +    'and emsof_request.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
+        + 'emsof_request_master.value '
+        + 'FROM emsof_request_master '
+        +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
+        +  'WHERE emsof_request_master.webemsof_account_id = "' + session.Item['account_id'].ToString + '" '
+        +    'and emsof_request_master.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
         AppCommon.BdpConnection
         );
       bdpDataReader_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
@@ -152,14 +151,13 @@ begin
       Label_this_fy_row_leader.Visible := TRUE;
       bdpCommand_get_this_fy_request_attributes := borland.data.provider.BdpCommand.Create
         (
-        'SELECT emsof_request.id,'
+        'SELECT emsof_request_master.id,'
         + 'request_status_code_description_map.description,'
-        + 'emsof_request.value '
-        + 'FROM request_status_code_description_map '
-        +   'JOIN emsof_request on (emsof_request.status_code = request_status_code_description_map.code)'
-        +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_request.id) '
-        +  'WHERE emsof_request.emsof_sponsorship_id = "' + session.Item['account_id'].ToString + '" '
-        +    'and emsof_request.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
+        + 'emsof_request_master.value '
+        + 'FROM emsof_request_master '
+        +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
+        +  'WHERE emsof_request_master.webemsof_account_id = "' + session.Item['account_id'].ToString + '" '
+        +    'and emsof_request_master.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
         AppCommon.BdpConnection
         );
       bdpDataReader_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
