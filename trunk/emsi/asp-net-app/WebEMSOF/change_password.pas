@@ -78,10 +78,10 @@ begin
   //
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
-    'UPDATE emsof_sponsorship_webemsof_account '
+    'UPDATE webemsof_account_master '
     + 'SET encoded_password = sha("' + TextBox_nominal_password.Text + '"),'
     +   'be_stale_password = FALSE '
-    + 'WHERE emsof_sponsorship_id = "' + session.Item['account_id'].ToString + '"',
+    + 'WHERE id = "' + session.Item['account_id'].ToString + '"',
     AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

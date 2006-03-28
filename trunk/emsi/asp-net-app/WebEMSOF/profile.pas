@@ -97,7 +97,7 @@ begin
     //
     BdpCommand_get_affiliate_num := borland.data.provider.BdpCommand.Create
       (
-      'SELECT affiliate_num FROM emsof_sponsorship WHERE id = ' + session.Item['account_id'].ToString,
+      'SELECT affiliate_num FROM webemsof_account_detail WHERE id = ' + session.Item['account_id'].ToString,
       AppCommon.BdpConnection
       );
     affiliate_num_obj := BdpCommand_get_affiliate_num.ExecuteScalar;
@@ -121,7 +121,7 @@ begin
       + 'federal_tax_id_num,'
       + 'contact_person_name,'
       + 'contact_person_phone_num '
-      + 'FROM response_agency_profile '
+      + 'FROM service '
       + 'WHERE affiliate_num = "' + affiliate_num_obj.ToString + '"',
       AppCommon.BdpConnection
       );
@@ -170,7 +170,7 @@ begin
   //
   BdpCommand_update_profile := borland.data.provider.bdpcommand.Create
     (
-    'UPDATE response_agency_profile '
+    'UPDATE service '
     + 'SET name = "' + TextBox_service_name.Text + '",'
     +   'be_qrs = ' + CheckBox_qrs.Checked.ToString + ','
     +   'be_bls_amb = ' + CheckBox_bls_amb.Checked.ToString + ','

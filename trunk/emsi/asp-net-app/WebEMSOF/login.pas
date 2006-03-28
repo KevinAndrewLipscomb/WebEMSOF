@@ -73,12 +73,12 @@ begin
     DropDownList_account_descriptor.Items.Add(listitem.Create('-- Select --','0'));
     bdpCommand_get_account_descriptors := Borland.Data.Provider.BdpCommand.Create
       (
-      'SELECT emsof_sponsorship_webemsof_account.emsof_sponsorship_id,'
-      + 'concat(response_agency_profile.name," (", county_code_name_map.name,")") AS account_descriptor '
-      + 'FROM emsof_sponsorship_webemsof_account '
-      +   'JOIN emsof_sponsorship on (emsof_sponsorship.id = emsof_sponsorship_webemsof_account.emsof_sponsorship_id) '
-      +     'JOIN county_code_name_map ON (county_code_name_map.code = emsof_sponsorship.county_code) '
-      +       'JOIN response_agency_profile using (affiliate_num) '
+      'SELECT webemsof_account_master.id,'
+      + 'concat(service.name," (", county_code_name_map.name,")") AS account_descriptor '
+      + 'FROM webemsof_account_master '
+      +   'JOIN webemsof_account_detail using (id) '
+      +     'JOIN county_code_name_map ON (county_code_name_map.code = webemsof_account_detail.county_code) '
+      +       'JOIN service using (affiliate_num) '
       + 'ORDER BY account_descriptor',
       AppCommon.BdpConnection
       );
@@ -89,7 +89,7 @@ begin
         listitem.Create
           (
           BdpDataReader_account_descriptors['account_descriptor'].ToString,
-          BdpDataReader_account_descriptors['emsof_sponsorship_id'].ToString
+          BdpDataReader_account_descriptors['id'].ToString
           )
         );
     AppCommon.BdpConnection.Close;
@@ -127,8 +127,8 @@ var
 begin
   bdpCommand_match_account := Borland.Data.Provider.BdpCommand.Create
     (
-    'SELECT be_stale_password FROM emsof_sponsorship_webemsof_account '
-    +  'where emsof_sponsorship_webemsof_account.emsof_sponsorship_id="' + DropDownList_account_descriptor.SelectedValue + '" '
+    'SELECT be_stale_password FROM webemsof_account_master '
+    +  'where webemsof_account_master.id="' + DropDownList_account_descriptor.SelectedValue + '" '
     +     'and encoded_password=sha("' + TextBox_password.Text + '")'
     ,AppCommon.BdpConnection
     );

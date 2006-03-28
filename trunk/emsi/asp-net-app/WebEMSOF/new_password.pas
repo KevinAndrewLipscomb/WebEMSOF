@@ -67,10 +67,10 @@ begin
     //
     BdpCommand_temporarify_password := borland.data.provider.bdpcommand.Create
       (
-      'update emsof_sponsorship_webemsof_account '
+      'update webemsof_account_master '
       + 'set encoded_password=sha("' + temporary_password + '"),'
       +   'be_stale_password=TRUE '
-      + 'where emsof_sponsorship_id=' + session.Item['account_id'].ToString,
+      + 'where id=' + session.Item['account_id'].ToString,
       AppCommon.BdpConnection
       );
     BdpCommand_temporarify_password.ExecuteNonQuery;
@@ -79,8 +79,8 @@ begin
     //
     BdpCommand_get_email_address := borland.data.provider.bdpcommand.Create
       (
-      'select password_reset_email_address from emsof_sponsorship_webemsof_account '
-      + 'where emsof_sponsorship_id ="' + session.Item['account_id'].ToString + '"',
+      'select password_reset_email_address from webemsof_account_master '
+      + 'where id ="' + session.Item['account_id'].ToString + '"',
       AppCommon.BdpConnection
       );
     Object_email_address := BdpCommand_get_email_address.ExecuteScalar;
