@@ -131,7 +131,7 @@ begin
   AppCommon.BdpConnection.Close;
   if be_stale_password_obj <> nil then
     if be_stale_password_obj.ToString = '0' then
-      server.Transfer('account_overview.aspx')
+      server.Transfer('service_appropriation.aspx')
     else
       server.Transfer('change_password.aspx')
   else // be_stale_password_obj = nil
