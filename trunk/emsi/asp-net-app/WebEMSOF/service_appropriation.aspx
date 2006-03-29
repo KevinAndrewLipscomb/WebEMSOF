@@ -10,7 +10,13 @@
      <form runat="server">
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder>
-<p>{content}</p>
+<p>
+        <ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
+<p>Which appropriation do you want to work with?</p>
+<p>
+        <ASP:RadioButtonList id="RadioButtonList_appropriation" runat="server"></ASP:RadioButtonList></p>
+<p>
+        <ASP:Button id="Button_continue" runat="server" text="Continue"></ASP:Button></p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>
      </form>
