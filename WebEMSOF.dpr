@@ -21,6 +21,9 @@ library WebEMSOF;
 {%AspMarkupContainer 'change_email_address.aspx'}
 {%AspMarkupContainer 'request_overview.aspx'}
 {%AspMarkupContainer 'service_appropriation.aspx'}
+{%AspMarkupContainer 'main.aspx'}
+{%AspMarkupContainer 'login_county_coord.aspx'}
+{%AspMarkupContainer 'login_regional_staffer.aspx'}
 
 uses
   System.Reflection,
@@ -34,7 +37,10 @@ uses
   change_password in 'change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
   change_email_address in 'change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page},
   request_overview in 'request_overview.pas' {request_overview.TWebForm_request_overview: System.Web.UI.Page},
-  service_appropriation in 'service_appropriation.pas' {service_appropriation.TWebForm_service_appropriation: System.Web.UI.Page};
+  service_appropriation in 'service_appropriation.pas' {service_appropriation.TWebForm_service_appropriation: System.Web.UI.Page},
+  main in 'main.pas' {main.TWebForm_main: System.Web.UI.Page},
+  login_county_coord in 'login_county_coord.pas' {login_county_coord.TWebForm_login_county_coord: System.Web.UI.Page},
+  login_regional_staffer in 'login_regional_staffer.pas' {login_regional_staffer.TWebForm_login_regional_staffer: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following

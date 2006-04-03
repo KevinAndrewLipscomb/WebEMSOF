@@ -21,8 +21,8 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_service_name: System.Web.UI.WebControls.Label;
     Label_email_address: System.Web.UI.WebControls.Label;
+    Label_user_name: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -57,7 +57,7 @@ begin
   if not IsPostback then
     begin
     AppCommon.BdpConnection.Open;
-    Label_service_name.Text := session.Item['service_name'].ToString;
+    Label_user_name.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
     //
     // Build a suitably-random password string.
     //
@@ -67,10 +67,10 @@ begin
     //
     BdpCommand_temporarify_password := borland.data.provider.bdpcommand.Create
       (
-      'update service_user '
+      'update ' + session.Item['target_user_table'].ToString + '_user '
       + 'set encoded_password=sha("' + temporary_password + '"),'
       +   'be_stale_password=TRUE '
-      + 'where id=' + session.Item['service_user_id'].ToString,
+      + 'where id=' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString,
       AppCommon.BdpConnection
       );
     BdpCommand_temporarify_password.ExecuteNonQuery;
@@ -79,8 +79,8 @@ begin
     //
     BdpCommand_get_email_address := borland.data.provider.bdpcommand.Create
       (
-      'select password_reset_email_address from service_user '
-      + 'where id ="' + session.Item['service_user_id'].ToString + '"',
+      'select password_reset_email_address from ' + session.Item['target_user_table'].ToString + '_user '
+      + 'where id ="' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
       AppCommon.BdpConnection
       );
     Object_email_address := BdpCommand_get_email_address.ExecuteScalar;
@@ -91,12 +91,14 @@ begin
       Object_email_address.ToString,
       ConfigurationSettings.AppSettings['application_name'] + ' temp password',
       'Someone at the host known as ' + request.UserHostName + ' (possibly you) requested a new password for the '
-      + session.Item['service_name'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
-      + ' system.  Please log into ' + ConfigurationSettings.AppSettings['application_name'] + ' using the '
-      + 'following credentials.  You will receive further instructions at that time.' + NEW_LINE
+      + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + ' '
+      + session.Item['target_user_table'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
+      + ' system.  Please log into ' + ConfigurationSettings.AppSettings['application_name'] + ' using the following credentials.  '
+      + 'You will receive further instructions at that time.' + NEW_LINE
       + NEW_LINE
-      + '   Service:  ' + session.Item['service_name'].ToString + NEW_LINE
-      + '   Password: ' + temporary_password + NEW_LINE
+      + '   ' + session.Item['target_user_table'].ToString + ':  ' + session.Item[session.Item['target_user_table'].ToString
+      + '_name'].ToString + NEW_LINE
+      + '   Password:  ' + temporary_password + NEW_LINE
       + NEW_LINE
       + 'The ' + ConfigurationSettings.AppSettings['application_name'] + ' login page is located at:' + NEW_LINE
       + NEW_LINE
