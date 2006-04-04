@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="account_overview.pas" AutoEventWireup="false" Inherits="account_overview.TWebForm_account_overview"%>
+<%@ Page language="c#" Debug="true" Codebehind="county_overview.pas" AutoEventWireup="false" Inherits="county_overview.TWebForm_county_overview"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -11,9 +11,9 @@
         <asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder>
       </p>
       <p>
-        <ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>
+        <ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>
       </p>
-      <p><strong>Account overview</strong>
+      <p><strong>County overview</strong>
       </p>
       <p>
         <table cellspacing="0" cellpadding="0" width="%" border="1">
@@ -30,7 +30,7 @@
                         <p align="center">Action</p></td>
                 </tr>
                 <tr>
-                  <td>Your service's WebEMSOF profile is:</td>
+                  <td>Your county's WebEMSOF profile is:</td>
                   <td>
                     <p align="center">
                       <ASP:Label id="Label_profile_status" runat="server" font-bold="True"></ASP:Label>

@@ -55,7 +55,7 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
-    Label_account_descriptor.Text := session.Item['account_descriptor'].ToString;
+    Label_account_descriptor.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
     end;
 end;
 
@@ -78,16 +78,16 @@ begin
   //
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
-    'UPDATE service_user '
+    'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
     + 'SET encoded_password = sha("' + TextBox_nominal_password.Text + '"),'
     +   'be_stale_password = FALSE '
-    + 'WHERE id = "' + session.Item['account_id'].ToString + '"',
+    + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
     AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;
   BdpCommand_update_account.ExecuteNonQuery;
   AppCommon.BdpConnection.Close;
-  server.Transfer('account_overview.aspx');
+  server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
 end;
 
 end.

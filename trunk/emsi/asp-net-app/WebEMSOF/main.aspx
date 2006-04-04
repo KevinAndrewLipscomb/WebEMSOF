@@ -14,7 +14,7 @@
         <ASP:Label id="Label_application_name" runat="server"></ASP:Label>, please indicate what kind of user you are:</p>
       <ul>
         <li>
-<p><strong><a href="login.aspx">Service (ambulance, QRS, rescue, helicopter, etc)<br>
+<p><strong><a href="login.aspx">Service (ambulance, QRS, rescue, etc)<br>
               </a>
             </strong></p></li>
         <li>

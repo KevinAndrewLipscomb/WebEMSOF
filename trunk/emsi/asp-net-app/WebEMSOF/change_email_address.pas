@@ -62,15 +62,15 @@ begin
     //
     // Set Label_account descriptor
     //
-    Label_account_descriptor.Text := session.Item['account_descriptor'].ToString;
+    Label_account_descriptor.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
     //
     // Preload email address fields
     //
     BdpCommand_get_email_address := borland.data.provider.BdpCommand.Create
       (
       'SELECT password_reset_email_address '
-      + 'FROM service_user '
-      + 'WHERE id = "' + session.Item['account_id'].ToString + '"',
+      + 'FROM ' + session.Item['target_user_table'].ToString + '_user '
+      + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
       AppCommon.BdpConnection
       );
     Object_email_address := BdpCommand_get_email_address.ExecuteScalar;
@@ -100,15 +100,15 @@ begin
   //
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
-    'UPDATE service_user '
+    'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
     + 'SET password_reset_email_address = "' + TextBox_nominal_email_address.Text + '"'
-    + 'WHERE id = "' + session.Item['account_id'].ToString + '"',
+    + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
     AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;
   BdpCommand_update_account.ExecuteNonQuery;
   AppCommon.BdpConnection.Close;
-  server.Transfer('account_overview.aspx');
+  server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
 end;
 
 end.

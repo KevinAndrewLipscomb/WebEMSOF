@@ -1,5 +1,5 @@
 
-unit account_overview;
+unit regional_staffer_overview;
 
 interface
 
@@ -30,7 +30,7 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_service_name: System.Web.UI.WebControls.Label;
+    Label_regional_staffer_name: System.Web.UI.WebControls.Label;
     LinkButton_last_fy_request_action: System.Web.UI.WebControls.LinkButton;
     LinkButton_this_fy_request_action: System.Web.UI.WebControls.LinkButton;
     Label_profile_status: System.Web.UI.WebControls.Label;
@@ -85,15 +85,15 @@ begin
   if not IsPostback then
     begin
     //
-    // Set Label_service_name
+    // Set Label_regional_staffer_name
     //
-    Label_service_name.Text := session.Item['service_name'].ToString;
+    Label_regional_staffer_name.Text := session.Item['regional_staffer_name'].ToString;
     //
     // Set Label_profile_status
     //
     bdpCommand_get_profile_status := borland.data.provider.bdpCommand.Create
       (
-      'select be_valid_profile from service where id = "' + session.Item['service_user_id'].ToString + '"'
+      'select be_valid_profile from regional_staffer where id = "' + session.Item['regional_staffer_user_id'].ToString + '"'
       ,AppCommon.BdpConnection
       );
     AppCommon.BdpConnection.Open;
