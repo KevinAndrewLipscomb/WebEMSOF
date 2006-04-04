@@ -24,6 +24,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'main.aspx'}
 {%AspMarkupContainer 'login_county_coord.aspx'}
 {%AspMarkupContainer 'login_regional_staffer.aspx'}
+{%ConfigurationCompiler 'unpublished.config'}
 
 uses
   System.Reflection,
