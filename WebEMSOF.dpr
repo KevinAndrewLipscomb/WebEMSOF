@@ -14,7 +14,7 @@ library WebEMSOF;
 {%DelphiDotNetAssemblyCompiler 'c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Common.dll'}
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\mscorlib.dll'}
 {%AspMarkupContainer 'new_password.aspx'}
-{%AspMarkupContainer 'account_overview.aspx'}
+{%AspMarkupContainer 'service_overview.aspx'}
 {%AspMarkupContainer 'profile.aspx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%AspMarkupContainer 'change_password.aspx'}
@@ -25,6 +25,9 @@ library WebEMSOF;
 {%AspMarkupContainer 'login_county_coord.aspx'}
 {%AspMarkupContainer 'login_regional_staffer.aspx'}
 {%ConfigurationCompiler 'unpublished.config'}
+{%AspMarkupContainer 'regional_staffer_overview.aspx'}
+{%AspMarkupContainer 'county_overview.aspx'}
+{%AspMarkupContainer 'county_appropriation.aspx'}
 
 uses
   System.Reflection,
@@ -33,7 +36,7 @@ uses
   login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
   AppCommon in 'AppCommon.pas',
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
-  account_overview in 'account_overview.pas' {account_overview.TWebForm_account_overview: System.Web.UI.Page},
+  service_overview in 'service_overview.pas' {service_overview.TWebForm_account_overview: System.Web.UI.Page},
   profile in 'profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
   change_password in 'change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
   change_email_address in 'change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page},
@@ -41,7 +44,10 @@ uses
   service_appropriation in 'service_appropriation.pas' {service_appropriation.TWebForm_service_appropriation: System.Web.UI.Page},
   main in 'main.pas' {main.TWebForm_main: System.Web.UI.Page},
   login_county_coord in 'login_county_coord.pas' {login_county_coord.TWebForm_login_county_coord: System.Web.UI.Page},
-  login_regional_staffer in 'login_regional_staffer.pas' {login_regional_staffer.TWebForm_login_regional_staffer: System.Web.UI.Page};
+  login_regional_staffer in 'login_regional_staffer.pas' {login_regional_staffer.TWebForm_login_regional_staffer: System.Web.UI.Page},
+  regional_staffer_overview in 'regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_account_overview: System.Web.UI.Page},
+  county_overview in 'county_overview.pas',
+  county_appropriation in 'county_appropriation.pas' {county_appropriation.TWebForm_county_appropriation: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following

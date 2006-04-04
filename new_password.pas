@@ -90,20 +90,21 @@ begin
       ConfigurationSettings.AppSettings['sender_email_address'],
       Object_email_address.ToString,
       ConfigurationSettings.AppSettings['application_name'] + ' temp password',
-      'Someone at the host known as ' + request.UserHostName + ' (possibly you) requested a new password for the '
-      + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + ' '
+      'Someone at the host known as ' + request.UserHostName + ' (possibly you) requested a new password for the "'
+      + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + '" '
       + session.Item['target_user_table'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
       + ' system.  Please log into ' + ConfigurationSettings.AppSettings['application_name'] + ' using the following credentials.  '
       + 'You will receive further instructions at that time.' + NEW_LINE
       + NEW_LINE
-      + '   ' + session.Item['target_user_table'].ToString + ':  ' + session.Item[session.Item['target_user_table'].ToString
-      + '_name'].ToString + NEW_LINE
-      + '   Password:  ' + temporary_password + NEW_LINE
+      + '   ' + session.Item['target_user_table'].ToString + ':' + NEW_LINE
+      + '      ' + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + NEW_LINE
+      + '   password:' + NEW_LINE
+      + '      ' + temporary_password + NEW_LINE
       + NEW_LINE
-      + 'The ' + ConfigurationSettings.AppSettings['application_name'] + ' login page is located at:' + NEW_LINE
+      + 'You can complete this process by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + '/login.aspx' + NEW_LINE
+      + ConfigurationSettings.AppSettings['application_name'] + '/main.aspx' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
