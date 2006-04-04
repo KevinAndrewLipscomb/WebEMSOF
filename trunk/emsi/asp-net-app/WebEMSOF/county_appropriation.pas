@@ -98,6 +98,7 @@ procedure TWebForm_county_appropriation.Button_continue_Click(sender: System.Obj
 begin
   session.Remove('region_dictated_appropriation_id');
   session.Add('region_dictated_appropriation_id',RadioButtonList_appropriation.SelectedValue);
+  server.Transfer('county_dictated_appropriations.aspx');
 end;
 
 end.
