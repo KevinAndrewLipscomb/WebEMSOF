@@ -50,7 +50,9 @@ end;
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   BdpCommand_get_appropriation_attribs: borland.data.provider.BdpCommand;
+  BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
   BdpDataReader_appropriation_attribs: borland.data.provider.BdpDataReader;
+  BdpDataReader_service_appropriations: borland.data.provider.BdpDataReader;
   TableRow_current: system.web.ui.webcontrols.TableRow;
   TableCell_edit_link: system.web.ui.webcontrols.TableCell;
   TableCell_service_name: system.web.ui.webcontrols.TableCell;
@@ -65,10 +67,11 @@ begin
     //
     BdpCommand_get_appropriation_attribs := borland.data.provider.bdpcommand.Create
       (
-      'select fiscal_year.designator,amount,region_code_name_map.name '
+      'select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name '
       + 'from region_dictated_appropriation '
-      +   'join fiscal_year on (fiscal_year.id = region_dictated_appropriation.fiscal_year_id) '
-      +   'join region_code_name_map on (region_code_name_map.code = region_dictated_appropriation.region_code) '
+      +   'join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) '
+      +   'join fiscal_year on (fiscal_year.id = fiscal_year_id) '
+      +   'join region_code_name_map on (region_code_name_map.code = region_code) '
       + 'where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].ToString,
       AppCommon.BdpConnection
       );
@@ -77,18 +80,34 @@ begin
     Label_fiscal_year_designator.Text := BdpDataReader_appropriation_attribs.GetString(0);
     Label_amount.Text := BdpDataReader_appropriation_attribs.GetDecimal(1).ToString;
     Label_region_name.Text := BdpDataReader_appropriation_attribs.GetString(2);
+    BdpDataReader_appropriation_attribs.Close;
     //
-//    TableRow_current := system.web.ui.webcontrols.tablerow.Create;
-//    TableCell_edit_link := system.web.ui.webcontrols.tablecell.Create;
-//    TableCell_edit_link.Text := 'Edit';
-//    TableRow_current.Cells.Add(TableCell_edit_link);
-//    TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
-//    TableCell_service_name.Text := '';
-//    TableRow_current.Cells.Add(TableCell_service_name);
-//    TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
-//    TableCell_amount.Text := '';
-//    TableRow_current.Cells.Add(TableCell_amount);
-//    Table_service_appropriations.Rows.Add(TableRow_current);
+    BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
+      (
+      'select county_dictated_appropriation.id,service.name,county_dictated_appropriation.amount '
+      + 'from county_dictated_appropriation '
+      +   'join service on (service.id=service_id) '
+      + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString,
+      AppCommon.BdpConnection
+      );
+    BdpDataReader_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
+    while BdpDataReader_service_appropriations.Read do
+      begin
+      TableRow_current := system.web.ui.webcontrols.tablerow.Create;
+      TableCell_edit_link := system.web.ui.webcontrols.tablecell.Create;
+      session.Remove('county_dictated_appropriation_id');
+      session.Add('county_dictated_appropriation_id',BdpDataReader_service_appropriations.GetInt16(0).ToString);
+      TableCell_edit_link.Text := '<a href="">Edit</a>';
+      TableRow_current.Cells.Add(TableCell_edit_link);
+      TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
+      TableCell_service_name.Text := BdpDataReader_service_appropriations.GetString(1);
+      TableRow_current.Cells.Add(TableCell_service_name);
+      TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
+      TableCell_amount.Text := BdpDataReader_service_appropriations.GetDecimal(2).ToString;
+      TableRow_current.Cells.Add(TableCell_amount);
+      Table_service_appropriations.Rows.Add(TableRow_current);
+      end;
+    BdpDataReader_service_appropriations.Close;
     AppCommon.BdpConnection.Close;
     end;
 end;
