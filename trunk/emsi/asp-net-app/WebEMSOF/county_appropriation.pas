@@ -63,10 +63,11 @@ begin
     bdpCommand_get_appropriations := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT region_dictated_appropriation.id,'
-      + 'concat("$",amount," from ",name," for ",designator) as appropriation_description '
+      + 'concat("$",region_dictated_appropriation.amount," from ",name," for ",designator) as appropriation_description '
       + 'FROM region_dictated_appropriation '
-      +   'JOIN region_code_name_map on (region_code_name_map.code=region_dictated_appropriation.region_code) '
-      +   'JOIN fiscal_year on (fiscal_year.id = region_dictated_appropriation.fiscal_year_id) '
+      +   'JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) '
+      +   'JOIN region_code_name_map on (region_code_name_map.code=region_code) '
+      +   'JOIN fiscal_year on (fiscal_year.id = fiscal_year_id) '
       + 'WHERE county_code = ' + session.Item['county_user_id'].ToString,
       AppCommon.BdpConnection
       );
