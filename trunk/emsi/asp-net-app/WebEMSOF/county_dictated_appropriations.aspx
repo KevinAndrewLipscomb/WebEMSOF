@@ -16,8 +16,10 @@
         <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label>&nbsp;appropriation of <strong>$</strong>
         <ASP:Label id="Label_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;from 
         <ASP:Label id="Label_region_name" runat="server"></ASP:Label>, the following service appropriations have been made:</p>
+      <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
 <p>
         <ASP:Table id="Table_service_appropriations" runat="server" borderwidth="1px" cellpadding="10"></ASP:Table></p>
+      </blockquote>
 <p>From the above county appropriation, you have <strong>$</strong><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;left to appropriate to services by the regional deadline of
         <ASP:Label id="Label_regional_county_dictated_appropriation_deadline_date_string" runat="server" font-bold="True" font-underline="True"></ASP:Label>.</p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
