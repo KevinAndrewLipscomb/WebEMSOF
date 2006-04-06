@@ -49,15 +49,20 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
+  service_appropriation_amount: decimal;
+  accumulated_service_appropriation_amount: decimal;
   BdpCommand_get_appropriation_attribs: borland.data.provider.BdpCommand;
   BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
   BdpDataReader_appropriation_attribs: borland.data.provider.BdpDataReader;
   BdpDataReader_service_appropriations: borland.data.provider.BdpDataReader;
+  region_dictated_appropriation_amount: decimal;
   TableRow_current: system.web.ui.webcontrols.TableRow;
   TableCell_edit_link: system.web.ui.webcontrols.TableCell;
+  TableCell_only: system.web.ui.webcontrols.TableCell;
   TableCell_service_name: system.web.ui.webcontrols.TableCell;
   TableCell_amount: system.web.ui.webcontrols.TableCell;
 begin
+  accumulated_service_appropriation_amount := 0.0;
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
@@ -78,7 +83,8 @@ begin
     BdpDataReader_appropriation_attribs := BdpCommand_get_appropriation_attribs.ExecuteReader;
     BdpDataReader_appropriation_attribs.Read;
     Label_fiscal_year_designator.Text := BdpDataReader_appropriation_attribs.GetString(0);
-    Label_amount.Text := BdpDataReader_appropriation_attribs.GetDecimal(1).ToString;
+    region_dictated_appropriation_amount := BdpDataReader_appropriation_attribs.GetDecimal(1);
+    Label_amount.Text := region_dictated_appropriation_amount.ToString;
     Label_region_name.Text := BdpDataReader_appropriation_attribs.GetString(2);
     BdpDataReader_appropriation_attribs.Close;
     //
@@ -91,22 +97,75 @@ begin
       AppCommon.BdpConnection
       );
     BdpDataReader_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
-    while BdpDataReader_service_appropriations.Read do
+    if BdpDataReader_service_appropriations.FieldCount < 1 then
       begin
       TableRow_current := system.web.ui.webcontrols.tablerow.Create;
-      TableCell_edit_link := system.web.ui.webcontrols.tablecell.Create;
-      session.Remove('county_dictated_appropriation_id');
-      session.Add('county_dictated_appropriation_id',BdpDataReader_service_appropriations.GetInt16(0).ToString);
-      TableCell_edit_link.Text := '<a href="">Edit</a>';
-      TableRow_current.Cells.Add(TableCell_edit_link);
-      TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
-      TableCell_service_name.Text := BdpDataReader_service_appropriations.GetString(1);
-      TableRow_current.Cells.Add(TableCell_service_name);
-      TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
-      TableCell_amount.Text := BdpDataReader_service_appropriations.GetDecimal(2).ToString;
-      TableRow_current.Cells.Add(TableCell_amount);
+      TableCell_only := system.web.ui.webcontrols.tablecell.Create;
+      TableCell_only.Text := 'None';
+      TableRow_current.Cells.Add(TableCell_only);
       Table_service_appropriations.Rows.Add(TableRow_current);
+      end
+    else
+      begin
+      //
+      // Build header row.
+      //
+      // Header for the column that holds the Edit links will be empty.
+      TableRow_current := system.web.ui.webcontrols.tablerow.Create;
+      TableRow_current.Cells.Add(system.web.ui.webcontrols.tablecell.Create);
+      // Service name
+      TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
+      TableCell_service_name.Text := 'Service';
+      TableCell_service_name.Font.Bold := TRUE;
+      TableCell_service_name.Font.Underline := TRUE;
+      TableRow_current.Cells.Add(TableCell_service_name);
+      // Amount
+      TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
+      TableCell_amount.Text := 'Amount';
+      TableCell_amount.Font.Bold := TRUE;
+      TableCell_amount.Font.Underline := TRUE;
+      TableRow_current.Cells.Add(TableCell_amount);
+      //
+      Table_service_appropriations.Rows.Add(TableRow_current);
+      //
+      while BdpDataReader_service_appropriations.Read do
+        begin
+        //
+        // Build the row.
+        //
+        // Edit link
+        TableRow_current := system.web.ui.webcontrols.tablerow.Create;
+        TableCell_edit_link := system.web.ui.webcontrols.tablecell.Create;
+        session.Remove('county_dictated_appropriation_id');
+        session.Add
+          (
+          'county_dictated_appropriation_id',
+          BdpDataReader_service_appropriations.GetInt32(BdpDataReader_service_appropriations.GetOrdinal('id')).ToString
+          );
+        TableCell_edit_link.Text := '<a href="">Edit</a>';
+        TableRow_current.Cells.Add(TableCell_edit_link);
+        // Service name
+        TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
+        TableCell_service_name.Text :=
+        BdpDataReader_service_appropriations.GetString(BdpDataReader_service_appropriations.GetOrdinal('name'));
+        TableRow_current.Cells.Add(TableCell_service_name);
+        // Amount
+        TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
+        service_appropriation_amount := BdpDataReader_service_appropriations.GetDecimal(BdpDataReader_service_appropriations.GetOrdinal('amount'));
+        TableCell_amount.Text := '$' + service_appropriation_amount.ToString;
+        TableRow_current.Cells.Add(TableCell_amount);
+        Table_service_appropriations.Rows.Add(TableRow_current);
+        //
+        // Accumulate the amount.
+        //
+        accumulated_service_appropriation_amount := accumulated_service_appropriation_amount + service_appropriation_amount;
+        //
+        end;
       end;
+    //
+    // Set Label_remainder
+    //
+    Label_unappropriated_amount.Text := (region_dictated_appropriation_amount - accumulated_service_appropriation_amount).ToString;
     BdpDataReader_service_appropriations.Close;
     AppCommon.BdpConnection.Close;
     end;
