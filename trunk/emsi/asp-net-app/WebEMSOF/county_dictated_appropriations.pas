@@ -53,8 +53,8 @@ var
   accumulated_service_appropriation_amount: decimal;
   BdpCommand_get_appropriation_attribs: borland.data.provider.BdpCommand;
   BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
-  BdpDataReader_appropriation_attribs: borland.data.provider.BdpDataReader;
-  BdpDataReader_service_appropriations: borland.data.provider.BdpDataReader;
+  bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
+  bdr_service_appropriations: borland.data.provider.BdpDataReader;
   region_dictated_appropriation_amount: decimal;
   TableRow_current: system.web.ui.webcontrols.TableRow;
   TableCell_edit_link: system.web.ui.webcontrols.TableCell;
@@ -80,13 +80,15 @@ begin
       + 'where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].ToString,
       AppCommon.BdpConnection
       );
-    BdpDataReader_appropriation_attribs := BdpCommand_get_appropriation_attribs.ExecuteReader;
-    BdpDataReader_appropriation_attribs.Read;
-    Label_fiscal_year_designator.Text := BdpDataReader_appropriation_attribs.GetString(0);
-    region_dictated_appropriation_amount := BdpDataReader_appropriation_attribs.GetDecimal(1);
+    bdr_appropriation_attribs := BdpCommand_get_appropriation_attribs.ExecuteReader;
+    bdr_appropriation_attribs.Read;
+    Label_fiscal_year_designator.Text :=
+      bdr_appropriation_attribs.GetValue(bdr_appropriation_attribs.GetOrdinal('designator')).ToString;
+    region_dictated_appropriation_amount :=
+      bdr_appropriation_attribs.GetDecimal(bdr_appropriation_attribs.GetOrdinal('amount'));
     Label_amount.Text := region_dictated_appropriation_amount.ToString;
-    Label_region_name.Text := BdpDataReader_appropriation_attribs.GetString(2);
-    BdpDataReader_appropriation_attribs.Close;
+    Label_region_name.Text := bdr_appropriation_attribs.GetValue(bdr_appropriation_attribs.GetOrdinal('name')).ToString;
+    bdr_appropriation_attribs.Close;
     //
     BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
       (
@@ -96,8 +98,8 @@ begin
       + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString,
       AppCommon.BdpConnection
       );
-    BdpDataReader_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
-    if BdpDataReader_service_appropriations.FieldCount < 1 then
+    bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
+    if bdr_service_appropriations.FieldCount < 1 then
       begin
       TableRow_current := system.web.ui.webcontrols.tablerow.Create;
       TableCell_only := system.web.ui.webcontrols.tablecell.Create;
@@ -128,7 +130,7 @@ begin
       //
       Table_service_appropriations.Rows.Add(TableRow_current);
       //
-      while BdpDataReader_service_appropriations.Read do
+      while bdr_service_appropriations.Read do
         begin
         //
         // Build the row.
@@ -140,18 +142,18 @@ begin
         session.Add
           (
           'county_dictated_appropriation_id',
-          BdpDataReader_service_appropriations.GetInt32(BdpDataReader_service_appropriations.GetOrdinal('id')).ToString
+          bdr_service_appropriations.GetInt32(bdr_service_appropriations.GetOrdinal('id')).ToString
           );
         TableCell_edit_link.Text := '<a href="">Edit</a>';
         TableRow_current.Cells.Add(TableCell_edit_link);
         // Service name
         TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
         TableCell_service_name.Text :=
-        BdpDataReader_service_appropriations.GetString(BdpDataReader_service_appropriations.GetOrdinal('name'));
+        bdr_service_appropriations.GetString(bdr_service_appropriations.GetOrdinal('name'));
         TableRow_current.Cells.Add(TableCell_service_name);
         // Amount
         TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
-        service_appropriation_amount := BdpDataReader_service_appropriations.GetDecimal(BdpDataReader_service_appropriations.GetOrdinal('amount'));
+        service_appropriation_amount := bdr_service_appropriations.GetDecimal(bdr_service_appropriations.GetOrdinal('amount'));
         TableCell_amount.Text := '$' + service_appropriation_amount.ToString;
         TableRow_current.Cells.Add(TableCell_amount);
         Table_service_appropriations.Rows.Add(TableRow_current);
@@ -166,7 +168,7 @@ begin
     // Set Label_remainder
     //
     Label_unappropriated_amount.Text := (region_dictated_appropriation_amount - accumulated_service_appropriation_amount).ToString;
-    BdpDataReader_service_appropriations.Close;
+    bdr_service_appropriations.Close;
     AppCommon.BdpConnection.Close;
     end;
 end;
