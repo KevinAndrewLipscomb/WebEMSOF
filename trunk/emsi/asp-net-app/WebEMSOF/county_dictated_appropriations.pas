@@ -16,6 +16,7 @@ type
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    procedure Bind_service_appropriations(sort_expression: string);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -28,6 +29,7 @@ type
     bdr_service_appropriations: borland.data.provider.BdpDataReader;
     Label_regional_county_dictated_appropriation_deadline_date: System.Web.UI.WebControls.Label;
     DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
+    procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
     { Public Declarations }
@@ -42,6 +44,7 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
+  Include(Self.DataGrid_service_appropriations.SortCommand, Self.SortCommand_service_appropriations);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -52,7 +55,6 @@ procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Objec
 var
   accumulated_service_appropriation_amount: decimal;
   BdpCommand_get_appropriation_attribs: borland.data.provider.BdpCommand;
-  BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
   region_dictated_appropriation_amount: decimal;
   service_appropriation_amount: decimal;
@@ -83,17 +85,7 @@ begin
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
     bdr_appropriation_attribs.Close;
     //
-    BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
-      (
-      'select county_dictated_appropriation.id,affiliate_num,service.name,county_dictated_appropriation.amount '
-      + 'from county_dictated_appropriation '
-      +   'join service on (service.id=service_id) '
-      + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString,
-      AppCommon.BdpConnection
-      );
-    bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
-    DataGrid_service_appropriations.DataSource := bdr_service_appropriations;
-    DataGrid_service_appropriations.DataBind;
+    Bind_service_appropriations('name');
     //
     // Set Label_remainder
     //
@@ -110,6 +102,32 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations(sort_expression: string);
+var
+  BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
+begin
+  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
+    (
+    'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
+    + 'from county_dictated_appropriation '
+    +   'join service on (service.id=service_id) '
+    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
+    + 'order by ' + sort_expression,
+    AppCommon.BdpConnection
+    );
+  bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
+  DataGrid_service_appropriations.DataSource := bdr_service_appropriations;
+  DataGrid_service_appropriations.DataBind;
+end;
+
+procedure TWebForm_county_dictated_appropriations.SortCommand_service_appropriations(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
+begin
+  AppCommon.BdpConnection.Open;
+  Bind_service_appropriations(e.SortExpression);
+  AppCommon.BdpConnection.Close;
 end;
 
 end.

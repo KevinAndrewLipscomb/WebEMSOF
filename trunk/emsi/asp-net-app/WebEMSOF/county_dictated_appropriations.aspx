@@ -4,6 +4,7 @@
 <html>
   <head>
 	<title id="Title" runat="server"></title>
+    <!-- $Id$ -->
   </head>
 
   <body>
@@ -18,7 +19,18 @@
         <ASP:Label id="Label_region_name" runat="server"></ASP:Label>, the following service appropriations have been made:</p>
       <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
 <p>
-          <ASP:DataGrid id="DataGrid_service_appropriations" runat="server" bordercolor="#CCCCCC" borderstyle="None" borderwidth="1px" backcolor="White" cellpadding="5" gridlines="Horizontal" forecolor="Black" allowsorting="True" useaccessibleheader="True" autogeneratecolumns="False">
+		  <ASP:DataGrid id="DataGrid_service_appropriations" runat="server"
+			bordercolor="#CCCCCC"
+			borderstyle="None"
+			borderwidth="1px"
+			backcolor="White"
+			cellpadding="5"
+			gridlines="Horizontal"
+			forecolor="Black"
+			allowsorting="True"
+			useaccessibleheader="True"
+			autogeneratecolumns="False"
+			OnSortCommand="SortCommand_service_appropriations">
             <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
             <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
             <HeaderStyle font-bold="True" forecolor="White" backcolor="#333333"></HeaderStyle>
@@ -29,7 +41,7 @@
               <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:$#,###,###.##}"></ASP:BoundColumn>
               <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit"></ASP:EditCommandColumn>
             </Columns>
-            <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid></p>
+			<PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid></p>
       </blockquote>
 <p>From the above county appropriation, you have <strong>$</strong><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;left to appropriate to services by the regional deadline of
         <ASP:Label id="Label_regional_county_dictated_appropriation_deadline_date" runat="server" font-bold="True" font-underline="True"></ASP:Label>.</p>
