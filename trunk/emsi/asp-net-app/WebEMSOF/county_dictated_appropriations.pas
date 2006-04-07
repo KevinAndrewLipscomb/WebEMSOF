@@ -25,9 +25,9 @@ type
     Label_amount: System.Web.UI.WebControls.Label;
     Label_region_name: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
-    Label_regional_county_dictated_appropriation_deadline_date_string: System.Web.UI.WebControls.Label;
     bdr_service_appropriations: borland.data.provider.BdpDataReader;
-    DataGrid_county_dictated_appropriation_join: System.Web.UI.WebControls.DataGrid;
+    Label_regional_county_dictated_appropriation_deadline_date: System.Web.UI.WebControls.Label;
+    DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
     procedure OnInit(e: EventArgs); override;
   public
     { Public Declarations }
@@ -46,6 +46,8 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   accumulated_service_appropriation_amount: decimal;
@@ -56,10 +58,10 @@ var
   service_appropriation_amount: decimal;
 begin
   accumulated_service_appropriation_amount := 0.0;
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     AppCommon.BdpConnection.Open;
     Label_county_name.Text := session.Item['county_name'].ToString;
     //
@@ -90,7 +92,8 @@ begin
       AppCommon.BdpConnection
       );
     bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
-    DataGrid_county_dictated_appropriation_join.DataBind;
+    DataGrid_service_appropriations.DataSource := bdr_service_appropriations;
+    DataGrid_service_appropriations.DataBind;
     //
     // Set Label_remainder
     //
