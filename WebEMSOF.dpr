@@ -47,7 +47,7 @@ uses
   login_county_coord in 'login_county_coord.pas' {login_county_coord.TWebForm_login_county_coord: System.Web.UI.Page},
   login_regional_staffer in 'login_regional_staffer.pas' {login_regional_staffer.TWebForm_login_regional_staffer: System.Web.UI.Page},
   regional_staffer_overview in 'regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_account_overview: System.Web.UI.Page},
-  county_overview in 'county_overview.pas',
+  county_overview in 'county_overview.pas' {county_overview.TWebForm_account_overview: System.Web.UI.Page},
   county_appropriation in 'county_appropriation.pas' {county_appropriation.TWebForm_county_appropriation: System.Web.UI.Page},
   county_dictated_appropriations in 'county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page};
 

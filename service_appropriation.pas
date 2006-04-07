@@ -48,7 +48,7 @@ end;
 procedure TWebForm_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdpCommand_get_appropriations: Borland.Data.Provider.BdpCommand;
-  BdpDataReader_appropriations: borland.data.provider.BdpDataReader;
+  bdr: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - service_appropriation';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -62,23 +62,31 @@ begin
     //
     bdpCommand_get_appropriations := Borland.Data.Provider.BdpCommand.Create
       (
-      'SELECT unique id,name '
+      'SELECT county_dictated_appropriation.id,'
+      + 'concat'
+      +   '('
+      +   '"$",'
+      +   'county_dictated_appropriation.amount,'
+      +   '" from ",'
+      +   'region_code_name_map.name,'
+      +   '" via ",'
+      +   'county_code_name_map.name,'
+      +   '" County for ",'
+      +   'designator'
+      +   ') '
+      +   'as appropriation_description '
       + 'FROM county_dictated_appropriation '
-      +   'JOIN county_code_name_map on (county_code_name_map.code=county_dictated_appropriation.county_code) '
-      + 'WHERE service_id = ' + session.Item['session_user_id'].ToString
-      + 'ORDER BY name',
+      +   'JOIN region_dictated_appropriation on (region_dictated_appropriation.id=region_dictated_appropriation_id) '
+      +   'JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) '
+      +   'JOIN region_code_name_map on (region_code_name_map.code=state_dictated_appropriation.region_code) '
+      +   'JOIN county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code) '
+      +   'JOIN fiscal_year on (fiscal_year.id = fiscal_year_id) '
+      + 'WHERE service_id = ' + session.Item['service_user_id'].ToString,
       AppCommon.BdpConnection
       );
-    BdpDataReader_appropriations := bdpCommand_get_appropriations.ExecuteReader;
-    while bdpDataReader_appropriations.Read do
-      RadioButtonList_appropriation.Items.Add
-        (
-        listitem.Create
-          (
-          BdpDataReader_appropriations['name'].ToString + ' County',
-          BdpDataReader_appropriations['id'].ToString
-          )
-        );
+    bdr := bdpCommand_get_appropriations.ExecuteReader;
+    while bdr.Read do
+      RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
     AppCommon.BdpConnection.Close;
     end;
 end;

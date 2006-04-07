@@ -59,7 +59,7 @@ end;
 procedure TWebForm_login_county_coord.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdpCommand_get_counties: Borland.Data.Provider.BdpCommand;
-  BdpDataReader_counties: borland.data.provider.BdpDataReader;
+  bdr: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login_county_coord';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -81,16 +81,9 @@ begin
       + 'ORDER BY name',
       AppCommon.BdpConnection
       );
-    BdpDataReader_counties := bdpCommand_get_counties.ExecuteReader;
-    while bdpDataReader_counties.Read do
-      DropDownList_county.Items.Add
-        (
-        listitem.Create
-          (
-          BdpDataReader_counties['name'].ToString,
-          BdpDataReader_counties['id'].ToString
-          )
-        );
+    bdr := bdpCommand_get_counties.ExecuteReader;
+    while bdr.Read do
+      DropDownList_county.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
     AppCommon.BdpConnection.Close;
     end;
 end;
