@@ -29,7 +29,6 @@ library WebEMSOF;
 {%AspMarkupContainer 'county_overview.aspx'}
 {%AspMarkupContainer 'county_appropriation.aspx'}
 {%AspMarkupContainer 'county_dictated_appropriations.aspx'}
-{$R 'county_dictated_appropriations.TWebForm_county_dictated_appropriations.resources' 'county_dictated_appropriations.resx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\new_password\default.txaPackage'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\request_overview\default.txaPackage'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\main\default.txaPackage'}
