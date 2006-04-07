@@ -76,9 +76,9 @@ var
   bdpCommand_get_last_fy_request_attributes: borland.data.Provider.bdpcommand;
   max_fiscal_year_id_obj: System.Object;
   bdpCommand_get_max_fiscal_year_id: borland.data.provider.BdpCommand;
-  bdpDataReader_last_fy_request_attributes: borland.data.provider.BdpDataReader;
+  bdr_last_fy_request_attributes: borland.data.provider.BdpDataReader;
   bdpCommand_get_this_fy_request_attributes: borland.data.Provider.bdpcommand;
-  bdpDataReader_this_fy_request_attributes: borland.data.provider.BdpDataReader;
+  bdr_this_fy_request_attributes: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -130,12 +130,12 @@ begin
         +    'and emsof_request_master.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
         AppCommon.BdpConnection
         );
-      bdpDataReader_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
-      if bdpDataReader_last_fy_request_attributes.Read then
+      bdr_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
+      if bdr_last_fy_request_attributes.Read then
         begin
-        Label_last_fy_request_id.Text := bdpDataReader_last_fy_request_attributes.GetString(0);
-        Label_last_fy_request_status.Text := bdpDataReader_last_fy_request_attributes.GetString(1) + '.';
-        Label_last_fy_request_value.Text := bdpDataReader_last_fy_request_attributes.GetString(2);
+        Label_last_fy_request_id.Text := bdr_last_fy_request_attributes['id'].tostring;
+        Label_last_fy_request_status.Text := bdr_last_fy_request_attributes['description'].tostring + '.';
+        Label_last_fy_request_value.Text := bdr_last_fy_request_attributes['value'].tostring;
         LinkButton_last_fy_request_action.Text := 'Review';
         end
       else
@@ -159,12 +159,12 @@ begin
         +    'and emsof_request_master.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
         AppCommon.BdpConnection
         );
-      bdpDataReader_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
-      if bdpDataReader_this_fy_request_attributes.Read then
+      bdr_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
+      if bdr_this_fy_request_attributes.Read then
         begin
-        Label_this_fy_request_id.Text := bdpDataReader_this_fy_request_attributes.GetString(0);
-        Label_this_fy_request_status.Text := bdpDataReader_this_fy_request_attributes.GetString(1) + '.';
-        Label_this_fy_request_value.Text := bdpDataReader_this_fy_request_attributes.GetString(2);
+        Label_this_fy_request_id.Text := bdr_this_fy_request_attributes['id'].ToString;
+        Label_this_fy_request_status.Text := bdr_this_fy_request_attributes['description'].tostring + '.';
+        Label_this_fy_request_value.Text := bdr_this_fy_request_attributes['value'].ToString;
         LinkButton_this_fy_request_action.Text := 'Review';
         end
       else

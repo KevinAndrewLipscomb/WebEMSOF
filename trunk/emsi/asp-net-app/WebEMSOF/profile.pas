@@ -77,7 +77,7 @@ var
   affiliate_num_obj: System.Object;
   BdpCommand_get_affiliate_num: borland.data.provider.BdpCommand;
   BdpCommand_get_profile: borland.data.provider.BdpCommand;
-  BdpDataReader_profile: borland.data.provider.BdpDataReader;
+  bdr: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - template_std';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -125,23 +125,23 @@ begin
       + 'WHERE affiliate_num = "' + affiliate_num_obj.ToString + '"',
       AppCommon.BdpConnection
       );
-    BdpDataReader_profile := BdpCommand_get_profile.ExecuteReader;
-    BdpDataReader_profile.Read;
+    bdr := BdpCommand_get_profile.ExecuteReader;
+    bdr.Read;
     //
-    TextBox_service_name.Text := BdpDataReader_profile.GetString(0);
-    CheckBox_qrs.Checked := Boolean(BdpDataReader_profile.GetInt16(1));
-    CheckBox_bls_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(2));
-    CheckBox_als_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(3));
-    CheckBox_als_squad.Checked := Boolean(BdpDataReader_profile.GetInt16(4));
-    CheckBox_air_amb.Checked := Boolean(BdpDataReader_profile.GetInt16(5));
-    CheckBox_rescue.Checked := Boolean(BdpDataReader_profile.GetInt16(6));
-    TextBox_address_line_1.Text := BdpDataReader_profile.GetString(7);
-    TextBox_address_line_2.Text := BdpDataReader_profile.GetString(8);
-    TextBox_city.Text := BdpDataReader_profile.GetString(9);
-    TextBox_zip_code.Text := BdpDataReader_profile.GetString(10);
-    TextBox_federal_tax_id_num.Text := BdpDataReader_profile.GetString(11);
-    TextBox_contact_person_name.Text := BdpDataReader_profile.GetString(12);
-    TextBox_contact_person_phone_num.Text := BdpDataReader_profile.GetString(13);
+    TextBox_service_name.Text := bdr['name'].tostring;
+    CheckBox_qrs.Checked := Boolean(bdr['be_qrs']);
+    CheckBox_bls_amb.Checked := Boolean(bdr['be_bls_amb']);
+    CheckBox_als_amb.Checked := Boolean(bdr['be_als_amb']);
+    CheckBox_als_squad.Checked := Boolean(bdr['be_als_squad']);
+    CheckBox_air_amb.Checked := Boolean(bdr['be_air_amb']);
+    CheckBox_rescue.Checked := Boolean(bdr['be_rescue']);
+    TextBox_address_line_1.Text := bdr['address_line_1'].tostring;
+    TextBox_address_line_2.Text := bdr['address_line_2'].tostring;
+    TextBox_city.Text := bdr['city'].tostring;
+    TextBox_zip_code.Text := bdr['zip_code'].tostring;
+    TextBox_federal_tax_id_num.Text := bdr['federal_tax_id_num'].tostring;
+    TextBox_contact_person_name.Text := bdr['contact_person_name'].tostring;
+    TextBox_contact_person_phone_num.Text := bdr['contact_person_phone_num'].tostring;
     //
     AppCommon.BdpConnection.Close;
     end;

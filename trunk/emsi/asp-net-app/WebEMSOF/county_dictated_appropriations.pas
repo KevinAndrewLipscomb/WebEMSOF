@@ -49,13 +49,13 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  service_appropriation_amount: decimal;
   accumulated_service_appropriation_amount: decimal;
   BdpCommand_get_appropriation_attribs: borland.data.provider.BdpCommand;
   BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
   bdr_service_appropriations: borland.data.provider.BdpDataReader;
   region_dictated_appropriation_amount: decimal;
+  service_appropriation_amount: decimal;
   TableRow_current: system.web.ui.webcontrols.TableRow;
   TableCell_edit_link: system.web.ui.webcontrols.TableCell;
   TableCell_only: system.web.ui.webcontrols.TableCell;
@@ -82,12 +82,10 @@ begin
       );
     bdr_appropriation_attribs := BdpCommand_get_appropriation_attribs.ExecuteReader;
     bdr_appropriation_attribs.Read;
-    Label_fiscal_year_designator.Text :=
-      bdr_appropriation_attribs.GetValue(bdr_appropriation_attribs.GetOrdinal('designator')).ToString;
-    region_dictated_appropriation_amount :=
-      bdr_appropriation_attribs.GetDecimal(bdr_appropriation_attribs.GetOrdinal('amount'));
+    Label_fiscal_year_designator.Text := bdr_appropriation_attribs['designator'].tostring;
+    region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
     Label_amount.Text := region_dictated_appropriation_amount.ToString;
-    Label_region_name.Text := bdr_appropriation_attribs.GetValue(bdr_appropriation_attribs.GetOrdinal('name')).ToString;
+    Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
     bdr_appropriation_attribs.Close;
     //
     BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
@@ -139,21 +137,16 @@ begin
         TableRow_current := system.web.ui.webcontrols.tablerow.Create;
         TableCell_edit_link := system.web.ui.webcontrols.tablecell.Create;
         session.Remove('county_dictated_appropriation_id');
-        session.Add
-          (
-          'county_dictated_appropriation_id',
-          bdr_service_appropriations.GetInt32(bdr_service_appropriations.GetOrdinal('id')).ToString
-          );
+        session.Add('county_dictated_appropriation_id',bdr_service_appropriations['id'].ToString);
         TableCell_edit_link.Text := '<a href="">Edit</a>';
         TableRow_current.Cells.Add(TableCell_edit_link);
         // Service name
         TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
-        TableCell_service_name.Text :=
-        bdr_service_appropriations.GetString(bdr_service_appropriations.GetOrdinal('name'));
+        TableCell_service_name.Text := bdr_service_appropriations['name'].tostring;
         TableRow_current.Cells.Add(TableCell_service_name);
         // Amount
         TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
-        service_appropriation_amount := bdr_service_appropriations.GetDecimal(bdr_service_appropriations.GetOrdinal('amount'));
+        service_appropriation_amount := decimal(bdr_service_appropriations['amount']);
         TableCell_amount.Text := '$' + service_appropriation_amount.ToString;
         TableRow_current.Cells.Add(TableCell_amount);
         Table_service_appropriations.Rows.Add(TableRow_current);

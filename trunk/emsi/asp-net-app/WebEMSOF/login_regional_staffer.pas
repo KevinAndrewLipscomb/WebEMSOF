@@ -59,7 +59,7 @@ end;
 procedure TWebForm_login_regional_staffer.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdpCommand_get_regional_staffers: Borland.Data.Provider.BdpCommand;
-  BdpDataReader_regional_staffers: borland.data.provider.BdpDataReader;
+  bdr: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login_regional_staffer';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -81,16 +81,10 @@ begin
       + 'ORDER BY last_name,first_name',
       AppCommon.BdpConnection
       );
-    BdpDataReader_regional_staffers := bdpCommand_get_regional_staffers.ExecuteReader;
-    while bdpDataReader_regional_staffers.Read do
+    bdr := bdpCommand_get_regional_staffers.ExecuteReader;
+    while bdr.Read do
       DropDownList_regional_staffer.Items.Add
-        (
-        listitem.Create
-          (
-          BdpDataReader_regional_staffers['last_name'].ToString + ', ' + BdpDataReader_regional_staffers['first_name'].ToString,
-          BdpDataReader_regional_staffers['id'].ToString
-          )
-        );
+        (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,bdr['id'].ToString));
     AppCommon.BdpConnection.Close;
     end;
 end;

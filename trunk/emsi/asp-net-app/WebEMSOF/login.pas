@@ -59,7 +59,7 @@ end;
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdpCommand_get_services: Borland.Data.Provider.BdpCommand;
-  BdpDataReader_services: borland.data.provider.BdpDataReader;
+  bdr: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -78,16 +78,9 @@ begin
       'SELECT id,name FROM service_user JOIN service using (id) ORDER BY name',
       AppCommon.BdpConnection
       );
-    BdpDataReader_services := bdpCommand_get_services.ExecuteReader;
-    while bdpDataReader_services.Read do
-      DropDownList_service.Items.Add
-        (
-        listitem.Create
-          (
-          BdpDataReader_services['name'].ToString,
-          BdpDataReader_services['id'].ToString
-          )
-        );
+    bdr := bdpCommand_get_services.ExecuteReader;
+    while bdr.Read do
+      DropDownList_service.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
     AppCommon.BdpConnection.Close;
     end;
 end;

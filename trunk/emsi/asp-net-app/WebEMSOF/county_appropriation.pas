@@ -48,7 +48,7 @@ end;
 procedure TWebForm_county_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdpCommand_get_appropriations: Borland.Data.Provider.BdpCommand;
-  BdpDataReader_appropriations: borland.data.provider.BdpDataReader;
+  bdr: borland.data.provider.BdpDataReader;
 begin
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_appropriation';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -71,16 +71,9 @@ begin
       + 'WHERE county_code = ' + session.Item['county_user_id'].ToString,
       AppCommon.BdpConnection
       );
-    BdpDataReader_appropriations := bdpCommand_get_appropriations.ExecuteReader;
-    while bdpDataReader_appropriations.Read do
-      RadioButtonList_appropriation.Items.Add
-        (
-        listitem.Create
-          (
-          BdpDataReader_appropriations['appropriation_description'].ToString,
-          BdpDataReader_appropriations['id'].ToString
-          )
-        );
+    bdr := bdpCommand_get_appropriations.ExecuteReader;
+    while bdr.Read do
+      RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
     AppCommon.BdpConnection.Close;
     end;
 end;
