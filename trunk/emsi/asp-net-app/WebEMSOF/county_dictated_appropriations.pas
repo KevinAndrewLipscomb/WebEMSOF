@@ -26,10 +26,9 @@ type
     Label_region_name: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     Label_regional_county_dictated_appropriation_deadline_date_string: System.Web.UI.WebControls.Label;
-    Table_service_appropriations: System.Web.UI.WebControls.Table;
+    bdr_service_appropriations: borland.data.provider.BdpDataReader;
+    DataGrid_county_dictated_appropriation_join: System.Web.UI.WebControls.DataGrid;
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
   public
     { Public Declarations }
   end;
@@ -53,14 +52,8 @@ var
   BdpCommand_get_appropriation_attribs: borland.data.provider.BdpCommand;
   BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
-  bdr_service_appropriations: borland.data.provider.BdpDataReader;
   region_dictated_appropriation_amount: decimal;
   service_appropriation_amount: decimal;
-  TableRow_current: system.web.ui.webcontrols.TableRow;
-  TableCell_edit_link: system.web.ui.webcontrols.TableCell;
-  TableCell_only: system.web.ui.webcontrols.TableCell;
-  TableCell_service_name: system.web.ui.webcontrols.TableCell;
-  TableCell_amount: system.web.ui.webcontrols.TableCell;
 begin
   accumulated_service_appropriation_amount := 0.0;
   Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
@@ -90,73 +83,14 @@ begin
     //
     BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
       (
-      'select county_dictated_appropriation.id,service.name,county_dictated_appropriation.amount '
+      'select county_dictated_appropriation.id,affiliate_num,service.name,county_dictated_appropriation.amount '
       + 'from county_dictated_appropriation '
       +   'join service on (service.id=service_id) '
       + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString,
       AppCommon.BdpConnection
       );
     bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
-    if bdr_service_appropriations.FieldCount < 1 then
-      begin
-      TableRow_current := system.web.ui.webcontrols.tablerow.Create;
-      TableCell_only := system.web.ui.webcontrols.tablecell.Create;
-      TableCell_only.Text := 'None';
-      TableRow_current.Cells.Add(TableCell_only);
-      Table_service_appropriations.Rows.Add(TableRow_current);
-      end
-    else
-      begin
-      //
-      // Build header row.
-      //
-      // Header for the column that holds the Edit links will be empty.
-      TableRow_current := system.web.ui.webcontrols.tablerow.Create;
-      TableRow_current.Cells.Add(system.web.ui.webcontrols.tablecell.Create);
-      // Service name
-      TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
-      TableCell_service_name.Text := 'Service';
-      TableCell_service_name.Font.Bold := TRUE;
-      TableCell_service_name.Font.Underline := TRUE;
-      TableRow_current.Cells.Add(TableCell_service_name);
-      // Amount
-      TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
-      TableCell_amount.Text := 'Amount';
-      TableCell_amount.Font.Bold := TRUE;
-      TableCell_amount.Font.Underline := TRUE;
-      TableRow_current.Cells.Add(TableCell_amount);
-      //
-      Table_service_appropriations.Rows.Add(TableRow_current);
-      //
-      while bdr_service_appropriations.Read do
-        begin
-        //
-        // Build the row.
-        //
-        // Edit link
-        TableRow_current := system.web.ui.webcontrols.tablerow.Create;
-        TableCell_edit_link := system.web.ui.webcontrols.tablecell.Create;
-        session.Remove('county_dictated_appropriation_id');
-        session.Add('county_dictated_appropriation_id',bdr_service_appropriations['id'].ToString);
-        TableCell_edit_link.Text := '<a href="">Edit</a>';
-        TableRow_current.Cells.Add(TableCell_edit_link);
-        // Service name
-        TableCell_service_name := system.web.ui.webcontrols.tablecell.Create;
-        TableCell_service_name.Text := bdr_service_appropriations['name'].tostring;
-        TableRow_current.Cells.Add(TableCell_service_name);
-        // Amount
-        TableCell_amount := system.web.ui.webcontrols.tablecell.Create;
-        service_appropriation_amount := decimal(bdr_service_appropriations['amount']);
-        TableCell_amount.Text := '$' + service_appropriation_amount.ToString;
-        TableRow_current.Cells.Add(TableCell_amount);
-        Table_service_appropriations.Rows.Add(TableRow_current);
-        //
-        // Accumulate the amount.
-        //
-        accumulated_service_appropriation_amount := accumulated_service_appropriation_amount + service_appropriation_amount;
-        //
-        end;
-      end;
+    DataGrid_county_dictated_appropriation_join.DataBind;
     //
     // Set Label_remainder
     //

@@ -29,6 +29,29 @@ library WebEMSOF;
 {%AspMarkupContainer 'county_overview.aspx'}
 {%AspMarkupContainer 'county_appropriation.aspx'}
 {%AspMarkupContainer 'county_dictated_appropriations.aspx'}
+{$R 'county_dictated_appropriations.TWebForm_county_dictated_appropriations.resources' 'county_dictated_appropriations.resx'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\new_password\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\request_overview\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\main\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\county_appropriation\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\county_dictated_appropriations\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\change_email_address\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\Global\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\login_county_coord\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\service_appropriation\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\service_overview\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\DataSet1Unit\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\county_overview\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\change_password\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\login_regional_staffer\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\profile\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\login\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\regional_staffer_overview\default.txaPackage'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txvpck'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txvpck'}
 
 uses
   System.Reflection,
