@@ -6,17 +6,21 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  borland.vcl.sysutils;
 
 type
   TWebForm_county_dictated_appropriations = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
+    procedure EditCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure CancelCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure UpdateCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
-    procedure Bind_service_appropriations(sort_expression: string);
+    procedure Bind_service_appropriations(sort_expression: string = '');
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -44,7 +48,9 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
-  Include(Self.DataGrid_service_appropriations.SortCommand, Self.SortCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -104,19 +110,55 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations(sort_expression: string);
+procedure TWebForm_county_dictated_appropriations.UpdateCommand_service_appropriations(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
-  BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
+  BdpCommand_update_service_appropriations : borland.data.provider.BdpCommand;
 begin
-  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
+  AppCommon.BdpConnection.Open;
+  BdpCommand_update_service_appropriations := borland.data.provider.bdpcommand.Create
     (
-    'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
-    + 'from county_dictated_appropriation '
-    +   'join service on (service.id=service_id) '
-    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
-    + 'order by ' + sort_expression,
+    'update county_dictated_appropriation'
+    + ' set amount = ' + Safe(Trim(TextBox(e.Item.Cells[3].Controls[0]).Text),NUMERIC)
+    + ' where id = ' + Safe(e.Item.Cells[0].Text,NUMERIC),
     AppCommon.BdpConnection
     );
+  BdpCommand_update_service_appropriations.ExecuteNonQuery;
+  DataGrid_service_appropriations.EditItemIndex := -1;
+  Bind_service_appropriations;
+  AppCommon.BdpConnection.Close;
+end;
+
+procedure TWebForm_county_dictated_appropriations.CancelCommand_service_appropriations(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  AppCommon.BdpConnection.Open;
+  DataGrid_service_appropriations.EditItemIndex := -1;
+  Bind_service_appropriations;
+  AppCommon.BdpConnection.Close;
+end;
+
+procedure TWebForm_county_dictated_appropriations.EditCommand_service_appropriations(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  AppCommon.BdpConnection.Open;
+  DataGrid_service_appropriations.EditItemIndex := e.Item.ItemIndex;
+  Bind_service_appropriations;
+  AppCommon.BdpConnection.Close;
+end;
+
+procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations(sort_expression: string = '');
+var
+  BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
+  cmdText: string;
+begin
+  cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
+    + 'from county_dictated_appropriation '
+    +   'join service on (service.id=service_id) '
+    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' ';
+//  if sort_expression <> '' then
+//    cmdText := cmdText + 'order by ' + sort_expression;
+  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
   bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
   DataGrid_service_appropriations.DataSource := bdr_service_appropriations;
   DataGrid_service_appropriations.DataBind;

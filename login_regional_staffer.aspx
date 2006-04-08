@@ -15,11 +15,7 @@
 				<li>Invalid regional staff user/password combination. Please try again.</li>
 			  </ul>
 			</font>
-	<table cellspacing="0" cellpadding="0" border="1">
-      <tbody>
-        <tr>
-          <td>
-            <table cellspacing="0" cellpadding="5">
+			<table cellspacing="0" cellpadding="5">
               <tbody>
                 <tr>
                   <td>
@@ -48,7 +44,7 @@
 					</p>
                   </td>
                   <td>
-													<asp:textbox id="TextBox_password" runat="server" textmode="Password"></asp:textbox>
+													<asp:textbox id="TextBox_password" runat="server" textmode="Password"></asp:textbox><ASP:RegularExpressionValidator id="RegularExpressionValidator_password" runat="server" errormessage='Please use only letters, numbers, and the underscore ("_") character (or local equivalents) in your password.' font-bold="True" controltovalidate="TextBox_password" validationexpression="\w+">!ERR!</ASP:RegularExpressionValidator>
 											         </td>
                 </tr>
                 <tr>
@@ -79,10 +75,6 @@
                 </tr>
               </tbody>
             </table>
-          </td>
-        </tr>
-      </tbody>
-	</table>
       <p></p>
 <h3>EMSOF documentation:
 </h3>

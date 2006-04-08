@@ -8,7 +8,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   AppCommon, Borland.Data.Provider, System.Globalization, 
-  System.Data.SqlClient, System.Data.Common, system.configuration;
+  System.Data.SqlClient, System.Data.Common, system.configuration,
+  system.text.regularexpressions, borland.vcl.sysutils;
 
 type
   TWebForm_login = class(System.Web.UI.Page)
@@ -33,6 +34,7 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Button_new_password: System.Web.UI.WebControls.Button;
     RangeValidator_service: System.Web.UI.WebControls.RangeValidator;
+    RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -41,6 +43,8 @@ type
   end;
 
 implementation
+
+const ID = '$Id$';
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -61,10 +65,10 @@ var
   bdpCommand_get_services: Borland.Data.Provider.BdpCommand;
   bdr: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
     session.Remove('target_user_table');
     session.Add('target_user_table','service');
     AppCommon.BdpConnection.Open;
@@ -117,8 +121,8 @@ begin
   bdpCommand_match_account := Borland.Data.Provider.BdpCommand.Create
     (
     'SELECT be_stale_password FROM service_user '
-    +  'where id="' + DropDownList_service.SelectedValue + '" '
-    +     'and encoded_password=sha("' + TextBox_password.Text + '")'
+    +  'where id=' + DropDownList_service.SelectedValue + ' '
+    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUMERIC) + '")'
     ,AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

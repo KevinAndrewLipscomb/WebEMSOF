@@ -24,6 +24,7 @@ type
     Label_service_name: System.Web.UI.WebControls.Label;
     RadioButtonList_appropriation: System.Web.UI.WebControls.RadioButtonList;
     Button_continue: System.Web.UI.WebControls.Button;
+    RequiredFieldValidator_appropriation: System.Web.UI.WebControls.RequiredFieldValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }

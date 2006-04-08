@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration,
+  borland.vcl.sysutils;
 
 type
   TWebForm_change_password = class(System.Web.UI.Page)
@@ -28,6 +29,7 @@ type
     RequiredFieldValidator_nominal_password: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_confirmation_password: System.Web.UI.WebControls.RequiredFieldValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
+    RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -79,7 +81,7 @@ begin
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
-    + 'SET encoded_password = sha("' + TextBox_nominal_password.Text + '"),'
+    + 'SET encoded_password = sha("' + Safe(Trim(TextBox_nominal_password.Text),ALPHANUMERIC) + '"),'
     +   'be_stale_password = FALSE '
     + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
     AppCommon.BdpConnection

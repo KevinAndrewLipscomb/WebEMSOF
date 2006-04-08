@@ -47,7 +47,7 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - template_std';
+    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_std';
     end;
 end;
 

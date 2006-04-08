@@ -90,7 +90,7 @@ begin
       ConfigurationSettings.AppSettings['sender_email_address'],
       Object_email_address.ToString,
       ConfigurationSettings.AppSettings['application_name'] + ' temp password',
-      'Someone at the host known as ' + request.UserHostName + ' (possibly you) requested a new password for the "'
+      'Someone at the host known as ' + Safe(request.UserHostName,HOSTNAME) + ' (possibly you) requested a new password for the "'
       + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + '" '
       + session.Item['target_user_table'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
       + ' system.  Please log into ' + ConfigurationSettings.AppSettings['application_name'] + ' using the following credentials.  '
@@ -104,7 +104,7 @@ begin
       + 'You can complete this process by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + '/main.aspx' + NEW_LINE
+      + server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
