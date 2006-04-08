@@ -38,10 +38,10 @@
               <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="Id"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
-              <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:$#,###,###.##}"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount ($)" dataformatstring="{0:#,###,###.##}"></ASP:BoundColumn>
               <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit"></ASP:EditCommandColumn>
             </Columns>
-			<PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid></p>
+            <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid></p>
       </blockquote>
 <p>From the above county appropriation, you have <strong>$</strong><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;left to appropriate to services by the regional deadline of
         <ASP:Label id="Label_regional_county_dictated_appropriation_deadline_date" runat="server" font-bold="True" font-underline="True"></ASP:Label>.</p>

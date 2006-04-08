@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   Borland.Data.Common, Borland.Data.Provider, System.Globalization, 
-  System.Data.Common, system.configuration;
+  System.Data.Common, system.configuration, borland.vcl.sysutils;
 
 type
   TWebForm_profile = class(System.Web.UI.Page)
@@ -51,6 +51,11 @@ type
     TextBox_contact_person_name: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_contact_person_name: System.Web.UI.WebControls.RequiredFieldValidator;
     Label_application_name: System.Web.UI.WebControls.Label;
+    RegularExpressionValidator_service_name: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_city: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_address_line_2: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_address_line_1: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_contact_person_name: System.Web.UI.WebControls.RegularExpressionValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -171,22 +176,22 @@ begin
   BdpCommand_update_profile := borland.data.provider.bdpcommand.Create
     (
     'UPDATE service '
-    + 'SET name = "' + TextBox_service_name.Text + '",'
+    + 'SET name = "' + Safe(Trim(TextBox_service_name.Text),HUMAN_NAME) + '",'
     +   'be_qrs = ' + CheckBox_qrs.Checked.ToString + ','
     +   'be_bls_amb = ' + CheckBox_bls_amb.Checked.ToString + ','
     +   'be_als_amb = ' + CheckBox_als_amb.Checked.ToString + ','
     +   'be_als_squad = ' + CheckBox_als_squad.Checked.ToString + ','
     +   'be_air_amb = ' + CheckBox_air_amb.Checked.ToString + ','
     +   'be_rescue = ' + CheckBox_rescue.Checked.ToString + ','
-    +   'address_line_1 = "' + TextBox_address_line_1.Text + '",'
-    +   'address_line_2 = "' + TextBox_address_line_2.Text + '",'
-    +   'city = "' + TextBox_city.Text + '",'
-    +   'zip_code = "' + TextBox_zip_code.Text + '",'
-    +   'federal_tax_id_num = "' + TextBox_federal_tax_id_num.Text + '",'
-    +   'contact_person_name = "' + TextBox_contact_person_name.Text + '",'
-    +   'contact_person_phone_num = "' + TextBox_contact_person_phone_num.Text + '",'
+    +   'address_line_1 = "' + Safe(Trim(TextBox_address_line_1.Text),POSTAL_STREET_ADDRESS) + '",'
+    +   'address_line_2 = "' + Safe(Trim(TextBox_address_line_2.Text),POSTAL_STREET_ADDRESS) + '",'
+    +   'city = "' + Safe(Trim(TextBox_city.Text),POSTAL_CITY) + '",'
+    +   'zip_code = "' + Safe(Trim(TextBox_zip_code.Text),HYPHENATED_NUMERALS) + '",'
+    +   'federal_tax_id_num = "' + Safe(Trim(TextBox_federal_tax_id_num.Text),HYPHENATED_NUMERALS) + '",'
+    +   'contact_person_name = "' + Safe(Trim(TextBox_contact_person_name.Text),HUMAN_NAME) + '",'
+    +   'contact_person_phone_num = "' + Safe(Trim(TextBox_contact_person_phone_num.Text),PHONE_NUMBER) + '",'
     +   'be_valid_profile = TRUE '
-    + 'WHERE affiliate_num = "' + Label_affiliate_num.Text + '"',
+    + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUMERIC) + '"',
     AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

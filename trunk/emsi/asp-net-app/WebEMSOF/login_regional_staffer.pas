@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   AppCommon, Borland.Data.Provider, System.Globalization, 
-  System.Data.SqlClient, System.Data.Common, system.configuration;
+  System.Data.SqlClient, System.Data.Common, system.configuration, borland.vcl.sysutils;
 
 type
   TWebForm_login_regional_staffer = class(System.Web.UI.Page)
@@ -33,6 +33,7 @@ type
     Button_new_password: System.Web.UI.WebControls.Button;
     DropDownList_regional_staffer: System.Web.UI.WebControls.DropDownList;
     RangeValidator_regional_staffer: System.Web.UI.WebControls.RangeValidator;
+    RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -122,7 +123,7 @@ begin
     (
     'SELECT be_stale_password FROM regional_staffer_user '
     +  'where id="' + DropDownList_regional_staffer.SelectedValue + '" '
-    +     'and encoded_password=sha("' + TextBox_password.Text + '")'
+    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUMERIC) + '")'
     ,AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

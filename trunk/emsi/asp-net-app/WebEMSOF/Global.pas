@@ -29,6 +29,8 @@ type
 
 implementation
 
+const ID = '$Id$';
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
