@@ -176,7 +176,7 @@ begin
   BdpCommand_update_profile := borland.data.provider.bdpcommand.Create
     (
     'UPDATE service '
-    + 'SET name = "' + Safe(Trim(TextBox_service_name.Text),HUMAN_NAME) + '",'
+    + 'SET name = "' + Safe(Trim(TextBox_service_name.Text),ORG_NAME) + '",'
     +   'be_qrs = ' + CheckBox_qrs.Checked.ToString + ','
     +   'be_bls_amb = ' + CheckBox_bls_amb.Checked.ToString + ','
     +   'be_als_amb = ' + CheckBox_als_amb.Checked.ToString + ','

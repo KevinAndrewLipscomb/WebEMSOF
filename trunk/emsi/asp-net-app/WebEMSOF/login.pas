@@ -102,9 +102,9 @@ procedure TWebForm_login.DropDownList_service_SelectedIndexChanged(sender: Syste
   e: System.EventArgs);
 begin
   session.Remove('service_user_id');
-  session.Add('service_user_id',DropDownList_service.SelectedValue);
+  session.Add('service_user_id',Safe(DropDownList_service.SelectedValue,NUM));
   session.Remove('service_name');
-  session.Add('service_name',DropDownList_service.SelectedItem.Text);
+  session.Add('service_name',Safe(DropDownList_service.SelectedItem.Text,ORG_NAME));
 end;
 
 procedure TWebForm_login.Button_new_password_Click(sender: System.Object;
