@@ -20,16 +20,17 @@ type
   safe_hint_type =
     (
     NONE,
-    ALPHANUMERIC,
+    ALPHANUM,
     ECMASCRIPT_WORD,
     EMAIL_ADDRESS,
     HOSTNAME,
     HUMAN_NAME,
-    HYPHENATED_NUMERALS,
-    NUMERIC,
-    PHONE_NUMBER,
+    HYPHENATED_NUM,
+    NUM,
+    PHONE_NUM,
     POSTAL_CITY,
-    POSTAL_STREET_ADDRESS
+    POSTAL_STREET_ADDRESS,
+    REAL_NUM
     );
 
 var
@@ -73,7 +74,7 @@ begin
     // This routine is not intended to assure that data is submitted in proper
     // format.  It is intended to protect against SQL insertion attacks.
     //
-    ALPHANUMERIC:
+    ALPHANUM:
       allow := '0-9a-zA-Z';
     ECMASCRIPT_WORD:
       allow := '0-9a-zA-Z_';
@@ -83,16 +84,18 @@ begin
       allow := '0-9a-zA-z_-\.';
     HUMAN_NAME:
       allow := 'a-zA-z-\. ' + APOSTROPHE;
-    HYPHENATED_NUMERALS:
+    HYPHENATED_NUM:
       allow := '0-9-';
-    NUMERIC:
+    NUM:
       allow := '0-9';
-    PHONE_NUMBER:
+    PHONE_NUM:
       allow := '0-9-\+\(\) ';
     POSTAL_CITY:
       allow := 'a-zA-Z-\. ' + APOSTROPHE;
     POSTAL_STREET_ADDRESS:
       allow := '0-9a-zA-Z#-,\(\)\. ' + APOSTROPHE;
+    REAL_NUM:
+      allow := '0-9\.';
   end;
   //
   if allow = NULL_STRING then

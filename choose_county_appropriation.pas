@@ -1,5 +1,5 @@
 
-unit county_appropriation;
+unit choose_county_appropriation;
 
 interface
 
@@ -64,7 +64,8 @@ begin
     bdpCommand_get_appropriations := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT region_dictated_appropriation.id,'
-      + 'concat("$",region_dictated_appropriation.amount," from ",name," for ",designator) as appropriation_description '
+      + 'concat("$",format(region_dictated_appropriation.amount,2)," from ",name," for ",designator) '
+      +   'as appropriation_description '
       + 'FROM region_dictated_appropriation '
       +   'JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) '
       +   'JOIN region_code_name_map on (region_code_name_map.code=region_code) '

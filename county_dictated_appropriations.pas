@@ -20,7 +20,7 @@ type
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
-    procedure Bind_service_appropriations(sort_expression: string = '');
+    procedure Bind_service_appropriations;
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -57,6 +57,9 @@ end;
 
 const ID = '$Id$';
 
+var
+  service_appropriations_sort_order: string;
+
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   accumulated_service_appropriation_amount: decimal;
@@ -87,15 +90,17 @@ begin
     bdr_appropriation_attribs.Read;
     Label_fiscal_year_designator.Text := bdr_appropriation_attribs['designator'].tostring;
     region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
-    Label_amount.Text := region_dictated_appropriation_amount.ToString;
+    Label_amount.Text := region_dictated_appropriation_amount.ToString('C');
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
     bdr_appropriation_attribs.Close;
     //
-    Bind_service_appropriations('name');
+    service_appropriations_sort_order := 'name';
+    Bind_service_appropriations;
     //
     // Set Label_remainder
     //
-    Label_unappropriated_amount.Text := (region_dictated_appropriation_amount - accumulated_service_appropriation_amount).ToString;
+    Label_unappropriated_amount.Text :=
+      (region_dictated_appropriation_amount - accumulated_service_appropriation_amount).ToString('C');
     bdr_service_appropriations.Close;
     AppCommon.BdpConnection.Close;
     end;
@@ -119,8 +124,8 @@ begin
   BdpCommand_update_service_appropriations := borland.data.provider.bdpcommand.Create
     (
     'update county_dictated_appropriation'
-    + ' set amount = ' + Safe(Trim(TextBox(e.Item.Cells[3].Controls[0]).Text),NUMERIC)
-    + ' where id = ' + Safe(e.Item.Cells[0].Text,NUMERIC),
+    + ' set amount = ' + Safe(Trim(TextBox(e.Item.Cells[3].Controls[0]).Text),REAL_NUM)
+    + ' where id = ' + Safe(e.Item.Cells[0].Text,NUM),
     AppCommon.BdpConnection
     );
   BdpCommand_update_service_appropriations.ExecuteNonQuery;
@@ -147,18 +152,19 @@ begin
   AppCommon.BdpConnection.Close;
 end;
 
-procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations(sort_expression: string = '');
+procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
   BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
-  cmdText: string;
 begin
-  cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
+  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
+    (
+    'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
     + 'from county_dictated_appropriation '
     +   'join service on (service.id=service_id) '
-    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' ';
-//  if sort_expression <> '' then
-//    cmdText := cmdText + 'order by ' + sort_expression;
-  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
+    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
+    + 'order by ' + service_appropriations_sort_order,
+    AppCommon.BdpConnection
+    );
   bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
   DataGrid_service_appropriations.DataSource := bdr_service_appropriations;
   DataGrid_service_appropriations.DataBind;
@@ -168,7 +174,8 @@ procedure TWebForm_county_dictated_appropriations.SortCommand_service_appropriat
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
   AppCommon.BdpConnection.Open;
-  Bind_service_appropriations(e.SortExpression);
+  service_appropriations_sort_order := e.SortExpression;
+  Bind_service_appropriations;
   AppCommon.BdpConnection.Close;
 end;
 

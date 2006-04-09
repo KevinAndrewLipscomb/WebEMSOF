@@ -67,7 +67,7 @@ begin
       + 'concat'
       +   '('
       +   '"$",'
-      +   'county_dictated_appropriation.amount,'
+      +   'format(county_dictated_appropriation.amount,2),'
       +   '" from ",'
       +   'region_code_name_map.name,'
       +   '" via ",'

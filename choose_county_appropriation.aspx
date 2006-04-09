@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="county_appropriation.pas" AutoEventWireup="false" Inherits="county_appropriation.TWebForm_county_appropriation" %>
+<%@ Page language="c#" Debug="true" Codebehind="choose_county_appropriation.pas" AutoEventWireup="false" Inherits="choose_county_appropriation.TWebForm_county_appropriation" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
