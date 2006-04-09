@@ -24,7 +24,7 @@
 			borderstyle="None"
 			borderwidth="1px"
 			backcolor="White"
-			cellpadding="5"
+			cellpadding="10"
 			gridlines="Horizontal"
 			forecolor="Black"
 			allowsorting="True"
