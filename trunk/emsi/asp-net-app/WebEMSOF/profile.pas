@@ -186,12 +186,12 @@ begin
     +   'address_line_1 = "' + Safe(Trim(TextBox_address_line_1.Text),POSTAL_STREET_ADDRESS) + '",'
     +   'address_line_2 = "' + Safe(Trim(TextBox_address_line_2.Text),POSTAL_STREET_ADDRESS) + '",'
     +   'city = "' + Safe(Trim(TextBox_city.Text),POSTAL_CITY) + '",'
-    +   'zip_code = "' + Safe(Trim(TextBox_zip_code.Text),HYPHENATED_NUMERALS) + '",'
-    +   'federal_tax_id_num = "' + Safe(Trim(TextBox_federal_tax_id_num.Text),HYPHENATED_NUMERALS) + '",'
+    +   'zip_code = "' + Safe(Trim(TextBox_zip_code.Text),HYPHENATED_NUM) + '",'
+    +   'federal_tax_id_num = "' + Safe(Trim(TextBox_federal_tax_id_num.Text),HYPHENATED_NUM) + '",'
     +   'contact_person_name = "' + Safe(Trim(TextBox_contact_person_name.Text),HUMAN_NAME) + '",'
-    +   'contact_person_phone_num = "' + Safe(Trim(TextBox_contact_person_phone_num.Text),PHONE_NUMBER) + '",'
+    +   'contact_person_phone_num = "' + Safe(Trim(TextBox_contact_person_phone_num.Text),PHONE_NUM) + '",'
     +   'be_valid_profile = TRUE '
-    + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUMERIC) + '"',
+    + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUM) + '"',
     AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

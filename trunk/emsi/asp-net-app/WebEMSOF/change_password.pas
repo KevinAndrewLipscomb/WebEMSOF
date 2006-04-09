@@ -81,7 +81,7 @@ begin
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
-    + 'SET encoded_password = sha("' + Safe(Trim(TextBox_nominal_password.Text),ALPHANUMERIC) + '"),'
+    + 'SET encoded_password = sha("' + Safe(Trim(TextBox_nominal_password.Text),ALPHANUM) + '"),'
     +   'be_stale_password = FALSE '
     + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
     AppCommon.BdpConnection

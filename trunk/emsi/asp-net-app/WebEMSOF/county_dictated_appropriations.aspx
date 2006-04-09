@@ -14,7 +14,7 @@
 <p>
         <ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label><strong>&nbsp;County</strong></p>
 <p>For your 
-        <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label>&nbsp;appropriation of <strong>$</strong>
+        <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label>&nbsp;appropriation of 
         <ASP:Label id="Label_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;from 
         <ASP:Label id="Label_region_name" runat="server"></ASP:Label>, the following service appropriations have been made:</p>
       <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
@@ -38,12 +38,14 @@
               <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="Id"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
-              <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount ($)" dataformatstring="{0:#,###,###.##}"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">
+                <ItemStyle horizontalalign="Right"></ItemStyle>
+              </ASP:BoundColumn>
               <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit"></ASP:EditCommandColumn>
             </Columns>
             <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid></p>
       </blockquote>
-<p>From the above county appropriation, you have <strong>$</strong><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;left to appropriate to services by the regional deadline of
+<p>From the above county appropriation, you have <ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;left to appropriate to services by the regional deadline of
         <ASP:Label id="Label_regional_county_dictated_appropriation_deadline_date" runat="server" font-bold="True" font-underline="True"></ASP:Label>.</p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>

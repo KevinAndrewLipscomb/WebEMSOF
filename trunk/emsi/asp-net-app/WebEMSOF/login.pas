@@ -122,7 +122,7 @@ begin
     (
     'SELECT be_stale_password FROM service_user '
     +  'where id=' + DropDownList_service.SelectedValue + ' '
-    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUMERIC) + '")'
+    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUM) + '")'
     ,AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

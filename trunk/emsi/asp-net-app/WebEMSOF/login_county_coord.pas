@@ -116,26 +116,73 @@ end;
 procedure TWebForm_login_county_coord.Button_log_in_Click(sender: System.Object; e: System.EventArgs);
 var
   bdpCommand_match_account: borland.data.provider.BdpCommand;
+  BdpCommand_get_appropriation_ids: borland.data.provider.BdpCommand;
+  bdpCommand_get_max_fiscal_year_id: borland.data.provider.BdpCommand;
+  bdr: borland.data.provider.BdpDataReader;
   be_stale_password_obj: System.Object;
+  max_fiscal_year_id_obj: System.Object;
 begin
   bdpCommand_match_account := Borland.Data.Provider.BdpCommand.Create
     (
     'SELECT be_stale_password FROM county_user '
     +  'where id="' + DropDownList_county.SelectedValue + '" '
-    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUMERIC) + '")'
+    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUM) + '")'
     ,AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;
   be_stale_password_obj := bdpCommand_match_account.ExecuteScalar;
   AppCommon.BdpConnection.Close;
-  if be_stale_password_obj <> nil then
-    if be_stale_password_obj.ToString = '0' then
-      server.Transfer('county_appropriation.aspx')
-    else
-      server.Transfer('change_password.aspx')
-  else // be_stale_password_obj = nil
-    if DropDownList_county.SelectedIndex <> 0 then
+  if be_stale_password_obj <> nil then begin
+    if be_stale_password_obj.ToString = '0' then begin
+      AppCommon.BdpConnection.Open;
+      //
+      // Determine current fiscal year
+      //
+      bdpCommand_get_max_fiscal_year_id := borland.data.provider.bdpcommand.Create
+        (
+        'SELECT max(id) as max_id FROM fiscal_year',
+        AppCommon.BdpConnection
+        );
+      max_fiscal_year_id_obj := bdpCommand_get_max_fiscal_year_id.ExecuteScalar;
+      //
+      BdpCommand_get_appropriation_ids := borland.data.provider.bdpcommand.Create
+        (
+        'SELECT region_dictated_appropriation.id'
+        + ' FROM region_dictated_appropriation'
+        +   ' JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id)'
+        +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
+        + ' WHERE county_code = ' + session.Item['county_user_id'].ToString
+        +   ' and fiscal_year_id >= (' + max_fiscal_year_id_obj.ToString + ' - 1)',
+        appcommon.bdpconnection
+        );
+      bdr := BdpCommand_get_appropriation_ids.ExecuteReader;
+      if not bdr.Read then begin
+        server.Transfer('no_appropriation.aspx');
+      end else begin
+        //
+        // This county has received at least one appropriation.  Add its id to the session in case its the only one.  If this is not
+        // the only appropriation, the id will be replaced by the choose_county_appropriation form.
+        //
+        session.Remove('region_dictated_appropriation_id');
+        session.Add('region_dictated_appropriation_id',bdr['id'].tostring);
+        //
+        if bdr.Read then begin
+          AppCommon.BdpConnection.Close;
+          server.Transfer('choose_county_appropriation.aspx');
+        end else begin
+          AppCommon.BdpConnection.Close;
+          server.Transfer('county_dictated_appropriations.aspx');
+        end;
+      end;
+    end else begin
+      server.Transfer('change_password.aspx');
+    end;
+  end else begin
+    // be_stale_password_obj = nil
+    if DropDownList_county.SelectedIndex <> 0 then begin
       invalid_credentials_warning.Visible := TRUE;
+    end;
   end;
+end;
 
 end.
