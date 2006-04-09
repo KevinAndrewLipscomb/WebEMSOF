@@ -30,9 +30,13 @@ type
     Label_amount: System.Web.UI.WebControls.Label;
     Label_region_name: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
-    bdr_service_appropriations: borland.data.provider.BdpDataReader;
     Label_regional_county_dictated_appropriation_deadline_date: System.Web.UI.WebControls.Label;
     DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
+    Label_no_appropriations: System.Web.UI.WebControls.Label;
+    DropDownList_services: System.Web.UI.WebControls.DropDownList;
+    TextBox_new_amount: System.Web.UI.WebControls.TextBox;
+    RegularExpressionValidator_new_amount: System.Web.UI.WebControls.RegularExpressionValidator;
+    Button_add_appropriation: System.Web.UI.WebControls.Button;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -58,7 +62,7 @@ end;
 const ID = '$Id$';
 
 var
-  be_service_appropriations_sort_order_ascending: boolean = TRUE;
+  be_sort_order_ascending: boolean = TRUE;
   service_appropriations_sort_order: string = 'name';
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
@@ -93,7 +97,7 @@ begin
     region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
     Label_amount.Text := region_dictated_appropriation_amount.ToString('C');
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
-    bdr_appropriation_attribs.Close;
+    AppCommon.BdpConnection.Close;
     //
     Bind_service_appropriations;
     //
@@ -101,8 +105,6 @@ begin
     //
     Label_unappropriated_amount.Text :=
       (region_dictated_appropriation_amount - accumulated_service_appropriation_amount).ToString('C');
-    bdr_service_appropriations.Close;
-    AppCommon.BdpConnection.Close;
     end;
 end;
 
@@ -147,62 +149,80 @@ begin
       );
   end;
   bc.ExecuteNonQuery;
+  AppCommon.BdpConnection.Close;
+  //
   DataGrid_service_appropriations.EditItemIndex := -1;
   Bind_service_appropriations;
-  AppCommon.BdpConnection.Close;
 end;
 
 procedure TWebForm_county_dictated_appropriations.CancelCommand_service_appropriations(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
-  AppCommon.BdpConnection.Open;
   DataGrid_service_appropriations.EditItemIndex := -1;
   Bind_service_appropriations;
-  AppCommon.BdpConnection.Close;
 end;
 
 procedure TWebForm_county_dictated_appropriations.EditCommand_service_appropriations(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
-  AppCommon.BdpConnection.Open;
   DataGrid_service_appropriations.EditItemIndex := e.Item.ItemIndex;
   Bind_service_appropriations;
-  AppCommon.BdpConnection.Close;
 end;
 
 procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
-  BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
+  bc_get_count: borland.data.provider.BdpCommand;
+  bc_get_appropriations: borland.data.provider.BdpCommand;
+  bdr: borland.data.provider.BdpDataReader;
   cmdText: string;
 begin
-  cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
+  AppCommon.BdpConnection.Open;
+  //
+  // As a woraround for the fact that BdpDataReader does not have a HasRows property, make an extra trip to the database to
+  // determine if there are any rows to get.
+  //
+  bc_get_count := borland.data.provider.BdpCommand.Create
+    (
+    'select count(*)'
     + 'from county_dictated_appropriation '
     +   'join service on (service.id=service_id) '
-    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
-    + 'order by ' + service_appropriations_sort_order;
-  if be_service_appropriations_sort_order_ascending then begin
-    cmdText := cmdText + ' asc';
+    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString,
+    appcommon.bdpconnection
+    );
+  if bc_get_count.ExecuteScalar.tostring <> '0' then begin
+    cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
+      + 'from county_dictated_appropriation '
+      +   'join service on (service.id=service_id) '
+      + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
+      + 'order by ' + service_appropriations_sort_order;
+    if be_sort_order_ascending then begin
+      cmdText := cmdText + ' asc';
+    end else begin
+      cmdText := cmdText + ' desc';
+    end;
+    bc_get_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
+    bdr := bc_get_appropriations.ExecuteReader;
+    DataGrid_service_appropriations.DataSource := bdr;
+    DataGrid_service_appropriations.DataBind;
+    Label_no_appropriations.Visible := FALSE;
+    DataGrid_service_appropriations.Visible := TRUE;
   end else begin
-    cmdText := cmdText + ' desc';
+    Label_no_appropriations.Visible := TRUE;
+    DataGrid_service_appropriations.Visible := FALSE;
   end;
-  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
-  bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
-  DataGrid_service_appropriations.DataSource := bdr_service_appropriations;
-  DataGrid_service_appropriations.DataBind;
+  AppCommon.BdpConnection.Close;
 end;
 
 procedure TWebForm_county_dictated_appropriations.SortCommand_service_appropriations(source: System.Object;
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
-  AppCommon.BdpConnection.Open;
   if e.SortExpression = service_appropriations_sort_order then begin
-    be_service_appropriations_sort_order_ascending := not be_service_appropriations_sort_order_ascending;
+    be_sort_order_ascending := not be_sort_order_ascending;
   end else begin
     service_appropriations_sort_order := e.SortExpression;
-    be_service_appropriations_sort_order_ascending := TRUE;
+    be_sort_order_ascending := TRUE;
   end;
   Bind_service_appropriations;
-  AppCommon.BdpConnection.Close;
 end;
 
 end.
