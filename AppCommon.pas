@@ -27,6 +27,7 @@ type
     HUMAN_NAME,
     HYPHENATED_NUM,
     NUM,
+    ORG_NAME,
     PHONE_NUM,
     POSTAL_CITY,
     POSTAL_STREET_ADDRESS,
@@ -88,6 +89,8 @@ begin
       allow := '0-9-';
     NUM:
       allow := '0-9';
+    ORG_NAME:
+      allow := '0-9a-zA-Z#&-,\. ' + APOSTROPHE;
     PHONE_NUM:
       allow := '0-9-\+\(\) ';
     POSTAL_CITY:

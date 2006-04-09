@@ -17,6 +17,7 @@ type
     procedure EditCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure CancelCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure UpdateCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure Button_add_appropriation_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -26,17 +27,18 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_county_name: System.Web.UI.WebControls.Label;
-    Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
-    Label_amount: System.Web.UI.WebControls.Label;
-    Label_region_name: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     Label_regional_county_dictated_appropriation_deadline_date: System.Web.UI.WebControls.Label;
-    DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
+    Label_amount: System.Web.UI.WebControls.Label;
+    Label_region_name: System.Web.UI.WebControls.Label;
+    Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
     DropDownList_services: System.Web.UI.WebControls.DropDownList;
     TextBox_new_amount: System.Web.UI.WebControls.TextBox;
     RegularExpressionValidator_new_amount: System.Web.UI.WebControls.RegularExpressionValidator;
     Button_add_appropriation: System.Web.UI.WebControls.Button;
+    DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
+    Label_literal_county: System.Web.UI.WebControls.Label;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -52,6 +54,7 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
+  Include(Self.Button_add_appropriation.Click, Self.Button_add_appropriation_Click);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
@@ -68,8 +71,10 @@ var
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   accumulated_service_appropriation_amount: decimal;
-  BdpCommand_get_appropriation_attribs: borland.data.provider.BdpCommand;
+  bc_get_appropriation_attribs: borland.data.provider.BdpCommand;
+  bc_get_services: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
+  bdr_services: borland.data.provider.BdpDataReader;
   region_dictated_appropriation_amount: decimal;
   service_appropriation_amount: decimal;
 begin
@@ -78,10 +83,13 @@ begin
   if not IsPostback then
     begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
-    AppCommon.BdpConnection.Open;
     Label_county_name.Text := session.Item['county_name'].ToString;
     //
-    BdpCommand_get_appropriation_attribs := borland.data.provider.bdpcommand.Create
+    AppCommon.BdpConnection.Open;
+    //
+    // Set parent appropriation labels.
+    //
+    bc_get_appropriation_attribs := borland.data.provider.bdpcommand.Create
       (
       'select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name '
       + 'from region_dictated_appropriation '
@@ -91,12 +99,26 @@ begin
       + 'where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].ToString,
       AppCommon.BdpConnection
       );
-    bdr_appropriation_attribs := BdpCommand_get_appropriation_attribs.ExecuteReader;
+    bdr_appropriation_attribs := bc_get_appropriation_attribs.ExecuteReader;
     bdr_appropriation_attribs.Read;
     Label_fiscal_year_designator.Text := bdr_appropriation_attribs['designator'].tostring;
     region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
     Label_amount.Text := region_dictated_appropriation_amount.ToString('C');
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
+    bdr_appropriation_attribs.Close;
+    //
+    // Fill DropDownList_services.
+    //
+    DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
+    bc_get_services := Borland.Data.Provider.BdpCommand.Create
+      (
+      'SELECT id,name FROM service_user JOIN service using (id) ORDER BY name',
+      AppCommon.BdpConnection
+      );
+    bdr_services := bc_get_services.ExecuteReader;
+    while bdr_services.Read do
+      DropDownList_services.Items.Add(listitem.Create(bdr_services['name'].tostring,bdr_services['id'].ToString));
+    //
     AppCommon.BdpConnection.Close;
     //
     Bind_service_appropriations;
@@ -115,6 +137,30 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.Button_add_appropriation_Click(sender: System.Object;
+  e: System.EventArgs);
+var
+  bc: borland.data.provider.bdpcommand;
+begin
+  appcommon.bdpconnection.Open;
+  bc := borland.data.provider.bdpcommand.Create
+    (
+    'insert into county_dictated_appropriation'
+    + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
+    +   ' service_id = ' + Safe(DropDownList_services.SelectedValue,NUM) + ','
+    +   ' amount = ' + Safe(Trim(TextBox_new_amount.Text),REAL_NUM),
+    appcommon.bdpconnection
+    );
+  bc.ExecuteNonQuery;
+  appcommon.bdpconnection.Close;
+  //
+  DropDownList_services.SelectedIndex := -1; 
+  TextBox_new_amount.Text := NULL_STRING;
+  //
+  DataGrid_service_appropriations.EditItemIndex := -1;
+  Bind_service_appropriations;
 end;
 
 procedure TWebForm_county_dictated_appropriations.UpdateCommand_service_appropriations(source: System.Object;
@@ -178,7 +224,7 @@ var
 begin
   AppCommon.BdpConnection.Open;
   //
-  // As a woraround for the fact that BdpDataReader does not have a HasRows property, make an extra trip to the database to
+  // As a workaround for the fact that BdpDataReader does not have a HasRows property, make an extra trip to the database to
   // determine if there are any rows to get.
   //
   bc_get_count := borland.data.provider.BdpCommand.Create
@@ -222,6 +268,7 @@ begin
     service_appropriations_sort_order := e.SortExpression;
     be_sort_order_ascending := TRUE;
   end;
+  DataGrid_service_appropriations.EditItemIndex := -1;
   Bind_service_appropriations;
 end;
 
