@@ -118,17 +118,35 @@ end;
 procedure TWebForm_county_dictated_appropriations.UpdateCommand_service_appropriations(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
-  BdpCommand_update_service_appropriations : borland.data.provider.BdpCommand;
+  amount: decimal;
+  amount_string: string;
+  bc : borland.data.provider.BdpCommand;
+  be_delete: boolean;
 begin
   AppCommon.BdpConnection.Open;
-  BdpCommand_update_service_appropriations := borland.data.provider.bdpcommand.Create
-    (
-    'update county_dictated_appropriation'
-    + ' set amount = ' + Safe(Trim(TextBox(e.Item.Cells[3].Controls[0]).Text),REAL_NUM)
-    + ' where id = ' + Safe(e.Item.Cells[0].Text,NUM),
-    AppCommon.BdpConnection
-    );
-  BdpCommand_update_service_appropriations.ExecuteNonQuery;
+  amount_string := Safe(Trim(TextBox(e.Item.Cells[3].Controls[0]).Text),REAL_NUM);
+  if amount_string = NULL_STRING then begin
+    be_delete := TRUE;
+  end else begin
+    amount := decimal.Parse(amount_string);
+    be_delete := (amount = 0);
+  end;
+  if be_delete then begin
+    bc := borland.data.provider.bdpcommand.Create
+      (
+      'delete from county_dictated_appropriation where id = ' + Safe(e.Item.Cells[0].Text,NUM),
+      AppCommon.BdpConnection
+      );
+  end else begin
+    bc := borland.data.provider.bdpcommand.Create
+      (
+      'update county_dictated_appropriation'
+      + ' set amount = ' + amount.tostring
+      + ' where id = ' + Safe(e.Item.Cells[0].Text,NUM),
+      AppCommon.BdpConnection
+      );
+  end;
+  bc.ExecuteNonQuery;
   DataGrid_service_appropriations.EditItemIndex := -1;
   Bind_service_appropriations;
   AppCommon.BdpConnection.Close;
