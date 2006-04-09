@@ -58,7 +58,8 @@ end;
 const ID = '$Id$';
 
 var
-  service_appropriations_sort_order: string;
+  be_service_appropriations_sort_order_ascending: boolean = TRUE;
+  service_appropriations_sort_order: string = 'name';
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
@@ -94,7 +95,6 @@ begin
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
     bdr_appropriation_attribs.Close;
     //
-    service_appropriations_sort_order := 'name';
     Bind_service_appropriations;
     //
     // Set Label_remainder
@@ -155,16 +155,19 @@ end;
 procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
   BdpCommand_get_service_appropriations: borland.data.provider.BdpCommand;
+  cmdText: string;
 begin
-  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create
-    (
-    'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
+  cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
     + 'from county_dictated_appropriation '
     +   'join service on (service.id=service_id) '
     + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
-    + 'order by ' + service_appropriations_sort_order,
-    AppCommon.BdpConnection
-    );
+    + 'order by ' + service_appropriations_sort_order;
+  if be_service_appropriations_sort_order_ascending then begin
+    cmdText := cmdText + ' asc';
+  end else begin
+    cmdText := cmdText + ' desc';
+  end;
+  BdpCommand_get_service_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
   bdr_service_appropriations := BdpCommand_get_service_appropriations.ExecuteReader;
   DataGrid_service_appropriations.DataSource := bdr_service_appropriations;
   DataGrid_service_appropriations.DataBind;
@@ -174,7 +177,12 @@ procedure TWebForm_county_dictated_appropriations.SortCommand_service_appropriat
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
   AppCommon.BdpConnection.Open;
-  service_appropriations_sort_order := e.SortExpression;
+  if e.SortExpression = service_appropriations_sort_order then begin
+    be_service_appropriations_sort_order_ascending := not be_service_appropriations_sort_order_ascending;
+  end else begin
+    service_appropriations_sort_order := e.SortExpression;
+    be_service_appropriations_sort_order_ascending := TRUE;
+  end;
   Bind_service_appropriations;
   AppCommon.BdpConnection.Close;
 end;
