@@ -103,9 +103,9 @@ procedure TWebForm_login_regional_staffer.DropDownList_regional_staffer_Selected
   e: System.EventArgs);
 begin
   session.Remove('regional_staffer_user_id');
-  session.Add('regional_staffer_user_id',DropDownList_regional_staffer.SelectedValue);
+  session.Add('regional_staffer_user_id',Safe(DropDownList_regional_staffer.SelectedValue,NUM));
   session.Remove('regional_staffer_name');
-  session.Add('regional_staffer_name',DropDownList_regional_staffer.SelectedItem.Text);
+  session.Add('regional_staffer_name',Safe(DropDownList_regional_staffer.SelectedItem.Text,HUMAN_NAME_CSV));
 end;
 
 procedure TWebForm_login_regional_staffer.Button_new_password_Click(sender: System.Object;

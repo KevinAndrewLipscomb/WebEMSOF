@@ -102,9 +102,9 @@ procedure TWebForm_login_county_coord.DropDownList_county_SelectedIndexChanged(s
   e: System.EventArgs);
 begin
   session.Remove('county_user_id');
-  session.Add('county_user_id',DropDownList_county.SelectedValue);
+  session.Add('county_user_id',Safe(DropDownList_county.SelectedValue,NUM));
   session.Remove('county_name');
-  session.Add('county_name',DropDownList_county.SelectedItem.Text);
+  session.Add('county_name',Safe(DropDownList_county.SelectedItem.Text,ALPHA));
 end;
 
 procedure TWebForm_login_county_coord.Button_new_password_Click(sender: System.Object;

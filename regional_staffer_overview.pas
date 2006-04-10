@@ -192,7 +192,7 @@ procedure TWebForm_account_overview.LinkButton_last_fy_request_action_Click(send
   e: System.EventArgs);
 begin
   session.Remove('emsof_request_id');
-  session.Add('emsof_request_id',Label_last_fy_request_id.Text);
+  session.Add('emsof_request_id',Safe(Label_last_fy_request_id.Text,NUM));
   session.Remove('relative_fy');
   session.Add('relative_fy','LAST');
   server.Transfer('request_overview.aspx');
@@ -202,7 +202,7 @@ procedure TWebForm_account_overview.LinkButton_this_fy_request_action_Click(send
   e: System.EventArgs);
 begin
   session.Remove('emsof_request_id');
-  session.Add('emsof_request_id',Label_this_fy_request_id.Text);
+  session.Add('emsof_request_id',Safe(Label_this_fy_request_id.Text,NUM));
   session.Remove('relative_fy');
   session.Add('relative_fy','THIS');
   server.Transfer('request_overview.aspx');

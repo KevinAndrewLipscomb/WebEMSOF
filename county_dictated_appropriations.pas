@@ -18,6 +18,8 @@ type
     procedure CancelCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure UpdateCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure Button_add_appropriation_Click(sender: System.Object; e: System.EventArgs);
+    procedure DataGrid_service_appropriations_ItemDataBound(sender: System.Object; 
+      e: System.Web.UI.WebControls.DataGridItemEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -58,6 +60,7 @@ begin
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -66,7 +69,10 @@ const ID = '$Id$';
 
 var
   be_sort_order_ascending: boolean = TRUE;
+  num_appropriations: integer = 0;
+  region_dictated_appropriation_amount: decimal;
   service_appropriations_sort_order: string = 'name';
+  sum_of_service_appropriations: decimal = 0;
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
@@ -75,13 +81,11 @@ var
   bc_get_services: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
   bdr_services: borland.data.provider.BdpDataReader;
-  region_dictated_appropriation_amount: decimal;
   service_appropriation_amount: decimal;
 begin
   accumulated_service_appropriation_amount := 0.0;
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session.Item['county_name'].ToString;
     //
@@ -123,11 +127,7 @@ begin
     //
     Bind_service_appropriations;
     //
-    // Set Label_remainder
-    //
-    Label_unappropriated_amount.Text :=
-      (region_dictated_appropriation_amount - accumulated_service_appropriation_amount).ToString('C');
-    end;
+  end;
 end;
 
 procedure TWebForm_county_dictated_appropriations.OnInit(e: EventArgs);
@@ -137,6 +137,21 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
+  e: System.Web.UI.WebControls.DataGridItemEventArgs);
+begin
+  if (e.item.itemtype = listitemtype.item) or (e.item.itemtype = listitemtype.alternatingitem) then begin
+    //
+    // We are dealing with a data row, not a header or footer row.
+    //
+    num_appropriations := num_appropriations + 1;
+    sum_of_service_appropriations :=
+      sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
+  end else if (e.item.itemtype = listitemtype.footer) then begin
+    e.item.cells[3].text := 'Total: <b>' + sum_of_service_appropriations.tostring('C') + '</b>';
+  end;
 end;
 
 procedure TWebForm_county_dictated_appropriations.Button_add_appropriation_Click(sender: System.Object;
@@ -217,45 +232,41 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
-  bc_get_count: borland.data.provider.BdpCommand;
   bc_get_appropriations: borland.data.provider.BdpCommand;
   bdr: borland.data.provider.BdpDataReader;
+  be_datagrid_empty: boolean;
   cmdText: string;
 begin
   AppCommon.BdpConnection.Open;
-  //
-  // As a workaround for the fact that BdpDataReader does not have a HasRows property, make an extra trip to the database to
-  // determine if there are any rows to get.
-  //
-  bc_get_count := borland.data.provider.BdpCommand.Create
-    (
-    'select count(*)'
+  cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
     + 'from county_dictated_appropriation '
     +   'join service on (service.id=service_id) '
-    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString,
-    appcommon.bdpconnection
-    );
-  if bc_get_count.ExecuteScalar.tostring <> '0' then begin
-    cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
-      + 'from county_dictated_appropriation '
-      +   'join service on (service.id=service_id) '
-      + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
-      + 'order by ' + service_appropriations_sort_order;
-    if be_sort_order_ascending then begin
-      cmdText := cmdText + ' asc';
-    end else begin
-      cmdText := cmdText + ' desc';
-    end;
-    bc_get_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
-    bdr := bc_get_appropriations.ExecuteReader;
-    DataGrid_service_appropriations.DataSource := bdr;
-    DataGrid_service_appropriations.DataBind;
-    Label_no_appropriations.Visible := FALSE;
-    DataGrid_service_appropriations.Visible := TRUE;
+    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
+    + 'order by ' + service_appropriations_sort_order;
+  if be_sort_order_ascending then begin
+    cmdText := cmdText + ' asc';
   end else begin
-    Label_no_appropriations.Visible := TRUE;
-    DataGrid_service_appropriations.Visible := FALSE;
+    cmdText := cmdText + ' desc';
   end;
+  bc_get_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
+  bdr := bc_get_appropriations.ExecuteReader;
+  DataGrid_service_appropriations.DataSource := bdr;
+  DataGrid_service_appropriations.DataBind;
+  be_datagrid_empty := (num_appropriations = 0);
+  //
+  // Manage control visibilities.
+  //
+  Label_no_appropriations.Visible := be_datagrid_empty;
+  DataGrid_service_appropriations.Visible := not be_datagrid_empty;
+  //
+  // Manage non-DataGrid control properties.
+  //
+  Label_unappropriated_amount.Text := (region_dictated_appropriation_amount - sum_of_service_appropriations).tostring('C');
+  //
+  // Clear aggregation vars for next bind, if any.
+  //
+  num_appropriations := 0;
+  sum_of_service_appropriations := 0;
   AppCommon.BdpConnection.Close;
 end;
 
