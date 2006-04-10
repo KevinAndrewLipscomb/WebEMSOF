@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   Borland.Data.Common, Borland.Data.Provider, System.Globalization, 
-  System.Data.Common, system.configuration, borland.vcl.sysutils;
+  System.Data.Common, system.configuration;
 
 type
   TWebForm_profile = class(System.Web.UI.Page)
@@ -176,20 +176,20 @@ begin
   BdpCommand_update_profile := borland.data.provider.bdpcommand.Create
     (
     'UPDATE service '
-    + 'SET name = "' + Safe(Trim(TextBox_service_name.Text),ORG_NAME) + '",'
+    + 'SET name = "' + Safe(TextBox_service_name.Text.trim,ORG_NAME) + '",'
     +   'be_qrs = ' + CheckBox_qrs.Checked.ToString + ','
     +   'be_bls_amb = ' + CheckBox_bls_amb.Checked.ToString + ','
     +   'be_als_amb = ' + CheckBox_als_amb.Checked.ToString + ','
     +   'be_als_squad = ' + CheckBox_als_squad.Checked.ToString + ','
     +   'be_air_amb = ' + CheckBox_air_amb.Checked.ToString + ','
     +   'be_rescue = ' + CheckBox_rescue.Checked.ToString + ','
-    +   'address_line_1 = "' + Safe(Trim(TextBox_address_line_1.Text),POSTAL_STREET_ADDRESS) + '",'
-    +   'address_line_2 = "' + Safe(Trim(TextBox_address_line_2.Text),POSTAL_STREET_ADDRESS) + '",'
-    +   'city = "' + Safe(Trim(TextBox_city.Text),POSTAL_CITY) + '",'
-    +   'zip_code = "' + Safe(Trim(TextBox_zip_code.Text),HYPHENATED_NUM) + '",'
-    +   'federal_tax_id_num = "' + Safe(Trim(TextBox_federal_tax_id_num.Text),HYPHENATED_NUM) + '",'
-    +   'contact_person_name = "' + Safe(Trim(TextBox_contact_person_name.Text),HUMAN_NAME) + '",'
-    +   'contact_person_phone_num = "' + Safe(Trim(TextBox_contact_person_phone_num.Text),PHONE_NUM) + '",'
+    +   'address_line_1 = "' + Safe(TextBox_address_line_1.Text.trim,POSTAL_STREET_ADDRESS) + '",'
+    +   'address_line_2 = "' + Safe(TextBox_address_line_2.Text.trim,POSTAL_STREET_ADDRESS) + '",'
+    +   'city = "' + Safe(TextBox_city.Text.Trim,POSTAL_CITY) + '",'
+    +   'zip_code = "' + Safe(TextBox_zip_code.Text.Trim,HYPHENATED_NUM) + '",'
+    +   'federal_tax_id_num = "' + Safe(TextBox_federal_tax_id_num.Text.trim,HYPHENATED_NUM) + '",'
+    +   'contact_person_name = "' + Safe(TextBox_contact_person_name.Text.trim,HUMAN_NAME) + '",'
+    +   'contact_person_phone_num = "' + Safe(TextBox_contact_person_phone_num.Text.trim,PHONE_NUM) + '",'
     +   'be_valid_profile = TRUE '
     + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUM) + '"',
     AppCommon.BdpConnection

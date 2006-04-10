@@ -6,8 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration,
-  borland.vcl.sysutils;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration;
 
 type
   TWebForm_change_email_address = class(System.Web.UI.Page)
@@ -103,7 +102,7 @@ begin
   BdpCommand_update_account := borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
-    + 'SET password_reset_email_address = "' + Safe(Trim(TextBox_nominal_email_address.Text),EMAIL_ADDRESS) + '"'
+    + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
     + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
     AppCommon.BdpConnection
     );

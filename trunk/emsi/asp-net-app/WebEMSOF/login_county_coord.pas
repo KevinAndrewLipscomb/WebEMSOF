@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   AppCommon, Borland.Data.Provider, System.Globalization, 
-  System.Data.SqlClient, System.Data.Common, system.configuration, borland.vcl.sysutils;
+  System.Data.SqlClient, System.Data.Common, system.configuration;
 
 type
   TWebForm_login_county_coord = class(System.Web.UI.Page)
@@ -126,7 +126,7 @@ begin
     (
     'SELECT be_stale_password FROM county_user '
     +  'where id="' + DropDownList_county.SelectedValue + '" '
-    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUM) + '")'
+    +     'and encoded_password=sha("' + Safe(TextBox_password.Text.Trim,ALPHANUM) + '")'
     ,AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

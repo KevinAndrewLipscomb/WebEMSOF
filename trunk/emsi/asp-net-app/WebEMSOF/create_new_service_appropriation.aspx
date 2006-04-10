@@ -1,0 +1,38 @@
+<%@ Page language="c#" Debug="true" Codebehind="create_new_service_appropriation.pas" AutoEventWireup="false" Inherits="create_new_service_appropriation.TWebForm_create_new_service_appropriation" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+	<title id="Title" runat="server"></title>
+      <!-- $Id$ -->
+  </head>
+
+  <body>
+     <form runat="server">
+      <asp:placeholder id="PlaceHolder_precontent" runat="server">
+      </asp:placeholder>
+		  <table cellspacing="0" cellpadding="5" border="0">
+			  <tr>
+				<td><strong>Create new appropriation:&nbsp; </strong></td>
+			  <td>Service:</td>
+			  <td><ASP:DropDownList id="DropDownList_services" runat="server"></ASP:DropDownList></td>
+			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_service" runat="server" errormessage="Please select a service." font-bold="True" controltovalidate="DropDownList_services">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_service" runat="server" errormessage="Please select a service for a new appropriation." font-bold="True" controltovalidate="DropDownList_services" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
+			  </tr>
+			<tr>
+			  <td></td>
+			  <td>Amount:&nbsp; $</td>
+			  <td><ASP:TextBox id="TextBox_new_amount" runat="server" width="6pc"></ASP:TextBox></td>
+			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_new_amount" runat="server" errormessage="Please enter an amount for a new appropriation." font-bold="True" controltovalidate="TextBox_new_amount">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_new_amount" runat="server" font-bold="True" errormessage="Please leave disallowed characters out of the new amount." validationexpression="[0-9$,\.]+" controltovalidate="TextBox_new_amount">!ERR!</ASP:RegularExpressionValidator></td>
+			</tr>
+			<tr>
+			  <td></td>
+			  <td></td>
+			  <td><ASP:Button id="Button_add_appropriation" runat="server" text="Add"></ASP:Button></td>
+			  <td></td>
+			</tr>
+		  </table>
+    <asp:placeholder id="PlaceHolder_postcontent" runat="server">
+    </asp:placeholder>
+     </form>
+  </body>
+</html>
