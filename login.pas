@@ -9,7 +9,7 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   AppCommon, Borland.Data.Provider, System.Globalization, 
   System.Data.SqlClient, System.Data.Common, system.configuration,
-  system.text.regularexpressions, borland.vcl.sysutils;
+  system.text.regularexpressions;
 
 type
   TWebForm_login = class(System.Web.UI.Page)
@@ -122,7 +122,7 @@ begin
     (
     'SELECT be_stale_password FROM service_user '
     +  'where id=' + DropDownList_service.SelectedValue + ' '
-    +     'and encoded_password=sha("' + Safe(Trim(TextBox_password.Text),ALPHANUM) + '")'
+    +     'and encoded_password=sha("' + Safe(TextBox_password.Text.trim,ALPHANUM) + '")'
     ,AppCommon.BdpConnection
     );
   AppCommon.BdpConnection.Open;

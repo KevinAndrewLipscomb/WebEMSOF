@@ -14,32 +14,46 @@
 <p>
 		<ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label><strong>&nbsp;
           <ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></strong></p>
-<p>Parent appropriation:&nbsp; <ASP:Label id="Label_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;from
-		<ASP:Label id="Label_region_name" runat="server"></ASP:Label>&nbsp;for <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label></p>
-<p>Service appropriations:</p>
+		<table cellspacing="0" cellpadding="5" border="0">
+			<tr>
+			  <td>
+<table cellspacing="0" cellpadding="5" border="0">
+			<tr>
+			  <td>
+				<p align="right">Parent appropriation:</p></td>
+			  <td><ASP:Label id="Label_parent_appropriation_amount" runat="server" font-bold="True"></ASP:Label></td>
+			  <td>from
+		<ASP:Label id="Label_region_name" runat="server"></ASP:Label>&nbsp;for <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label></td>
+			</tr>
+			<tr>
+			  <td>
+				<p align="right">-</p></td>
+			  <td>
+				<ASP:Label id="Label_sum_of_service_appropriations" runat="server" font-bold="True" font-underline="True"></ASP:Label></td>
+			  <td>appropriated to services</td>
+			</tr>
+			<tr>
+			  <td>
+				<p align="right">=</p></td>
+			  <td><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label></td>
+			  <td>remaining</td>
+			</tr>
+		</table>			  </td>
+			</tr>
+          <tr>
+            <td bgcolor="gold"><font size="2">&nbsp;</font><ASP:Label id="Label_note_deadline" runat="server" font-size="Small">NOTE:  The regional deadline for making service appropriations is </ASP:Label><ASP:Label id="Label_regional_county_dictated_appropriation_deadline_date" runat="server" font-bold="True" font-underline="True" font-size="Small"></ASP:Label>. 
+    
+              </td>
+          </tr>
+		</table>
+<p>&nbsp;&nbsp;Service appropriations:</p>
 	  <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
-		  <ASP:Label id="Label_no_appropriations" runat="server" font-bold="True" visible="False" height="2pc">-- NONE --</ASP:Label>
-		  <table cellspacing="0" cellpadding="1" border="0" bgcolor="#c0c0c0">
-			  <tr>
-				<td><strong>Create new appropriation:&nbsp; </strong></td>
-			  <td>Service:</td>
-			  <td><ASP:DropDownList id="DropDownList_services" runat="server"></ASP:DropDownList></td>
-			  <td></td>
-			  </tr>
-			<tr>
-			  <td></td>
-			  <td>Amount:&nbsp; $</td>
-			  <td><ASP:TextBox id="TextBox_new_amount" runat="server" width="6pc"></ASP:TextBox></td>
-			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_new_amount" runat="server" font-bold="True" errormessage="Please leave disallowed characters out of the new amount." validationexpression="[0-9$,\.]+" controltovalidate="TextBox_new_amount">!ERR!</ASP:RegularExpressionValidator></td>
-			</tr>
-			<tr>
-			  <td></td>
-			  <td></td>
-			  <td><ASP:Button id="Button_add_appropriation" runat="server" text="Add"></ASP:Button></td>
-			  <td></td>
-			</tr>
-		  </table>
-        <p>
+		<p>
+		  <ASP:Label id="Label_no_appropriations" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
+		<p>
+		  <ASP:HyperLink id="HyperLink_new_appropriation" runat="server" navigateurl="create_new_service_appropriation.aspx" font-bold="True">Make new service appropriation</ASP:HyperLink>
+		</p>
+		<p>
 		  <ASP:DataGrid id="DataGrid_service_appropriations" runat="server"
 			bordercolor="#CCCCCC"
 			borderstyle="None"
@@ -51,7 +65,7 @@
 			allowsorting="True"
 			useaccessibleheader="True"
 			autogeneratecolumns="False"
-			OnSortCommand="SortCommand_service_appropriations" visible="False" showfooter="True">
+			OnSortCommand="SortCommand_service_appropriations" visible="False">
             <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
             <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
             <HeaderStyle font-bold="True" forecolor="White" backcolor="#333333"></HeaderStyle>
@@ -69,8 +83,6 @@
             <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
         </p>
 	  </blockquote>
-<p>From the above county appropriation, you have <ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;left to appropriate to services by the regional deadline of
-		<ASP:Label id="Label_regional_county_dictated_appropriation_deadline_date" runat="server" font-bold="True" font-underline="True"></ASP:Label>.</p>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
 	</asp:placeholder>
 	 </form>

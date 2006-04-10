@@ -51,6 +51,7 @@ library WebEMSOF;
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txvpck'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txvpck'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txvpck'}
+{%AspMarkupContainer 'create_new_service_appropriation.aspx'}
 
 uses
   System.Reflection,
@@ -71,7 +72,8 @@ uses
   regional_staffer_overview in 'regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_account_overview: System.Web.UI.Page},
   county_overview in 'county_overview.pas' {county_overview.TWebForm_account_overview: System.Web.UI.Page},
   choose_county_appropriation in 'choose_county_appropriation.pas' {choose_county_appropriation.TWebForm_county_appropriation: System.Web.UI.Page},
-  county_dictated_appropriations in 'county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page};
+  county_dictated_appropriations in 'county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page},
+  create_new_service_appropriation in 'create_new_service_appropriation.pas' {create_new_service_appropriation.TWebForm_create_new_service_appropriation: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following

@@ -6,8 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
-  borland.vcl.sysutils;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, appcommon;
 
 type
   TWebForm_county_dictated_appropriations = class(System.Web.UI.Page)
@@ -17,7 +16,6 @@ type
     procedure EditCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure CancelCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure UpdateCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure Button_add_appropriation_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_service_appropriations_ItemDataBound(sender: System.Object; 
       e: System.Web.UI.WebControls.DataGridItemEventArgs);
   {$ENDREGION}
@@ -31,16 +29,15 @@ type
     Label_county_name: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     Label_regional_county_dictated_appropriation_deadline_date: System.Web.UI.WebControls.Label;
-    Label_amount: System.Web.UI.WebControls.Label;
+    Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_region_name: System.Web.UI.WebControls.Label;
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
-    DropDownList_services: System.Web.UI.WebControls.DropDownList;
-    TextBox_new_amount: System.Web.UI.WebControls.TextBox;
-    RegularExpressionValidator_new_amount: System.Web.UI.WebControls.RegularExpressionValidator;
-    Button_add_appropriation: System.Web.UI.WebControls.Button;
     DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
     Label_literal_county: System.Web.UI.WebControls.Label;
+    HyperLink_new_appropriation: System.Web.UI.WebControls.HyperLink;
+    Label_sum_of_service_appropriations: System.Web.UI.WebControls.Label;
+    Label_note_deadline: System.Web.UI.WebControls.Label;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -56,7 +53,6 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
-  Include(Self.Button_add_appropriation.Click, Self.Button_add_appropriation_Click);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
@@ -78,9 +74,7 @@ procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Objec
 var
   accumulated_service_appropriation_amount: decimal;
   bc_get_appropriation_attribs: borland.data.provider.BdpCommand;
-  bc_get_services: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
-  bdr_services: borland.data.provider.BdpDataReader;
   service_appropriation_amount: decimal;
 begin
   accumulated_service_appropriation_amount := 0.0;
@@ -107,21 +101,9 @@ begin
     bdr_appropriation_attribs.Read;
     Label_fiscal_year_designator.Text := bdr_appropriation_attribs['designator'].tostring;
     region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
-    Label_amount.Text := region_dictated_appropriation_amount.ToString('C');
+    Label_parent_appropriation_amount.Text := region_dictated_appropriation_amount.ToString('C');
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
     bdr_appropriation_attribs.Close;
-    //
-    // Fill DropDownList_services.
-    //
-    DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
-    bc_get_services := Borland.Data.Provider.BdpCommand.Create
-      (
-      'SELECT id,name FROM service_user JOIN service using (id) ORDER BY name',
-      AppCommon.BdpConnection
-      );
-    bdr_services := bc_get_services.ExecuteReader;
-    while bdr_services.Read do
-      DropDownList_services.Items.Add(listitem.Create(bdr_services['name'].tostring,bdr_services['id'].ToString));
     //
     AppCommon.BdpConnection.Close;
     //
@@ -154,30 +136,6 @@ begin
   end;
 end;
 
-procedure TWebForm_county_dictated_appropriations.Button_add_appropriation_Click(sender: System.Object;
-  e: System.EventArgs);
-var
-  bc: borland.data.provider.bdpcommand;
-begin
-  appcommon.bdpconnection.Open;
-  bc := borland.data.provider.bdpcommand.Create
-    (
-    'insert into county_dictated_appropriation'
-    + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
-    +   ' service_id = ' + Safe(DropDownList_services.SelectedValue,NUM) + ','
-    +   ' amount = ' + Safe(Trim(TextBox_new_amount.Text),REAL_NUM),
-    appcommon.bdpconnection
-    );
-  bc.ExecuteNonQuery;
-  appcommon.bdpconnection.Close;
-  //
-  DropDownList_services.SelectedIndex := -1; 
-  TextBox_new_amount.Text := NULL_STRING;
-  //
-  DataGrid_service_appropriations.EditItemIndex := -1;
-  Bind_service_appropriations;
-end;
-
 procedure TWebForm_county_dictated_appropriations.UpdateCommand_service_appropriations(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
@@ -187,8 +145,8 @@ var
   be_delete: boolean;
 begin
   AppCommon.BdpConnection.Open;
-  amount_string := Safe(Trim(TextBox(e.Item.Cells[3].Controls[0]).Text),REAL_NUM);
-  if amount_string = NULL_STRING then begin
+  amount_string := Safe(TextBox(e.Item.Cells[3].Controls[0]).Text.Trim,REAL_NUM);
+  if amount_string = system.string.EMPTY then begin
     be_delete := TRUE;
   end else begin
     amount := decimal.Parse(amount_string);
@@ -261,6 +219,7 @@ begin
   //
   // Manage non-DataGrid control properties.
   //
+  Label_sum_of_service_appropriations.text := sum_of_service_appropriations.ToString('C');
   Label_unappropriated_amount.Text := (region_dictated_appropriation_amount - sum_of_service_appropriations).tostring('C');
   //
   // Clear aggregation vars for next bind, if any.
