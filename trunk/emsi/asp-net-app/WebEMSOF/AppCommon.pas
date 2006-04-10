@@ -20,11 +20,13 @@ type
   safe_hint_type =
     (
     NONE,
+    ALPHA,
     ALPHANUM,
     ECMASCRIPT_WORD,
     EMAIL_ADDRESS,
     HOSTNAME,
     HUMAN_NAME,
+    HUMAN_NAME_CSV,
     HYPHENATED_NUM,
     NUM,
     ORG_NAME,
@@ -75,6 +77,8 @@ begin
     // This routine is not intended to assure that data is submitted in proper
     // format.  It is intended to protect against SQL insertion attacks.
     //
+    ALPHA:
+      allow := 'a-zA-Z';
     ALPHANUM:
       allow := '0-9a-zA-Z';
     ECMASCRIPT_WORD:
@@ -85,6 +89,8 @@ begin
       allow := '0-9a-zA-z_-\.';
     HUMAN_NAME:
       allow := 'a-zA-z-\. ' + APOSTROPHE;
+    HUMAN_NAME_CSV:
+      allow := 'a-zA-z-,\. ' + APOSTROPHE;
     HYPHENATED_NUM:
       allow := '0-9-';
     NUM:

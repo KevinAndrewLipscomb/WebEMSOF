@@ -51,7 +51,7 @@
 			allowsorting="True"
 			useaccessibleheader="True"
 			autogeneratecolumns="False"
-			OnSortCommand="SortCommand_service_appropriations" visible="False">
+			OnSortCommand="SortCommand_service_appropriations" visible="False" showfooter="True">
             <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
             <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
             <HeaderStyle font-bold="True" forecolor="White" backcolor="#333333"></HeaderStyle>
@@ -63,7 +63,7 @@
                 <ItemStyle horizontalalign="Right"></ItemStyle>
               </ASP:BoundColumn>
               <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit">
-                <ItemStyle forecolor="#0000FF"></ItemStyle>
+                <ItemStyle forecolor="Blue"></ItemStyle>
               </ASP:EditCommandColumn>
             </Columns>
             <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>

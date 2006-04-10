@@ -105,7 +105,7 @@ procedure TWebForm_service_appropriation.Button_continue_Click(sender: System.Ob
   e: System.EventArgs);
 begin
   session.Remove('county_dictated_appropriation_id');
-  session.Add('county_dictated_appropriation_id',RadioButtonList_appropriation.SelectedValue);
+  session.Add('county_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
 end;
 
 end.
