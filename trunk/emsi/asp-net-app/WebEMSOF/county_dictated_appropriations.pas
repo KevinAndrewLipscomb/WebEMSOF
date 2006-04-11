@@ -138,15 +138,17 @@ end;
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
-  if (e.item.itemtype = listitemtype.item) or (e.item.itemtype = listitemtype.alternatingitem) then begin
+  if (e.item.itemtype = listitemtype.alternatingitem)
+    or (e.item.itemtype = listitemtype.edititem)
+    or (e.item.itemtype = listitemtype.item)
+    or (e.item.itemtype = listitemtype.selecteditem)
+  then begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
     num_appropriations := num_appropriations + 1;
     sum_of_service_appropriations :=
       sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
-  end else if (e.item.itemtype = listitemtype.footer) then begin
-    e.item.cells[3].text := 'Total: <b>' + sum_of_service_appropriations.tostring('C') + '</b>';
   end;
 end;
 

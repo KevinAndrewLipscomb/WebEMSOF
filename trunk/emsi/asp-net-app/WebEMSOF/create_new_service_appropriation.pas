@@ -89,24 +89,28 @@ end;
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_Click(sender: System.Object;
   e: System.EventArgs);
 var
+  amount: decimal;
+  amount_string: string;
   bc: borland.data.provider.bdpcommand;
 begin
-  appcommon.bdpconnection.Open;
-  bc := borland.data.provider.bdpcommand.Create
-    (
-    'insert into county_dictated_appropriation'
-    + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
-    +   ' service_id = ' + Safe(DropDownList_services.SelectedValue,NUM) + ','
-    +   ' amount = ' + Safe(TextBox_new_amount.Text.Trim,REAL_NUM),
-    appcommon.bdpconnection
-    );
-  bc.ExecuteNonQuery;
-  appcommon.bdpconnection.Close;
-  //
-  DropDownList_services.SelectedIndex := -1;
-  TextBox_new_amount.Text := system.string.EMPTY;
-  //
-  server.Transfer('county_dictated_appropriations.aspx');
+  amount_string := Safe(TextBox_new_amount.Text.Trim,REAL_NUM);
+  if amount_string <> system.string.EMPTY then begin
+    amount := decimal.Parse(amount_string);
+    if amount > 0 then begin
+      appcommon.bdpconnection.Open;
+      bc := borland.data.provider.bdpcommand.Create
+        (
+        'insert into county_dictated_appropriation'
+        + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
+        +   ' service_id = ' + Safe(DropDownList_services.SelectedValue,NUM) + ','
+        +   ' amount = ' + amount.tostring,
+        appcommon.bdpconnection
+        );
+      bc.ExecuteNonQuery;
+      appcommon.bdpconnection.Close;
+    end;
+    server.Transfer('county_dictated_appropriations.aspx');
+  end;
 end;
 
 end.
