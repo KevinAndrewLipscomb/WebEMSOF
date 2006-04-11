@@ -28,7 +28,6 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_county_name: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
-    Label_regional_county_dictated_appropriation_deadline_date: System.Web.UI.WebControls.Label;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_region_name: System.Web.UI.WebControls.Label;
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
@@ -38,6 +37,7 @@ type
     HyperLink_new_appropriation: System.Web.UI.WebControls.HyperLink;
     Label_sum_of_service_appropriations: System.Web.UI.WebControls.Label;
     Label_note_deadline: System.Web.UI.WebControls.Label;
+    Label_make_appropriations_deadline: System.Web.UI.WebControls.Label;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -74,8 +74,8 @@ procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Objec
 var
   accumulated_service_appropriation_amount: decimal;
   bc_get_appropriation_attribs: borland.data.provider.BdpCommand;
+  bc_get_make_appropriations_deadline: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
-  service_appropriation_amount: decimal;
 begin
   accumulated_service_appropriation_amount := 0.0;
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -104,6 +104,20 @@ begin
     Label_parent_appropriation_amount.Text := region_dictated_appropriation_amount.ToString('C');
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
     bdr_appropriation_attribs.Close;
+    //
+    // Set Label_make_appropriations_deadline.
+    //
+    bc_get_make_appropriations_deadline := borland.data.provider.bdpcommand.Create
+      (
+      'select value'
+      + ' from fy_calendar'
+      +   ' join fiscal_year on (fiscal_year.id = fiscal_year_id)'
+      +   ' join milestone_code_name_map on (code = milestone_code)'
+      + ' where designator = "' + Safe(Label_fiscal_year_designator.Text,ALPHANUM) + '"'
+      +   ' and name = "emsof-county-dictated-appropriation-deadline"',
+      appcommon.bdpconnection
+      );
+    Label_make_appropriations_deadline.text := bc_get_make_appropriations_deadline.ExecuteScalar.tostring;
     //
     AppCommon.BdpConnection.Close;
     //
