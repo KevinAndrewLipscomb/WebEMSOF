@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriations.pas" AutoEventWireup="false" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" %>
+<%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriations.pas" AutoEventWireup="false" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" smartnavigation="true" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -41,7 +41,7 @@
 		</table>			  </td>
 			</tr>
           <tr>
-            <td bgcolor="gold"><font size="2">&nbsp;</font><ASP:Label id="Label_note_deadline" runat="server" font-size="Small">NOTE:  The regional deadline for making service appropriations is </ASP:Label><ASP:Label id="Label_regional_county_dictated_appropriation_deadline_date" runat="server" font-bold="True" font-underline="True" font-size="Small"></ASP:Label>. 
+            <td bgcolor="gold"><ASP:Label id="Label_note_deadline" runat="server" font-size="Small">NOTE:  The regional deadline for making service appropriations is </ASP:Label><ASP:Label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-underline="True" font-size="Small"></ASP:Label>. 
     
               </td>
           </tr>
@@ -68,7 +68,7 @@
 			OnSortCommand="SortCommand_service_appropriations" visible="False">
             <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
             <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
-            <HeaderStyle font-bold="True" forecolor="White" backcolor="#333333"></HeaderStyle>
+            <HeaderStyle font-bold="True" forecolor="Blue" backcolor="#E0E0E0"></HeaderStyle>
             <Columns>
               <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="Id"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>

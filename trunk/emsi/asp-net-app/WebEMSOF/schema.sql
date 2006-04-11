@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: db4free.org
--- Generation Time: Apr 05, 2006 at 09:24 PM
--- Server version: 5.0.19
+-- Generation Time: Apr 11, 2006 at 03:02 AM
+-- Server version: 5.0.20
 -- PHP Version: 5.0.3
 -- 
 -- Database: `kalipso`
@@ -21,7 +21,7 @@ CREATE TABLE county_code_name_map (
   `name` varchar(15) NOT NULL,
   PRIMARY KEY  (`code`),
   KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -37,7 +37,7 @@ CREATE TABLE county_dictated_appropriation (
   PRIMARY KEY  (id),
   KEY service_id (service_id),
   KEY region_dictated_appropriation_id (region_dictated_appropriation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -108,7 +108,7 @@ CREATE TABLE emsof_request_master (
   KEY status_code (status_code),
   KEY fiscal_year_id (fiscal_year_id),
   KEY county_dictated_appropriation_id (county_dictated_appropriation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -121,7 +121,23 @@ CREATE TABLE fiscal_year (
   designator char(6) NOT NULL,
   PRIMARY KEY  (id),
   UNIQUE KEY designator (designator)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `fy_calendar`
+-- 
+
+CREATE TABLE fy_calendar (
+  id smallint(5) unsigned NOT NULL auto_increment,
+  fiscal_year_id smallint(5) unsigned NOT NULL,
+  milestone_code smallint(5) unsigned NOT NULL,
+  `when` datetime NOT NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY fiscal_year_id (fiscal_year_id,milestone_code),
+  KEY milestone_code (milestone_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -133,7 +149,19 @@ CREATE TABLE item_status_code_description_map (
   `code` tinyint(3) unsigned NOT NULL auto_increment,
   description varchar(63) NOT NULL,
   PRIMARY KEY  (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `milestone_code_name_map`
+-- 
+
+CREATE TABLE milestone_code_name_map (
+  `code` smallint(5) unsigned NOT NULL auto_increment,
+  `name` varchar(63) NOT NULL,
+  PRIMARY KEY  (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -146,7 +174,7 @@ CREATE TABLE region_code_name_map (
   `name` varchar(15) NOT NULL,
   PRIMARY KEY  (`code`),
   KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -162,7 +190,7 @@ CREATE TABLE region_dictated_appropriation (
   PRIMARY KEY  (id),
   KEY county_code (county_code),
   KEY state_dictated_appropriation_id (state_dictated_appropriation_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -176,7 +204,7 @@ CREATE TABLE regional_staffer (
   first_name varchar(63) NOT NULL,
   PRIMARY KEY  (id),
   UNIQUE KEY last_name (last_name,first_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -203,7 +231,7 @@ CREATE TABLE request_status_code_description_map (
   `code` tinyint(4) NOT NULL auto_increment,
   description varchar(63) NOT NULL,
   PRIMARY KEY  (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -232,7 +260,7 @@ CREATE TABLE service (
   PRIMARY KEY  (id),
   UNIQUE KEY affiliate_num (affiliate_num),
   KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -263,7 +291,7 @@ CREATE TABLE state_dictated_appropriation (
   PRIMARY KEY  (id),
   KEY fiscal_year_id (fiscal_year_id),
   KEY region_code (region_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 
 -- Constraints for dumped tables
@@ -297,6 +325,13 @@ ALTER TABLE `emsof_request_master`
   ADD CONSTRAINT emsof_request_master_ibfk_2 FOREIGN KEY (county_dictated_appropriation_id) REFERENCES county_dictated_appropriation (id),
   ADD CONSTRAINT emsof_request_master_ibfk_3 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id),
   ADD CONSTRAINT emsof_request_master_ibfk_4 FOREIGN KEY (status_code) REFERENCES request_status_code_description_map (`code`);
+
+-- 
+-- Constraints for table `fy_calendar`
+-- 
+ALTER TABLE `fy_calendar`
+  ADD CONSTRAINT fy_calendar_ibfk_2 FOREIGN KEY (milestone_code) REFERENCES milestone_code_name_map (`code`),
+  ADD CONSTRAINT fy_calendar_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id);
 
 -- 
 -- Constraints for table `region_dictated_appropriation`
