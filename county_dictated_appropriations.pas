@@ -27,17 +27,16 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_county_name: System.Web.UI.WebControls.Label;
-    Label_unappropriated_amount: System.Web.UI.WebControls.Label;
-    Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
-    Label_region_name: System.Web.UI.WebControls.Label;
-    Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
     DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
     Label_literal_county: System.Web.UI.WebControls.Label;
     HyperLink_new_appropriation: System.Web.UI.WebControls.HyperLink;
-    Label_sum_of_service_appropriations: System.Web.UI.WebControls.Label;
-    Label_note_deadline: System.Web.UI.WebControls.Label;
     Label_make_appropriations_deadline: System.Web.UI.WebControls.Label;
+    Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
+    Label_region_name: System.Web.UI.WebControls.Label;
+    Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
+    Label_sum_of_service_appropriations: System.Web.UI.WebControls.Label;
+    Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -76,6 +75,7 @@ var
   bc_get_appropriation_attribs: borland.data.provider.BdpCommand;
   bc_get_make_appropriations_deadline: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
+  make_appropriations_deadline: system.datetime;
 begin
   accumulated_service_appropriation_amount := 0.0;
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -105,7 +105,7 @@ begin
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
     bdr_appropriation_attribs.Close;
     //
-    // Set Label_make_appropriations_deadline.
+    // All further rendering is deadline-dependent.
     //
     bc_get_make_appropriations_deadline := borland.data.provider.bdpcommand.Create
       (
@@ -117,12 +117,25 @@ begin
       +   ' and name = "emsof-county-dictated-appropriation-deadline"',
       appcommon.bdpconnection
       );
-    Label_make_appropriations_deadline.text := bc_get_make_appropriations_deadline.ExecuteScalar.tostring;
+    make_appropriations_deadline := system.datetime(bc_get_make_appropriations_deadline.ExecuteScalar);
+    Label_make_appropriations_deadline.text := 'NOTE:  The deadline for making service appropriations is '
+    + make_appropriations_deadline.tostring('dddd, MMMM dd, yyyy ''at'' HH:mm:ss') + '.';
+      //
+      // Set this label correctly just in case the visibility of the deadline controls is mishandled.  Better to have the
+      // deadline displayed after the milestone than not displayed before the milestone.
     //
     AppCommon.BdpConnection.Close;
     //
     Bind_service_appropriations;
     //
+    if make_appropriations_deadline > datetime.Now then begin
+      //
+      // Modify the DataGrid control appropriately.
+      //
+      //
+    end else begin
+      Label_make_appropriations_deadline.visible := FALSE;
+    end;
   end;
 end;
 
