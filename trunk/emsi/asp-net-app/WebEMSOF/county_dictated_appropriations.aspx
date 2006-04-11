@@ -4,7 +4,7 @@
 <html>
   <head>
 	<title id="Title" runat="server"></title>
-    <!-- $Id$ -->
+	<!-- $Id$ -->
   </head>
 
   <body>
@@ -13,10 +13,7 @@
 	  </asp:placeholder>
 <p>
 		<ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label><strong>&nbsp;
-          <ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></strong></p>
-		<table cellspacing="0" cellpadding="5" border="0">
-			<tr>
-			  <td>
+		  <ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></strong></p>
 <table cellspacing="0" cellpadding="5" border="0">
 			<tr>
 			  <td>
@@ -38,15 +35,16 @@
 			  <td><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label></td>
 			  <td>remaining</td>
 			</tr>
-		</table>			  </td>
-			</tr>
-          <tr>
-            <td bgcolor="gold"><ASP:Label id="Label_note_deadline" runat="server" font-size="Small">NOTE:  The regional deadline for making service appropriations is </ASP:Label><ASP:Label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-underline="True" font-size="Small"></ASP:Label>. 
-    
-              </td>
-          </tr>
 		</table>
-<p>&nbsp;&nbsp;Service appropriations:</p>
+<p>
+        <table cellspacing="0" cellpadding="5" border="0">
+            <tr>
+              <td>Service appropriations:</td>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+              <td><ASP:Label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-underline="True" font-size="Small" backcolor="Gold"></ASP:Label></td>
+            </tr>
+        </table>
+</p>
 	  <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
 		<p>
 		  <ASP:Label id="Label_no_appropriations" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
