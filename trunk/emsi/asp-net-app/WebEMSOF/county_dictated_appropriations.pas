@@ -129,10 +129,13 @@ begin
     //
     AppCommon.BdpConnection.Close;
     //
-    be_before_deadline := make_appropriations_deadline > datetime.Now;
-    TableRow_sum_of_service_appropriations.visible := be_before_deadline;
-    TableRow_unappropriated_amount.visible := be_before_deadline;
-    Label_make_appropriations_deadline.visible := be_before_deadline;
+    if datetime.Now > make_appropriations_deadline then begin
+      be_before_deadline := FALSE;
+      TableRow_sum_of_service_appropriations.visible := FALSE;
+      TableRow_unappropriated_amount.visible := FALSE;
+      Label_make_appropriations_deadline.visible := FALSE;
+      HyperLink_new_appropriation.visible := FALSE;
+    end;
     //
     Bind_service_appropriations;  // also affected by be_before_deadline
   end;

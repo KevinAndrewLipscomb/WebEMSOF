@@ -13,10 +13,15 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure Button_add_appropriation_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_add_appropriation_and_repeat_Click(sender: System.Object;
+      e: System.EventArgs);
+    procedure Button_cancel_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_add_appropriation_and_stop_Click(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    procedure AddAppropriation(amount_string: string; service_id_string: string);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -32,7 +37,6 @@ type
     Button_cancel: System.Web.UI.WebControls.Button;
     procedure OnInit(e: EventArgs); override;
   private
-    { Private Declarations }
   public
     { Public Declarations }
   end;
@@ -46,7 +50,9 @@ implementation
 /// </summary>
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
-  Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_Click);
+  Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
+  Include(Self.Button_add_appropriation_and_stop.Click, Self.Button_add_appropriation_and_stop_Click);
+  Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -88,14 +94,36 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_Click(sender: System.Object;
+procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_stop_Click(sender: System.Object;
   e: System.EventArgs);
+begin
+  AddAppropriation(Safe(TextBox_new_amount.Text.Trim,REAL_NUM),Safe(DropDownList_services.SelectedValue,NUM));
+  server.Transfer('county_dictated_appropriations.aspx');
+end;
+
+procedure TWebForm_create_new_service_appropriation.Button_cancel_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('county_dictated_appropriations.aspx');
+end;
+
+procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_repeat_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  AddAppropriation(Safe(TextBox_new_amount.Text.Trim,REAL_NUM),Safe(DropDownList_services.SelectedValue,NUM));
+  TextBox_new_amount.Text := system.string.EMPTY;
+  DropDownList_services.SelectedIndex := -1;
+end;
+
+procedure TWebForm_create_new_service_appropriation.AddAppropriation
+  (
+  amount_string: string;
+  service_id_string: string
+  );
 var
   amount: decimal;
-  amount_string: string;
   bc: borland.data.provider.bdpcommand;
 begin
-  amount_string := Safe(TextBox_new_amount.Text.Trim,REAL_NUM);
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
     if amount > 0 then begin
@@ -104,14 +132,13 @@ begin
         (
         'insert into county_dictated_appropriation'
         + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
-        +   ' service_id = ' + Safe(DropDownList_services.SelectedValue,NUM) + ','
+        +   ' service_id = ' + service_id_string + ','
         +   ' amount = ' + amount.tostring,
         appcommon.bdpconnection
         );
       bc.ExecuteNonQuery;
       appcommon.bdpconnection.Close;
     end;
-    server.Transfer('county_dictated_appropriations.aspx');
   end;
 end;
 
