@@ -37,6 +37,8 @@ type
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_sum_of_service_appropriations: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
+    TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -134,6 +136,8 @@ begin
       //
       //
     end else begin
+      TableRow_sum_of_service_appropriations.visible := FALSE;
+      TableRow_unappropriated_amount.visible := FALSE;
       Label_make_appropriations_deadline.visible := FALSE;
     end;
   end;

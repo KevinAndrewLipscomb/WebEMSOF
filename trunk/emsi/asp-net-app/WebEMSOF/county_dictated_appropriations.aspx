@@ -14,37 +14,39 @@
 <p>
 		<ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label><strong>&nbsp;
 		  <ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></strong></p>
-<table cellspacing="0" cellpadding="5" border="0">
+			  <table cellspacing="0" cellpadding="5" border="0">
 			<tr>
 			  <td>
 				<p align="right">Parent appropriation:</p></td>
-			  <td><ASP:Label id="Label_parent_appropriation_amount" runat="server" font-bold="True"></ASP:Label></td>
+			  <td>
+              <p align="right"><ASP:Label id="Label_parent_appropriation_amount" runat="server" font-bold="True"></ASP:Label></p></td>
 			  <td>from
 		<ASP:Label id="Label_region_name" runat="server"></ASP:Label>&nbsp;for <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label></td>
 			</tr>
-			<tr>
+			<tr id="TableRow_sum_of_service_appropriations" runat="server">
 			  <td>
 				<p align="right">-</p></td>
 			  <td>
-				<ASP:Label id="Label_sum_of_service_appropriations" runat="server" font-bold="True" font-underline="True"></ASP:Label></td>
+              <p align="right">
+				<ASP:Label id="Label_sum_of_service_appropriations" runat="server" font-bold="True" font-underline="True"></ASP:Label></p></td>
 			  <td>appropriated to services</td>
 			</tr>
-			<tr>
+			<tr id="TableRow_unappropriated_amount" runat="server">
 			  <td>
 				<p align="right">=</p></td>
-			  <td><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label></td>
+			  <td>
+              <p align="right"><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label></p></td>
 			  <td>remaining</td>
 			</tr>
 		</table>
-<p>
-        <table cellspacing="0" cellpadding="5" border="0">
-            <tr>
-              <td>Service appropriations:</td>
-              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-              <td><ASP:Label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-underline="True" font-size="Small" backcolor="Gold"></ASP:Label></td>
-            </tr>
-        </table>
-</p>
+      <p></p>
+		<table cellspacing="0" cellpadding="5" border="0">
+			<tr>
+			  <td>Service appropriations:</td>
+			  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
+			  <td><ASP:Label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-underline="True" font-size="Small" backcolor="Gold"></ASP:Label></td>
+			</tr>
+		</table>
 	  <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
 		<p>
 		  <ASP:Label id="Label_no_appropriations" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
