@@ -65,12 +65,12 @@ end;
 const ID = '$Id$';
 
 var
-  be_before_deadline: boolean = TRUE;
-  be_sort_order_ascending: boolean = TRUE;
-  num_appropriations: integer = 0;
+  be_before_deadline: boolean;
+  be_sort_order_ascending: boolean;
+  num_appropriations: integer;
   region_dictated_appropriation_amount: decimal;
-  service_appropriations_sort_order: string = 'name';
-  sum_of_service_appropriations: decimal = 0;
+  service_appropriations_sort_order: string;
+  sum_of_service_appropriations: decimal;
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
@@ -83,6 +83,15 @@ begin
   accumulated_service_appropriation_amount := 0.0;
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
+    //
+    // Initialize implementation-global variables.
+    //
+    be_before_deadline := TRUE;
+    be_sort_order_ascending := TRUE;
+    num_appropriations := 0;
+    service_appropriations_sort_order := 'name';
+    sum_of_service_appropriations := 0;
+    //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session.Item['county_name'].ToString;
     //
