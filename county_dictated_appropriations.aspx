@@ -51,7 +51,7 @@
 		<p>
 		  <ASP:Label id="Label_no_appropriations" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
 		<p>
-		  <ASP:HyperLink id="HyperLink_new_appropriation" runat="server" navigateurl="create_new_service_appropriation.aspx" font-bold="True">Make new service appropriation</ASP:HyperLink>
+		  <ASP:HyperLink id="HyperLink_new_appropriation" runat="server" navigateurl="create_new_service_appropriation.aspx" font-bold="True">Make new service appropriation(s)</ASP:HyperLink>
 		</p>
 		<p>
 		  <ASP:DataGrid id="DataGrid_service_appropriations" runat="server"
