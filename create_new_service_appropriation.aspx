@@ -27,7 +27,9 @@
 			<tr>
 			  <td></td>
 			  <td></td>
-			  <td><ASP:Button id="Button_add_appropriation" runat="server" text="Add"></ASP:Button></td>
+			  <td><ASP:Button id="Button_add_appropriation_and_repeat" runat="server" text="Add and Repeat"></ASP:Button><br>
+              <ASP:Button id="Button_add_appropriation_and_stop" runat="server" text="Add and Stop"></ASP:Button><br>
+              <ASP:Button id="Button_cancel" runat="server" text="Cancel"></ASP:Button></td>
 			  <td></td>
 			</tr>
 		  </table>

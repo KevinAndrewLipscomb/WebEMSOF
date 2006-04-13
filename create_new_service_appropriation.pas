@@ -26,8 +26,10 @@ type
     TextBox_new_amount: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_new_amount: System.Web.UI.WebControls.RequiredFieldValidator;
     RegularExpressionValidator_new_amount: System.Web.UI.WebControls.RegularExpressionValidator;
-    Button_add_appropriation: System.Web.UI.WebControls.Button;
+    Button_add_appropriation_and_repeat: System.Web.UI.WebControls.Button;
     RequiredFieldValidator_service: System.Web.UI.WebControls.RequiredFieldValidator;
+    Button_add_appropriation_and_stop: System.Web.UI.WebControls.Button;
+    Button_cancel: System.Web.UI.WebControls.Button;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -44,7 +46,7 @@ implementation
 /// </summary>
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
-  Include(Self.Button_add_appropriation.Click, Self.Button_add_appropriation_Click);
+  Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
