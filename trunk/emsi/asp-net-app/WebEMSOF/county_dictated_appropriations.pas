@@ -65,6 +65,7 @@ end;
 const ID = '$Id$';
 
 var
+  be_before_deadline: boolean = TRUE;
   be_sort_order_ascending: boolean = TRUE;
   num_appropriations: integer = 0;
   region_dictated_appropriation_amount: decimal;
@@ -128,18 +129,12 @@ begin
     //
     AppCommon.BdpConnection.Close;
     //
-    Bind_service_appropriations;
+    be_before_deadline := make_appropriations_deadline > datetime.Now;
+    TableRow_sum_of_service_appropriations.visible := be_before_deadline;
+    TableRow_unappropriated_amount.visible := be_before_deadline;
+    Label_make_appropriations_deadline.visible := be_before_deadline;
     //
-    if make_appropriations_deadline > datetime.Now then begin
-      //
-      // Modify the DataGrid control appropriately.
-      //
-      //
-    end else begin
-      TableRow_sum_of_service_appropriations.visible := FALSE;
-      TableRow_unappropriated_amount.visible := FALSE;
-      Label_make_appropriations_deadline.visible := FALSE;
-    end;
+    Bind_service_appropriations;  // also affected by be_before_deadline
   end;
 end;
 
@@ -166,6 +161,7 @@ begin
     num_appropriations := num_appropriations + 1;
     sum_of_service_appropriations :=
       sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
+    e.item.Cells[4].controls.item[0].visible := be_before_deadline;
   end;
 end;
 
