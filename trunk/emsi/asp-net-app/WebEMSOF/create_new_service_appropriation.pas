@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  system.web.mail;
 
 type
   TWebForm_create_new_service_appropriation = class(System.Web.UI.Page)
@@ -122,13 +123,19 @@ procedure TWebForm_create_new_service_appropriation.AddAppropriation
   );
 var
   amount: decimal;
-  bc: borland.data.provider.bdpcommand;
+  bc_get_cc_email_address: borland.data.provider.bdpcommand;
+  bc_get_fy_designator: borland.data.provider.bdpcommand;
+  bc_get_service_email_address: borland.data.provider.bdpcommand;
+  bc_insert_appropriation: borland.data.provider.bdpcommand;
 begin
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
     if amount > 0 then begin
       appcommon.bdpconnection.Open;
-      bc := borland.data.provider.bdpcommand.Create
+      //
+      // Record the new appropriation.
+      //
+      bc_insert_appropriation := borland.data.provider.bdpcommand.Create
         (
         'insert into county_dictated_appropriation'
         + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
@@ -136,7 +143,53 @@ begin
         +   ' amount = ' + amount.tostring,
         appcommon.bdpconnection
         );
-      bc.ExecuteNonQuery;
+      bc_insert_appropriation.ExecuteNonQuery;
+      //
+      // Send notice of the appropriation to the service's email address of record.
+      //
+      //   Set up the command to get service's email address of record.
+      bc_get_service_email_address := borland.data.provider.bdpcommand.Create
+        (
+        'select password_reset_email_address from service_user '
+        + 'where id ="' + service_id_string + '"',
+        AppCommon.BdpConnection
+        );
+      //   Set up the command to get the appropriate fiscal year designator.
+      bc_get_fy_designator := borland.data.provider.bdpcommand.Create
+        (
+        'select designator'
+        + ' from fiscal_year'
+        +   ' join state_dictated_appropriation on (state_dictated_appropriation.fiscal_year_id=fiscal_year.id)'
+        +   ' join region_dictated_appropriation'
+        +     ' on (region_dictated_appropriation.state_dictated_appropriation_id=state_dictated_appropriation.id)'
+        + ' where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].tostring,
+        appcommon.bdpconnection
+        );
+      //   Set up the command to get the County Coorindator's email address.
+      bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
+        (
+        'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
+        AppCommon.BdpConnection
+        );
+      //   Send the email message.
+      smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+      smtpmail.Send
+        (
+        ConfigurationSettings.AppSettings['sender_email_address'],
+        bc_get_service_email_address.ExecuteScalar.tostring,
+        'New ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
+        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator ('
+        + bc_get_cc_email_address.ExecuteScalar.tostring + ') has made a new EMSOF appropriation of ' + amount.tostring('C')
+        + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
+        + NEW_LINE
+        + 'You can work on this appropriation by visiting:' + NEW_LINE
+        + NEW_LINE
+        + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+        + server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+        + NEW_LINE
+        + '-- ' + ConfigurationSettings.AppSettings['application_name']
+        );
+      //
       appcommon.bdpconnection.Close;
     end;
   end;
