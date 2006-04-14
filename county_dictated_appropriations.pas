@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, appcommon;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, appcommon,
+  system.web.mail;
 
 type
   TWebForm_county_dictated_appropriations = class(System.Web.UI.Page)
@@ -182,33 +183,87 @@ procedure TWebForm_county_dictated_appropriations.UpdateCommand_service_appropri
 var
   amount: decimal;
   amount_string: string;
-  bc : borland.data.provider.BdpCommand;
+  bc_change_appropriation : borland.data.provider.BdpCommand;
+  bc_get_cc_email_address: borland.data.provider.bdpcommand;
+  bc_get_service_email_address: borland.data.provider.bdpcommand;
   be_delete: boolean;
+  appropriation_id_string: string;
+  specific_county_action_text: string;
+  specific_next_step_text: string;
+  specific_preposition: string;
 begin
   AppCommon.BdpConnection.Open;
+  //
+  appropriation_id_string := Safe(e.Item.Cells[0].Text,NUM);
   amount_string := Safe(TextBox(e.Item.Cells[3].Controls[0]).Text.Trim,REAL_NUM);
+  //
   if amount_string = system.string.EMPTY then begin
     be_delete := TRUE;
   end else begin
     amount := decimal.Parse(amount_string);
     be_delete := (amount = 0);
   end;
+  //
+  //
+  // Set up the command to get service's email address of record.  This must be done before we delete the appropriation because the
+  // appropriation is this routine's only link to the service.
+  //
+  bc_get_service_email_address := borland.data.provider.bdpcommand.Create
+    (
+    'select password_reset_email_address'
+    + ' from service_user join county_dictated_appropriation on county_dictated_appropriation.service_id=service_user.id)'
+    + ' where county_dictated_appropriation.id =' + appropriation_id_string,
+    AppCommon.BdpConnection
+    );
+  //
+  // Since we're getting email addresses, let's get the County Coordinator's email address too.
+  //
+  bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
+    (
+    'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
+    AppCommon.BdpConnection
+    );
+  //
   if be_delete then begin
-    bc := borland.data.provider.bdpcommand.Create
+    bc_change_appropriation := borland.data.provider.bdpcommand.Create
       (
-      'delete from county_dictated_appropriation where id = ' + Safe(e.Item.Cells[0].Text,NUM),
+      'delete from county_dictated_appropriation where id = ' + appropriation_id_string,
       AppCommon.BdpConnection
       );
+    specific_county_action_text := 'deleted';
+    specific_preposition := 'from';
+    specific_next_step_text := 'use ' + ConfigurationSettings.AppSettings['application_name'];
   end else begin
-    bc := borland.data.provider.bdpcommand.Create
+    bc_change_appropriation := borland.data.provider.bdpcommand.Create
       (
       'update county_dictated_appropriation'
       + ' set amount = ' + amount.tostring
-      + ' where id = ' + Safe(e.Item.Cells[0].Text,NUM),
+      + ' where id = ' + appropriation_id_string,
       AppCommon.BdpConnection
       );
+    specific_county_action_text := 'changed';
+    specific_preposition := 'for';
+    specific_next_step_text := 'work on this appropriation';
   end;
-  bc.ExecuteNonQuery;
+  bc_change_appropriation.ExecuteNonQuery;
+  //
+  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+  smtpmail.Send
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    bc_get_service_email_address.ExecuteScalar.tostring,
+    'Change of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
+    'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator (' + bc_get_cc_email_address.ExecuteScalar.tostring
+    + ') has ' + specific_county_action_text + ' an EMSOF appropriation ' + specific_preposition + ' your service for '
+    + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+    + NEW_LINE
+    + 'You can ' + specific_next_step_text + ' by visiting:' + NEW_LINE
+    + NEW_LINE
+    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+    + server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
   AppCommon.BdpConnection.Close;
   //
   DataGrid_service_appropriations.EditItemIndex := -1;
