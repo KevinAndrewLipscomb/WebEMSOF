@@ -79,6 +79,7 @@
               <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit">
                 <ItemStyle forecolor="Blue"></ItemStyle>
               </ASP:EditCommandColumn>
+              <ASP:ButtonColumn text="Delete" commandname="Delete"></ASP:ButtonColumn>
             </Columns>
             <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
         </p>

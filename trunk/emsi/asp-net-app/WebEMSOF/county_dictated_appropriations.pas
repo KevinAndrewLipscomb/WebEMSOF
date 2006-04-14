@@ -19,6 +19,8 @@ type
     procedure UpdateCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_service_appropriations_ItemDataBound(sender: System.Object; 
       e: System.Web.UI.WebControls.DataGridItemEventArgs);
+    procedure DataGrid_service_appropriations_DeleteCommand(source: System.Object; 
+      e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -58,6 +60,7 @@ begin
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.DeleteCommand, Self.DataGrid_service_appropriations_DeleteCommand);
   Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -160,6 +163,14 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  session.Remove('county_dictated_appropriation_id_selected_for_deletion');
+  session.Add('county_dictated_appropriation_id_selected_for_deletion',Safe(e.Item.Cells[0].Text,NUM));
+  server.Transfer('delete_service_appropriation.aspx');
+end;
+
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
@@ -174,7 +185,8 @@ begin
     num_appropriations := num_appropriations + 1;
     sum_of_service_appropriations :=
       sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
-    e.item.Cells[4].controls.item[0].visible := be_before_deadline;
+    e.item.Cells[4].controls.item[0].visible := be_before_deadline;  // Cell 4 is the Edit linkbutton cell.
+    e.item.Cells[5].controls.item[0].visible := be_before_deadline;  // Cell 5 is the Delete linkbutton cell.
   end;
 end;
 
@@ -183,91 +195,66 @@ procedure TWebForm_county_dictated_appropriations.UpdateCommand_service_appropri
 var
   amount: decimal;
   amount_string: string;
+  appropriation_id_string: string;
   bc_change_appropriation : borland.data.provider.BdpCommand;
   bc_get_cc_email_address: borland.data.provider.bdpcommand;
   bc_get_service_email_address: borland.data.provider.bdpcommand;
-  be_delete: boolean;
-  appropriation_id_string: string;
-  specific_county_action_text: string;
-  specific_next_step_text: string;
-  specific_preposition: string;
 begin
   AppCommon.BdpConnection.Open;
   //
   appropriation_id_string := Safe(e.Item.Cells[0].Text,NUM);
   amount_string := Safe(TextBox(e.Item.Cells[3].Controls[0]).Text.Trim,REAL_NUM);
   //
-  if amount_string = system.string.EMPTY then begin
-    be_delete := TRUE;
-  end else begin
+  if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
-    be_delete := (amount = 0);
-  end;
-  //
-  //
-  // Set up the command to get service's email address of record.  This must be done before we delete the appropriation because the
-  // appropriation is this routine's only link to the service.
-  //
-  bc_get_service_email_address := borland.data.provider.bdpcommand.Create
-    (
-    'select password_reset_email_address'
-    + ' from service_user join county_dictated_appropriation on county_dictated_appropriation.service_id=service_user.id)'
-    + ' where county_dictated_appropriation.id =' + appropriation_id_string,
-    AppCommon.BdpConnection
-    );
-  //
-  // Since we're getting email addresses, let's get the County Coordinator's email address too.
-  //
-  bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
-    (
-    'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
-    AppCommon.BdpConnection
-    );
-  //
-  if be_delete then begin
+    //
     bc_change_appropriation := borland.data.provider.bdpcommand.Create
       (
-      'delete from county_dictated_appropriation where id = ' + appropriation_id_string,
+      'update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
       AppCommon.BdpConnection
       );
-    specific_county_action_text := 'deleted';
-    specific_preposition := 'from';
-    specific_next_step_text := 'use ' + ConfigurationSettings.AppSettings['application_name'];
-  end else begin
-    bc_change_appropriation := borland.data.provider.bdpcommand.Create
+    bc_change_appropriation.ExecuteNonQuery;
+    //
+    // Set up the command to get service's email address of record.
+    //
+    bc_get_service_email_address := borland.data.provider.bdpcommand.Create
       (
-      'update county_dictated_appropriation'
-      + ' set amount = ' + amount.tostring
-      + ' where id = ' + appropriation_id_string,
+      'select password_reset_email_address'
+      + ' from service_user join county_dictated_appropriation on (county_dictated_appropriation.service_id=service_user.id)'
+      + ' where county_dictated_appropriation.id =' + appropriation_id_string,
       AppCommon.BdpConnection
       );
-    specific_county_action_text := 'changed';
-    specific_preposition := 'for';
-    specific_next_step_text := 'work on this appropriation';
+    //
+    // Since we're getting email addresses, let's get the County Coordinator's email address too.
+    //
+    bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
+      (
+      'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
+      AppCommon.BdpConnection
+      );
+    //
+    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+    smtpmail.Send
+      (
+      ConfigurationSettings.AppSettings['sender_email_address'],
+      bc_get_service_email_address.ExecuteScalar.tostring,
+      'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
+      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator (' + bc_get_cc_email_address.ExecuteScalar.tostring
+      + ') has modified an EMSOF appropriation for your service for '
+      + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+      + NEW_LINE
+      + 'You can work on this appropriation by visiting:' + NEW_LINE
+      + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+      + NEW_LINE
+      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      );
+    AppCommon.BdpConnection.Close;
+    //
+    DataGrid_service_appropriations.EditItemIndex := -1;
+    Bind_service_appropriations;
   end;
-  bc_change_appropriation.ExecuteNonQuery;
-  //
-  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-  smtpmail.Send
-    (
-    ConfigurationSettings.AppSettings['sender_email_address'],
-    bc_get_service_email_address.ExecuteScalar.tostring,
-    'Change of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-    'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator (' + bc_get_cc_email_address.ExecuteScalar.tostring
-    + ') has ' + specific_county_action_text + ' an EMSOF appropriation ' + specific_preposition + ' your service for '
-    + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
-    + NEW_LINE
-    + 'You can ' + specific_next_step_text + ' by visiting:' + NEW_LINE
-    + NEW_LINE
-    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-    + server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
-    + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
-    );
-  AppCommon.BdpConnection.Close;
-  //
-  DataGrid_service_appropriations.EditItemIndex := -1;
-  Bind_service_appropriations;
 end;
 
 procedure TWebForm_county_dictated_appropriations.CancelCommand_service_appropriations(source: System.Object;
