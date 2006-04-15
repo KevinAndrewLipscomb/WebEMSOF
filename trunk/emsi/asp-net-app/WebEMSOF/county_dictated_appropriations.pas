@@ -165,10 +165,42 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+var
+  bc_delete: borland.data.provider.bdpcommand;
+  bc_get_count: borland.data.provider.bdpcommand;
+  id_string: string;
 begin
-  session.Remove('county_dictated_appropriation_id_selected_for_deletion');
-  session.Add('county_dictated_appropriation_id_selected_for_deletion',Safe(e.Item.Cells[0].Text,NUM));
-  server.Transfer('delete_service_appropriation.aspx');
+  appcommon.bdpconnection.Open;
+  id_string := Safe(e.Item.Cells[0].Text,NUM);
+  bc_get_count := borland.data.provider.bdpcommand.Create
+    (
+    'select count(*) from emsof_request_master where county_dictated_appropriation_id = ' + id_string,
+    appcommon.bdpconnection
+    );
+  if bc_get_count.ExecuteScalar.tostring <> '0' then begin
+    //
+    // A service has already entered equipment requests against this appropriation.  Send the county coordinator to a confirmation
+    // page.
+    //
+    AppCommon.BdpConnection.Close;
+    session.Remove('county_dictated_appropriation_id_selected_for_deletion');
+    session.Add('county_dictated_appropriation_id_selected_for_deletion',id_string);
+    server.Transfer('delete_service_appropriation.aspx');
+  end else begin
+    //
+    // Nothing is linked to this appropriation, so go ahead and delete it.
+    //
+    bc_delete := borland.data.provider.bdpcommand.Create
+      (
+      'delete from county_dictated_appropriation where id = ' + id_string,
+      appcommon.bdpconnection
+      );
+    bc_delete.ExecuteNonQuery;
+    AppCommon.BdpConnection.Close;
+  end;
+  //
+  DataGrid_service_appropriations.EditItemIndex := -1;
+  Bind_service_appropriations;
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
@@ -236,18 +268,20 @@ begin
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      bc_get_cc_email_address.ExecuteScalar.tostring,
       bc_get_service_email_address.ExecuteScalar.tostring,
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator (' + bc_get_cc_email_address.ExecuteScalar.tostring
-      + ') has modified an EMSOF appropriation for your service for '
-      + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
+      + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
       + 'You can work on this appropriation by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
       + NEW_LINE
+        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+        + NEW_LINE
+        + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     AppCommon.BdpConnection.Close;
