@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  system.web.mail;
 
 type
   TWebForm_delete_service_appropriation = class(System.Web.UI.Page)
@@ -115,16 +116,60 @@ end;
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
 var
-  bc: borland.data.provider.bdpcommand;
+  bc_delete: borland.data.provider.bdpcommand;
+  bc_get_cc_email_address: borland.data.provider.bdpcommand;
+  bc_get_service_email_address: borland.data.provider.bdpcommand;
 begin
   appcommon.bdpconnection.Open;
-    bc := borland.data.provider.bdpcommand.Create
+  //
+  // Set up the notification message.  This must be done before we delete the appropriation.
+  //
+  //   Set up the command to get service's email address of record.
+  bc_get_service_email_address := borland.data.provider.bdpcommand.Create
+    (
+    'select password_reset_email_address'
+    + ' from service_user join county_dictated_appropriation on (county_dictated_appropriation.service_id=service_user.id)'
+    + ' where county_dictated_appropriation.id =' + session.item['county_dictated_appropriation_id_selected_for_deletion'].tostring,
+    AppCommon.BdpConnection
+    );
+  //   Since we're getting email addresses, let's get the County Coordinator's email address too.
+  bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
+    (
+    'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
+    AppCommon.BdpConnection
+    );
+  //
+  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+  smtpmail.Send
+    (
+    bc_get_cc_email_address.ExecuteScalar.tostring,
+    bc_get_service_email_address.ExecuteScalar.tostring,
+    'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
+    'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
+    + 'service for ' + Safe(Label_fiscal_year.text,ALPHANUM) + '.' + NEW_LINE
+    + NEW_LINE
+    + 'NOTE that the equipment request(s) that you had already entered against this appropriation were also deleted.  This was '
+    + 'done with the County Coordinator''s knowledge.' + NEW_LINE
+    + NEW_LINE
+    + 'You can use ' + ConfigurationSettings.AppSettings['application_name'] + ' by visiting:' + NEW_LINE
+    + NEW_LINE
+    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+    + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+    + NEW_LINE
+      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+      + NEW_LINE
+      + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
+  //
+  bc_delete := borland.data.provider.bdpcommand.Create
     (
     'delete from county_dictated_appropriation where id = '
     + session.item['county_dictated_appropriation_id_selected_for_deletion'].tostring,
     appcommon.bdpconnection
     );
-    bc.ExecuteNonQuery;
+  bc_delete.ExecuteNonQuery;
+  //
   appcommon.bdpconnection.Close;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
