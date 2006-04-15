@@ -167,7 +167,9 @@ procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriation
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
   bc_delete: borland.data.provider.bdpcommand;
+  bc_get_cc_email_address: borland.data.provider.bdpcommand;
   bc_get_count: borland.data.provider.bdpcommand;
+  bc_get_service_email_address: borland.data.provider.bdpcommand;
   id_string: string;
 begin
   appcommon.bdpconnection.Open;
@@ -188,6 +190,43 @@ begin
     server.Transfer('delete_service_appropriation.aspx');
   end else begin
     //
+    // Set up the notification message.  This must be done before we delete the appropriation.
+    //
+    //   Set up the command to get service's email address of record.
+    bc_get_service_email_address := borland.data.provider.bdpcommand.Create
+      (
+      'select password_reset_email_address'
+      + ' from service_user join county_dictated_appropriation on (county_dictated_appropriation.service_id=service_user.id)'
+      + ' where county_dictated_appropriation.id =' + id_string,
+      AppCommon.BdpConnection
+      );
+    //   Since we're getting email addresses, let's get the County Coordinator's email address too.
+    bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
+      (
+      'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
+      AppCommon.BdpConnection
+      );
+    //
+    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+    smtpmail.Send
+      (
+      bc_get_cc_email_address.ExecuteScalar.tostring,
+      bc_get_service_email_address.ExecuteScalar.tostring,
+      'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
+      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
+      + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+      + NEW_LINE
+      + 'You can use ' + ConfigurationSettings.AppSettings['application_name'] + ' by visiting:' + NEW_LINE
+      + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+      + NEW_LINE
+        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+        + NEW_LINE
+        + NEW_LINE
+      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      );
+    //
     // Nothing is linked to this appropriation, so go ahead and delete it.
     //
     bc_delete := borland.data.provider.bdpcommand.Create
@@ -196,6 +235,7 @@ begin
       appcommon.bdpconnection
       );
     bc_delete.ExecuteNonQuery;
+    //
     AppCommon.BdpConnection.Close;
   end;
   //
