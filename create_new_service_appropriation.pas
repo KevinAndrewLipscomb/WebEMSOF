@@ -175,17 +175,19 @@ begin
       smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
       smtpmail.Send
         (
-        ConfigurationSettings.AppSettings['sender_email_address'],
+        bc_get_cc_email_address.ExecuteScalar.tostring,
         bc_get_service_email_address.ExecuteScalar.tostring,
         'New ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator ('
-        + bc_get_cc_email_address.ExecuteScalar.tostring + ') has made a new EMSOF appropriation of ' + amount.tostring('C')
-        + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
+        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation of '
+        + amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
         + NEW_LINE
         + 'You can work on this appropriation by visiting:' + NEW_LINE
         + NEW_LINE
         + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-        + server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+        + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+        + NEW_LINE
+        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+        + NEW_LINE
         + NEW_LINE
         + '-- ' + ConfigurationSettings.AppSettings['application_name']
         );

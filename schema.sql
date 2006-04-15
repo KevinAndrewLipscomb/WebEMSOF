@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: db4free.org
--- Generation Time: Apr 11, 2006 at 03:02 AM
+-- Generation Time: Apr 15, 2006 at 03:34 PM
 -- Server version: 5.0.20
 -- PHP Version: 5.0.3
 -- 
@@ -30,7 +30,7 @@ CREATE TABLE county_code_name_map (
 -- 
 
 CREATE TABLE county_dictated_appropriation (
-  id smallint(5) unsigned NOT NULL auto_increment,
+  id int(10) unsigned NOT NULL auto_increment,
   region_dictated_appropriation_id smallint(5) unsigned NOT NULL,
   service_id smallint(5) unsigned NOT NULL,
   amount decimal(10,2) unsigned NOT NULL,
@@ -100,13 +100,11 @@ CREATE TABLE emsof_request_detail (
 
 CREATE TABLE emsof_request_master (
   id bigint(20) unsigned NOT NULL auto_increment,
-  county_dictated_appropriation_id smallint(5) unsigned NOT NULL,
-  fiscal_year_id smallint(5) unsigned NOT NULL,
+  county_dictated_appropriation_id int(10) unsigned NOT NULL,
   status_code tinyint(3) NOT NULL,
   `value` decimal(10,2) unsigned NOT NULL,
   PRIMARY KEY  (id),
   KEY status_code (status_code),
-  KEY fiscal_year_id (fiscal_year_id),
   KEY county_dictated_appropriation_id (county_dictated_appropriation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -133,7 +131,7 @@ CREATE TABLE fy_calendar (
   id smallint(5) unsigned NOT NULL auto_increment,
   fiscal_year_id smallint(5) unsigned NOT NULL,
   milestone_code smallint(5) unsigned NOT NULL,
-  `when` datetime NOT NULL,
+  `value` datetime NOT NULL,
   PRIMARY KEY  (id),
   UNIQUE KEY fiscal_year_id (fiscal_year_id,milestone_code),
   KEY milestone_code (milestone_code)
@@ -301,8 +299,8 @@ CREATE TABLE state_dictated_appropriation (
 -- Constraints for table `county_dictated_appropriation`
 -- 
 ALTER TABLE `county_dictated_appropriation`
-  ADD CONSTRAINT county_dictated_appropriation_ibfk_4 FOREIGN KEY (region_dictated_appropriation_id) REFERENCES region_dictated_appropriation (id),
-  ADD CONSTRAINT county_dictated_appropriation_ibfk_5 FOREIGN KEY (service_id) REFERENCES service (id);
+  ADD CONSTRAINT county_dictated_appropriation_ibfk_7 FOREIGN KEY (service_id) REFERENCES service (id),
+  ADD CONSTRAINT county_dictated_appropriation_ibfk_6 FOREIGN KEY (region_dictated_appropriation_id) REFERENCES region_dictated_appropriation (id);
 
 -- 
 -- Constraints for table `county_user`
@@ -322,16 +320,15 @@ ALTER TABLE `emsof_request_detail`
 -- Constraints for table `emsof_request_master`
 -- 
 ALTER TABLE `emsof_request_master`
-  ADD CONSTRAINT emsof_request_master_ibfk_2 FOREIGN KEY (county_dictated_appropriation_id) REFERENCES county_dictated_appropriation (id),
-  ADD CONSTRAINT emsof_request_master_ibfk_3 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id),
-  ADD CONSTRAINT emsof_request_master_ibfk_4 FOREIGN KEY (status_code) REFERENCES request_status_code_description_map (`code`);
+  ADD CONSTRAINT emsof_request_master_ibfk_13 FOREIGN KEY (status_code) REFERENCES request_status_code_description_map (`code`),
+  ADD CONSTRAINT emsof_request_master_ibfk_12 FOREIGN KEY (county_dictated_appropriation_id) REFERENCES county_dictated_appropriation (id) ON DELETE CASCADE;
 
 -- 
 -- Constraints for table `fy_calendar`
 -- 
 ALTER TABLE `fy_calendar`
-  ADD CONSTRAINT fy_calendar_ibfk_2 FOREIGN KEY (milestone_code) REFERENCES milestone_code_name_map (`code`),
-  ADD CONSTRAINT fy_calendar_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id);
+  ADD CONSTRAINT fy_calendar_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id),
+  ADD CONSTRAINT fy_calendar_ibfk_2 FOREIGN KEY (milestone_code) REFERENCES milestone_code_name_map (`code`);
 
 -- 
 -- Constraints for table `region_dictated_appropriation`
