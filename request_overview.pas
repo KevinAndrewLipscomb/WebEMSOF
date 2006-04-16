@@ -45,14 +45,15 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   BdpCommand_get_line_items: borland.data.provider.BdpCommand;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
     //
     // Set Label_account_descriptor
     //
@@ -75,7 +76,7 @@ begin
     //
     // Fill Table_shopping_cart
     //
-    end;
+  end;
 end;
 
 procedure TWebForm_request_overview.OnInit(e: EventArgs);

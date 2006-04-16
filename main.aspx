@@ -4,14 +4,14 @@
 <html>
   <head>
 	<title id="Title" runat="server"></title>
+	<!-- $Id$ -->
   </head>
 
   <body>
      <form runat="server">
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder>
-<p>To log into 
-        <ASP:Label id="Label_application_name" runat="server"></ASP:Label>, please indicate what kind of user you are:</p>
+<p>Welcome to <ASP:Label id="Label_application_name" runat="server"></ASP:Label>.&nbsp;&nbsp;Please indicate what kind of user you are:</p>
       <ul>
         <li>
 <p><strong><a href="login.aspx">Service <small><i>(elaborated)</i></small><!-- (ambulance, QRS, rescue, etc) --><br>

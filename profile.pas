@@ -77,17 +77,16 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_profile.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  affiliate_num_obj: System.Object;
-  BdpCommand_get_affiliate_num: borland.data.provider.BdpCommand;
-  BdpCommand_get_profile: borland.data.provider.BdpCommand;
+  affiliate_num: string;
   bdr: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - template_std';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - template_std';
     AppCommon.BdpConnection.Open;
     //
     // Set Label_service_name
@@ -100,17 +99,17 @@ begin
     //
     // Get affiliate_num and set Label_affiliate_num
     //
-    BdpCommand_get_affiliate_num := borland.data.provider.BdpCommand.Create
+    affiliate_num := borland.data.provider.BdpCommand.Create
       (
       'SELECT affiliate_num FROM webemsof_account_detail WHERE id = ' + session.Item['account_id'].ToString,
       AppCommon.BdpConnection
-      );
-    affiliate_num_obj := BdpCommand_get_affiliate_num.ExecuteScalar;
-    Label_affiliate_num.Text := affiliate_num_obj.ToString;
+      )
+      .ExecuteScalar.tostring;
+    Label_affiliate_num.Text := affiliate_num;
     //
     // Get profile
     //
-    BdpCommand_get_profile := borland.data.provider.BdpCommand.Create
+    bdr := borland.data.provider.BdpCommand.Create
       (
       'SELECT name,'
       + 'be_qrs,'
@@ -127,10 +126,10 @@ begin
       + 'contact_person_name,'
       + 'contact_person_phone_num '
       + 'FROM service '
-      + 'WHERE affiliate_num = "' + affiliate_num_obj.ToString + '"',
+      + 'WHERE affiliate_num = "' + affiliate_num + '"',
       AppCommon.BdpConnection
-      );
-    bdr := BdpCommand_get_profile.ExecuteReader;
+      )
+      .ExecuteReader;
     bdr.Read;
     //
     TextBox_service_name.Text := bdr['name'].tostring;
@@ -149,7 +148,7 @@ begin
     TextBox_contact_person_phone_num.Text := bdr['contact_person_phone_num'].tostring;
     //
     AppCommon.BdpConnection.Close;
-    end;
+  end;
 end;
 
 procedure TWebForm_profile.OnInit(e: EventArgs);
@@ -162,8 +161,6 @@ begin
 end;
 
 procedure TWebForm_profile.Button_submit_Click(sender: System.Object; e: System.EventArgs);
-var
-  BdpCommand_update_profile: borland.data.provider.BdpCommand;
   //IpHostEntry: System.Net.IpHostEntry;
 begin
   //
@@ -173,7 +170,8 @@ begin
   //
   // Commit the displayed data to the database.
   //
-  BdpCommand_update_profile := borland.data.provider.bdpcommand.Create
+  AppCommon.BdpConnection.Open;
+  borland.data.provider.bdpcommand.Create
     (
     'UPDATE service '
     + 'SET name = "' + Safe(TextBox_service_name.Text.trim,ORG_NAME) + '",'
@@ -193,9 +191,8 @@ begin
     +   'be_valid_profile = TRUE '
     + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUM) + '"',
     AppCommon.BdpConnection
-    );
-  AppCommon.BdpConnection.Open;
-  BdpCommand_update_profile.ExecuteNonQuery;
+    )
+    .ExecuteNonQuery;
   AppCommon.BdpConnection.Close;
   server.Transfer('account_overview.aspx');
 end;

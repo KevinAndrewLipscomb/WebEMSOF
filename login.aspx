@@ -3,7 +3,8 @@
 
 <html>
   <head>
-    <title id="Title" runat="server"></title>
+	<title id="Title" runat="server"></title>
+	<!-- $Id$ -->
   </head>
 
   <body ms_positioning="FlowLayout">

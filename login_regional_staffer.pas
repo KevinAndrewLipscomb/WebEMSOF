@@ -57,15 +57,15 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_login_regional_staffer.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdpCommand_get_regional_staffers: Borland.Data.Provider.BdpCommand;
   bdr: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login_regional_staffer';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login_regional_staffer';
     session.Remove('target_user_table');
     session.Add('target_user_table','regional_staffer');
     AppCommon.BdpConnection.Open;
@@ -74,20 +74,21 @@ begin
     // Load DropDownList_account
     //
     DropDownList_regional_staffer.Items.Add(listitem.Create('-- Select --','0'));
-    bdpCommand_get_regional_staffers := Borland.Data.Provider.BdpCommand.Create
+    bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT id,last_name,first_name '
       + 'FROM regional_staffer_user JOIN regional_staffer using (id) '
       + 'WHERE be_active = TRUE '
       + 'ORDER BY last_name,first_name',
       AppCommon.BdpConnection
-      );
-    bdr := bdpCommand_get_regional_staffers.ExecuteReader;
-    while bdr.Read do
+      )
+      .ExecuteReader;
+    while bdr.Read do begin
       DropDownList_regional_staffer.Items.Add
         (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,bdr['id'].ToString));
-    AppCommon.BdpConnection.Close;
     end;
+    AppCommon.BdpConnection.Close;
+  end;
 end;
 
 procedure TWebForm_login_regional_staffer.OnInit(e: EventArgs);
@@ -116,27 +117,29 @@ end;
 
 procedure TWebForm_login_regional_staffer.Button_log_in_Click(sender: System.Object; e: System.EventArgs);
 var
-  bdpCommand_match_account: borland.data.provider.BdpCommand;
   be_stale_password_obj: System.Object;
 begin
-  bdpCommand_match_account := Borland.Data.Provider.BdpCommand.Create
+  AppCommon.BdpConnection.Open;
+  be_stale_password_obj := Borland.Data.Provider.BdpCommand.Create
     (
     'SELECT be_stale_password FROM regional_staffer_user '
     +  'where id="' + DropDownList_regional_staffer.SelectedValue + '" '
     +     'and encoded_password=sha("' + Safe(TextBox_password.Text.Trim,ALPHANUM) + '")'
     ,AppCommon.BdpConnection
-    );
-  AppCommon.BdpConnection.Open;
-  be_stale_password_obj := bdpCommand_match_account.ExecuteScalar;
+    )
+    .ExecuteScalar;
   AppCommon.BdpConnection.Close;
-  if be_stale_password_obj <> nil then
-    if be_stale_password_obj.ToString = '0' then
-      server.Transfer('regional_staffer_appropriation.aspx')
-    else
-      server.Transfer('change_password.aspx')
-  else // be_stale_password_obj = nil
-    if DropDownList_regional_staffer.SelectedIndex <> 0 then
+  if be_stale_password_obj <> nil then begin
+    if be_stale_password_obj.ToString = '0' then begin
+      server.Transfer('regional_staffer_appropriation.aspx');
+    end else begin
+      server.Transfer('change_password.aspx');
+    end;
+  end else begin // be_stale_password_obj = nil
+    if DropDownList_regional_staffer.SelectedIndex <> 0 then begin
       invalid_credentials_warning.Visible := TRUE;
+    end;
   end;
+end;
 
 end.

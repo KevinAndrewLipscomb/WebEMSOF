@@ -50,12 +50,14 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
     Label_account_descriptor.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
     end;
 end;
@@ -71,22 +73,19 @@ end;
 
 procedure TWebForm_change_password.Button_submit_Click(sender: System.Object;
   e: System.EventArgs);
-var
-  BdpCommand_update_account: borland.data.provider.BdpCommand;
 begin
   //
   // Commit the data to the database.
   //
-  BdpCommand_update_account := borland.data.provider.bdpcommand.Create
+  AppCommon.BdpConnection.Open;
+  borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
     + 'SET encoded_password = sha("' + Safe(TextBox_nominal_password.Text.trim,ALPHANUM) + '"),'
     +   'be_stale_password = FALSE '
     + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
     AppCommon.BdpConnection
-    );
-  AppCommon.BdpConnection.Open;
-  BdpCommand_update_account.ExecuteNonQuery;
+    ).ExecuteNonQuery;
   AppCommon.BdpConnection.Close;
   server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
 end;

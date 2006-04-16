@@ -41,12 +41,14 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_main.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - main';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - main';
     Label_application_name.Text := ConfigurationSettings.AppSettings['application_name'];
     end;
 end;

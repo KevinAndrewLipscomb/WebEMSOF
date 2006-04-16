@@ -62,28 +62,27 @@ const ID = '$Id$';
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bc_get_services: borland.data.provider.BdpCommand;
   bdr_services: borland.data.provider.BdpDataReader;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_service_appropriation';
     //
     // Fill DropDownList_services.
     //
+    appcommon.bdpconnection.Open;
     DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
-    bc_get_services := Borland.Data.Provider.BdpCommand.Create
+    bdr_services := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT id,name FROM service_user JOIN service using (id) ORDER BY name',
       AppCommon.BdpConnection
-      );
-    appcommon.bdpconnection.Open;
-    bdr_services := bc_get_services.ExecuteReader;
-    while bdr_services.Read do
+      )
+      .ExecuteReader;
+    while bdr_services.Read do begin
       DropDownList_services.Items.Add(listitem.Create(bdr_services['name'].tostring,bdr_services['id'].ToString));
     end;
     appcommon.bdpconnection.Close;
+  end;
 end;
 
 procedure TWebForm_create_new_service_appropriation.OnInit(e: EventArgs);
@@ -126,7 +125,6 @@ var
   bc_get_cc_email_address: borland.data.provider.bdpcommand;
   bc_get_fy_designator: borland.data.provider.bdpcommand;
   bc_get_service_email_address: borland.data.provider.bdpcommand;
-  bc_insert_appropriation: borland.data.provider.bdpcommand;
 begin
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
@@ -135,15 +133,15 @@ begin
       //
       // Record the new appropriation.
       //
-      bc_insert_appropriation := borland.data.provider.bdpcommand.Create
+      borland.data.provider.bdpcommand.Create
         (
         'insert into county_dictated_appropriation'
         + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
         +   ' service_id = ' + service_id_string + ','
         +   ' amount = ' + amount.tostring,
         appcommon.bdpconnection
-        );
-      bc_insert_appropriation.ExecuteNonQuery;
+        )
+        .ExecuteNonQuery;
       //
       // Send notice of the appropriation to the service's email address of record.
       //

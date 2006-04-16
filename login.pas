@@ -79,7 +79,7 @@ begin
     DropDownList_service.Items.Add(listitem.Create('-- Select --','0'));
     bdpCommand_get_services := Borland.Data.Provider.BdpCommand.Create
       (
-      'SELECT id,name FROM service_user JOIN service using (id) ORDER BY name',
+      'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ORDER BY name',
       AppCommon.BdpConnection
       );
     bdr := bdpCommand_get_services.ExecuteReader;
@@ -130,7 +130,7 @@ begin
   AppCommon.BdpConnection.Close;
   if be_stale_password_obj <> nil then
     if be_stale_password_obj.ToString = '0' then
-      server.Transfer('service_appropriation.aspx')
+      server.Transfer('service_overview.aspx')
     else
       server.Transfer('change_password.aspx')
   else // be_stale_password_obj = nil
