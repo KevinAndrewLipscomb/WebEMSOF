@@ -14,7 +14,7 @@
 <p>
 		<ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>&nbsp;
 		  <ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></p>
-	  <p><small>Change WebEMSOF
+	  <p><small>Change your WebEMSOF
 		<a href="http://localhost/WebEMSOF/change_password.aspx">password</a>&nbsp;| <a href="http://localhost/WebEMSOF/change_email_address.aspx">email address</a>
 	  </small></p>
 			  <table cellspacing="0" cellpadding="5" border="0">
