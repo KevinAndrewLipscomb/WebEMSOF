@@ -45,10 +45,9 @@ const ID = '$Id$';
 procedure TWebForm_template_std.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_std';
-    end;
+  end;
 end;
 
 procedure TWebForm_template_std.OnInit(e: EventArgs);
