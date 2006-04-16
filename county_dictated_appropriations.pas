@@ -71,6 +71,13 @@ const ID = '$Id$';
 var
   be_before_deadline: boolean;
   be_sort_order_ascending: boolean;
+  dgi_id: integer;
+  dgi_password_reset_email_address: integer;
+  dgi_affiliate_num: integer;
+  dgi_name: integer;
+  dgi_amount: integer;
+  dgi_linkbutton_edit: integer;
+  dgi_linkbutton_delete: integer;
   num_appropriations: integer;
   region_dictated_appropriation_amount: decimal;
   service_appropriations_sort_order: string;
@@ -95,6 +102,14 @@ begin
     num_appropriations := 0;
     service_appropriations_sort_order := 'name';
     sum_of_service_appropriations := 0;
+    //   Set up symbolic DataGrid Indices for use in other event handlers.
+    dgi_id                           := 0;
+    dgi_password_reset_email_address := 1;
+    dgi_affiliate_num                := 2;
+    dgi_name                         := 3;
+    dgi_amount                       := 4;
+    dgi_linkbutton_edit              := 5;
+    dgi_linkbutton_delete            := 6;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session.Item['county_name'].ToString;
@@ -134,13 +149,6 @@ begin
       appcommon.bdpconnection
       );
     make_appropriations_deadline := system.datetime(bc_get_make_appropriations_deadline.ExecuteScalar);
-    Label_make_appropriations_deadline.text := 'NOTE:  The deadline for making service appropriations is '
-    + make_appropriations_deadline.tostring('dddd, MMMM dd, yyyy ''at'' HH:mm:ss') + '.';
-      //
-      // Set this label correctly just in case the visibility of the deadline controls is mishandled.  Better to have the
-      // deadline displayed after the milestone than not displayed before the milestone.
-    //
-    AppCommon.BdpConnection.Close;
     //
     if datetime.Now > make_appropriations_deadline then begin
       be_before_deadline := FALSE;
@@ -148,7 +156,13 @@ begin
       TableRow_unappropriated_amount.visible := FALSE;
       Label_make_appropriations_deadline.visible := FALSE;
       HyperLink_new_appropriation.visible := FALSE;
+    end else begin
+      Label_make_appropriations_deadline.text := 'NOTE:  The deadline for making service appropriations is '
+      + make_appropriations_deadline.tostring('dddd, MMMM dd, yyyy ''at'' HH:mm:ss') + '.';
+      //
     end;
+    //
+    AppCommon.BdpConnection.Close;
     //
     Bind_service_appropriations;  // also affected by be_before_deadline
   end;
@@ -166,52 +180,57 @@ end;
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
-  bc_delete: borland.data.provider.bdpcommand;
-  bc_get_cc_email_address: borland.data.provider.bdpcommand;
-  bc_get_count: borland.data.provider.bdpcommand;
-  bc_get_service_email_address: borland.data.provider.bdpcommand;
+  bc: borland.data.provider.bdpcommand;
   id_string: string;
 begin
   appcommon.bdpconnection.Open;
-  id_string := Safe(e.Item.Cells[0].Text,NUM);
-  bc_get_count := borland.data.provider.bdpcommand.Create
+  id_string := Safe(e.Item.Cells[dgi_id].Text,NUM);
+  bc := borland.data.provider.bdpcommand.Create
     (
     'select count(*) from emsof_request_master where county_dictated_appropriation_id = ' + id_string,
     appcommon.bdpconnection
     );
-  if bc_get_count.ExecuteScalar.tostring <> '0' then begin
-    //
-    // A service has already entered equipment requests against this appropriation.  Send the county coordinator to a confirmation
-    // page.
-    //
+  if bc.ExecuteScalar.tostring <> '0' then begin
     AppCommon.BdpConnection.Close;
-    session.Remove('county_dictated_appropriation_id_selected_for_deletion');
-    session.Add('county_dictated_appropriation_id_selected_for_deletion',id_string);
+    //
+    // A service has already entered equipment requests against this appropriation.  Add relevant data to the session and send the
+    // county coordinator to a confirmation page.
+    //
+    session.Remove('id_of_appropriation_selected_for_deletion');
+    session.Add('id_of_appropriation_selected_for_deletion',id_string);
+    //
+    session.Remove('email_address_of_service_of_appropriation_selected_for_deletion');
+    session.Add
+      (
+      'email_address_of_service_of_appropriation_selected_for_deletion',
+      Safe(e.item.cells[dgi_password_reset_email_address].text,EMAIL_ADDRESS)
+      );
+    //
+    session.Remove('service_name_of_appropriation_selected_for_deletion');
+    session.Add('service_name_of_appropriation_selected_for_deletion',Safe(e.item.cells[dgi_name].text,ORG_NAME));
+    //
+    session.Remove('amount_of_appropriation_selected_for_deletion');
+    session.Add('amount_of_appropriation_selected_for_deletion',Safe(e.item.cells[dgi_amount].text,REAL_NUM));
+    //
     server.Transfer('delete_service_appropriation.aspx');
   end else begin
     //
-    // Set up the notification message.  This must be done before we delete the appropriation.
+    // Nothing is linked to this appropriation, so go ahead and delete it.
     //
-    //   Set up the command to get service's email address of record.
-    bc_get_service_email_address := borland.data.provider.bdpcommand.Create
+    borland.data.provider.bdpcommand.Create
       (
-      'select password_reset_email_address'
-      + ' from service_user join county_dictated_appropriation on (county_dictated_appropriation.service_id=service_user.id)'
-      + ' where county_dictated_appropriation.id =' + id_string,
-      AppCommon.BdpConnection
-      );
-    //   Since we're getting email addresses, let's get the County Coordinator's email address too.
-    bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
-      AppCommon.BdpConnection
-      );
+      'delete from county_dictated_appropriation where id = ' + id_string,
+      appcommon.bdpconnection
+      )
+      .ExecuteNonQuery;
+    //
+    // Send a notification message.
     //
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      bc_get_cc_email_address.ExecuteScalar.tostring,
-      bc_get_service_email_address.ExecuteScalar.tostring,
+      session.item['county_user_password_reset_email_address'].tostring,
+      Safe(e.item.cells[dgi_password_reset_email_address].text,EMAIL_ADDRESS),
       'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
@@ -226,15 +245,6 @@ begin
         + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    //
-    // Nothing is linked to this appropriation, so go ahead and delete it.
-    //
-    bc_delete := borland.data.provider.bdpcommand.Create
-      (
-      'delete from county_dictated_appropriation where id = ' + id_string,
-      appcommon.bdpconnection
-      );
-    bc_delete.ExecuteNonQuery;
     //
     AppCommon.BdpConnection.Close;
   end;
@@ -257,8 +267,8 @@ begin
     num_appropriations := num_appropriations + 1;
     sum_of_service_appropriations :=
       sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
-    e.item.Cells[4].controls.item[0].visible := be_before_deadline;  // Cell 4 is the Edit linkbutton cell.
-    e.item.Cells[5].controls.item[0].visible := be_before_deadline;  // Cell 5 is the Delete linkbutton cell.
+    e.item.Cells[dgi_linkbutton_edit].controls.item[0].visible := be_before_deadline;
+    e.item.Cells[dgi_linkbutton_delete].controls.item[0].visible := be_before_deadline;
   end;
 end;
 
@@ -268,48 +278,27 @@ var
   amount: decimal;
   amount_string: string;
   appropriation_id_string: string;
-  bc_change_appropriation : borland.data.provider.BdpCommand;
-  bc_get_cc_email_address: borland.data.provider.bdpcommand;
-  bc_get_service_email_address: borland.data.provider.bdpcommand;
 begin
   AppCommon.BdpConnection.Open;
   //
-  appropriation_id_string := Safe(e.Item.Cells[0].Text,NUM);
-  amount_string := Safe(TextBox(e.Item.Cells[3].Controls[0]).Text.Trim,REAL_NUM);
+  appropriation_id_string := Safe(e.Item.Cells[dgi_id].Text,NUM);
+  amount_string := Safe(e.Item.Cells[dgi_amount].Text.Trim,REAL_NUM);
   //
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
     //
-    bc_change_appropriation := borland.data.provider.bdpcommand.Create
+    borland.data.provider.bdpcommand.Create
       (
       'update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
       AppCommon.BdpConnection
-      );
-    bc_change_appropriation.ExecuteNonQuery;
-    //
-    // Set up the command to get service's email address of record.
-    //
-    bc_get_service_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address'
-      + ' from service_user join county_dictated_appropriation on (county_dictated_appropriation.service_id=service_user.id)'
-      + ' where county_dictated_appropriation.id =' + appropriation_id_string,
-      AppCommon.BdpConnection
-      );
-    //
-    // Since we're getting email addresses, let's get the County Coordinator's email address too.
-    //
-    bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
-      AppCommon.BdpConnection
-      );
+      )
+      .ExecuteNonQuery;
     //
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      bc_get_cc_email_address.ExecuteScalar.tostring,
-      bc_get_service_email_address.ExecuteScalar.tostring,
+      session.item['county_user_password_reset_email_address'].tostring,
+      Safe(e.item.cells[dgi_password_reset_email_address].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
@@ -353,16 +342,25 @@ var
   cmdText: string;
 begin
   AppCommon.BdpConnection.Open;
-  cmdText := 'select county_dictated_appropriation.id,affiliate_num,name,county_dictated_appropriation.amount '
-    + 'from county_dictated_appropriation '
-    +   'join service on (service.id=service_id) '
-    + 'where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString + ' '
-    + 'order by ' + service_appropriations_sort_order;
+  //
+  // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
+  //
+  cmdText := 'select county_dictated_appropriation.id,' // column 0
+  + ' password_reset_email_address,'                    // column 1
+  + ' affiliate_num,'                                   // column 2
+  + ' name,'                                            // column 3
+  + ' county_dictated_appropriation.amount'             // column 4
+  + ' from county_dictated_appropriation'
+  +   ' join service on (service.id=service_id)'
+  +   ' join service_user on (service_user.id=service.id)'
+  + ' where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString
+  + ' order by ' + service_appropriations_sort_order;
   if be_sort_order_ascending then begin
     cmdText := cmdText + ' asc';
   end else begin
     cmdText := cmdText + ' desc';
   end;
+  //
   bc_get_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
   bdr := bc_get_appropriations.ExecuteReader;
   DataGrid_service_appropriations.DataSource := bdr;

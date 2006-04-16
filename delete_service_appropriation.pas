@@ -56,8 +56,6 @@ const ID = '$Id$';
 
 procedure TWebForm_delete_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bc_get_appropriation_attributes: borland.data.provider.bdpcommand;
-  bc_get_service_name: borland.data.provider.bdpcommand;
   bdr: borland.data.provider.bdpdatareader;
   service_name: string;
 begin
@@ -69,20 +67,13 @@ begin
     //
     // Set Label_service_name_*.
     //
-    bc_get_service_name := borland.data.provider.bdpcommand.Create
-      (
-      'select name from service join county_dictated_appropriation on (county_dictated_appropriation.service_id=service.id)'
-      + ' where county_dictated_appropriation.id = '
-      +     session.item['county_dictated_appropriation_id_selected_for_deletion'].tostring,
-      appcommon.bdpconnection
-      );
-    service_name := bc_get_service_name.ExecuteScalar.tostring;
+    service_name := session.item['service_name_of_appropriation_selected_for_deletion'].tostring;
     Label_service_name_1.text := service_name;
     Label_service_name_2.text := service_name;
     //
     // Set appropriation attribute labels.
     //
-    bc_get_appropriation_attributes := borland.data.provider.bdpcommand.Create
+    bdr := borland.data.provider.bdpcommand.Create
       (
       'select designator,county_dictated_appropriation.amount'
       + ' from county_dictated_appropriation'
@@ -92,13 +83,13 @@ begin
       +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
       +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
       + ' where county_dictated_appropriation.id = '
-      +     session.item['county_dictated_appropriation_id_selected_for_deletion'].tostring,
+      +     session.item['id_of_appropriation_selected_for_deletion'].tostring,
       appcommon.bdpconnection
-      );
-    bdr := bc_get_appropriation_attributes.ExecuteReader;
+      )
+      .ExecuteReader;
     bdr.Read;
     Label_fiscal_year.text := bdr['designator'].tostring;
-    Label_amount.text := decimal(bdr['amount']).tostring('C');
+    Label_amount.text := decimal.Parse(session.item['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
     //
     appcommon.bdpconnection.Close;
     end;
@@ -115,35 +106,16 @@ end;
 
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
-var
-  bc_delete: borland.data.provider.bdpcommand;
-  bc_get_cc_email_address: borland.data.provider.bdpcommand;
-  bc_get_service_email_address: borland.data.provider.bdpcommand;
 begin
   appcommon.bdpconnection.Open;
   //
-  // Set up the notification message.  This must be done before we delete the appropriation.
-  //
-  //   Set up the command to get service's email address of record.
-  bc_get_service_email_address := borland.data.provider.bdpcommand.Create
-    (
-    'select password_reset_email_address'
-    + ' from service_user join county_dictated_appropriation on (county_dictated_appropriation.service_id=service_user.id)'
-    + ' where county_dictated_appropriation.id =' + session.item['county_dictated_appropriation_id_selected_for_deletion'].tostring,
-    AppCommon.BdpConnection
-    );
-  //   Since we're getting email addresses, let's get the County Coordinator's email address too.
-  bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
-    (
-    'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
-    AppCommon.BdpConnection
-    );
+  // Send the notification message.
   //
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
-    bc_get_cc_email_address.ExecuteScalar.tostring,
-    bc_get_service_email_address.ExecuteScalar.tostring,
+    session.item['county_user_password_reset_email_address'].tostring,
+    session.item['email_address_of_service_of_appropriation_selected_for_deletion'].tostring,
     'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
     'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
     + 'service for ' + Safe(Label_fiscal_year.text,ALPHANUM) + '.' + NEW_LINE
@@ -162,13 +134,13 @@ begin
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
   //
-  bc_delete := borland.data.provider.bdpcommand.Create
+  borland.data.provider.bdpcommand.Create
     (
     'delete from county_dictated_appropriation where id = '
-    + session.item['county_dictated_appropriation_id_selected_for_deletion'].tostring,
+    + session.item['id_of_appropriation_selected_for_deletion'].tostring,
     appcommon.bdpconnection
-    );
-  bc_delete.ExecuteNonQuery;
+    )
+    .ExecuteNonQuery;
   //
   appcommon.bdpconnection.Close;
   server.Transfer('county_dictated_appropriations.aspx');
