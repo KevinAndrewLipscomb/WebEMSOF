@@ -12,7 +12,7 @@
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder>
 <p>
-        <ASP:Label id="Label_literal_warning" runat="server" font-bold="True" font-size="Large" backcolor="Gold">Warning!</ASP:Label></p>
+        <ASP:Label id="Label_literal_warning" runat="server" font-bold="True" font-size="Large" backcolor="Gold">&nbsp;Warning!&nbsp;</ASP:Label></p>
 <p><ASP:Label id="Label_service_name_1" runat="server"></ASP:Label>&nbsp;has&nbsp;already entered equipment requests in association with the 
         <ASP:Label id="Label_fiscal_year" runat="server"></ASP:Label>&nbsp;appropriation of 
         <ASP:Label id="Label_amount" runat="server"></ASP:Label>&nbsp;that you made to them.&nbsp; If you delete the appropriation, WebEMSOF will also <strong>permanently delete</strong> the associated equipment requests.&nbsp; The equipment requests will <strong>not</strong> automatically carry over to any other appropriation.</p>

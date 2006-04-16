@@ -4,6 +4,7 @@
 <html>
   <head>
 	<title id="Title" runat="server"></title>
+	<!-- $Id$ -->
   </head>
 
   <body>
@@ -16,7 +17,10 @@
 <p>
         <ASP:RadioButtonList id="RadioButtonList_appropriation" runat="server"></ASP:RadioButtonList></p>
 <p>
-        <ASP:Button id="Button_continue" runat="server" text="Continue"></ASP:Button></p></strong>
+        <ASP:Button id="Button_continue" runat="server" text="Continue"></ASP:Button></p>
+	  <p><small>Change WebEMSOF
+		<a href="change_password.aspx">password</a>&nbsp;| <a href="change_email_address.aspx">email address</a>
+	  </small></p></strong>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>
      </form>

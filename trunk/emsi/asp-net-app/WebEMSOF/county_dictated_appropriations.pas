@@ -85,13 +85,9 @@ var
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  accumulated_service_appropriation_amount: decimal;
-  bc_get_appropriation_attribs: borland.data.provider.BdpCommand;
-  bc_get_make_appropriations_deadline: borland.data.provider.BdpCommand;
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
   make_appropriations_deadline: system.datetime;
 begin
-  accumulated_service_appropriation_amount := 0.0;
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
@@ -118,7 +114,7 @@ begin
     //
     // Set parent appropriation labels.
     //
-    bc_get_appropriation_attribs := borland.data.provider.bdpcommand.Create
+    bdr_appropriation_attribs := borland.data.provider.bdpcommand.Create
       (
       'select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name '
       + 'from region_dictated_appropriation '
@@ -127,8 +123,8 @@ begin
       +   'join region_code_name_map on (region_code_name_map.code = region_code) '
       + 'where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].ToString,
       AppCommon.BdpConnection
-      );
-    bdr_appropriation_attribs := bc_get_appropriation_attribs.ExecuteReader;
+      )
+      .ExecuteReader;
     bdr_appropriation_attribs.Read;
     Label_fiscal_year_designator.Text := bdr_appropriation_attribs['designator'].tostring;
     region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
@@ -138,17 +134,20 @@ begin
     //
     // All further rendering is deadline-dependent.
     //
-    bc_get_make_appropriations_deadline := borland.data.provider.bdpcommand.Create
+    make_appropriations_deadline := system.datetime
       (
-      'select value'
-      + ' from fy_calendar'
-      +   ' join fiscal_year on (fiscal_year.id = fiscal_year_id)'
-      +   ' join milestone_code_name_map on (code = milestone_code)'
-      + ' where designator = "' + Safe(Label_fiscal_year_designator.Text,ALPHANUM) + '"'
-      +   ' and name = "emsof-county-dictated-appropriation-deadline"',
-      appcommon.bdpconnection
+      borland.data.provider.bdpcommand.Create
+        (
+        'select value'
+        + ' from fy_calendar'
+        +   ' join fiscal_year on (fiscal_year.id = fiscal_year_id)'
+        +   ' join milestone_code_name_map on (code = milestone_code)'
+        + ' where designator = "' + Safe(Label_fiscal_year_designator.Text,ALPHANUM) + '"'
+        +   ' and name = "emsof-county-dictated-appropriation-deadline"',
+        appcommon.bdpconnection
+        )
+        .ExecuteScalar
       );
-    make_appropriations_deadline := system.datetime(bc_get_make_appropriations_deadline.ExecuteScalar);
     //
     if datetime.Now > make_appropriations_deadline then begin
       be_before_deadline := FALSE;
@@ -157,8 +156,8 @@ begin
       Label_make_appropriations_deadline.visible := FALSE;
       HyperLink_new_appropriation.visible := FALSE;
     end else begin
-      Label_make_appropriations_deadline.text := 'NOTE:  The deadline for making service appropriations is '
-      + make_appropriations_deadline.tostring('dddd, MMMM dd, yyyy ''at'' HH:mm:ss') + '.';
+      Label_make_appropriations_deadline.text := ' NOTE:  The deadline for making service appropriations is '
+      + make_appropriations_deadline.tostring('dddd, MMMM dd, yyyy ''at'' HH:mm:ss') + '. ';
       //
     end;
     //
@@ -336,8 +335,6 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
-  bc_get_appropriations: borland.data.provider.BdpCommand;
-  bdr: borland.data.provider.BdpDataReader;
   be_datagrid_empty: boolean;
   cmdText: string;
 begin
@@ -361,9 +358,8 @@ begin
     cmdText := cmdText + ' desc';
   end;
   //
-  bc_get_appropriations := borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection);
-  bdr := bc_get_appropriations.ExecuteReader;
-  DataGrid_service_appropriations.DataSource := bdr;
+  DataGrid_service_appropriations.DataSource :=
+    borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
   DataGrid_service_appropriations.DataBind;
   be_datagrid_empty := (num_appropriations = 0);
   //

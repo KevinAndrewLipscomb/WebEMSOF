@@ -70,20 +70,18 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_account_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdpCommand_get_profile_status: borland.data.provider.BdpCommand;
-  bdpCommand_get_last_fy_request_attributes: borland.data.Provider.bdpcommand;
-  max_fiscal_year_id_obj: System.Object;
-  bdpCommand_get_max_fiscal_year_id: borland.data.provider.BdpCommand;
+  bc_get_profile_status: borland.data.provider.BdpCommand;
+  max_fiscal_year_id_string: string;
   bdr_last_fy_request_attributes: borland.data.provider.BdpDataReader;
-  bdpCommand_get_this_fy_request_attributes: borland.data.Provider.bdpcommand;
   bdr_this_fy_request_attributes: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
     //
     // Set Label_service_name
     //
@@ -91,35 +89,32 @@ begin
     //
     // Set Label_profile_status
     //
-    bdpCommand_get_profile_status := borland.data.provider.bdpCommand.Create
+    bc_get_profile_status := borland.data.provider.bdpCommand.Create
       (
       'select be_valid_profile from service where id = "' + session.Item['service_user_id'].ToString + '"'
       ,AppCommon.BdpConnection
       );
     AppCommon.BdpConnection.Open;
-    if bdpCommand_get_profile_status.ExecuteScalar.ToString = '0' then
-      begin
+    if bc_get_profile_status.ExecuteScalar.ToString = '0' then begin
       Label_profile_status.Text := 'Not saved.';
       LinkButton_profile_action.Text := 'Create profile';
-      end
-    else
-      begin
+    end else begin
       Label_profile_status.Text := 'Saved.';
       LinkButton_profile_action.Text := 'Edit profile';
       //
       // Determine current fiscal year
       //
-      bdpCommand_get_max_fiscal_year_id := borland.data.provider.bdpcommand.Create
+      max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
         AppCommon.BdpConnection
-        );
-      max_fiscal_year_id_obj := bdpCommand_get_max_fiscal_year_id.ExecuteScalar;
+        )
+        .ExecuteScalar.tostring;
       //
       // Set Label_last_fy_*
       //
       Label_last_fy_row_leader.Visible := TRUE;
-      bdpCommand_get_last_fy_request_attributes := borland.data.provider.BdpCommand.Create
+      bdr_last_fy_request_attributes := borland.data.provider.BdpCommand.Create
         (
         'SELECT emsof_request_master.id,'
         + 'request_status_code_description_map.description,'
@@ -127,28 +122,25 @@ begin
         + 'FROM emsof_request_master '
         +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
         +  'WHERE emsof_request_master.county_dictated_appropriation_id = "' + session.Item['account_id'].ToString + '" '
-        +    'and emsof_request_master.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
+        +    'and emsof_request_master.fiscal_year_id = (' + max_fiscal_year_id_string + ' - 1)',
         AppCommon.BdpConnection
-        );
-      bdr_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
-      if bdr_last_fy_request_attributes.Read then
-        begin
+        )
+        .ExecuteReader;
+      if bdr_last_fy_request_attributes.Read then begin
         Label_last_fy_request_id.Text := bdr_last_fy_request_attributes['id'].tostring;
         Label_last_fy_request_status.Text := bdr_last_fy_request_attributes['description'].tostring + '.';
         Label_last_fy_request_value.Text := bdr_last_fy_request_attributes['value'].tostring;
         LinkButton_last_fy_request_action.Text := 'Review';
-        end
-      else
-        begin
+      end else begin
         Label_last_fy_request_id.Text := '0';
         Label_last_fy_request_status.Text := 'Blank.';
         Label_last_fy_request_value.Text := '--';
-        end;
+      end;
       //
       // Set Label_this_fy_*
       //
       Label_this_fy_row_leader.Visible := TRUE;
-      bdpCommand_get_this_fy_request_attributes := borland.data.provider.BdpCommand.Create
+      bdr_this_fy_request_attributes := borland.data.provider.BdpCommand.Create
         (
         'SELECT emsof_request_master.id,'
         + 'request_status_code_description_map.description,'
@@ -156,27 +148,24 @@ begin
         + 'FROM emsof_request_master '
         +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
         +  'WHERE emsof_request_master.webemsof_account_id = "' + session.Item['account_id'].ToString + '" '
-        +    'and emsof_request_master.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
+        +    'and emsof_request_master.fiscal_year_id = ' + max_fiscal_year_id_string,
         AppCommon.BdpConnection
-        );
-      bdr_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
-      if bdr_this_fy_request_attributes.Read then
-        begin
+        )
+        .ExecuteReader;
+      if bdr_this_fy_request_attributes.Read then begin
         Label_this_fy_request_id.Text := bdr_this_fy_request_attributes['id'].tostring;
         Label_this_fy_request_status.Text := bdr_this_fy_request_attributes['description'].tostring + '.';
         Label_this_fy_request_value.Text := bdr_this_fy_request_attributes['value'].tostring;
         LinkButton_this_fy_request_action.Text := 'Review';
-        end
-      else
-        begin
+      end else begin
         Label_this_fy_request_id.Text := '0';
         Label_this_fy_request_status.Text := 'Blank.';
         Label_this_fy_request_value.Text := '--';
         LinkButton_this_fy_request_action.Text := 'Start';
-        end;
       end;
-    AppCommon.BdpConnection.Close;
     end;
+    AppCommon.BdpConnection.Close;
+  end;
 end;
 
 procedure TWebForm_account_overview.OnInit(e: EventArgs);

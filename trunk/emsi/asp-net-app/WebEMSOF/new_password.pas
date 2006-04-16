@@ -43,19 +43,17 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_new_password.Page_Load(sender: System.Object; e: System.EventArgs);
-type
-  byte_array_type = array of byte;
 var
-  BdPCommand_temporarify_password: borland.data.provider.bdpcommand;
-  BdpCommand_get_email_address: borland.data.provider.BdpCommand;
-  Object_email_address: system.Object;
+  email_address: string;
   temporary_password: string[8];
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
     AppCommon.BdpConnection.Open;
     Label_user_name.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
     //
@@ -65,30 +63,30 @@ begin
     //
     // Make the password string the service's new temporary password, and set the stale flag to force an immediate password change.
     //
-    BdpCommand_temporarify_password := borland.data.provider.bdpcommand.Create
+    borland.data.provider.bdpcommand.Create
       (
       'update ' + session.Item['target_user_table'].ToString + '_user '
       + 'set encoded_password=sha("' + temporary_password + '"),'
       +   'be_stale_password=TRUE '
       + 'where id=' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString,
       AppCommon.BdpConnection
-      );
-    BdpCommand_temporarify_password.ExecuteNonQuery;
+      )
+      .ExecuteNonQuery;
     //
     // Send the new password to the service's email address of record.
     //
-    BdpCommand_get_email_address := borland.data.provider.bdpcommand.Create
+    email_address := borland.data.provider.bdpcommand.Create
       (
       'select password_reset_email_address from ' + session.Item['target_user_table'].ToString + '_user '
       + 'where id ="' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
       AppCommon.BdpConnection
-      );
-    Object_email_address := BdpCommand_get_email_address.ExecuteScalar;
+      )
+      .ExecuteScalar.tostring;
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
-      Object_email_address.ToString,
+      email_address,
       ConfigurationSettings.AppSettings['application_name'] + ' temp password',
       'Someone at the host known as ' + Safe(request.UserHostName,HOSTNAME) + ' (possibly you) requested a new password for the "'
       + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + '" '
@@ -111,7 +109,7 @@ begin
     //
     // Set Label_email_address.
     //
-    Label_email_address.Text := Object_email_address.ToString;
+    Label_email_address.Text := email_address;
     //
     AppCommon.BdpConnection.Close;
     end;

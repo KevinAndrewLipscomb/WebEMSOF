@@ -47,22 +47,22 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_county_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdpCommand_get_appropriations: Borland.Data.Provider.BdpCommand;
   bdr: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - choose_county_appropriation';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - choose_county_appropriation';
     AppCommon.BdpConnection.Open;
     //
     Label_county_name.Text := session.Item['county_name'].ToString;
     //
     // Load RadioButtonList_appropriation
     //
-    bdpCommand_get_appropriations := Borland.Data.Provider.BdpCommand.Create
+    bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT region_dictated_appropriation.id,'
       + 'concat("$",format(region_dictated_appropriation.amount,2)," from ",name," for ",designator) '
@@ -73,12 +73,13 @@ begin
       +   'JOIN fiscal_year on (fiscal_year.id = fiscal_year_id) '
       + 'WHERE county_code = ' + session.Item['county_user_id'].ToString,
       AppCommon.BdpConnection
-      );
-    bdr := bdpCommand_get_appropriations.ExecuteReader;
-    while bdr.Read do
+      )
+      .ExecuteReader;
+    while bdr.Read do begin
       RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
-    AppCommon.BdpConnection.Close;
     end;
+    AppCommon.BdpConnection.Close;
+  end;
 end;
 
 procedure TWebForm_county_appropriation.OnInit(e: EventArgs);

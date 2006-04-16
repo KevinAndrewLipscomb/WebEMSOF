@@ -43,6 +43,8 @@ type
 
 implementation
 
+const ID = '$Id$';
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -62,10 +64,10 @@ var
   bdpCommand_get_counties: Borland.Data.Provider.BdpCommand;
   bdr: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login_county_coord';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login_county_coord';
     session.Remove('target_user_table');
     session.Add('target_user_table','county');
     AppCommon.BdpConnection.Open;

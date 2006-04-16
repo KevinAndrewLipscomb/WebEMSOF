@@ -50,15 +50,16 @@ begin
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_change_email_address.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  BdpCommand_get_email_address: borland.data.provider.BdpCommand;
-  Object_email_address: system.Object;
+  email_address: string;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
     AppCommon.BdpConnection.Open;
     //
     // Set Label_account descriptor
@@ -67,16 +68,16 @@ begin
     //
     // Preload email address fields
     //
-    BdpCommand_get_email_address := borland.data.provider.BdpCommand.Create
+    email_address := borland.data.provider.BdpCommand.Create
       (
       'SELECT password_reset_email_address '
       + 'FROM ' + session.Item['target_user_table'].ToString + '_user '
       + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
       AppCommon.BdpConnection
-      );
-    Object_email_address := BdpCommand_get_email_address.ExecuteScalar;
-    TextBox_nominal_email_address.Text := Object_email_address.ToString;
-    TextBox_confirmation_email_address.Text := Object_email_address.ToString;
+      )
+      .ExecuteScalar.tostring;
+    TextBox_nominal_email_address.Text := email_address;
+    TextBox_confirmation_email_address.Text := email_address;
     //
     AppCommon.BdpConnection.Close;
     end;
@@ -93,21 +94,19 @@ end;
 
 procedure TWebForm_change_email_address.Button_submit_Click(sender: System.Object;
   e: System.EventArgs);
-var
-  BdpCommand_update_account: borland.data.provider.BdpCommand;
 begin
+  AppCommon.BdpConnection.Open;
   //
   // Commit the data to the database.
   //
-  BdpCommand_update_account := borland.data.provider.bdpcommand.Create
+  borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
     + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
     + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
     AppCommon.BdpConnection
-    );
-  AppCommon.BdpConnection.Open;
-  BdpCommand_update_account.ExecuteNonQuery;
+    )
+    .ExecuteNonQuery;
   AppCommon.BdpConnection.Close;
   server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
 end;
