@@ -25,6 +25,7 @@ type
     RadioButtonList_appropriation: System.Web.UI.WebControls.RadioButtonList;
     Button_continue: System.Web.UI.WebControls.Button;
     RequiredFieldValidator_appropriation: System.Web.UI.WebControls.RequiredFieldValidator;
+    Label_literal_county: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -51,7 +52,7 @@ var
   bdpCommand_get_appropriations: Borland.Data.Provider.BdpCommand;
   bdr: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_appropriation';
+  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - choose_county_appropriation';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
