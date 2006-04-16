@@ -41,8 +41,6 @@ type
     LinkButton_profile_action: System.Web.UI.WebControls.LinkButton;
     Label_this_fy_row_leader: System.Web.UI.WebControls.Label;
     Label_last_fy_row_leader: System.Web.UI.WebControls.Label;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_last_fy_request_id: System.Web.UI.WebControls.Label;
     Label_this_fy_request_id: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
@@ -64,8 +62,6 @@ begin
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
   Include(Self.LinkButton_last_fy_request_action.Click, Self.LinkButton_last_fy_request_action_Click);
   Include(Self.LinkButton_this_fy_request_action.Click, Self.LinkButton_this_fy_request_action_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_account_attributes_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
