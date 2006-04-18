@@ -59,7 +59,7 @@ uses
   login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
   AppCommon in 'AppCommon.pas',
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
-  service_overview in 'service_overview.pas' {service_overview.TWebForm_account_overview: System.Web.UI.Page},
+  service_overview in 'service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
   profile in 'profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
   change_password in 'change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
   change_email_address in 'change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page},
