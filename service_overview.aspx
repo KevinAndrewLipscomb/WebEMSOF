@@ -44,23 +44,24 @@
 			gridlines="Horizontal"
 			forecolor="Black"
 			useaccessibleheader="True"
-		    autogeneratecolumns="False">
-          <HeaderStyle font-bold="True" forecolor="Blue" backcolor="#E0E0E0"></HeaderStyle>
-          <Columns>
-            <ASP:BoundColumn visible="False" datafield="id" readonly="True"></ASP:BoundColumn>
-            <ASP:BoundColumn datafield="fy_designator" readonly="True" headertext="Cycle"></ASP:BoundColumn>
-            <ASP:BoundColumn datafield="county_name" readonly="True" headertext="Sponsor county"></ASP:BoundColumn>
-            <ASP:BoundColumn datafield="county_dictated_appropriation_amount" readonly="True" headertext="Amount appropriated" dataformatstring="{0:C}">
-              <ItemStyle horizontalalign="Right"></ItemStyle>
-            </ASP:BoundColumn>
-            <ASP:BoundColumn datafield="status" readonly="True" headertext="Status">
-              <ItemStyle font-bold="True"></ItemStyle>
-            </ASP:BoundColumn>
-            <ASP:BoundColumn datafield="value" readonly="True" headertext="Amount requested" dataformatstring="{0:C}">
-              <ItemStyle horizontalalign="Right"></ItemStyle>
-            </ASP:BoundColumn>
-            <ASP:ButtonColumn headertext="Action"></ASP:ButtonColumn>
-          </Columns></ASP:DataGrid>
+		    autogeneratecolumns="False"><HeaderStyle font-bold="True" backcolor="#E0E0E0"></HeaderStyle>
+  <Columns>
+    <ASP:BoundColumn datafield="id" readonly="True" headertext="WebEMSOF ID#">
+      <ItemStyle horizontalalign="Center" forecolor="#808080"></ItemStyle>
+    </ASP:BoundColumn>
+    <ASP:BoundColumn datafield="fy_designator" readonly="True" headertext="Cycle"></ASP:BoundColumn>
+    <ASP:BoundColumn datafield="county_name" readonly="True" headertext="Sponsor county"></ASP:BoundColumn>
+    <ASP:BoundColumn datafield="county_dictated_appropriation_amount" readonly="True" headertext="Amount appropriated" dataformatstring="{0:C}">
+      <ItemStyle horizontalalign="Right"></ItemStyle>
+    </ASP:BoundColumn>
+    <ASP:BoundColumn datafield="status" readonly="True" headertext="Status">
+      <ItemStyle font-bold="True"></ItemStyle>
+    </ASP:BoundColumn>
+    <ASP:BoundColumn datafield="value" readonly="True" headertext="Amount requested" dataformatstring="{0:C}">
+      <ItemStyle horizontalalign="Right"></ItemStyle>
+    </ASP:BoundColumn>
+    <ASP:ButtonColumn headertext="Action"></ASP:ButtonColumn>
+  </Columns></ASP:DataGrid>
 		</blockquote>
 	  <p><small>Change your WebEMSOF
 		<a href="http://localhost/WebEMSOF/change_password.aspx">password</a>&nbsp;| <a href="http://localhost/WebEMSOF/change_email_address.aspx">email address</a>
