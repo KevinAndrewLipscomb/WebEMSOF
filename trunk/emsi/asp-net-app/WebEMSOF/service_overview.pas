@@ -16,10 +16,6 @@ type
   strict private
     procedure InitializeComponent;
     procedure LinkButton_profile_action_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_this_fy_request_action_Click(sender: System.Object;
-      e: System.EventArgs);
-    procedure LinkButton_last_fy_request_action_Click(sender: System.Object; 
-      e: System.EventArgs);
     procedure DataGrid_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
   {$ENDREGION}
   strict private
@@ -30,18 +26,8 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_service_name: System.Web.UI.WebControls.Label;
-    LinkButton_last_fy_request_action: System.Web.UI.WebControls.LinkButton;
-    LinkButton_this_fy_request_action: System.Web.UI.WebControls.LinkButton;
     Label_profile_status: System.Web.UI.WebControls.Label;
-    Label_last_fy_request_status: System.Web.UI.WebControls.Label;
-    Label_this_fy_request_status: System.Web.UI.WebControls.Label;
-    Label_last_fy_request_value: System.Web.UI.WebControls.Label;
-    Label_this_fy_request_value: System.Web.UI.WebControls.Label;
     LinkButton_profile_action: System.Web.UI.WebControls.LinkButton;
-    Label_this_fy_row_leader: System.Web.UI.WebControls.Label;
-    Label_last_fy_row_leader: System.Web.UI.WebControls.Label;
-    Label_last_fy_request_id: System.Web.UI.WebControls.Label;
-    Label_this_fy_request_id: System.Web.UI.WebControls.Label;
     DataGrid: System.Web.UI.WebControls.DataGrid;
     Label_no_dg_items: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
@@ -61,8 +47,6 @@ implementation
 procedure TWebForm_service_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
-  Include(Self.LinkButton_last_fy_request_action.Click, Self.LinkButton_last_fy_request_action_Click);
-  Include(Self.LinkButton_this_fy_request_action.Click, Self.LinkButton_this_fy_request_action_Click);
   Include(Self.DataGrid.ItemDataBound, Self.DataGrid_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -74,14 +58,15 @@ var
   be_before_deadline: boolean;
   be_sort_order_ascending: boolean;
   dg_sort_order: string;
-  dgi_id: integer;
-  dgi_fy_designator: integer;
-  dgi_county_name: integer;
-  dgi_status: integer;
-  dgi_value: integer;
-  dgi_linkbutton: integer;
+  dgi_id: cardinal;
+  dgi_fy_designator: cardinal;
+  dgi_county_name: cardinal;
+  dgi_county_dictated_appropriation_amount: cardinal;
+  dgi_status: cardinal;
+  dgi_value: cardinal;
+  dgi_linkbutton: cardinal;
   max_fiscal_year_id_string: string;
-  num_dg_items: integer;
+  num_dg_items: cardinal;
 
 procedure TWebForm_service_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
@@ -101,9 +86,10 @@ begin
     dgi_id := 0;
     dgi_fy_designator := 1;
     dgi_county_name := 2;
-    dgi_status := 3;
-    dgi_value := 4;
-    dgi_linkbutton := 5;
+    dgi_county_dictated_appropriation_amount := 3;
+    dgi_status := 4;
+    dgi_value := 5;
+    dgi_linkbutton := 6;
     num_dg_items := 0;
     //
     // Set Label_service_name
@@ -166,26 +152,6 @@ begin
   end;
 end;
 
-procedure TWebForm_service_overview.LinkButton_last_fy_request_action_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  session.Remove('emsof_request_id');
-  session.Add('emsof_request_id',Safe(Label_last_fy_request_id.Text,NUM));
-  session.Remove('relative_fy');
-  session.Add('relative_fy','LAST');
-  server.Transfer('request_overview.aspx');
-end;
-
-procedure TWebForm_service_overview.LinkButton_this_fy_request_action_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  session.Remove('emsof_request_id');
-  session.Add('emsof_request_id',Safe(Label_this_fy_request_id.Text,NUM));
-  session.Remove('relative_fy');
-  session.Add('relative_fy','THIS');
-  server.Transfer('request_overview.aspx');
-end;
-
 procedure TWebForm_service_overview.LinkButton_profile_action_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -201,11 +167,12 @@ begin
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
-  cmdText := 'SELECT emsof_request_master.id,'                   // column 0
-  + ' designator as fy_designator,'                               // column 1
-  + ' name as county_name,'                                       // column 2
-  + ' request_status_code_description_map.description as status,' // column 3
-  + ' emsof_request_master.value'                                 // column 4
+  cmdText := 'SELECT emsof_request_master.id,'                                       // column 0
+  + ' designator as fy_designator,'                                                  // column 1
+  + ' name as county_name,'                                                          // column 2
+  + ' county_dictated_appropriation.amount as county_dictated_appropriation_amount,' // column 3
+  + ' request_status_code_description_map.description as status,'                    // column 4
+  + ' emsof_request_master.value as value'                                           // column 5
   + ' FROM emsof_request_master'
   +   ' JOIN county_dictated_appropriation'
   +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'

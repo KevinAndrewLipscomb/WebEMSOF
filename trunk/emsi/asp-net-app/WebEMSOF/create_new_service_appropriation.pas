@@ -125,6 +125,7 @@ var
   bc_get_cc_email_address: borland.data.provider.bdpcommand;
   bc_get_fy_designator: borland.data.provider.bdpcommand;
   bc_get_service_email_address: borland.data.provider.bdpcommand;
+  max_county_dictated_appropriation_id_string: string;
 begin
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
@@ -139,6 +140,28 @@ begin
         + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
         +   ' service_id = ' + service_id_string + ','
         +   ' amount = ' + amount.tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteNonQuery;
+      //
+      // Initialize a new emsof_request_master record, since at this time there must be a one-to-one relationship between a county-
+      // dictated appropriation and an EMSOF request.
+      //
+      //   Get max(county_dictated_appropriation.id), which must be the id of the county_dictated_appropriation record that we just
+      //   inserted.
+      //
+      max_county_dictated_appropriation_id_string := borland.data.provider.bdpcommand.Create
+        (
+        'select max(id) from county_dictated_appropriation',
+        appcommon.bdpconnection
+        )
+        .ExecuteScalar.tostring;
+      //
+      //    Insert and link back to the above max id.
+      //
+      borland.data.provider.bdpcommand.Create
+        (
+        'insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string,
         appcommon.bdpconnection
         )
         .ExecuteNonQuery;

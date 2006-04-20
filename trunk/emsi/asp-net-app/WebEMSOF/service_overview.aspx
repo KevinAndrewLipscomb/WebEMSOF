@@ -16,7 +16,7 @@
 	  </p>
 	  <p><strong>Account overview</strong>
 	  </p>
-		<table cellspacing="0" cellpadding="5" border="0">
+		<table cellspacing="0" cellpadding="10" border="0">
 			<tr>
 			  <td>Your service's WebEMSOF profile is:</td>
 			  <td>
@@ -25,71 +25,40 @@
 					</p></td>
 			  <td>
 						<div align="center">
-					<ASP:LinkButton id="LinkButton_profile_action" runat="server" font-bold="True"></ASP:LinkButton>
+					<ASP:LinkButton id="LinkButton_profile_action" runat="server" font-bold="True" font-size="Small"></ASP:LinkButton>
 						</div></td>
 			</tr>
 			<tr>
 			  <td colspan="3"><hr /></td>
 			</tr>
 		</table>
-		&nbsp;Your EMSOF requests:
+		&nbsp;&nbsp; Your EMSOF requests:
 		<blockquote>
-		<table cellspacing="0" cellpadding="0" width="%" border="1">
-		  <tr>
-			<td>
-			  <table cellspacing="0" cellpadding="10" width="%" border="0">
-				<tr>
-				  <td></td>
-				  <td>
-					<p align="center">Status</p></td>
-				  <td>
-					<p align="center">Value</p></td>
-				  <td>
-						<p align="center">Action</p></td>
-				</tr>
-				<tr>
-				  <td><ASP:Label id="Label_last_fy_row_leader" runat="server" visible="False">Your request for <strong>last</strong> fiscal year is:</ASP:Label>
-						<ASP:Label id="Label_last_fy_request_id" runat="server" visible="False"></ASP:Label></td>
-				  <td>
-					<div align="center">
-					  <ASP:Label id="Label_last_fy_request_status" runat="server" font-bold="True"></ASP:Label>
-					</div></td>
-				  <td>
-					<div align="center">
-					  <ASP:Label id="Label_last_fy_request_value" runat="server" font-bold="True"></ASP:Label>
-					</div></td>
-				  <td>
-						<div align="center">
-					<ASP:LinkButton id="LinkButton_last_fy_request_action" runat="server" font-bold="True"></ASP:LinkButton>
-						</div></td>
-				</tr>
-				<tr>
-				  <td><ASP:Label id="Label_this_fy_row_leader" runat="server" visible="False">Your request for <strong>this</strong> fiscal year is:</ASP:Label>
-						<ASP:Label id="Label_this_fy_request_id" runat="server" visible="False"></ASP:Label></td>
-				  <td>
-					<div align="center">
-					  <ASP:Label id="Label_this_fy_request_status" runat="server" font-bold="True"></ASP:Label>
-					</div></td>
-				  <td>
-					<div align="center">
-					  <ASP:Label id="Label_this_fy_request_value" runat="server" font-bold="True"></ASP:Label>
-					</div></td>
-				  <td>
-						<div align="center">
-					<ASP:LinkButton id="LinkButton_this_fy_request_action" runat="server" font-bold="True"></ASP:LinkButton>
-						</div></td>
-				</tr>
-			  </table></td>
-		  </tr>
-		</table>
         <p><ASP:Label id="Label_no_dg_items" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
-		<ASP:DataGrid id="DataGrid" runat="server" autogeneratecolumns="False" cellpadding="5">
+		<ASP:DataGrid id="DataGrid" runat="server"
+			bordercolor="#CCCCCC"
+			borderstyle="None"
+			borderwidth="1px"
+			backcolor="White"
+			cellpadding="10"
+			gridlines="Horizontal"
+			forecolor="Black"
+			useaccessibleheader="True"
+		    autogeneratecolumns="False">
+          <HeaderStyle font-bold="True" forecolor="Blue" backcolor="#E0E0E0"></HeaderStyle>
           <Columns>
             <ASP:BoundColumn visible="False" datafield="id" readonly="True"></ASP:BoundColumn>
             <ASP:BoundColumn datafield="fy_designator" readonly="True" headertext="Cycle"></ASP:BoundColumn>
-            <ASP:BoundColumn datafield="county_name" readonly="True" headertext="County"></ASP:BoundColumn>
-            <ASP:BoundColumn datafield="status_code" readonly="True" headertext="Status"></ASP:BoundColumn>
-            <ASP:BoundColumn datafield="value" readonly="True" headertext="Value"></ASP:BoundColumn>
+            <ASP:BoundColumn datafield="county_name" readonly="True" headertext="Sponsor county"></ASP:BoundColumn>
+            <ASP:BoundColumn datafield="county_dictated_appropriation_amount" readonly="True" headertext="Amount appropriated" dataformatstring="{0:C}">
+              <ItemStyle horizontalalign="Right"></ItemStyle>
+            </ASP:BoundColumn>
+            <ASP:BoundColumn datafield="status" readonly="True" headertext="Status">
+              <ItemStyle font-bold="True"></ItemStyle>
+            </ASP:BoundColumn>
+            <ASP:BoundColumn datafield="value" readonly="True" headertext="Amount requested" dataformatstring="{0:C}">
+              <ItemStyle horizontalalign="Right"></ItemStyle>
+            </ASP:BoundColumn>
             <ASP:ButtonColumn headertext="Action"></ASP:ButtonColumn>
           </Columns></ASP:DataGrid>
 		</blockquote>
