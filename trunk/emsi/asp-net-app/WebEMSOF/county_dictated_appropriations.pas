@@ -186,7 +186,10 @@ begin
   id_string := Safe(e.Item.Cells[dgi_id].Text,NUM);
   bc := borland.data.provider.bdpcommand.Create
     (
-    'select count(*) from emsof_request_master where county_dictated_appropriation_id = ' + id_string,
+    'select count(master_id)'  // Leaving the star out prevents inclusion of nulls in count
+    + ' from emsof_request_detail'
+    +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
+    + ' where county_dictated_appropriation_id = ' + id_string,
     appcommon.bdpconnection
     );
   if bc.ExecuteScalar.tostring <> '0' then begin
