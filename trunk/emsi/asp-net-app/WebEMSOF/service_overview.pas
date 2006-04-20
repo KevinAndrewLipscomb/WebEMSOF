@@ -62,6 +62,7 @@ var
   dgi_fy_designator: cardinal;
   dgi_county_name: cardinal;
   dgi_county_dictated_appropriation_amount: cardinal;
+  dgi_status_code: cardinal;
   dgi_status: cardinal;
   dgi_value: cardinal;
   dgi_linkbutton: cardinal;
@@ -87,9 +88,10 @@ begin
     dgi_fy_designator := 1;
     dgi_county_name := 2;
     dgi_county_dictated_appropriation_amount := 3;
-    dgi_status := 4;
-    dgi_value := 5;
-    dgi_linkbutton := 6;
+    dgi_status_code := 4;
+    dgi_status := 5;
+    dgi_value := 6;
+    dgi_linkbutton := 7;
     num_dg_items := 0;
     //
     // Set Label_service_name
@@ -138,6 +140,8 @@ end;
 
 procedure TWebForm_service_overview.DataGrid_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
+var
+  link_button: System.Web.UI.WebControls.LinkButton;
 begin
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
@@ -148,6 +152,26 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     num_dg_items := num_dg_items + 1;
+    //
+    // Drop the appropriate LinkButton in the Action column.
+    //
+    link_button := System.Web.UI.WebControls.LinkButton.Create;
+//    case e.item.cells[dgi_status_code].tostring of
+//      '1':
+//        e.item.cells[dgi_linkbutton].Controls.Add(link_button.);
+//      '2':
+//      '3':
+//      '4':
+//      '5':
+//      '6':
+//      '7':
+//      '8':
+//      '9':
+//      '10':
+//      '11':
+//      '12':
+//      '13':
+//    end;
     e.item.Cells[dgi_linkbutton].controls.item[0].visible := be_before_deadline;
   end;
 end;
@@ -171,8 +195,9 @@ begin
   + ' designator as fy_designator,'                                                  // column 1
   + ' name as county_name,'                                                          // column 2
   + ' county_dictated_appropriation.amount as county_dictated_appropriation_amount,' // column 3
-  + ' request_status_code_description_map.description as status,'                    // column 4
-  + ' emsof_request_master.value as value'                                           // column 5
+  + ' status_code,'                                                                  // column 4
+  + ' request_status_code_description_map.description as status,'                    // column 5
+  + ' emsof_request_master.value as value'                                           // column 6
   + ' FROM emsof_request_master'
   +   ' JOIN county_dictated_appropriation'
   +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
