@@ -143,6 +143,10 @@ procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;
 begin
   session.Remove('emsof_request_master_id');
   session.Add('emsof_request_master_id',Safe(e.item.cells[dgi_id].text,NUM));
+  session.Remove('fiscal_year_designator');
+  session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fy_designator].text,ALPHANUM));
+  session.Remove('sponsor_county');
+  session.Add('sponsor_county',Safe(e.item.cells[dgi_county_name].text,POSTAL_CITY));
   server.Transfer('request_overview.aspx');
 end;
 
