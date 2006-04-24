@@ -17,6 +17,7 @@ type
     procedure InitializeComponent;
     procedure LinkButton_profile_action_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
+    procedure DataGrid_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -47,6 +48,7 @@ implementation
 procedure TWebForm_service_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
+  Include(Self.DataGrid.ItemCommand, Self.DataGrid_ItemCommand);
   Include(Self.DataGrid.ItemDataBound, Self.DataGrid_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -72,8 +74,6 @@ var
 procedure TWebForm_service_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bc_get_profile_status: borland.data.provider.BdpCommand;
-  bdr_last_fy_request_attributes: borland.data.provider.BdpDataReader;
-  bdr_this_fy_request_attributes: borland.data.provider.BdpDataReader;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -138,10 +138,16 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  session.Remove('emsof_request_master_id');
+  session.Add('emsof_request_master_id',Safe(e.item.cells[dgi_id].text,NUM));
+  server.Transfer('request_overview.aspx');
+end;
+
 procedure TWebForm_service_overview.DataGrid_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
-var
-  link_button: System.Web.UI.WebControls.LinkButton;
 begin
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
@@ -155,23 +161,13 @@ begin
     //
     // Drop the appropriate LinkButton in the Action column.
     //
-    link_button := System.Web.UI.WebControls.LinkButton.Create;
-//    case e.item.cells[dgi_status_code].tostring of
-//      '1':
-//        e.item.cells[dgi_linkbutton].Controls.Add(link_button.);
-//      '2':
-//      '3':
-//      '4':
-//      '5':
-//      '6':
-//      '7':
-//      '8':
-//      '9':
-//      '10':
-//      '11':
-//      '12':
-//      '13':
-//    end;
+    if e.item.cells[dgi_status_code].text = '1' then begin
+      LinkButton(e.item.cells[dgi_linkbutton].controls.item[0]).text := 'Start shopping';
+    end else if e.item.cells[dgi_status_code].text = '2' then begin
+      LinkButton(e.item.cells[dgi_linkbutton].controls.item[0]).text := 'Continue shopping';
+    end else begin
+      LinkButton(e.item.cells[dgi_linkbutton].controls.item[0]).text := 'Review';
+    end;
     e.item.Cells[dgi_linkbutton].controls.item[0].visible := be_before_deadline;
   end;
 end;
@@ -208,7 +204,7 @@ begin
   +   ' JOIN fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
   +   ' JOIN county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)'
   +   ' JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
-  + ' WHERE fiscal_year.id > (' + max_fiscal_year_id_string + ' - 1)'
+  + ' WHERE fiscal_year.id >= (' + max_fiscal_year_id_string + ' - 1)'
   + ' order by ' + dg_sort_order;
   if be_sort_order_ascending then begin
     cmdText := cmdText + ' asc';
