@@ -20,11 +20,12 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
+    Label_service_name: System.Web.UI.WebControls.Label;
     Label_num_items_in_shopping_cart: System.Web.UI.WebControls.Label;
     Table_shopping_cart: System.Web.UI.WebControls.Table;
     LinkButton_add_item: System.Web.UI.WebControls.LinkButton;
-    Label_which_relative_fiscal_year: System.Web.UI.WebControls.Label;
+    Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
+    Label_sponsor_county: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -54,22 +55,27 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
+    appcommon.bdpconnection.Open;
     //
-    // Set Label_account_descriptor
+    // Set Label_service_name
     //
-    Label_account_descriptor.Text := session.Item['account_descriptor'].ToString;
+    Label_service_name.text := session.Item['service_name'].ToString;
     //
-    // Set Label_which_relative_fiscal_year
+    // Set Label_fiscal_year_designator
     //
-    Label_which_relative_fiscal_year.Text := session.Item['relative_fy'].ToString;
+    Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
+    //
+    // Set Label_sponsor_county
+    //
+    Label_sponsor_county.text := session.item['sponsor_county'].tostring;
     //
     // Get request line items
     //
-    BdpCommand_get_line_items := borland.data.provider.BdpCommand.Create
-      (
-      'select ',
-      AppCommon.BdpConnection
-      );
+//    BdpCommand_get_line_items := borland.data.provider.BdpCommand.Create
+//      (
+//      'select ',
+//      AppCommon.BdpConnection
+//      );
     //
     // Set Label_num_items_in_shopping_cart
     //
