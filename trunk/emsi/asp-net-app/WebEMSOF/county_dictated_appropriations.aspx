@@ -69,27 +69,27 @@
 			useaccessibleheader="True"
 			autogeneratecolumns="False"
 			OnSortCommand="SortCommand_service_appropriations" visible="False">
-  <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
-  <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
-  <HeaderStyle font-bold="True" forecolor="Blue" backcolor="#E0E0E0"></HeaderStyle>
-  <Columns>
-    <ASP:BoundColumn datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
-      <ItemStyle horizontalalign="Center" forecolor="#808080"></ItemStyle>
-    </ASP:BoundColumn>
-    <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
-    <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
-    <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
-    <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">
-      <ItemStyle horizontalalign="Right"></ItemStyle>
-    </ASP:BoundColumn>
-    <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit">
-      <ItemStyle forecolor="Blue"></ItemStyle>
-    </ASP:EditCommandColumn>
-    <ASP:ButtonColumn text="Delete" commandname="Delete">
-      <ItemStyle forecolor="Blue"></ItemStyle>
-    </ASP:ButtonColumn>
-  </Columns>
-  <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
+            <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
+            <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
+            <HeaderStyle font-bold="True" forecolor="Blue" backcolor="#E0E0E0"></HeaderStyle>
+            <Columns>
+              <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
+                <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
+              </ASP:BoundColumn>
+              <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">
+                <ItemStyle horizontalalign="Right"></ItemStyle>
+              </ASP:BoundColumn>
+              <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit">
+                <ItemStyle forecolor="Blue"></ItemStyle>
+              </ASP:EditCommandColumn>
+              <ASP:ButtonColumn text="Delete" commandname="Delete">
+                <ItemStyle forecolor="Blue"></ItemStyle>
+              </ASP:ButtonColumn>
+            </Columns>
+            <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
         </p>
 	  </blockquote>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
