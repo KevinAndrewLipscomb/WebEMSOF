@@ -57,7 +57,7 @@
             <ASP:BoundColumn datafield="value" readonly="True" headertext="Amount requested" dataformatstring="{0:C}">
               <ItemStyle horizontalalign="Right"></ItemStyle>
             </ASP:BoundColumn>
-            <ASP:ButtonColumn headertext="Action" commandname="Select">
+            <ASP:ButtonColumn text="Review" headertext="Action" commandname="Select">
               <ItemStyle font-bold="True" forecolor="Blue"></ItemStyle>
             </ASP:ButtonColumn>
           </Columns></ASP:DataGrid>
