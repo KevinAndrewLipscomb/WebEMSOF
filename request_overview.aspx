@@ -30,14 +30,14 @@
 				<p align="right">-</p></td>
 			  <td>
               <p align="right">
-				<ASP:Label id="Label_sum_of_item_amounts" runat="server" font-bold="True" font-underline="True"></ASP:Label></p></td>
-			  <td>appropriated to services</td>
+				<ASP:Label id="Label_sum_of_emsof_antes" runat="server" font-bold="True" font-underline="True"></ASP:Label></p></td>
+			  <td>requested from EMSOF (below)</td>
 			</tr>
 			<tr id="TableRow_unrequested_amount" runat="server">
 			  <td>
 				<p align="right">=</p></td>
 			  <td>
-              <p align="right"><ASP:Label id="Label_unappropriated_amount" runat="server" font-bold="True"></ASP:Label></p></td>
+              <p align="right"><ASP:Label id="Label_unused_amount" runat="server" font-bold="True"></ASP:Label></p></td>
 			  <td>remaining</td>
 			</tr>
 		</table>
@@ -64,20 +64,19 @@
 			cellpadding="10"
 			gridlines="Horizontal"
 			forecolor="Black"
-			allowsorting="True"
 			useaccessibleheader="True"
 			autogeneratecolumns="False"
 			visible="False">
             <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
             <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
-			<Columns>
-              <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
+            <Columns>
+              <ASP:BoundColumn visible="False" datafield="master_id" readonly="True">
                 <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
               </ASP:BoundColumn>
-              <ASP:BoundColumn datafield="priority" sortexpression="priority" readonly="True" headertext="Priority"></ASP:BoundColumn>
-              <ASP:BoundColumn datafield="equipment-description" sortexpression="equipment_description" readonly="True" headertext="Equipment description"></ASP:BoundColumn>
-              <ASP:BoundColumn datafield="value" sortexpression="value" headertext="Value"></ASP:BoundColumn>
-              <ASP:BoundColumn datafield="status" sortexpression="status" readonly="True" headertext="Status"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="priority" readonly="True" headertext="Priority"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="item_description" readonly="True" headertext="Description"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="emsof_ante" headertext="EMSOF ante"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="status" readonly="True" headertext="Status"></ASP:BoundColumn>
               <ASP:ButtonColumn text="Select" commandname="Select"></ASP:ButtonColumn>
               <ASP:ButtonColumn text="Increase priority" commandname="IncreasePriority"></ASP:ButtonColumn>
               <ASP:ButtonColumn text="Decrease priority" commandname="DecreasePriority"></ASP:ButtonColumn>

@@ -29,10 +29,11 @@ type
     DataGrid_items: System.Web.UI.WebControls.DataGrid;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
-    Label_sum_of_item_amounts: System.Web.UI.WebControls.Label;
-    Label_unappropriated_amount: System.Web.UI.WebControls.Label;
-    TableRow_sum_of_item_amounts: System.Web.UI.HtmlControls.HtmlTableRow;
+    Label_sum_of_emsof_antes: System.Web.UI.WebControls.Label;
+    Label_unused_amount: System.Web.UI.WebControls.Label;
+    TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_sum_of_item_amounts: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -57,11 +58,14 @@ const ID = '$Id$';
 
 var
   be_before_deadline: boolean;
-  be_sort_order_ascending: boolean;
   county_dictated_appropriation_amount: decimal;
-  dg_sort_order: string;
+  dgi_master_id: cardinal;
+  dgi_priority: cardinal;
+  dgi_item_description: cardinal;
+  dgi_status: cardinal;
+  dgi_emsof_ante: cardinal;
   num_items: cardinal;
-  sum_of_item_amounts: decimal;
+  sum_of_emsof_antes: decimal;
 
 procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 //var
@@ -73,10 +77,13 @@ begin
     // Initialize implementation-global variables.
     //
     be_before_deadline := TRUE;
-    be_sort_order_ascending := TRUE;
-    dg_sort_order := 'name';
+    dgi_master_id := 0;
+    dgi_priority := 1;
+    dgi_item_description := 2;
+    dgi_emsof_ante := 3;
+    dgi_status := 4;
     num_items := 0;
-    sum_of_item_amounts := 0;
+    sum_of_emsof_antes := 0;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
     appcommon.bdpconnection.Open;
@@ -108,7 +115,7 @@ begin
 //    //
 //    if datetime.Now > make_item_requests_deadline then begin
 //      be_before_deadline := FALSE;
-//      TableRow_sum_of_item_amounts.visible := FALSE;
+//      TableRow_sum_of_emsof_antes.visible := FALSE;
 //      TableRow_unrequested_amount.visible := FALSE;
 //      Label_make_requests_deadline.visible := FALSE;
 //      HyperLink_add_item_to_request.visible := FALSE;
@@ -142,21 +149,16 @@ begin
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
-  cmdText := 'select county_dictated_appropriation.id,' // column 0
-  + ' password_reset_email_address,'                    // column 1
-  + ' affiliate_num,'                                   // column 2
-  + ' name,'                                            // column 3
-  + ' county_dictated_appropriation.amount'             // column 4
-  + ' from county_dictated_appropriation'
-  +   ' join service on (service.id=service_id)'
-  +   ' join service_user on (service_user.id=service.id)'
-  + ' where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString
-  + ' order by ' + dg_sort_order;
-  if be_sort_order_ascending then begin
-    cmdText := cmdText + ' asc';
-  end else begin
-    cmdText := cmdText + ' desc';
-  end;
+  cmdText := 'select master_id,'                                         // column 0
+  + ' priority,'                                                         // column 1
+  + ' eligible_provider_equipment_list.description as item_description,' // column 2
+  + ' emsof_ante,'                                                       // column 3
+  + ' item_status_code_description_map.description as status'            // column 4
+  + ' from emsof_request_detail'
+  +   ' join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+  +   ' join item_status_code_description_map on (item_status_code_description_map.code=emsof_request_detail.status_code)'
+  + ' where master_id = ' + session.Item['emsof_request_master_id'].ToString
+  + ' order by priority';
   //
   DataGrid_items.DataSource :=
     borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
@@ -170,13 +172,13 @@ begin
   //
   // Manage non-DataGrid control properties.
   //
-  Label_sum_of_item_amounts.text := sum_of_item_amounts.ToString('C');
-  Label_unappropriated_amount.Text := (county_dictated_appropriation_amount - sum_of_item_amounts).tostring('C');
+  Label_sum_of_emsof_antes.text := sum_of_emsof_antes.ToString('C');
+  Label_unused_amount.Text := (county_dictated_appropriation_amount - sum_of_emsof_antes).tostring('C');
   //
   // Clear aggregation vars for next bind, if any.
   //
   num_items := 0;
-  sum_of_item_amounts := 0;
+  sum_of_emsof_antes := 0;
   AppCommon.BdpConnection.Close;
 end;
 
