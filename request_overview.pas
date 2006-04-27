@@ -13,6 +13,8 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -34,6 +36,8 @@ type
     TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_sum_of_item_amounts: System.Web.UI.HtmlControls.HtmlTableRow;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -50,6 +54,8 @@ implementation
 /// </summary>
 procedure TWebForm_request_overview.InitializeComponent;
 begin
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -138,6 +144,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_overview.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+      server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_request_overview.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+      server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_request_overview.Bind_items;

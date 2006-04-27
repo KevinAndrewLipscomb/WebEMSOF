@@ -15,7 +15,7 @@
 		<ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>&nbsp;
 		  <ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></p>
 	  <p><small>Change your WebEMSOF
-		<a href="http://localhost/WebEMSOF/change_password.aspx">password</a>&nbsp;| <a href="http://localhost/WebEMSOF/change_email_address.aspx">email address</a>
+		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;|&nbsp;<ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
 	  </small></p>
 			  <table cellspacing="0" cellpadding="5" border="0">
 			<tr>
@@ -73,10 +73,10 @@
             <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
             <HeaderStyle font-bold="True" forecolor="Blue" backcolor="#E0E0E0"></HeaderStyle>
             <Columns>
-              <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
+              <ASP:BoundColumn datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
                 <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
               </ASP:BoundColumn>
-              <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">

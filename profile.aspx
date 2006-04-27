@@ -15,7 +15,7 @@
       <p>
         <ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
 <p><strong>
-          <ASP:Label id="Label_application_name" runat="server"></ASP:Label>profile</strong></p>
+          <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;profile</strong></p>
 <p>
         <table cellspacing="0" cellpadding="0" width="%" border="1">
             <tr><td>
@@ -31,7 +31,7 @@
                         <p align="right">Service name:</p></td>
 		<td>
                         <ASP:TextBox id="TextBox_service_name" runat="server" maxlength="127"></ASP:TextBox></td>
-					  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_service_name" runat="server" errormessage="Service name is required." controltovalidate="TextBox_service_name" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_service_name" runat="server" errormessage="Please leave disallowed punctuation out of your service name." font-bold="True" controltovalidate="TextBox_service_name" validationexpression="[0-9a-zA-z\.,'#%&amp;()-_]+">!ERR!</ASP:RegularExpressionValidator></td>
+					  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_service_name" runat="server" errormessage="Service name is required." controltovalidate="TextBox_service_name" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_service_name" runat="server" errormessage="Please leave disallowed punctuation out of your service name." font-bold="True" controltovalidate="TextBox_service_name" validationexpression="[0-9a-zA-z\.,'#%&amp;()-_ ]+">!ERR!</ASP:RegularExpressionValidator></td>
 	  </tr>
 	  <tr>
 							  <td valign="top" nowrap="true">
@@ -55,16 +55,16 @@
                         <ASP:TextBox id="TextBox_address_line_2" runat="server" maxlength="127"></ASP:TextBox></td>
                       <td valign="top">
                         <ASP:RequiredFieldValidator id="RequiredFieldValidator_address_line_1" runat="server" font-bold="True" controltovalidate="TextBox_address_line_1" errormessage="At least one address line is required.">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_address_line_1" runat="server" font-bold="True" controltovalidate="TextBox_address_line_1" errormessage="Please leave disallowed characters out of the first address line."
-                                validationexpression="[0-9a-zA-Z\.,#%&amp;()-_']*">!ERR!</ASP:RegularExpressionValidator>
+                                validationexpression="[0-9a-zA-Z\.,#%&amp;()-_' ]*">!ERR!</ASP:RegularExpressionValidator>
   <br><ASP:RegularExpressionValidator id="RegularExpressionValidator_address_line_2" runat="server" font-bold="True" controltovalidate="TextBox_address_line_2" errormessage="Please leave disallowed characters out of the second address line."
-                                validationexpression="[0-9a-zA-Z\.,#%&amp;()-_']*">!ERR!</ASP:RegularExpressionValidator></td>
+                                validationexpression="[0-9a-zA-Z\.,#%&amp;()-_' ]*">!ERR!</ASP:RegularExpressionValidator></td>
 	  </tr>
 	  <tr>
 		<td nowrap="true">
 						<p align="right">City:</p></td>
 		<td>
 						<ASP:TextBox id="TextBox_city" runat="server" maxlength="127"></ASP:TextBox></td>
-					  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_city" runat="server" errormessage="City is required." controltovalidate="TextBox_city" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_city" runat="server" font-bold="True" controltovalidate="TextBox_city" errormessage="Please leave disallowed characters out of the city name." validationexpression="[a-zA-Z\.']+">!ERR!</ASP:RegularExpressionValidator></td>
+					  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_city" runat="server" errormessage="City is required." controltovalidate="TextBox_city" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_city" runat="server" font-bold="True" controltovalidate="TextBox_city" errormessage="Please leave disallowed characters out of the city name." validationexpression="[a-zA-Z\.' ]+">!ERR!</ASP:RegularExpressionValidator></td>
 	  </tr>
 	  <tr>
 		<td nowrap="true">
@@ -94,7 +94,7 @@
                         <p align="right">Contact person's name:</p></td>
         <td>
                         <ASP:TextBox id="TextBox_contact_person_name" runat="server" maxlength="127"></ASP:TextBox></td>
-                      <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_contact_person_name" runat="server" errormessage="Contact person's name is required." controltovalidate="TextBox_contact_person_name" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_contact_person_name" runat="server" errormessage="Please leave disallowed characters out of contact person's name." font-bold="True" controltovalidate="TextBox_contact_person_name" validationexpression="[a-zA-Z\.,]+">!ERR!</ASP:RegularExpressionValidator></td>
+                      <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_contact_person_name" runat="server" errormessage="Contact person's name is required." controltovalidate="TextBox_contact_person_name" font-bold="True">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_contact_person_name" runat="server" errormessage="Please leave disallowed characters out of contact person's name." font-bold="True" controltovalidate="TextBox_contact_person_name" validationexpression="[a-zA-Z\., ]+">!ERR!</ASP:RegularExpressionValidator></td>
       </tr>
       <tr>
 		<td nowrap="true">

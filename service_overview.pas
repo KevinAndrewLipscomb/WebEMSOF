@@ -18,6 +18,8 @@ type
     procedure LinkButton_profile_action_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -31,6 +33,10 @@ type
     LinkButton_profile_action: System.Web.UI.WebControls.LinkButton;
     DataGrid: System.Web.UI.WebControls.DataGrid;
     Label_no_dg_items: System.Web.UI.WebControls.Label;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
+    TableRow_separator: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_item_requests_section: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -50,6 +56,8 @@ begin
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
   Include(Self.DataGrid.ItemCommand, Self.DataGrid_ItemCommand);
   Include(Self.DataGrid.ItemDataBound, Self.DataGrid_ItemDataBound);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -76,7 +84,7 @@ var
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - service_overview';
     //
     // Initialize implementation-scoped vars.
     //
@@ -97,15 +105,18 @@ begin
     //
     // Set Label_profile_status
     //
+    AppCommon.BdpConnection.Open;
     bc_get_profile_status := borland.data.provider.bdpCommand.Create
       (
       'select be_valid_profile from service where id = "' + session.Item['service_user_id'].ToString + '"'
       ,AppCommon.BdpConnection
       );
-    AppCommon.BdpConnection.Open;
     if bc_get_profile_status.ExecuteScalar.ToString = '0' then begin
       Label_profile_status.Text := 'Not saved.';
       LinkButton_profile_action.Text := 'Create profile';
+      TableRow_separator.visible := FALSE;
+      TableRow_item_requests_section.visible := FALSE;
+      AppCommon.BdpConnection.Close;
     end else begin
       Label_profile_status.Text := 'Saved.';
       LinkButton_profile_action.Text := 'Edit profile';
@@ -118,7 +129,6 @@ begin
         AppCommon.BdpConnection
         )
         .ExecuteScalar.tostring;
-    end;
 //    //
 //    // Determine temporal location with respect to deadline.
 //    //
@@ -138,10 +148,11 @@ begin
 //      );
 //    //
 //    be_before_deadline := (datetime.Now <= make_item_requests_deadline);
-    //
-    AppCommon.BdpConnection.Close;
-    //
-    BindDataGrid;
+      //
+      AppCommon.BdpConnection.Close;
+      //
+      BindDataGrid;
+    end;
   end;
 end;
 
@@ -152,6 +163,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_service_overview.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+      server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_service_overview.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+      server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;
@@ -227,7 +250,8 @@ begin
     +   ' JOIN fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
     +   ' JOIN county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)'
     +   ' JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
-    + ' WHERE fiscal_year.id >= (' + max_fiscal_year_id_string + ' - 1)'
+    + ' WHERE service_id = ' + session.item['service_user_id'].tostring
+    +   ' and fiscal_year.id >= (' + max_fiscal_year_id_string + ' - 1)'
     + ' order by fy_designator,county_name',
     AppCommon.BdpConnection
     )

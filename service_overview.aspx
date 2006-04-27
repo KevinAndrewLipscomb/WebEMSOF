@@ -11,23 +11,23 @@
 	  <p><asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder></p>
 	  <h1><ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h1>
 	  <h3>Account overview</h3>
-		<table cellspacing="0" cellpadding="10" border="0">
-			<tr>
-			  <td>Your service's WebEMSOF profile is:</td>
-			  <td>
-					<p align="center">
-					  <ASP:Label id="Label_profile_status" runat="server" font-bold="True"></ASP:Label>
-					</p></td>
-			  <td>
-						<div align="center">
-					<ASP:LinkButton id="LinkButton_profile_action" runat="server" font-bold="True" font-size="X-Small"></ASP:LinkButton>
-						</div></td>
-			</tr>
-			<tr>
-			  <td colspan="3"><hr /></td>
-			</tr>
-		</table>
-		&nbsp;&nbsp; Your EMSOF requests:
+		<table cellspacing="0" cellpadding="0" border="0">
+		  <tr>
+			<td>
+			  <table cellpadding="10">
+				<tr>
+				  <td>Your service's WebEMSOF profile is:</td>
+				  <td><ASP:Label id="Label_profile_status" runat="server" font-bold="True"></ASP:Label></td>
+				  <td><ASP:LinkButton id="LinkButton_profile_action" runat="server" font-bold="True" font-size="X-Small"></ASP:LinkButton></td>
+				</tr>
+			  </table>
+			</td>
+		  </tr>
+		  <tr id="TableRow_separator" runat="server">
+			  <td><hr /></td>
+		  </tr>
+          <tr id="TableRow_item_requests_section" runat="server">
+			<td>&nbsp;&nbsp; Your EMSOF requests:
 		<blockquote>
         <p><ASP:Label id="Label_no_dg_items" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
 		<ASP:DataGrid id="DataGrid" runat="server"
@@ -61,9 +61,10 @@
               <ItemStyle font-bold="True" forecolor="Blue"></ItemStyle>
             </ASP:ButtonColumn>
           </Columns></ASP:DataGrid>
-		</blockquote>
+		</blockquote></td>
+		  </tr></table>
 	  <p><small>Change your WebEMSOF
-		<a href="http://localhost/WebEMSOF/change_password.aspx">password</a>&nbsp;| <a href="http://localhost/WebEMSOF/change_email_address.aspx">email address</a>
+		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
 	  </small></p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
     </form>
