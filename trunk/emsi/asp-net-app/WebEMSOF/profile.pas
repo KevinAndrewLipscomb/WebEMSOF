@@ -86,12 +86,12 @@ var
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - template_std';
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
     AppCommon.BdpConnection.Open;
     //
     // Set Label_service_name
     //
-    Label_service_name.Text := session.Item['account_descriptor'].ToString;
+    Label_service_name.Text := session.Item['service_name'].ToString;
     //
     // Set Label_application_name
     //
@@ -101,7 +101,7 @@ begin
     //
     affiliate_num := borland.data.provider.BdpCommand.Create
       (
-      'SELECT affiliate_num FROM webemsof_account_detail WHERE id = ' + session.Item['account_id'].ToString,
+      'SELECT affiliate_num FROM service WHERE id = ' + session.Item['service_user_id'].ToString,
       AppCommon.BdpConnection
       )
       .ExecuteScalar.tostring;
@@ -133,12 +133,12 @@ begin
     bdr.Read;
     //
     TextBox_service_name.Text := bdr['name'].tostring;
-    CheckBox_qrs.Checked := Boolean(bdr['be_qrs']);
-    CheckBox_bls_amb.Checked := Boolean(bdr['be_bls_amb']);
-    CheckBox_als_amb.Checked := Boolean(bdr['be_als_amb']);
-    CheckBox_als_squad.Checked := Boolean(bdr['be_als_squad']);
-    CheckBox_air_amb.Checked := Boolean(bdr['be_air_amb']);
-    CheckBox_rescue.Checked := Boolean(bdr['be_rescue']);
+    CheckBox_qrs.Checked := (bdr['be_qrs'].tostring = '1');
+    CheckBox_bls_amb.Checked := (bdr['be_bls_amb'].tostring = '1');
+    CheckBox_als_amb.Checked := (bdr['be_als_amb'].tostring = '1');
+    CheckBox_als_squad.Checked := (bdr['be_als_squad'].tostring = '1');
+    CheckBox_air_amb.Checked := (bdr['be_air_amb'].tostring = '1');
+    CheckBox_rescue.Checked := (bdr['be_rescue'].tostring = '1');
     TextBox_address_line_1.Text := bdr['address_line_1'].tostring;
     TextBox_address_line_2.Text := bdr['address_line_2'].tostring;
     TextBox_city.Text := bdr['city'].tostring;
@@ -194,7 +194,7 @@ begin
     )
     .ExecuteNonQuery;
   AppCommon.BdpConnection.Close;
-  server.Transfer('account_overview.aspx');
+  server.Transfer('service_overview.aspx');
 end;
 
 end.

@@ -14,6 +14,8 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_continue_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -26,6 +28,8 @@ type
     Button_continue: System.Web.UI.WebControls.Button;
     RequiredFieldValidator_appropriation: System.Web.UI.WebControls.RequiredFieldValidator;
     Label_literal_county: System.Web.UI.WebControls.Label;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -43,6 +47,8 @@ implementation
 procedure TWebForm_county_appropriation.InitializeComponent;
 begin
   Include(Self.Button_continue.Click, Self.Button_continue_Click);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -89,6 +95,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_appropriation.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_county_appropriation.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_county_appropriation.Button_continue_Click(sender: System.Object;

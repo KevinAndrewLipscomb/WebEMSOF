@@ -21,6 +21,8 @@ type
       e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid_service_appropriations_DeleteCommand(source: System.Object; 
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -42,6 +44,8 @@ type
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -57,6 +61,8 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
@@ -176,6 +182,18 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_county_dictated_appropriations.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+    server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_county_dictated_appropriations.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+    server.Transfer('change_password.aspx');
+end;
+
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
@@ -284,7 +302,7 @@ begin
   AppCommon.BdpConnection.Open;
   //
   appropriation_id_string := Safe(e.Item.Cells[dgi_id].Text,NUM);
-  amount_string := Safe(e.Item.Cells[dgi_amount].Text.Trim,REAL_NUM);
+  amount_string := Safe(TextBox(e.Item.Cells[dgi_amount].controls[0]).Text.Trim,REAL_NUM);
   //
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);

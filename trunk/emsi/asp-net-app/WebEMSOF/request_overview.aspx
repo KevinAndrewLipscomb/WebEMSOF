@@ -14,7 +14,7 @@
 <h3>
 		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3>
 	  <p><small>Change your WebEMSOF
-		<a href="http://localhost/WebEMSOF/change_password.aspx">password</a>&nbsp;| <a href="http://localhost/WebEMSOF/change_email_address.aspx">email address</a>
+		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
 	  </small></p>
 	  <table cellspacing="0" cellpadding="5" border="0">
 			<tr>
