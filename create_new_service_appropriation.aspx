@@ -19,7 +19,8 @@
 			  <tr>
 			  <td>
 			  <p align="right">Service:</p></td>
-			  <td><ASP:DropDownList id="DropDownList_services" runat="server"></ASP:DropDownList></td>
+			  <td><ASP:DropDownList id="DropDownList_services" runat="server"></ASP:DropDownList>&nbsp; 
+                <ASP:CheckBox id="CheckBox_show_all_services_in_region" runat="server" text="Show all services in region"></ASP:CheckBox></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_service" runat="server" errormessage="Please select a service." font-bold="True" controltovalidate="DropDownList_services">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_service" runat="server" errormessage="Please select a service for a new appropriation." font-bold="True" controltovalidate="DropDownList_services" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
 			  </tr>
 			<tr>
