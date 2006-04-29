@@ -53,7 +53,7 @@
 		<p>
 		  <ASP:Label id="Label_no_appropriations" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
 		<p>
-		  <ASP:HyperLink id="HyperLink_add_item_to_request" runat="server" navigateurl="add_item_to_request.aspx" font-bold="True">Add item(s) to request</ASP:HyperLink>
+		  <ASP:HyperLink id="HyperLink_add_item_to_request" runat="server" navigateurl="create_new_item_request.aspx" font-bold="True">Add item(s) to request</ASP:HyperLink>
 		</p>
 		<p>
 		  <ASP:DataGrid id="DataGrid_items" runat="server"

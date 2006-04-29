@@ -51,6 +51,7 @@ library WebEMSOF;
 {%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txvpck'}
 {%AspMarkupContainer 'create_new_service_appropriation.aspx'}
 {%AspMarkupContainer 'delete_service_appropriation.aspx'}
+{%AspMarkupContainer 'create_new_item_request.aspx'}
 
 uses
   System.Reflection,
@@ -71,7 +72,8 @@ uses
   choose_county_appropriation in 'choose_county_appropriation.pas' {choose_county_appropriation.TWebForm_county_appropriation: System.Web.UI.Page},
   county_dictated_appropriations in 'county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page},
   create_new_service_appropriation in 'create_new_service_appropriation.pas' {create_new_service_appropriation.TWebForm_create_new_service_appropriation: System.Web.UI.Page},
-  delete_service_appropriation in 'delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page};
+  delete_service_appropriation in 'delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page},
+  create_new_item_request in 'create_new_item_request.pas' {create_new_item_request.TWebForm_create_new_item_request: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following
