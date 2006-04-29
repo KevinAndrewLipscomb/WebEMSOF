@@ -29,7 +29,7 @@
           <tr id="TableRow_item_requests_section" runat="server">
 			<td>&nbsp;&nbsp; Your EMSOF requests:
 		<blockquote>
-        <p><ASP:Label id="Label_no_dg_items" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
+        <p><ASP:Label id="Label_no_dg_items" runat="server" font-bold="True" visible="False">-- No county appropriations yet --</ASP:Label></p>
 		<ASP:DataGrid id="DataGrid" runat="server"
 			bordercolor="#CCCCCC"
 			borderstyle="None"
