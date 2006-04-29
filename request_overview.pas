@@ -83,6 +83,7 @@ begin
     // Initialize implementation-global variables.
     //
     be_before_deadline := TRUE;
+    county_dictated_appropriation_amount := decimal.Parse(session.item['county_dictated_appropriation_amount'].tostring);
     dgi_master_id := 0;
     dgi_priority := 1;
     dgi_item_description := 2;
@@ -99,8 +100,7 @@ begin
     Label_service_name.text := session.Item['service_name'].ToString;
     Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
     Label_sponsor_county.text := session.item['sponsor_county'].tostring;
-    Label_parent_appropriation_amount.Text :=
-      decimal.Parse(session.item['county_dictated_appropriation_amount'].tostring).ToString('C');
+    Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
 //    //
 //    // All further rendering is deadline-dependent.
 //    //

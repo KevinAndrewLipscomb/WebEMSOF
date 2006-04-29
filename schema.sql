@@ -121,7 +121,7 @@ DROP TABLE IF EXISTS emsof_request_detail;
 CREATE TABLE IF NOT EXISTS emsof_request_detail (
   master_id bigint(20) unsigned NOT NULL,
   equipment_code smallint(5) unsigned NOT NULL,
-  `value` decimal(10,2) unsigned NOT NULL,
+  emsof_ante decimal(10,2) unsigned NOT NULL,
   status_code tinyint(3) unsigned NOT NULL,
   priority smallint(5) unsigned NOT NULL,
   PRIMARY KEY  (master_id,priority),
