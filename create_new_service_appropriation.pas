@@ -19,8 +19,7 @@ type
     procedure Button_cancel_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_add_appropriation_and_stop_Click(sender: System.Object;
       e: System.EventArgs);
-    procedure CheckBox_show_all_services_in_region_CheckedChanged(sender: System.Object; 
-      e: System.EventArgs);
+    procedure CheckBox_unfilter_CheckedChanged(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -39,7 +38,7 @@ type
     RequiredFieldValidator_service: System.Web.UI.WebControls.RequiredFieldValidator;
     Button_add_appropriation_and_stop: System.Web.UI.WebControls.Button;
     Button_cancel: System.Web.UI.WebControls.Button;
-    CheckBox_show_all_services_in_region: System.Web.UI.WebControls.CheckBox;
+    CheckBox_unfilter: System.Web.UI.WebControls.CheckBox;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -55,10 +54,10 @@ implementation
 /// </summary>
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
+  Include(Self.CheckBox_unfilter.CheckedChanged, Self.CheckBox_unfilter_CheckedChanged);
   Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
   Include(Self.Button_add_appropriation_and_stop.Click, Self.Button_add_appropriation_and_stop_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
-  Include(Self.CheckBox_show_all_services_in_region.CheckedChanged, Self.CheckBox_show_all_services_in_region_CheckedChanged);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -66,7 +65,7 @@ end;
 const ID = '$Id$';
 
 var
-  be_interested_in_all_regional_services: boolean;
+  be_service_list_filtered: boolean;
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
@@ -76,7 +75,7 @@ begin
     //
     // Initialize implementation-scoped variables.
     //
-    be_interested_in_all_regional_services := FALSE;
+    be_service_list_filtered := TRUE;
     //
     Bind_services;
   end;
@@ -91,10 +90,10 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_create_new_service_appropriation.CheckBox_show_all_services_in_region_CheckedChanged(sender: System.Object;
+procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object; 
   e: System.EventArgs);
 begin
-  be_interested_in_all_regional_services := CheckBox_show_all_services_in_region.checked;
+  be_service_list_filtered := not CheckBox_unfilter.checked;
   Bind_services;
 end;
 
@@ -228,10 +227,11 @@ var
   cmdText: string;
 begin
   appcommon.bdpconnection.Open;
+  DropDownList_services.Items.Clear;
   DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
   //
   cmdText := 'SELECT id,name FROM service_user JOIN service using (id) ';
-  if not be_interested_in_all_regional_services then begin
+  if be_service_list_filtered then begin
     cmdText := cmdText + 'where county_code = ' + session.item['county_user_id'].tostring + ' ';
   end;
   cmdText := cmdText + 'ORDER BY name';
