@@ -51,7 +51,6 @@ type
     Label_match_level: System.Web.UI.WebControls.Label;
     Label_min_service_ante: System.Web.UI.WebControls.Label;
     TextBox_additional_service_ante: System.Web.UI.WebControls.TextBox;
-    RegularExpressionValidator_additinoal_service_ante: System.Web.UI.WebControls.RegularExpressionValidator;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
     Label_emsof_ante: System.Web.UI.WebControls.Label;
     Label_allowable_cost: System.Web.UI.WebControls.Label;
@@ -60,6 +59,7 @@ type
     Button_submit_and_repeat: System.Web.UI.WebControls.Button;
     Button_submit_and_stop: System.Web.UI.WebControls.Button;
     TextBox_unit_cost: System.Web.UI.WebControls.TextBox;
+    RegularExpressionValidator_additional_service_ante: System.Web.UI.WebControls.RegularExpressionValidator;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -165,8 +165,34 @@ end;
 
 procedure TWebForm_create_new_item_request.DropDownList_equipment_category_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
+var
+  bdr: borland.data.provider.bdpdatareader;
+  life_expectancy_string: string;
 begin
-
+  appcommon.bdpconnection.Open;
+  bdr := borland.data.provider.bdpcommand.Create
+    (
+    'select life_expectancy_years,'
+    + ' allowable_cost'
+    + ' from eligible_provider_equipment_list'
+    + ' where code = ' + DropDownList_equipment_category.SelectedValue,
+    appcommon.bdpconnection
+    )
+    .ExecuteReader;
+  bdr.Read;
+  //
+  life_expectancy_string := bdr['life_expectancy_years'].tostring;
+  if life_expectancy_string <> system.string.EMPTY then begin
+    Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
+    Label_life_expectancy.font.bold := TRUE;
+  end else begin
+    Label_life_expectancy.text := 'PA DOH EMSO has not specified a life expectancy for this category of equipment.';
+    Label_life_expectancy.font.bold := FALSE;
+  end;
+  Label_allowable_cost.text := bdr['allowable_cost'].tostring;
+  appcommon.bdpconnection.Close;
+  //
+  // Recalc;
 end;
 
 procedure TWebForm_create_new_item_request.Button_cancel_Click(sender: System.Object;
