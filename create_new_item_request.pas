@@ -19,9 +19,13 @@ type
       e: System.EventArgs);
     procedure Button_submit_and_repeat_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_submit_and_stop_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_recalculate_1_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_recalculate_2_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_recalculate_3_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    procedure Recalculate;
     procedure AddItem
       (
       amount_string: string;
@@ -60,6 +64,9 @@ type
     Button_submit_and_stop: System.Web.UI.WebControls.Button;
     TextBox_unit_cost: System.Web.UI.WebControls.TextBox;
     RegularExpressionValidator_additional_service_ante: System.Web.UI.WebControls.RegularExpressionValidator;
+    LinkButton_recalculate_1: System.Web.UI.WebControls.LinkButton;
+    LinkButton_recalculate_2: System.Web.UI.WebControls.LinkButton;
+    LinkButton_recalculate_3: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -76,6 +83,9 @@ implementation
 procedure TWebForm_create_new_item_request.InitializeComponent;
 begin
   Include(Self.DropDownList_equipment_category.SelectedIndexChanged, Self.DropDownList_equipment_category_SelectedIndexChanged);
+  Include(Self.LinkButton_recalculate_1.Click, Self.LinkButton_recalculate_1_Click);
+  Include(Self.LinkButton_recalculate_2.Click, Self.LinkButton_recalculate_2_Click);
+  Include(Self.LinkButton_recalculate_3.Click, Self.LinkButton_recalculate_3_Click);
   Include(Self.Button_submit_and_repeat.Click, Self.Button_submit_and_repeat_Click);
   Include(Self.Button_submit_and_stop.Click, Self.Button_submit_and_stop_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
@@ -148,6 +158,24 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_create_new_item_request.LinkButton_recalculate_3_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  Recalculate;
+end;
+
+procedure TWebForm_create_new_item_request.LinkButton_recalculate_2_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  Recalculate;
+end;
+
+procedure TWebForm_create_new_item_request.LinkButton_recalculate_1_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  Recalculate;
+end;
+
 procedure TWebForm_create_new_item_request.Button_submit_and_stop_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -175,7 +203,7 @@ begin
     'select life_expectancy_years,'
     + ' allowable_cost'
     + ' from eligible_provider_equipment_list'
-    + ' where code = ' + DropDownList_equipment_category.SelectedValue,
+    + ' where code = ' + Safe(DropDownList_equipment_category.SelectedValue,NUM),
     appcommon.bdpconnection
     )
     .ExecuteReader;
@@ -199,6 +227,13 @@ procedure TWebForm_create_new_item_request.Button_cancel_Click(sender: System.Ob
   e: System.EventArgs);
 begin
   server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_create_new_item_request.Recalculate;
+begin
+  if (TextBox_unit_cost.text <> system.string.EMPTY) and (TextBox_quantity.text <> system.string.EMPTY) then begin
+    Label_total_cost.text := (decimal.Parse(TextBox_unit_cost.text)*decimal.Parse(TextBox_quantity.text)).tostring;
+  end;
 end;
 
 procedure TWebForm_create_new_item_request.AddItem
