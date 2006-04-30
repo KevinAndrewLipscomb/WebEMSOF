@@ -61,13 +61,26 @@
 			<tr>
 			  <td>
 			  <p align="right">Anticipated unit cost:&nbsp; $</p></td>
-			  <td><ASP:TextBox id="TextBox_unit_cost" runat="server" width="6pc"></ASP:TextBox></td>
+			  <td>
+						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+							<tr>
+							  <td><ASP:TextBox id="TextBox_unit_cost" runat="server" width="6pc"></ASP:TextBox></td>
+							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_1" runat="server" font-size="Smaller">Recalculate</ASP:LinkButton></td>
+							</tr>
+						</table></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_unit_cost" runat="server" errormessage="Please enter a unit cost." font-bold="True" controltovalidate="TextBox_unit_cost">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_unit_cost" runat="server" font-bold="True" errormessage="Please enter a valid unit cost." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_unit_cost">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
 			  <td>
 			  <p align="right">Anticipated quantity:</p></td>
-			  <td><ASP:TextBox id="TextBox_quantity" runat="server" width="6pc"></ASP:TextBox></td>
+			  <td>&nbsp; 
+
+                        <table cellspacing="0" cellpadding="0" width="100%" border="0">
+                            <tr>
+                              <td><ASP:TextBox id="TextBox_quantity" runat="server" width="6pc"></ASP:TextBox></td>
+                              <td align="right"><ASP:LinkButton id="LinkButton_recalculate_2" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
+                            </tr>
+                        </table></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_quantity" runat="server" errormessage="Please enter a quantity." font-bold="True" controltovalidate="TextBox_quantity">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_quantity" runat="server" font-bold="True" errormessage="Please enter a valid quantity." validationexpression="[1-9][0-9]*" controltovalidate="TextBox_quantity">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
@@ -95,7 +108,14 @@
 			<tr>
 			  <td>
 			  <p align="right"><strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>:&nbsp; $</p></td>
-			  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
+			  <td>&nbsp; 
+
+                        <table cellspacing="0" cellpadding="0" width="100%" border="0">
+                            <tr>
+                              <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
+                              <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
+                            </tr>
+                        </table></td>
 			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additional_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
@@ -106,8 +126,10 @@
 			  <td></td>
 			</tr>
 			<tr>
-			  <td></td>
-			  <td><ASP:Button id="Button_submit_and_repeat" runat="server" text="Submit and Repeat"></ASP:Button>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button></td>
+			  <td>
+                        <div align="right"><ASP:Button id="Button_submit_and_repeat" runat="server" text="Submit and Repeat"></ASP:Button>
+                        </div></td>
+			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button></td>
 			  <td></td>
 			</tr>
 		  </table>
