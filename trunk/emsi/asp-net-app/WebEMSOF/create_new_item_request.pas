@@ -87,6 +87,7 @@ const ID = '$Id$';
 
 procedure TWebForm_create_new_item_request.Page_Load(sender: System.Object; e: System.EventArgs);
 var
+  bdr_factors: borland.data.provider.BdpDataReader;
   bdr_services: borland.data.provider.BdpDataReader;
   cmdText: string;
 begin
@@ -94,12 +95,41 @@ begin
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_item_request';
     //
-    // Initialize implementation-scoped variables.
-    //
     appcommon.bdpconnection.Open;
-    DropDownList_equipment_category.Items.Add(listitem.Create('-- Select --','0'));
     //
-    cmdText := 'SELECT code,description FROM eligible_provider_equipment_list ORDER BY description';
+    // Determine this service's eligibility factors.
+    //
+    bdr_factors := borland.data.provider.bdpcommand.Create
+      (
+      'select (be_als_amb or be_air_amb) as be_als_amb,'
+      + ' (be_als_amb or be_als_squad) as be_als_squad,'
+      + ' (be_bls_amb or be_als_amb) as be_bls_amb,'
+      + ' (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs'
+      + ' FROM service'
+      + ' WHERE id = ' + session.item['service_user_id'].tostring,
+      appcommon.bdpconnection
+      )
+      .ExecuteReader;
+    bdr_factors.Read;
+    cmdText := 'SELECT code,description FROM eligible_provider_equipment_list WHERE FALSE '; // Default to empty set
+    if bdr_factors['be_als_amb'].tostring = '1' then begin
+      cmdText := cmdText + 'or be_eligible_als_amb = 1 ';
+    end;
+    if bdr_factors['be_als_squad'].tostring = '1' then begin
+      cmdText := cmdText + 'or be_eligible_als_squad = 1 ';
+    end;
+    if bdr_factors['be_bls_amb'].tostring = '1' then begin
+      cmdText := cmdText + 'or be_eligible_bls_amb = 1 ';
+    end;
+    if bdr_factors['be_qrs'].tostring = '1' then begin
+      cmdText := cmdText + 'or be_eligible_qrs = 1 ';
+    end;
+    cmdText := cmdText + 'ORDER BY description';
+    bdr_factors.Close;
+    //
+    // Build DropDownList using the appropriate query.
+    //
+    DropDownList_equipment_category.Items.Add(listitem.Create('-- Select --','0'));
     //
     bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
     while bdr_services.Read do begin

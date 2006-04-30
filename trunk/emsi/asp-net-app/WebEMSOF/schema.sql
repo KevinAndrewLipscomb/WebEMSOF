@@ -110,6 +110,41 @@ CREATE TABLE IF NOT EXISTS eligible_provider_equipment_list (
 -- Dumping data for table `eligible_provider_equipment_list`
 -- 
 
+insert into eligible_provider_equipment_list
+values
+  (1,"EKG monitor/defibrillator w/pacer",5,1,1,0,0,12000,6000,7200),
+  (2,"12 lead EKG",5,1,1,0,0,20000,10000,12000),
+  (3,"AED",5,0,0,1,1,3500,1750,2100),
+  (4,"Oxygen system parts",5,1,1,1,1,500,250,300),
+  (5,"Capnography",3,1,1,0,0,3000,1500,1800),
+  (6,"CPAP",5,1,1,0,0,900,450,540),
+  (7,"Pulse oximeter",5,1,1,0,0,700,350,420),
+  (8,"Nitrous oxide delivery system",5,1,1,0,0,2000,1000,1200),
+  (9,"IV infusion pump",5,1,1,0,0,2000,1000,1200),
+  (10,"Intubation, durable",5,1,1,0,0,600,300,360),
+  (11,"Transtracheal jet insufflators",5,1,1,0,0,200,100,120),
+  (12,"Splinting/immobilization devices",3,1,1,1,1,500,250,300),
+  (13,"Stairchair",5,1,0,1,0,2000,1000,1200),
+  (14,"Stretcher, primary",5,1,0,1,0,4000,2000,2400),
+  (15,"Stretcher/chair combination",5,1,0,1,0,700,350,420),
+  (16,"Suction, portable, battery operated",3,1,1,1,1,900,450,540),
+  (17,"Ventilator, automatic",5,1,1,1,1,3000,1500,1800),
+  (18,"Ambulance",null,1,0,1,0,33333.33,15000,20000),
+  (19,"Squad/response vehicle",null,0,1,0,1,15000,7500,9000),
+  (20,"Data collection software",null,1,1,1,1,1700,1700,1700),
+  (21,"Data collection hardware",3,1,1,1,1,1500,750,900),
+  (22,"Radio, mobile (up to 2/vehicle)",5,1,1,1,1,3000,1500,1800),
+  (23,"Radio, portable (1/vehicle)",5,1,1,1,1,3000,1500,1800),
+  (24,"Triage vest set",5,1,1,1,1,150,75,90),
+  (25,"Triage system",5,1,1,1,1,500,250,300),
+  (26,"Alerting (up to 5)",5,1,1,1,1,400,200,240),
+  (27,"Vehicle safety monitoring system",5,1,1,1,1,3500,1750,2100),
+  (28,"PPE/turnout gear",5,1,1,1,1,1200,600,720),
+  (29,"Protective ballistic vest (over garment style)",5,1,1,1,1,1000,500,600),
+  (30,"Traffic safety",5,1,1,1,1,500,250,300),
+  (31,"Large patient moving/carrying device",10,1,1,1,1,300,150,180),
+  (32,"SCBA (up to 2/licensed vehicle)",10,1,1,1,1,3000,1500,1800);
+
 
 -- --------------------------------------------------------
 
