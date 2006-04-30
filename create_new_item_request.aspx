@@ -21,13 +21,13 @@
 			  <tr>
 				<td><p align="right">Equipment category:</p></td>
 				<td>
-				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server"></ASP:DropDownList>&nbsp;&nbsp;
+				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server" autopostback="True"></ASP:DropDownList>&nbsp;&nbsp;
 				</td>
 				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
 			  </tr>
 			  <tr>
 				<td><p align="right">Life expectancy:</p></td>
-				<td><ASP:Label id="Label_life_expectancy" runat="server" font-bold="True"></ASP:Label></td>
+				<td><ASP:Label id="Label_life_expectancy" runat="server"></ASP:Label></td>
 				<td></td>
 			  </tr>
 			  <tr>
@@ -96,7 +96,7 @@
 			  <td>
 			  <p align="right"><strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>:&nbsp; $</p></td>
 			  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
-			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additinoal_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
+			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additional_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
 			  <td>
