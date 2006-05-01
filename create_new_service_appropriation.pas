@@ -23,7 +23,7 @@ type
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
-    procedure AddAppropriation(amount_string: string; service_id_string: string);
+    procedure AddAppropriation(amount_string: string; service_id_string: string; be_rural: boolean);
     procedure Bind_services;
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -39,6 +39,7 @@ type
     Button_add_appropriation_and_stop: System.Web.UI.WebControls.Button;
     Button_cancel: System.Web.UI.WebControls.Button;
     CheckBox_unfilter: System.Web.UI.WebControls.CheckBox;
+    RadioButtonList_match_level: System.Web.UI.WebControls.RadioButtonList;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -100,7 +101,12 @@ end;
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_stop_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  AddAppropriation(Safe(TextBox_new_amount.Text.Trim,REAL_NUM),Safe(DropDownList_services.SelectedValue,NUM));
+  AddAppropriation
+    (
+    Safe(TextBox_new_amount.Text.Trim,REAL_NUM),
+    Safe(DropDownList_services.SelectedValue,NUM),
+    (RadioButtonList_match_level.selectedvalue = 'Rural')
+    );
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 
@@ -113,7 +119,12 @@ end;
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_repeat_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  AddAppropriation(Safe(TextBox_new_amount.Text.Trim,REAL_NUM),Safe(DropDownList_services.SelectedValue,NUM));
+  AddAppropriation
+    (
+    Safe(TextBox_new_amount.Text.Trim,REAL_NUM),
+    Safe(DropDownList_services.SelectedValue,NUM),
+    (RadioButtonList_match_level.selectedvalue = 'Rural')
+    );
   TextBox_new_amount.Text := system.string.EMPTY;
   DropDownList_services.SelectedIndex := -1;
 end;
@@ -121,7 +132,8 @@ end;
 procedure TWebForm_create_new_service_appropriation.AddAppropriation
   (
   amount_string: string;
-  service_id_string: string
+  service_id_string: string;
+  be_rural: boolean
   );
 var
   amount: decimal;
@@ -129,10 +141,20 @@ var
   bc_get_fy_designator: borland.data.provider.bdpcommand;
   bc_get_service_email_address: borland.data.provider.bdpcommand;
   max_county_dictated_appropriation_id_string: string;
+  match_level: decimal;
+  messageText: string;
 begin
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
     if amount > 0 then begin
+      //
+      // Determine the appropriate numeric match level.
+      //
+      match_level := 0.50;
+      if RadioButtonList_match_level.selectedvalue = 'rural' then begin
+        match_level := 0.60;
+      end;
+      //
       appcommon.bdpconnection.Open;
       //
       // Record the new appropriation.
@@ -142,7 +164,8 @@ begin
         'insert into county_dictated_appropriation'
         + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
         +   ' service_id = ' + service_id_string + ','
-        +   ' amount = ' + amount.tostring,
+        +   ' amount = ' + amount.tostring + ','
+        +   ' match_level = ' + match_level.tostring,
         appcommon.bdpconnection
         )
         .ExecuteNonQuery;
@@ -195,6 +218,26 @@ begin
         'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
         AppCommon.BdpConnection
         );
+      //   Set up the messageText.
+      messageText := 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
+      + 'of ' + amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
+      + NEW_LINE
+      + 'Furthermore, the above coordinator has designated your service as a ';
+      if be_rural then begin
+        messageText := messageText + 'RURAL service.' + NEW_LINE;
+      end else begin
+        messageText := messageText + 'STANDARD (non-rural) service.' + NEW_LINE;
+      end;
+      messageText := messageText + NEW_LINE
+      + 'You can work on this appropriation by visiting:' + NEW_LINE
+      + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+      + NEW_LINE
+      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+      + NEW_LINE
+      + NEW_LINE
+      + '-- ' + ConfigurationSettings.AppSettings['application_name'];
       //   Send the email message.
       smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
       smtpmail.Send
@@ -202,18 +245,7 @@ begin
         bc_get_cc_email_address.ExecuteScalar.tostring,
         bc_get_service_email_address.ExecuteScalar.tostring,
         'New ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation of '
-        + amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
-        + NEW_LINE
-        + 'You can work on this appropriation by visiting:' + NEW_LINE
-        + NEW_LINE
-        + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-        + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
-        + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
-        + NEW_LINE
-        + NEW_LINE
-        + '-- ' + ConfigurationSettings.AppSettings['application_name']
+        messageText
         );
       //
       appcommon.bdpconnection.Close;

@@ -31,6 +31,16 @@
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_new_amount" runat="server" errormessage="Please enter an amount for a new appropriation." font-bold="True" controltovalidate="TextBox_new_amount">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_new_amount" runat="server" font-bold="True" errormessage="Please enter a valid amount." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_new_amount">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
+			  <td>
+			  <p align="right">Match level:</p></td>
+			  <td>
+                <ASP:RadioButtonList id="RadioButtonList_match_level" runat="server" repeatdirection="Horizontal">
+                  <ASP:ListItem value="standard" selected="True">Standard (50%)</ASP:ListItem>
+                  <ASP:ListItem value="rural">Rural (60%)</ASP:ListItem>
+                </ASP:RadioButtonList></td>
+			  <td></td>
+			</tr>
+			<tr>
 			  <td></td>
 			  <td><ASP:Button id="Button_add_appropriation_and_repeat" runat="server" text="Add and Repeat"></ASP:Button>&nbsp;<ASP:Button id="Button_add_appropriation_and_stop" runat="server" text="Add and Stop"></ASP:Button>&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button></td>
 			  <td></td>

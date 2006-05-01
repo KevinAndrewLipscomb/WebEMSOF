@@ -69,6 +69,7 @@ var
   dgi_id: cardinal;
   dgi_fy_designator: cardinal;
   dgi_county_name: cardinal;
+  dgi_county_dictated_appropriation_id: cardinal;
   dgi_county_dictated_appropriation_amount: cardinal;
   dgi_status_code: cardinal;
   dgi_status: cardinal;
@@ -92,11 +93,12 @@ begin
     dgi_id := 0;
     dgi_fy_designator := 1;
     dgi_county_name := 2;
-    dgi_county_dictated_appropriation_amount := 3;
-    dgi_status_code := 4;
-    dgi_status := 5;
-    dgi_value := 6;
-    dgi_linkbutton := 7;
+    dgi_county_dictated_appropriation_id := 3;
+    dgi_county_dictated_appropriation_amount := 4;
+    dgi_status_code := 5;
+    dgi_status := 6;
+    dgi_value := 7;
+    dgi_linkbutton := 8;
     num_dg_items := 0;
     //
     // Set Label_service_name
@@ -186,6 +188,8 @@ begin
   session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fy_designator].text,ALPHANUM));
   session.Remove('sponsor_county');
   session.Add('sponsor_county',Safe(e.item.cells[dgi_county_name].text,POSTAL_CITY));
+  session.Remove('county_dictated_appropriation_id');
+  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_county_dictated_appropriation_id].text,REAL_NUM));
   session.Remove('county_dictated_appropriation_amount');
   session.Add('county_dictated_appropriation_amount',Safe(e.item.cells[dgi_county_dictated_appropriation_amount].text,REAL_NUM));
   server.Transfer('request_overview.aspx');
@@ -236,10 +240,11 @@ begin
     'SELECT emsof_request_master.id,'                                                  // column 0
     + ' designator as fy_designator,'                                                  // column 1
     + ' name as county_name,'                                                          // column 2
-    + ' county_dictated_appropriation.amount as county_dictated_appropriation_amount,' // column 3
-    + ' status_code,'                                                                  // column 4
-    + ' request_status_code_description_map.description as status,'                    // column 5
-    + ' emsof_request_master.value as value'                                           // column 6
+    + ' county_dictated_appropriation.id as county_dictated_appropriation_id,'         // column 3
+    + ' county_dictated_appropriation.amount as county_dictated_appropriation_amount,' // column 4
+    + ' status_code,'                                                                  // column 5
+    + ' request_status_code_description_map.description as status,'                    // column 6
+    + ' emsof_request_master.value as value'                                           // column 7
     + ' FROM emsof_request_master'
     +   ' JOIN county_dictated_appropriation'
     +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
