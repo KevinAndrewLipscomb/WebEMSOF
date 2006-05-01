@@ -95,6 +95,9 @@ end;
 
 const ID = '$Id$';
 
+var
+  match_level: decimal;
+
 procedure TWebForm_create_new_item_request.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr_factors: borland.data.provider.BdpDataReader;
@@ -145,6 +148,21 @@ begin
     while bdr_services.Read do begin
       DropDownList_equipment_category.Items.Add(listitem.Create(bdr_services['description'].tostring,bdr_services['code'].ToString));
     end;
+    //
+    // Set Label_match_level.
+    //
+    match_level := decimal.Parse
+      (
+      borland.data.provider.bdpcommand.Create
+        (
+        'select match_level from county_dictated_appropriation'
+        + ' where id = ' + session.item['county_dictated_appropriation_id'].tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteScalar.tostring
+      );
+    Label_match_level.text := match_level.tostring;
+    //
     appcommon.bdpconnection.Close;
   end;
 end;
@@ -207,20 +225,20 @@ begin
     appcommon.bdpconnection
     )
     .ExecuteReader;
-  bdr.Read;
-  //
-  life_expectancy_string := bdr['life_expectancy_years'].tostring;
-  if life_expectancy_string <> system.string.EMPTY then begin
-    Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
-    Label_life_expectancy.font.bold := TRUE;
-  end else begin
-    Label_life_expectancy.text := 'PA DOH EMSO has not specified a life expectancy for this category of equipment.';
-    Label_life_expectancy.font.bold := FALSE;
+  if bdr.Read then begin
+    life_expectancy_string := bdr['life_expectancy_years'].tostring;
+    if life_expectancy_string <> system.string.EMPTY then begin
+      Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
+      Label_life_expectancy.font.bold := TRUE;
+    end else begin
+      Label_life_expectancy.text := 'PA DOH EMSO has not specified a life expectancy for this category of equipment.';
+      Label_life_expectancy.font.bold := FALSE;
+    end;
+    Label_allowable_cost.text := bdr['allowable_cost'].tostring;
   end;
-  Label_allowable_cost.text := bdr['allowable_cost'].tostring;
   appcommon.bdpconnection.Close;
   //
-  // Recalc;
+  Recalculate;
 end;
 
 procedure TWebForm_create_new_item_request.Button_cancel_Click(sender: System.Object;
@@ -230,9 +248,39 @@ begin
 end;
 
 procedure TWebForm_create_new_item_request.Recalculate;
+var
+  additional_service_ante: decimal;
+  allowable_cost: decimal;
+  effective_emsof_ante: decimal;
+  max_emsof_ante: decimal;
+  quantity: decimal;
+  total_cost: decimal;
+  unit_cost: decimal;
 begin
   if (TextBox_unit_cost.text <> system.string.EMPTY) and (TextBox_quantity.text <> system.string.EMPTY) then begin
-    Label_total_cost.text := (decimal.Parse(TextBox_unit_cost.text)*decimal.Parse(TextBox_quantity.text)).tostring;
+    //
+    allowable_cost := decimal.Parse(Label_allowable_cost.text);
+    unit_cost := decimal.Parse(TextBox_unit_cost.text);
+    quantity := decimal.Parse(TextBox_quantity.text);
+    if TextBox_additional_service_ante.text <> system.string.EMPTY then begin
+      additional_service_ante := decimal.Parse(TextBox_additional_service_ante.text);
+    end else begin
+      additional_service_ante := 0;
+    end;
+    //
+    total_cost := unit_cost*quantity;
+    //
+    if unit_cost > allowable_cost then begin
+      max_emsof_ante := allowable_cost*quantity*match_level;
+      effective_emsof_ante := max_emsof_ante - additional_service_ante;
+    end else begin
+      max_emsof_ante := total_cost*match_level;
+      effective_emsof_ante := max_emsof_ante - additional_service_ante;
+    end;
+    //
+    Label_total_cost.text := total_cost.tostring;
+    Label_emsof_ante.text := effective_emsof_ante.tostring;
+    Label_min_service_ante.text := (total_cost - max_emsof_ante).tostring;
   end;
 end;
 

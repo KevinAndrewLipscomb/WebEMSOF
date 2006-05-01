@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS county_dictated_appropriation (
   region_dictated_appropriation_id smallint(5) unsigned NOT NULL,
   service_id smallint(5) unsigned NOT NULL,
   amount decimal(10,2) unsigned NOT NULL,
+  match_level float(1) NOT NULL default '0.50',
   PRIMARY KEY  (id),
   KEY service_id (service_id),
   KEY region_dictated_appropriation_id (region_dictated_appropriation_id)
