@@ -16,7 +16,6 @@ library WebEMSOF;
 {%AspMarkupContainer 'new_password.aspx'}
 {%AspMarkupContainer 'service_overview.aspx'}
 {%AspMarkupContainer 'profile.aspx'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%AspMarkupContainer 'change_password.aspx'}
 {%AspMarkupContainer 'change_email_address.aspx'}
 {%AspMarkupContainer 'request_overview.aspx'}
@@ -27,31 +26,10 @@ library WebEMSOF;
 {%AspMarkupContainer 'regional_staffer_overview.aspx'}
 {%AspMarkupContainer 'choose_county_appropriation.aspx'}
 {%AspMarkupContainer 'county_dictated_appropriations.aspx'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\new_password\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\request_overview\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\main\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\county_appropriation\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\county_dictated_appropriations\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\change_email_address\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\Global\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\login_county_coord\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\service_appropriation\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\service_overview\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\DataSet1Unit\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\county_overview\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\change_password\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\login_regional_staffer\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\profile\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\login\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\regional_staffer_overview\default.txaPackage'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\AppCommon\default.txvpck'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\WebEMSOF\default.txvpck'}
 {%AspMarkupContainer 'create_new_service_appropriation.aspx'}
 {%AspMarkupContainer 'delete_service_appropriation.aspx'}
 {%AspMarkupContainer 'create_new_item_request.aspx'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 
 uses
   System.Reflection,
