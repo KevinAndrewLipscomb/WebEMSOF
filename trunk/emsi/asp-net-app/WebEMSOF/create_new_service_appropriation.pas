@@ -127,7 +127,6 @@ var
   bc_get_fy_designator: borland.data.provider.bdpcommand;
   bc_get_service_email_address: borland.data.provider.bdpcommand;
   max_county_dictated_appropriation_id_string: string;
-  match_level: decimal;
   messageText: string;
   service_id_string: string;
 begin
@@ -206,7 +205,7 @@ begin
       + 'You can work on this appropriation by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '.htm' + NEW_LINE
       + NEW_LINE
       + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
       + NEW_LINE
