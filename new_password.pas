@@ -102,7 +102,7 @@ begin
       + 'You can complete this process by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '.htm' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
