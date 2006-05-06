@@ -55,7 +55,6 @@ type
     Label_match_level: System.Web.UI.WebControls.Label;
     Label_min_service_ante: System.Web.UI.WebControls.Label;
     TextBox_additional_service_ante: System.Web.UI.WebControls.TextBox;
-    Label_sponsor_county: System.Web.UI.WebControls.Label;
     Label_emsof_ante: System.Web.UI.WebControls.Label;
     Label_allowable_cost: System.Web.UI.WebControls.Label;
     RequiredFieldValidator_equipment_category: System.Web.UI.WebControls.RequiredFieldValidator;
@@ -96,6 +95,11 @@ end;
 const ID = '$Id$';
 
 var
+  allowable_cost: decimal;
+  bdri_equipment_category_allowable_cost: cardinal;
+  bdri_equipment_category_funding_level: cardinal;
+  cmdText_get_equipment_category_monetary_details: string;
+  funding_level: decimal;
   match_level: decimal;
 
 procedure TWebForm_create_new_item_request.Page_Load(sender: System.Object; e: System.EventArgs);
@@ -155,13 +159,35 @@ begin
       (
       borland.data.provider.bdpcommand.Create
         (
-        'select match_level from county_dictated_appropriation'
-        + ' where id = ' + session.item['county_dictated_appropriation_id'].tostring,
+        'select factor'
+        + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
+        + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
         appcommon.bdpconnection
         )
         .ExecuteScalar.tostring
       );
-    Label_match_level.text := match_level.tostring;
+    Label_match_level.text := cardinal(match_level*100).tostring + '%';
+    //
+    // Build cmdText_get_equipment_category_monetary_details
+    //
+    cmdText_get_equipment_category_monetary_details := 'select life_expectancy_years,'
+    + ' allowable_cost,';
+    if match_level = 0.60 then begin
+      cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+      + 'funding_level_rural as funding_level';
+    end else if match_level = 1.00 then begin
+      cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+      + 'allowable_cost as funding_level';
+    end else begin
+      cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+      + 'funding_level_nonrural as funding_level';
+    end;
+    cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+    + ' from eligible_provider_equipment_list'
+    + ' where code = ';
+    //    Mind these indices if the query changes.
+    bdri_equipment_category_allowable_cost := 1;
+    bdri_equipment_category_funding_level := 2;
     //
     appcommon.bdpconnection.Close;
   end;
@@ -218,15 +244,14 @@ begin
   appcommon.bdpconnection.Open;
   bdr := borland.data.provider.bdpcommand.Create
     (
-    'select life_expectancy_years,'
-    + ' allowable_cost'
-    + ' from eligible_provider_equipment_list'
-    + ' where code = ' + Safe(DropDownList_equipment_category.SelectedValue,NUM),
+    cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
     appcommon.bdpconnection
     )
     .ExecuteReader;
   if bdr.Read then begin
+    //
     life_expectancy_string := bdr['life_expectancy_years'].tostring;
+    //
     if life_expectancy_string <> system.string.EMPTY then begin
       Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
       Label_life_expectancy.font.bold := TRUE;
@@ -234,7 +259,27 @@ begin
       Label_life_expectancy.text := 'PA DOH EMSO has not specified a life expectancy for this category of equipment.';
       Label_life_expectancy.font.bold := FALSE;
     end;
-    Label_allowable_cost.text := bdr['allowable_cost'].tostring;
+    //
+    if not bdr.IsDbNull(bdri_equipment_category_allowable_cost) then begin
+      Label_allowable_cost.text := bdr['allowable_cost'].tostring;
+      allowable_cost := decimal.Parse(Label_allowable_cost.text);
+    end else begin
+      Label_allowable_cost.text := '(none specified)';
+      allowable_cost := decimal.maxvalue;
+    end;
+    //
+    if not bdr.IsDbNull(bdri_equipment_category_funding_level) then begin
+      funding_level := decimal.Parse(bdr['funding_level'].tostring);
+    end else begin
+      funding_level := decimal.maxvalue;
+    end;
+    //
+    if funding_level = allowable_cost then begin
+      Label_match_level.text := '100%';
+    end else begin
+      Label_match_level.text := cardinal(match_level*100).tostring + '%';
+    end;
+    //
   end;
   appcommon.bdpconnection.Close;
   //
@@ -250,7 +295,6 @@ end;
 procedure TWebForm_create_new_item_request.Recalculate;
 var
   additional_service_ante: decimal;
-  allowable_cost: decimal;
   effective_emsof_ante: decimal;
   max_emsof_ante: decimal;
   quantity: decimal;
@@ -259,7 +303,6 @@ var
 begin
   if (TextBox_unit_cost.text <> system.string.EMPTY) and (TextBox_quantity.text <> system.string.EMPTY) then begin
     //
-    allowable_cost := decimal.Parse(Label_allowable_cost.text);
     unit_cost := decimal.Parse(TextBox_unit_cost.text);
     quantity := decimal.Parse(TextBox_quantity.text);
     if TextBox_additional_service_ante.text <> system.string.EMPTY then begin
@@ -269,18 +312,42 @@ begin
     end;
     //
     total_cost := unit_cost*quantity;
+    Label_total_cost.text := total_cost.tostring;
     //
-    if unit_cost > allowable_cost then begin
-      max_emsof_ante := allowable_cost*quantity*match_level;
-      effective_emsof_ante := max_emsof_ante - additional_service_ante;
+    if ((match_level = 1.00) and (allowable_cost = decimal.maxvalue))
+        //
+        // This is the zebra case where a distressed service wants an item with no specified allowable cost (initially an ambulance
+        // or squad/response vehicle).  Basically, they can have whatever they want, up to the limit of the remainder of their
+        // appropriation.  Consideration of their appropriation is not within the scope of this form, so we can indicate that the
+        // request can be fully funded.
+        //
+      or ((unit_cost <= allowable_cost) and (funding_level = allowable_cost))
+        //
+        // This is the case where items in an "equipment category" are always fully funded (up to the limit of a service's
+        // appropriation, which is not within the scope of this form).  This initially describes only Data Collection Software.
+        //
+    then begin
+      //
+      max_emsof_ante := total_cost;
+      //
     end else begin
-      max_emsof_ante := total_cost*match_level;
-      effective_emsof_ante := max_emsof_ante - additional_service_ante;
+      //
+      if unit_cost > allowable_cost then begin
+        max_emsof_ante := math.Max(allowable_cost*match_level,funding_level)*quantity;
+      end else begin
+        max_emsof_ante := total_cost*match_level;
+      end;
+      //
     end;
     //
-    Label_total_cost.text := total_cost.tostring;
-    Label_emsof_ante.text := effective_emsof_ante.tostring;
-    Label_min_service_ante.text := (total_cost - max_emsof_ante).tostring;
+    // A service may elect not to use the max_emsof_ante.  An example would be when they know that doing so, in the context of all
+    // their other request items, would draw more EMSOF funds than they were appropriated.  So account for if they want to ante up
+    // more of the cost themselves.
+    //
+    effective_emsof_ante := max_emsof_ante - additional_service_ante;
+    //
+    Label_emsof_ante.text := effective_emsof_ante.tostring('F2');
+    Label_min_service_ante.text := (total_cost - max_emsof_ante).tostring('F2');
   end;
 end;
 

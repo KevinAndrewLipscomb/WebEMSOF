@@ -23,7 +23,7 @@ type
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
-    procedure AddAppropriation(amount_string: string; service_id_string: string; be_rural: boolean);
+    procedure AddAppropriation;
     procedure Bind_services;
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -101,12 +101,7 @@ end;
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_stop_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  AddAppropriation
-    (
-    Safe(TextBox_new_amount.Text.Trim,REAL_NUM),
-    Safe(DropDownList_services.SelectedValue,NUM),
-    (RadioButtonList_match_level.selectedvalue = 'Rural')
-    );
+  AddAppropriation;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 
@@ -119,42 +114,28 @@ end;
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_repeat_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  AddAppropriation
-    (
-    Safe(TextBox_new_amount.Text.Trim,REAL_NUM),
-    Safe(DropDownList_services.SelectedValue,NUM),
-    (RadioButtonList_match_level.selectedvalue = 'Rural')
-    );
+  AddAppropriation;
   TextBox_new_amount.Text := system.string.EMPTY;
   DropDownList_services.SelectedIndex := -1;
 end;
 
-procedure TWebForm_create_new_service_appropriation.AddAppropriation
-  (
-  amount_string: string;
-  service_id_string: string;
-  be_rural: boolean
-  );
+procedure TWebForm_create_new_service_appropriation.AddAppropriation;
 var
   amount: decimal;
+  amount_string: string;
   bc_get_cc_email_address: borland.data.provider.bdpcommand;
   bc_get_fy_designator: borland.data.provider.bdpcommand;
   bc_get_service_email_address: borland.data.provider.bdpcommand;
   max_county_dictated_appropriation_id_string: string;
   match_level: decimal;
   messageText: string;
+  service_id_string: string;
 begin
+  amount_string := Safe(TextBox_new_amount.Text.Trim,REAL_NUM);
+  service_id_string := Safe(DropDownList_services.SelectedValue,NUM);
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
     if amount > 0 then begin
-      //
-      // Determine the appropriate numeric match level.
-      //
-      match_level := 0.50;
-      if RadioButtonList_match_level.selectedvalue = 'rural' then begin
-        match_level := 0.60;
-      end;
-      //
       appcommon.bdpconnection.Open;
       //
       // Record the new appropriation.
@@ -165,7 +146,7 @@ begin
         + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
         +   ' service_id = ' + service_id_string + ','
         +   ' amount = ' + amount.tostring + ','
-        +   ' match_level = ' + match_level.tostring,
+        +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM),
         appcommon.bdpconnection
         )
         .ExecuteNonQuery;
@@ -222,13 +203,6 @@ begin
       messageText := 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
       + 'of ' + amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
       + NEW_LINE
-      + 'Furthermore, the above coordinator has designated your service as a ';
-      if be_rural then begin
-        messageText := messageText + 'RURAL service.' + NEW_LINE;
-      end else begin
-        messageText := messageText + 'STANDARD (non-rural) service.' + NEW_LINE;
-      end;
-      messageText := messageText + NEW_LINE
       + 'You can work on this appropriation by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'

@@ -35,8 +35,8 @@
 			  <p align="right">Match level:</p></td>
 			  <td>
                 <ASP:RadioButtonList id="RadioButtonList_match_level" runat="server" repeatdirection="Horizontal">
-                  <ASP:ListItem value="standard" selected="True">Standard (50%)</ASP:ListItem>
-                  <ASP:ListItem value="rural">Rural (60%)</ASP:ListItem>
+                  <ASP:ListItem value="1" selected="True">Standard (50%)</ASP:ListItem>
+                  <ASP:ListItem value="2">Rural (60%)</ASP:ListItem>
                 </ASP:RadioButtonList></td>
 			  <td></td>
 			</tr>

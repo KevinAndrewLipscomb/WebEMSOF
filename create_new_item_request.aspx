@@ -92,9 +92,7 @@
 			</tr>
 			<tr>
 			  <td>
-			  <p align="right">Match level dictated by
-				  <ASP:Label id="Label_sponsor_county" runat="server"></ASP:Label>&nbsp;County:
-  <br><small><i>May not apply for all equipment categories</i></small></p></td>
+			  <p align="right">Effective match level:</p></td>
 			  <td>
 				<ASP:Label id="Label_match_level" runat="server"></ASP:Label></td>
 			  <td></td>

@@ -53,10 +53,11 @@ CREATE TABLE IF NOT EXISTS county_dictated_appropriation (
   region_dictated_appropriation_id smallint(5) unsigned NOT NULL,
   service_id smallint(5) unsigned NOT NULL,
   amount decimal(10,2) unsigned NOT NULL,
-  match_level float(1) NOT NULL default '0.50',
+  match_level_id tinyint(3) unsigned NOT NULL default '1',
   PRIMARY KEY  (id),
   KEY service_id (service_id),
-  KEY region_dictated_appropriation_id (region_dictated_appropriation_id)
+  KEY region_dictated_appropriation_id (region_dictated_appropriation_id),
+  KEY match_level_id (match_level_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 
@@ -260,6 +261,29 @@ INSERT INTO item_status_code_description_map VALUES (2, 'NO invoice on file at r
 INSERT INTO item_status_code_description_map VALUES (3, 'Invoice on file at regional council');
 INSERT INTO item_status_code_description_map VALUES (4, 'NO canceled check on file at regional council');
 INSERT INTO item_status_code_description_map VALUES (5, 'Canceled check on file at regional council');
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `match_level`
+-- 
+
+CREATE TABLE match_level (
+  id tinyint(3) unsigned NOT NULL auto_increment,
+  `name` varchar(31) character set utf8 NOT NULL,
+  factor decimal(3,2) unsigned NOT NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY factor (factor),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- 
+-- Dumping data for table `match_level`
+-- 
+
+INSERT INTO match_level VALUES (1, 'Standard', 0.50);
+INSERT INTO match_level VALUES (2, 'Rural', 0.60);
+INSERT INTO match_level VALUES (3, 'Distressed', 1.00);
 
 -- --------------------------------------------------------
 
@@ -496,7 +520,8 @@ INSERT INTO state_dictated_appropriation VALUES (1,1,1,350172.00);
 -- 
 ALTER TABLE `county_dictated_appropriation`
   ADD CONSTRAINT county_dictated_appropriation_ibfk_1 FOREIGN KEY (region_dictated_appropriation_id) REFERENCES region_dictated_appropriation (id),
-  ADD CONSTRAINT county_dictated_appropriation_ibfk_2 FOREIGN KEY (service_id) REFERENCES service (id);
+  ADD CONSTRAINT county_dictated_appropriation_ibfk_2 FOREIGN KEY (service_id) REFERENCES service (id),
+  ADD CONSTRAINT county_dictated_appropriation_ibfk_3 FOREIGN KEY (match_level_id) REFERENCES match_level (id);
 
 -- 
 -- Constraints for table `county_user`
