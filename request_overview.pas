@@ -15,6 +15,7 @@ type
     procedure InitializeComponent;
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure DataGrid_items_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -56,6 +57,7 @@ procedure TWebForm_request_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
+  Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -64,18 +66,22 @@ const ID = '$Id$';
 
 var
   be_before_deadline: boolean;
-  county_dictated_appropriation_amount: decimal;
   dgi_master_id: cardinal;
   dgi_priority: cardinal;
   dgi_item_description: cardinal;
   dgi_status: cardinal;
+  dgi_linkbutton_select: cardinal;
+  dgi_linkbutton_increase_priority: cardinal;
+  dgi_linkbutton_decrease_priority: cardinal;
   dgi_emsof_ante: cardinal;
   num_items: cardinal;
-  sum_of_emsof_antes: decimal;
 
 procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.EventArgs);
-//var
+var
+  bdr: borland.data.provider.bdpdatareader;
+  county_dictated_appropriation_amount: decimal;
 //  make_item_requests_deadline: system.datetime;
+  sum_of_emsof_antes: decimal;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -89,6 +95,9 @@ begin
     dgi_item_description := 2;
     dgi_emsof_ante := 3;
     dgi_status := 4;
+    dgi_linkbutton_select := 5;
+    dgi_linkbutton_increase_priority := 6;
+    dgi_linkbutton_decrease_priority := 7;
     num_items := 0;
     sum_of_emsof_antes := 0;
     //
@@ -131,6 +140,28 @@ begin
 //      //
 //    end;
     //
+    // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
+    // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
+    //
+    bdr := borland.data.provider.bdpcommand.Create
+      (
+      'select num_items,value from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
+      appcommon.bdpconnection
+      )
+      .ExecuteReader;
+    bdr.Read;
+    num_items := bdr['num_items'].GetHashCode;
+    sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
+    //
+    if num_items = 0 then begin
+      Label_no_appropriations.Visible := TRUE;
+    end else begin
+      DataGrid_items.Visible := TRUE;
+    end;
+    //
+    Label_sum_of_emsof_antes.text := sum_of_emsof_antes.tostring('C');
+    Label_unused_amount.Text := (county_dictated_appropriation_amount - sum_of_emsof_antes).tostring('C');
+    //
     AppCommon.BdpConnection.Close;
     //
     Bind_items;  // also affected by be_before_deadline
@@ -144,6 +175,24 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_overview.DataGrid_items_ItemDataBound(sender: System.Object;
+  e: System.Web.UI.WebControls.DataGridItemEventArgs);
+begin
+  if (e.item.itemtype = listitemtype.alternatingitem)
+    or (e.item.itemtype = listitemtype.edititem)
+    or (e.item.itemtype = listitemtype.item)
+    or (e.item.itemtype = listitemtype.selecteditem)
+  then begin
+    //
+    // We are dealing with a data row, not a header or footer row.
+    //
+    e.item.Cells[dgi_linkbutton_select].controls.item[0].visible := be_before_deadline;
+    e.item.Cells[dgi_linkbutton_increase_priority].controls.item[0].visible := (e.item.itemindex > 0) and be_before_deadline;
+    e.item.Cells[dgi_linkbutton_decrease_priority].controls.item[0].visible :=
+      (e.item.itemindex < integer(num_items) - 1) and be_before_deadline;
+  end;
 end;
 
 procedure TWebForm_request_overview.LinkButton_change_email_address_Click(sender: System.Object;
@@ -160,7 +209,6 @@ end;
 
 procedure TWebForm_request_overview.Bind_items;
 var
-  be_datagrid_empty: boolean;
   cmdText: string;
 begin
   AppCommon.BdpConnection.Open;
@@ -181,22 +229,9 @@ begin
   DataGrid_items.DataSource :=
     borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
   DataGrid_items.DataBind;
-  be_datagrid_empty := (num_items = 0);
-  //
-  // Manage control visibilities.
-  //
-  Label_no_appropriations.Visible := be_datagrid_empty;
-  DataGrid_items.Visible := not be_datagrid_empty;
-  //
-  // Manage non-DataGrid control properties.
-  //
-  Label_sum_of_emsof_antes.text := sum_of_emsof_antes.ToString('C');
-  Label_unused_amount.Text := (county_dictated_appropriation_amount - sum_of_emsof_antes).tostring('C');
   //
   // Clear aggregation vars for next bind, if any.
   //
-  num_items := 0;
-  sum_of_emsof_antes := 0;
   AppCommon.BdpConnection.Close;
 end;
 

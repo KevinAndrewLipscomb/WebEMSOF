@@ -69,17 +69,28 @@
 			visible="False">
             <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
             <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
+            <HeaderStyle font-bold="True" backcolor="#E0E0E0"></HeaderStyle>
             <Columns>
               <ASP:BoundColumn visible="False" datafield="master_id" readonly="True">
                 <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
               </ASP:BoundColumn>
-              <ASP:BoundColumn datafield="priority" readonly="True" headertext="Priority"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="priority" readonly="True" headertext="Priority">
+                <ItemStyle horizontalalign="Center"></ItemStyle>
+              </ASP:BoundColumn>
               <ASP:BoundColumn datafield="item_description" readonly="True" headertext="Description"></ASP:BoundColumn>
-              <ASP:BoundColumn datafield="emsof_ante" headertext="EMSOF ante"></ASP:BoundColumn>
+              <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF ante" dataformatstring="{0:C}">
+                <ItemStyle horizontalalign="Right"></ItemStyle>
+              </ASP:BoundColumn>
               <ASP:BoundColumn datafield="status" readonly="True" headertext="Status"></ASP:BoundColumn>
-              <ASP:ButtonColumn text="Select" commandname="Select"></ASP:ButtonColumn>
-              <ASP:ButtonColumn text="Increase priority" commandname="IncreasePriority"></ASP:ButtonColumn>
-              <ASP:ButtonColumn text="Decrease priority" commandname="DecreasePriority"></ASP:ButtonColumn>
+              <ASP:ButtonColumn text="Select" commandname="Select">
+                <ItemStyle forecolor="#0000FF"></ItemStyle>
+              </ASP:ButtonColumn>
+              <ASP:ButtonColumn text="Increase priority" commandname="IncreasePriority">
+                <ItemStyle forecolor="#0000FF"></ItemStyle>
+              </ASP:ButtonColumn>
+              <ASP:ButtonColumn text="Decrease priority" commandname="DecreasePriority">
+                <ItemStyle forecolor="#0000FF"></ItemStyle>
+              </ASP:ButtonColumn>
             </Columns>
             <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
         </p>
