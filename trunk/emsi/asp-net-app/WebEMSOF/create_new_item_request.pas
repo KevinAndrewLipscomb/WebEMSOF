@@ -26,11 +26,7 @@ type
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
     procedure Recalculate;
-    procedure AddItem
-      (
-      amount_string: string;
-      service_id_string: string
-      );
+    procedure AddItem;
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -166,7 +162,7 @@ begin
         )
         .ExecuteScalar.tostring
       );
-    Label_match_level.text := cardinal(match_level*100).tostring + '%';
+    Label_match_level.text := match_level.tostring('P0');
     //
     // Build cmdText_get_equipment_category_monetary_details
     //
@@ -223,16 +219,27 @@ end;
 procedure TWebForm_create_new_item_request.Button_submit_and_stop_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-//  AddItem(Safe(TextBox_new_amount.Text.Trim,REAL_NUM),Safe(DropDownList_services.SelectedValue,NUM));
+  AddItem;
   server.Transfer('request_overview.aspx');
 end;
 
 procedure TWebForm_create_new_item_request.Button_submit_and_repeat_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-//  AddItem(Safe(TextBox_new_amount.Text.Trim,REAL_NUM),Safe(DropDownList_services.SelectedValue,NUM));
-//  TextBox_new_amount.Text := system.string.EMPTY;
+  AddItem;
   DropDownList_equipment_category.SelectedIndex := -1;
+  Label_life_expectancy.text := '';
+  TextBox_make_model.text := '';
+  TextBox_place_kept.text := '';
+  RadioButtonList_condition.selectedindex := -1;
+  Label_allowable_cost.text := '';
+  TextBox_unit_cost.text := '';
+  TextBox_quantity.text := '';
+  Label_total_cost.text := '';
+  Label_match_level.text := match_level.tostring('P0');
+  Label_min_service_ante.text := '';
+  TextBox_additional_service_ante.text := '';
+  Label_emsof_ante.text := '';
 end;
 
 procedure TWebForm_create_new_item_request.DropDownList_equipment_category_SelectedIndexChanged(sender: System.Object;
@@ -277,7 +284,7 @@ begin
     if funding_level = allowable_cost then begin
       Label_match_level.text := '100%';
     end else begin
-      Label_match_level.text := cardinal(match_level*100).tostring + '%';
+      Label_match_level.text := match_level.tostring('P0');
     end;
     //
   end;
@@ -312,7 +319,7 @@ begin
     end;
     //
     total_cost := unit_cost*quantity;
-    Label_total_cost.text := total_cost.tostring;
+    Label_total_cost.text := total_cost.tostring('N2');
     //
     if ((match_level = 1.00) and (allowable_cost = decimal.maxvalue))
         //
@@ -346,112 +353,58 @@ begin
     //
     effective_emsof_ante := max_emsof_ante - additional_service_ante;
     //
-    Label_emsof_ante.text := effective_emsof_ante.tostring('F2');
-    Label_min_service_ante.text := (total_cost - max_emsof_ante).tostring('F2');
+    Label_emsof_ante.text := effective_emsof_ante.tostring('N2');
+    Label_min_service_ante.text := (total_cost - max_emsof_ante).tostring('N2');
   end;
 end;
 
-procedure TWebForm_create_new_item_request.AddItem
-  (
-  amount_string: string;
-  service_id_string: string
-  );
+procedure TWebForm_create_new_item_request.AddItem;
 var
-  amount: decimal;
-  bc_get_cc_email_address: borland.data.provider.bdpcommand;
-  bc_get_fy_designator: borland.data.provider.bdpcommand;
-  bc_get_service_email_address: borland.data.provider.bdpcommand;
-  max_county_dictated_appropriation_id_string: string;
+  priority_string: string;
 begin
-  if amount_string <> system.string.EMPTY then begin
-    amount := decimal.Parse(amount_string);
-    if amount > 0 then begin
-      appcommon.bdpconnection.Open;
-      //
-      // Record the new appropriation.
-      //
-      borland.data.provider.bdpcommand.Create
-        (
-        'insert into county_dictated_appropriation'
-        + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
-        +   ' service_id = ' + service_id_string + ','
-        +   ' amount = ' + amount.tostring,
-        appcommon.bdpconnection
-        )
-        .ExecuteNonQuery;
-      //
-      // Initialize a new emsof_request_master record, since at this time there must be a one-to-one relationship between a county-
-      // dictated appropriation and an EMSOF request.
-      //
-      //   Get max(county_dictated_appropriation.id), which must be the id of the county_dictated_appropriation record that we just
-      //   inserted.
-      //
-      max_county_dictated_appropriation_id_string := borland.data.provider.bdpcommand.Create
-        (
-        'select max(id) from county_dictated_appropriation',
-        appcommon.bdpconnection
-        )
-        .ExecuteScalar.tostring;
-      //
-      //    Insert and link back to the above max id.
-      //
-      borland.data.provider.bdpcommand.Create
-        (
-        'insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string,
-        appcommon.bdpconnection
-        )
-        .ExecuteNonQuery;
-      //
-      // Send notice of the appropriation to the service's email address of record.
-      //
-      //   Set up the command to get service's email address of record.
-      bc_get_service_email_address := borland.data.provider.bdpcommand.Create
-        (
-        'select password_reset_email_address from service_user '
-        + 'where id ="' + service_id_string + '"',
-        AppCommon.BdpConnection
-        );
-      //   Set up the command to get the appropriate fiscal year designator.
-      bc_get_fy_designator := borland.data.provider.bdpcommand.Create
-        (
-        'select designator'
-        + ' from fiscal_year'
-        +   ' join state_dictated_appropriation on (state_dictated_appropriation.fiscal_year_id=fiscal_year.id)'
-        +   ' join region_dictated_appropriation'
-        +     ' on (region_dictated_appropriation.state_dictated_appropriation_id=state_dictated_appropriation.id)'
-        + ' where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].tostring,
-        appcommon.bdpconnection
-        );
-      //   Set up the command to get the County Coorindator's email address.
-      bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
-        (
-        'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
-        AppCommon.BdpConnection
-        );
-      //   Send the email message.
-      smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-      smtpmail.Send
-        (
-        bc_get_cc_email_address.ExecuteScalar.tostring,
-        bc_get_service_email_address.ExecuteScalar.tostring,
-        'New ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation of '
-        + amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
-        + NEW_LINE
-        + 'You can work on this appropriation by visiting:' + NEW_LINE
-        + NEW_LINE
-        + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-        + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '.htm' + NEW_LINE
-        + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
-        + NEW_LINE
-        + NEW_LINE
-        + '-- ' + ConfigurationSettings.AppSettings['application_name']
-        );
-      //
-      appcommon.bdpconnection.Close;
-    end;
-  end;
+  appcommon.bdpconnection.Open;
+  //
+  // Get the number of items entered against this request previously, and initialize this item to have a priority just lower than
+  // all previous items.
+  //
+  priority_string := borland.data.provider.bdpcommand.Create
+    (
+    'select (num_items + 1) from emsof_request_master where id = ' + session.Item['emsof_request_master_id'].tostring,
+    appcommon.bdpconnection
+    )
+    .ExecuteScalar.tostring;
+  //
+  // Record the new request item.
+  //
+  borland.data.provider.bdpcommand.Create
+    (
+    'insert into emsof_request_detail'
+    + ' set master_id = ' + session.Item['emsof_request_master_id'].tostring + ','
+    +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
+    +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
+    +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
+    +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
+    +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
+    +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
+    +   ' priority = ' + priority_string,
+    appcommon.bdpconnection
+    )
+    .ExecuteNonQuery;
+  //
+  // Update the master record.
+  //
+  borland.data.provider.bdpcommand.Create
+    (
+    'update emsof_request_master'
+    + ' set status_code = 2,'
+    +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
+    +   ' num_items = num_items + 1'
+    + ' where id = ' + session.Item['emsof_request_master_id'].tostring,
+    appcommon.bdpconnection
+    )
+    .ExecuteNonQuery;
+  //
+  appcommon.bdpconnection.Close;
 end;
 
 end.

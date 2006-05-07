@@ -30,6 +30,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'delete_service_appropriation.aspx'}
 {%AspMarkupContainer 'create_new_item_request.aspx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
+{%File 'schema.sql'}
 
 uses
   System.Reflection,
