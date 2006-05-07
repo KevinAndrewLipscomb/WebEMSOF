@@ -32,13 +32,13 @@
 			  </tr>
 			  <tr>
 				<td><p align="right">Make &amp; model:</p></td>
-				<td><ASP:TextBox id="TextBox_make_model" runat="server" width="20pc"></ASP:TextBox></td>
-				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_make_model" runat="server" errormessage="Please enter a make and model." font-bold="True" controltovalidate="TextBox_make_model">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_make_model" runat="server" font-bold="True" errormessage="Please enter a valid make and model." validationexpression="[a-zA-z0-9#\*\(\)-\+/\. ]+" controltovalidate="TextBox_make_model">!ERR!</ASP:RegularExpressionValidator></td>
+				<td><ASP:TextBox id="TextBox_make_model" runat="server" width="20pc" maxlength="127"></ASP:TextBox></td>
+				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_make_model" runat="server" errormessage="Please enter a make and model." font-bold="True" controltovalidate="TextBox_make_model">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_make_model" runat="server" font-bold="True" errormessage="Please enter a valid make and model." validationexpression="[0-9a-zA-Z#\*\(\)\-\+/\. ]+" controltovalidate="TextBox_make_model">!ERR!</ASP:RegularExpressionValidator></td>
 			  </tr>
 			  <tr>
 				<td><p align="right">Place where equipment will be kept:</p></td>
-				<td><ASP:TextBox id="TextBox_place_kept" runat="server" width="20pc"></ASP:TextBox></td>
-				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_place_kept" runat="server" errormessage="Please enter a place where the equipment will be kept." font-bold="True" controltovalidate="TextBox_place_kept">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_place_kept" runat="server" font-bold="True" errormessage="Please enter a valid place where the equipment will be kept." validationexpression="[a-zA-z0-9#\(\)-/\. ]+" controltovalidate="TextBox_place_kept">!ERR!</ASP:RegularExpressionValidator></td>
+				<td><ASP:TextBox id="TextBox_place_kept" runat="server" width="20pc" maxlength="127"></ASP:TextBox></td>
+				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_place_kept" runat="server" errormessage="Please enter a place where the equipment will be kept." font-bold="True" controltovalidate="TextBox_place_kept">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_place_kept" runat="server" font-bold="True" errormessage="Please enter a valid place where the equipment will be kept." validationexpression="[0-9a-zA-Z#\(\)\-/\. ]+" controltovalidate="TextBox_place_kept">!ERR!</ASP:RegularExpressionValidator></td>
 			  </tr>
 			  <tr>
 				<td><p align="right">Will the equipment be new or refurbished?:</p></td>
@@ -65,7 +65,7 @@
 						<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_unit_cost" runat="server" width="6pc"></ASP:TextBox></td>
-							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_1" runat="server" font-size="Smaller">Recalculate</ASP:LinkButton></td>
+							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_1" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_unit_cost" runat="server" errormessage="Please enter a unit cost." font-bold="True" controltovalidate="TextBox_unit_cost">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_unit_cost" runat="server" font-bold="True" errormessage="Please enter a valid unit cost." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_unit_cost">!ERR!</ASP:RegularExpressionValidator></td>

@@ -19,7 +19,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- 
 
 DROP TABLE IF EXISTS county_code_name_map;
-CREATE TABLE IF NOT EXISTS county_code_name_map (
+CREATE TABLE county_code_name_map (
   `code` tinyint(3) unsigned NOT NULL auto_increment,
   `name` varchar(15) NOT NULL,
   PRIMARY KEY  (`code`),
@@ -48,7 +48,7 @@ INSERT INTO county_code_name_map VALUES (10, 'Westmoreland');
 -- 
 
 DROP TABLE IF EXISTS county_dictated_appropriation;
-CREATE TABLE IF NOT EXISTS county_dictated_appropriation (
+CREATE TABLE county_dictated_appropriation (
   id int(10) unsigned NOT NULL auto_increment,
   region_dictated_appropriation_id smallint(5) unsigned NOT NULL,
   service_id smallint(5) unsigned NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS county_dictated_appropriation (
 -- 
 
 DROP TABLE IF EXISTS county_user;
-CREATE TABLE IF NOT EXISTS county_user (
+CREATE TABLE county_user (
   id tinyint(3) unsigned NOT NULL,
   encoded_password char(40) default NULL,
   be_stale_password tinyint(1) NOT NULL default '1',
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS county_user (
 -- 
 
 DROP TABLE IF EXISTS eligible_provider_equipment_list;
-CREATE TABLE IF NOT EXISTS eligible_provider_equipment_list (
+CREATE TABLE eligible_provider_equipment_list (
   `code` smallint(5) unsigned NOT NULL auto_increment,
   description varchar(127) NOT NULL,
   life_expectancy_years tinyint(3) unsigned default NULL,
@@ -155,11 +155,15 @@ values
 -- 
 
 DROP TABLE IF EXISTS emsof_request_detail;
-CREATE TABLE IF NOT EXISTS emsof_request_detail (
+CREATE TABLE emsof_request_detail (
   master_id bigint(20) unsigned NOT NULL,
   equipment_code smallint(5) unsigned NOT NULL,
+  make_model varchar(127) NOT NULL,
+  place_kept varchar(127) NOT NULL,
+  quantity smallint(5) unsigned NOT NULL,
+  unit_cost decimal(10,2) unsigned NOT NULL,
   emsof_ante decimal(10,2) unsigned NOT NULL,
-  status_code tinyint(3) unsigned NOT NULL,
+  status_code tinyint(3) unsigned NOT NULL default '1',
   priority smallint(5) unsigned NOT NULL,
   PRIMARY KEY  (master_id,priority),
   KEY equipment_code (equipment_code),
@@ -178,11 +182,12 @@ CREATE TABLE IF NOT EXISTS emsof_request_detail (
 -- 
 
 DROP TABLE IF EXISTS emsof_request_master;
-CREATE TABLE IF NOT EXISTS emsof_request_master (
+CREATE TABLE emsof_request_master (
   id bigint(20) unsigned NOT NULL auto_increment,
   county_dictated_appropriation_id int(10) unsigned NOT NULL,
   status_code tinyint(3) NOT NULL default '1',
   `value` decimal(10,2) unsigned NOT NULL default '0.00',
+  num_items smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (id),
   KEY status_code (status_code),
   KEY county_dictated_appropriation_id (county_dictated_appropriation_id)
@@ -200,7 +205,7 @@ CREATE TABLE IF NOT EXISTS emsof_request_master (
 -- 
 
 DROP TABLE IF EXISTS fiscal_year;
-CREATE TABLE IF NOT EXISTS fiscal_year (
+CREATE TABLE fiscal_year (
   id smallint(5) unsigned NOT NULL auto_increment,
   designator char(6) NOT NULL,
   PRIMARY KEY  (id),
@@ -220,7 +225,7 @@ INSERT INTO fiscal_year VALUES (1, 'FY0506');
 -- 
 
 DROP TABLE IF EXISTS fy_calendar;
-CREATE TABLE IF NOT EXISTS fy_calendar (
+CREATE TABLE fy_calendar (
   id smallint(5) unsigned NOT NULL auto_increment,
   fiscal_year_id smallint(5) unsigned NOT NULL,
   milestone_code smallint(5) unsigned NOT NULL,
@@ -246,7 +251,7 @@ INSERT INTO fy_calendar VALUES (4, 1, 4, '2006-05-31 23:59:59');
 -- 
 
 DROP TABLE IF EXISTS item_status_code_description_map;
-CREATE TABLE IF NOT EXISTS item_status_code_description_map (
+CREATE TABLE item_status_code_description_map (
   `code` tinyint(3) unsigned NOT NULL auto_increment,
   description varchar(63) NOT NULL,
   PRIMARY KEY  (`code`)
@@ -292,7 +297,7 @@ INSERT INTO match_level VALUES (3, 'Distressed', 1.00);
 -- 
 
 DROP TABLE IF EXISTS milestone_code_name_map;
-CREATE TABLE IF NOT EXISTS milestone_code_name_map (
+CREATE TABLE milestone_code_name_map (
   `code` smallint(5) unsigned NOT NULL auto_increment,
   `name` varchar(63) NOT NULL,
   PRIMARY KEY  (`code`)
@@ -314,7 +319,7 @@ INSERT INTO milestone_code_name_map VALUES (4, 'emsof-service-canceled-check-sub
 -- 
 
 DROP TABLE IF EXISTS region_code_name_map;
-CREATE TABLE IF NOT EXISTS region_code_name_map (
+CREATE TABLE region_code_name_map (
   `code` tinyint(3) unsigned NOT NULL auto_increment,
   `name` varchar(15) NOT NULL,
   PRIMARY KEY  (`code`),
@@ -334,7 +339,7 @@ INSERT INTO region_code_name_map VALUES (1, 'EMSI');
 -- 
 
 DROP TABLE IF EXISTS region_dictated_appropriation;
-CREATE TABLE IF NOT EXISTS region_dictated_appropriation (
+CREATE TABLE region_dictated_appropriation (
   id smallint(5) unsigned NOT NULL auto_increment,
   state_dictated_appropriation_id smallint(5) unsigned NOT NULL,
   county_code tinyint(3) unsigned NOT NULL,
@@ -366,7 +371,7 @@ INSERT INTO region_dictated_appropriation VALUES (10,1,10,52066.00);
 -- 
 
 DROP TABLE IF EXISTS regional_staffer;
-CREATE TABLE IF NOT EXISTS regional_staffer (
+CREATE TABLE regional_staffer (
   id smallint(5) unsigned NOT NULL auto_increment,
   last_name varchar(63) NOT NULL,
   first_name varchar(63) NOT NULL,
@@ -386,7 +391,7 @@ CREATE TABLE IF NOT EXISTS regional_staffer (
 -- 
 
 DROP TABLE IF EXISTS regional_staffer_user;
-CREATE TABLE IF NOT EXISTS regional_staffer_user (
+CREATE TABLE regional_staffer_user (
   id smallint(5) unsigned NOT NULL,
   encoded_password char(40) default NULL,
   be_stale_password tinyint(1) NOT NULL default '1',
@@ -407,7 +412,7 @@ CREATE TABLE IF NOT EXISTS regional_staffer_user (
 -- 
 
 DROP TABLE IF EXISTS request_status_code_description_map;
-CREATE TABLE IF NOT EXISTS request_status_code_description_map (
+CREATE TABLE request_status_code_description_map (
   `code` tinyint(4) NOT NULL auto_increment,
   description varchar(63) NOT NULL,
   PRIMARY KEY  (`code`)
@@ -437,7 +442,7 @@ INSERT INTO request_status_code_description_map VALUES (12, 'Withdrawn by servic
 -- 
 
 DROP TABLE IF EXISTS service;
-CREATE TABLE IF NOT EXISTS service (
+CREATE TABLE service (
   id smallint(5) unsigned NOT NULL auto_increment,
   county_code tinyint(3) unsigned NOT NULL,
   affiliate_num char(5) NOT NULL,
@@ -474,7 +479,7 @@ CREATE TABLE IF NOT EXISTS service (
 -- 
 
 DROP TABLE IF EXISTS service_user;
-CREATE TABLE IF NOT EXISTS service_user (
+CREATE TABLE service_user (
   id smallint(5) unsigned NOT NULL,
   encoded_password char(40) default NULL,
   be_stale_password tinyint(1) NOT NULL default '1',
@@ -495,7 +500,7 @@ CREATE TABLE IF NOT EXISTS service_user (
 -- 
 
 DROP TABLE IF EXISTS state_dictated_appropriation;
-CREATE TABLE IF NOT EXISTS state_dictated_appropriation (
+CREATE TABLE state_dictated_appropriation (
   id smallint(5) unsigned NOT NULL auto_increment,
   region_code tinyint(3) unsigned NOT NULL,
   fiscal_year_id smallint(5) unsigned NOT NULL,

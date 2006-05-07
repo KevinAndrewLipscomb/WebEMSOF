@@ -27,6 +27,8 @@ type
     HUMAN_NAME,
     HUMAN_NAME_CSV,
     HYPHENATED_NUM,
+    MAKE_MODEL,
+    NARRATIVE,
     NUM,
     ORG_NAME,
     PHONE_NUM,
@@ -85,13 +87,17 @@ begin
     EMAIL_ADDRESS:
       allow := '0-9a-zA-Z_\.@-';
     HOSTNAME:
-      allow := '0-9a-zA-z_-\.';
+      allow := '0-9a-zA-Z_-\.';
     HUMAN_NAME:
-      allow := 'a-zA-z-\. ' + APOSTROPHE;
+      allow := 'a-zA-Z-\. ' + APOSTROPHE;
     HUMAN_NAME_CSV:
-      allow := 'a-zA-z-,\. ' + APOSTROPHE;
+      allow := 'a-zA-Z-,\. ' + APOSTROPHE;
     HYPHENATED_NUM:
       allow := '0-9-';
+    MAKE_MODEL:
+      allow := '0-9a-zA-Z#\*\(\)-\+/\. ';
+    NARRATIVE:
+      allow := '0-9a-zA-Z#\(\)-,/\. ';
     NUM:
       allow := '0-9';
     ORG_NAME:
@@ -113,6 +119,7 @@ begin
     scratch_string := regex.Replace(source_string,'[^' + allow + ']',system.string.EMPTY);
     regex.Replace(scratch_string,APOSTROPHE,DOUBLE_APOSTROPHE);
     regex.Replace(scratch_string,QUOTE,DOUBLE_QUOTE);
+    regex.Replace(scratch_string,';',':,');
     end;
   //
   Safe := scratch_string;
