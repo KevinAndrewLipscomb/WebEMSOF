@@ -185,13 +185,13 @@ end;
 procedure TWebForm_county_dictated_appropriations.LinkButton_change_email_address_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-    server.Transfer('change_email_address.aspx');
+  server.Transfer('change_email_address.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.LinkButton_change_password_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-    server.Transfer('change_password.aspx');
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;

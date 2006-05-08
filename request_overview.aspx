@@ -94,7 +94,7 @@
             </Columns>
             <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
         </p>
-	  </blockquote></strong>
+	  </blockquote>
       <p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder></p>

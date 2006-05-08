@@ -16,6 +16,7 @@ type
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_items_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
+    procedure DataGrid_items_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -57,6 +58,7 @@ procedure TWebForm_request_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
+  Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -175,6 +177,50 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_overview.DataGrid_items_ItemCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  appcommon.bdpconnection.Open;
+  if e.commandname = 'IncreasePriority' then begin
+    borland.data.provider.bdpcommand.Create
+      (
+      'update emsof_request_detail set priority = 0'
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      + ';'
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' - 1'
+      + ';'
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' - 1'
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority = 0',
+      appcommon.bdpconnection
+      )
+      .ExecuteNonQuery;
+  end else if e.commandname = 'DecreasePriority' then begin
+    borland.data.provider.bdpcommand.Create
+      (
+      'update emsof_request_detail set priority = 0'
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      + ';'
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' + 1'
+      + ';'
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' + 1'
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority = 0',
+      appcommon.bdpconnection
+      )
+      .ExecuteNonQuery;
+  end else begin // e.commandname = 'Select'
+  end;
+  appcommon.bdpconnection.Close;
+  Bind_items;
 end;
 
 procedure TWebForm_request_overview.DataGrid_items_ItemDataBound(sender: System.Object;
