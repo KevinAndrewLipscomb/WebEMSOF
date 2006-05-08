@@ -186,7 +186,8 @@ begin
   if e.commandname = 'IncreasePriority' then begin
     borland.data.provider.bdpcommand.Create
       (
-      'update emsof_request_detail set priority = 0'
+      'START TRANSACTION;'
+      + 'update emsof_request_detail set priority = 0'
       + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
       +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
       + ';'
@@ -196,14 +197,16 @@ begin
       + ';'
       + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' - 1'
       + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
-      +   ' and priority = 0',
+      +   ' and priority = 0;'
+      + 'COMMIT;',
       appcommon.bdpconnection
       )
       .ExecuteNonQuery;
   end else if e.commandname = 'DecreasePriority' then begin
     borland.data.provider.bdpcommand.Create
       (
-      'update emsof_request_detail set priority = 0'
+      'START TRANSACTION;'
+      + 'update emsof_request_detail set priority = 0'
       + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
       +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
       + ';'
@@ -213,7 +216,8 @@ begin
       + ';'
       + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' + 1'
       + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
-      +   ' and priority = 0',
+      +   ' and priority = 0;'
+      + 'COMMIT;',
       appcommon.bdpconnection
       )
       .ExecuteNonQuery;
