@@ -29,6 +29,7 @@ type
     RequiredFieldValidator_confirmation_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_nominal_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
+    Label_literal_county: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }

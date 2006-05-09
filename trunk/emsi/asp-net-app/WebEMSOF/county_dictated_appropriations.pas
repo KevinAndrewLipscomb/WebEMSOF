@@ -21,9 +21,7 @@ type
       e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid_service_appropriations_DeleteCommand(source: System.Object; 
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_set_service_request_submission_deadline_Click(sender: System.Object; 
+    procedure LinkButton_county_dictated_deadline_Click(sender: System.Object; 
       e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -45,11 +43,11 @@ type
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
-    LinkButton_set_service_request_submission_deadline: System.Web.UI.WebControls.LinkButton;
-    TableRow_no_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_datagrid: System.Web.UI.HtmlControls.HtmlTableRow;
+    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
+    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    Label_no_appropriations: System.Web.UI.WebControls.Label;
+    LinkButton_county_dictated_deadline: System.Web.UI.WebControls.LinkButton;
+    Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -65,9 +63,7 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
-  Include(Self.LinkButton_set_service_request_submission_deadline.Click, Self.LinkButton_set_service_request_submission_deadline_Click);
+  Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
@@ -164,11 +160,21 @@ begin
       be_before_deadline := FALSE;
       TableRow_sum_of_service_appropriations.visible := FALSE;
       TableRow_unappropriated_amount.visible := FALSE;
-      Label_make_appropriations_deadline.visible := FALSE;
+      Table_deadlines.visible := FALSE;
       HyperLink_new_appropriation.visible := FALSE;
     end else begin
-      Label_make_appropriations_deadline.text := ' NOTE:  The deadline for making service appropriations is '
-      + make_appropriations_deadline.tostring('dddd, MMMM dd, yyyy ''at'' HH:mm:ss') + '. ';
+      Label_make_appropriations_deadline.text := make_appropriations_deadline.tostring('HH:mm:ss dddd, MMMM d, yyyy');
+      LinkButton_county_dictated_deadline.text := datetime
+        (
+        borland.data.provider.bdpcommand.Create
+          (
+          'select service_to_county_submission_deadline from region_dictated_appropriation'
+          + ' where id = ' + session.item['region_dictated_appropriation_id'].tostring,
+          appcommon.bdpconnection
+          )
+          .ExecuteScalar
+        )
+        .tostring('HH:mm:ss dddd, MMMM d, yyyy');
       //
     end;
     //
@@ -187,22 +193,12 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_county_dictated_appropriations.LinkButton_set_service_request_submission_deadline_Click(sender: System.Object;
+procedure TWebForm_county_dictated_appropriations.LinkButton_county_dictated_deadline_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('county_dictated_request_deadline.aspx');
-end;
-
-procedure TWebForm_county_dictated_appropriations.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_county_dictated_appropriations.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
+  session.Remove('county_dictated_deadline');
+  session.Add('county_dictated_deadline',LinkButton_county_dictated_deadline.text);
+  server.Transfer('county_dictated_deadline.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;
@@ -397,8 +393,8 @@ begin
   //
   // Manage control visibilities.
   //
-  TableRow_no_appropriations.Visible := be_datagrid_empty;
-  TableRow_datagrid.Visible := not be_datagrid_empty;
+  Label_no_appropriations.Visible := be_datagrid_empty;
+  Datagrid_service_appropriations.Visible := not be_datagrid_empty;
   //
   // Manage non-DataGrid control properties.
   //

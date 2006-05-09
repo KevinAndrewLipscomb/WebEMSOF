@@ -29,6 +29,7 @@ type
     RequiredFieldValidator_confirmation_password: System.Web.UI.WebControls.RequiredFieldValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
+    Label_literal_county: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
