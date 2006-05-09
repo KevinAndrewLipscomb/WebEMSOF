@@ -23,6 +23,8 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_set_service_request_submission_deadline_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -32,7 +34,6 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_county_name: System.Web.UI.WebControls.Label;
-    Label_no_appropriations: System.Web.UI.WebControls.Label;
     DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
     Label_literal_county: System.Web.UI.WebControls.Label;
     HyperLink_new_appropriation: System.Web.UI.WebControls.HyperLink;
@@ -46,6 +47,9 @@ type
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
+    LinkButton_set_service_request_submission_deadline: System.Web.UI.WebControls.LinkButton;
+    TableRow_no_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_datagrid: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -63,6 +67,7 @@ procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
+  Include(Self.LinkButton_set_service_request_submission_deadline.Click, Self.LinkButton_set_service_request_submission_deadline_Click);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
@@ -180,6 +185,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.LinkButton_set_service_request_submission_deadline_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('county_dictated_request_deadline.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.LinkButton_change_email_address_Click(sender: System.Object;
@@ -386,8 +397,8 @@ begin
   //
   // Manage control visibilities.
   //
-  Label_no_appropriations.Visible := be_datagrid_empty;
-  DataGrid_service_appropriations.Visible := not be_datagrid_empty;
+  TableRow_no_appropriations.Visible := be_datagrid_empty;
+  TableRow_datagrid.Visible := not be_datagrid_empty;
   //
   // Manage non-DataGrid control properties.
   //
