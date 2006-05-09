@@ -28,7 +28,7 @@
 			  <td>from
 		<ASP:Label id="Label_sponsor_county" runat="server"></ASP:Label>&nbsp;for <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label></td>
 			</tr>
-			<tr id="TableRow_sum_of_item_amounts" runat="server">
+			<tr id="TableRow_sum_of_emsof_antes" runat="server">
 			  <td>
 				<p align="right">-</p></td>
 			  <td>
@@ -48,7 +48,7 @@
 			  </tr>
 		  </table>
 	  <p>
-        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_deadlines" runat="server">
             <tr>
               <td>
 		<table cellspacing="0" cellpadding="5" border="0">

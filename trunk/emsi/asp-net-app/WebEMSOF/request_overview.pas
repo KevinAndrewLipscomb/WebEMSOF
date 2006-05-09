@@ -34,11 +34,11 @@ type
     Label_unused_amount: System.Web.UI.WebControls.Label;
     TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_sum_of_item_amounts: System.Web.UI.HtmlControls.HtmlTableRow;
     HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     HyperLink_finalize: System.Web.UI.WebControls.HyperLink;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
+    Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -79,7 +79,7 @@ procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.E
 var
   bdr: borland.data.provider.bdpdatareader;
   county_dictated_appropriation_amount: decimal;
-//  make_item_requests_deadline: system.datetime;
+  make_item_requests_deadline: system.datetime;
   sum_of_emsof_antes: decimal;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -109,35 +109,32 @@ begin
     Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
     Label_sponsor_county.text := session.item['sponsor_county'].tostring;
     Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
-//    //
-//    // All further rendering is deadline-dependent.
-//    //
-//    make_item_requests_deadline := system.datetime
-//      (
-//      borland.data.provider.bdpcommand.Create
-//        (
-//        'select value'
-//        + ' from fy_calendar'
-//        +   ' join fiscal_year on (fiscal_year.id = fiscal_year_id)'
-//        +   ' join milestone_code_name_map on (code = milestone_code)'
-//        + ' where designator = "' + Safe(Label_fiscal_year_designator.Text,ALPHANUM) + '"'
-//        +   ' and name = "emsof-service-make-item-requests-deadline"',
-//        appcommon.bdpconnection
-//        )
-//        .ExecuteScalar
-//      );
-//    //
-//    if datetime.Now > make_item_requests_deadline then begin
-//      be_before_deadline := FALSE;
-//      TableRow_sum_of_emsof_antes.visible := FALSE;
-//      TableRow_unrequested_amount.visible := FALSE;
-//      Label_make_requests_deadline.visible := FALSE;
-//      HyperLink_add_item_to_request.visible := FALSE;
-//    end else begin
-//      Label_make_requests_deadline.text := ' NOTE:  The deadline for making item requests is '
-//      + make_item_requests_deadline.tostring('dddd, MMMM dd, yyyy ''at'' HH:mm:ss') + '. ';
-//      //
-//    end;
+    //
+    // All further rendering is deadline-dependent.
+    //
+    make_item_requests_deadline := system.datetime
+      (
+      borland.data.provider.bdpcommand.Create
+        (
+        'select service_to_county_submission_deadline'
+        + ' from county_dictated_appropriation join region_dictated_appropriation'
+        +   ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+        + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteScalar
+      );
+    //
+    if datetime.Now > make_item_requests_deadline then begin
+      be_before_deadline := FALSE;
+      TableRow_sum_of_emsof_antes.visible := FALSE;
+      TableRow_unrequested_amount.visible := FALSE;
+      Table_deadlines.visible := FALSE;
+      HyperLink_add_item_to_request.visible := FALSE;
+      HyperLink_finalize.visible := FALSE;
+    end else begin
+      Label_make_requests_deadline.text := make_item_requests_deadline.tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+    end;
     //
     // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
     // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
