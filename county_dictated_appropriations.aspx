@@ -79,34 +79,34 @@
 		  </td>
 		</tr>
 	  </table>
-      <p>
-        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="5" border="1" id="Table_deadlines" runat="server">
+      <p></p>
+	  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+		  <tr>
+			<td>
+		<table cellspacing="0" cellpadding="5" border="0" id="Table_deadlines" runat="server">
 			<tr>
 			  <td bgcolor="#f5f5f5" colspan="2">
 				<p align="left"><strong>Deadlines</strong>
-                </p></td>
+				</p></td>
 			</tr>
-            <tr>
-              <td>
-                <p align="right">The deadline for you to make service appropriations is:</p></td>
-              <td>
-			<div align="right">
-			  <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>
-			</div></td>
-            </tr>
-            <tr>
-              <td>
-<p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is:</p></td>
-              <td>
-                <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True"></ASP:LinkButton></td>
-            </tr>
-        </table>
-      </p>
-	  <p>
-	  <table cellspacing="0" cellpadding="0" border="1" width="100%" bordercolor="#dcdcdc">
+			<tr>
+			  <td>
+				<p align="left">You must&nbsp;make service appropriations&nbsp;by
+			  <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>.</p></td>
+			</tr>
+			<tr>
+			  <td>
+<p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is
+				<ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True"></ASP:LinkButton>.</p></td>
+						  </tr>
+		</table></td>
+		  </tr>
+	  </table>
+	  <p></p>
+	  <table cellspacing="0" cellpadding="0" border="1"  bordercolor="#dcdcdc">
 		<tr>
 		  <td>
-	  <table cellspacing="0" cellpadding="10" border="0" width="100%">
+	  <table cellspacing="0" cellpadding="10" border="0">
 		<tr bgcolor="#f5f5f5">
 		  <td>
 			<strong>Service appropriations</strong>
@@ -158,9 +158,9 @@
 		  </td>
 		</tr>
 	  </table>
-	  </p>
+	  <p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server">
-	  </asp:placeholder>
+	  </asp:placeholder></p>
 	</form>
   </body>
 </html>

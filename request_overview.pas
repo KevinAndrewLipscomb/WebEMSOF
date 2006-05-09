@@ -13,8 +13,6 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_items_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid_items_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
@@ -32,14 +30,15 @@ type
     HyperLink_add_item_to_request: System.Web.UI.WebControls.HyperLink;
     DataGrid_items: System.Web.UI.WebControls.DataGrid;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
-    Label_sponsor_county: System.Web.UI.WebControls.Label;
     Label_sum_of_emsof_antes: System.Web.UI.WebControls.Label;
     Label_unused_amount: System.Web.UI.WebControls.Label;
     TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_sum_of_item_amounts: System.Web.UI.HtmlControls.HtmlTableRow;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
+    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
+    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    HyperLink_finalize: System.Web.UI.WebControls.HyperLink;
+    Label_sponsor_county: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -56,8 +55,6 @@ implementation
 /// </summary>
 procedure TWebForm_request_overview.InitializeComponent;
 begin
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
@@ -243,18 +240,6 @@ begin
     e.item.Cells[dgi_linkbutton_decrease_priority].controls.item[0].visible :=
       (e.item.itemindex < integer(num_items) - 1) and be_before_deadline;
   end;
-end;
-
-procedure TWebForm_request_overview.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_request_overview.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_request_overview.Bind_items;

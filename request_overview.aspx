@@ -8,20 +8,23 @@
   </head>
 
   <body>
-     <form runat="server">
+	 <form runat="server">
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder>
 <h3>
 		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3>
 	  <p><small>Change your WebEMSOF
-		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
+		<ASP:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:hyperlink>&nbsp;| <ASP:HyperLink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</ASP:HyperLink>
 	  </small></p>
+		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+              <tr>
+				<td>
 	  <table cellspacing="0" cellpadding="5" border="0">
 			<tr>
+			  <td bgcolor="#f5f5f5">
+				<p align="right"><strong>Parent appropriation:</strong></p></td>
 			  <td>
-				<p align="right">Parent appropriation:</p></td>
-			  <td>
-              <p align="right"><ASP:Label id="Label_parent_appropriation_amount" runat="server" font-bold="True"></ASP:Label></p></td>
+			  <p align="right"><ASP:Label id="Label_parent_appropriation_amount" runat="server"></ASP:Label></p></td>
 			  <td>from
 		<ASP:Label id="Label_sponsor_county" runat="server"></ASP:Label>&nbsp;for <ASP:Label id="Label_fiscal_year_designator" runat="server"></ASP:Label></td>
 			</tr>
@@ -29,35 +32,58 @@
 			  <td>
 				<p align="right">-</p></td>
 			  <td>
-              <p align="right">
-				<ASP:Label id="Label_sum_of_emsof_antes" runat="server" font-bold="True" font-underline="True"></ASP:Label></p></td>
+			  <p align="right">
+				<ASP:Label id="Label_sum_of_emsof_antes" runat="server" font-underline="True"></ASP:Label></p></td>
 			  <td>requested from EMSOF (below)</td>
 			</tr>
 			<tr id="TableRow_unrequested_amount" runat="server">
 			  <td>
 				<p align="right">=</p></td>
 			  <td>
-              <p align="right"><ASP:Label id="Label_unused_amount" runat="server" font-bold="True"></ASP:Label></p></td>
+              <p align="right"><ASP:Label id="Label_unused_amount" runat="server"></ASP:Label></p></td>
 			  <td>remaining</td>
 			</tr>
 		</table>
-		<p></p>
+				</td>
+			  </tr>
+		  </table>
+	  <p>
+        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+            <tr>
+              <td>
 		<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
-			  <td>Items requested:</td>
-			  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-			  <td><ASP:Label id="Label_make_requests_deadline" runat="server" font-bold="True" font-underline="True" font-size="Small" backcolor="Gold"></ASP:Label></td>
+			  <td bgcolor="#f5f5f5"><strong>Deadlines</strong></td>
 			</tr>
-		</table>
-	  <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
-		<p>
-		  <ASP:Label id="Label_no_appropriations" runat="server" font-bold="True" visible="False">-- NONE --</ASP:Label></p>
-		<p>
-		  <ASP:HyperLink id="HyperLink_add_item_to_request" runat="server" navigateurl="create_new_item_request.aspx" font-bold="True">Add item(s) to request</ASP:HyperLink>
-		</p>
-		<p>
+			<tr>
+			  <td>You must finalize your item requests by <ASP:Label id="Label_make_requests_deadline" runat="server" font-bold="True" font-size="Medium"></ASP:Label>.</td>
+			</tr>
+		</table></td>
+            </tr>
+        </table>
+	  </p>
+	  <p>
+		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+			<tr>
+			  <td>
+		<table cellspacing="0" cellpadding="10" border="0">
+			<tr bgcolor="#f5f5f5">
+			  <td><strong>Items requested</strong></td>
+			  <td>
+			  <div align="center"><ASP:HyperLink id="HyperLink_add_item_to_request" runat="server" navigateurl="create_new_item_request.aspx">New</ASP:HyperLink>
+			  </div></td>
+			  <td>
+                        <p align="center">
+                          <ASP:HyperLink id="HyperLink_finalize" runat="server" font-bold="True">FINALIZE</ASP:HyperLink>
+                        </p></td>
+			</tr>
+			<tr>
+			  <td colspan="3"><ASP:Label id="Label_no_appropriations" runat="server" visible="False" font-italic="True">-- NONE --</ASP:Label></td>
+			</tr>
+		  <tr>
+			<td colspan="3">
 		  <ASP:DataGrid id="DataGrid_items" runat="server"
-			bordercolor="#CCCCCC"
+			bordercolor="#dcdcdc"
 			borderstyle="None"
 			borderwidth="1px"
 			backcolor="White"
@@ -68,36 +94,42 @@
 			autogeneratecolumns="False"
 			visible="False">
             <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
-            <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
-            <HeaderStyle font-bold="True" backcolor="#E0E0E0"></HeaderStyle>
+			<SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
+            <HeaderStyle font-bold="True" backcolor="#f5f5f5"></HeaderStyle>
             <Columns>
-              <ASP:BoundColumn visible="False" datafield="master_id" readonly="True">
+			  <ASP:BoundColumn visible="False" datafield="master_id" readonly="True">
                 <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
               </ASP:BoundColumn>
               <ASP:BoundColumn datafield="priority" readonly="True" headertext="Priority">
-                <ItemStyle horizontalalign="Center"></ItemStyle>
+				<ItemStyle horizontalalign="Center"></ItemStyle>
               </ASP:BoundColumn>
               <ASP:BoundColumn datafield="item_description" readonly="True" headertext="Description"></ASP:BoundColumn>
               <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF ante" dataformatstring="{0:C}">
-                <ItemStyle horizontalalign="Right"></ItemStyle>
+				<ItemStyle horizontalalign="Right"></ItemStyle>
               </ASP:BoundColumn>
               <ASP:BoundColumn datafield="status" readonly="True" headertext="Status"></ASP:BoundColumn>
               <ASP:ButtonColumn text="Select" commandname="Select">
-                <ItemStyle forecolor="#0000FF"></ItemStyle>
+				<ItemStyle forecolor="#0000FF"></ItemStyle>
               </ASP:ButtonColumn>
               <ASP:ButtonColumn text="Increase priority" commandname="IncreasePriority">
                 <ItemStyle forecolor="#0000FF"></ItemStyle>
-              </ASP:ButtonColumn>
+			  </ASP:ButtonColumn>
               <ASP:ButtonColumn text="Decrease priority" commandname="DecreasePriority">
                 <ItemStyle forecolor="#0000FF"></ItemStyle>
               </ASP:ButtonColumn>
-            </Columns>
+			</Columns>
             <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
-        </p>
-	  </blockquote>
-      <p>
-    <asp:placeholder id="PlaceHolder_postcontent" runat="server">
-    </asp:placeholder></p>
-     </form>
+            </td>
+          </tr>
+		</table>
+			  </td>
+			</tr>
+		</table>
+	  </p>
+		<p></p>
+	  <p>
+	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
+	</asp:placeholder></p>
+	 </form>
   </body>
 </html>
