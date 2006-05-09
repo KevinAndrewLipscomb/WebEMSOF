@@ -18,13 +18,11 @@
         County
       </asp:label></p>
       <p>
-		<small>Change your WebEMSOF </small>
-			<asp:linkbutton id="LinkButton_change_password" runat="server">
-		<small>password</small>
-	  </asp:linkbutton>&nbsp;| <small>&nbsp;</small>
-	  <asp:linkbutton id="LinkButton_change_email_address" runat="server">
-		<small>email address</small>
-	  </asp:linkbutton>
+		<small>Change your WebEMSOF
+			<asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>
+			|
+			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>
+		</small>
 	  </p>
 	  <table cellspacing="0" cellpadding="0" border="1" bordercolor="#dcdcdc">
         <tr>
@@ -59,9 +57,7 @@
 				  <asp:label id="Label_sum_of_service_appropriations" runat="server" font-underline="True"></asp:label>
 				  </p>
 				</td>
-				<td>
-				  appropriated to services
-				</td>
+				<td>appropriated to services (below)</td>
 			  </tr>
 			  <tr id="TableRow_unappropriated_amount" runat="server">
 				<td>
@@ -83,6 +79,29 @@
 		  </td>
 		</tr>
 	  </table>
+      <p>
+        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="5" border="1" id="Table_deadlines" runat="server">
+			<tr>
+			  <td bgcolor="#f5f5f5" colspan="2">
+				<p align="left"><strong>Deadlines</strong>
+                </p></td>
+			</tr>
+            <tr>
+              <td>
+                <p align="right">The deadline for you to make service appropriations is:</p></td>
+              <td>
+			<div align="right">
+			  <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>
+			</div></td>
+            </tr>
+            <tr>
+              <td>
+<p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is:</p></td>
+              <td>
+                <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True"></ASP:LinkButton></td>
+            </tr>
+        </table>
+      </p>
 	  <p>
 	  <table cellspacing="0" cellpadding="0" border="1" width="100%" bordercolor="#dcdcdc">
 		<tr>
@@ -95,25 +114,18 @@
 		  <td>
 			<div align="center">
 			  <asp:hyperlink id="HyperLink_new_appropriation" runat="server"
-			  navigateurl="create_new_service_appropriation.aspx">
-				Make new service appropriation(s)
+			  navigateurl="create_new_service_appropriation.aspx" font-bold="True">
+				New
 			  </asp:hyperlink>
 			</div>
 		  </td>
-                      <td>
-			  <div align="center">
-				<asp:linkbutton id="LinkButton_set_service_request_submission_deadline" runat="server">Set deadline for services to submit requests to you</asp:linkbutton>
-			  </div></td>
-                      <td>
-			<div align="right">
-			  <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-underline="True" font-size="Small" backcolor="Gold"></asp:label>
-			</div></td>
 		</tr>
-		<tr id="TableRow_no_appropriations" runat="server">
-		  <td colspan="4">--&nbsp;NONE&nbsp;--
+		<tr>
+		  <td colspan="4">
+                        <ASP:Label id="Label_no_appropriations" runat="server" font-italic="True">-- NONE --</ASP:Label>
 		  </td>
 		</tr>
-		<tr id="TableRow_datagrid" runat="server">
+		<tr>
 		  <td colspan="4">
 		<asp:datagrid id="DataGrid_service_appropriations" runat="server"
 		bordercolor="#DCDCDC" borderstyle="None" borderwidth="1px" backcolor="White" cellpadding="10" gridlines="Horizontal" forecolor="Black"

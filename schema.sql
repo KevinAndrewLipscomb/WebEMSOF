@@ -1,22 +1,22 @@
 -- phpMyAdmin SQL Dump
 -- version 2.7.0-pl1
 -- http://www.phpmyadmin.net
--- 
+--
 -- Host: db4free.org
 -- Generation Time: Apr 28, 2006 at 11:26 PM
 -- Server version: 5.0.20
 -- PHP Version: 5.0.3
 
 SET FOREIGN_KEY_CHECKS=0;
--- 
+--
 -- Database: `emsidb`
--- 
+--
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `county_code_name_map`
--- 
+--
 
 DROP TABLE IF EXISTS county_code_name_map;
 CREATE TABLE county_code_name_map (
@@ -26,9 +26,9 @@ CREATE TABLE county_code_name_map (
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Dumping data for table `county_code_name_map`
--- 
+--
 
 INSERT INTO county_code_name_map VALUES (1, 'Allegheny');
 INSERT INTO county_code_name_map VALUES (2, 'Armstrong');
@@ -43,9 +43,9 @@ INSERT INTO county_code_name_map VALUES (10, 'Westmoreland');
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `county_dictated_appropriation`
--- 
+--
 
 DROP TABLE IF EXISTS county_dictated_appropriation;
 CREATE TABLE county_dictated_appropriation (
@@ -60,16 +60,16 @@ CREATE TABLE county_dictated_appropriation (
   KEY match_level_id (match_level_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Dumping data for table `county_dictated_appropriation`
--- 
+--
 
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `county_user`
--- 
+--
 
 DROP TABLE IF EXISTS county_user;
 CREATE TABLE county_user (
@@ -344,6 +344,7 @@ CREATE TABLE region_dictated_appropriation (
   state_dictated_appropriation_id smallint(5) unsigned NOT NULL,
   county_code tinyint(3) unsigned NOT NULL,
   amount decimal(10,2) unsigned NOT NULL,
+  service_to_county_submission_deadline datetime default NULL,
   PRIMARY KEY  (id),
   KEY county_code (county_code),
   KEY state_dictated_appropriation_id (state_dictated_appropriation_id)
@@ -528,7 +529,7 @@ ALTER TABLE `county_dictated_appropriation`
   ADD CONSTRAINT county_dictated_appropriation_ibfk_2 FOREIGN KEY (service_id) REFERENCES service (id),
   ADD CONSTRAINT county_dictated_appropriation_ibfk_3 FOREIGN KEY (match_level_id) REFERENCES match_level (id);
 
--- 
+--
 -- Constraints for table `county_user`
 -- 
 ALTER TABLE `county_user`

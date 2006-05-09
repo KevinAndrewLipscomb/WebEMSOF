@@ -19,7 +19,9 @@
 <p>
         <ASP:Button id="Button_continue" runat="server" text="Continue"></ASP:Button></p>
 	  <p><small>Change your WebEMSOF
-		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
+		<ASP:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:hyperlink>
+		|
+		<ASP:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</ASP:hyperlink>
 	  </small></p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>
