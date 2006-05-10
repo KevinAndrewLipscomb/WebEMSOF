@@ -187,15 +187,7 @@
 			<Language Name="ActiveLang"></Language>
 			<Language Name="ProjectLang">$00000000</Language>
 			<Language Name="RootDir"></Language>
-		</Language>  
-    
-    
-    
-    
-    
-    
-    
-    <FileList>
+		</Language>  <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="system" Version="1.0.5000.0" LinkUnits="False"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System.Data" AssemblyName="system.data" Version="1.0.5000.0" LinkUnits="False"/>
@@ -230,25 +222,25 @@
       <File FileName="county_dictated_deadline.aspx" ContainerId="AspMarkupContainer" ModuleName="county_dictated_deadline"/>
       <File FileName="" ContainerId="" ModuleName="System.Reflection"/>
       <File FileName="" ContainerId="" ModuleName="System.Runtime.CompilerServices"/>
-      <File FileName="Global.pas" ContainerId="PascalCompiler" ModuleName="Global" Parent="Global.asax"/>
-      <File FileName="login.pas" ContainerId="PascalCompiler" ModuleName="login" Parent="login.aspx"/>
-      <File FileName="AppCommon.pas" ContainerId="PascalCompiler" ModuleName="AppCommon"/>
-      <File FileName="new_password.pas" ContainerId="PascalCompiler" ModuleName="new_password" Parent="new_password.aspx"/>
-      <File FileName="service_overview.pas" ContainerId="PascalCompiler" ModuleName="service_overview" Parent="service_overview.aspx"/>
-      <File FileName="profile.pas" ContainerId="PascalCompiler" ModuleName="profile" Parent="profile.aspx"/>
-      <File FileName="change_password.pas" ContainerId="PascalCompiler" ModuleName="change_password" Parent="change_password.aspx"/>
-      <File FileName="change_email_address.pas" ContainerId="PascalCompiler" ModuleName="change_email_address" Parent="change_email_address.aspx"/>
-      <File FileName="request_overview.pas" ContainerId="PascalCompiler" ModuleName="request_overview" Parent="request_overview.aspx"/>
-      <File FileName="main.pas" ContainerId="PascalCompiler" ModuleName="main" Parent="main.aspx"/>
-      <File FileName="login_county_coord.pas" ContainerId="PascalCompiler" ModuleName="login_county_coord" Parent="login_county_coord.aspx"/>
-      <File FileName="login_regional_staffer.pas" ContainerId="PascalCompiler" ModuleName="login_regional_staffer" Parent="login_regional_staffer.aspx"/>
-      <File FileName="regional_staffer_overview.pas" ContainerId="PascalCompiler" ModuleName="regional_staffer_overview" Parent="regional_staffer_overview.aspx"/>
-      <File FileName="choose_county_appropriation.pas" ContainerId="PascalCompiler" ModuleName="choose_county_appropriation" Parent="choose_county_appropriation.aspx"/>
-      <File FileName="county_dictated_appropriations.pas" ContainerId="PascalCompiler" ModuleName="county_dictated_appropriations" Parent="county_dictated_appropriations.aspx"/>
-      <File FileName="create_new_service_appropriation.pas" ContainerId="PascalCompiler" ModuleName="create_new_service_appropriation" Parent="create_new_service_appropriation.aspx"/>
-      <File FileName="delete_service_appropriation.pas" ContainerId="PascalCompiler" ModuleName="delete_service_appropriation" Parent="delete_service_appropriation.aspx"/>
-      <File FileName="create_new_item_request.pas" ContainerId="PascalCompiler" ModuleName="create_new_item_request" Parent="create_new_item_request.aspx"/>
-      <File FileName="county_dictated_deadline.pas" ContainerId="PascalCompiler" ModuleName="county_dictated_deadline" Parent="county_dictated_deadline.aspx"/>
+      <File FileName="Global.pas" ContainerId="" ModuleName="Global" Parent="Global.asax"/>
+      <File FileName="login.pas" ContainerId="" ModuleName="login" Parent="login.aspx"/>
+      <File FileName="AppCommon.pas" ContainerId="" ModuleName="AppCommon"/>
+      <File FileName="new_password.pas" ContainerId="" ModuleName="new_password" Parent="new_password.aspx"/>
+      <File FileName="service_overview.pas" ContainerId="" ModuleName="service_overview" Parent="service_overview.aspx"/>
+      <File FileName="profile.pas" ContainerId="" ModuleName="profile" Parent="profile.aspx"/>
+      <File FileName="change_password.pas" ContainerId="" ModuleName="change_password" Parent="change_password.aspx"/>
+      <File FileName="change_email_address.pas" ContainerId="" ModuleName="change_email_address" Parent="change_email_address.aspx"/>
+      <File FileName="request_overview.pas" ContainerId="" ModuleName="request_overview" Parent="request_overview.aspx"/>
+      <File FileName="main.pas" ContainerId="" ModuleName="main" Parent="main.aspx"/>
+      <File FileName="login_county_coord.pas" ContainerId="" ModuleName="login_county_coord" Parent="login_county_coord.aspx"/>
+      <File FileName="login_regional_staffer.pas" ContainerId="" ModuleName="login_regional_staffer" Parent="login_regional_staffer.aspx"/>
+      <File FileName="regional_staffer_overview.pas" ContainerId="" ModuleName="regional_staffer_overview" Parent="regional_staffer_overview.aspx"/>
+      <File FileName="choose_county_appropriation.pas" ContainerId="" ModuleName="choose_county_appropriation" Parent="choose_county_appropriation.aspx"/>
+      <File FileName="county_dictated_appropriations.pas" ContainerId="" ModuleName="county_dictated_appropriations" Parent="county_dictated_appropriations.aspx"/>
+      <File FileName="create_new_service_appropriation.pas" ContainerId="" ModuleName="create_new_service_appropriation" Parent="create_new_service_appropriation.aspx"/>
+      <File FileName="delete_service_appropriation.pas" ContainerId="" ModuleName="delete_service_appropriation" Parent="delete_service_appropriation.aspx"/>
+      <File FileName="create_new_item_request.pas" ContainerId="" ModuleName="create_new_item_request" Parent="create_new_item_request.aspx"/>
+      <File FileName="county_dictated_deadline.pas" ContainerId="" ModuleName="county_dictated_deadline" Parent="county_dictated_deadline.aspx"/>
     </FileList>
   </DelphiDotNet.Personality>
 	<ModelSupport>True</ModelSupport>

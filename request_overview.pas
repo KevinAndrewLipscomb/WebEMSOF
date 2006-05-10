@@ -39,6 +39,7 @@ type
     HyperLink_finalize: System.Web.UI.WebControls.HyperLink;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
+    HyperLink_service_overview: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -232,7 +233,6 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    e.item.Cells[dgi_linkbutton_select].controls.item[0].visible := be_before_deadline;
     e.item.Cells[dgi_linkbutton_increase_priority].controls.item[0].visible := (e.item.itemindex > 0) and be_before_deadline;
     e.item.Cells[dgi_linkbutton_decrease_priority].controls.item[0].visible :=
       (e.item.itemindex < integer(num_items) - 1) and be_before_deadline;
