@@ -62,6 +62,7 @@ type
     LinkButton_recalculate_1: System.Web.UI.WebControls.LinkButton;
     LinkButton_recalculate_2: System.Web.UI.WebControls.LinkButton;
     LinkButton_recalculate_3: System.Web.UI.WebControls.LinkButton;
+    HyperLink_request_overview: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
   public

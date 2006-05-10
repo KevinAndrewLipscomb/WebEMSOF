@@ -12,6 +12,8 @@
       <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
 	  </asp:placeholder></p>
+      <p>[ Back to&nbsp;<ASP:HyperLink id="HyperLink_request_overview" runat="server"
+                       navigateurl="request_overview.aspx">request overview</ASP:HyperLink> form ]</p>
 	  <p><strong>Create new item request:</strong></p>
 	  <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
 		<table cellspacing="0" cellpadding="0" border="1">
