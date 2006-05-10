@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="create_new_item_request.pas" AutoEventWireup="false" Inherits="create_new_item_request.TWebForm_create_new_item_request" %>
+<%@ Page language="c#" Debug="true" Codebehind="request_item_detail.pas" AutoEventWireup="false" Inherits="request_item_detail.TWebForm_request_item_detail" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -8,17 +8,22 @@
   </head>
 
   <body>
-     <form runat="server">
-      <p>
-      <asp:placeholder id="PlaceHolder_precontent" runat="server">
+	 <form runat="server">
+	  <p>
+	  <asp:placeholder id="PlaceHolder_precontent" runat="server">
 	  </asp:placeholder></p>
-      <p>[ Back to&nbsp;<ASP:HyperLink id="HyperLink_request_overview" runat="server"
-                       navigateurl="request_overview.aspx">request overview</ASP:HyperLink> form ]</p>
-	  <p><strong>Create new item request:</strong></p>
-	  <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
-		<table cellspacing="0" cellpadding="0" border="1">
-			<tr>
-			  <td>
+	  <p><small>[ Back to&nbsp;<ASP:HyperLink id="HyperLink_request_overview" runat="server"
+					   navigateurl="request_overview.aspx">request overview</ASP:HyperLink> form ]</small></p>
+	  <p><small>
+		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+			  <tr>
+				<td>
+				  <table cellspacing="0" cellpadding="10" border="0">
+					  <tr bgcolor="#f5f5f5">
+						<td><strong>Item detail</strong></td>
+					  </tr>
+					  <tr>
+						<td>
 		  <table cellspacing="0" cellpadding="10" border="0">
 			  <tr>
 				<td><p align="right">Equipment category:</p></td>
@@ -77,12 +82,12 @@
 			  <p align="right">Anticipated quantity:</p></td>
 			  <td>&nbsp; 
 
-                        <table cellspacing="0" cellpadding="0" width="100%" border="0">
-                            <tr>
-                              <td><ASP:TextBox id="TextBox_quantity" runat="server" width="6pc"></ASP:TextBox></td>
-                              <td align="right"><ASP:LinkButton id="LinkButton_recalculate_2" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
-                            </tr>
-                        </table></td>
+						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+							<tr>
+							  <td><ASP:TextBox id="TextBox_quantity" runat="server" width="6pc"></ASP:TextBox></td>
+							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_2" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
+							</tr>
+						</table></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_quantity" runat="server" errormessage="Please enter a quantity." font-bold="True" controltovalidate="TextBox_quantity">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_quantity" runat="server" font-bold="True" errormessage="Please enter a valid quantity." validationexpression="[1-9][0-9]*" controltovalidate="TextBox_quantity">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
@@ -111,12 +116,12 @@
 			  <p align="right"><strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>:&nbsp; $</p></td>
 			  <td>&nbsp; 
 
-                        <table cellspacing="0" cellpadding="0" width="100%" border="0">
-                            <tr>
-                              <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
-                              <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
-                            </tr>
-                        </table></td>
+						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+							<tr>
+							  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
+							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
+							</tr>
+						</table></td>
 			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additional_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
@@ -128,16 +133,32 @@
 			</tr>
 			<tr>
 			  <td>
-                        <div align="right"><ASP:Button id="Button_submit_and_repeat" runat="server" text="Submit and Repeat"></ASP:Button>
-                        </div></td>
-			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button></td>
+						<div align="right"><ASP:Button id="Button_submit_and_repeat" runat="server" text="Submit and Repeat"></ASP:Button>
+						</div></td>
+			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>&nbsp;
+                                     &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button></td>
+			  <td></td>
+			</tr>
+			<tr id="TableRow_delete" runat="server">
+			  <td colspan="2">
+                                  <div align="center">
+                                  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="5" border="1" align="center">
+                                      <tr>
+										<td>Check the box <em>and </em>click the button to delete:&nbsp; 
+                                          
+                                            <ASP:CheckBox id="CheckBox_delete" runat="server" text="Delete this equipment request item"></ASP:CheckBox>&nbsp;
+                                            <ASP:Button id="Button_delete" runat="server" text="Confirm delete"></ASP:Button></td>
+									  </tr>
+								  </table>
+                                  </div></td>
 			  <td></td>
 			</tr>
 		  </table>
-			  </td>
-			</tr>
-		</table>
-	  </blockquote>
+						</td>
+					  </tr>
+				  </table></td>
+			  </tr>
+		  </table></small></p>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
 	</asp:placeholder>
 	 </form>

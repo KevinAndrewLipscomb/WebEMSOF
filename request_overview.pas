@@ -135,7 +135,12 @@ begin
       HyperLink_finalize.visible := FALSE;
     end else begin
       Label_make_requests_deadline.text := make_item_requests_deadline.tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+      session.Remove('emsof_request_item_priority');
+      session.Add('emsof_request_item_priority',system.string.EMPTY);
     end;
+    //
+    session.Remove('be_before_service_to_county_submission_deadline');
+    session.Add('be_before_service_to_county_submission_deadline',be_before_deadline.tostring);
     //
     // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
     // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
@@ -177,8 +182,8 @@ end;
 procedure TWebForm_request_overview.DataGrid_items_ItemCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
-  appcommon.bdpconnection.Open;
   if e.commandname = 'IncreasePriority' then begin
+    appcommon.bdpconnection.Open;
     borland.data.provider.bdpcommand.Create
       (
       'START TRANSACTION;'
@@ -197,7 +202,9 @@ begin
       appcommon.bdpconnection
       )
       .ExecuteNonQuery;
+    appcommon.bdpconnection.Close;
   end else if e.commandname = 'DecreasePriority' then begin
+    appcommon.bdpconnection.Open;
     borland.data.provider.bdpcommand.Create
       (
       'START TRANSACTION;'
@@ -216,9 +223,14 @@ begin
       appcommon.bdpconnection
       )
       .ExecuteNonQuery;
+    appcommon.bdpconnection.Close;
   end else begin // e.commandname = 'Select'
+    session.Remove('emsof_request_item_priority');
+    session.Add('emsof_request_item_priority',Safe(e.item.cells[dgi_priority].text,NUM));
+    session.Remove('emsof_request_item_equipment_category');
+    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[dgi_item_description].text,NUM));
+    server.Transfer('request_item_detail.aspx');
   end;
-  appcommon.bdpconnection.Close;
   Bind_items;
 end;
 

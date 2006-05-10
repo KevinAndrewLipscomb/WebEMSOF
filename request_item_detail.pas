@@ -1,5 +1,5 @@
 
-unit create_new_item_request;
+unit request_item_detail;
 
 interface
 
@@ -10,7 +10,7 @@ uses
   system.web.mail;
 
 type
-  TWebForm_create_new_item_request = class(System.Web.UI.Page)
+  TWebForm_request_item_detail = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -27,6 +27,7 @@ type
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
     procedure Recalculate;
     procedure AddItem;
+    procedure ShowDependentData;
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -63,6 +64,9 @@ type
     LinkButton_recalculate_2: System.Web.UI.WebControls.LinkButton;
     LinkButton_recalculate_3: System.Web.UI.WebControls.LinkButton;
     HyperLink_request_overview: System.Web.UI.WebControls.HyperLink;
+    CheckBox_delete: System.Web.UI.WebControls.CheckBox;
+    Button_delete: System.Web.UI.WebControls.Button;
+    TableRow_delete: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -76,7 +80,7 @@ implementation
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebForm_create_new_item_request.InitializeComponent;
+procedure TWebForm_request_item_detail.InitializeComponent;
 begin
   Include(Self.DropDownList_equipment_category.SelectedIndexChanged, Self.DropDownList_equipment_category_SelectedIndexChanged);
   Include(Self.LinkButton_recalculate_1.Click, Self.LinkButton_recalculate_1_Click);
@@ -99,71 +103,19 @@ var
   funding_level: decimal;
   match_level: decimal;
 
-procedure TWebForm_create_new_item_request.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_request_item_detail.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr_factors: borland.data.provider.BdpDataReader;
   bdr_services: borland.data.provider.BdpDataReader;
+  bdr_user_details: borland.data.provider.BdpDataReader;
+  be_before_deadline: boolean;
   cmdText: string;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_item_request';
+    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
     //
     appcommon.bdpconnection.Open;
-    //
-    // Determine this service's eligibility factors.
-    //
-    bdr_factors := borland.data.provider.bdpcommand.Create
-      (
-      'select (be_als_amb or be_air_amb) as be_als_amb,'
-      + ' (be_als_amb or be_als_squad) as be_als_squad,'
-      + ' (be_bls_amb or be_als_amb) as be_bls_amb,'
-      + ' (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs'
-      + ' FROM service'
-      + ' WHERE id = ' + session.item['service_user_id'].tostring,
-      appcommon.bdpconnection
-      )
-      .ExecuteReader;
-    bdr_factors.Read;
-    cmdText := 'SELECT code,description FROM eligible_provider_equipment_list WHERE FALSE '; // Default to empty set
-    if bdr_factors['be_als_amb'].tostring = '1' then begin
-      cmdText := cmdText + 'or be_eligible_als_amb = 1 ';
-    end;
-    if bdr_factors['be_als_squad'].tostring = '1' then begin
-      cmdText := cmdText + 'or be_eligible_als_squad = 1 ';
-    end;
-    if bdr_factors['be_bls_amb'].tostring = '1' then begin
-      cmdText := cmdText + 'or be_eligible_bls_amb = 1 ';
-    end;
-    if bdr_factors['be_qrs'].tostring = '1' then begin
-      cmdText := cmdText + 'or be_eligible_qrs = 1 ';
-    end;
-    cmdText := cmdText + 'ORDER BY description';
-    bdr_factors.Close;
-    //
-    // Build DropDownList using the appropriate query.
-    //
-    DropDownList_equipment_category.Items.Add(listitem.Create('-- Select --','0'));
-    //
-    bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
-    while bdr_services.Read do begin
-      DropDownList_equipment_category.Items.Add(listitem.Create(bdr_services['description'].tostring,bdr_services['code'].ToString));
-    end;
-    //
-    // Set Label_match_level.
-    //
-    match_level := decimal.Parse
-      (
-      borland.data.provider.bdpcommand.Create
-        (
-        'select factor'
-        + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
-        + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
-        appcommon.bdpconnection
-        )
-        .ExecuteScalar.tostring
-      );
-    Label_match_level.text := match_level.tostring('P0');
     //
     // Build cmdText_get_equipment_category_monetary_details
     //
@@ -186,11 +138,144 @@ begin
     bdri_equipment_category_allowable_cost := 1;
     bdri_equipment_category_funding_level := 2;
     //
+    be_before_deadline := session.item['be_before_service_to_county_submission_deadline'].tostring = 'True'; // Case matters.
+    if be_before_deadline then begin
+      //
+      // Determine this service's eligibility factors.
+      //
+      bdr_factors := borland.data.provider.bdpcommand.Create
+        (
+        'select (be_als_amb or be_air_amb) as be_als_amb,'
+        + ' (be_als_amb or be_als_squad) as be_als_squad,'
+        + ' (be_bls_amb or be_als_amb) as be_bls_amb,'
+        + ' (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs'
+        + ' FROM service'
+        + ' WHERE id = ' + session.item['service_user_id'].tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteReader;
+      bdr_factors.Read;
+      cmdText := 'SELECT code,description FROM eligible_provider_equipment_list WHERE FALSE '; // Default to empty set
+      if bdr_factors['be_als_amb'].tostring = '1' then begin
+        cmdText := cmdText + 'or be_eligible_als_amb = 1 ';
+      end;
+      if bdr_factors['be_als_squad'].tostring = '1' then begin
+        cmdText := cmdText + 'or be_eligible_als_squad = 1 ';
+      end;
+      if bdr_factors['be_bls_amb'].tostring = '1' then begin
+        cmdText := cmdText + 'or be_eligible_bls_amb = 1 ';
+      end;
+      if bdr_factors['be_qrs'].tostring = '1' then begin
+        cmdText := cmdText + 'or be_eligible_qrs = 1 ';
+      end;
+      cmdText := cmdText + 'ORDER BY description';
+      bdr_factors.Close;
+      //
+      // Build DropDownList using the appropriate query.
+      //
+      DropDownList_equipment_category.Items.Add(listitem.Create('-- Select --','0'));
+      //
+      bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
+      while bdr_services.Read do begin
+        DropDownList_equipment_category.Items.Add(listitem.Create(bdr_services['description'].tostring,bdr_services['code'].ToString));
+      end;
+    end else begin
+      //
+      // Set controls with static data that can be retrieved directly from the session object.
+      //
+      DropDownList_equipment_category.Items.Add
+        (
+        listitem.Create(session.item['emsof_request_item_equipment_category'].tostring,'0')
+        );
+      //
+      // Set controls with static data that must be retrieved from the database.
+      //
+      bdr_user_details := borland.data.provider.bdpcommand.Create
+        (
+        'select make_model,place_kept,be_refurbished,unit_cost,quantity,emsof_ante from emsof_request_detail'
+        + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+        +   ' and priority = ' + session.item['emsof_request_item_priority'].tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteReader;
+      bdr_user_details.Read;
+      TextBox_make_model.text := bdr_user_details['make_model'].tostring;
+      TextBox_place_kept.text := bdr_user_details['place_kept'].tostring;
+      if bdr_user_details['be_refurbished'].tostring = '0' then begin
+         RadioButtonList_condition.selectedindex := 0;
+      end else begin
+         RadioButtonList_condition.selectedindex := 1;
+      end;
+      TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
+      TextBox_quantity.text := bdr_user_details['quantity'].tostring;
+      Label_emsof_ante.text := decimal.Parse(bdr_user_details['emsof_ante'].tostring).tostring('N2');
+      //
+      ShowDependentData;
+      //
+      // Disable all item-detail-related user controls that should remain visible.
+      //
+      DropDownList_equipment_category.enabled := FALSE;
+      RequiredFieldValidator_equipment_category.enabled := FALSE;
+      RangeValidator_equipment_category.enabled := FALSE;
+      TextBox_make_model.enabled := FALSE;
+      RequiredFieldValidator_make_model.enabled := FALSE;
+      RegularExpressionValidator_make_model.enabled := FALSE;
+      TextBox_place_kept.enabled := FALSE;
+      RequiredFieldValidator_place_kept.enabled := FALSE;
+      RegularExpressionValidator_place_kept.enabled := FALSE;
+      RadioButtonList_condition.enabled := FALSE;
+      RequiredFieldValidator_condition.enabled := FALSE;
+      TextBox_unit_cost.enabled := FALSE;
+      RequiredFieldValidator_unit_cost.enabled := FALSE;
+      RegularExpressionValidator_unit_cost.enabled := FALSE;
+      TextBox_quantity.enabled := FALSE;
+      RequiredFieldValidator_quantity.enabled := FALSE;
+      RegularExpressionValidator_quantity.enabled := FALSE;
+      TextBox_additional_service_ante.enabled := FALSE;
+      RegularExpressionValidator_additional_service_ante.enabled := FALSE;
+      //
+      // Make all other item-detail-related controls invisible.
+      //
+      LinkButton_recalculate_1.visible := FALSE;
+      LinkButton_recalculate_2.visible := FALSE;
+      LinkButton_recalculate_3.visible := FALSE;
+      Button_submit_and_repeat.enabled := FALSE;
+      Button_submit_and_stop.enabled := FALSE;
+      TableRow_delete.visible := FALSE;
+      //
+    end;
+    //
+    if session.item['emsof_request_item_priority'].tostring = system.string.EMPTY then begin
+      //
+      // Set Label_match_level.
+      //
+      match_level := decimal.Parse
+        (
+        borland.data.provider.bdpcommand.Create
+          (
+          'select factor'
+          + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
+          + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+          appcommon.bdpconnection
+          )
+          .ExecuteScalar.tostring
+        );
+      Label_match_level.text := match_level.tostring('P0');
+      //
+      TableRow_delete.visible := FALSE;
+      //
+    end else begin // We were called to operate on an explicitly selected request item.
+      if be_before_deadline then begin
+      end else begin // Deadline has passed.  Do not allow any modifications.
+      end;
+    end;
+    //
     appcommon.bdpconnection.Close;
+    //
   end;
 end;
 
-procedure TWebForm_create_new_item_request.OnInit(e: EventArgs);
+procedure TWebForm_request_item_detail.OnInit(e: EventArgs);
 begin
   //
   // Required for Designer support
@@ -199,32 +284,32 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_create_new_item_request.LinkButton_recalculate_3_Click(sender: System.Object;
+procedure TWebForm_request_item_detail.LinkButton_recalculate_3_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   Recalculate;
 end;
 
-procedure TWebForm_create_new_item_request.LinkButton_recalculate_2_Click(sender: System.Object;
+procedure TWebForm_request_item_detail.LinkButton_recalculate_2_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   Recalculate;
 end;
 
-procedure TWebForm_create_new_item_request.LinkButton_recalculate_1_Click(sender: System.Object;
+procedure TWebForm_request_item_detail.LinkButton_recalculate_1_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   Recalculate;
 end;
 
-procedure TWebForm_create_new_item_request.Button_submit_and_stop_Click(sender: System.Object;
+procedure TWebForm_request_item_detail.Button_submit_and_stop_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   AddItem;
   server.Transfer('request_overview.aspx');
 end;
 
-procedure TWebForm_create_new_item_request.Button_submit_and_repeat_Click(sender: System.Object;
+procedure TWebForm_request_item_detail.Button_submit_and_repeat_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   AddItem;
@@ -243,64 +328,19 @@ begin
   Label_emsof_ante.text := '';
 end;
 
-procedure TWebForm_create_new_item_request.DropDownList_equipment_category_SelectedIndexChanged(sender: System.Object;
+procedure TWebForm_request_item_detail.DropDownList_equipment_category_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
-var
-  bdr: borland.data.provider.bdpdatareader;
-  life_expectancy_string: string;
 begin
-  appcommon.bdpconnection.Open;
-  bdr := borland.data.provider.bdpcommand.Create
-    (
-    cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
-    appcommon.bdpconnection
-    )
-    .ExecuteReader;
-  if bdr.Read then begin
-    //
-    life_expectancy_string := bdr['life_expectancy_years'].tostring;
-    //
-    if life_expectancy_string <> system.string.EMPTY then begin
-      Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
-      Label_life_expectancy.font.bold := TRUE;
-    end else begin
-      Label_life_expectancy.text := 'PA DOH EMSO has not specified a life expectancy for this category of equipment.';
-      Label_life_expectancy.font.bold := FALSE;
-    end;
-    //
-    if not bdr.IsDbNull(bdri_equipment_category_allowable_cost) then begin
-      Label_allowable_cost.text := bdr['allowable_cost'].tostring;
-      allowable_cost := decimal.Parse(Label_allowable_cost.text);
-    end else begin
-      Label_allowable_cost.text := '(none specified)';
-      allowable_cost := decimal.maxvalue;
-    end;
-    //
-    if not bdr.IsDbNull(bdri_equipment_category_funding_level) then begin
-      funding_level := decimal.Parse(bdr['funding_level'].tostring);
-    end else begin
-      funding_level := decimal.maxvalue;
-    end;
-    //
-    if funding_level = allowable_cost then begin
-      Label_match_level.text := '100%';
-    end else begin
-      Label_match_level.text := match_level.tostring('P0');
-    end;
-    //
-  end;
-  appcommon.bdpconnection.Close;
-  //
-  Recalculate;
+  ShowDependentData;
 end;
 
-procedure TWebForm_create_new_item_request.Button_cancel_Click(sender: System.Object;
+procedure TWebForm_request_item_detail.Button_cancel_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   server.Transfer('request_overview.aspx');
 end;
 
-procedure TWebForm_create_new_item_request.Recalculate;
+procedure TWebForm_request_item_detail.Recalculate;
 var
   additional_service_ante: decimal;
   effective_emsof_ante: decimal;
@@ -359,7 +399,7 @@ begin
   end;
 end;
 
-procedure TWebForm_create_new_item_request.AddItem;
+procedure TWebForm_request_item_detail.AddItem;
 var
   priority_string: string;
 begin
@@ -406,6 +446,56 @@ begin
     .ExecuteNonQuery;
   //
   appcommon.bdpconnection.Close;
+end;
+
+procedure TWebForm_request_item_detail.ShowDependentData;
+var
+  bdr: borland.data.provider.bdpdatareader;
+  life_expectancy_string: string;
+begin
+  appcommon.bdpconnection.Open;
+  bdr := borland.data.provider.bdpcommand.Create
+    (
+    cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
+    appcommon.bdpconnection
+    )
+    .ExecuteReader;
+  if bdr.Read then begin
+    //
+    life_expectancy_string := bdr['life_expectancy_years'].tostring;
+    //
+    if life_expectancy_string <> system.string.EMPTY then begin
+      Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
+      Label_life_expectancy.font.bold := TRUE;
+    end else begin
+      Label_life_expectancy.text := 'PA DOH EMSO has not specified a life expectancy for this category of equipment.';
+      Label_life_expectancy.font.bold := FALSE;
+    end;
+    //
+    if not bdr.IsDbNull(bdri_equipment_category_allowable_cost) then begin
+      Label_allowable_cost.text := bdr['allowable_cost'].tostring;
+      allowable_cost := decimal.Parse(Label_allowable_cost.text);
+    end else begin
+      Label_allowable_cost.text := '(none specified)';
+      allowable_cost := decimal.maxvalue;
+    end;
+    //
+    if not bdr.IsDbNull(bdri_equipment_category_funding_level) then begin
+      funding_level := decimal.Parse(bdr['funding_level'].tostring);
+    end else begin
+      funding_level := decimal.maxvalue;
+    end;
+    //
+    if funding_level = allowable_cost then begin
+      Label_match_level.text := '100%';
+    end else begin
+      Label_match_level.text := match_level.tostring('P0');
+    end;
+    //
+  end;
+  appcommon.bdpconnection.Close;
+  //
+  Recalculate;
 end;
 
 end.
