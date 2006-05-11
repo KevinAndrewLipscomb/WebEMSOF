@@ -122,7 +122,7 @@
 							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
-			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additional_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
+			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additional_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[0-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>
 			  <td>
@@ -137,7 +137,7 @@
 						</div></td>
 			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>
                                   <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp;
-											    &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
+											     &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
 				<div id="Div_bottom_backlink" runat="server">
 				  [&nbsp;Back&nbsp;to&nbsp;<ASP:HyperLink id="HyperLink_request_overview_2" runat="server" navigateurl="request_overview.aspx">request&nbsp;overview</ASP:HyperLink>&nbsp;form&nbsp;]
 				</div>
