@@ -68,6 +68,7 @@ var
   be_before_deadline: boolean;
   dgi_master_id: cardinal;
   dgi_priority: cardinal;
+  dgi_code: cardinal;
   dgi_item_description: cardinal;
   dgi_status: cardinal;
   dgi_linkbutton_select: cardinal;
@@ -92,12 +93,13 @@ begin
     county_dictated_appropriation_amount := decimal.Parse(session.item['county_dictated_appropriation_amount'].tostring);
     dgi_master_id := 0;
     dgi_priority := 1;
-    dgi_item_description := 2;
-    dgi_emsof_ante := 3;
-    dgi_status := 4;
-    dgi_linkbutton_select := 5;
-    dgi_linkbutton_increase_priority := 6;
-    dgi_linkbutton_decrease_priority := 7;
+    dgi_code := 2;
+    dgi_item_description := 3;
+    dgi_emsof_ante := 4;
+    dgi_status := 5;
+    dgi_linkbutton_select := 6;
+    dgi_linkbutton_increase_priority := 7;
+    dgi_linkbutton_decrease_priority := 8;
     num_items := 0;
     sum_of_emsof_antes := 0;
     //
@@ -141,6 +143,8 @@ begin
     //
     session.Remove('be_before_service_to_county_submission_deadline');
     session.Add('be_before_service_to_county_submission_deadline',be_before_deadline.tostring);
+    session.Remove('be_finalized');
+    session.Add('be_finalized','False');
     //
     // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
     // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
@@ -227,8 +231,10 @@ begin
   end else begin // e.commandname = 'Select'
     session.Remove('emsof_request_item_priority');
     session.Add('emsof_request_item_priority',Safe(e.item.cells[dgi_priority].text,NUM));
+    session.Remove('emsof_request_item_code');
+    session.Add('emsof_request_item_code',Safe(e.item.cells[dgi_code].text,NUM));
     session.Remove('emsof_request_item_equipment_category');
-    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[dgi_item_description].text,NUM));
+    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[dgi_item_description].text,NARRATIVE));
     server.Transfer('request_item_detail.aspx');
   end;
   Bind_items;
@@ -261,9 +267,10 @@ begin
   //
   cmdText := 'select master_id,'                                         // column 0
   + ' priority,'                                                         // column 1
-  + ' eligible_provider_equipment_list.description as item_description,' // column 2
-  + ' emsof_ante,'                                                       // column 3
-  + ' item_status_code_description_map.description as status'            // column 4
+  + ' eligible_provider_equipment_list.code,'                            // column 2
+  + ' eligible_provider_equipment_list.description as item_description,' // column 3
+  + ' emsof_ante,'                                                       // column 4
+  + ' item_status_code_description_map.description as status'            // column 5
   + ' from emsof_request_detail'
   +   ' join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
   +   ' join item_status_code_description_map on (item_status_code_description_map.code=emsof_request_detail.status_code)'

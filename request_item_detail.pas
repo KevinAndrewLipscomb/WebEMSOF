@@ -22,6 +22,8 @@ type
     procedure LinkButton_recalculate_1_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_recalculate_2_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_recalculate_3_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_delete_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_update_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -63,10 +65,13 @@ type
     LinkButton_recalculate_1: System.Web.UI.WebControls.LinkButton;
     LinkButton_recalculate_2: System.Web.UI.WebControls.LinkButton;
     LinkButton_recalculate_3: System.Web.UI.WebControls.LinkButton;
-    HyperLink_request_overview: System.Web.UI.WebControls.HyperLink;
     CheckBox_delete: System.Web.UI.WebControls.CheckBox;
     Button_delete: System.Web.UI.WebControls.Button;
     TableRow_delete: System.Web.UI.HtmlControls.HtmlTableRow;
+    Button_update: System.Web.UI.WebControls.Button;
+    HyperLink_request_overview_1: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_2: System.Web.UI.WebControls.HyperLink;
+    Div_bottom_backlink: System.Web.UI.HtmlControls.HtmlGenericControl;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -88,7 +93,9 @@ begin
   Include(Self.LinkButton_recalculate_3.Click, Self.LinkButton_recalculate_3_Click);
   Include(Self.Button_submit_and_repeat.Click, Self.Button_submit_and_repeat_Click);
   Include(Self.Button_submit_and_stop.Click, Self.Button_submit_and_stop_Click);
+  Include(Self.Button_update.Click, Self.Button_update_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
+  Include(Self.Button_delete.Click, Self.Button_delete_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -96,12 +103,14 @@ end;
 const ID = '$Id$';
 
 var
+  additional_service_ante: decimal;
   allowable_cost: decimal;
   bdri_equipment_category_allowable_cost: cardinal;
   bdri_equipment_category_funding_level: cardinal;
   cmdText_get_equipment_category_monetary_details: string;
   funding_level: decimal;
   match_level: decimal;
+  saved_emsof_ante: decimal;
 
 procedure TWebForm_request_item_detail.Page_Load(sender: System.Object; e: System.EventArgs);
 var
@@ -109,6 +118,9 @@ var
   bdr_services: borland.data.provider.BdpDataReader;
   bdr_user_details: borland.data.provider.BdpDataReader;
   be_before_deadline: boolean;
+  be_finalized: boolean;
+  be_locked: boolean;
+  be_new: boolean;
   cmdText: string;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -116,6 +128,20 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
     //
     appcommon.bdpconnection.Open;
+    //
+    // Set Label_match_level.
+    //
+    match_level := decimal.Parse
+      (
+      borland.data.provider.bdpcommand.Create
+        (
+        'select factor'
+        + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
+        + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteScalar.tostring
+      );
     //
     // Build cmdText_get_equipment_category_monetary_details
     //
@@ -139,7 +165,19 @@ begin
     bdri_equipment_category_funding_level := 2;
     //
     be_before_deadline := session.item['be_before_service_to_county_submission_deadline'].tostring = 'True'; // Case matters.
-    if be_before_deadline then begin
+    be_finalized := session.item['be_finalized'].tostring = 'True'; // Case matters.
+    be_locked := (not be_before_deadline) or be_finalized;
+    be_new := session.item['emsof_request_item_priority'].tostring = system.string.EMPTY;
+    //
+    // Manage whether or not the instruction ("-- Select --") appears at the top of DropDownList_equipment_category.
+    //
+    if be_new then begin
+      DropDownList_equipment_category.Items.Add(listitem.Create('-- Select --','0'));
+    end;
+    //
+    // Manage the loading of nominal elements into DropDownList_equipment_category.
+    //
+    if be_new or (not be_locked) then begin
       //
       // Determine this service's eligibility factors.
       //
@@ -171,28 +209,48 @@ begin
       cmdText := cmdText + 'ORDER BY description';
       bdr_factors.Close;
       //
-      // Build DropDownList using the appropriate query.
-      //
-      DropDownList_equipment_category.Items.Add(listitem.Create('-- Select --','0'));
-      //
       bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
       while bdr_services.Read do begin
         DropDownList_equipment_category.Items.Add(listitem.Create(bdr_services['description'].tostring,bdr_services['code'].ToString));
       end;
     end else begin
-      //
-      // Set controls with static data that can be retrieved directly from the session object.
-      //
       DropDownList_equipment_category.Items.Add
         (
-        listitem.Create(session.item['emsof_request_item_equipment_category'].tostring,'0')
+        listitem.Create
+          (
+          session.item['emsof_request_item_equipment_category'].tostring,
+          session.item['emsof_request_item_code'].tostring
+          )
         );
       //
-      // Set controls with static data that must be retrieved from the database.
+    end;
+    //
+    // Manage the initially selected value in DropDownList_equipment_category and the availability of the submit/update/delete
+    // options.
+    //
+    if not (be_new or be_locked) then begin
+      DropDownList_equipment_category.selectedvalue := session.item['emsof_request_item_code'].tostring;
+      Button_submit_and_repeat.visible := FALSE;
+      Button_submit_and_stop.visible := FALSE;
+      Button_update.visible := TRUE;
+    end else begin
+      TableRow_delete.visible := FALSE;
+    end;
+    //
+    // Manage the filling of the other data elements.
+    //
+    if be_new then begin
+      Label_match_level.text := match_level.tostring('P0');
+    end else begin
+      //
+      appcommon.bdpconnection.Close;
+      ShowDependentData;
+      appcommon.bdpconnection.Open;
       //
       bdr_user_details := borland.data.provider.bdpcommand.Create
         (
-        'select make_model,place_kept,be_refurbished,unit_cost,quantity,emsof_ante from emsof_request_detail'
+        'select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante'
+        + ' from emsof_request_detail'
         + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
         +   ' and priority = ' + session.item['emsof_request_item_priority'].tostring,
         appcommon.bdpconnection
@@ -208,11 +266,17 @@ begin
       end;
       TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
       TextBox_quantity.text := bdr_user_details['quantity'].tostring;
-      Label_emsof_ante.text := decimal.Parse(bdr_user_details['emsof_ante'].tostring).tostring('N2');
+      TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
+      saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
+      Label_emsof_ante.text := saved_emsof_ante.tostring('N2');
       //
-      ShowDependentData;
+      Recalculate;
       //
-      // Disable all item-detail-related user controls that should remain visible.
+    end;
+    //
+    // Manage the availability of the remaining item-detail-related controls.
+    //
+    if be_locked then begin
       //
       DropDownList_equipment_category.enabled := FALSE;
       RequiredFieldValidator_equipment_category.enabled := FALSE;
@@ -239,35 +303,14 @@ begin
       LinkButton_recalculate_1.visible := FALSE;
       LinkButton_recalculate_2.visible := FALSE;
       LinkButton_recalculate_3.visible := FALSE;
-      Button_submit_and_repeat.enabled := FALSE;
-      Button_submit_and_stop.enabled := FALSE;
-      TableRow_delete.visible := FALSE;
+      Button_submit_and_repeat.visible := FALSE;
+      Button_submit_and_stop.visible := FALSE;
+      Button_update.visible := FALSE;
+      Button_cancel.visible := FALSE;
+      Div_bottom_backlink.visible := TRUE;
       //
-    end;
-    //
-    if session.item['emsof_request_item_priority'].tostring = system.string.EMPTY then begin
-      //
-      // Set Label_match_level.
-      //
-      match_level := decimal.Parse
-        (
-        borland.data.provider.bdpcommand.Create
-          (
-          'select factor'
-          + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
-          + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
-          appcommon.bdpconnection
-          )
-          .ExecuteScalar.tostring
-        );
-      Label_match_level.text := match_level.tostring('P0');
-      //
-      TableRow_delete.visible := FALSE;
-      //
-    end else begin // We were called to operate on an explicitly selected request item.
-      if be_before_deadline then begin
-      end else begin // Deadline has passed.  Do not allow any modifications.
-      end;
+    end else begin
+      Div_bottom_backlink.visible := FALSE;
     end;
     //
     appcommon.bdpconnection.Close;
@@ -282,6 +325,82 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_item_detail.Button_update_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  //
+  Recalculate;  // Forces setting of additional_service_ante
+  //
+  appcommon.bdpconnection.Open;
+  //
+  // Update the detail record.
+  // Update the master record.
+  //
+  borland.data.provider.bdpcommand.Create
+    (
+    'START TRANSACTION'
+    + ';'
+    + 'update emsof_request_detail'
+    + ' set equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
+    +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
+    +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
+    +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
+    +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
+    +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
+    +   ' additional_service_ante = ' + additional_service_ante.tostring + ','
+    +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
+    + ' where master_id = ' + session.Item['emsof_request_master_id'].tostring
+    +   ' and priority = ' + session.Item['emsof_request_item_priority'].tostring
+    + ';'
+    + 'update emsof_request_master'
+    + ' set value = value - ' + saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
+    + ' where id = ' + session.Item['emsof_request_master_id'].tostring
+    + ';'
+    + 'COMMIT;',
+    appcommon.bdpconnection
+    )
+    .ExecuteNonQuery;
+  //
+  appcommon.bdpconnection.Close;
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_request_item_detail.Button_delete_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  if CheckBox_delete.checked then begin
+    appcommon.bdpconnection.Open;
+    //
+    // Delete the detail record.
+    // Eliminate the resulting gap in the priority sequence.
+    // Update the master record.
+    //
+    borland.data.provider.bdpcommand.Create
+      (
+      'START TRANSACTION'
+      + ';'
+      + 'delete from emsof_request_detail'
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority = ' + session.item['emsof_request_item_priority'].tostring
+      + ';'
+      + 'update emsof_request_detail set priority = priority - 1'
+      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      +   ' and priority > ' + session.item['emsof_request_item_priority'].tostring
+      + ';'
+      + 'update emsof_request_master'
+      + ' set value = value - ' + saved_emsof_ante.tostring + ','
+      +   ' num_items = num_items - 1'
+      + ' where id = ' + session.Item['emsof_request_master_id'].tostring
+      + ';'
+      + 'COMMIT;',
+      appcommon.bdpconnection
+      )
+      .ExecuteNonQuery;
+    appcommon.bdpconnection.Close;
+    server.Transfer('request_overview.aspx');
+  end;
 end;
 
 procedure TWebForm_request_item_detail.LinkButton_recalculate_3_Click(sender: System.Object;
@@ -342,7 +461,6 @@ end;
 
 procedure TWebForm_request_item_detail.Recalculate;
 var
-  additional_service_ante: decimal;
   effective_emsof_ante: decimal;
   max_emsof_ante: decimal;
   quantity: decimal;
@@ -394,6 +512,7 @@ begin
     //
     effective_emsof_ante := max_emsof_ante - additional_service_ante;
     //
+    Label_match_level.text := (effective_emsof_ante/total_cost).tostring('P0');
     Label_emsof_ante.text := effective_emsof_ante.tostring('N2');
     Label_min_service_ante.text := (total_cost - max_emsof_ante).tostring('N2');
   end;
@@ -403,7 +522,11 @@ procedure TWebForm_request_item_detail.AddItem;
 var
   priority_string: string;
 begin
+  //
+  Recalculate;  // Forces setting of additional_service_ante
+  //
   appcommon.bdpconnection.Open;
+  //
   //
   // Get the number of items entered against this request previously, and initialize this item to have a priority just lower than
   // all previous items.
@@ -416,31 +539,31 @@ begin
     .ExecuteScalar.tostring;
   //
   // Record the new request item.
-  //
-  borland.data.provider.bdpcommand.Create
-    (
-    'insert into emsof_request_detail'
-    + ' set master_id = ' + session.Item['emsof_request_master_id'].tostring + ','
-    +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
-    +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
-    +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
-    +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
-    +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
-    +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
-    +   ' priority = ' + priority_string,
-    appcommon.bdpconnection
-    )
-    .ExecuteNonQuery;
-  //
   // Update the master record.
   //
   borland.data.provider.bdpcommand.Create
     (
-    'update emsof_request_master'
+    'START TRANSACTION'
+    + ';'
+    + 'insert into emsof_request_detail'
+    + ' set master_id = ' + session.Item['emsof_request_master_id'].tostring + ','
+    +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
+    +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
+    +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
+    +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
+    +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
+    +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
+    +   ' additional_service_ante = ' + additional_service_ante.tostring + ','
+    +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
+    +   ' priority = ' + priority_string
+    + ';'
+    + 'update emsof_request_master'
     + ' set status_code = 2,'
     +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
     +   ' num_items = num_items + 1'
-    + ' where id = ' + session.Item['emsof_request_master_id'].tostring,
+    + ' where id = ' + session.Item['emsof_request_master_id'].tostring
+    + ';'
+    + 'COMMIT;',
     appcommon.bdpconnection
     )
     .ExecuteNonQuery;
@@ -450,19 +573,19 @@ end;
 
 procedure TWebForm_request_item_detail.ShowDependentData;
 var
-  bdr: borland.data.provider.bdpdatareader;
+  bdr_state_details: borland.data.provider.bdpdatareader;
   life_expectancy_string: string;
 begin
   appcommon.bdpconnection.Open;
-  bdr := borland.data.provider.bdpcommand.Create
+  bdr_state_details := borland.data.provider.bdpcommand.Create
     (
     cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
     appcommon.bdpconnection
     )
     .ExecuteReader;
-  if bdr.Read then begin
+  if bdr_state_details.Read then begin
     //
-    life_expectancy_string := bdr['life_expectancy_years'].tostring;
+    life_expectancy_string := bdr_state_details['life_expectancy_years'].tostring;
     //
     if life_expectancy_string <> system.string.EMPTY then begin
       Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
@@ -472,16 +595,16 @@ begin
       Label_life_expectancy.font.bold := FALSE;
     end;
     //
-    if not bdr.IsDbNull(bdri_equipment_category_allowable_cost) then begin
-      Label_allowable_cost.text := bdr['allowable_cost'].tostring;
+    if not bdr_state_details.IsDbNull(bdri_equipment_category_allowable_cost) then begin
+      Label_allowable_cost.text := bdr_state_details['allowable_cost'].tostring;
       allowable_cost := decimal.Parse(Label_allowable_cost.text);
     end else begin
       Label_allowable_cost.text := '(none specified)';
       allowable_cost := decimal.maxvalue;
     end;
     //
-    if not bdr.IsDbNull(bdri_equipment_category_funding_level) then begin
-      funding_level := decimal.Parse(bdr['funding_level'].tostring);
+    if not bdr_state_details.IsDbNull(bdri_equipment_category_funding_level) then begin
+      funding_level := decimal.Parse(bdr_state_details['funding_level'].tostring);
     end else begin
       funding_level := decimal.maxvalue;
     end;

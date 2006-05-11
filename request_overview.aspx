@@ -14,7 +14,7 @@
 <h3>
 		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3>
 	  <p><small>[ Back to <ASP:HyperLink id="HyperLink_service_overview" runat="server"
-                         navigateurl="service_overview.aspx">service overview</ASP:HyperLink>form ]&nbsp; [ Change your WebEMSOF
+                         navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ]&nbsp; [ Change your WebEMSOF
 		<ASP:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:hyperlink>&nbsp;| <ASP:HyperLink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</ASP:HyperLink>&nbsp;]
 	  </small></p>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
@@ -84,7 +84,7 @@
 		  <tr>
 			<td colspan="3">
 		  <ASP:DataGrid id="DataGrid_items" runat="server"
-			bordercolor="#dcdcdc"
+			bordercolor="Gainsboro"
 			borderstyle="None"
 			borderwidth="1px"
 			backcolor="White"
@@ -94,32 +94,33 @@
 			useaccessibleheader="True"
 			autogeneratecolumns="False"
 			visible="False">
-            <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
-			<SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
-            <HeaderStyle font-bold="True" backcolor="#f5f5f5"></HeaderStyle>
-            <Columns>
-			  <ASP:BoundColumn visible="False" datafield="master_id" readonly="True">
-                <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
-              </ASP:BoundColumn>
-              <ASP:BoundColumn datafield="priority" readonly="True" headertext="Priority">
-				<ItemStyle horizontalalign="Center"></ItemStyle>
-              </ASP:BoundColumn>
-              <ASP:BoundColumn datafield="item_description" readonly="True" headertext="Description"></ASP:BoundColumn>
-              <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF ante" dataformatstring="{0:C}">
-				<ItemStyle horizontalalign="Right"></ItemStyle>
-              </ASP:BoundColumn>
-              <ASP:BoundColumn datafield="status" readonly="True" headertext="Status"></ASP:BoundColumn>
-              <ASP:ButtonColumn text="Select" commandname="Select">
-				<ItemStyle forecolor="#0000FF"></ItemStyle>
-              </ASP:ButtonColumn>
-              <ASP:ButtonColumn text="Increase priority" commandname="IncreasePriority">
-                <ItemStyle forecolor="#0000FF"></ItemStyle>
-			  </ASP:ButtonColumn>
-              <ASP:ButtonColumn text="Decrease priority" commandname="DecreasePriority">
-                <ItemStyle forecolor="#0000FF"></ItemStyle>
-              </ASP:ButtonColumn>
-			</Columns>
-            <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
+                          <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
+                          <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
+                          <HeaderStyle font-bold="True" backcolor="WhiteSmoke"></HeaderStyle>
+                          <Columns>
+                            <ASP:BoundColumn visible="False" datafield="master_id" readonly="True">
+                              <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
+                            </ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="priority" readonly="True" headertext="Priority">
+                              <ItemStyle horizontalalign="Center"></ItemStyle>
+                            </ASP:BoundColumn>
+                            <ASP:BoundColumn visible="False" datafield="code" readonly="True"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="item_description" readonly="True" headertext="Description"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF ante" dataformatstring="{0:C}">
+                              <ItemStyle horizontalalign="Right"></ItemStyle>
+                            </ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="status" readonly="True" headertext="Status"></ASP:BoundColumn>
+                            <ASP:ButtonColumn text="Select" commandname="Select">
+                              <ItemStyle forecolor="Blue"></ItemStyle>
+                            </ASP:ButtonColumn>
+                            <ASP:ButtonColumn text="Increase priority" commandname="IncreasePriority">
+                              <ItemStyle forecolor="Blue"></ItemStyle>
+                            </ASP:ButtonColumn>
+                            <ASP:ButtonColumn text="Decrease priority" commandname="DecreasePriority">
+                              <ItemStyle forecolor="Blue"></ItemStyle>
+                            </ASP:ButtonColumn>
+                          </Columns>
+                          <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle></ASP:DataGrid>
             </td>
           </tr>
 		</table>
