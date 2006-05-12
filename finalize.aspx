@@ -35,32 +35,94 @@
 		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_summary" runat="server">
 			<tr>
 			  <td>
-              <table cellspacing="0" cellpadding="10" border="0">
-                  <tr>
-                    <td bgcolor="#f5f5f5"><strong>SUMMARY</strong></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <p>This form allows you to&nbsp;~~~ your Requested Items List to your County EMSOF Coordinator for approval.</p>
-                      <p>You must confirm the following before clicking the LOCK AND ~~~:</p>
-                      <p>1. Grand Total Cost &amp; up-front payment to vendors.</p>
-                      <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
-                        <p>
-                          <ASP:CheckBox id="CheckBox1" runat="server"></ASP:CheckBox>
-                        </p>
-                      </blockquote>
-                      <p>2. Total EMSOF Reimbursement.</p>
-                      <p>3. Amount that will not be reimbursed.</p>
-                      <p>4. Terms &amp; Conditions.</p>
-                      <p>5. WebEMSOF will notify County EMSOF Coordinator&nbsp;of finalization via&nbsp;email.</p>
-                      <p>6. You will have read-only access to your request until your County EMSOF Coordinator dispositions it.</p>
-                      <p>7. Other deadlines.</p></td>
-                  </tr>
-              </table></td>
+			  <table cellspacing="0" cellpadding="10" border="0">
+				  <tr>
+					<td bgcolor="#f5f5f5"><strong>SUMMARY</strong></td>
+				  </tr>
+				  <tr>
+					<td>
+					  <p>This form allows you to&nbsp;route your Requested Items List to your County EMSOF Coordinator for approval.</p>
+					  <p>You must confirm the following before clicking the gray button at the bottom of the page:</p>
+					  <ol>
+                        <li>
+                      <p>Do you understand that if you complete this form and click the gray button below, you will <u>not</u> be able to make any future modifications to your request (unless your County EMSOF Coordinator rejects it and routes it back to you)?<br>
+                            <br>
+                            <ASP:CheckBox id="CheckBox_understand_read_only_1" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+						<li>
+					  <p>Do you understand that the anticipated grand total cost of your request is
+							<ASP:Label id="Label_grand_total_cost" runat="server" font-bold="True"></ASP:Label>, and that your service must pay all costs "up front" when ordering from vendors?<br>
+							<br>
+							<ASP:CheckBox id="CheckBox_understand_grand_total_up_front" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+						<li>
+					  <p>Do you understand that EMSOF will only reimburse a maximum of&nbsp;<ASP:Label id="Label_max_reimbursement" runat="server" font-bold="True"></ASP:Label>&nbsp;to your service?<br>
+							<br>
+							<ASP:CheckBox id="CheckBox_understand_max_reimbursement" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+						<li>
+					  <p>Do you understand that, if your actual costs are less than your anticipated costs, the actual EMSOF reimbursement will also be less than shown above?<br>
+							<br>
+							<ASP:CheckBox id="CheckBox_understand_anticipated_vs_actual" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+						<li>
+					  <p>Do you understand that, if you purchase all the items in your request,&nbsp;at least
+							<ASP:Label id="Label_unreimbursed_amount" runat="server" font-bold="True"></ASP:Label>of your costs will <u>not</u> be reimbursed?<br>
+							<br>
+							<ASP:CheckBox id="CheckBox_understand_unreimbursed_amount" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+						<li>
+					  <p>Do you understand that you must 
+                            <u>not</u> order any of the items you have requested until <u>after</u> you receive an Approval To Proceed notice from the Regional Council?<br>
+                            <br>
+                            <ASP:CheckBox id="CheckBox_understand_wait_for_approval_to_order" runat="server" text="Yes"></ASP:CheckBox></p></li>
+						<li>
+					  <p>After you receive the Approval To Proceed notice, these deadlines will apply:<br>
+                            <br>
+                            <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+                                <tr>
+                                  <td>
+							<table cellspacing="0" cellpadding="5" border="0">
+								<tr bgcolor="#f5f5f5">
+								  <td colspan="2"><strong>Deadlines</strong></td>
+								</tr>
+								<tr>
+								  <td>You must complete the purchase of all items by:</td>
+								  <td>
+                                            <ASP:Label id="Label_deadline_purchase_completion" runat="server"></ASP:Label></td>
+								</tr>
+                                <tr>
+                                  <td>You must submit all associated invoices to the Regional Council by:</td>
+                                  <td>
+                                            <ASP:Label id="Label_deadline_invoice_submission" runat="server"></ASP:Label></td>
+								</tr>
+								<tr>
+								  <td>You must submit all associated canceled checks to the Regional Council by:</td>
+								  <td>
+                                            <ASP:Label id="Label_deadline_canceled_check_submission" runat="server"></ASP:Label></td>
+                                </tr>
+							</table></td>
+                                </tr>
+                            </table><br>Do you understand these deadlines?
+							<br>
+							<br>
+							<ASP:CheckBox id="CheckBox_understand_deadlines" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+						<li>
+					  <p>Have you read, do you understand, and do you agree to abide by the
+							<ASP:HyperLink id="HyperLink_terms_and_conditions" runat="server" font-bold="True" navigateurl="terms-and-conditions.pdf" target="_blank">Terms & Conditions</ASP:HyperLink>&nbsp;of this cycle's EMSOF program?<br>
+							<br>
+							<ASP:CheckBox id="CheckBox_agree_to_terms_and_conditions" runat="server" text="Yes"></ASP:CheckBox></p></li>
+                        <li>
+                      <p>Again, do you understand that if you complete this form and click the gray button below, you will <u>not</u> be able to make any future modifications to your request (unless your County EMSOF Coordinator rejects it and routes it back to you)?<br>
+							<br>
+							<ASP:CheckBox id="CheckBox_understand_read_only_2" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+					  </ol>
+					  <p><strong>If you answered Yes to all the above questions, you may complete the Request Phase Finalization process by clicking this button:</strong></p>
+					  <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
+					  <p>
+						  <ASP:Button id="Button_finalize" runat="server" text="LOCK YOUR REQUEST AND ROUTE IT TO COUNTY"></ASP:Button></p>
+					  </blockquote></td>
+				  </tr>
+			  </table></td>
 			</tr>
-        </table>
-    <asp:placeholder id="PlaceHolder_postcontent" runat="server">
-    </asp:placeholder>
-     </form>
+		</table>
+	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
+	</asp:placeholder>
+	 </form>
   </body>
 </html>
