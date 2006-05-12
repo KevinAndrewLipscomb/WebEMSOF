@@ -21,7 +21,9 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_service_name: System.Web.UI.WebControls.Label;
-    HyperLink_request_overview: System.Web.UI.WebControls.HyperLink;
+    Table_sorry: System.Web.UI.HtmlControls.HtmlTable;
+    Table_summary: System.Web.UI.HtmlControls.HtmlTable;
+    CheckBox1: System.Web.UI.WebControls.CheckBox;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }

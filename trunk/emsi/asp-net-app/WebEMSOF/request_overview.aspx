@@ -75,7 +75,7 @@
 			  </div></td>
 			  <td>
                         <p align="center">
-                          <ASP:HyperLink id="HyperLink_finalize" runat="server" font-bold="True">FINALIZE...</ASP:HyperLink>
+                          <ASP:HyperLink id="HyperLink_finalize" runat="server" font-bold="True" navigateurl="finalize.aspx" target="_blank">FINALIZE...</ASP:HyperLink>
                         </p></td>
 			</tr>
 			<tr>
