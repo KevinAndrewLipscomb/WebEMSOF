@@ -84,7 +84,7 @@ begin
       )
       .ExecuteReader;
     bdr.Read;
-    Label_deadline_invoice_submission.text :=
+    Label_deadline_purchase_completion.text :=
       datetime.Parse(bdr['emsof_service_purchase_completion_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
     bdr.Close;
     bdr := borland.data.provider.bdpcommand.Create
