@@ -45,9 +45,14 @@
 					  <p>You must confirm the following before clicking the gray button at the bottom of the page:</p>
 					  <ol>
                         <li>
-                      <p>Do you understand that if you complete this form and click the gray button below, you will <u>not</u> be able to make any future modifications to your request (unless your County EMSOF Coordinator rejects it and routes it back to you)?<br>
+                      <p>Do you understand that if you complete this form and click the gray button below, you will <u>not</u> be able to make any future changes to your request (other than costs and quantities), unless your County EMSOF Coordinator rejects it and routes it back to you?<br>
                             <br>
                             <ASP:CheckBox id="CheckBox_understand_read_only_1" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
+						<li id="ListItem_remainder_goes_to_region" runat="server">
+					  <p>Do you realize that you will forfeit the remaining 
+                            <ASP:Label id="Label_unused_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;of your appropriation?<br>
+                            <br>
+                            <ASP:CheckBox id="CheckBox_understand_remainder_goes_to_region" runat="server" text="Yes"></ASP:CheckBox></p></li>
 						<li>
 					  <p>Do you understand that the anticipated grand total cost of your request is
 							<ASP:Label id="Label_grand_total_cost" runat="server" font-bold="True"></ASP:Label>, and that your service must pay all costs "up front" when ordering from vendors?<br>
@@ -108,7 +113,7 @@
 							<br>
 							<ASP:CheckBox id="CheckBox_agree_to_terms_and_conditions" runat="server" text="Yes"></ASP:CheckBox></p></li>
                         <li>
-                      <p>Again, do you understand that if you complete this form and click the gray button below, you will <u>not</u> be able to make any future modifications to your request (unless your County EMSOF Coordinator rejects it and routes it back to you)?<br>
+                      <p>Again, do you understand that if you complete this form and click the gray button below, you will <u>not</u> be able to make any future changes to your request (other than costs and quantities), unless your County EMSOF Coordinator rejects it and routes it back to you?<br>
 							<br>
 							<ASP:CheckBox id="CheckBox_understand_read_only_2" runat="server" text="Yes"></ASP:CheckBox><br></p></li>
 					  </ol>
