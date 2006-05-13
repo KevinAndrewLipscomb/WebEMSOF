@@ -83,6 +83,7 @@ var
   county_dictated_appropriation_amount: decimal;
   make_item_requests_deadline: system.datetime;
   sum_of_emsof_antes: decimal;
+  unused_amount: decimal;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -158,15 +159,25 @@ begin
     bdr.Read;
     num_items := bdr['num_items'].GetHashCode;
     sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
+    unused_amount := county_dictated_appropriation_amount - sum_of_emsof_antes;
+    //
+    // Add unused_amount to session object in case of request finalization.
+    //
+    session.Remove('unused_amount');
+    session.Add('unused_amount',unused_amount);
+    //
+    Label_sum_of_emsof_antes.text := sum_of_emsof_antes.tostring('C');
+    Label_unused_amount.Text := unused_amount.tostring('C');
+    if unused_amount < 0 then begin
+      Label_unused_amount.font.bold := TRUE;
+      Label_unused_amount.forecolor := color.red;
+    end;
     //
     if num_items = 0 then begin
       Label_no_appropriations.Visible := TRUE;
     end else begin
       DataGrid_items.Visible := TRUE;
     end;
-    //
-    Label_sum_of_emsof_antes.text := sum_of_emsof_antes.tostring('C');
-    Label_unused_amount.Text := (county_dictated_appropriation_amount - sum_of_emsof_antes).tostring('C');
     //
     AppCommon.BdpConnection.Close;
     //

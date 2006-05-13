@@ -24,6 +24,8 @@ type
     Label_service_name: System.Web.UI.WebControls.Label;
     Table_sorry: System.Web.UI.HtmlControls.HtmlTable;
     Table_summary: System.Web.UI.HtmlControls.HtmlTable;
+    CheckBox_understand_read_only_1: System.Web.UI.WebControls.CheckBox;
+    ListItem_remainder_goes_to_region: system.web.ui.htmlcontrols.htmlgenericcontrol;
     Label_grand_total_cost: System.Web.UI.WebControls.Label;
     CheckBox_understand_grand_total_up_front: System.Web.UI.WebControls.CheckBox;
     CheckBox_understand_max_reimbursement: System.Web.UI.WebControls.CheckBox;
@@ -40,7 +42,8 @@ type
     Label_deadline_purchase_completion: System.Web.UI.WebControls.Label;
     Label_deadline_invoice_submission: System.Web.UI.WebControls.Label;
     Label_deadline_canceled_check_submission: System.Web.UI.WebControls.Label;
-    CheckBox_understand_read_only_1: System.Web.UI.WebControls.CheckBox;
+    Label_unused_amount: System.Web.UI.WebControls.Label;
+    CheckBox_understand_remainder_goes_to_region: System.Web.UI.WebControls.CheckBox;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -72,50 +75,65 @@ begin
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
     //
-    appcommon.bdpconnection.Open;
+    Label_service_name.text := session.item['service_name'].tostring;
     //
-    bdr := borland.data.provider.bdpcommand.Create
-      (
-      'select value as emsof_service_purchase_completion_deadline'
-      + ' from fy_calendar'
-      +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
-      + ' where name = "emsof-service-purchase-completion-deadline"',
-      appcommon.bdpconnection
-      )
-      .ExecuteReader;
-    bdr.Read;
-    Label_deadline_purchase_completion.text :=
-      datetime.Parse(bdr['emsof_service_purchase_completion_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
-    bdr.Close;
-    bdr := borland.data.provider.bdpcommand.Create
-      (
-      'select value as emsof_service_invoice_submission_deadline'
-      + ' from fy_calendar'
-      +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
-      + ' where name = "emsof-service-invoice-submission-deadline"',
-      appcommon.bdpconnection
-      )
-      .ExecuteReader;
-    bdr.Read;
-    Label_deadline_invoice_submission.text :=
-      datetime.Parse(bdr['emsof_service_invoice_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
-    bdr.Close;
-    bdr := borland.data.provider.bdpcommand.Create
-      (
-      'select value as emsof_service_canceled_check_submission_deadline'
-      + ' from fy_calendar'
-      +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
-      + ' where name = "emsof-service-canceled-check-submission-deadline"',
-      appcommon.bdpconnection
-      )
-      .ExecuteReader;
-    bdr.Read;
-    Label_deadline_canceled_check_submission.text :=
-      datetime.Parse(bdr['emsof_service_canceled_check_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
-    bdr.Close;
-    //
-    appcommon.bdpconnection.Close;
-    //
+    if decimal(session.item['unused_amount']) >= 0 then begin
+      //
+      Table_sorry.visible := FALSE;
+      //
+      if decimal(session.item['unused_amount']) = 0 then begin
+        ListItem_remainder_goes_to_region.visible := FALSE;
+      end else begin
+        Label_unused_amount.text := decimal(session.item['unused_amount']).tostring('C');
+      end;
+      //
+      appcommon.bdpconnection.Open;
+      //
+      bdr := borland.data.provider.bdpcommand.Create
+        (
+        'select value as emsof_service_purchase_completion_deadline'
+        + ' from fy_calendar'
+        +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
+        + ' where name = "emsof-service-purchase-completion-deadline"',
+        appcommon.bdpconnection
+        )
+        .ExecuteReader;
+      bdr.Read;
+      Label_deadline_purchase_completion.text :=
+        datetime.Parse(bdr['emsof_service_purchase_completion_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+      bdr.Close;
+      bdr := borland.data.provider.bdpcommand.Create
+        (
+        'select value as emsof_service_invoice_submission_deadline'
+        + ' from fy_calendar'
+        +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
+        + ' where name = "emsof-service-invoice-submission-deadline"',
+        appcommon.bdpconnection
+        )
+        .ExecuteReader;
+      bdr.Read;
+      Label_deadline_invoice_submission.text :=
+        datetime.Parse(bdr['emsof_service_invoice_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+      bdr.Close;
+      bdr := borland.data.provider.bdpcommand.Create
+        (
+        'select value as emsof_service_canceled_check_submission_deadline'
+        + ' from fy_calendar'
+        +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
+        + ' where name = "emsof-service-canceled-check-submission-deadline"',
+        appcommon.bdpconnection
+        )
+        .ExecuteReader;
+      bdr.Read;
+      Label_deadline_canceled_check_submission.text :=
+        datetime.Parse(bdr['emsof_service_canceled_check_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+      bdr.Close;
+      //
+      appcommon.bdpconnection.Close;
+      //
+    end else begin
+      Table_summary.visible := FALSE;
+    end;
   end;
 end;
 
@@ -131,6 +149,7 @@ end;
 procedure TWebForm_finalize.Button_finalize_Click(sender: System.Object; e: System.EventArgs);
 begin
   if CheckBox_understand_read_only_1.checked
+    and ((decimal(session.item['unused_amount']) = 0) or CheckBox_understand_remainder_goes_to_region.checked)
     and CheckBox_understand_grand_total_up_front.checked
     and CheckBox_understand_max_reimbursement.checked
     and CheckBox_understand_anticipated_vs_actual.checked
@@ -140,6 +159,8 @@ begin
     and CheckBox_understand_read_only_2.checked
     and CheckBox_understand_wait_for_approval_to_order.checked
   then begin
+    //
+    server.Transfer('finalization_accepted.aspx');
     //
   end;
 end;

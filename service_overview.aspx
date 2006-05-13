@@ -53,13 +53,13 @@
                     </ASP:BoundColumn>
                     <ASP:BoundColumn visible="False" datafield="status_code" readonly="True" headertext="Status code"></ASP:BoundColumn>
                     <ASP:BoundColumn datafield="status" readonly="True" headertext="Status">
-                      <ItemStyle font-bold="True"></ItemStyle>
+                      <ItemStyle font-bold="True" horizontalalign="Center"></ItemStyle>
                     </ASP:BoundColumn>
                     <ASP:BoundColumn datafield="value" readonly="True" headertext="Amount requested" dataformatstring="{0:C}">
                       <ItemStyle horizontalalign="Right"></ItemStyle>
                     </ASP:BoundColumn>
                     <ASP:ButtonColumn text="Review" headertext="Action" commandname="Select">
-                      <ItemStyle font-bold="True" forecolor="Blue"></ItemStyle>
+                      <ItemStyle font-bold="True" horizontalalign="Center" forecolor="Blue"></ItemStyle>
                     </ASP:ButtonColumn>
                   </Columns></ASP:DataGrid>
 		</blockquote></td>
