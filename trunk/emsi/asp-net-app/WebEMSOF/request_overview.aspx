@@ -48,6 +48,19 @@
 				</td>
 			  </tr>
 		  </table>
+      <p></p>
+      <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+          <tr>
+            <td>
+              <table cellspacing="0" cellpadding="5" border="0">
+                  <tr>
+                    <td bgcolor="#f5f5f5"><strong>Master status:</strong></td>
+                    <td>
+                      <ASP:Label id="Label_master_status" runat="server"></ASP:Label></td>
+                  </tr>
+              </table></td>
+          </tr>
+      </table>
 	  <p>
         <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_deadlines" runat="server">
             <tr>

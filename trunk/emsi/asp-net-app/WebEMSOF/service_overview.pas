@@ -184,6 +184,8 @@ procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;
 begin
   session.Remove('emsof_request_master_id');
   session.Add('emsof_request_master_id',Safe(e.item.cells[dgi_id].text,NUM));
+  session.Remove('emsof_request_master_status');
+  session.Add('emsof_request_master_status',Safe(e.item.cells[dgi_status].text,NARRATIVE));
   session.Remove('fiscal_year_designator');
   session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fy_designator].text,ALPHANUM));
   session.Remove('sponsor_county');
