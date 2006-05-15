@@ -24,6 +24,7 @@ type
     procedure LinkButton_recalculate_3_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_delete_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_update_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_withdraw_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -71,7 +72,8 @@ type
     Button_update: System.Web.UI.WebControls.Button;
     HyperLink_request_overview_1: System.Web.UI.WebControls.HyperLink;
     HyperLink_request_overview_2: System.Web.UI.WebControls.HyperLink;
-    Div_bottom_backlink: System.Web.UI.HtmlControls.HtmlGenericControl;
+    Button_withdraw: System.Web.UI.WebControls.LinkButton;
+    TableRow_post_finalization_actions: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -96,6 +98,7 @@ begin
   Include(Self.Button_update.Click, Self.Button_update_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.Button_delete.Click, Self.Button_delete_Click);
+  Include(Self.Button_withdraw.Click, Self.Button_withdraw_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -297,9 +300,6 @@ begin
       RegularExpressionValidator_quantity.enabled := FALSE;
       TextBox_additional_service_ante.enabled := FALSE;
       RegularExpressionValidator_additional_service_ante.enabled := FALSE;
-      //
-      // Make all other item-detail-related controls invisible.
-      //
       LinkButton_recalculate_1.visible := FALSE;
       LinkButton_recalculate_2.visible := FALSE;
       LinkButton_recalculate_3.visible := FALSE;
@@ -307,10 +307,10 @@ begin
       Button_submit_and_stop.visible := FALSE;
       Button_update.visible := FALSE;
       Button_cancel.visible := FALSE;
-      Div_bottom_backlink.visible := TRUE;
+      TableRow_post_finalization_actions.visible := TRUE;
       //
     end else begin
-      Div_bottom_backlink.visible := FALSE;
+      TableRow_post_finalization_actions.visible := FALSE;
     end;
     //
     appcommon.bdpconnection.Close;
@@ -325,6 +325,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_item_detail.Button_withdraw_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('emsof_request_item_emsof_ante');
+  session.Add('emsof_request_item_emsof_ante',Safe(Label_emsof_ante.text,REAL_NUM));
+  server.Transfer('withdraw_request_item.aspx');
 end;
 
 procedure TWebForm_request_item_detail.Button_update_Click(sender: System.Object;

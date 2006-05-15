@@ -134,34 +134,40 @@
 			<tr>
 			  <td>
 						<div align="right"><ASP:Button id="Button_submit_and_repeat" runat="server" text="Submit and Repeat"></ASP:Button>
+
 						</div></td>
 			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>
-                                  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp;
-											     &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
-				<div id="Div_bottom_backlink" runat="server">
-				  [&nbsp;Back&nbsp;to&nbsp;<ASP:HyperLink id="HyperLink_request_overview_2" runat="server" navigateurl="request_overview.aspx">request&nbsp;overview</ASP:HyperLink>&nbsp;form&nbsp;]
-				</div>
+								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp;
+													    &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
+
 			  </td>
 			  <td></td>
 			</tr>
 			<tr id="TableRow_delete" runat="server">
 			  <td colspan="2">
-                                  <div align="center">
-                                  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="5" border="1" align="center">
-                                      <tr>
+								  <div align="center">
+								  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="5" border="1" align="center">
+									  <tr>
 										<td>Check the box <u>and</u>&nbsp;click the button to delete:&nbsp; 
-                                          
-                                            
-  
-                                            
-                                            <ASP:CheckBox id="CheckBox_delete" runat="server" text="Delete this equipment request item"></ASP:CheckBox>&nbsp;
-                                            
-  
-                                            
-                                            <ASP:Button id="Button_delete" runat="server" text="Confirm delete" causesvalidation="False"></ASP:Button></td>
+
+
+
+
+											<ASP:CheckBox id="CheckBox_delete" runat="server" text="Delete this equipment request item"></ASP:CheckBox>&nbsp; 
+
+
+
+											<ASP:Button id="Button_delete" runat="server" text="Delete" causesvalidation="False"></ASP:Button></td>
 									  </tr>
 								  </table>
+								  </div></td>
+			  <td></td>
+			</tr>
+			<tr id="TableRow_post_finalization_actions" runat="server">
+			  <td>
+                                  <div align="right">[ <ASP:LinkButton id="Button_withdraw" runat="server">Withdraw</ASP:LinkButton>&nbsp;]
                                   </div></td>
+			  <td>[&nbsp;Back&nbsp;to&nbsp;<ASP:HyperLink id="HyperLink_request_overview_2" runat="server" navigateurl="request_overview.aspx">request&nbsp;overview</ASP:HyperLink>&nbsp;form&nbsp;]</td>
 			  <td></td>
 			</tr>
 		  </table>
