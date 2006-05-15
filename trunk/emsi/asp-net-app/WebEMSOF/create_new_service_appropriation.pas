@@ -178,7 +178,7 @@ begin
       bc_get_service_email_address := borland.data.provider.bdpcommand.Create
         (
         'select password_reset_email_address from service_user '
-        + 'where id ="' + service_id_string + '"',
+        + 'where id = ' + service_id_string,
         AppCommon.BdpConnection
         );
       //   Set up the command to get the appropriate fiscal year designator.
@@ -195,7 +195,7 @@ begin
       //   Set up the command to get the County Coorindator's email address.
       bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
         (
-        'select password_reset_email_address from county_user where id ="' + session.item['county_user_id'].tostring + '"',
+        'select password_reset_email_address from county_user where id = ' + session.item['county_user_id'].tostring,
         AppCommon.BdpConnection
         );
       //   Set up the messageText.
