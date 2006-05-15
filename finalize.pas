@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  system.web.mail;
 
 type
   TWebForm_finalize = class(System.Web.UI.Page)
@@ -84,6 +85,7 @@ procedure TWebForm_finalize.Page_Load(sender: System.Object; e: System.EventArgs
 var
   bdr: borland.data.provider.bdpdatareader;
   grand_total_cost: decimal;
+  grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -106,16 +108,18 @@ begin
       //
       // Set Label_grand_total_cost.
       //
-      grand_total_cost := decimal
+      grand_total_cost_obj := borland.data.provider.bdpcommand.Create
         (
-        borland.data.provider.bdpcommand.Create
-          (
-          'select sum(unit_cost*quantity) from emsof_request_detail'
-          + ' where master_id = ' + session.item['emsof_request_master_id'].tostring,
-          appcommon.bdpconnection
-          )
-          .ExecuteScalar
-        );
+        'select sum(unit_cost*quantity) from emsof_request_detail'
+        + ' where master_id = ' + session.item['emsof_request_master_id'].tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteScalar;
+      if grand_total_cost_obj = dbnull.value then begin
+         grand_total_cost := 0;
+      end else begin
+         grand_total_cost := decimal(grand_total_cost_obj);
+      end;
       Label_grand_total_cost.text := grand_total_cost.tostring('C');
       //
       // Set Label_max_reimbursement.
@@ -188,6 +192,10 @@ begin
 end;
 
 procedure TWebForm_finalize.Button_finalize_Click(sender: System.Object; e: System.EventArgs);
+var
+  cc_email_address: string;
+  fy_designator: string;
+  service_email_address: string;
 begin
   if CheckBox_understand_read_only_1.checked
     and ((decimal(session.item['unused_amount']) = 0) or CheckBox_understand_remainder_goes_to_region.checked)
@@ -200,6 +208,62 @@ begin
     and CheckBox_understand_read_only_2.checked
     and CheckBox_understand_wait_for_approval_to_order.checked
   then begin
+    //
+    appcommon.bdpconnection.Open;
+    //
+    // Update database.
+    //
+    borland.data.provider.bdpcommand.Create
+      (
+      'update emsof_request_master set status_code = 3 where id = ' + session.item['emsof_request_master_id'].tostring,
+      appcommon.bdpconnection
+      )
+      .ExecuteNonQuery;
+    //
+    // Send notification to county coordinator.
+    //
+    //   Set up the command to get service's email address of record.
+    service_email_address := borland.data.provider.bdpcommand.Create
+      (
+      'select password_reset_email_address from service_user where id ="' + session.item['service_user_id'].tostring + '"',
+      AppCommon.BdpConnection
+      )
+      .ExecuteScalar.tostring;
+    //   Set up the command to get the County Coorindator's email address.
+    cc_email_address := borland.data.provider.bdpcommand.Create
+      (
+      'select password_reset_email_address'
+      + ' from county_dictated_appropriation'
+      +   ' join region_dictated_appropriation'
+      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+      +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
+      + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+      AppCommon.BdpConnection
+      )
+      .ExecuteScalar.tostring;
+    //
+    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+    smtpmail.Send
+      (
+      service_email_address,
+      cc_email_address,
+      session.item['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
+      + ' request',
+      session.item['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
+      + ' request for ' + session.item['fiscal_year_designator'].tostring + '.' + NEW_LINE
+      + NEW_LINE
+      + 'Please approve or reject this request by visiting:' + NEW_LINE
+      + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '.htm' + NEW_LINE
+      + NEW_LINE
+      + 'Replies to this message will be addressed to the ' + session.Item['service_name'].ToString + ' EMSOF Coordinator.'
+      + NEW_LINE
+      + NEW_LINE
+      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      );
+    //
+    appcommon.bdpconnection.Open;
     //
     server.Transfer('request_overview.aspx');
     //

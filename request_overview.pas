@@ -68,6 +68,7 @@ const ID = '$Id$';
 
 var
   be_before_deadline: boolean;
+  be_finalized: boolean;
   dgi_master_id: cardinal;
   dgi_priority: cardinal;
   dgi_code: cardinal;
@@ -93,6 +94,7 @@ begin
     // Initialize implementation-global variables.
     //
     be_before_deadline := TRUE;
+    be_finalized := FALSE;
     county_dictated_appropriation_amount := decimal.Parse(session.item['county_dictated_appropriation_amount'].tostring);
     dgi_master_id := 0;
     dgi_priority := 1;
@@ -147,7 +149,7 @@ begin
     session.Remove('be_before_service_to_county_submission_deadline');
     session.Add('be_before_service_to_county_submission_deadline',be_before_deadline.tostring);
     session.Remove('be_finalized');
-    session.Add('be_finalized','False');
+    session.Add('be_finalized',be_finalized.tostring);
     //
     // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
     // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
@@ -261,6 +263,13 @@ end;
 procedure TWebForm_request_overview.DataGrid_items_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
+  //
+  // Manage column visibility.
+  //
+  e.item.Cells[dgi_status].visible := (not be_before_deadline) or be_finalized;
+  //
+  // Manage cells in visible columns.
+  //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
     or (e.item.itemtype = listitemtype.item)

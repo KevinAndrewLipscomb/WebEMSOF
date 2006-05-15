@@ -263,7 +263,7 @@ CREATE TABLE item_status_code_description_map (
 -- Dumping data for table `item_status_code_description_map`
 -- 
 
-INSERT INTO item_status_code_description_map VALUES (1, 'Not yet approved');
+INSERT INTO item_status_code_description_map VALUES (1, 'Master is not yet approved');
 INSERT INTO item_status_code_description_map VALUES (2, 'NO invoice on file at regional council');
 INSERT INTO item_status_code_description_map VALUES (3, 'Invoice on file at regional council');
 INSERT INTO item_status_code_description_map VALUES (4, 'NO canceled check on file at regional council');
