@@ -301,6 +301,11 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
+    if e.item.cells[dgi_status].text = 'WITHDRAWN' then begin
+      LinkButton(e.item.cells[dgi_linkbutton_select].controls.item[0]).text := 'WITHDRAWN';
+      LinkButton(e.item.cells[dgi_linkbutton_select].controls.item[0]).enabled := FALSE;
+    end;
+    //
     e.item.Cells[dgi_linkbutton_increase_priority].controls.item[0].visible :=
       (e.item.itemindex > 0) and be_before_deadline and not be_finalized;
     e.item.Cells[dgi_linkbutton_decrease_priority].controls.item[0].visible :=

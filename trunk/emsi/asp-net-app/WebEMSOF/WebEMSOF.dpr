@@ -33,6 +33,7 @@ library WebEMSOF;
 {%File 'schema.sql'}
 {%AspMarkupContainer 'county_dictated_deadline.aspx'}
 {%AspMarkupContainer 'finalize.aspx'}
+{%AspMarkupContainer 'withdraw_request_item.aspx'}
 
 uses
   System.Reflection,
@@ -56,7 +57,8 @@ uses
   delete_service_appropriation in 'delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page},
   request_item_detail in 'request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: System.Web.UI.Page},
   county_dictated_deadline in 'county_dictated_deadline.pas' {county_dictated_deadline.TWebForm_county_dictated_deadline: System.Web.UI.Page},
-  finalize in 'finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page};
+  finalize in 'finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},
+  withdraw_request_item in 'withdraw_request_item.pas' {withdraw_request_item.TWebForm_withdraw_request_item: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following
