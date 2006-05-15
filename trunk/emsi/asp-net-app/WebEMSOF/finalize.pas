@@ -194,7 +194,6 @@ end;
 procedure TWebForm_finalize.Button_finalize_Click(sender: System.Object; e: System.EventArgs);
 var
   cc_email_address: string;
-  fy_designator: string;
   service_email_address: string;
 begin
   if CheckBox_understand_read_only_1.checked
