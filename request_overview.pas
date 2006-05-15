@@ -41,6 +41,7 @@ type
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
     HyperLink_service_overview: System.Web.UI.WebControls.HyperLink;
     LinkButton_finalize: System.Web.UI.WebControls.LinkButton;
+    Label_master_status: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -57,9 +58,9 @@ implementation
 /// </summary>
 procedure TWebForm_request_overview.InitializeComponent;
 begin
+  Include(Self.LinkButton_finalize.Click, Self.LinkButton_finalize_Click);
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
-  Include(Self.LinkButton_finalize.Click, Self.LinkButton_finalize_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -68,6 +69,7 @@ const ID = '$Id$';
 
 var
   be_before_deadline: boolean;
+  be_completely_approved: boolean;
   be_finalized: boolean;
   dgi_master_id: cardinal;
   dgi_priority: cardinal;
@@ -94,7 +96,7 @@ begin
     // Initialize implementation-global variables.
     //
     be_before_deadline := TRUE;
-    be_finalized := FALSE;
+    be_completely_approved := FALSE;
     county_dictated_appropriation_amount := decimal.Parse(session.item['county_dictated_appropriation_amount'].tostring);
     dgi_master_id := 0;
     dgi_priority := 1;
@@ -117,6 +119,7 @@ begin
     Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
     Label_sponsor_county.text := session.item['sponsor_county'].tostring;
     Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
+    Label_master_status.text := session.item['emsof_request_master_status'].tostring;
     //
     // All further rendering is deadline-dependent.
     //
@@ -133,8 +136,16 @@ begin
         .ExecuteScalar
       );
     //
-    if datetime.Now > make_item_requests_deadline then begin
-      be_before_deadline := FALSE;
+    be_before_deadline := (datetime.Now <= make_item_requests_deadline);
+    //
+    be_finalized := '1' = borland.data.provider.bdpcommand.Create
+      (
+      'select (status_code > 2) from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
+      appcommon.bdpconnection
+      )
+      .ExecuteScalar.tostring;
+    //
+    if (not be_before_deadline) or be_finalized then begin
       TableRow_sum_of_emsof_antes.visible := FALSE;
       TableRow_unrequested_amount.visible := FALSE;
       Table_deadlines.visible := FALSE;
@@ -162,20 +173,32 @@ begin
       .ExecuteReader;
     bdr.Read;
     num_items := bdr['num_items'].GetHashCode;
-    sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
-    unused_amount := county_dictated_appropriation_amount - sum_of_emsof_antes;
-    //
-    Label_sum_of_emsof_antes.text := sum_of_emsof_antes.tostring('C');
-    Label_unused_amount.Text := unused_amount.tostring('C');
-    if unused_amount < 0 then begin
-      Label_unused_amount.font.bold := TRUE;
-      Label_unused_amount.forecolor := color.red;
+    if be_before_deadline and (not be_finalized) then begin
+      sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
+      unused_amount := county_dictated_appropriation_amount - sum_of_emsof_antes;
+      //
+      Label_sum_of_emsof_antes.text := sum_of_emsof_antes.tostring('C');
+      Label_unused_amount.Text := unused_amount.tostring('C');
+      if unused_amount < 0 then begin
+        Label_unused_amount.font.bold := TRUE;
+        Label_unused_amount.forecolor := color.red;
+      end;
     end;
+    bdr.Close;
     //
     if num_items = 0 then begin
       Label_no_appropriations.Visible := TRUE;
     end else begin
       DataGrid_items.Visible := TRUE;
+    end;
+    //
+    if be_finalized then begin
+      be_completely_approved := '1' = borland.data.provider.bdpcommand.Create
+        (
+        'select (status_code between 8 and 10) from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
+        appcommon.bdpconnection
+        )
+        .ExecuteScalar.tostring;
     end;
     //
     AppCommon.BdpConnection.Close;
@@ -266,7 +289,7 @@ begin
   //
   // Manage column visibility.
   //
-  e.item.Cells[dgi_status].visible := (not be_before_deadline) or be_finalized;
+  e.item.Cells[dgi_status].visible := be_completely_approved;
   //
   // Manage cells in visible columns.
   //
@@ -278,9 +301,10 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    e.item.Cells[dgi_linkbutton_increase_priority].controls.item[0].visible := (e.item.itemindex > 0) and be_before_deadline;
+    e.item.Cells[dgi_linkbutton_increase_priority].controls.item[0].visible :=
+      (e.item.itemindex > 0) and be_before_deadline and not be_finalized;
     e.item.Cells[dgi_linkbutton_decrease_priority].controls.item[0].visible :=
-      (e.item.itemindex < integer(num_items) - 1) and be_before_deadline;
+      (e.item.itemindex < integer(num_items) - 1) and be_before_deadline and not be_finalized;
   end;
 end;
 
