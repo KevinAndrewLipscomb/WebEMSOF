@@ -15,6 +15,7 @@ type
     procedure InitializeComponent;
     procedure DataGrid_items_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid_items_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure LinkButton_finalize_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -36,10 +37,10 @@ type
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
-    HyperLink_finalize: System.Web.UI.WebControls.HyperLink;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
     HyperLink_service_overview: System.Web.UI.WebControls.HyperLink;
+    LinkButton_finalize: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -58,6 +59,7 @@ procedure TWebForm_request_overview.InitializeComponent;
 begin
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
+  Include(Self.LinkButton_finalize.Click, Self.LinkButton_finalize_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -76,14 +78,14 @@ var
   dgi_linkbutton_decrease_priority: cardinal;
   dgi_emsof_ante: cardinal;
   num_items: cardinal;
+  sum_of_emsof_antes: decimal;
+  unused_amount: decimal;
 
 procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr: borland.data.provider.bdpdatareader;
   county_dictated_appropriation_amount: decimal;
   make_item_requests_deadline: system.datetime;
-  sum_of_emsof_antes: decimal;
-  unused_amount: decimal;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -135,7 +137,7 @@ begin
       TableRow_unrequested_amount.visible := FALSE;
       Table_deadlines.visible := FALSE;
       HyperLink_add_item_to_request.visible := FALSE;
-      HyperLink_finalize.visible := FALSE;
+      LinkButton_finalize.visible := FALSE;
     end else begin
       Label_make_requests_deadline.text := make_item_requests_deadline.tostring('HH:mm:ss dddd, MMMM dd, yyyy');
       session.Remove('emsof_request_item_priority');
@@ -160,11 +162,6 @@ begin
     num_items := bdr['num_items'].GetHashCode;
     sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
     unused_amount := county_dictated_appropriation_amount - sum_of_emsof_antes;
-    //
-    // Add unused_amount to session object in case of request finalization.
-    //
-    session.Remove('unused_amount');
-    session.Add('unused_amount',unused_amount);
     //
     Label_sum_of_emsof_antes.text := sum_of_emsof_antes.tostring('C');
     Label_unused_amount.Text := unused_amount.tostring('C');
@@ -192,6 +189,16 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_overview.LinkButton_finalize_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('sum_of_emsof_antes');
+  session.Add('sum_of_emsof_antes',sum_of_emsof_antes);
+  session.Remove('unused_amount');
+  session.Add('unused_amount',unused_amount);
+  server.Transfer('finalize.aspx');
 end;
 
 procedure TWebForm_request_overview.DataGrid_items_ItemCommand(source: System.Object;

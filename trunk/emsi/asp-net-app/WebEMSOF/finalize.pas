@@ -29,7 +29,7 @@ type
     Label_grand_total_cost: System.Web.UI.WebControls.Label;
     CheckBox_understand_grand_total_up_front: System.Web.UI.WebControls.CheckBox;
     CheckBox_understand_max_reimbursement: System.Web.UI.WebControls.CheckBox;
-    Label_max_reimbursement: System.Web.UI.WebControls.Label;
+    Label_max_reimbursement_1: System.Web.UI.WebControls.Label;
     CheckBox_understand_anticipated_vs_actual: System.Web.UI.WebControls.CheckBox;
     Label_unreimbursed_amount: System.Web.UI.WebControls.Label;
     CheckBox_understand_unreimbursed_amount: System.Web.UI.WebControls.CheckBox;
@@ -44,6 +44,19 @@ type
     Label_deadline_canceled_check_submission: System.Web.UI.WebControls.Label;
     Label_unused_amount: System.Web.UI.WebControls.Label;
     CheckBox_understand_remainder_goes_to_region: System.Web.UI.WebControls.CheckBox;
+    HyperLink_request_overview_0: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_2: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_3: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_4: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_5: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_6: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_7: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_8: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_9: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_10: System.Web.UI.WebControls.HyperLink;
+    HyperLink_request_overview_1: System.Web.UI.WebControls.HyperLink;
+    Label_max_reimbursement_2: System.Web.UI.WebControls.Label;
+    HyperLink_request_overview_bottom: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -70,6 +83,8 @@ const ID = '$Id$';
 procedure TWebForm_finalize.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr: borland.data.provider.bdpdatareader;
+  grand_total_cost: decimal;
+  max_reimbursement: decimal;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -88,6 +103,32 @@ begin
       end;
       //
       appcommon.bdpconnection.Open;
+      //
+      // Set Label_grand_total_cost.
+      //
+      grand_total_cost := decimal
+        (
+        borland.data.provider.bdpcommand.Create
+          (
+          'select sum(unit_cost*quantity) from emsof_request_detail'
+          + ' where master_id = ' + session.item['emsof_request_master_id'].tostring,
+          appcommon.bdpconnection
+          )
+          .ExecuteScalar
+        );
+      Label_grand_total_cost.text := grand_total_cost.tostring('C');
+      //
+      // Set Label_max_reimbursement.
+      //
+      max_reimbursement := decimal(session.item['sum_of_emsof_antes']);
+      Label_max_reimbursement_1.text := max_reimbursement.tostring('C');
+      Label_max_reimbursement_2.text := Label_max_reimbursement_1.text;
+      //
+      // Set Label_unreimbursed_amount.
+      //
+      Label_unreimbursed_amount.text := (grand_total_cost - max_reimbursement).tostring('C');
+      //
+      // Set Label_deadline_*
       //
       bdr := borland.data.provider.bdpcommand.Create
         (
@@ -160,7 +201,7 @@ begin
     and CheckBox_understand_wait_for_approval_to_order.checked
   then begin
     //
-    server.Transfer('finalization_accepted.aspx');
+    server.Transfer('request_overview.aspx');
     //
   end;
 end;
