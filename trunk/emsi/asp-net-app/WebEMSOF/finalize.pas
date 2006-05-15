@@ -263,7 +263,7 @@ begin
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
-    appcommon.bdpconnection.Open;
+    appcommon.bdpconnection.Close;
     //
     server.Transfer('request_overview.aspx');
     //
