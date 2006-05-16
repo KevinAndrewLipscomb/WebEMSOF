@@ -13,6 +13,9 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
+    procedure LinkButton_service_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_county_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_regional_staffer_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -21,6 +24,9 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_application_name: System.Web.UI.WebControls.Label;
+    LinkButton_service: System.Web.UI.WebControls.LinkButton;
+    LinkButton_county: System.Web.UI.WebControls.LinkButton;
+    LinkButton_regional_staffer: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -37,6 +43,9 @@ implementation
 /// </summary>
 procedure TWebForm_main.InitializeComponent;
 begin
+  Include(Self.LinkButton_service.Click, Self.LinkButton_service_Click);
+  Include(Self.LinkButton_county.Click, Self.LinkButton_county_Click);
+  Include(Self.LinkButton_regional_staffer.Click, Self.LinkButton_regional_staffer_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -60,6 +69,28 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_main.LinkButton_regional_staffer_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('target_user_table');
+  session.Add('target_user_table','regional_staffer');
+  response.Redirect('protected/regional_staffer_overview.aspx');
+end;
+
+procedure TWebForm_main.LinkButton_county_Click(sender: System.Object; e: System.EventArgs);
+begin
+  session.Remove('target_user_table');
+  session.Add('target_user_table','county');
+  response.Redirect('protected/choose_county_appropriation.aspx');
+end;
+
+procedure TWebForm_main.LinkButton_service_Click(sender: System.Object; e: System.EventArgs);
+begin
+  session.Remove('target_user_table');
+  session.Add('target_user_table','service');
+  response.Redirect('protected/service_overview.aspx');
 end;
 
 end.

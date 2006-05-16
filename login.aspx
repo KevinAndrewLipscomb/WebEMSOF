@@ -13,35 +13,77 @@
 	  </asp:placeholder>
 			<font color="red">
 			  <ul id="invalid_credentials_warning" runat="server">
-				<li>Invalid service/password combination. Please try again.</li>
+				<li>Invalid choice/password combination. Please try again.</li>
 			  </ul>
 			</font>
 			<table cellspacing="0" cellpadding="5">
               <tbody>
-                <tr>
-                  <td>
-                    <p align="right">Service:
-                    </p>
-                  </td>
-                  <td>
-                    <table cellspacing="0" cellpadding="5">
-                      <tbody>
-                        <tr>
-                          <td>
-                            <asp:dropdownlist id="DropDownList_service" 
-                                              runat="server">
-                            </asp:dropdownlist>
-                          </td>
-                          <td><ASP:RangeValidator id="RangeValidator_service" runat="server" errormessage="Please select a service." font-bold="True" controltovalidate="DropDownList_service" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <p align="right">Password:
+				<tr id="TableRow_service" runat="server">
+				  <td>
+					<p align="right">Service:
+					</p>
+				  </td>
+				  <td>
+					<table cellspacing="0" cellpadding="5">
+					  <tbody>
+						<tr>
+						  <td>
+							<asp:dropdownlist id="DropDownList_service"
+											  runat="server">
+							</asp:dropdownlist>
+						  </td>
+						  <td><ASP:RangeValidator id="RangeValidator_service" runat="server" errormessage="Please select a service." font-bold="True" controltovalidate="DropDownList_service" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator>
+						  </td>
+						</tr>
+					  </tbody>
+					</table>
+				  </td>
+				</tr>
+				<tr id="TableRow_county" runat="server">
+				  <td>
+					<p align="right">County:
+					</p>
+				  </td>
+				  <td>
+					<table cellspacing="0" cellpadding="5">
+					  <tbody>
+						<tr>
+						  <td>
+							<asp:dropdownlist id="DropDownList_county"
+											  runat="server">
+							</asp:dropdownlist>
+						  </td>
+						  <td><ASP:RangeValidator id="RangeValidator_county" runat="server" errormessage="Please select a county." font-bold="True" controltovalidate="DropDownList_county" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator>
+						  </td>
+						</tr>
+					  </tbody>
+					</table>
+				  </td>
+				</tr>
+				<tr id="TableRow_regional_staffer" runat="server">
+				  <td>
+					<p align="right">Regional staffer:
+					</p>
+				  </td>
+				  <td>
+					<table cellspacing="0" cellpadding="5">
+					  <tbody>
+						<tr>
+						  <td>
+							<asp:dropdownlist id="DropDownList_regional_staffer"
+											  runat="server">
+							</asp:dropdownlist>
+						  </td>
+						  <td><ASP:RangeValidator id="RangeValidator_regional_staffer" runat="server" errormessage="Please select a regional staffer." font-bold="True" controltovalidate="DropDownList_regional_staffer" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator>
+						  </td>
+						</tr>
+					  </tbody>
+					</table>
+				  </td>
+				</tr>
+				<tr>
+				  <td>
+					<p align="right">Password:
 					</p>
                   </td>
                   <td>
@@ -54,7 +96,7 @@
                   <td>
                     <asp:checkbox id="CheckBox_keep_me_logged_in" 
                                   runat="server" 
-                                  text="Keep me logged in on this computer" enabled="False">
+                                  text="Keep me logged in on this computer">
                     </asp:checkbox>
                   </td>
                 </tr>

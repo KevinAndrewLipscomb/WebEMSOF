@@ -13,27 +13,29 @@ library WebEMSOF;
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Design.dll'}
 {%DelphiDotNetAssemblyCompiler 'c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Common.dll'}
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\mscorlib.dll'}
-{%AspMarkupContainer 'new_password.aspx'}
-{%AspMarkupContainer 'service_overview.aspx'}
-{%AspMarkupContainer 'profile.aspx'}
-{%AspMarkupContainer 'change_password.aspx'}
-{%AspMarkupContainer 'change_email_address.aspx'}
-{%AspMarkupContainer 'request_overview.aspx'}
 {%AspMarkupContainer 'main.aspx'}
-{%AspMarkupContainer 'login_county_coord.aspx'}
-{%AspMarkupContainer 'login_regional_staffer.aspx'}
-{%ConfigurationCompiler 'unpublished.config'}
-{%AspMarkupContainer 'regional_staffer_overview.aspx'}
-{%AspMarkupContainer 'choose_county_appropriation.aspx'}
-{%AspMarkupContainer 'county_dictated_appropriations.aspx'}
-{%AspMarkupContainer 'create_new_service_appropriation.aspx'}
-{%AspMarkupContainer 'delete_service_appropriation.aspx'}
-{%AspMarkupContainer 'request_item_detail.aspx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%File 'schema.sql'}
-{%AspMarkupContainer 'county_dictated_deadline.aspx'}
-{%AspMarkupContainer 'finalize.aspx'}
-{%AspMarkupContainer 'withdraw_request_item.aspx'}
+{%AspFolderContainer 'protected'}
+{%AspMarkupContainer 'protected\change_email_address.aspx'}
+{%AspMarkupContainer 'protected\change_password.aspx'}
+{%AspMarkupContainer 'protected\choose_county_appropriation.aspx'}
+{%AspMarkupContainer 'protected\county_dictated_appropriations.aspx'}
+{%AspMarkupContainer 'protected\county_dictated_deadline.aspx'}
+{%AspMarkupContainer 'protected\create_new_service_appropriation.aspx'}
+{%AspMarkupContainer 'protected\delete_service_appropriation.aspx'}
+{%AspMarkupContainer 'protected\finalize.aspx'}
+{%AspMarkupContainer 'protected\login_county_coord.aspx'}
+{%AspMarkupContainer 'protected\login_regional_staffer.aspx'}
+{%AspMarkupContainer 'protected\new_password.aspx'}
+{%AspMarkupContainer 'protected\profile.aspx'}
+{%AspMarkupContainer 'protected\regional_staffer_overview.aspx'}
+{%AspMarkupContainer 'protected\request_item_detail.aspx'}
+{%AspMarkupContainer 'protected\request_overview.aspx'}
+{%AspMarkupContainer 'protected\service_overview.aspx'}
+{%AspMarkupContainer 'protected\withdraw_request_item.aspx'}
+{%ConfigurationCompiler 'unpublished.config'}
+{%AspWebConfigContainer 'protected\Web.config'}
 
 uses
   System.Reflection,
@@ -41,24 +43,24 @@ uses
   Global in 'Global.pas' {Global.TGlobal: System.Web.HttpApplication},
   login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
   AppCommon in 'AppCommon.pas',
-  new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
-  service_overview in 'service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
-  profile in 'profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
-  change_password in 'change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
-  change_email_address in 'change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page},
-  request_overview in 'request_overview.pas' {request_overview.TWebForm_request_overview: System.Web.UI.Page},
   main in 'main.pas' {main.TWebForm_main: System.Web.UI.Page},
-  login_county_coord in 'login_county_coord.pas' {login_county_coord.TWebForm_login_county_coord: System.Web.UI.Page},
-  login_regional_staffer in 'login_regional_staffer.pas' {login_regional_staffer.TWebForm_login_regional_staffer: System.Web.UI.Page},
-  regional_staffer_overview in 'regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_account_overview: System.Web.UI.Page},
-  choose_county_appropriation in 'choose_county_appropriation.pas' {choose_county_appropriation.TWebForm_county_appropriation: System.Web.UI.Page},
-  county_dictated_appropriations in 'county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page},
-  create_new_service_appropriation in 'create_new_service_appropriation.pas' {create_new_service_appropriation.TWebForm_create_new_service_appropriation: System.Web.UI.Page},
-  delete_service_appropriation in 'delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page},
-  request_item_detail in 'request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: System.Web.UI.Page},
-  county_dictated_deadline in 'county_dictated_deadline.pas' {county_dictated_deadline.TWebForm_county_dictated_deadline: System.Web.UI.Page},
-  finalize in 'finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},
-  withdraw_request_item in 'withdraw_request_item.pas' {withdraw_request_item.TWebForm_withdraw_request_item: System.Web.UI.Page};
+  change_email_address in 'protected\change_email_address.pas',
+  change_password in 'protected\change_password.pas',
+  choose_county_appropriation in 'protected\choose_county_appropriation.pas',
+  county_dictated_appropriations in 'protected\county_dictated_appropriations.pas',
+  county_dictated_deadline in 'protected\county_dictated_deadline.pas',
+  create_new_service_appropriation in 'protected\create_new_service_appropriation.pas',
+  delete_service_appropriation in 'protected\delete_service_appropriation.pas',
+  finalize in 'protected\finalize.pas',
+  login_county_coord in 'protected\login_county_coord.pas' {login_county_coord.TWebForm_login_county_coord: System.Web.UI.Page},
+  login_regional_staffer in 'protected\login_regional_staffer.pas' {login_regional_staffer.TWebForm_login_regional_staffer: System.Web.UI.Page},
+  new_password in 'protected\new_password.pas',
+  profile in 'protected\profile.pas',
+  regional_staffer_overview in 'protected\regional_staffer_overview.pas',
+  request_item_detail in 'protected\request_item_detail.pas',
+  request_overview in 'protected\request_overview.pas',
+  service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
+  withdraw_request_item in 'protected\withdraw_request_item.pas';
 
 //
 // General Information about an assembly is controlled through the following
