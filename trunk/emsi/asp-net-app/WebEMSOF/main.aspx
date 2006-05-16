@@ -13,18 +13,9 @@
       </asp:placeholder>
 <p>Welcome to <ASP:Label id="Label_application_name" runat="server"></ASP:Label>.&nbsp;&nbsp;Please indicate what kind of user you are:</p>
       <ul>
-        <li>
-<p><strong><a href="login.aspx">Service <small><i>(elaborated)</i></small><!-- (ambulance, QRS, rescue, etc) --><br>
-              </a>
-            </strong></p></li>
-        <li>
-<p><strong><a href="login_county_coord.aspx">County Coordinator<br>
-              </a>
-            </strong></p></li>
-        <li>
-<p><strong><a href="login_regional_staffer.aspx">Regional staffer</a>
-            </strong></p>
-        </li>
+		<li><p><ASP:LinkButton id="LinkButton_service" runat="server">Service (elaborate)</ASP:LinkButton></p></li>
+		<li><p><ASP:LinkButton id="LinkButton_county" runat="server">County Coordinator</ASP:LinkButton></p></li>
+		<li><p><ASP:LinkButton id="LinkButton_regional_staffer" runat="server">Regional staffer</ASP:LinkButton><!-- (ambulance, QRS, rescue, etc) --></p></li>
       </ul>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>

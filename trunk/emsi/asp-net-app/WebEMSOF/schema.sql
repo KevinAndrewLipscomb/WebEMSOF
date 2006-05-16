@@ -268,6 +268,7 @@ INSERT INTO item_status_code_description_map VALUES (2, 'NO invoice on file at r
 INSERT INTO item_status_code_description_map VALUES (3, 'Invoice on file at regional council');
 INSERT INTO item_status_code_description_map VALUES (4, 'NO canceled check on file at regional council');
 INSERT INTO item_status_code_description_map VALUES (5, 'Canceled check on file at regional council');
+INSERT INTO item_status_code_description_map VALUES (6, 'WITHDRAWN');
 
 -- --------------------------------------------------------
 
