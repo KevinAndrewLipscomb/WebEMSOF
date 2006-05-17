@@ -83,16 +83,16 @@ end;
 procedure TWebForm_county_dictated_deadline.Calendar_SelectionChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  appcommon.bdpconnection.Open;
+  appcommon.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
     'update region_dictated_appropriation'
     + ' set service_to_county_submission_deadline = "' + Calendar.selecteddate.tostring('yyyyMMdd') + '235959"'
     + ' where id = ' + session.item['region_dictated_appropriation_id'].tostring,
-    appcommon.bdpconnection
+    appcommon.db
     )
     .ExecuteNonQuery;
-  appcommon.bdpconnection.Close;
+  appcommon.DbClose;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 

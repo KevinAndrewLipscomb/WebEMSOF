@@ -135,7 +135,7 @@ begin
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
     if amount > 0 then begin
-      appcommon.bdpconnection.Open;
+      appcommon.DbOpen;
       //
       // Record the new appropriation.
       //
@@ -146,7 +146,7 @@ begin
         +   ' service_id = ' + service_id_string + ','
         +   ' amount = ' + amount.tostring + ','
         +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM),
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteNonQuery;
       //
@@ -159,7 +159,7 @@ begin
       max_county_dictated_appropriation_id_string := borland.data.provider.bdpcommand.Create
         (
         'select max(id) from county_dictated_appropriation',
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteScalar.tostring;
       //
@@ -168,7 +168,7 @@ begin
       borland.data.provider.bdpcommand.Create
         (
         'insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string,
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteNonQuery;
       //
@@ -179,7 +179,7 @@ begin
         (
         'select password_reset_email_address from service_user '
         + 'where id = ' + service_id_string,
-        AppCommon.BdpConnection
+        appcommon.db
         );
       //   Set up the command to get the appropriate fiscal year designator.
       bc_get_fy_designator := borland.data.provider.bdpcommand.Create
@@ -190,13 +190,13 @@ begin
         +   ' join region_dictated_appropriation'
         +     ' on (region_dictated_appropriation.state_dictated_appropriation_id=state_dictated_appropriation.id)'
         + ' where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].tostring,
-        appcommon.bdpconnection
+        appcommon.db
         );
       //   Set up the command to get the County Coorindator's email address.
       bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
         (
         'select password_reset_email_address from county_user where id = ' + session.item['county_user_id'].tostring,
-        AppCommon.BdpConnection
+        appcommon.db
         );
       //   Set up the messageText.
       messageText := 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
@@ -221,7 +221,7 @@ begin
         messageText
         );
       //
-      appcommon.bdpconnection.Close;
+      appcommon.DbClose;
     end;
   end;
 end;
@@ -231,7 +231,7 @@ var
   bdr_services: borland.data.provider.BdpDataReader;
   cmdText: string;
 begin
-  appcommon.bdpconnection.Open;
+  appcommon.DbOpen;
   DropDownList_services.Items.Clear;
   DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
   //
@@ -241,11 +241,11 @@ begin
   end;
   cmdText := cmdText + 'ORDER BY name';
   //
-  bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
+  bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,appcommon.db).ExecuteReader;
   while bdr_services.Read do begin
     DropDownList_services.Items.Add(listitem.Create(bdr_services['name'].tostring,bdr_services['id'].ToString));
   end;
-  appcommon.bdpconnection.Close;
+  appcommon.DbClose;
 end;
 
 end.

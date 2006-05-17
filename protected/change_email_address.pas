@@ -61,7 +61,7 @@ begin
   if not IsPostback then
     begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     //
     // Set Label_account descriptor
     //
@@ -74,13 +74,13 @@ begin
       'SELECT password_reset_email_address '
       + 'FROM ' + session.Item['target_user_table'].ToString + '_user '
       + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     TextBox_nominal_email_address.Text := email_address;
     TextBox_confirmation_email_address.Text := email_address;
     //
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
     end;
 end;
 
@@ -96,7 +96,7 @@ end;
 procedure TWebForm_change_email_address.Button_submit_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   //
   // Commit the data to the database.
   //
@@ -105,10 +105,10 @@ begin
     'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
     + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
     + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
-    AppCommon.BdpConnection
+    appcommon.db
     )
     .ExecuteNonQuery;
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
   server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
 end;
 

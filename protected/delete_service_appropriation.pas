@@ -62,7 +62,7 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
-    appcommon.bdpconnection.Open;
+    appcommon.DbOpen;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - delete_service_appropriation';
     //
     // Set Label_service_name_*.
@@ -84,14 +84,14 @@ begin
       +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
       + ' where county_dictated_appropriation.id = '
       +     session.item['id_of_appropriation_selected_for_deletion'].tostring,
-      appcommon.bdpconnection
+      appcommon.db
       )
       .ExecuteReader;
     bdr.Read;
     Label_fiscal_year.text := bdr['designator'].tostring;
     Label_amount.text := decimal.Parse(session.item['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
     //
-    appcommon.bdpconnection.Close;
+    appcommon.DbClose;
     end;
 end;
 
@@ -107,7 +107,7 @@ end;
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  appcommon.bdpconnection.Open;
+  appcommon.DbOpen;
   //
   // Send the notification message.
   //
@@ -138,11 +138,11 @@ begin
     (
     'delete from county_dictated_appropriation where id = '
     + session.item['id_of_appropriation_selected_for_deletion'].tostring,
-    appcommon.bdpconnection
+    appcommon.db
     )
     .ExecuteNonQuery;
   //
-  appcommon.bdpconnection.Close;
+  appcommon.DbClose;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 

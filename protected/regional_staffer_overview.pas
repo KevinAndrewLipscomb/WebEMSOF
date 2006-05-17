@@ -84,16 +84,16 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     //
     be_stale_password := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password FROM regional_staffer_user where id=' + session.item['regional_staffer_user_id'].tostring,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     if be_stale_password = '1' then begin
-      AppCommon.BdpConnection.Close;
+      appcommon.DbClose;
       server.Transfer('change_password.aspx');
     end;
     //
@@ -108,7 +108,7 @@ begin
     bdpCommand_get_profile_status := borland.data.provider.bdpCommand.Create
       (
       'select be_valid_profile from regional_staffer where id = "' + session.Item['regional_staffer_user_id'].ToString + '"'
-      ,AppCommon.BdpConnection
+      ,appcommon.db
       );
     if bdpCommand_get_profile_status.ExecuteScalar.ToString = '0' then
       begin
@@ -125,7 +125,7 @@ begin
       bdpCommand_get_max_fiscal_year_id := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
-        AppCommon.BdpConnection
+        appcommon.db
         );
       max_fiscal_year_id_obj := bdpCommand_get_max_fiscal_year_id.ExecuteScalar;
       //
@@ -141,7 +141,7 @@ begin
         +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
         +  'WHERE emsof_request_master.county_dictated_appropriation_id = "' + session.Item['account_id'].ToString + '" '
         +    'and emsof_request_master.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
-        AppCommon.BdpConnection
+        appcommon.db
         );
       bdr_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
       if bdr_last_fy_request_attributes.Read then
@@ -170,7 +170,7 @@ begin
         +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
         +  'WHERE emsof_request_master.webemsof_account_id = "' + session.Item['account_id'].ToString + '" '
         +    'and emsof_request_master.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
-        AppCommon.BdpConnection
+        appcommon.db
         );
       bdr_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
       if bdr_this_fy_request_attributes.Read then
@@ -188,7 +188,7 @@ begin
         LinkButton_this_fy_request_action.Text := 'Start';
         end;
       end;
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
   end;
 end;
 

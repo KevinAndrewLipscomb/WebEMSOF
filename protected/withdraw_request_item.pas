@@ -88,7 +88,7 @@ end;
 procedure TWebForm_withdraw_request_item.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  appcommon.bdpconnection.Open;
+  appcommon.DbOpen;
 //  //
 //  // Send the notification message.
 //  //
@@ -131,11 +131,11 @@ begin
     + ' where id = ' + session.Item['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
-    appcommon.bdpconnection
+    appcommon.db
     )
     .ExecuteNonQuery;
   //
-  appcommon.bdpconnection.Close;
+  appcommon.DbClose;
   server.Transfer('request_overview.aspx');
 end;
 

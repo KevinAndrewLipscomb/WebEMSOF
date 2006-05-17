@@ -87,7 +87,7 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     //
     // Set Label_service_name
     //
@@ -102,7 +102,7 @@ begin
     affiliate_num := borland.data.provider.BdpCommand.Create
       (
       'SELECT affiliate_num FROM service WHERE id = ' + session.Item['service_user_id'].ToString,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     Label_affiliate_num.Text := affiliate_num;
@@ -127,7 +127,7 @@ begin
       + 'contact_person_phone_num '
       + 'FROM service '
       + 'WHERE affiliate_num = "' + affiliate_num + '"',
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteReader;
     bdr.Read;
@@ -147,7 +147,7 @@ begin
     TextBox_contact_person_name.Text := bdr['contact_person_name'].tostring;
     TextBox_contact_person_phone_num.Text := bdr['contact_person_phone_num'].tostring;
     //
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
   end;
 end;
 
@@ -170,7 +170,7 @@ begin
   //
   // Commit the displayed data to the database.
   //
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
     'UPDATE service '
@@ -190,10 +190,10 @@ begin
     +   'contact_person_phone_num = "' + Safe(TextBox_contact_person_phone_num.Text.trim,PHONE_NUM) + '",'
     +   'be_valid_profile = TRUE '
     + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUM) + '"',
-    AppCommon.BdpConnection
+    appcommon.db
     )
     .ExecuteNonQuery;
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
   server.Transfer('service_overview.aspx');
 end;
 

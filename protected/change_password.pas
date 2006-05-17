@@ -79,16 +79,16 @@ begin
   //
   // Commit the data to the database.
   //
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
-    'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
-    + 'SET encoded_password = sha("' + Safe(TextBox_nominal_password.Text.trim,ALPHANUM) + '"),'
-    +   'be_stale_password = FALSE '
-    + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
-    AppCommon.BdpConnection
+    'UPDATE ' + session.Item['target_user_table'].ToString + '_user'
+    + ' SET encoded_password = "' + appcommon.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
+    +   ' be_stale_password = FALSE'
+    + ' WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
+    appcommon.db
     ).ExecuteNonQuery;
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
   server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
 end;
 

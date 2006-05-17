@@ -70,7 +70,7 @@ begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login_county_coord';
     session.Remove('target_user_table');
     session.Add('target_user_table','county');
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     invalid_credentials_warning.Visible := FALSE;
     //
     // Load DropDownList_account
@@ -82,12 +82,12 @@ begin
       + 'FROM county_user JOIN county_code_name_map on (county_code_name_map.code = county_user.id) '
       + 'WHERE be_active = TRUE '
       + 'ORDER BY name',
-      AppCommon.BdpConnection
+      appcommon.db
       );
     bdr := bdpCommand_get_counties.ExecuteReader;
     while bdr.Read do
       DropDownList_county.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
     end;
 end;
 
@@ -130,9 +130,9 @@ begin
     'SELECT be_stale_password, password_reset_email_address FROM county_user '
     +  'where id="' + DropDownList_county.SelectedValue + '" '
     +     'and encoded_password=sha("' + Safe(TextBox_password.Text.Trim,ALPHANUM) + '")'
-    ,AppCommon.BdpConnection
+    ,appcommon.db
     );
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   bdr_county_user_attribs := bc_match_account.ExecuteReader;
   if bdr_county_user_attribs.Read then begin
     if bdr_county_user_attribs['be_stale_password'].ToString = '0' then begin
@@ -150,7 +150,7 @@ begin
       bc_get_max_fiscal_year_id := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
-        AppCommon.BdpConnection
+        appcommon.db
         );
       max_fiscal_year_id_obj := bc_get_max_fiscal_year_id.ExecuteScalar;
       //
@@ -162,11 +162,11 @@ begin
         +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
         + ' WHERE county_code = ' + session.Item['county_user_id'].ToString
         +   ' and fiscal_year_id >= (' + max_fiscal_year_id_obj.ToString + ' - 1)',
-        appcommon.bdpconnection
+        appcommon.db
         );
       bdr_appropriation_ids := bc_get_appropriation_ids.ExecuteReader;
       if not bdr_appropriation_ids.Read then begin
-        AppCommon.BdpConnection.Close;
+        appcommon.DbClose;
         server.Transfer('no_appropriation.aspx');
       end else begin
         //
@@ -183,15 +183,15 @@ begin
         session.Add('county_user_password_reset_email_address',county_user_email_address);
         //
         if bdr_appropriation_ids.Read then begin
-          AppCommon.BdpConnection.Close;
+          appcommon.DbClose;
           server.Transfer('choose_county_appropriation.aspx');
         end else begin
-          AppCommon.BdpConnection.Close;
+          appcommon.DbClose;
           server.Transfer('county_dictated_appropriations.aspx');
         end;
       end;
     end else begin
-      AppCommon.BdpConnection.Close;
+      appcommon.DbClose;
       server.Transfer('change_password.aspx');
     end;
   end else begin
@@ -200,7 +200,7 @@ begin
       invalid_credentials_warning.Visible := TRUE;
     end;
   end;
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
 end;
 
 end.
