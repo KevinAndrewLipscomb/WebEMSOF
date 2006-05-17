@@ -29,7 +29,6 @@ type
     RequiredFieldValidator_confirmation_password: System.Web.UI.WebControls.RequiredFieldValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
-    Label_literal_county: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -56,11 +55,13 @@ const ID = '$Id$';
 procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
     Label_account_descriptor.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
+    if session.item['target_user_table'].tostring = 'county' then begin
+      Label_account_descriptor.Text := Label_account_descriptor.Text + ' County';
     end;
+  end;
 end;
 
 procedure TWebForm_change_password.OnInit(e: EventArgs);

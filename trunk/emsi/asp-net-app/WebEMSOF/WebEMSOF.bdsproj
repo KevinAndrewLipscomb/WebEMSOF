@@ -162,7 +162,7 @@
 		<Options>
 			<Options Name="AspNetUseHostServer" Type="Boolean">True</Options>
 			<Options Name="AspNetLaunchBrowser" Type="Boolean">True</Options>
-			<Options Name="AspNetStartPage" Type="String">main.aspx</Options>
+			<Options Name="AspNetStartPage" Type="String">login.aspx</Options>
 			<Options Name="AspNetHostServer" Type="String">IIS</Options>
 			<Options Name="AspNetCassiniVirtualDirectory" Type="String">\</Options>
 			<Options Name="AspNetIISVirtualDirectory" Type="String">WebEMSOF</Options>
@@ -189,165 +189,6 @@
 			<Language Name="RootDir"></Language>
 		</Language>  
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="system" Version="1.0.5000.0" LinkUnits="False"/>
@@ -362,7 +203,6 @@
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Design.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System.Design" AssemblyName="System.Design" Version="1.0.5000.0" LinkUnits="False"/>
       <File FileName="c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Common.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="Borland.Data.Common" AssemblyName="Borland.Data.Common" Version="2.5.0.0" LinkUnits="False"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\mscorlib.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="mscorlib" AssemblyName="mscorlib" Version="1.0.5000.0" LinkUnits="False"/>
-      <File FileName="main.aspx" ContainerId="AspMarkupContainer" ModuleName="main"/>
       <File FileName="ModelSupport_WebEMSOF\default.txaPackage" ContainerId="TogetherDiagram" ModuleName="default"/>
       <File FileName="schema.sql" ContainerId="File" ModuleName="schema"/>
       <File FileName="protected" ContainerId="AspFolderContainer" ModuleName="protected"/>
@@ -376,7 +216,6 @@
       <File FileName="protected\finalize.aspx" ContainerId="AspMarkupContainer" ModuleName="finalize"/>
       <File FileName="protected\login_county_coord.aspx" ContainerId="AspMarkupContainer" ModuleName="login_county_coord"/>
       <File FileName="protected\login_regional_staffer.aspx" ContainerId="AspMarkupContainer" ModuleName="login_regional_staffer"/>
-      <File FileName="protected\new_password.aspx" ContainerId="AspMarkupContainer" ModuleName="new_password"/>
       <File FileName="protected\profile.aspx" ContainerId="AspMarkupContainer" ModuleName="profile"/>
       <File FileName="protected\regional_staffer_overview.aspx" ContainerId="AspMarkupContainer" ModuleName="regional_staffer_overview"/>
       <File FileName="protected\request_item_detail.aspx" ContainerId="AspMarkupContainer" ModuleName="request_item_detail"/>
@@ -385,29 +224,29 @@
       <File FileName="protected\withdraw_request_item.aspx" ContainerId="AspMarkupContainer" ModuleName="withdraw_request_item"/>
       <File FileName="unpublished.config" ContainerId="ConfigurationCompiler" ModuleName="unpublished"/>
       <File FileName="protected\Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
+      <File FileName="new_password.aspx" ContainerId="AspMarkupContainer" ModuleName="new_password"/>
       <File FileName="" ContainerId="" ModuleName="System.Reflection"/>
       <File FileName="" ContainerId="" ModuleName="System.Runtime.CompilerServices"/>
-      <File FileName="Global.pas" ContainerId="PascalCompiler" ModuleName="Global" Parent="Global.asax"/>
-      <File FileName="login.pas" ContainerId="PascalCompiler" ModuleName="login" Parent="login.aspx"/>
-      <File FileName="AppCommon.pas" ContainerId="PascalCompiler" ModuleName="AppCommon"/>
-      <File FileName="main.pas" ContainerId="PascalCompiler" ModuleName="main" Parent="main.aspx"/>
-      <File FileName="protected\change_email_address.pas" ContainerId="PascalCompiler" ModuleName="change_email_address" Parent="protected\change_email_address.aspx"/>
-      <File FileName="protected\change_password.pas" ContainerId="PascalCompiler" ModuleName="change_password" Parent="protected\change_password.aspx"/>
-      <File FileName="protected\choose_county_appropriation.pas" ContainerId="PascalCompiler" ModuleName="choose_county_appropriation" Parent="protected\choose_county_appropriation.aspx"/>
-      <File FileName="protected\county_dictated_appropriations.pas" ContainerId="PascalCompiler" ModuleName="county_dictated_appropriations" Parent="protected\county_dictated_appropriations.aspx"/>
-      <File FileName="protected\county_dictated_deadline.pas" ContainerId="PascalCompiler" ModuleName="county_dictated_deadline" Parent="protected\county_dictated_deadline.aspx"/>
-      <File FileName="protected\create_new_service_appropriation.pas" ContainerId="PascalCompiler" ModuleName="create_new_service_appropriation" Parent="protected\create_new_service_appropriation.aspx"/>
-      <File FileName="protected\delete_service_appropriation.pas" ContainerId="PascalCompiler" ModuleName="delete_service_appropriation" Parent="protected\delete_service_appropriation.aspx"/>
-      <File FileName="protected\finalize.pas" ContainerId="PascalCompiler" ModuleName="finalize" Parent="protected\finalize.aspx"/>
-      <File FileName="protected\login_county_coord.pas" ContainerId="PascalCompiler" ModuleName="login_county_coord" Parent="protected\login_county_coord.aspx"/>
-      <File FileName="protected\login_regional_staffer.pas" ContainerId="PascalCompiler" ModuleName="login_regional_staffer" Parent="protected\login_regional_staffer.aspx"/>
-      <File FileName="protected\new_password.pas" ContainerId="PascalCompiler" ModuleName="new_password" Parent="protected\new_password.aspx"/>
-      <File FileName="protected\profile.pas" ContainerId="PascalCompiler" ModuleName="profile" Parent="protected\profile.aspx"/>
-      <File FileName="protected\regional_staffer_overview.pas" ContainerId="PascalCompiler" ModuleName="regional_staffer_overview" Parent="protected\regional_staffer_overview.aspx"/>
-      <File FileName="protected\request_item_detail.pas" ContainerId="PascalCompiler" ModuleName="request_item_detail" Parent="protected\request_item_detail.aspx"/>
-      <File FileName="protected\request_overview.pas" ContainerId="PascalCompiler" ModuleName="request_overview" Parent="protected\request_overview.aspx"/>
-      <File FileName="protected\service_overview.pas" ContainerId="PascalCompiler" ModuleName="service_overview" Parent="protected\service_overview.aspx"/>
-      <File FileName="protected\withdraw_request_item.pas" ContainerId="PascalCompiler" ModuleName="withdraw_request_item" Parent="protected\withdraw_request_item.aspx"/>
+      <File FileName="Global.pas" ContainerId="" ModuleName="Global" Parent="Global.asax"/>
+      <File FileName="login.pas" ContainerId="" ModuleName="login" Parent="login.aspx"/>
+      <File FileName="AppCommon.pas" ContainerId="" ModuleName="AppCommon"/>
+      <File FileName="protected\change_email_address.pas" ContainerId="" ModuleName="change_email_address" Parent="protected\change_email_address.aspx"/>
+      <File FileName="protected\change_password.pas" ContainerId="" ModuleName="change_password" Parent="protected\change_password.aspx"/>
+      <File FileName="protected\choose_county_appropriation.pas" ContainerId="" ModuleName="choose_county_appropriation" Parent="protected\choose_county_appropriation.aspx"/>
+      <File FileName="protected\county_dictated_appropriations.pas" ContainerId="" ModuleName="county_dictated_appropriations" Parent="protected\county_dictated_appropriations.aspx"/>
+      <File FileName="protected\county_dictated_deadline.pas" ContainerId="" ModuleName="county_dictated_deadline" Parent="protected\county_dictated_deadline.aspx"/>
+      <File FileName="protected\create_new_service_appropriation.pas" ContainerId="" ModuleName="create_new_service_appropriation" Parent="protected\create_new_service_appropriation.aspx"/>
+      <File FileName="protected\delete_service_appropriation.pas" ContainerId="" ModuleName="delete_service_appropriation" Parent="protected\delete_service_appropriation.aspx"/>
+      <File FileName="protected\finalize.pas" ContainerId="" ModuleName="finalize" Parent="protected\finalize.aspx"/>
+      <File FileName="protected\login_county_coord.pas" ContainerId="" ModuleName="login_county_coord" Parent="protected\login_county_coord.aspx"/>
+      <File FileName="protected\login_regional_staffer.pas" ContainerId="" ModuleName="login_regional_staffer" Parent="protected\login_regional_staffer.aspx"/>
+      <File FileName="protected\profile.pas" ContainerId="" ModuleName="profile" Parent="protected\profile.aspx"/>
+      <File FileName="protected\regional_staffer_overview.pas" ContainerId="" ModuleName="regional_staffer_overview" Parent="protected\regional_staffer_overview.aspx"/>
+      <File FileName="protected\request_item_detail.pas" ContainerId="" ModuleName="request_item_detail" Parent="protected\request_item_detail.aspx"/>
+      <File FileName="protected\request_overview.pas" ContainerId="" ModuleName="request_overview" Parent="protected\request_overview.aspx"/>
+      <File FileName="protected\service_overview.pas" ContainerId="" ModuleName="service_overview" Parent="protected\service_overview.aspx"/>
+      <File FileName="protected\withdraw_request_item.pas" ContainerId="" ModuleName="withdraw_request_item" Parent="protected\withdraw_request_item.aspx"/>
+      <File FileName="new_password.pas" ContainerId="" ModuleName="new_password" Parent="new_password.aspx"/>
     </FileList>
   </DelphiDotNet.Personality>
 	<ModelSupport>True</ModelSupport>

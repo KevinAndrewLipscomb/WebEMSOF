@@ -54,11 +54,25 @@ const ID = '$Id$';
 procedure TWebForm_county_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr: borland.data.provider.BdpDataReader;
+  be_stale_password: string;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - choose_county_appropriation';
+    //
     AppCommon.BdpConnection.Open;
+    //
+    be_stale_password := Borland.Data.Provider.BdpCommand.Create
+      (
+      'SELECT be_stale_password FROM county_user where id=' + session.item['county_user_id'].tostring,
+      AppCommon.BdpConnection
+      )
+      .ExecuteScalar.tostring;
+    if be_stale_password = '1' then begin
+      appcommon.bdpconnection.Close;
+      server.Transfer('protected/change_password.aspx');
+    end;
+    //
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - choose_county_appropriation';
     //
     Label_county_name.Text := session.Item['county_name'].ToString;
     //

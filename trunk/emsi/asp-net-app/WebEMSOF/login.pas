@@ -18,34 +18,29 @@ type
     procedure InitializeComponent;
     procedure Button_log_in_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_new_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure DropDownList_service_SelectedIndexChanged(sender: System.Object;
+    procedure DropDownList_user_kind_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
-    procedure DropDownList_county_SelectedIndexChanged(sender: System.Object; 
-      e: System.EventArgs);
-    procedure DropDownList_regional_staffer_SelectedIndexChanged(sender: System.Object; 
+    procedure DropDownList_user_SelectedIndexChanged(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
-    invalid_credentials_warning: System.Web.UI.HtmlControls.HtmlGenericControl;
     TextBox_password: System.Web.UI.WebControls.TextBox;
     Button_log_in: System.Web.UI.WebControls.Button;
     CheckBox_keep_me_logged_in: System.Web.UI.WebControls.CheckBox;
-    DropDownList_service: System.Web.UI.WebControls.DropDownList;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Button_new_password: System.Web.UI.WebControls.Button;
-    RangeValidator_service: System.Web.UI.WebControls.RangeValidator;
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
-    DropDownList_county: System.Web.UI.WebControls.DropDownList;
-    RangeValidator_county: System.Web.UI.WebControls.RangeValidator;
-    DropDownList_regional_staffer: System.Web.UI.WebControls.DropDownList;
-    RangeValidator_regional_staffer: System.Web.UI.WebControls.RangeValidator;
-    TableRow_service: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_county: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_regional_staffer: System.Web.UI.HtmlControls.HtmlTableRow;
+    invalid_credentials_warning: System.Web.UI.HtmlControls.HtmlGenericControl;
+    Label_application_name: System.Web.UI.WebControls.Label;
+    DropDownList_user_kind: System.Web.UI.WebControls.DropDownList;
+    Label_user: System.Web.UI.WebControls.Label;
+    DropDownList_user: System.Web.UI.WebControls.DropDownList;
+    RangeValidator_username: System.Web.UI.WebControls.RangeValidator;
+    RegularExpressionValidator_user_kind: System.Web.UI.WebControls.RegularExpressionValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -64,10 +59,8 @@ const ID = '$Id$';
 /// </summary>
 procedure TWebForm_login.InitializeComponent;
 begin
-  Include(Self.DropDownList_service.SelectedIndexChanged, Self.DropDownList_service_SelectedIndexChanged);
-  Include(Self.DropDownList_county.SelectedIndexChanged, Self.DropDownList_county_SelectedIndexChanged);
-  Include(Self.DropDownList_regional_staffer.SelectedIndexChanged, Self.DropDownList_regional_staffer_SelectedIndexChanged);
-  Include(Self.TextBox_password.TextChanged, Self.Button_log_in_Click);
+  Include(Self.DropDownList_user_kind.SelectedIndexChanged, Self.DropDownList_user_kind_SelectedIndexChanged);
+  Include(Self.DropDownList_user.SelectedIndexChanged, Self.DropDownList_user_SelectedIndexChanged);
   Include(Self.Button_log_in.Click, Self.Button_log_in_Click);
   Include(Self.Button_new_password.Click, Self.Button_new_password_Click);
   Include(Self.Load, Self.Page_Load);
@@ -75,69 +68,13 @@ end;
 {$ENDREGION}
 
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
-var
-  bdr: borland.data.provider.BdpDataReader;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
-    //
+    Label_application_name.text := configurationsettings.appsettings['application_name'];
     invalid_credentials_warning.Visible := FALSE;
-    TableRow_service.visible := FALSE;
-    TableRow_county.visible := FALSE;
-    TableRow_regional_staffer.visible := FALSE;
-    //
-    AppCommon.BdpConnection.Open;
-    //
-    if session.item['target_user_table'].tostring = 'service' then begin
-      DropDownList_service.Items.Add(listitem.Create('-- Select --','0'));
-      bdr := Borland.Data.Provider.BdpCommand.Create
-        (
-        'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ORDER BY name',
-        AppCommon.BdpConnection
-        )
-        .ExecuteReader;
-      while bdr.Read do begin
-        DropDownList_service.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
-      end;
-      TableRow_service.visible := TRUE;
-    end else if session.item['target_user_table'].tostring = 'county' then begin
-      DropDownList_county.Items.Add(listitem.Create('-- Select --','0'));
-      bdr := Borland.Data.Provider.BdpCommand.Create
-        (
-        'SELECT id,name '
-        + 'FROM county_user JOIN county_code_name_map on (county_code_name_map.code = county_user.id) '
-        + 'WHERE be_active = TRUE '
-        + 'ORDER BY name',
-        AppCommon.BdpConnection
-        )
-        .ExecuteReader;
-      while bdr.Read do begin
-        DropDownList_county.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
-      end;
-      TableRow_county.visible := TRUE;
-    end else if session.item['target_user_table'].tostring = 'regional_staffer' then begin
-      DropDownList_regional_staffer.Items.Add(listitem.Create('-- Select --','0'));
-      bdr := Borland.Data.Provider.BdpCommand.Create
-        (
-        'SELECT id,last_name,first_name '
-        + 'FROM regional_staffer_user JOIN regional_staffer using (id) '
-        + 'WHERE be_active = TRUE '
-        + 'ORDER BY last_name,first_name',
-        AppCommon.BdpConnection
-        )
-        .ExecuteReader;
-      while bdr.Read do begin
-        DropDownList_regional_staffer.Items.Add
-          (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,bdr['id'].ToString));
-      end;
-      TableRow_regional_staffer.visible := TRUE;
-    end;
-    //
-    AppCommon.BdpConnection.Close;
-    //
-    end;
+  end;
 end;
 
 procedure TWebForm_login.OnInit(e: EventArgs);
@@ -149,31 +86,73 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_login.DropDownList_regional_staffer_SelectedIndexChanged(sender: System.Object;
+procedure TWebForm_login.DropDownList_user_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('regional_staffer_user_id');
-  session.Add('regional_staffer_user_id',Safe(DropDownList_regional_staffer.SelectedValue,NUM));
-  session.Remove('regional_staffer_name');
-  session.Add('regional_staffer_name',Safe(DropDownList_regional_staffer.SelectedItem.Text,HUMAN_NAME_CSV));
+  session.Remove(DropDownList_user_kind.selectedvalue + '_user_id');
+  session.Add(DropDownList_user_kind.selectedvalue + '_user_id',Safe(DropDownList_user.SelectedValue,NUM));
+  session.Remove(DropDownList_user_kind.selectedvalue + '_name');
+  session.Add(DropDownList_user_kind.selectedvalue + '_name',Safe(DropDownList_user.SelectedItem.Text,ORG_NAME));
 end;
 
-procedure TWebForm_login.DropDownList_county_SelectedIndexChanged(sender: System.Object;
+procedure TWebForm_login.DropDownList_user_kind_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
+var
+  bdr: borland.data.provider.BdpDataReader;
 begin
-  session.Remove('county_user_id');
-  session.Add('county_user_id',Safe(DropDownList_county.SelectedValue,NUM));
-  session.Remove('county_name');
-  session.Add('county_name',Safe(DropDownList_county.SelectedItem.Text,ALPHA));
-end;
-
-procedure TWebForm_login.DropDownList_service_SelectedIndexChanged(sender: System.Object;
-  e: System.EventArgs);
-begin
-  session.Remove('service_user_id');
-  session.Add('service_user_id',Safe(DropDownList_service.SelectedValue,NUM));
-  session.Remove('service_name');
-  session.Add('service_name',Safe(DropDownList_service.SelectedItem.Text,ORG_NAME));
+  appcommon.bdpconnection.Open;
+  session.Remove('target_user_table');
+  session.Add('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ALPHA));
+  Label_user.enabled := TRUE;
+  DropDownList_user.items.Clear;
+  DropDownList_user.items.Add(listitem.Create('-- Select --','0'));
+  if DropDownList_user_kind.selectedvalue = 'service' then begin
+    Label_user.text := 'Service';
+    bdr := Borland.Data.Provider.BdpCommand.Create
+      (
+      'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ORDER BY name',
+      AppCommon.BdpConnection
+      )
+      .ExecuteReader;
+    while bdr.Read do begin
+      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
+    end;
+  end else if DropDownList_user_kind.selectedvalue = 'county' then begin
+    Label_user.text := 'County';
+    bdr := Borland.Data.Provider.BdpCommand.Create
+      (
+      'SELECT id,name '
+      + 'FROM county_user JOIN county_code_name_map on (county_code_name_map.code = county_user.id) '
+      + 'WHERE be_active = TRUE '
+      + 'ORDER BY name',
+      AppCommon.BdpConnection
+      )
+      .ExecuteReader;
+    while bdr.Read do begin
+      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
+    end;
+  end else if DropDownList_user_kind.selectedvalue = 'regional_staffer' then begin
+    Label_user.text := 'Regional staffer';
+    bdr := Borland.Data.Provider.BdpCommand.Create
+      (
+      'SELECT id,last_name,first_name '
+      + 'FROM regional_staffer_user JOIN regional_staffer using (id) '
+      + 'WHERE be_active = TRUE '
+      + 'ORDER BY last_name,first_name',
+      AppCommon.BdpConnection
+      )
+      .ExecuteReader;
+    while bdr.Read do begin
+      DropDownList_user.Items.Add
+        (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,bdr['id'].ToString));
+    end;
+  end else begin
+    session.Remove('target_user_table');
+    Label_user.enabled := FALSE;
+    Label_user.text := 'User';
+    DropDownList_user.items.Clear;
+  end;
+  appcommon.bdpconnection.Close;
 end;
 
 procedure TWebForm_login.Button_new_password_Click(sender: System.Object;
@@ -184,26 +163,31 @@ end;
 
 procedure TWebForm_login.Button_log_in_Click(sender: System.Object; e: System.EventArgs);
 var
-  be_stale_password_obj: System.Object;
+  obj: System.Object;
 begin
   AppCommon.BdpConnection.Open;
-  be_stale_password_obj := Borland.Data.Provider.BdpCommand.Create
+  obj := Borland.Data.Provider.BdpCommand.Create
     (
-    'SELECT be_stale_password FROM ' + session.item['target_user_table'].tostring + '_user'
-    +  ' where id=' + session.item[session.item['target_user_table'].tostring + '_user_id'].tostring
+    'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_user'
+    +  ' where id = ' + Safe(DropDownList_user.selectedvalue,NUM)
     +     ' and encoded_password=sha("' + Safe(TextBox_password.Text.trim,ALPHANUM) + '")'
     ,AppCommon.BdpConnection
     )
     .ExecuteScalar;
   AppCommon.BdpConnection.Close;
-  if be_stale_password_obj <> nil then begin
-    if be_stale_password_obj.ToString = '0' then begin
-      //server.Transfer('service_overview.aspx')
-      formsauthentication.RedirectFromLoginPage(DropDownList_service.selectedvalue,CheckBox_keep_me_logged_in.checked);
+  if obj <> nil then begin
+    if formsauthentication.GetRedirectUrl(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked) =
+      '/' + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/default.aspx'
+    then begin
+      if DropDownList_user_kind.selectedvalue = 'county' then begin
+        server.Transfer('protected/choose_county_appropriation.aspx');
+      end else begin
+        server.Transfer('protected/' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_overview.aspx');
+      end;
     end else begin
-      server.Transfer('change_password.aspx')
+      formsauthentication.RedirectFromLoginPage(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked);
     end;
-  end else begin // be_stale_password_obj = nil
+  end else begin
     invalid_credentials_warning.Visible := TRUE;
   end;
 end;

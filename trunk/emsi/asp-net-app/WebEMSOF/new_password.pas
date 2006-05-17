@@ -23,6 +23,7 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_email_address: System.Web.UI.WebControls.Label;
     Label_user_name: System.Web.UI.WebControls.Label;
+    Label1: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -56,6 +57,9 @@ begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
     AppCommon.BdpConnection.Open;
     Label_user_name.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
+    if session.item['target_user_table'].tostring = 'county' then begin
+      Label_user_name.Text := Label_user_name.Text + ' County';
+    end;
     //
     // Build a suitably-random password string.
     //

@@ -74,16 +74,30 @@ procedure TWebForm_account_overview.Page_Load(sender: System.Object; e: System.E
 var
   bdpCommand_get_profile_status: borland.data.provider.BdpCommand;
   bdpCommand_get_last_fy_request_attributes: borland.data.Provider.bdpcommand;
+  be_stale_password: string;
   max_fiscal_year_id_obj: System.Object;
   bdpCommand_get_max_fiscal_year_id: borland.data.provider.BdpCommand;
   bdr_last_fy_request_attributes: borland.data.provider.BdpDataReader;
   bdpCommand_get_this_fy_request_attributes: borland.data.Provider.bdpcommand;
   bdr_this_fy_request_attributes: borland.data.provider.BdpDataReader;
 begin
-  Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    //
+    AppCommon.BdpConnection.Open;
+    //
+    be_stale_password := Borland.Data.Provider.BdpCommand.Create
+      (
+      'SELECT be_stale_password FROM regional_staffer_user where id=' + session.item['regional_staffer_user_id'].tostring,
+      AppCommon.BdpConnection
+      )
+      .ExecuteScalar.tostring;
+    if be_stale_password = '1' then begin
+      AppCommon.BdpConnection.Close;
+      server.Transfer('change_password.aspx');
+    end;
+    //
+    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
     //
     // Set Label_regional_staffer_name
     //
@@ -96,7 +110,6 @@ begin
       'select be_valid_profile from regional_staffer where id = "' + session.Item['regional_staffer_user_id'].ToString + '"'
       ,AppCommon.BdpConnection
       );
-    AppCommon.BdpConnection.Open;
     if bdpCommand_get_profile_status.ExecuteScalar.ToString = '0' then
       begin
       Label_profile_status.Text := 'Not saved.';
@@ -176,7 +189,7 @@ begin
         end;
       end;
     AppCommon.BdpConnection.Close;
-    end;
+  end;
 end;
 
 procedure TWebForm_account_overview.OnInit(e: EventArgs);
