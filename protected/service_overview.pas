@@ -81,10 +81,25 @@ var
 procedure TWebForm_service_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bc_get_profile_status: borland.data.provider.BdpCommand;
+  be_stale_password: string;
 //  make_item_requests_deadline: system.datetime;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
+    //
+    AppCommon.BdpConnection.Open;
+    //
+    be_stale_password := Borland.Data.Provider.BdpCommand.Create
+      (
+      'SELECT be_stale_password FROM service_user where id=' + session.item['service_user_id'].tostring,
+      AppCommon.BdpConnection
+      )
+      .ExecuteScalar.tostring;
+    if be_stale_password = '1' then begin
+      AppCommon.BdpConnection.Close;
+      server.Transfer('change_password.aspx');
+    end;
+    //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - service_overview';
     //
     // Initialize implementation-scoped vars.
@@ -107,7 +122,6 @@ begin
     //
     // Set Label_profile_status
     //
-    AppCommon.BdpConnection.Open;
     bc_get_profile_status := borland.data.provider.bdpCommand.Create
       (
       'select be_valid_profile from service where id = "' + session.Item['service_user_id'].ToString + '"'

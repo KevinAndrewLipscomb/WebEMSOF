@@ -14,12 +14,19 @@
       </asp:placeholder></p>
       <p>
         <ASP:Label id="Label_user_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
-<p></p>
       <p>
-        <table cellspacing="0" cellpadding="5" width="%" border="1">
+        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
             <tr>
-              <td>A temporary WebEMSOF password has been sent to 
+              <td>
+                <table cellspacing="0" cellpadding="5" border="0">
+                    <tr>
+                      <td bgcolor="#f5f5f5"><strong>New password</strong></td>
+                    </tr>
+                    <tr>
+                      <td>A temporary WebEMSOF password has been sent to 
                 <ASP:Label id="Label_email_address" runat="server" font-bold="True"></ASP:Label>.&nbsp; Please log in again after you receive it.&nbsp; You will receive further instructions at that time.</td>
+                    </tr>
+                </table></td>
             </tr>
         </table></p>
       <p>

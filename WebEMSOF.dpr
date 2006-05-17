@@ -13,7 +13,6 @@ library WebEMSOF;
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Design.dll'}
 {%DelphiDotNetAssemblyCompiler 'c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Common.dll'}
 {%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\mscorlib.dll'}
-{%AspMarkupContainer 'main.aspx'}
 {%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
 {%File 'schema.sql'}
 {%AspFolderContainer 'protected'}
@@ -27,7 +26,6 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\finalize.aspx'}
 {%AspMarkupContainer 'protected\login_county_coord.aspx'}
 {%AspMarkupContainer 'protected\login_regional_staffer.aspx'}
-{%AspMarkupContainer 'protected\new_password.aspx'}
 {%AspMarkupContainer 'protected\profile.aspx'}
 {%AspMarkupContainer 'protected\regional_staffer_overview.aspx'}
 {%AspMarkupContainer 'protected\request_item_detail.aspx'}
@@ -36,6 +34,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\withdraw_request_item.aspx'}
 {%ConfigurationCompiler 'unpublished.config'}
 {%AspWebConfigContainer 'protected\Web.config'}
+{%AspMarkupContainer 'new_password.aspx'}
 
 uses
   System.Reflection,
@@ -43,24 +42,23 @@ uses
   Global in 'Global.pas' {Global.TGlobal: System.Web.HttpApplication},
   login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
   AppCommon in 'AppCommon.pas',
-  main in 'main.pas' {main.TWebForm_main: System.Web.UI.Page},
   change_email_address in 'protected\change_email_address.pas',
-  change_password in 'protected\change_password.pas',
-  choose_county_appropriation in 'protected\choose_county_appropriation.pas',
+  change_password in 'protected\change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
+  choose_county_appropriation in 'protected\choose_county_appropriation.pas' {choose_county_appropriation.TWebForm_county_appropriation: System.Web.UI.Page},
   county_dictated_appropriations in 'protected\county_dictated_appropriations.pas',
   county_dictated_deadline in 'protected\county_dictated_deadline.pas',
   create_new_service_appropriation in 'protected\create_new_service_appropriation.pas',
-  delete_service_appropriation in 'protected\delete_service_appropriation.pas',
+  delete_service_appropriation in 'protected\delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page},
   finalize in 'protected\finalize.pas',
   login_county_coord in 'protected\login_county_coord.pas' {login_county_coord.TWebForm_login_county_coord: System.Web.UI.Page},
   login_regional_staffer in 'protected\login_regional_staffer.pas' {login_regional_staffer.TWebForm_login_regional_staffer: System.Web.UI.Page},
-  new_password in 'protected\new_password.pas',
   profile in 'protected\profile.pas',
-  regional_staffer_overview in 'protected\regional_staffer_overview.pas',
+  regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_account_overview: System.Web.UI.Page},
   request_item_detail in 'protected\request_item_detail.pas',
   request_overview in 'protected\request_overview.pas',
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
-  withdraw_request_item in 'protected\withdraw_request_item.pas';
+  withdraw_request_item in 'protected\withdraw_request_item.pas',
+  new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following

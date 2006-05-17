@@ -71,7 +71,7 @@ begin
   case hint of
     //
     // Be extremely protective here:
-    // -  Escape ("\") the following eleven characters: [\^$.|?*+()
+    // -  Escape ("\") the following twelve characters: [\^$.|?*+()-
     // -  For scalars, do not allow punctuation.
     // -  When in doubt, don't allow it.
     //
@@ -85,29 +85,29 @@ begin
     ECMASCRIPT_WORD:
       allow := '0-9a-zA-Z_';
     EMAIL_ADDRESS:
-      allow := '0-9a-zA-Z_\.@-';
+      allow := '0-9a-zA-Z_\.@\-';
     HOSTNAME:
-      allow := '0-9a-zA-Z_-\.';
+      allow := '0-9a-zA-Z_\-\.';
     HUMAN_NAME:
-      allow := 'a-zA-Z-\. ' + APOSTROPHE;
+      allow := 'a-zA-Z\-\. ' + APOSTROPHE;
     HUMAN_NAME_CSV:
-      allow := 'a-zA-Z-,\. ' + APOSTROPHE;
+      allow := 'a-zA-Z\-,\. ' + APOSTROPHE;
     HYPHENATED_NUM:
-      allow := '0-9-';
+      allow := '0-9\-';
     MAKE_MODEL:
-      allow := '0-9a-zA-Z#\*\(\)-\+/\. ';
+      allow := '0-9a-zA-Z#\*\(\)\-\+/\. ';
     NARRATIVE:
-      allow := '0-9a-zA-Z#\(\)-,/\. ';
+      allow := '0-9a-zA-Z#\(\)\-,/\. ';
     NUM:
       allow := '0-9';
     ORG_NAME:
-      allow := '0-9a-zA-Z#&-,\. ' + APOSTROPHE;
+      allow := '0-9a-zA-Z#&\-,\. ' + APOSTROPHE;
     PHONE_NUM:
       allow := '0-9-\+\(\) ';
     POSTAL_CITY:
-      allow := 'a-zA-Z-\. ' + APOSTROPHE;
+      allow := 'a-zA-Z\-\. ' + APOSTROPHE;
     POSTAL_STREET_ADDRESS:
-      allow := '0-9a-zA-Z#-,\(\)\. ' + APOSTROPHE;
+      allow := '0-9a-zA-Z#\-,\(\)\. ' + APOSTROPHE;
     REAL_NUM:
       allow := '0-9\.';
   end;
