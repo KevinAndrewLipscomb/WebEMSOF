@@ -104,7 +104,7 @@ begin
         Label_unused_amount.text := decimal(session.item['unused_amount']).tostring('C');
       end;
       //
-      appcommon.bdpconnection.Open;
+      appcommon.DbOpen;
       //
       // Set Label_grand_total_cost.
       //
@@ -112,7 +112,7 @@ begin
         (
         'select sum(unit_cost*quantity) from emsof_request_detail'
         + ' where master_id = ' + session.item['emsof_request_master_id'].tostring,
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteScalar;
       if grand_total_cost_obj = dbnull.value then begin
@@ -140,7 +140,7 @@ begin
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-purchase-completion-deadline"',
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteReader;
       bdr.Read;
@@ -153,7 +153,7 @@ begin
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-invoice-submission-deadline"',
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteReader;
       bdr.Read;
@@ -166,7 +166,7 @@ begin
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-canceled-check-submission-deadline"',
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteReader;
       bdr.Read;
@@ -174,7 +174,7 @@ begin
         datetime.Parse(bdr['emsof_service_canceled_check_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
       bdr.Close;
       //
-      appcommon.bdpconnection.Close;
+      appcommon.DbClose;
       //
     end else begin
       Table_summary.visible := FALSE;
@@ -208,14 +208,14 @@ begin
     and CheckBox_understand_wait_for_approval_to_order.checked
   then begin
     //
-    appcommon.bdpconnection.Open;
+    appcommon.DbOpen;
     //
     // Update database.
     //
     borland.data.provider.bdpcommand.Create
       (
       'update emsof_request_master set status_code = 3 where id = ' + session.item['emsof_request_master_id'].tostring,
-      appcommon.bdpconnection
+      appcommon.db
       )
       .ExecuteNonQuery;
     //
@@ -225,7 +225,7 @@ begin
     service_email_address := borland.data.provider.bdpcommand.Create
       (
       'select password_reset_email_address from service_user where id ="' + session.item['service_user_id'].tostring + '"',
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     //   Set up the command to get the County Coorindator's email address.
@@ -237,7 +237,7 @@ begin
       +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
       +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
       + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     //
@@ -262,7 +262,7 @@ begin
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
-    appcommon.bdpconnection.Close;
+    appcommon.DbClose;
     //
     server.Transfer('request_overview.aspx');
     //

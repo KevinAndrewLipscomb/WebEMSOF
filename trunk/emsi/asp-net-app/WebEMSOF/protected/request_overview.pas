@@ -111,7 +111,7 @@ begin
     sum_of_emsof_antes := 0;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
-    appcommon.bdpconnection.Open;
+    appcommon.DbOpen;
     //
     // Set parent appropriation labels.
     //
@@ -131,7 +131,7 @@ begin
         + ' from county_dictated_appropriation join region_dictated_appropriation'
         +   ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
         + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteScalar
       );
@@ -141,7 +141,7 @@ begin
     be_finalized := '1' = borland.data.provider.bdpcommand.Create
       (
       'select (status_code > 2) from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
-      appcommon.bdpconnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     //
@@ -168,7 +168,7 @@ begin
     bdr := borland.data.provider.bdpcommand.Create
       (
       'select num_items,value from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
-      appcommon.bdpconnection
+      appcommon.db
       )
       .ExecuteReader;
     bdr.Read;
@@ -196,12 +196,12 @@ begin
       be_completely_approved := '1' = borland.data.provider.bdpcommand.Create
         (
         'select (status_code between 8 and 10) from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteScalar.tostring;
     end;
     //
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
     //
     Bind_items;  // also affected by be_before_deadline
   end;
@@ -230,7 +230,7 @@ procedure TWebForm_request_overview.DataGrid_items_ItemCommand(source: System.Ob
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   if e.commandname = 'IncreasePriority' then begin
-    appcommon.bdpconnection.Open;
+    appcommon.DbOpen;
     borland.data.provider.bdpcommand.Create
       (
       'START TRANSACTION;'
@@ -246,12 +246,12 @@ begin
       + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
       +   ' and priority = 0;'
       + 'COMMIT;',
-      appcommon.bdpconnection
+      appcommon.db
       )
       .ExecuteNonQuery;
-    appcommon.bdpconnection.Close;
+    appcommon.DbClose;
   end else if e.commandname = 'DecreasePriority' then begin
-    appcommon.bdpconnection.Open;
+    appcommon.DbOpen;
     borland.data.provider.bdpcommand.Create
       (
       'START TRANSACTION;'
@@ -267,10 +267,10 @@ begin
       + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
       +   ' and priority = 0;'
       + 'COMMIT;',
-      appcommon.bdpconnection
+      appcommon.db
       )
       .ExecuteNonQuery;
-    appcommon.bdpconnection.Close;
+    appcommon.DbClose;
   end else begin // e.commandname = 'Select'
     session.Remove('emsof_request_item_priority');
     session.Add('emsof_request_item_priority',Safe(e.item.cells[dgi_priority].text,NUM));
@@ -317,7 +317,7 @@ procedure TWebForm_request_overview.Bind_items;
 var
   cmdText: string;
 begin
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
@@ -334,12 +334,12 @@ begin
   + ' order by priority';
   //
   DataGrid_items.DataSource :=
-    borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
+    borland.data.provider.bdpcommand.Create(cmdText,appcommon.db).ExecuteReader;
   DataGrid_items.DataBind;
   //
   // Clear aggregation vars for next bind, if any.
   //
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
 end;
 
 end.

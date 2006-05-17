@@ -87,16 +87,16 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     //
     be_stale_password := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password FROM service_user where id=' + session.item['service_user_id'].tostring,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     if be_stale_password = '1' then begin
-      AppCommon.BdpConnection.Close;
+      appcommon.DbClose;
       server.Transfer('change_password.aspx');
     end;
     //
@@ -125,14 +125,14 @@ begin
     bc_get_profile_status := borland.data.provider.bdpCommand.Create
       (
       'select be_valid_profile from service where id = "' + session.Item['service_user_id'].ToString + '"'
-      ,AppCommon.BdpConnection
+      ,appcommon.db
       );
     if bc_get_profile_status.ExecuteScalar.ToString = '0' then begin
       Label_profile_status.Text := 'Not saved.';
       LinkButton_profile_action.Text := 'Create profile';
       TableRow_separator.visible := FALSE;
       TableRow_item_requests_section.visible := FALSE;
-      AppCommon.BdpConnection.Close;
+      appcommon.DbClose;
     end else begin
       Label_profile_status.Text := 'Saved.';
       LinkButton_profile_action.Text := 'Edit profile';
@@ -142,7 +142,7 @@ begin
       max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
-        AppCommon.BdpConnection
+        appcommon.db
         )
         .ExecuteScalar.tostring;
 //    //
@@ -158,14 +158,14 @@ begin
 //        +   ' join milestone_code_name_map on (code = milestone_code)'
 //        + ' where id = ' + max_fiscal_year_id_string
 //        +   ' and name = "emsof-service-item-requests-deadline"',
-//        appcommon.bdpconnection
+//        appcommon.db
 //        )
 //        .ExecuteScalar
 //      );
 //    //
 //    be_before_deadline := (datetime.Now <= make_item_requests_deadline);
       //
-      AppCommon.BdpConnection.Close;
+      appcommon.DbClose;
       //
       BindDataGrid;
     end;
@@ -247,7 +247,7 @@ procedure TWebForm_service_overview.BindDataGrid;
 var
   be_datagrid_empty: boolean;
 begin
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
@@ -274,7 +274,7 @@ begin
     + ' WHERE service_id = ' + session.item['service_user_id'].tostring
     +   ' and fiscal_year.id >= (' + max_fiscal_year_id_string + ' - 1)'
     + ' order by fy_designator,county_name',
-    AppCommon.BdpConnection
+    appcommon.db
     )
     .ExecuteReader;
   DataGrid.DataBind;
@@ -288,7 +288,7 @@ begin
   // Clear aggregation vars for next bind, if any.
   //
   num_dg_items := 0;
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
 end;
 
 end.

@@ -9,7 +9,7 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   AppCommon, Borland.Data.Provider, System.Globalization, 
   System.Data.SqlClient, System.Data.Common, system.configuration,
-  system.text.regularexpressions,system.web.security;
+  system.text.regularexpressions, system.web.security, system.io;
 
 type
   TWebForm_login = class(System.Web.UI.Page)
@@ -100,7 +100,7 @@ procedure TWebForm_login.DropDownList_user_kind_SelectedIndexChanged(sender: Sys
 var
   bdr: borland.data.provider.BdpDataReader;
 begin
-  appcommon.bdpconnection.Open;
+  appcommon.DbOpen;
   session.Remove('target_user_table');
   session.Add('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ALPHA));
   Label_user.enabled := TRUE;
@@ -111,7 +111,7 @@ begin
     bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ORDER BY name',
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteReader;
     while bdr.Read do begin
@@ -125,7 +125,7 @@ begin
       + 'FROM county_user JOIN county_code_name_map on (county_code_name_map.code = county_user.id) '
       + 'WHERE be_active = TRUE '
       + 'ORDER BY name',
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteReader;
     while bdr.Read do begin
@@ -139,7 +139,7 @@ begin
       + 'FROM regional_staffer_user JOIN regional_staffer using (id) '
       + 'WHERE be_active = TRUE '
       + 'ORDER BY last_name,first_name',
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteReader;
     while bdr.Read do begin
@@ -152,7 +152,7 @@ begin
     Label_user.text := 'User';
     DropDownList_user.items.Clear;
   end;
-  appcommon.bdpconnection.Close;
+  appcommon.DbClose;
 end;
 
 procedure TWebForm_login.Button_new_password_Click(sender: System.Object;
@@ -163,27 +163,25 @@ end;
 
 procedure TWebForm_login.Button_log_in_Click(sender: System.Object; e: System.EventArgs);
 var
-  obj: System.Object;
+  obj: system.object;
 begin
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   obj := Borland.Data.Provider.BdpCommand.Create
     (
     'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_user'
     +  ' where id = ' + Safe(DropDownList_user.selectedvalue,NUM)
-    +     ' and encoded_password=sha("' + Safe(TextBox_password.Text.trim,ALPHANUM) + '")'
-    ,AppCommon.BdpConnection
+    +     ' and encoded_password = "' + appcommon.Digest(Safe(TextBox_password.Text.trim,ALPHANUM)) + '"'
+    ,appcommon.db
     )
     .ExecuteScalar;
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
   if obj <> nil then begin
-    if formsauthentication.GetRedirectUrl(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked) =
-      '/' + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/default.aspx'
+    if 'default.aspx' = path.GetFileName
+      (
+      formsauthentication.GetRedirectUrl(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked)
+      )
     then begin
-      if DropDownList_user_kind.selectedvalue = 'county' then begin
-        server.Transfer('protected/choose_county_appropriation.aspx');
-      end else begin
-        server.Transfer('protected/' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_overview.aspx');
-      end;
+      server.Transfer('protected/' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_overview.aspx');
     end else begin
       formsauthentication.RedirectFromLoginPage(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked);
     end;

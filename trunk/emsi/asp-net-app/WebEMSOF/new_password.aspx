@@ -24,7 +24,7 @@
                     </tr>
                     <tr>
                       <td>A temporary WebEMSOF password has been sent to 
-                <ASP:Label id="Label_email_address" runat="server" font-bold="True"></ASP:Label>.&nbsp; Please log in again after you receive it.&nbsp; You will receive further instructions at that time.</td>
+                <ASP:Label id="Label_email_address" runat="server" font-bold="True"></ASP:Label>.&nbsp; Please&nbsp;<ASP:HyperLink id="HyperLink_login" runat="server" navigateurl="login.aspx" font-bold="True">log in</ASP:HyperLink> again after you receive it.&nbsp; You will receive further instructions at that time.</td>
                     </tr>
                 </table></td>
             </tr>

@@ -5,6 +5,9 @@ INTERFACE
 uses
   borland.data.provider,
   system.configuration,
+  system.data,
+  system.security.cryptography,
+  system.text,
   system.text.regularexpressions,
   system.Web.UI.WebControls;
 
@@ -38,7 +41,19 @@ type
     );
 
 var
-  BdpConnection: borland.data.provider.bdpconnection;
+  db: borland.data.provider.bdpconnection;
+
+procedure DbClose;
+
+procedure DbOpen;
+
+function Digest(source_string: string): string;
+
+procedure PopulatePlaceHolders
+  (
+  var precontent: System.Web.Ui.WebControls.PlaceHolder;
+  var postcontent: System.Web.Ui.WebControls.PlaceHolder
+  );
 
 function Safe
   (
@@ -47,15 +62,93 @@ function Safe
   )
   : string;
 
-procedure PopulatePlaceHolders
+IMPLEMENTATION
+
+const ID = '$Id$';
+
+PROCEDURE DbClose;
+begin
+  db.Close;
+end;
+
+PROCEDURE DbOpen;
+begin
+  if db.State <> connectionstate.OPEN then begin
+    db.Open;
+  end;
+end;
+
+FUNCTION Digest(source_string: string): string;
+var
+  byte_buf: array[1..20] of byte;
+  i: cardinal;
+  target_string: string;
+begin
+  target_string := system.string.EMPTY;
+  byte_buf := sha1managed.Create.ComputeHash(asciiencoding.Create.GetBytes(source_string));
+  for i := 1 to 20 do begin
+    target_string := target_string + byte_buf[i].tostring('x2');
+  end;
+  Digest := target_string;
+end;
+
+PROCEDURE PopulatePrecontent(var precontent: System.Web.Ui.WebControls.PlaceHolder);
+var
+  literal: System.Web.Ui.WebControls.Literal;
+  validation_summary_control: System.Web.Ui.WebControls.ValidationSummary;
+begin
+  literal := System.Web.Ui.WebControls.Literal.Create;
+  literal.Text := ''
+    + '<table cellpadding=5>'
+    +   '<tr>'
+    +     '<td valign=top width=1>'
+    +       'logo-1' //<img src="http://www.emsi.org/images/logo_left.gif" align="center" valign="middle" width="113" height="99" />'
+    +     '</td>'
+    +     '<td align="left" valign="top" width=1>'
+    +       'logo-2' //<img src="http://www.emsi.org/images/logo_right.gif" align="left" valign="top" width="135" height="100" />'
+    +     '</td>'
+    +     '<td nowrap valign=top>'
+    +       '<p>'
+    +         '<small>'
+    +           'address' //221-2500 Penn Avenue '
+    //+           '<a href="http://www.emsi.org/location/index.shtml">'
+    +             '<b><span style="font-variant: small-caps">(map)</span></b>'
+    //+           '</a>'
+    +           '<br>'
+    +           'city-state-zip<br>' //Pittsburgh, PA 15221-2166<br>'
+    +           'tel-1<br>' //tel:+1-412-242-7322<br>'
+    +           'tel-2<br>' //tel:+1-866-827-EMSI (3674)<br>'
+    +           'fax<br>' //fax:+1-412-242-7434<br>'
+    +           'email' //<a href="mailto:info@emsi.org">info@emsi.org</a>'
+    +         '</small>'
+    +       '</p>'
+    +     '</td>'
+    +   '</tr>'
+    + '</table>'
+    + '<h1>' + ConfigurationSettings.AppSettings['application_name'] + ' system</h1>';
+  precontent.Controls.Add(literal);
+  validation_summary_control := System.Web.Ui.WebControls.ValidationSummary.Create;
+  precontent.Controls.Add(validation_summary_control);
+end;
+
+PROCEDURE PopulatePostcontent(var postcontent: System.Web.Ui.WebControls.PlaceHolder);
+var
+  literal: System.Web.Ui.WebControls.Literal;
+begin
+  literal := System.Web.Ui.WebControls.Literal.Create;
+  literal.Text := '<!-- Copyright Kalips''o Infogistics LLC -->';
+  postcontent.Controls.Add(literal);
+end;
+
+PROCEDURE PopulatePlaceHolders
   (
   var precontent: System.Web.Ui.WebControls.PlaceHolder;
   var postcontent: System.Web.Ui.WebControls.PlaceHolder
   );
-
-IMPLEMENTATION
-
-const ID = '$Id';
+begin
+PopulatePrecontent(precontent);
+PopulatePostcontent(postcontent);
+end;
 
 FUNCTION Safe
   (
@@ -125,66 +218,8 @@ begin
   Safe := scratch_string;
 end;
 
-  PROCEDURE PopulatePrecontent(var precontent: System.Web.Ui.WebControls.PlaceHolder);
-var
-  literal: System.Web.Ui.WebControls.Literal;
-  validation_summary_control: System.Web.Ui.WebControls.ValidationSummary;
-begin
-  literal := System.Web.Ui.WebControls.Literal.Create;
-  literal.Text := ''
-    + '<table cellpadding=5>'
-    +   '<tr>'
-    +     '<td valign=top width=1>'
-    +       'logo-1' //<img src="http://www.emsi.org/images/logo_left.gif" align="center" valign="middle" width="113" height="99" />'
-    +     '</td>'
-    +     '<td align="left" valign="top" width=1>'
-    +       'logo-2' //<img src="http://www.emsi.org/images/logo_right.gif" align="left" valign="top" width="135" height="100" />'
-    +     '</td>'
-    +     '<td nowrap valign=top>'
-    +       '<p>'
-    +         '<small>'
-    +           'address' //221-2500 Penn Avenue '
-    //+           '<a href="http://www.emsi.org/location/index.shtml">'
-    +             '<b><span style="font-variant: small-caps">(map)</span></b>'
-    //+           '</a>'
-    +           '<br>'
-    +           'city-state-zip<br>' //Pittsburgh, PA 15221-2166<br>'
-    +           'tel-1<br>' //tel:+1-412-242-7322<br>'
-    +           'tel-2<br>' //tel:+1-866-827-EMSI (3674)<br>'
-    +           'fax<br>' //fax:+1-412-242-7434<br>'
-    +           'email' //<a href="mailto:info@emsi.org">info@emsi.org</a>'
-    +         '</small>'
-    +       '</p>'
-    +     '</td>'
-    +   '</tr>'
-    + '</table>'
-    + '<h1>' + ConfigurationSettings.AppSettings['application_name'] + ' system</h1>';
-  precontent.Controls.Add(literal);
-  validation_summary_control := System.Web.Ui.WebControls.ValidationSummary.Create;
-  precontent.Controls.Add(validation_summary_control);
-end;
-
-PROCEDURE PopulatePostcontent(var postcontent: System.Web.Ui.WebControls.PlaceHolder);
-var
-  literal: System.Web.Ui.WebControls.Literal;
-begin
-  literal := System.Web.Ui.WebControls.Literal.Create;
-  literal.Text := '<!-- Copyright Kalips''o Infogistics LLC -->';
-  postcontent.Controls.Add(literal);
-end;
-
-PROCEDURE PopulatePlaceHolders
-  (
-  var precontent: System.Web.Ui.WebControls.PlaceHolder;
-  var postcontent: System.Web.Ui.WebControls.PlaceHolder
-  );
-begin
-PopulatePrecontent(precontent);
-PopulatePostcontent(postcontent);
-end;
-
 BEGIN
-BdpConnection := borland.data.provider.bdpconnection.Create;
-BdpConnection.ConnectionOptions := 'transaction isolation=ReadCommitted';
-BdpConnection.ConnectionString := ConfigurationSettings.AppSettings['bdp_connection_string'];
+db := borland.data.provider.bdpconnection.Create;
+db.ConnectionOptions := 'transaction isolation=ReadCommitted';
+db.ConnectionString := ConfigurationSettings.AppSettings['bdp_connection_string'];
 END.

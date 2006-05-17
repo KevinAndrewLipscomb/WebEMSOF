@@ -59,16 +59,16 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     //
     be_stale_password := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password FROM county_user where id=' + session.item['county_user_id'].tostring,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     if be_stale_password = '1' then begin
-      appcommon.bdpconnection.Close;
+      appcommon.DbClose;
       server.Transfer('protected/change_password.aspx');
     end;
     //
@@ -88,13 +88,13 @@ begin
       +   'JOIN region_code_name_map on (region_code_name_map.code=region_code) '
       +   'JOIN fiscal_year on (fiscal_year.id = fiscal_year_id) '
       + 'WHERE county_code = ' + session.Item['county_user_id'].ToString,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteReader;
     while bdr.Read do begin
       RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
     end;
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
   end;
 end;
 

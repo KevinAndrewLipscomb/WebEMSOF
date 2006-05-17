@@ -117,7 +117,7 @@ begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session.Item['county_name'].ToString;
     //
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     //
     // Set parent appropriation labels.
     //
@@ -129,7 +129,7 @@ begin
       +   'join fiscal_year on (fiscal_year.id = fiscal_year_id) '
       +   'join region_code_name_map on (region_code_name_map.code = region_code) '
       + 'where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].ToString,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteReader;
     bdr_appropriation_attribs.Read;
@@ -151,7 +151,7 @@ begin
         +   ' join milestone_code_name_map on (code = milestone_code)'
         + ' where designator = "' + Safe(Label_fiscal_year_designator.Text,ALPHANUM) + '"'
         +   ' and name = "emsof-county-dictated-appropriation-deadline"',
-        appcommon.bdpconnection
+        appcommon.db
         )
         .ExecuteScalar
       );
@@ -170,7 +170,7 @@ begin
           (
           'select service_to_county_submission_deadline from region_dictated_appropriation'
           + ' where id = ' + session.item['region_dictated_appropriation_id'].tostring,
-          appcommon.bdpconnection
+          appcommon.db
           )
           .ExecuteScalar
         )
@@ -178,7 +178,7 @@ begin
       //
     end;
     //
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
     //
     Bind_service_appropriations;  // also affected by be_before_deadline
   end;
@@ -207,7 +207,7 @@ var
   bc: borland.data.provider.bdpcommand;
   id_string: string;
 begin
-  appcommon.bdpconnection.Open;
+  appcommon.DbOpen;
   id_string := Safe(e.Item.Cells[dgi_id].Text,NUM);
   bc := borland.data.provider.bdpcommand.Create
     (
@@ -215,10 +215,10 @@ begin
     + ' from emsof_request_detail'
     +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
     + ' where county_dictated_appropriation_id = ' + id_string,
-    appcommon.bdpconnection
+    appcommon.db
     );
   if bc.ExecuteScalar.tostring <> '0' then begin
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
     //
     // A service has already entered equipment requests against this appropriation.  Add relevant data to the session and send the
     // county coordinator to a confirmation page.
@@ -247,7 +247,7 @@ begin
     borland.data.provider.bdpcommand.Create
       (
       'delete from county_dictated_appropriation where id = ' + id_string,
-      appcommon.bdpconnection
+      appcommon.db
       )
       .ExecuteNonQuery;
     //
@@ -273,7 +273,7 @@ begin
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
   end;
   //
   DataGrid_service_appropriations.EditItemIndex := -1;
@@ -306,7 +306,7 @@ var
   amount_string: string;
   appropriation_id_string: string;
 begin
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   //
   appropriation_id_string := Safe(e.Item.Cells[dgi_id].Text,NUM);
   amount_string := Safe(TextBox(e.Item.Cells[dgi_amount].controls[0]).Text.Trim,REAL_NUM);
@@ -317,7 +317,7 @@ begin
     borland.data.provider.bdpcommand.Create
       (
       'update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteNonQuery;
     //
@@ -340,7 +340,7 @@ begin
         + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
     //
     DataGrid_service_appropriations.EditItemIndex := -1;
     Bind_service_appropriations;
@@ -366,7 +366,7 @@ var
   be_datagrid_empty: boolean;
   cmdText: string;
 begin
-  AppCommon.BdpConnection.Open;
+  appcommon.DbOpen;
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
@@ -387,7 +387,7 @@ begin
   end;
   //
   DataGrid_service_appropriations.DataSource :=
-    borland.data.provider.bdpcommand.Create(cmdText,AppCommon.BdpConnection).ExecuteReader;
+    borland.data.provider.bdpcommand.Create(cmdText,appcommon.db).ExecuteReader;
   DataGrid_service_appropriations.DataBind;
   be_datagrid_empty := (num_appropriations = 0);
   //
@@ -405,7 +405,7 @@ begin
   //
   num_appropriations := 0;
   sum_of_service_appropriations := 0;
-  AppCommon.BdpConnection.Close;
+  appcommon.DbClose;
 end;
 
 procedure TWebForm_county_dictated_appropriations.SortCommand_service_appropriations(source: System.Object;

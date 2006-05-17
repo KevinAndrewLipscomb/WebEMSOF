@@ -24,6 +24,7 @@ type
     Label_email_address: System.Web.UI.WebControls.Label;
     Label_user_name: System.Web.UI.WebControls.Label;
     Label1: System.Web.UI.WebControls.Label;
+    HyperLink_login: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -55,7 +56,7 @@ begin
   if not IsPostback then
     begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
-    AppCommon.BdpConnection.Open;
+    appcommon.DbOpen;
     Label_user_name.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
     if session.item['target_user_table'].tostring = 'county' then begin
       Label_user_name.Text := Label_user_name.Text + ' County';
@@ -69,11 +70,11 @@ begin
     //
     borland.data.provider.bdpcommand.Create
       (
-      'update ' + session.Item['target_user_table'].ToString + '_user '
-      + 'set encoded_password=sha("' + temporary_password + '"),'
-      +   'be_stale_password=TRUE '
-      + 'where id=' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString,
-      AppCommon.BdpConnection
+      'update ' + session.Item['target_user_table'].ToString + '_user'
+      + ' set encoded_password = "' + appcommon.Digest(temporary_password) + '",'
+      +   ' be_stale_password = TRUE '
+      + ' where id = ' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString,
+      appcommon.db
       )
       .ExecuteNonQuery;
     //
@@ -83,7 +84,7 @@ begin
       (
       'select password_reset_email_address from ' + session.Item['target_user_table'].ToString + '_user '
       + 'where id ="' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
-      AppCommon.BdpConnection
+      appcommon.db
       )
       .ExecuteScalar.tostring;
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
@@ -115,7 +116,7 @@ begin
     //
     Label_email_address.Text := email_address;
     //
-    AppCommon.BdpConnection.Close;
+    appcommon.DbClose;
     end;
 end;
 

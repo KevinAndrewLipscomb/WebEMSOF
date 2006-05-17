@@ -22,7 +22,9 @@
                       <td bgcolor="#f5f5f5"><strong>Change password</strong></td>
                     </tr>
                     <tr>
-                      <td>You must change your password before proceeding.</td>
+                      <td>
+						You must change your password before proceeding.<br>
+					  </td>
                     </tr>
                     <tr>
 					  <td>
