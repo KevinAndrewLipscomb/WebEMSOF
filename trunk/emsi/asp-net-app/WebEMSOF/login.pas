@@ -41,6 +41,7 @@ type
     DropDownList_user: System.Web.UI.WebControls.DropDownList;
     RangeValidator_username: System.Web.UI.WebControls.RangeValidator;
     RegularExpressionValidator_user_kind: System.Web.UI.WebControls.RegularExpressionValidator;
+    TextBox_noop_ie_behavior_workaround: System.Web.UI.WebControls.TextBox;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
