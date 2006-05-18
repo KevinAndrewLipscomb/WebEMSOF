@@ -253,8 +253,8 @@ begin
       + NEW_LINE
       + 'Please approve or reject this request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '.htm' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
       + NEW_LINE
       + 'Replies to this message will be addressed to the ' + session.Item['service_name'].ToString + ' EMSOF Coordinator.'
       + NEW_LINE

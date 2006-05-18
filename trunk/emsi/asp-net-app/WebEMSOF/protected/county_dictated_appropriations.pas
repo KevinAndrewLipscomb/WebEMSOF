@@ -262,10 +262,11 @@ begin
       'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
-      + 'You can use ' + ConfigurationSettings.AppSettings['application_name'] + ' by visiting:' + NEW_LINE
+      + 'For an overview of your EMSOF appropriations, visit:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/main.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
+      + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
         + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
         + NEW_LINE
