@@ -176,15 +176,7 @@ begin
     .ExecuteScalar;
   appcommon.DbClose;
   if obj <> nil then begin
-    if 'default.aspx' = path.GetFileName
-      (
-      formsauthentication.GetRedirectUrl(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked)
-      )
-    then begin
-      server.Transfer('protected/' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_overview.aspx');
-    end else begin
-      formsauthentication.RedirectFromLoginPage(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked);
-    end;
+    formsauthentication.RedirectFromLoginPage(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked);
   end else begin
     invalid_credentials_warning.Visible := TRUE;
   end;
