@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="default.pas" AutoEventWireup="false" Inherits="default.TWebForm_default" %>
+<%@ Page language="c#" Debug="true" Codebehind="Default.pas" AutoEventWireup="false" Inherits="Default.TWebForm_Default" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
