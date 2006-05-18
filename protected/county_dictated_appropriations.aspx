@@ -128,29 +128,33 @@
 		<tr>
 		  <td colspan="4">
 		<asp:datagrid id="DataGrid_service_appropriations" runat="server"
-		bordercolor="#DCDCDC" borderstyle="None" borderwidth="1px" backcolor="White" cellpadding="10" gridlines="Horizontal" forecolor="Black"
+		bordercolor="Gainsboro" borderstyle="None" borderwidth="1px" backcolor="White" cellpadding="10" gridlines="Horizontal" forecolor="Black"
 		allowsorting="True" useaccessibleheader="True" autogeneratecolumns="False" onsortcommand="SortCommand_service_appropriations" visible="False">
-                          <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
-                          <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
-                          <HeaderStyle forecolor="Blue" backcolor="#F5F5F5"></HeaderStyle>
-                          <Columns>
-                            <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
-                              <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">
-                              <ItemStyle horizontalalign="Right"></ItemStyle>
-                            </ASP:BoundColumn>
-                            <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit">
-                              <ItemStyle forecolor="Blue"></ItemStyle>
-                            </ASP:EditCommandColumn>
-                            <ASP:ButtonColumn text="Delete" commandname="Delete">
-                              <ItemStyle forecolor="Blue"></ItemStyle>
-                            </ASP:ButtonColumn>
-                          </Columns>
-                          <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle>
+                        <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
+                        <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
+                        <HeaderStyle forecolor="Blue" backcolor="WhiteSmoke"></HeaderStyle>
+                        <Columns>
+                          <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
+                            <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
+                          </ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">
+                            <ItemStyle horizontalalign="Right"></ItemStyle>
+                          </ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="status_code"></ASP:BoundColumn>
+                          <ASP:ButtonColumn datatextfield="status_description" sortexpression="status_description" headertext="Status" commandname="Select">
+                            <ItemStyle horizontalalign="Center" forecolor="#C0C0C0"></ItemStyle>
+                          </ASP:ButtonColumn>
+                          <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit">
+                            <ItemStyle forecolor="Blue"></ItemStyle>
+                          </ASP:EditCommandColumn>
+                          <ASP:ButtonColumn text="Delete" commandname="Delete">
+                            <ItemStyle forecolor="Blue"></ItemStyle>
+                          </ASP:ButtonColumn>
+                        </Columns>
+                        <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle>
 		</asp:datagrid>
 		  </td>
 		</tr>
