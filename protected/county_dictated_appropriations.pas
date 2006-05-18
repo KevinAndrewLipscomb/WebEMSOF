@@ -302,7 +302,7 @@ begin
     if e.item.cells[dgi_status_code].text > '2' then begin
       LinkButton(e.item.cells[dgi_status_description].controls.item[0]).enabled := TRUE;
       LinkButton(e.item.cells[dgi_status_description].controls.item[0]).forecolor := color.BLUE;
-      if e.item.cells[dgi_status_description].text = '2' then begin
+      if e.item.cells[dgi_status_code].text = '2' then begin
         LinkButton(e.item.cells[dgi_status_description].controls.item[0]).font.bold := TRUE;
       end;
     end else begin
