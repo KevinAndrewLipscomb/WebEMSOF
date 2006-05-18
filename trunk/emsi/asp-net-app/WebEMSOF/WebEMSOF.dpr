@@ -41,7 +41,7 @@ uses
   Global in 'Global.pas' {Global.TGlobal: System.Web.HttpApplication},
   login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
   AppCommon in 'AppCommon.pas',
-  change_email_address in 'protected\change_email_address.pas',
+  change_email_address in 'protected\change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page},
   change_password in 'protected\change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
   county_dictated_appropriations in 'protected\county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page},
   county_dictated_deadline in 'protected\county_dictated_deadline.pas',

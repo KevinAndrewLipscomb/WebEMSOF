@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration,
+  system.net;
 
 type
   TWebForm_change_email_address = class(System.Web.UI.Page)
@@ -14,6 +15,7 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
+    procedure CustomValidator1_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -30,6 +32,7 @@ type
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_nominal_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
     Label_literal_county: System.Web.UI.WebControls.Label;
+    CustomValidator1: System.Web.UI.WebControls.CustomValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -47,6 +50,7 @@ implementation
 procedure TWebForm_change_email_address.InitializeComponent;
 begin
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
+  Include(Self.CustomValidator1.ServerValidate, Self.CustomValidator1_ServerValidate);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -91,6 +95,17 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_change_email_address.CustomValidator1_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := TRUE;
+  try
+    dns.GetHostByName(args.value);
+  except
+    args.isvalid := FALSE;
+  end;
 end;
 
 procedure TWebForm_change_email_address.Button_submit_Click(sender: System.Object;

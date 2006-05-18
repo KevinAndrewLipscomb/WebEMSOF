@@ -83,6 +83,8 @@ var
   dgi_affiliate_num: cardinal;
   dgi_name: cardinal;
   dgi_amount: cardinal;
+  dgi_status_code: cardinal;
+  dgi_status_description: cardinal;
   dgi_linkbutton_edit: cardinal;
   dgi_linkbutton_delete: cardinal;
   num_appropriations: cardinal;
@@ -111,8 +113,10 @@ begin
     dgi_affiliate_num                := 2;
     dgi_name                         := 3;
     dgi_amount                       := 4;
-    dgi_linkbutton_edit              := 5;
-    dgi_linkbutton_delete            := 6;
+    dgi_status_code                  := 5;
+    dgi_status_description           := 6;
+    dgi_linkbutton_edit              := 7;
+    dgi_linkbutton_delete            := 8;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session.Item['county_name'].ToString;
@@ -295,6 +299,15 @@ begin
     num_appropriations := num_appropriations + 1;
     sum_of_service_appropriations :=
       sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
+    if e.item.cells[dgi_status_code].text > '2' then begin
+      LinkButton(e.item.cells[dgi_status_description].controls.item[0]).enabled := TRUE;
+      LinkButton(e.item.cells[dgi_status_description].controls.item[0]).forecolor := color.BLUE;
+      if e.item.cells[dgi_status_description].text = '2' then begin
+        LinkButton(e.item.cells[dgi_status_description].controls.item[0]).font.bold := TRUE;
+      end;
+    end else begin
+      LinkButton(e.item.cells[dgi_status_description].controls.item[0]).enabled := FALSE;
+    end;
     e.item.Cells[dgi_linkbutton_edit].controls.item[0].visible := be_before_deadline;
     e.item.Cells[dgi_linkbutton_delete].controls.item[0].visible := be_before_deadline;
   end;
@@ -375,10 +388,14 @@ begin
   + ' password_reset_email_address,'                    // column 1
   + ' affiliate_num,'                                   // column 2
   + ' name,'                                            // column 3
-  + ' county_dictated_appropriation.amount'             // column 4
+  + ' county_dictated_appropriation.amount,'            // column 4
+  + ' status_code,'                                     // column 5
+  + ' description as status_description'                // column 6
   + ' from county_dictated_appropriation'
   +   ' join service on (service.id=service_id)'
   +   ' join service_user on (service_user.id=service.id)'
+  +   ' join emsof_request_master on (emsof_request_master.county_dictated_appropriation_id=county_dictated_appropriation.id)'
+  +   ' join request_status_code_description_map on (request_status_code_description_map.code=emsof_request_master.status_code)'
   + ' where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString
   + ' order by ' + service_appropriations_sort_order;
   if be_sort_order_ascending then begin
