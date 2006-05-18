@@ -1,5 +1,5 @@
 
-unit default;
+unit Default;
 
 interface
 
@@ -9,7 +9,7 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration;
 
 type
-  TWebForm_default = class(System.Web.UI.Page)
+  TWebForm_Default = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -36,7 +36,7 @@ implementation
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebForm_default.InitializeComponent;
+procedure TWebForm_Default.InitializeComponent;
 begin
   Include(Self.Load, Self.Page_Load);
 end;
@@ -44,11 +44,11 @@ end;
 
 const ID = '$Id$';
 
-procedure TWebForm_default.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_Default.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - default';
+    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - Default';
     Label_application_name.text := ConfigurationSettings.AppSettings['application_name'];
     //
     if session.item['target_user_table'] <> nil then begin
@@ -58,7 +58,7 @@ begin
   end;
 end;
 
-procedure TWebForm_default.OnInit(e: EventArgs);
+procedure TWebForm_Default.OnInit(e: EventArgs);
 begin
   //
   // Required for Designer support
