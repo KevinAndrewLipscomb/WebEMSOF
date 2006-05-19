@@ -87,33 +87,12 @@ end;
 
 procedure TWebForm_withdraw_request_item.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
+var
+  bdr: borland.data.provider.bdpdatareader;
+  recipient_list_string: string;
+  service_email_address: string;
 begin
   appcommon.DbOpen;
-//  //
-//  // Send the notification message.
-//  //
-//  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-//  smtpmail.Send
-//    (
-//    session.item['county_user_password_reset_email_address'].tostring,
-//    session.item['email_address_of_service_of_appropriation_selected_for_deletion'].tostring,
-//    'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-//    'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
-//    + 'service for ' + Safe(Label_fiscal_year.text,ALPHANUM) + '.' + NEW_LINE
-//    + NEW_LINE
-//    + 'NOTE that the equipment request(s) that you had already entered against this appropriation were also deleted.  This was '
-//    + 'done with the County Coordinator''s knowledge.' + NEW_LINE
-//    + NEW_LINE
-//    + 'You can use ' + ConfigurationSettings.AppSettings['application_name'] + ' by visiting:' + NEW_LINE
-//    + NEW_LINE
-//    + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-//    + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
-//    + NEW_LINE
-//      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
-//      + NEW_LINE
-//      + NEW_LINE
-//    + '-- ' + ConfigurationSettings.AppSettings['application_name']
-//    );
   //
   borland.data.provider.bdpcommand.Create
     (
@@ -134,6 +113,55 @@ begin
     appcommon.db
     )
     .ExecuteNonQuery;
+  //
+  // Send the notification message.
+  //
+  //   Build the recipient list
+  //
+  bdr := borland.data.provider.bdpcommand.Create
+    (
+    'select password_reset_email_address as email_address'
+    + ' from regional_staffer_user'
+    +   ' join regional_staffer_role on (regional_staffer_role.regional_staffer_id=regional_staffer_user.id)'
+    + ' where title = "emsof-request-item-withdrawal-notice-recipient"',
+    appcommon.db
+    )
+    .ExecuteReader;
+  recipient_list_string := system.string.EMPTY;
+  while bdr.Read do begin
+    recipient_list_string := recipient_list_string + bdr['email_address'].tostring;
+  end;
+  //
+  //   Get the service's email address.
+  //
+  service_email_address := borland.data.provider.bdpcommand.Create
+    ('select password_reset_email_address from service_user where id = ' + session.item['service_user_id'].tostring,appcommon.db)' +
+    .ExecuteScalar.tostring;
+  //
+  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+  smtpmail.Send
+    (
+    service_email_address,
+    recipient_list_string,
+    'Withdrawal of EMSOF request item',
+    session.Item['service_name'].ToString + ' has withdrawn a(n) "' + Label_description.text + '" item from their '
+    + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  The associated sponsor county is '
+    + session.item['sponsor_county'].tostring + ' and the status of this service''s EMSOF request is '
+    + session.item['emsof_request_master_status'].tostring + '.' + NEW_LINE
+    + NEW_LINE
+    + session.Item['service_name'].ToString + ' is aware that this action may result in the surrender ' + Label_emsof_ante.text
+    + ' of EMSOF matching funds back to the Regional Council, depending on whether the relevant deadlines have passed.' + NEW_LINE
+    + NEW_LINE
+    + 'You can see the effect of this action by visiting:' + NEW_LINE
+    + NEW_LINE
+    + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+    + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
+    + NEW_LINE
+    + 'Replies to this message will be addressed to the ' + session.Item['service_name'].ToString + ' EMSOF Coordinator.'
+    + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
   //
   appcommon.DbClose;
   server.Transfer('request_overview.aspx');
