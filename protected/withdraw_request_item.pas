@@ -127,15 +127,16 @@ begin
     appcommon.db
     )
     .ExecuteReader;
-  recipient_list_string := system.string.EMPTY;
+  bdr.Read;
+  recipient_list_string := bdr['email_address'].tostring;
   while bdr.Read do begin
-    recipient_list_string := recipient_list_string + bdr['email_address'].tostring;
+    recipient_list_string := recipient_list_string + ',' + bdr['email_address'].tostring;
   end;
   //
   //   Get the service's email address.
   //
   service_email_address := borland.data.provider.bdpcommand.Create
-    ('select password_reset_email_address from service_user where id = ' + session.item['service_user_id'].tostring,appcommon.db)' +
+    ('select password_reset_email_address from service_user where id = ' + session.item['service_user_id'].tostring,appcommon.db)
     .ExecuteScalar.tostring;
   //
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
@@ -149,8 +150,8 @@ begin
     + session.item['sponsor_county'].tostring + ' and the status of this service''s EMSOF request is '
     + session.item['emsof_request_master_status'].tostring + '.' + NEW_LINE
     + NEW_LINE
-    + session.Item['service_name'].ToString + ' is aware that this action may result in the surrender ' + Label_emsof_ante.text
-    + ' of EMSOF matching funds back to the Regional Council, depending on whether the relevant deadlines have passed.' + NEW_LINE
+    + session.Item['service_name'].ToString + ' is aware that this action effectively surrenders ' + Label_emsof_ante.text
+    + ' of EMSOF matching funds back to the Regional Council.' + NEW_LINE
     + NEW_LINE
     + 'You can see the effect of this action by visiting:' + NEW_LINE
     + NEW_LINE
