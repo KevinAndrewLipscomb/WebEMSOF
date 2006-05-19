@@ -304,6 +304,8 @@ begin
       LinkButton(e.item.cells[dgi_status_description].controls.item[0]).forecolor := color.BLUE;
       if e.item.cells[dgi_status_code].text = '3' then begin
         LinkButton(e.item.cells[dgi_status_description].controls.item[0]).font.bold := TRUE;
+        LinkButton(e.item.cells[dgi_status_description].controls.item[0]).text :=
+          '>' + LinkButton(e.item.cells[dgi_status_description].controls.item[0]).text.ToUpper + '<';
       end;
     end else begin
       LinkButton(e.item.cells[dgi_status_description].controls.item[0]).enabled := FALSE;
