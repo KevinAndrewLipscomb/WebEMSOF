@@ -13,6 +13,7 @@
       </asp:placeholder>
 <p>
         <ASP:Label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
+<p><small>[ Back to <ASP:LinkButton id="LinkButton_back_to_overview" runat="server"></ASP:LinkButton>&nbsp;form ]</small></p>
 <p>
         <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
             <tr>
