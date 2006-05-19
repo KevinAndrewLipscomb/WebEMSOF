@@ -50,7 +50,7 @@ uses
   finalize in 'protected\finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},
   profile in 'protected\profile.pas',
   regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_account_overview: System.Web.UI.Page},
-  request_item_detail in 'protected\request_item_detail.pas',
+  request_item_detail in 'protected\request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: System.Web.UI.Page},
   request_overview in 'protected\request_overview.pas',
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
   withdraw_request_item in 'protected\withdraw_request_item.pas' {withdraw_request_item.TWebForm_withdraw_request_item: System.Web.UI.Page},
