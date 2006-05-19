@@ -15,7 +15,8 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
-    procedure CustomValidator1_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure CustomValidator_nominal_email_address_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure LinkButton_back_to_overview_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -29,10 +30,10 @@ type
     TextBox_confirmation_email_address: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_nominal_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_confirmation_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
-    CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_nominal_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
-    Label_literal_county: System.Web.UI.WebControls.Label;
-    CustomValidator1: System.Web.UI.WebControls.CustomValidator;
+    LinkButton_back_to_overview: System.Web.UI.WebControls.LinkButton;
+    CustomValidator_nominal_email_address: System.Web.UI.WebControls.CustomValidator;
+    CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -49,8 +50,9 @@ implementation
 /// </summary>
 procedure TWebForm_change_email_address.InitializeComponent;
 begin
+  Include(Self.LinkButton_back_to_overview.Click, Self.LinkButton_back_to_overview_Click);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
-  Include(Self.CustomValidator1.ServerValidate, Self.CustomValidator1_ServerValidate);
+  Include(Self.CustomValidator_nominal_email_address.ServerValidate, Self.CustomValidator_nominal_email_address_ServerValidate);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -70,6 +72,10 @@ begin
     // Set Label_account descriptor
     //
     Label_account_descriptor.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
+    if session.item['target_user_table'].tostring = 'county' then begin
+      Label_account_descriptor.Text := Label_account_descriptor.Text + ' County';
+    end;
+    LinkButton_back_to_overview.text := session.item['target_user_table'].tostring + ' overview';
     //
     // Preload email address fields
     //
@@ -97,12 +103,18 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_change_email_address.CustomValidator1_ServerValidate(source: System.Object;
+procedure TWebForm_change_email_address.LinkButton_back_to_overview_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer(session.item['target_user_table'].tostring + '_overview.aspx');
+end;
+
+procedure TWebForm_change_email_address.CustomValidator_nominal_email_address_ServerValidate(source: System.Object;
   args: System.Web.UI.WebControls.ServerValidateEventArgs);
 begin
   args.isvalid := TRUE;
   try
-    dns.GetHostByName(args.value);
+    dns.GetHostByName(args.value.Substring(args.value.LastIndexOf('@') + 1));
   except
     args.isvalid := FALSE;
   end;
@@ -111,20 +123,22 @@ end;
 procedure TWebForm_change_email_address.Button_submit_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  appcommon.DbOpen;
-  //
-  // Commit the data to the database.
-  //
-  borland.data.provider.bdpcommand.Create
-    (
-    'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
-    + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
-    + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
-    appcommon.db
-    )
-    .ExecuteNonQuery;
-  appcommon.DbClose;
-  server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
+  if page.isvalid then begin
+    appcommon.DbOpen;
+    //
+    // Commit the data to the database.
+    //
+    borland.data.provider.bdpcommand.Create
+      (
+      'UPDATE ' + session.Item['target_user_table'].ToString + '_user '
+      + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
+      + 'WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
+      appcommon.db
+      )
+      .ExecuteNonQuery;
+    appcommon.DbClose;
+    server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
+  end;
 end;
 
 end.

@@ -14,6 +14,7 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_overview_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -29,6 +30,7 @@ type
     RequiredFieldValidator_confirmation_password: System.Web.UI.WebControls.RequiredFieldValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
+    LinkButton_back_to_overview: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -46,6 +48,7 @@ implementation
 procedure TWebForm_change_password.InitializeComponent;
 begin
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
+  Include(Self.LinkButton_back_to_overview.Click, Self.LinkButton_overview_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -61,6 +64,7 @@ begin
     if session.item['target_user_table'].tostring = 'county' then begin
       Label_account_descriptor.Text := Label_account_descriptor.Text + ' County';
     end;
+    LinkButton_back_to_overview.text := session.Item['target_user_table'].tostring + ' overview';
   end;
 end;
 
@@ -71,6 +75,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_change_password.LinkButton_overview_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer(session.item['target_user_table'].tostring + '_overview.aspx');
 end;
 
 procedure TWebForm_change_password.Button_submit_Click(sender: System.Object;
