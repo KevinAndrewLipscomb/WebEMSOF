@@ -11,17 +11,21 @@
   <form runat="server">
 		  <asp:placeholder id="PlaceHolder_precontent" runat="server">
 	  </asp:placeholder>
-			<font color="red">
-			  <ul id="invalid_credentials_warning" runat="server">
-				<li>Invalid user/password combination. Please try again.</li>
-			  </ul>
-			</font>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
 			  <tr>
 				<td>
 				  <table cellspacing="0" cellpadding="5" border="0">
 					  <tr>
-						<td bgcolor="#f5f5f5"><strong>Log in</strong></td>
+						<td bgcolor="#f5f5f5"><strong>
+                        <table cellspacing="0" cellpadding="0" width="100%" border="0">
+                            <tr>
+                              <td><strong>Log in</strong></td>
+                              <td>
+                                <div align="right">
+                              <ASP:CustomValidator id="CustomValidator_account_exists" runat="server" errormessage="Invalid user/password combination. Please try again." font-bold="True">!ERR!</ASP:CustomValidator>
+                                </div></td>
+                            </tr>
+                        </table></strong></td>
 					  </tr>
 					  <tr>
 						<td>
@@ -32,7 +36,7 @@
                               <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;user are you?</td>
 				  <td>
 									  <ASP:DropDownList id="DropDownList_user_kind" runat="server" autopostback="True">
-                                <ASP:ListItem value="0">-- Select --</ASP:ListItem>
+                                <ASP:ListItem value="0">-- Select (then wait for form to refresh) --</ASP:ListItem>
                                 <ASP:ListItem value="service">Service (Ambulance, QRS, ALS Squad, etc)</ASP:ListItem>
                                 <ASP:ListItem value="county">County Coordinator</ASP:ListItem>
                                 <ASP:ListItem value="regional_staffer">Regional staffer</ASP:ListItem></ASP:DropDownList><ASP:RegularExpressionValidator id="RegularExpressionValidator_user_kind" runat="server" errormessage="Please select a user kind." font-bold="True" controltovalidate="DropDownList_user_kind" validationexpression="[a-z]+">!ERR!</ASP:RegularExpressionValidator>
@@ -68,7 +72,7 @@
                   </td>
 				</tr>
                 <tr>
-				  <td>
+				  <td valign="top">
                   </td>
 				  <td>
                     

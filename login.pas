@@ -22,6 +22,8 @@ type
       e: System.EventArgs);
     procedure DropDownList_user_SelectedIndexChanged(sender: System.Object;
       e: System.EventArgs);
+    procedure CustomValidator_account_exists_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -34,7 +36,6 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Button_new_password: System.Web.UI.WebControls.Button;
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
-    invalid_credentials_warning: System.Web.UI.HtmlControls.HtmlGenericControl;
     Label_application_name: System.Web.UI.WebControls.Label;
     DropDownList_user_kind: System.Web.UI.WebControls.DropDownList;
     Label_user: System.Web.UI.WebControls.Label;
@@ -42,6 +43,7 @@ type
     RangeValidator_username: System.Web.UI.WebControls.RangeValidator;
     RegularExpressionValidator_user_kind: System.Web.UI.WebControls.RegularExpressionValidator;
     TextBox_noop_ie_behavior_workaround: System.Web.UI.WebControls.TextBox;
+    CustomValidator_account_exists: System.Web.UI.WebControls.CustomValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -62,6 +64,7 @@ procedure TWebForm_login.InitializeComponent;
 begin
   Include(Self.DropDownList_user_kind.SelectedIndexChanged, Self.DropDownList_user_kind_SelectedIndexChanged);
   Include(Self.DropDownList_user.SelectedIndexChanged, Self.DropDownList_user_SelectedIndexChanged);
+  Include(Self.CustomValidator_account_exists.ServerValidate, Self.CustomValidator_account_exists_ServerValidate);
   Include(Self.Button_log_in.Click, Self.Button_log_in_Click);
   Include(Self.Button_new_password.Click, Self.Button_new_password_Click);
   Include(Self.Load, Self.Page_Load);
@@ -74,7 +77,6 @@ begin
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
     Label_application_name.text := configurationsettings.appsettings['application_name'];
-    invalid_credentials_warning.Visible := FALSE;
   end;
 end;
 
@@ -85,6 +87,24 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_login.CustomValidator_account_exists_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+var
+  obj: system.object;
+begin
+  appcommon.DbOpen;
+  obj := Borland.Data.Provider.BdpCommand.Create
+    (
+    'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_user'
+    +  ' where id = ' + Safe(DropDownList_user.selectedvalue,NUM)
+    +     ' and encoded_password = "' + appcommon.Digest(Safe(TextBox_password.Text.trim,ALPHANUM)) + '"'
+    ,appcommon.db
+    )
+    .ExecuteScalar;
+  appcommon.DbClose;
+  args.isvalid := (obj <> nil);
 end;
 
 procedure TWebForm_login.DropDownList_user_SelectedIndexChanged(sender: System.Object;
@@ -163,23 +183,9 @@ begin
 end;
 
 procedure TWebForm_login.Button_log_in_Click(sender: System.Object; e: System.EventArgs);
-var
-  obj: system.object;
 begin
-  appcommon.DbOpen;
-  obj := Borland.Data.Provider.BdpCommand.Create
-    (
-    'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_user'
-    +  ' where id = ' + Safe(DropDownList_user.selectedvalue,NUM)
-    +     ' and encoded_password = "' + appcommon.Digest(Safe(TextBox_password.Text.trim,ALPHANUM)) + '"'
-    ,appcommon.db
-    )
-    .ExecuteScalar;
-  appcommon.DbClose;
-  if obj <> nil then begin
+  if page.isvalid then begin
     formsauthentication.RedirectFromLoginPage(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked);
-  end else begin
-    invalid_credentials_warning.Visible := TRUE;
   end;
 end;
 
