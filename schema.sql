@@ -426,16 +426,16 @@ CREATE TABLE request_status_code_description_map (
 -- Dumping data for table `request_status_code_description_map`
 -- 
 
-INSERT INTO request_status_code_description_map VALUES (1, 'Not started');
-INSERT INTO request_status_code_description_map VALUES (2, 'Not finished');
-INSERT INTO request_status_code_description_map VALUES (3, 'Waiting for county approval');
-INSERT INTO request_status_code_description_map VALUES (4, 'Waiting for regional compliance check');
-INSERT INTO request_status_code_description_map VALUES (5, 'Waiting for regional executive director approval');
-INSERT INTO request_status_code_description_map VALUES (6, 'Waiting to be submitted to DOH');
-INSERT INTO request_status_code_description_map VALUES (7, 'Waiting for DOH approval');
-INSERT INTO request_status_code_description_map VALUES (8, 'Waiting for invoices');
-INSERT INTO request_status_code_description_map VALUES (9, 'Waiting for canceled checks');
-INSERT INTO request_status_code_description_map VALUES (10, 'Reimbursement check has been issued');
+INSERT INTO request_status_code_description_map VALUES (1, 'Initialized');
+INSERT INTO request_status_code_description_map VALUES (2, 'Started by service, not finalized');
+INSERT INTO request_status_code_description_map VALUES (3, 'Needs county approval');
+INSERT INTO request_status_code_description_map VALUES (4, 'Needs regional compliance check');
+INSERT INTO request_status_code_description_map VALUES (5, 'Needs regional executive director approval');
+INSERT INTO request_status_code_description_map VALUES (6, 'Regional council is submitting to DOH');
+INSERT INTO request_status_code_description_map VALUES (7, 'Needs DOH approval');
+INSERT INTO request_status_code_description_map VALUES (8, 'Regional council needs invoice(s)');
+INSERT INTO request_status_code_description_map VALUES (9, 'Regional council needs canceled check(s)');
+INSERT INTO request_status_code_description_map VALUES (10, 'Reimbursement issued');
 INSERT INTO request_status_code_description_map VALUES (11, 'Rejected');
 INSERT INTO request_status_code_description_map VALUES (12, 'Withdrawn by service');
 
