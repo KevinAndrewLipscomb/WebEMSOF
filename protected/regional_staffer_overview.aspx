@@ -11,8 +11,12 @@
         <asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder>
       </p>
 	  <p><small>[
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]</small></p>
-      <p>
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ 
+		  Change WebEMSOF
+		  <ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>&nbsp;
+		  ]</small>
+	  </p>
+	  <p>
         <ASP:Label id="Label_regional_staffer_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>
       </p>
       <p><strong>Regional staffer overview</strong>
@@ -80,11 +84,7 @@
           </tr>
         </table>
       </p>
-      <p>Change WebEMSOF 
-        <ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
-      </p>
-      <p></p>
-      <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
+	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
     </form>
   </body>
 </html>

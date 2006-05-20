@@ -10,7 +10,10 @@
 	<form runat="server">
 	  <p><asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder></p>
 	  <p><small>[ 
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]</small></p>
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ 
+		  Change your WebEMSOF
+		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>&nbsp;]
+	  </small></p>
 	  <h1><ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h1>
 	  <h3>Account overview</h3>
 		<table cellspacing="0" cellpadding="0" border="0">
@@ -66,9 +69,6 @@
                   </Columns></ASP:DataGrid>
 		</blockquote></td>
 		  </tr></table>
-	  <p><small>Change your WebEMSOF
-		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>
-	  </small></p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
     </form>
   </body>

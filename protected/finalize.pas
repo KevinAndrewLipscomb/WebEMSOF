@@ -60,6 +60,7 @@ type
     Label_max_reimbursement_2: System.Web.UI.WebControls.Label;
     HyperLink_request_overview_bottom: System.Web.UI.WebControls.HyperLink;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_request_overview_00: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }

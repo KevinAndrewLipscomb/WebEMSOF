@@ -13,14 +13,14 @@
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
       <p><small>[ 
-          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]</small></p>
+          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_county_dictated_appropriations" runat="server" navigateurl="county_dictated_appropriations.aspx">county-dictated appropriations</ASP:HyperLink>&nbsp;form ]</small></p>
 <p>
         <ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>&nbsp;<ASP:Label id="Label_literal_county" runat="server" font-bold="True"
                    font-size="Large">County</ASP:Label></p>
 <p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is:</p>
 <blockquote>
   <ASP:Label id="Label_current_deadline" runat="server" font-bold="True"></ASP:Label></blockquote>
-<p>Use the calendar to change this setting, or <ASP:LinkButton id="LinkButton_cancel" runat="server">click here to cancel</ASP:LinkButton>.</p>
+<p>Use the calendar to change this setting, or <ASP:HyperLink id="HyperLink_cancel" runat="server" navigateurl="county_dictated_appropriations.aspx">click here to cancel</ASP:HyperLink>.</p>
 <blockquote><ASP:Calendar id="Calendar" runat="server" font-size="8pt" backcolor="White" width="200px" daynameformat="FirstTwoLetters" forecolor="Black" height="180px" font-names="Verdana" bordercolor="Gainsboro" cellpadding="4">
           <TodayDayStyle forecolor="Black" backcolor="#CCCCCC"></TodayDayStyle>
           <SelectorStyle backcolor="#CCCCCC"></SelectorStyle>

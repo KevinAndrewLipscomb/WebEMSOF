@@ -58,6 +58,7 @@ type
     RegularExpressionValidator_address_line_1: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_contact_person_name: System.Web.UI.WebControls.RegularExpressionValidator;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_service_overview: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }

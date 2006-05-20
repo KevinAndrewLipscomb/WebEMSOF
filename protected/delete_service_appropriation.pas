@@ -32,6 +32,7 @@ type
     Label_amount: System.Web.UI.WebControls.Label;
     Label_service_name_2: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
