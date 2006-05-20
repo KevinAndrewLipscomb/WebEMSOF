@@ -12,7 +12,7 @@
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder>
 <p><small>[ 
-          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_back_to_overview" runat="server"></ASP:LinkButton>&nbsp;form ]</small></p>
+          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_back_to_overview" runat="server" causesvalidation="False"></ASP:LinkButton>&nbsp;form ]</small></p>
 <p>
         <ASP:Label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></ASP:Label></p></small>
 <p>

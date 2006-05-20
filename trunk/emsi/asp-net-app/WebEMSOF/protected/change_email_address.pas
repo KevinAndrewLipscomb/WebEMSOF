@@ -52,10 +52,10 @@ implementation
 /// </summary>
 procedure TWebForm_change_email_address.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back_to_overview.Click, Self.LinkButton_back_to_overview_Click);
   Include(Self.CustomValidator_nominal_email_address.ServerValidate, Self.CustomValidator_nominal_email_address_ServerValidate);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
