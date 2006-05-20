@@ -65,7 +65,8 @@ begin
     saved_emsof_ante := decimal.Parse(session.item['emsof_request_item_emsof_ante'].tostring);
     //
     Label_priority.text := session.item['emsof_request_item_priority'].tostring;
-    Label_description.text := session.item['emsof_request_item_equipment_category'].tostring;
+    Label_description.text := session.item['emsof_request_item_make_model'].tostring + ' '
+    + session.item['emsof_request_item_equipment_category'].tostring;
     Label_emsof_ante.text := saved_emsof_ante.tostring('C');
   end;
 end;
@@ -147,8 +148,8 @@ begin
     'Withdrawal of EMSOF request item',
     session.Item['service_name'].ToString + ' has withdrawn a(n) "' + Label_description.text + '" item from their '
     + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  The associated sponsor county is '
-    + session.item['sponsor_county'].tostring + ' and the status of this service''s EMSOF request is '
-    + session.item['emsof_request_master_status'].tostring + '.' + NEW_LINE
+    + session.item['sponsor_county'].tostring + ' and the status of this service''s EMSOF request is "'
+    + session.item['emsof_request_master_status'].tostring + '".' + NEW_LINE
     + NEW_LINE
     + session.Item['service_name'].ToString + ' is aware that this action effectively surrenders ' + Label_emsof_ante.text
     + ' of EMSOF matching funds back to the Regional Council.' + NEW_LINE
