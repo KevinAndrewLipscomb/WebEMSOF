@@ -175,7 +175,7 @@ begin
     // Manage whether or not the instruction ("-- Select --") appears at the top of DropDownList_equipment_category.
     //
     if be_new then begin
-      DropDownList_equipment_category.Items.Add(listitem.Create('-- Select --','0'));
+      DropDownList_equipment_category.Items.Add(listitem.Create('-- Select (then wait for form to refresh) --','0'));
     end;
     //
     // Manage the loading of nominal elements into DropDownList_equipment_category.
@@ -330,6 +330,8 @@ end;
 procedure TWebForm_request_item_detail.Button_withdraw_Click(sender: System.Object;
   e: System.EventArgs);
 begin
+  session.Remove('emsof_request_item_make_model');
+  session.Add('emsof_request_item_make_model',Safe(TextBox_make_model.text,MAKE_MODEL));
   session.Remove('emsof_request_item_emsof_ante');
   session.Add('emsof_request_item_emsof_ante',Safe(Label_emsof_ante.text,REAL_NUM));
   server.Transfer('withdraw_request_item.aspx');
@@ -604,7 +606,7 @@ begin
     end;
     //
     if not bdr_state_details.IsDbNull(bdri_equipment_category_allowable_cost) then begin
-      Label_allowable_cost.text := bdr_state_details['allowable_cost'].tostring;
+      Label_allowable_cost.text := decimal.Parse(bdr_state_details['allowable_cost'].tostring).tostring('N2');
       allowable_cost := decimal.Parse(Label_allowable_cost.text);
     end else begin
       Label_allowable_cost.text := '(none specified)';

@@ -302,6 +302,9 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     if e.item.cells[dgi_status].text = 'WITHDRAWN' then begin
+      e.item.cells[dgi_priority].enabled := FALSE;
+      e.item.cells[dgi_item_description].enabled := FALSE;
+      e.item.cells[dgi_emsof_ante].enabled := FALSE;
       LinkButton(e.item.cells[dgi_linkbutton_select].controls.item[0]).text := 'WITHDRAWN';
       LinkButton(e.item.cells[dgi_linkbutton_select].controls.item[0]).enabled := FALSE;
     end;

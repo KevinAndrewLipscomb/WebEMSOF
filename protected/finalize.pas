@@ -194,6 +194,7 @@ end;
 procedure TWebForm_finalize.Button_finalize_Click(sender: System.Object; e: System.EventArgs);
 var
   cc_email_address: string;
+  emsof_request_master_status: string;
   service_email_address: string;
 begin
   if CheckBox_understand_read_only_1.checked
@@ -218,6 +219,14 @@ begin
       appcommon.db
       )
       .ExecuteNonQuery;
+    //
+    // Update the appropriate session object.
+    //
+    emsof_request_master_status := borland.data.provider.bdpcommand.Create
+      ('select description from request_status_code_description_map where code = 3',appcommon.db)
+      .ExecuteScalar.tostring;
+    session.Remove('emsof_request_master_status');
+    session.Add('emsof_request_master_status',emsof_request_master_status);
     //
     // Send notification to county coordinator.
     //
