@@ -12,6 +12,8 @@
       <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
+	  <p><small>[
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]</small></p>
       <p><strong>Create new appropriation:</strong>
       </p>
       <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">

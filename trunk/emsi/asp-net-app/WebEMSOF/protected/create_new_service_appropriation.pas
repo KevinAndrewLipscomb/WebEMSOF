@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
-  system.web.mail;
+  system.web.mail, system.web.security;
 
 type
   TWebForm_create_new_service_appropriation = class(System.Web.UI.Page)
@@ -20,6 +20,7 @@ type
     procedure Button_add_appropriation_and_stop_Click(sender: System.Object;
       e: System.EventArgs);
     procedure CheckBox_unfilter_CheckedChanged(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -40,6 +41,7 @@ type
     Button_cancel: System.Web.UI.WebControls.Button;
     CheckBox_unfilter: System.Web.UI.WebControls.CheckBox;
     RadioButtonList_match_level: System.Web.UI.WebControls.RadioButtonList;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -55,6 +57,7 @@ implementation
 /// </summary>
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.CheckBox_unfilter.CheckedChanged, Self.CheckBox_unfilter_CheckedChanged);
   Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
   Include(Self.Button_add_appropriation_and_stop.Click, Self.Button_add_appropriation_and_stop_Click);
@@ -89,6 +92,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_create_new_service_appropriation.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object; 

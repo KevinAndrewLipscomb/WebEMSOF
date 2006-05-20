@@ -62,9 +62,9 @@ const ID = '$Id$';
 /// </summary>
 procedure TWebForm_login.InitializeComponent;
 begin
+  Include(Self.CustomValidator_account_exists.ServerValidate, Self.CustomValidator_account_exists_ServerValidate);
   Include(Self.DropDownList_user_kind.SelectedIndexChanged, Self.DropDownList_user_kind_SelectedIndexChanged);
   Include(Self.DropDownList_user.SelectedIndexChanged, Self.DropDownList_user_SelectedIndexChanged);
-  Include(Self.CustomValidator_account_exists.ServerValidate, Self.CustomValidator_account_exists_ServerValidate);
   Include(Self.Button_log_in.Click, Self.Button_log_in_Click);
   Include(Self.Button_new_password.Click, Self.Button_new_password_Click);
   Include(Self.Load, Self.Page_Load);
@@ -97,7 +97,7 @@ begin
   appcommon.DbOpen;
   obj := Borland.Data.Provider.BdpCommand.Create
     (
-    'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ALPHA) + '_user'
+    'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD) + '_user'
     +  ' where id = ' + Safe(DropDownList_user.selectedvalue,NUM)
     +     ' and encoded_password = "' + appcommon.Digest(Safe(TextBox_password.Text.trim,ALPHANUM)) + '"'
     ,appcommon.db
@@ -123,7 +123,7 @@ var
 begin
   appcommon.DbOpen;
   session.Remove('target_user_table');
-  session.Add('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ALPHA));
+  session.Add('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD));
   Label_user.enabled := TRUE;
   DropDownList_user.items.Clear;
   DropDownList_user.items.Add(listitem.Create('-- Select --','0'));

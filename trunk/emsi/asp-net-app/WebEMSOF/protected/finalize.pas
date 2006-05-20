@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
-  system.web.mail;
+  system.web.mail, system.web.security;
 
 type
   TWebForm_finalize = class(System.Web.UI.Page)
@@ -15,6 +15,7 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_finalize_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -58,6 +59,7 @@ type
     HyperLink_request_overview_1: System.Web.UI.WebControls.HyperLink;
     Label_max_reimbursement_2: System.Web.UI.WebControls.Label;
     HyperLink_request_overview_bottom: System.Web.UI.WebControls.HyperLink;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -74,6 +76,7 @@ implementation
 /// </summary>
 procedure TWebForm_finalize.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.Button_finalize.Click, Self.Button_finalize_Click);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -189,6 +192,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_finalize.LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_finalize.Button_finalize_Click(sender: System.Object; e: System.EventArgs);

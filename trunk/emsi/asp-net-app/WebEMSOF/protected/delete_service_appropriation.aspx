@@ -9,8 +9,11 @@
 
   <body>
      <form runat="server">
+      <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
-      </asp:placeholder>
+      </asp:placeholder></p>
+      <p><small>[ 
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]</small></p>
 <p>
         <table bordercolor="#ffd700" cellspacing="0" cellpadding="0" border="1">
             <tr>

@@ -9,6 +9,8 @@
   <body>
 	<form runat="server">
 	  <p><asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder></p>
+	  <p><small>[ 
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]</small></p>
 	  <h1><ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h1>
 	  <h3>Account overview</h3>
 		<table cellspacing="0" cellpadding="0" border="0">

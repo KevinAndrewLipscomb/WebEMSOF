@@ -10,20 +10,19 @@
 	  <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
-      <p>
-      <asp:label id="Label_county_name" runat="server" font-bold="True"
-      font-size="Large"></asp:label>&nbsp;
-      <asp:label id="Label_literal_county" runat="server" font-bold="True"
-      font-size="Large">
-        County
-      </asp:label></p>
-      <p>
-		<small>Change your WebEMSOF
-			<asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>
+	  <p><small>[
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Change your WebEMSOF
+			<asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
-			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>
-		</small>
-	  </p>
+			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
+</small></p>
+	  <p>
+	  <asp:label id="Label_county_name" runat="server" font-bold="True"
+	  font-size="Large"></asp:label>&nbsp;
+	  <asp:label id="Label_literal_county" runat="server" font-bold="True"
+	  font-size="Large">
+		County
+	  </asp:label></p>
 	  <table cellspacing="0" cellpadding="0" border="1" bordercolor="#dcdcdc">
         <tr>
           <td>

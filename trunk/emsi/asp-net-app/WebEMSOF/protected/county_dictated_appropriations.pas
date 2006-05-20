@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, appcommon,
-  system.web.mail;
+  system.web.mail, system.web.security;
 
 type
   TWebForm_county_dictated_appropriations = class(System.Web.UI.Page)
@@ -23,6 +23,7 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_county_dictated_deadline_Click(sender: System.Object; 
       e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -48,6 +49,7 @@ type
     Label_no_appropriations: System.Web.UI.WebControls.Label;
     LinkButton_county_dictated_deadline: System.Web.UI.WebControls.LinkButton;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -63,6 +65,7 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
@@ -195,6 +198,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.LinkButton_county_dictated_deadline_Click(sender: System.Object;
