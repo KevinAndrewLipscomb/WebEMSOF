@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   System.Data.Common, Borland.Data.Provider, System.Globalization, 
-  Borland.Data.Common, system.configuration;
+  Borland.Data.Common, system.configuration, system.web.security;
 
 type
   TWebForm_service_overview = class(System.Web.UI.Page)
@@ -20,6 +20,7 @@ type
     procedure DataGrid_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -37,6 +38,7 @@ type
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     TableRow_separator: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_item_requests_section: System.Web.UI.HtmlControls.HtmlTableRow;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -53,6 +55,7 @@ implementation
 /// </summary>
 procedure TWebForm_service_overview.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
   Include(Self.DataGrid.ItemCommand, Self.DataGrid_ItemCommand);
   Include(Self.DataGrid.ItemDataBound, Self.DataGrid_ItemDataBound);
@@ -179,6 +182,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_service_overview.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_service_overview.LinkButton_change_email_address_Click(sender: System.Object;

@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
-  system.web.mail;
+  system.web.mail, system.web.security;
 
 type
   TWebForm_delete_service_appropriation = class(System.Web.UI.Page)
@@ -16,6 +16,7 @@ type
     procedure InitializeComponent;
     procedure Button_no_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_yes_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -30,6 +31,7 @@ type
     Label_fiscal_year: System.Web.UI.WebControls.Label;
     Label_amount: System.Web.UI.WebControls.Label;
     Label_service_name_2: System.Web.UI.WebControls.Label;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -46,6 +48,7 @@ implementation
 /// </summary>
 procedure TWebForm_delete_service_appropriation.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.Button_yes.Click, Self.Button_yes_Click);
   Include(Self.Button_no.Click, Self.Button_no_Click);
   Include(Self.Load, Self.Page_Load);
@@ -102,6 +105,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_delete_service_appropriation.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;

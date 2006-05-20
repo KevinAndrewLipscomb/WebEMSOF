@@ -9,6 +9,8 @@ uses
   system.security.cryptography,
   system.text,
   system.text.regularexpressions,
+  system.web,
+  system.web.security,
   system.Web.UI.WebControls;
 
 const

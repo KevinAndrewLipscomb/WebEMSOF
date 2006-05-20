@@ -9,8 +9,11 @@
 
   <body>
      <form runat="server">
+      <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
-      </asp:placeholder>
+      </asp:placeholder></p>
+      <p><small>[ 
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]</small></p>
 <p>
         <table bordercolor="#ffd700" cellspacing="0" cellpadding="0" border="1">
             <tr>
@@ -25,7 +28,7 @@
 <p>Withdrawing an item from your request at this point is an <strong>irreversible</strong> action.</p>
 <p>Are you sure you want to withdraw&nbsp;your <strong>Priority</strong>
 		<ASP:Label id="Label_priority" runat="server" font-bold="True"></ASP:Label>&nbsp;item
-		     (<ASP:Label id="Label_description" runat="server" font-bold="True"></ASP:Label>) from your request, and surrender
+		       (<ASP:Label id="Label_description" runat="server" font-bold="True"></ASP:Label>) from your request, and surrender
 		<ASP:Label id="Label_emsof_ante" runat="server" font-bold="True"></ASP:Label>&nbsp;of EMSOF funds to&nbsp;your Regional Council in the process?</p>
 <p>
 		<table cellspacing="0" cellpadding="10" border="0">

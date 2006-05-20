@@ -11,9 +11,10 @@
 	 <form runat="server">
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder>
+<p><small>[ 
+          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_back_to_overview" runat="server"></ASP:LinkButton>&nbsp;form ]</small></p>
 <p>
-        <ASP:Label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
-<p><small>[ Back to <ASP:LinkButton id="LinkButton_back_to_overview" runat="server"></ASP:LinkButton>&nbsp;form ]</small></p>
+        <ASP:Label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></ASP:Label></p></small>
 <p>
 		<table cellspacing="0" cellpadding="0" width="%" border="1" bordercolor="#dcdcdc">
 			<tr><td>

@@ -9,14 +9,17 @@
 
   <body>
 	 <form runat="server">
+      <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
-      </asp:placeholder>
-<h3>
-		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3>
-	  <p><small>[ Back to <ASP:HyperLink id="HyperLink_service_overview" runat="server"
-                         navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ]&nbsp; [ Change your WebEMSOF
+      </asp:placeholder></p>
+	  <p>
+<small>[ 
+          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_service_overview" runat="server"
+						 navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ]&nbsp; [ Change your WebEMSOF
 		<ASP:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:hyperlink>&nbsp;| <ASP:HyperLink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</ASP:HyperLink>&nbsp;]
 	  </small></p>
+<h3>
+		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3></small>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
               <tr>
 				<td>

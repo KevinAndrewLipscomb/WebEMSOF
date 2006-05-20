@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  system.web.security;
 
 type
   TWebForm_county_appropriation = class(System.Web.UI.Page)
@@ -14,6 +15,7 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_continue_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -26,6 +28,7 @@ type
     Button_continue: System.Web.UI.WebControls.Button;
     RequiredFieldValidator_appropriation: System.Web.UI.WebControls.RequiredFieldValidator;
     Label_literal_county: System.Web.UI.WebControls.Label;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
@@ -44,6 +47,7 @@ implementation
 /// </summary>
 procedure TWebForm_county_appropriation.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.Button_continue.Click, Self.Button_continue_Click);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -138,6 +142,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_appropriation.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_county_appropriation.Button_continue_Click(sender: System.Object;

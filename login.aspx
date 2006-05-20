@@ -39,7 +39,7 @@
                                 <ASP:ListItem value="0">-- Select (then wait for form to refresh) --</ASP:ListItem>
                                 <ASP:ListItem value="service">Service (Ambulance, QRS, ALS Squad, etc)</ASP:ListItem>
                                 <ASP:ListItem value="county">County Coordinator</ASP:ListItem>
-                                <ASP:ListItem value="regional_staffer">Regional staffer</ASP:ListItem></ASP:DropDownList><ASP:RegularExpressionValidator id="RegularExpressionValidator_user_kind" runat="server" errormessage="Please select a user kind." font-bold="True" controltovalidate="DropDownList_user_kind" validationexpression="[a-z]+">!ERR!</ASP:RegularExpressionValidator>
+                                <ASP:ListItem value="regional_staffer">Regional staffer</ASP:ListItem></ASP:DropDownList><ASP:RegularExpressionValidator id="RegularExpressionValidator_user_kind" runat="server" errormessage="Please select a user kind." font-bold="True" controltovalidate="DropDownList_user_kind" validationexpression="[a-z_]+">!ERR!</ASP:RegularExpressionValidator>
 									</td>
 				</tr>
 				<tr>

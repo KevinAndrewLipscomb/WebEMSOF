@@ -189,6 +189,25 @@
 			<Language Name="RootDir"></Language>
 		</Language>  
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="system" Version="1.0.5000.0" LinkUnits="False"/>
@@ -244,7 +263,7 @@
       <File FileName="protected\withdraw_request_item.pas" ContainerId="PascalCompiler" ModuleName="withdraw_request_item" Parent="protected\withdraw_request_item.aspx"/>
       <File FileName="new_password.pas" ContainerId="PascalCompiler" ModuleName="new_password" Parent="new_password.aspx"/>
       <File FileName="protected\county_overview.pas" ContainerId="PascalCompiler" ModuleName="county_overview" Parent="protected\county_overview.aspx"/>
-      <File FileName="Default.pas" ContainerId="PascalCompiler" ModuleName="Default"/>
+      <File FileName="Default.pas" ContainerId="PascalCompiler" ModuleName="Default" Parent="Default.aspx"/>
     </FileList>
   </DelphiDotNet.Personality>
 	<ModelSupport>True</ModelSupport>

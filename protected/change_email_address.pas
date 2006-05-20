@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration,
-  system.net;
+  system.net, system.web.security;
 
 type
   TWebForm_change_email_address = class(System.Web.UI.Page)
@@ -17,6 +17,7 @@ type
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
     procedure CustomValidator_nominal_email_address_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
     procedure LinkButton_back_to_overview_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -34,6 +35,7 @@ type
     LinkButton_back_to_overview: System.Web.UI.WebControls.LinkButton;
     CustomValidator_nominal_email_address: System.Web.UI.WebControls.CustomValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -51,8 +53,9 @@ implementation
 procedure TWebForm_change_email_address.InitializeComponent;
 begin
   Include(Self.LinkButton_back_to_overview.Click, Self.LinkButton_back_to_overview_Click);
-  Include(Self.Button_submit.Click, Self.Button_submit_Click);
   Include(Self.CustomValidator_nominal_email_address.ServerValidate, Self.CustomValidator_nominal_email_address_ServerValidate);
+  Include(Self.Button_submit.Click, Self.Button_submit_Click);
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -101,6 +104,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_change_email_address.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_change_email_address.LinkButton_back_to_overview_Click(sender: System.Object;

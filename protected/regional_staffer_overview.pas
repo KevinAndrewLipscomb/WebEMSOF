@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
   System.Data.Common, Borland.Data.Provider, System.Globalization, 
-  Borland.Data.Common, system.configuration;
+  Borland.Data.Common, system.configuration, system.web.security;
 
 type
   TWebForm_account_overview = class(System.Web.UI.Page)
@@ -23,6 +23,7 @@ type
       e: System.EventArgs);
     procedure LinkButton_last_fy_request_action_Click(sender: System.Object; 
       e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -45,6 +46,7 @@ type
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_last_fy_request_id: System.Web.UI.WebControls.Label;
     Label_this_fy_request_id: System.Web.UI.WebControls.Label;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -61,6 +63,7 @@ implementation
 /// </summary>
 procedure TWebForm_account_overview.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
   Include(Self.LinkButton_last_fy_request_action.Click, Self.LinkButton_last_fy_request_action_Click);
   Include(Self.LinkButton_this_fy_request_action.Click, Self.LinkButton_this_fy_request_action_Click);
@@ -199,6 +202,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_account_overview.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_account_overview.LinkButton_last_fy_request_action_Click(sender: System.Object;
