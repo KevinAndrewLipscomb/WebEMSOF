@@ -31,6 +31,7 @@ type
     Label_description: System.Web.UI.WebControls.Label;
     Label_emsof_ante: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_request_item_detail: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }

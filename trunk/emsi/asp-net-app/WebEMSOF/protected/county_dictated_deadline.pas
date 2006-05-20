@@ -15,7 +15,6 @@ type
   strict private
     procedure InitializeComponent;
     procedure Calendar_SelectionChanged(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_cancel_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -28,8 +27,8 @@ type
     Label_literal_county: System.Web.UI.WebControls.Label;
     Calendar: System.Web.UI.WebControls.Calendar;
     Label_current_deadline: System.Web.UI.WebControls.Label;
-    LinkButton_cancel: System.Web.UI.WebControls.LinkButton;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -47,7 +46,6 @@ implementation
 procedure TWebForm_county_dictated_deadline.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_cancel.Click, Self.LinkButton_cancel_Click);
   Include(Self.Calendar.SelectionChanged, Self.Calendar_SelectionChanged);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -84,12 +82,6 @@ begin
   formsauthentication.SignOut;
   session.Clear;
   server.Transfer('../Default.aspx');
-end;
-
-procedure TWebForm_county_dictated_deadline.LinkButton_cancel_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('county_dictated_appropriations.aspx');
 end;
 
 procedure TWebForm_county_dictated_deadline.Calendar_SelectionChanged(sender: System.Object;

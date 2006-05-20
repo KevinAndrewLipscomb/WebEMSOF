@@ -42,6 +42,7 @@ type
     CheckBox_unfilter: System.Web.UI.WebControls.CheckBox;
     RadioButtonList_match_level: System.Web.UI.WebControls.RadioButtonList;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
   public
