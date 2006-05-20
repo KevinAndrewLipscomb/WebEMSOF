@@ -1,0 +1,82 @@
+
+unit template_protected;
+
+interface
+
+uses
+  System.Collections, System.ComponentModel,
+  System.Data, System.Drawing, System.Web, System.Web.SessionState,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security;
+
+type
+  TWebForm_template_protected = class(System.Web.UI.Page)
+  {$REGION 'Designer Managed Code'}
+  strict private
+    procedure InitializeComponent;
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+  {$ENDREGION}
+  strict private
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+  strict protected
+    Title: System.Web.UI.HtmlControls.HtmlGenericControl;
+    PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
+    PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
+    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    Label_account_descriptor: System.Web.UI.WebControls.Label;
+    HyperLink_back: System.Web.UI.WebControls.HyperLink;
+    procedure OnInit(e: EventArgs); override;
+  private
+    { Private Declarations }
+  public
+    { Public Declarations }
+  end;
+
+implementation
+
+{$REGION 'Designer Managed Code'}
+/// <summary>
+/// Required method for Designer support -- do not modify
+/// the contents of this method with the code editor.
+/// </summary>
+procedure TWebForm_template_protected.InitializeComponent;
+begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.Load, Self.Page_Load);
+end;
+{$ENDREGION}
+
+const ID = '$Id$';
+
+procedure TWebForm_template_protected.Page_Load(sender: System.Object; e: System.EventArgs);
+begin
+  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  if not IsPostback then begin
+    //
+    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_protected';
+    Label_account_descriptor.text := session.item['_name'].tostring;
+    //
+    //
+  end;
+end;
+
+procedure TWebForm_template_protected.OnInit(e: EventArgs);
+begin
+  //
+  // Required for Designer support
+  //
+  InitializeComponent;
+  inherited OnInit(e);
+end;
+
+procedure TWebForm_template_protected.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
+end;
+
+end.
+
