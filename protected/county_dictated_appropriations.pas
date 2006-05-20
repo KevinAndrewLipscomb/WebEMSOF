@@ -24,6 +24,8 @@ type
     procedure LinkButton_county_dictated_deadline_Click(sender: System.Object; 
       e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure DataGrid_service_appropriations_ItemCommand(source: System.Object; 
+      e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -67,6 +69,7 @@ procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
+  Include(Self.DataGrid_service_appropriations.ItemCommand, Self.DataGrid_service_appropriations_ItemCommand);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
@@ -198,6 +201,22 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  session.Remove('fiscal_year_designator');
+  session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
+  session.Remove('service_name');
+  session.Add('service_name',Safe(e.item.cells[dgi_name].text,ORG_NAME));
+  session.Remove('affiliate_num');
+  session.Add('affiliate_num',Safe(e.item.cells[dgi_affiliate_num].text,NUM));
+  session.Remove('appropriation_amount');
+  session.Add('appropriation_amount',Safe(e.item.cells[dgi_amount].text,REAL_NUM));
+  session.Remove('county_dictated_appropriation_id');
+  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_id].text,NUM));
+  server.Transfer('county_dictated_appropriation_detail.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.LinkButton_logout_Click(sender: System.Object;

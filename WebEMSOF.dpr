@@ -34,6 +34,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'new_password.aspx'}
 {%AspMarkupContainer 'protected\county_overview.aspx'}
 {%AspMarkupContainer 'Default.aspx'}
+{%AspMarkupContainer 'protected\county_dictated_appropriation_detail.aspx'}
 
 uses
   System.Reflection,
@@ -56,7 +57,8 @@ uses
   withdraw_request_item in 'protected\withdraw_request_item.pas' {withdraw_request_item.TWebForm_withdraw_request_item: System.Web.UI.Page},
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
   county_overview in 'protected\county_overview.pas' {county_overview.TWebForm_county_appropriation: System.Web.UI.Page},
-  Default in 'Default.pas' {Default.TWebForm_Default: System.Web.UI.Page};
+  Default in 'Default.pas' {Default.TWebForm_Default: System.Web.UI.Page},
+  county_dictated_appropriation_detail in 'protected\county_dictated_appropriation_detail.pas' {county_dictated_appropriation_detail.TWebForm_county_dictated_appropriation_detail: System.Web.UI.Page};
 
 //
 // General Information about an assembly is controlled through the following
