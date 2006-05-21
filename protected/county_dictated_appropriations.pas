@@ -101,6 +101,7 @@ var
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
+  county_dictated_deadline: system.datetime;
   make_appropriations_deadline: system.datetime;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -174,7 +175,7 @@ begin
       HyperLink_new_appropriation.visible := FALSE;
     end else begin
       Label_make_appropriations_deadline.text := make_appropriations_deadline.tostring('HH:mm:ss dddd, MMMM d, yyyy');
-      LinkButton_county_dictated_deadline.text := datetime
+      county_dictated_deadline := datetime
         (
         borland.data.provider.bdpcommand.Create
           (
@@ -183,8 +184,10 @@ begin
           appcommon.db
           )
           .ExecuteScalar
-        )
-        .tostring('HH:mm:ss dddd, MMMM d, yyyy');
+        );
+      LinkButton_county_dictated_deadline.text := county_dictated_deadline.tostring('HH:mm:ss dddd, MMMM d, yyyy');
+      session.Remove('county_dictated_deadline');
+      session.Add('county_dictated_deadline',county_dictated_deadline);
       //
     end;
     //
@@ -217,6 +220,8 @@ begin
     session.Add('appropriation_amount',Safe(e.item.cells[dgi_amount].text,REAL_NUM));
     session.Remove('county_dictated_appropriation_id');
     session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_id].text,NUM));
+    session.Remove('emsof_request_master_status_code');
+    session.Add('emsof_request_master_status_code',Safe(e.item.cells[dgi_status_code].text,NUM));
     server.Transfer('county_dictated_appropriation_detail.aspx');
   end;
 end;

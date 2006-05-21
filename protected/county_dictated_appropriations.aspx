@@ -18,7 +18,7 @@
 </small></p>
 	  <p>
 	  <asp:label id="Label_county_name" runat="server" font-bold="True"
-	  font-size="Large"></asp:label>&nbsp;
+	  font-size="Large"></asp:label>
 	  <asp:label id="Label_literal_county" runat="server" font-bold="True"
 	  font-size="Large">
 		County
