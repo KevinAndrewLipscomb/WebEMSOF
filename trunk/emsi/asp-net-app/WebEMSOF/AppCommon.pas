@@ -19,6 +19,8 @@ const
   DOUBLE_QUOTE = '""';
   NEW_LINE = #10;
   QUOTE = '"';
+  SPACE = #32;
+  TAB = #9;
 
 type
   safe_hint_type =
