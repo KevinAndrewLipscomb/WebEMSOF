@@ -206,17 +206,19 @@ end;
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
-  session.Remove('fiscal_year_designator');
-  session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
-  session.Remove('service_name');
-  session.Add('service_name',Safe(e.item.cells[dgi_name].text,ORG_NAME));
-  session.Remove('affiliate_num');
-  session.Add('affiliate_num',Safe(e.item.cells[dgi_affiliate_num].text,NUM));
-  session.Remove('appropriation_amount');
-  session.Add('appropriation_amount',Safe(e.item.cells[dgi_amount].text,REAL_NUM));
-  session.Remove('county_dictated_appropriation_id');
-  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_id].text,NUM));
-  server.Transfer('county_dictated_appropriation_detail.aspx');
+  if e.commandname = 'Select' then begin
+    session.Remove('fiscal_year_designator');
+    session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
+    session.Remove('service_name');
+    session.Add('service_name',Safe(e.item.cells[dgi_name].text,ORG_NAME));
+    session.Remove('affiliate_num');
+    session.Add('affiliate_num',Safe(e.item.cells[dgi_affiliate_num].text,NUM));
+    session.Remove('appropriation_amount');
+    session.Add('appropriation_amount',Safe(e.item.cells[dgi_amount].text,REAL_NUM));
+    session.Remove('county_dictated_appropriation_id');
+    session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_id].text,NUM));
+    server.Transfer('county_dictated_appropriation_detail.aspx');
+  end;
 end;
 
 procedure TWebForm_county_dictated_appropriations.LinkButton_logout_Click(sender: System.Object;
