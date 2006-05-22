@@ -14,9 +14,79 @@
       </asp:placeholder></p>
 	  <p><small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_county_dictated_appropriations" runat="server" navigateurl="county_dictated_appropriations.aspx">county-dictated appropriations</ASP:HyperLink>&nbsp;form ]</small></p>
-      <p><strong>Create new appropriation:</strong>
-      </p>
-      <blockquote dir="ltr" style="MARGIN-RIGHT: 0px">
+	  <p>
+	  <asp:label id="Label_county_name" runat="server" font-bold="True"
+	  font-size="Large"></asp:label>
+	  <asp:label id="Label_literal_county" runat="server" font-bold="True"
+	  font-size="Large">
+		County
+	  </asp:label></p>
+	  <table cellspacing="0" cellpadding="0" border="1" bordercolor="#dcdcdc">
+        <tr>
+          <td>
+			<table cellspacing="0" cellpadding="5" border="0">
+              <tr>
+				<td bgcolor="#f5f5f5">
+                  <p align="right">
+					<strong>Parent appropriation:</strong>
+                  </p>
+                </td>
+                <td>
+                  <p align="right">
+                  <asp:label id="Label_parent_appropriation_amount" runat="server"></asp:label>
+				  </p>
+				</td>
+				<td>
+				  from
+				  <asp:label id="Label_region_name" runat="server">
+				  </asp:label>&nbsp;for
+				  <asp:label id="Label_fiscal_year_designator" runat="server"></asp:label>
+				</td>
+			  </tr>
+			  <tr id="TableRow_sum_of_service_appropriations" runat="server">
+				<td>
+				  <p align="right">
+					-
+				  </p>
+				</td>
+				<td>
+				  <p align="right">
+				  <asp:label id="Label_sum_of_service_appropriations" runat="server" font-underline="True"></asp:label>
+				  </p>
+				</td>
+				<td>appropriated to services (below)</td>
+			  </tr>
+			  <tr id="TableRow_unappropriated_amount" runat="server">
+				<td>
+				  <p align="right">
+					=
+				  </p>
+				</td>
+				<td>
+				  <p align="right">
+				  <asp:label id="Label_unappropriated_amount" runat="server">
+				  </asp:label>
+				  </p>
+				</td>
+				<td>
+				  remaining
+				</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+	  </table>
+      <p></p>
+      <p><strong>
+          <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+              <tr>
+                <td>
+                  <table cellspacing="0" cellpadding="5" border="0">
+                      <tr>
+                        <td bgcolor="#f5f5f5"><strong>New appropriation</strong></td>
+                      </tr>
+                      <tr>
+                        <td>
 		  <table cellspacing="0" cellpadding="5" border="0">
 			  <tr>
 			  <td>
@@ -47,8 +117,12 @@
 			  <td><ASP:Button id="Button_add_appropriation_and_repeat" runat="server" text="Add and Repeat"></ASP:Button>&nbsp;<ASP:Button id="Button_add_appropriation_and_stop" runat="server" text="Add and Stop"></ASP:Button>&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button></td>
 			  <td></td>
 			</tr>
-		  </table>
-	  </blockquote>
+		  </table></td>
+                      </tr>
+                  </table></td>
+              </tr>
+          </table></strong>
+      </p>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>
      </form>

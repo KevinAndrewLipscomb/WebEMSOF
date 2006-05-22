@@ -112,10 +112,7 @@
 		  </td>
 		  <td>
 			<div align="center">
-			  <asp:hyperlink id="HyperLink_new_appropriation" runat="server"
-			  navigateurl="create_new_service_appropriation.aspx" font-bold="True">
-				New
-			  </asp:hyperlink>
+			  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True">New</asp:LinkButton>
 			</div>
 		  </td>
 		</tr>
