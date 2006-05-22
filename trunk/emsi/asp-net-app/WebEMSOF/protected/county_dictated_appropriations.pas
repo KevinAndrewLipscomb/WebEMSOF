@@ -325,6 +325,12 @@ end;
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
+  //
+  // Manage column visibility
+  //
+  e.item.cells[dgi_linkbutton_edit].visible := be_before_deadline;
+  e.item.cells[dgi_linkbutton_delete].visible := be_before_deadline;
+  //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
     or (e.item.itemtype = listitemtype.item)
@@ -336,19 +342,21 @@ begin
     num_appropriations := num_appropriations + 1;
     sum_of_service_appropriations :=
       sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
-    if e.item.cells[dgi_status_code].text > '2' then begin
+    if convert.ToInt16(e.item.cells[dgi_status_code].text) > 2 then begin
       LinkButton(e.item.cells[dgi_status_description].controls.item[0]).enabled := TRUE;
       LinkButton(e.item.cells[dgi_status_description].controls.item[0]).forecolor := color.BLUE;
-      if e.item.cells[dgi_status_code].text = '3' then begin
-        LinkButton(e.item.cells[dgi_status_description].controls.item[0]).font.bold := TRUE;
-        LinkButton(e.item.cells[dgi_status_description].controls.item[0]).text :=
-          '>' + LinkButton(e.item.cells[dgi_status_description].controls.item[0]).text.ToUpper + '<';
+      if convert.ToInt16(e.item.cells[dgi_status_code].text) >= 3 then begin
+        if convert.ToInt16(e.item.cells[dgi_status_code].text) = 3 then begin
+          LinkButton(e.item.cells[dgi_status_description].controls.item[0]).font.bold := TRUE;
+          LinkButton(e.item.cells[dgi_status_description].controls.item[0]).text :=
+            '>' + LinkButton(e.item.cells[dgi_status_description].controls.item[0]).text.ToUpper + '<';
+        end;
+        LinkButton(e.item.cells[dgi_linkbutton_edit].controls.item[0]).visible := FALSE;
+        LinkButton(e.item.cells[dgi_linkbutton_delete].controls.item[0]).visible := FALSE;
       end;
     end else begin
       LinkButton(e.item.cells[dgi_status_description].controls.item[0]).enabled := FALSE;
     end;
-    e.item.Cells[dgi_linkbutton_edit].controls.item[0].visible := be_before_deadline;
-    e.item.Cells[dgi_linkbutton_delete].controls.item[0].visible := be_before_deadline;
   end;
 end;
 

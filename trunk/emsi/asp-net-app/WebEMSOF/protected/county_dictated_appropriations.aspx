@@ -79,10 +79,10 @@
 		</tr>
 	  </table>
       <p></p>
-	  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+	  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_deadlines" runat="server">
 		  <tr>
 			<td>
-		<table cellspacing="0" cellpadding="5" border="0" id="Table_deadlines" runat="server">
+		<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
 			  <td bgcolor="#f5f5f5" colspan="2">
 				<p align="left"><strong>Deadlines</strong>
