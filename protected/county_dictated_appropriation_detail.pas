@@ -271,6 +271,8 @@ begin
       //
       //   Send notifications to service and region.
       //
+      smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+      //
       smtpmail.Send
         (
         cc_email_address,
