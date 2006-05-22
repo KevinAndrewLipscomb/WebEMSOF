@@ -70,13 +70,13 @@ procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
+  Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.DataGrid_service_appropriations.ItemCommand, Self.DataGrid_service_appropriations_ItemCommand);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.DeleteCommand, Self.DataGrid_service_appropriations_DeleteCommand);
   Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
-  Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -97,6 +97,7 @@ var
   dgi_linkbutton_delete: cardinal;
   num_appropriations: cardinal;
   region_dictated_appropriation_amount: decimal;
+  saved_amount: decimal;
   service_appropriations_sort_order: string;
   sum_of_service_appropriations: decimal;
   unappropriated_amount: decimal;
@@ -243,6 +244,8 @@ begin
     session.Remove('emsof_request_master_status_code');
     session.Add('emsof_request_master_status_code',Safe(e.item.cells[dgi_status_code].text,NUM));
     server.Transfer('county_dictated_appropriation_detail.aspx');
+  end else if e.commandname = 'Edit' then begin
+    saved_amount := decimal.Parse(Safe(e.item.cells[dgi_amount].text,REAL_NUM));
   end;
 end;
 
@@ -395,6 +398,9 @@ begin
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
     //
+    if (amount - saved_amount) > unappropriated_amount then begin
+      amount := saved_amount + unappropriated_amount;
+    end;
     borland.data.provider.bdpcommand.Create
       (
       'update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
@@ -416,9 +422,9 @@ begin
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '.htm' + NEW_LINE
       + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
-        + NEW_LINE
-        + NEW_LINE
+      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+      + NEW_LINE
+      + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     appcommon.DbClose;
