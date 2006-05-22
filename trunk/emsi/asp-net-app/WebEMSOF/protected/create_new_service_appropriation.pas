@@ -43,6 +43,15 @@ type
     RadioButtonList_match_level: System.Web.UI.WebControls.RadioButtonList;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
+    Label_county_name: System.Web.UI.WebControls.Label;
+    Label_literal_county: System.Web.UI.WebControls.Label;
+    Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
+    Label_region_name: System.Web.UI.WebControls.Label;
+    Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
+    Label_sum_of_service_appropriations: System.Web.UI.WebControls.Label;
+    Label_unappropriated_amount: System.Web.UI.WebControls.Label;
+    TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -70,17 +79,32 @@ end;
 const ID = '$Id$';
 
 var
+  amount: decimal;
   be_service_list_filtered: boolean;
+  unappropriated_amount: decimal;
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_service_appropriation';
+    Label_county_name.text := session.item['county_name'].tostring;
     //
     // Initialize implementation-scoped variables.
     //
+    amount := 0;
     be_service_list_filtered := TRUE;
+    //
+    Label_parent_appropriation_amount.text := decimal.Parse(session.item['parent_appropriation_amount'].tostring).tostring('C');
+    Label_region_name.text := session.item['region_name'].tostring;
+    Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
+    Label_sum_of_service_appropriations.text := decimal.Parse(session.item['sum_of_service_appropriations'].tostring).tostring('C');
+    unappropriated_amount := decimal(session.item['unappropriated_amount']);
+    Label_unappropriated_amount.text := unappropriated_amount.tostring('C');
+    if unappropriated_amount < 0 then begin
+      Label_unappropriated_amount.font.bold := TRUE;
+      Label_unappropriated_amount.forecolor := color.red;
+    end;
     //
     Bind_services;
   end;
@@ -126,14 +150,26 @@ end;
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_repeat_Click(sender: System.Object;
   e: System.EventArgs);
 begin
+  //
   AddAppropriation;
   TextBox_new_amount.Text := system.string.EMPTY;
   DropDownList_services.SelectedIndex := -1;
+  //
+  // Update labels in the Parent appropriation section.
+  //
+  Label_sum_of_service_appropriations.text :=
+    (decimal.parse(Safe(Label_sum_of_service_appropriations.text,REAL_NUM)) + amount).tostring('C');
+  unappropriated_amount := unappropriated_amount - amount;
+  Label_unappropriated_amount.text := unappropriated_amount.tostring('C');
+  if unappropriated_amount < 0 then begin
+    Label_unappropriated_amount.font.bold := TRUE;
+    Label_unappropriated_amount.forecolor := color.red;
+  end;
+  //
 end;
 
 procedure TWebForm_create_new_service_appropriation.AddAppropriation;
 var
-  amount: decimal;
   amount_string: string;
   bc_get_cc_email_address: borland.data.provider.bdpcommand;
   bc_get_fy_designator: borland.data.provider.bdpcommand;

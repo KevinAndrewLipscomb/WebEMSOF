@@ -26,6 +26,7 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_service_appropriations_ItemCommand(source: System.Object; 
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure LinkButton_new_appropriation_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -37,7 +38,6 @@ type
     Label_county_name: System.Web.UI.WebControls.Label;
     DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
     Label_literal_county: System.Web.UI.WebControls.Label;
-    HyperLink_new_appropriation: System.Web.UI.WebControls.HyperLink;
     Label_make_appropriations_deadline: System.Web.UI.WebControls.Label;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_region_name: System.Web.UI.WebControls.Label;
@@ -52,6 +52,7 @@ type
     LinkButton_county_dictated_deadline: System.Web.UI.WebControls.LinkButton;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    LinkButton_new_appropriation: System.Web.UI.WebControls.LinkButton;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -75,6 +76,7 @@ begin
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.DeleteCommand, Self.DataGrid_service_appropriations_DeleteCommand);
   Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
+  Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -97,6 +99,7 @@ var
   region_dictated_appropriation_amount: decimal;
   service_appropriations_sort_order: string;
   sum_of_service_appropriations: decimal;
+  unappropriated_amount: decimal;
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
@@ -114,6 +117,7 @@ begin
     num_appropriations := 0;
     service_appropriations_sort_order := 'name';
     sum_of_service_appropriations := 0;
+    unappropriated_amount := 0;
     //   Set up symbolic DataGrid Indices for use in other event handlers.
     dgi_id                           := 0;
     dgi_password_reset_email_address := 1;
@@ -172,7 +176,7 @@ begin
       TableRow_sum_of_service_appropriations.visible := FALSE;
       TableRow_unappropriated_amount.visible := FALSE;
       Table_deadlines.visible := FALSE;
-      HyperLink_new_appropriation.visible := FALSE;
+      LinkButton_new_appropriation.visible := FALSE;
     end else begin
       Label_make_appropriations_deadline.text := make_appropriations_deadline.tostring('HH:mm:ss dddd, MMMM d, yyyy');
       county_dictated_deadline := datetime
@@ -204,6 +208,22 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.LinkButton_new_appropriation_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('parent_appropriation_amount');
+  session.Add('parent_appropriation_amount',Safe(Label_parent_appropriation_amount.text,REAL_NUM));
+  session.Remove('region_name');
+  session.Add('region_name',Safe(Label_region_name.text,ORG_NAME));
+  session.Remove('fiscal_year_designator');
+  session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
+  session.Remove('sum_of_service_appropriations');
+  session.Add('sum_of_service_appropriations',Safe(Label_sum_of_service_appropriations.text,REAL_NUM));
+  session.Remove('unappropriated_amount');
+  session.Add('unappropriated_amount',unappropriated_amount);
+  server.Transfer('create_new_service_appropriation.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemCommand(source: System.Object;
@@ -464,7 +484,12 @@ begin
   // Manage non-DataGrid control properties.
   //
   Label_sum_of_service_appropriations.text := sum_of_service_appropriations.ToString('C');
-  Label_unappropriated_amount.Text := (region_dictated_appropriation_amount - sum_of_service_appropriations).tostring('C');
+  unappropriated_amount := region_dictated_appropriation_amount - sum_of_service_appropriations;
+  Label_unappropriated_amount.Text := unappropriated_amount.tostring('C');
+  if unappropriated_amount < 0 then begin
+    Label_unappropriated_amount.font.bold := TRUE;
+    Label_unappropriated_amount.forecolor := color.red;
+  end;
   //
   // Clear aggregation vars for next bind, if any.
   //
