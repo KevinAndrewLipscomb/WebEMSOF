@@ -139,9 +139,9 @@
                           <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">
                             <ItemStyle horizontalalign="Right"></ItemStyle>
                           </ASP:BoundColumn>
-                          <ASP:BoundColumn visible="False" datafield="status_code"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="status_code" readonly="True"></ASP:BoundColumn>
                           <ASP:ButtonColumn datatextfield="status_description" sortexpression="status_description" headertext="Status" commandname="Select">
-                            <ItemStyle horizontalalign="Center" forecolor="#C0C0C0"></ItemStyle>
+                            <ItemStyle horizontalalign="Center" forecolor="Silver"></ItemStyle>
                           </ASP:ButtonColumn>
                           <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit">
                             <ItemStyle forecolor="Blue"></ItemStyle>
