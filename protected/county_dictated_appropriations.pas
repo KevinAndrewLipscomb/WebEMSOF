@@ -53,6 +53,8 @@ type
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_new_appropriation: System.Web.UI.WebControls.LinkButton;
+    Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
+    Label_application_name: System.Web.UI.WebControls.Label;
     procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -153,6 +155,7 @@ begin
     region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
     Label_parent_appropriation_amount.Text := region_dictated_appropriation_amount.ToString('C');
     Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
+    Label_application_name.text := configurationsettings.appsettings['application_name'];
     bdr_appropriation_attribs.Close;
     //
     // All further rendering is deadline-dependent.
@@ -198,6 +201,7 @@ begin
     //
     appcommon.DbClose;
     //
+    Table_warning_forced_amount.visible := FALSE;
     Bind_service_appropriations;  // also affected by be_before_deadline
   end;
 end;
@@ -341,6 +345,7 @@ begin
     appcommon.DbClose;
   end;
   //
+  Table_warning_forced_amount.visible := FALSE;
   DataGrid_service_appropriations.EditItemIndex := -1;
   Bind_service_appropriations;
 end;
@@ -400,6 +405,9 @@ begin
     //
     if (amount - saved_amount) > unappropriated_amount then begin
       amount := saved_amount + unappropriated_amount;
+      Table_warning_forced_amount.visible := TRUE;
+    end else begin
+      Table_warning_forced_amount.visible := FALSE;
     end;
     borland.data.provider.bdpcommand.Create
       (
@@ -437,6 +445,7 @@ end;
 procedure TWebForm_county_dictated_appropriations.CancelCommand_service_appropriations(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
+  Table_warning_forced_amount.visible := FALSE;
   DataGrid_service_appropriations.EditItemIndex := -1;
   Bind_service_appropriations;
 end;
@@ -513,6 +522,7 @@ begin
     service_appropriations_sort_order := e.SortExpression;
     be_sort_order_ascending := TRUE;
   end;
+  Table_warning_forced_amount.visible := FALSE;
   DataGrid_service_appropriations.EditItemIndex := -1;
   Bind_service_appropriations;
 end;
