@@ -23,7 +23,7 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_email_address: System.Web.UI.WebControls.Label;
     Label_user_name: System.Web.UI.WebControls.Label;
-    Label1: System.Web.UI.WebControls.Label;
+    Label_application_name: System.Web.UI.WebControls.Label;
     HyperLink_login: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
@@ -61,6 +61,7 @@ begin
     if session.item['target_user_table'].tostring = 'county' then begin
       Label_user_name.Text := Label_user_name.Text + ' County';
     end;
+    Label_application_name.text := configurationsettings.appsettings['application_name'];
     //
     // Build a suitably-random password string.
     //

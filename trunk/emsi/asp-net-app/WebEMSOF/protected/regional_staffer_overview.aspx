@@ -12,9 +12,9 @@
       </p>
 	  <p><small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ 
-		  Change WebEMSOF
+		  Change 
 		  <ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>&nbsp;
-		  ]</small>
+		   ]</small>
 	  </p>
 	  <p>
         <ASP:Label id="Label_regional_staffer_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>
@@ -36,7 +36,7 @@
                         <p align="center">Action</p></td>
                 </tr>
                 <tr>
-                  <td>Your WebEMSOF profile is:</td>
+                  <td>Your <ASP:Label id="Label1" runat="server"></ASP:Label>profile is:</td>
                   <td>
                     <p align="center">
                       <ASP:Label id="Label_profile_status" runat="server" font-bold="True"></ASP:Label>
