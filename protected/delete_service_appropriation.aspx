@@ -27,7 +27,7 @@
 					  <td>
 <p><ASP:Label id="Label_service_name_1" runat="server"></ASP:Label>&nbsp;has&nbsp;already entered equipment requests in association with the
 		<ASP:Label id="Label_fiscal_year" runat="server"></ASP:Label>&nbsp;appropriation of
-		<ASP:Label id="Label_amount" runat="server"></ASP:Label>&nbsp;that you made to them.&nbsp; If you delete the appropriation, WebEMSOF will also <strong>permanently delete</strong> the associated equipment requests.&nbsp; The equipment requests will <strong>not</strong> automatically carry over to any other appropriation.</p>
+		<ASP:Label id="Label_amount" runat="server"></ASP:Label>&nbsp;that you made to them.&nbsp; If you delete the appropriation, <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;will also <strong>permanently delete</strong> the associated equipment requests.&nbsp; The equipment requests will <strong>not</strong> automatically carry over to any other appropriation.</p>
 <p>Are you sure you want to permanently delete this appropriation (and all equipment requests that
 		<ASP:Label id="Label_service_name_2" runat="server"></ASP:Label>&nbsp;has already entered against it)?</p>
 <p>

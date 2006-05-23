@@ -30,6 +30,7 @@ type
     Button_no: System.Web.UI.WebControls.Button;
     Label_fiscal_year: System.Web.UI.WebControls.Label;
     Label_amount: System.Web.UI.WebControls.Label;
+    Label_application_name: System.Web.UI.WebControls.Label;
     Label_service_name_2: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
@@ -74,6 +75,7 @@ begin
     service_name := session.item['service_name_of_appropriation_selected_for_deletion'].tostring;
     Label_service_name_1.text := service_name;
     Label_service_name_2.text := service_name;
+    Label_application_name.text := configurationsettings.appsettings['application_name'];
     //
     // Set appropriation attribute labels.
     //

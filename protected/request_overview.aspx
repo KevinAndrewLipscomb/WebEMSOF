@@ -15,7 +15,7 @@
 	  <p>
 <small>[ 
           <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_service_overview" runat="server"
-						 navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ]&nbsp; [ Change your WebEMSOF
+						 navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ]&nbsp; [ Change your 
 		<ASP:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:hyperlink>&nbsp;| <ASP:HyperLink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</ASP:HyperLink>&nbsp;]
 	  </small></p>
 <h3>
