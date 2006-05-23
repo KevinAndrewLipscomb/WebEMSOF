@@ -102,6 +102,21 @@
 		  </tr>
 	  </table>
 	  <p></p>
+	  <table bordercolor="#ffd700" cellspacing="0" cellpadding="0" border="1" id="Table_warning_forced_amount" runat="server">
+            <tr>
+              <td>
+              <table cellspacing="0" cellpadding="5" border="0">
+                  <tr>
+                    <td bgcolor="#ffd700"><strong>Warning</strong></td>
+                  </tr>
+                  <tr>
+                    <td>To prevent you from exceeding your county appropriation, 
+                      <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;reduced the amount of the service appropriation that you just updated.</td>
+                  </tr>
+              </table></td>
+            </tr>
+        </table>
+	  <p></p>
 	  <table cellspacing="0" cellpadding="0" border="1"  bordercolor="#dcdcdc">
 		<tr>
 		  <td>
