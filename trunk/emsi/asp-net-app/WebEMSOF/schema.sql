@@ -276,6 +276,7 @@ INSERT INTO item_status_code_description_map VALUES (6, 'WITHDRAWN');
 -- Table structure for table `match_level`
 -- 
 
+DROP TABLE IF EXISTS match_level;
 CREATE TABLE match_level (
   id tinyint(3) unsigned NOT NULL auto_increment,
   `name` varchar(31) character set utf8 NOT NULL,
@@ -357,16 +358,16 @@ CREATE TABLE region_dictated_appropriation (
 -- Dumping data for table `region_dictated_appropriation`
 --
 
-INSERT INTO region_dictated_appropriation VALUES (1,1,1,97368.00);
-INSERT INTO region_dictated_appropriation VALUES (2,1,2,19578.00);
-INSERT INTO region_dictated_appropriation VALUES (3,1,3,24998.00);
-INSERT INTO region_dictated_appropriation VALUES (4,1,4,35270.00);
-INSERT INTO region_dictated_appropriation VALUES (5,1,5,30140.00);
-INSERT INTO region_dictated_appropriation VALUES (6,1,6,13618.00);
-INSERT INTO region_dictated_appropriation VALUES (7,1,7,24329.00);
-INSERT INTO region_dictated_appropriation VALUES (8,1,8,16846.00);
-INSERT INTO region_dictated_appropriation VALUES (9,1,9,35959.00);
-INSERT INTO region_dictated_appropriation VALUES (10,1,10,52066.00);
+INSERT INTO region_dictated_appropriation VALUES (1,1,1,97368.00,null);
+INSERT INTO region_dictated_appropriation VALUES (2,1,2,19578.00,null);
+INSERT INTO region_dictated_appropriation VALUES (3,1,3,24998.00,null);
+INSERT INTO region_dictated_appropriation VALUES (4,1,4,35270.00,null);
+INSERT INTO region_dictated_appropriation VALUES (5,1,5,30140.00,null);
+INSERT INTO region_dictated_appropriation VALUES (6,1,6,13618.00,null);
+INSERT INTO region_dictated_appropriation VALUES (7,1,7,24329.00,null);
+INSERT INTO region_dictated_appropriation VALUES (8,1,8,16846.00,null);
+INSERT INTO region_dictated_appropriation VALUES (9,1,9,35959.00,null);
+INSERT INTO region_dictated_appropriation VALUES (10,1,10,52066.00,null);
 
 -- --------------------------------------------------------
 
@@ -395,6 +396,7 @@ CREATE TABLE regional_staffer (
 -- Table structure for table `regional_staffer_role`
 --
 
+DROP TABLE IF EXISTS regional_staffer_role;
 CREATE TABLE regional_staffer_role (
   id smallint(5) unsigned NOT NULL auto_increment,
   title varchar(63) NOT NULL,

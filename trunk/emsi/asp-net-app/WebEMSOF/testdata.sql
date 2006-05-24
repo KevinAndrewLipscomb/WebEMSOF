@@ -30,7 +30,7 @@ INSERT INTO state_dictated_appropriation (region_code,fiscal_year_id,amount)
 VALUES
   (1,2,350172.02);
 
-INSERT INTO region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount)
+INSERT INTO region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount,service_to_county_submission_deadline)
 VALUES
   (2,1,97368.02,'2006-11-16 23:59:59'),
   (2,2,19578.02,'2006-11-16 23:59:59'),
@@ -53,6 +53,11 @@ VALUES
   ('emsof-request-item-withdrawal-notice-recipient', 1),
   ('emsof-request-item-withdrawal-notice-recipient', 2),
   ('primary-emsof-coordinator', 2);
+
+insert into regional_staffer_user (id,encoded_password,be_stale_password,password_reset_email_address)
+values
+  (1,sha('regionpass'),FALSE,'finances@kvrs.org'),
+  (2,sha('regionpass'),FALSE,'finances@kvrs.org');
 
 insert into service (county_code,affiliate_num,name)
 values
