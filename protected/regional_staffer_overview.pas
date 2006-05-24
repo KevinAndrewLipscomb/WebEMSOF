@@ -15,15 +15,8 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_profile_action_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_account_attributes_Click(sender: System.Object; 
-      e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_this_fy_request_action_Click(sender: System.Object; 
-      e: System.EventArgs);
-    procedure LinkButton_last_fy_request_action_Click(sender: System.Object; 
-      e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_continue_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -32,21 +25,12 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_regional_staffer_name: System.Web.UI.WebControls.Label;
-    LinkButton_last_fy_request_action: System.Web.UI.WebControls.LinkButton;
-    LinkButton_this_fy_request_action: System.Web.UI.WebControls.LinkButton;
-    Label_profile_status: System.Web.UI.WebControls.Label;
-    Label_last_fy_request_status: System.Web.UI.WebControls.Label;
-    Label_this_fy_request_status: System.Web.UI.WebControls.Label;
-    Label_last_fy_request_value: System.Web.UI.WebControls.Label;
-    Label_this_fy_request_value: System.Web.UI.WebControls.Label;
-    LinkButton_profile_action: System.Web.UI.WebControls.LinkButton;
-    Label_this_fy_row_leader: System.Web.UI.WebControls.Label;
-    Label_last_fy_row_leader: System.Web.UI.WebControls.Label;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
-    Label_last_fy_request_id: System.Web.UI.WebControls.Label;
-    Label_this_fy_request_id: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
+    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    RequiredFieldValidator_appropriation: System.Web.UI.WebControls.RequiredFieldValidator;
+    RadioButtonList_appropriation: System.Web.UI.WebControls.RadioButtonList;
+    Button_continue: System.Web.UI.WebControls.Button;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -64,134 +48,91 @@ implementation
 procedure TWebForm_account_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_account_attributes_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
-  Include(Self.LinkButton_profile_action.Click, Self.LinkButton_profile_action_Click);
-  Include(Self.LinkButton_last_fy_request_action.Click, Self.LinkButton_last_fy_request_action_Click);
-  Include(Self.LinkButton_this_fy_request_action.Click, Self.LinkButton_this_fy_request_action_Click);
+  Include(Self.Button_continue.Click, Self.Button_continue_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
+const ID = '$Id$';
+
 procedure TWebForm_account_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdpCommand_get_profile_status: borland.data.provider.BdpCommand;
-  bdpCommand_get_last_fy_request_attributes: borland.data.Provider.bdpcommand;
-  be_stale_password: string;
-  max_fiscal_year_id_obj: System.Object;
-  bdpCommand_get_max_fiscal_year_id: borland.data.provider.BdpCommand;
-  bdr_last_fy_request_attributes: borland.data.provider.BdpDataReader;
-  bdpCommand_get_this_fy_request_attributes: borland.data.Provider.bdpcommand;
-  bdr_this_fy_request_attributes: borland.data.provider.BdpDataReader;
+  bdr: borland.data.provider.BdpDataReader;
+  regional_staffer_user_email_address: string;
+  max_fiscal_year_id_string: string;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
-    appcommon.DbOpen;
-    //
-    be_stale_password := Borland.Data.Provider.BdpCommand.Create
-      (
-      'SELECT be_stale_password FROM regional_staffer_user where id=' + session.item['regional_staffer_user_id'].tostring,
-      appcommon.db
-      )
-      .ExecuteScalar.tostring;
-    if be_stale_password = '1' then begin
-      appcommon.DbClose;
-      server.Transfer('change_password.aspx');
-    end;
-    //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
-    //
-    // Set Label_regional_staffer_name
     //
     Label_regional_staffer_name.Text := session.Item['regional_staffer_name'].ToString;
     //
-    // Set Label_profile_status
+    appcommon.DbOpen;
     //
-    bdpCommand_get_profile_status := borland.data.provider.bdpCommand.Create
+    bdr := Borland.Data.Provider.BdpCommand.Create
       (
-      'select be_valid_profile from regional_staffer where id = "' + session.Item['regional_staffer_user_id'].ToString + '"'
-      ,appcommon.db
-      );
-    if bdpCommand_get_profile_status.ExecuteScalar.ToString = '0' then
-      begin
-      Label_profile_status.Text := 'Not saved.';
-      LinkButton_profile_action.Text := 'Create profile';
-      end
-    else
-      begin
-      Label_profile_status.Text := 'Saved.';
-      LinkButton_profile_action.Text := 'Edit profile';
+      'SELECT be_stale_password, password_reset_email_address FROM regional_staffer_user'
+      + ' where id = ' + session.item['regional_staffer_user_id'].tostring,
+      appcommon.db
+      )
+      .ExecuteReader;
+    bdr.Read;
+    if bdr['be_stale_password'].ToString = '0' then begin
+      //
+      // Get anything else needed from this reader, then close it.  We have another reader to open, and only one can be open at a
+      // time.
+      //
+      regional_staffer_user_email_address := bdr['password_reset_email_address'].tostring;
+      bdr.Close;
+      //
+      // Where we go next depends on how many appropriations have been made to this county.
       //
       // Determine current fiscal year
       //
-      bdpCommand_get_max_fiscal_year_id := borland.data.provider.bdpcommand.Create
+      max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
         appcommon.db
-        );
-      max_fiscal_year_id_obj := bdpCommand_get_max_fiscal_year_id.ExecuteScalar;
+        )
+        .ExecuteScalar.tostring;
       //
-      // Set Label_last_fy_*
-      //
-      Label_last_fy_row_leader.Visible := TRUE;
-      bdpCommand_get_last_fy_request_attributes := borland.data.provider.BdpCommand.Create
+      bdr := borland.data.provider.bdpcommand.Create
         (
-        'SELECT emsof_request_master.id,'
-        + 'request_status_code_description_map.description,'
-        + 'emsof_request_master.value '
-        + 'FROM emsof_request_master '
-        +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
-        +  'WHERE emsof_request_master.county_dictated_appropriation_id = "' + session.Item['account_id'].ToString + '" '
-        +    'and emsof_request_master.fiscal_year_id = (' + max_fiscal_year_id_obj.ToString + ' - 1)',
+        'SELECT state_dictated_appropriation.id,'
+        + ' concat(designator,"  ($",format(state_dictated_appropriation.amount,2)," from PA DOH EMSO)")'
+        +   ' as appropriation_description'
+        + ' FROM state_dictated_appropriation'
+        +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
+        +   ' JOIN regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
+        + ' WHERE regional_staffer.id = ' + session.Item['regional_staffer_user_id'].ToString
+        +   ' and fiscal_year_id >= (' + max_fiscal_year_id_string + ' - 1)',
         appcommon.db
-        );
-      bdr_last_fy_request_attributes := bdpCommand_get_last_fy_request_attributes.ExecuteReader;
-      if bdr_last_fy_request_attributes.Read then
-        begin
-        Label_last_fy_request_id.Text := bdr_last_fy_request_attributes['id'].tostring;
-        Label_last_fy_request_status.Text := bdr_last_fy_request_attributes['description'].tostring + '.';
-        Label_last_fy_request_value.Text := bdr_last_fy_request_attributes['value'].tostring;
-        LinkButton_last_fy_request_action.Text := 'Review';
-        end
-      else
-        begin
-        Label_last_fy_request_id.Text := '0';
-        Label_last_fy_request_status.Text := 'Blank.';
-        Label_last_fy_request_value.Text := '--';
-        end;
-      //
-      // Set Label_this_fy_*
-      //
-      Label_this_fy_row_leader.Visible := TRUE;
-      bdpCommand_get_this_fy_request_attributes := borland.data.provider.BdpCommand.Create
-        (
-        'SELECT emsof_request_master.id,'
-        + 'request_status_code_description_map.description,'
-        + 'emsof_request_master.value '
-        + 'FROM emsof_request_master '
-        +   'JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
-        +  'WHERE emsof_request_master.webemsof_account_id = "' + session.Item['account_id'].ToString + '" '
-        +    'and emsof_request_master.fiscal_year_id = ' + max_fiscal_year_id_obj.ToString,
-        appcommon.db
-        );
-      bdr_this_fy_request_attributes := bdpCommand_get_this_fy_request_attributes.ExecuteReader;
-      if bdr_this_fy_request_attributes.Read then
-        begin
-        Label_this_fy_request_id.Text := bdr_this_fy_request_attributes['id'].tostring;
-        Label_this_fy_request_status.Text := bdr_this_fy_request_attributes['description'].tostring + '.';
-        Label_this_fy_request_value.Text := bdr_this_fy_request_attributes['value'].tostring;
-        LinkButton_this_fy_request_action.Text := 'Review';
-        end
-      else
-        begin
-        Label_this_fy_request_id.Text := '0';
-        Label_this_fy_request_status.Text := 'Blank.';
-        Label_this_fy_request_value.Text := '--';
-        LinkButton_this_fy_request_action.Text := 'Start';
+        )
+        .ExecuteReader;
+      while bdr.Read do begin
+        RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
+      end;
+      appcommon.DbClose;
+      if RadioButtonList_appropriation.items.Count = 0 then begin
+        server.Transfer('no_appropriation.aspx');
+      end else begin
+        //
+        // Add the county's email address to the session, as it will be needed by county_dictated_appropriations however we
+        // get there.
+        //
+        session.Remove('regional_staffer_user_password_reset_email_address');
+        session.Add('regional_staffer_user_password_reset_email_address',regional_staffer_user_email_address);
+        if RadioButtonList_appropriation.items.Count = 1 then begin
+          session.Remove('state_dictated_appropriation_id');
+          session.Add('state_dictated_appropriation_id',bdr['id'].tostring);
+          server.Transfer('region_dictated_appropriations.aspx');
         end;
       end;
-    appcommon.DbClose;
+    end else begin
+      appcommon.DbClose;
+      server.Transfer('change_password.aspx');
+    end;
   end;
 end;
 
@@ -204,50 +145,20 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_account_overview.Button_continue_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('state_dictated_appropriation_id');
+  session.Add('state_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
+  server.Transfer('region_dictated_appropriations.aspx');
+end;
+
 procedure TWebForm_account_overview.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   formsauthentication.SignOut;
   session.Clear;
   server.Transfer('../Default.aspx');
-end;
-
-procedure TWebForm_account_overview.LinkButton_last_fy_request_action_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  session.Remove('emsof_request_id');
-  session.Add('emsof_request_id',Safe(Label_last_fy_request_id.Text,NUM));
-  session.Remove('relative_fy');
-  session.Add('relative_fy','LAST');
-  server.Transfer('request_overview.aspx');
-end;
-
-procedure TWebForm_account_overview.LinkButton_this_fy_request_action_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  session.Remove('emsof_request_id');
-  session.Add('emsof_request_id',Safe(Label_this_fy_request_id.Text,NUM));
-  session.Remove('relative_fy');
-  session.Add('relative_fy','THIS');
-  server.Transfer('request_overview.aspx');
-end;
-
-procedure TWebForm_account_overview.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_account_overview.LinkButton_change_account_attributes_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
-end;
-
-procedure TWebForm_account_overview.LinkButton_profile_action_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('profile.aspx');
 end;
 
 end.

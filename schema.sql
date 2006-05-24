@@ -353,9 +353,9 @@ CREATE TABLE region_dictated_appropriation (
   KEY state_dictated_appropriation_id (state_dictated_appropriation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Dumping data for table `region_dictated_appropriation`
--- 
+--
 
 INSERT INTO region_dictated_appropriation VALUES (1,1,1,97368.00);
 INSERT INTO region_dictated_appropriation VALUES (2,1,2,19578.00);
@@ -370,29 +370,44 @@ INSERT INTO region_dictated_appropriation VALUES (10,1,10,52066.00);
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `regional_staffer`
--- 
+--
 
 DROP TABLE IF EXISTS regional_staffer;
 CREATE TABLE regional_staffer (
   id smallint(5) unsigned NOT NULL auto_increment,
+  region_code tinyint(3) unsigned NOT NULL,
   last_name varchar(63) NOT NULL,
   first_name varchar(63) NOT NULL,
   PRIMARY KEY  (id),
-  UNIQUE KEY last_name (last_name,first_name)
+  UNIQUE KEY last_name (last_name,first_name),
+  KEY region_code (region_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Dumping data for table `regional_staffer`
--- 
-
+--
 
 -- --------------------------------------------------------
 
--- 
+--
+-- Table structure for table `regional_staffer_role`
+--
+
+CREATE TABLE regional_staffer_role (
+  id smallint(5) unsigned NOT NULL auto_increment,
+  title varchar(63) NOT NULL,
+  regional_staffer_id smallint(5) unsigned NOT NULL,
+  PRIMARY KEY  (id),
+  KEY regional_staffer_id (regional_staffer_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `regional_staffer_user`
--- 
+--
 
 DROP TABLE IF EXISTS regional_staffer_user;
 CREATE TABLE regional_staffer_user (
@@ -534,42 +549,54 @@ ALTER TABLE `county_dictated_appropriation`
 
 --
 -- Constraints for table `county_user`
--- 
+--
 ALTER TABLE `county_user`
   ADD CONSTRAINT county_user_ibfk_1 FOREIGN KEY (id) REFERENCES county_code_name_map (`code`);
 
--- 
+--
 -- Constraints for table `emsof_request_detail`
--- 
+--
 ALTER TABLE `emsof_request_detail`
   ADD CONSTRAINT emsof_request_detail_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id),
   ADD CONSTRAINT emsof_request_detail_ibfk_2 FOREIGN KEY (equipment_code) REFERENCES eligible_provider_equipment_list (`code`),
   ADD CONSTRAINT emsof_request_detail_ibfk_3 FOREIGN KEY (status_code) REFERENCES item_status_code_description_map (`code`);
 
--- 
+--
 -- Constraints for table `emsof_request_master`
--- 
+--
 ALTER TABLE `emsof_request_master`
   ADD CONSTRAINT emsof_request_master_ibfk_1 FOREIGN KEY (county_dictated_appropriation_id) REFERENCES county_dictated_appropriation (id) ON DELETE CASCADE,
   ADD CONSTRAINT emsof_request_master_ibfk_2 FOREIGN KEY (status_code) REFERENCES request_status_code_description_map (`code`);
 
--- 
+--
 -- Constraints for table `fy_calendar`
--- 
+--
 ALTER TABLE `fy_calendar`
   ADD CONSTRAINT fy_calendar_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id),
   ADD CONSTRAINT fy_calendar_ibfk_2 FOREIGN KEY (milestone_code) REFERENCES milestone_code_name_map (`code`);
 
--- 
+--
 -- Constraints for table `region_dictated_appropriation`
--- 
+--
 ALTER TABLE `region_dictated_appropriation`
   ADD CONSTRAINT region_dictated_appropriation_ibfk_1 FOREIGN KEY (state_dictated_appropriation_id) REFERENCES state_dictated_appropriation (id),
   ADD CONSTRAINT region_dictated_appropriation_ibfk_2 FOREIGN KEY (county_code) REFERENCES county_code_name_map (`code`);
 
+--
+-- Constraints for table `regional_staffer`
+--
+ALTER TABLE `regional_staffer`
+  ADD CONSTRAINT regional_staffer_ibfk_1 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`);
+
 -- 
+-- Constraints for table `regional_staffer_role`
+-- 
+ALTER TABLE `regional_staffer_role`
+  ADD CONSTRAINT regional_staffer_role_ibfk_1 FOREIGN KEY (regional_staffer_id) REFERENCES regional_staffer (id);
+
+--
 -- Constraints for table `regional_staffer_user`
--- 
+--
 ALTER TABLE `regional_staffer_user`
   ADD CONSTRAINT regional_staffer_user_ibfk_1 FOREIGN KEY (id) REFERENCES regional_staffer (id);
 

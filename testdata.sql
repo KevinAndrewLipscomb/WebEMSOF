@@ -19,7 +19,7 @@ INSERT INTO fiscal_year (designator)
 VALUES
   ('FY0607');
 
-INSERT INTO fy_calendar (fiscal_year_id,milestone_code,`value`)
+INSERT INTO fy_calendar (fiscal_year_id,milestone_code,value)
 VALUES
   (2, 1, '2006-11-30 23:59:59'),
   (2, 2, '2007-01-31 23:59:59'),
@@ -42,6 +42,17 @@ VALUES
   (2,8,16846.02,'2006-11-16 23:59:59'),
   (2,9,35959.02,'2006-11-16 23:59:59'),
   (2,10,52066.02,'2006-11-16 23:59:59');
+
+INSERT INTO regional_staffer (region_code, last_name, first_name)
+VALUES
+  (1, 'McElree', 'Tom'),
+  (1, 'Cameron', 'Amos P');
+
+INSERT INTO regional_staffer_role (title, regional_staffer_id)
+VALUES
+  ('emsof-request-item-withdrawal-notice-recipient', 1),
+  ('emsof-request-item-withdrawal-notice-recipient', 2),
+  ('primary-emsof-coordinator', 2);
 
 insert into service (county_code,affiliate_num,name)
 values
