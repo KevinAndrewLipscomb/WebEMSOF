@@ -20,11 +20,25 @@
 	  </small></p>
 <p>
 		<ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>&nbsp;<ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></p>
+<p>
+        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+            <tr>
+              <td>
+                <table cellspacing="0" cellpadding="10" border="0">
+                    <tr>
+                      <td bgcolor="#f5f5f5"><strong>Available cycles</strong></td>
+                    </tr>
+                    <tr>
+                      <td>
 <p>Which appropriation do you want to work with?&nbsp; <ASP:RequiredFieldValidator id="RequiredFieldValidator_appropriation" runat="server" errormessage="Please choose an appropriation." font-bold="True" controltovalidate="RadioButtonList_appropriation">!ERR!</ASP:RequiredFieldValidator></p>
 <p>
         <ASP:RadioButtonList id="RadioButtonList_appropriation" runat="server"></ASP:RadioButtonList></p>
 <p>
-        <ASP:Button id="Button_continue" runat="server" text="Continue"></ASP:Button></p>
+        <ASP:Button id="Button_continue" runat="server" text="Continue"></ASP:Button></p></td>
+                    </tr>
+                </table></td>
+            </tr>
+        </table></p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>
      </form>
