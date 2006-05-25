@@ -57,6 +57,7 @@ type
     Label_sum_of_county_appropriations: System.Web.UI.WebControls.Label;
     DataGrid_county_appropriations: System.Web.UI.WebControls.DataGrid;
     TableRow_sum_of_county_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
+    Table_appropriations: System.Web.UI.HtmlControls.HtmlTable;
     procedure SortCommand_county_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
@@ -134,6 +135,10 @@ begin
     //
     appcommon.DbOpen;
     //
+    // Disable Table_appropriations for now.
+    //
+    Table_appropriations.visible := FALSE;
+    //
     // Set parent appropriation labels.
     //
     bdr_appropriation_attribs := borland.data.provider.bdpcommand.Create
@@ -149,12 +154,16 @@ begin
     Label_fiscal_year_designator.Text := bdr_appropriation_attribs['designator'].tostring;
     state_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
     Label_parent_appropriation_amount.Text := state_dictated_appropriation_amount.ToString('C');
-    Label_application_name.text := configurationsettings.appsettings['application_name'];
     bdr_appropriation_attribs.Close;
+    //
+    // Code to set LinkButton_region_dictated_deadline.text should go here.
+    //
+    //
+    Label_application_name.text := configurationsettings.appsettings['application_name'];
+    Table_warning_forced_amount.visible := FALSE;
     //
     appcommon.DbClose;
     //
-    Table_warning_forced_amount.visible := FALSE;
     Bind_county_appropriations;  // also affected by be_before_deadline
   end;
 end;
@@ -202,7 +211,7 @@ begin
       session.item['regional_staffer_user_password_reset_email_address'].tostring,
       Safe(e.item.cells[dgi_password_reset_email_address].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your county',
-      'The ' + session.Item['region_name'].ToString + ' Regional Council EMSOF Coordinator has modified an EMSOF appropriation for '
+      'Regional staffer ' + session.Item['regional_staffer_name'].ToString + ' has modified an EMSOF appropriation for '
       + 'your county for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
       + 'You can work on this appropriation by visiting:' + NEW_LINE
@@ -211,7 +220,7 @@ begin
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
       + '/protected/county_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session.Item['region_name'].ToString + ' Regional Council EMSOF Coordinator.'
+      + 'Replies to this message will be addressed to Regional Staffer ' + session.Item['regional_staffer_name'].ToString + '.'
       + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
@@ -397,8 +406,6 @@ begin
     num_appropriations := num_appropriations + 1;
     sum_of_county_appropriations :=
       sum_of_county_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
-    LinkButton(e.item.cells[dgi_name].controls.item[0]).enabled := TRUE;
-    LinkButton(e.item.cells[dgi_name].controls.item[0]).forecolor := color.BLUE;
   end;
 end;
 
@@ -417,8 +424,8 @@ begin
   + ' name,'                                            // column 3
   + ' region_dictated_appropriation.amount'             // column 4
   + ' from region_dictated_appropriation'
-  +   ' join county_code_name_map on (county_code_name_map.id=county_id)'
-  +   ' join county_user on (county_user.id=county.id)'
+  +   ' join county_code_name_map on (county_code_name_map.code=county_code)'
+  +   ' join county_user on (county_user.id=county_code)'
   + ' where state_dictated_appropriation_id = ' + session.Item['state_dictated_appropriation_id'].ToString
   + ' order by ' + county_appropriations_sort_order;
   if be_sort_order_ascending then begin
