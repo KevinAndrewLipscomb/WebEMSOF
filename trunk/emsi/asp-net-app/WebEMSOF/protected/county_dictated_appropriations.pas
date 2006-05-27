@@ -17,16 +17,18 @@ type
     procedure EditCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure CancelCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure UpdateCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure DataGrid_service_appropriations_ItemDataBound(sender: System.Object; 
+    procedure DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
       e: System.Web.UI.WebControls.DataGridItemEventArgs);
-    procedure DataGrid_service_appropriations_DeleteCommand(source: System.Object; 
+    procedure DataGrid_service_appropriations_DeleteCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure LinkButton_county_dictated_deadline_Click(sender: System.Object; 
+    procedure LinkButton_county_dictated_deadline_Click(sender: System.Object;
       e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-    procedure DataGrid_service_appropriations_ItemCommand(source: System.Object; 
+    procedure DataGrid_service_appropriations_ItemCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_new_appropriation_Click(sender: System.Object; e: System.EventArgs);
+    procedure DataGrid_service_appropriations_SortCommand(source: System.Object;
+      e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -55,7 +57,6 @@ type
     LinkButton_new_appropriation: System.Web.UI.WebControls.LinkButton;
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
-    procedure SortCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure OnInit(e: EventArgs); override;
   public
     { Public Declarations }
@@ -76,6 +77,7 @@ begin
   Include(Self.DataGrid_service_appropriations.ItemCommand, Self.DataGrid_service_appropriations_ItemCommand);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.SortCommand, Self.DataGrid_service_appropriations_SortCommand);
   Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
   Include(Self.DataGrid_service_appropriations.DeleteCommand, Self.DataGrid_service_appropriations_DeleteCommand);
   Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
@@ -213,6 +215,20 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_SortCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
+begin
+  if e.SortExpression = service_appropriations_sort_order then begin
+    be_sort_order_ascending := not be_sort_order_ascending;
+  end else begin
+    service_appropriations_sort_order := e.SortExpression;
+    be_sort_order_ascending := TRUE;
+  end;
+  Table_warning_forced_amount.visible := FALSE;
+  DataGrid_service_appropriations.EditItemIndex := -1;
+  Bind_service_appropriations;
 end;
 
 procedure TWebForm_county_dictated_appropriations.LinkButton_new_appropriation_Click(sender: System.Object;
@@ -512,20 +528,6 @@ begin
   num_appropriations := 0;
   sum_of_service_appropriations := 0;
   appcommon.DbClose;
-end;
-
-procedure TWebForm_county_dictated_appropriations.SortCommand_service_appropriations(source: System.Object;
-  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
-begin
-  if e.SortExpression = service_appropriations_sort_order then begin
-    be_sort_order_ascending := not be_sort_order_ascending;
-  end else begin
-    service_appropriations_sort_order := e.SortExpression;
-    be_sort_order_ascending := TRUE;
-  end;
-  Table_warning_forced_amount.visible := FALSE;
-  DataGrid_service_appropriations.EditItemIndex := -1;
-  Bind_service_appropriations;
 end;
 
 end.
