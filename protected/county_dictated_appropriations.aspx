@@ -140,7 +140,7 @@
 		  <td colspan="4">
 		<asp:datagrid id="DataGrid_service_appropriations" runat="server"
 		bordercolor="Gainsboro" borderstyle="None" borderwidth="1px" backcolor="White" cellpadding="10" gridlines="Horizontal" forecolor="Black"
-		allowsorting="True" useaccessibleheader="True" autogeneratecolumns="False" onsortcommand="SortCommand_service_appropriations" visible="False">
+		allowsorting="True" useaccessibleheader="True" autogeneratecolumns="False" visible="False">
                         <FooterStyle forecolor="Black" backcolor="#CCCC99"></FooterStyle>
                         <SelectedItemStyle font-bold="True" forecolor="White" backcolor="#CC3333"></SelectedItemStyle>
                         <HeaderStyle forecolor="Blue" backcolor="WhiteSmoke"></HeaderStyle>

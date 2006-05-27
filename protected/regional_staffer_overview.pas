@@ -150,7 +150,7 @@ procedure TWebForm_account_overview.Button_continue_Click(sender: System.Object;
 begin
   session.Remove('state_dictated_appropriation_id');
   session.Add('state_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
-  server.Transfer('region_dictated_appropriations.aspx');
+  server.Transfer('regional_compliance_check_overview.aspx');
 end;
 
 procedure TWebForm_account_overview.LinkButton_logout_Click(sender: System.Object;

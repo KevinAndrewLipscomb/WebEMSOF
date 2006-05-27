@@ -360,7 +360,8 @@ begin
       + ' update emsof_request_master'
       + ' join county_dictated_appropriation'
       +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-      + ' set emsof_request_master.status_code = 4'
+      + ' set emsof_request_master.status_code = 4,'
+      +   ' county_approval_timestamp = now()'
       + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring
       + ';'
       + ' update emsof_request_detail'
