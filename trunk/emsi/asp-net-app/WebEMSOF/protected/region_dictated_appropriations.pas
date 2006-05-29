@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, appcommon,
   system.web.mail, system.web.security;
 
+const ID = '$Id$';
+
 type
   TWebForm_region_dictated_appropriations = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -86,8 +88,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 var
   be_before_deadline: boolean;

@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon,
   Borland.Data.Provider, system.web.mail, system.configuration;
 
+const ID = '$Id$';
+
 type
   TWebForm_new_password = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -28,8 +30,6 @@ type
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation
@@ -44,8 +44,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 procedure TWebForm_new_password.Page_Load(sender: System.Object; e: System.EventArgs);
 var

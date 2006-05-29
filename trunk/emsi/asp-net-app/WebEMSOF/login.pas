@@ -7,9 +7,11 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  AppCommon, Borland.Data.Provider, System.Globalization, 
+  AppCommon, Borland.Data.Provider, System.Globalization,
   System.Data.SqlClient, System.Data.Common, system.configuration,
   system.text.regularexpressions, system.web.security, system.io;
+
+const ID = '$Id$';
 
 type
   TWebForm_login = class(System.Web.UI.Page)
@@ -47,13 +49,9 @@ type
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation
-
-const ID = '$Id$';
 
 {$REGION 'Designer Managed Code'}
 /// <summary>

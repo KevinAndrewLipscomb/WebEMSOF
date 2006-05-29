@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
   system.web.mail, system.web.security;
 
+const ID = '$Id$';
+
 type
   TWebForm_finalize = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -82,8 +84,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 procedure TWebForm_finalize.Page_Load(sender: System.Object; e: System.EventArgs);
 var

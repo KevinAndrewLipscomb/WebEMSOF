@@ -6,9 +6,11 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
-  System.Data.Common, Borland.Data.Provider, System.Globalization, 
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon,
+  System.Data.Common, Borland.Data.Provider, System.Globalization,
   Borland.Data.Common, system.configuration, system.web.security;
+
+const ID = '$Id$';
 
 type
   TWebForm_account_overview = class(System.Web.UI.Page)
@@ -52,8 +54,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 procedure TWebForm_account_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var

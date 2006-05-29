@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.mail,
   borland.data.provider, system.web.security;
 
+const ID = '$Id$';
+
 type
   TWebForm_withdraw_request_item = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -54,8 +56,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 var
   saved_emsof_ante: decimal;

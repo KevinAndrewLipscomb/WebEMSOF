@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
   system.web.security;
 
+const ID = '$Id$';
+
 type
   TWebForm_county_appropriation = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -52,8 +54,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 procedure TWebForm_county_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 var
