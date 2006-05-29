@@ -513,7 +513,7 @@ begin
       );
     //
     appcommon.DbClose;
-    server.Transfer('county_dictated_appropriations.aspx');
+    server.Transfer(session.item['calling_form'].tostring);
   end;
 end;
 
