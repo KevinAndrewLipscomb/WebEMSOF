@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriation_detail.pas" AutoEventWireup="false" Inherits="county_dictated_appropriation_detail.TWebForm_county_dictated_appropriation_detail" %>
+<%@ Page language="c#" Debug="true" Codebehind="full_request_review_approve.pas" AutoEventWireup="false" Inherits="full_request_review_approve.TWebForm_full_request_review_approve" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                       [ Back to <asp:hyperlink id="HyperLink_back" runat="server" navigateurl="county_dictated_appropriations.aspx">county-dictated appropriation</asp:hyperlink>&nbsp;form ]&nbsp;
+		                            [ Back to <asp:hyperlink id="HyperLink_back" runat="server">previous</asp:hyperlink>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
@@ -103,17 +103,15 @@
                 <td>
                   <asp:datagrid id="DataGrid_items" runat="server"
                   autogeneratecolumns="False" useaccessibleheader="True"
-                  cellpadding="10" gridlines="Horizontal">
-                    <headerstyle backcolor="WhiteSmoke"></headerstyle>
-                    <columns>
-                      <asp:boundcolumn datafield="priority" sortexpression="priority" readonly="true" headertext="Priority">
-                        <itemstyle font-size="Large" font-bold="True"
-                        horizontalalign="Center" verticalalign="Top">
-                        </itemstyle>
-                      </asp:boundcolumn>
-                      <asp:templatecolumn headertext="Detail">
-                        <itemstyle horizontalalign="Left" verticalalign="Top"></itemstyle>
-                        <itemtemplate>
+                  cellpadding="10" gridlines="Horizontal" bordercolor="#DCDCDC" borderwidth="1px">
+                        <HeaderStyle backcolor="WhiteSmoke"></HeaderStyle>
+                        <Columns>
+                          <ASP:BoundColumn datafield="priority" sortexpression="priority" readonly="True" headertext="Priority">
+                            <ItemStyle font-size="Large" font-bold="True" horizontalalign="Center" verticalalign="Top"></ItemStyle>
+                          </ASP:BoundColumn>
+                          <ASP:TemplateColumn headertext="Detail">
+                            <ItemStyle horizontalalign="Left" verticalalign="Top"></ItemStyle>
+                            <ItemTemplate>
                           <table cellpadding="2">
                             <tr>
                               <td>
@@ -156,9 +154,9 @@
 							  </td>
 							</tr>
 						  </table>
-                        </itemtemplate>
-                      </asp:templatecolumn>
-                    </columns>
+                            </ItemTemplate>
+                          </ASP:TemplateColumn>
+                        </Columns>
                   </asp:datagrid>
                 </td>
               </tr>
@@ -180,17 +178,15 @@
                 <td>
                   <p>
                     If you are not ready to disposition this 
-					request, <asp:hyperlink id="HyperLink_back_2" runat="server"
-				  navigateurl="county_dictated_appropriations.aspx">
-					go back to the county-dictated appropriation form
-				  </asp:hyperlink>.
+					request, <asp:hyperlink id="HyperLink_back_2" runat="server">go back to the previous form</asp:hyperlink>.
 				</p></td>
 			  </tr>
 			  <tr>
 				<td>
 				  <table cellspacing="0" cellpadding="10" border="0">
 					<tr>
-					  <td bgcolor="#f5f5f5"><strong>To APPROVE and send to the regional council...</strong></td>
+					  <td bgcolor="#f5f5f5"><strong>To APPROVE and send to 
+                                <ASP:Label id="Label_next_approver" runat="server"></ASP:Label>...</strong></td>
 					</tr>
 					<tr>
 					  <td>

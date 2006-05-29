@@ -28,6 +28,7 @@ type
     NONE,
     ALPHA,
     ALPHANUM,
+    DATE_TIME,
     ECMASCRIPT_WORD,
     EMAIL_ADDRESS,
     HOSTNAME,
@@ -179,6 +180,8 @@ begin
       allow := 'a-zA-Z';
     ALPHANUM:
       allow := '0-9a-zA-Z';
+    DATE_TIME:
+      allow := '0-9AMPamp:\/ ';
     ECMASCRIPT_WORD:
       allow := '0-9a-zA-Z_';
     EMAIL_ADDRESS:

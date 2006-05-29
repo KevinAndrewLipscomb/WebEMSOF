@@ -176,6 +176,18 @@ begin
         )
         .ExecuteScalar
       );
+    county_dictated_deadline := datetime
+      (
+      borland.data.provider.bdpcommand.Create
+        (
+        'select service_to_county_submission_deadline from region_dictated_appropriation'
+        + ' where id = ' + session.item['region_dictated_appropriation_id'].tostring,
+        appcommon.db
+        )
+        .ExecuteScalar
+      );
+    session.Remove('county_dictated_deadline');
+    session.Add('county_dictated_deadline',county_dictated_deadline);
     //
     if datetime.Now > make_appropriations_deadline then begin
       be_before_deadline := FALSE;
@@ -185,20 +197,7 @@ begin
       LinkButton_new_appropriation.visible := FALSE;
     end else begin
       Label_make_appropriations_deadline.text := make_appropriations_deadline.tostring('HH:mm:ss dddd, MMMM d, yyyy');
-      county_dictated_deadline := datetime
-        (
-        borland.data.provider.bdpcommand.Create
-          (
-          'select service_to_county_submission_deadline from region_dictated_appropriation'
-          + ' where id = ' + session.item['region_dictated_appropriation_id'].tostring,
-          appcommon.db
-          )
-          .ExecuteScalar
-        );
       LinkButton_county_dictated_deadline.text := county_dictated_deadline.tostring('HH:mm:ss dddd, MMMM d, yyyy');
-      session.Remove('county_dictated_deadline');
-      session.Add('county_dictated_deadline',county_dictated_deadline);
-      //
     end;
     //
     appcommon.DbClose;
@@ -251,6 +250,10 @@ procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriation
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   if e.commandname = 'Select' then begin
+    session.Remove('calling_form');
+    session.Add('calling_form','county_dictated_appropriations.aspx');
+    session.Remove('account_descriptor');
+    session.Add('account_descriptor',session.Item['county_name'].ToString + ' County');
     session.Remove('fiscal_year_designator');
     session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
     session.Remove('service_name');
@@ -263,7 +266,13 @@ begin
     session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_id].text,NUM));
     session.Remove('emsof_request_master_status_code');
     session.Add('emsof_request_master_status_code',Safe(e.item.cells[dgi_status_code].text,NUM));
-    server.Transfer('county_dictated_appropriation_detail.aspx');
+    session.Remove('request_status_this_session_may_approve');
+    session.Add('request_status_this_session_may_approve','3');
+    session.Remove('next_approver_descriptor');
+    session.Add('next_approver_descriptor','Regional Council');
+    session.Remove('promotion_status');
+    session.Add('promotion_status','4');
+    server.Transfer('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
     saved_amount := decimal.Parse(Safe(e.item.cells[dgi_amount].text,REAL_NUM));
   end;

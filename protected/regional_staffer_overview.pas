@@ -118,15 +118,15 @@ begin
         server.Transfer('no_appropriation.aspx');
       end else begin
         //
-        // Add the county's email address to the session, as it will be needed by county_dictated_appropriations however we
-        // get there.
+        // Add the regional staffer's email address to the session, as it will be needed by region_dictated_appropriations however
+        // we get there.
         //
         session.Remove('regional_staffer_user_password_reset_email_address');
         session.Add('regional_staffer_user_password_reset_email_address',regional_staffer_user_email_address);
         if RadioButtonList_appropriation.items.Count = 1 then begin
           session.Remove('state_dictated_appropriation_id');
           session.Add('state_dictated_appropriation_id',bdr['id'].tostring);
-          server.Transfer('region_dictated_appropriations.aspx');
+          server.Transfer('regional_compliance_check_overview.aspx');
         end;
       end;
     end else begin

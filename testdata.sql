@@ -48,11 +48,11 @@ VALUES
   (1, 'McElree', 'Tom'),
   (1, 'Cameron', 'Amos P');
 
-INSERT INTO regional_staffer_role (title, regional_staffer_id)
+INSERT INTO regional_staffer_role (region_code, title, regional_staffer_id)
 VALUES
-  ('emsof-request-item-withdrawal-notice-recipient', 1),
-  ('emsof-request-item-withdrawal-notice-recipient', 2),
-  ('primary-emsof-coordinator', 2);
+  (1, 'emsof-request-item-withdrawal-notice-recipient', 1),
+  (1, 'emsof-request-item-withdrawal-notice-recipient', 2),
+  (1, 'regional-planner', 2);
 
 insert into regional_staffer_user (id,encoded_password,be_stale_password,password_reset_email_address)
 values

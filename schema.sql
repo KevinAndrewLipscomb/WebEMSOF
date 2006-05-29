@@ -191,6 +191,9 @@ CREATE TABLE emsof_request_master (
   `value` decimal(10,2) unsigned NOT NULL default '0.00',
   num_items smallint(5) unsigned NOT NULL default '0',
   county_approval_timestamp datetime default NULL,
+  regional_planner_approval_timestamp datetime default NULL,
+  regional_director_approval_timestamp datetime default NULL,
+  state_approval_timestamp datetime default NULL,
   PRIMARY KEY  (id),
   KEY status_code (status_code),
   KEY county_dictated_appropriation_id (county_dictated_appropriation_id)
@@ -400,10 +403,12 @@ CREATE TABLE regional_staffer (
 DROP TABLE IF EXISTS regional_staffer_role;
 CREATE TABLE regional_staffer_role (
   id smallint(5) unsigned NOT NULL auto_increment,
+  region_code tinyint(3) unsigned NOT NULL,
   title varchar(63) NOT NULL,
   regional_staffer_id smallint(5) unsigned NOT NULL,
   PRIMARY KEY  (id),
-  KEY regional_staffer_id (regional_staffer_id)
+  KEY regional_staffer_id (regional_staffer_id),
+  KEY region_code (region_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -595,7 +600,8 @@ ALTER TABLE `regional_staffer`
 -- Constraints for table `regional_staffer_role`
 -- 
 ALTER TABLE `regional_staffer_role`
-  ADD CONSTRAINT regional_staffer_role_ibfk_1 FOREIGN KEY (regional_staffer_id) REFERENCES regional_staffer (id);
+  ADD CONSTRAINT regional_staffer_role_ibfk_3 FOREIGN KEY (regional_staffer_id) REFERENCES regional_staffer (id),
+  ADD CONSTRAINT regional_staffer_role_ibfk_2 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`);
 
 --
 -- Constraints for table `regional_staffer_user`
