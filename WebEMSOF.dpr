@@ -34,7 +34,6 @@ library WebEMSOF;
 {%AspMarkupContainer 'new_password.aspx'}
 {%AspMarkupContainer 'protected\county_overview.aspx'}
 {%AspMarkupContainer 'Default.aspx'}
-{%AspMarkupContainer 'protected\county_dictated_appropriation_detail.aspx'}
 {%AspMarkupContainer 'protected\region_dictated_appropriations.aspx'}
 {%AspMarkupContainer 'protected\regional_compliance_check_overview.aspx'}
 {%AspMarkupContainer 'protected\full_request_review_approve.aspx'}
@@ -61,7 +60,6 @@ uses
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
   county_overview in 'protected\county_overview.pas' {county_overview.TWebForm_county_appropriation: System.Web.UI.Page},
   Default in 'Default.pas' {Default.TWebForm_Default: System.Web.UI.Page},
-  county_dictated_appropriation_detail in 'protected\county_dictated_appropriation_detail.pas' {county_dictated_appropriation_detail.TWebForm_county_dictated_appropriation_detail: System.Web.UI.Page},
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_compliance_check_overview in 'protected\regional_compliance_check_overview.pas' {regional_compliance_check_overview.TWebForm_regional_compliance_check_overview: System.Web.UI.Page},
   full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page};

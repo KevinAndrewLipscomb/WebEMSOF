@@ -6,6 +6,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Web, System.Web.SessionState;
 
+const ID = '$Id$';
+
 type
   TGlobal = class(System.Web.HttpApplication)
   {$REGION 'Designer Managed Code'}
@@ -28,8 +30,6 @@ type
   end;
 
 implementation
-
-const ID = '$Id$';
 
 {$REGION 'Designer Managed Code'}
 /// <summary>

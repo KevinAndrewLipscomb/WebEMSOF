@@ -40,7 +40,7 @@ type
   private
     { Private Declarations }
   public
-    { Public Declarations }
+    const ID = '$Id$';
   end;
 
 implementation
@@ -59,8 +59,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 procedure TWebForm_change_email_address.Page_Load(sender: System.Object; e: System.EventArgs);
 var

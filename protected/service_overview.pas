@@ -43,7 +43,7 @@ type
   private
     { Private Declarations }
   public
-    { Public Declarations }
+    const ID = '$Id$';
   end;
 
 implementation
@@ -64,8 +64,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 var
   be_before_deadline: boolean;

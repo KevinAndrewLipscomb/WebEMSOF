@@ -1,5 +1,5 @@
 
-unit regional_compliance_check_overview;
+unit regional_approval_overview;
 
 interface
 
@@ -11,7 +11,7 @@ uses
 
 const ID = '$Id$';
 
-type TWebForm_regional_compliance_check_overview = class(System.Web.UI.Page)
+type TWebForm_regional_approval_overview = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -46,7 +46,7 @@ implementation
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebForm_regional_compliance_check_overview.InitializeComponent;
+procedure TWebForm_regional_approval_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
@@ -71,12 +71,12 @@ var dgi_linkbutton_select: cardinal;
 var num_qualifying_requests: cardinal;
 var sort_order: string;
 
-procedure TWebForm_regional_compliance_check_overview.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_regional_approval_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_compliance_check_overview';
+    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_approval_overview';
     Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
     //
     // Initialize implementation-wide vars.
@@ -101,7 +101,7 @@ begin
   end;
 end;
 
-procedure TWebForm_regional_compliance_check_overview.OnInit(e: EventArgs);
+procedure TWebForm_regional_approval_overview.OnInit(e: EventArgs);
 begin
   //
   // Required for Designer support
@@ -110,7 +110,7 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_regional_compliance_check_overview.DataGrid_requests_ItemDataBound(sender: System.Object;
+procedure TWebForm_regional_approval_overview.DataGrid_requests_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
   if (e.item.itemtype = listitemtype.alternatingitem)
@@ -125,7 +125,7 @@ begin
   end;
 end;
 
-procedure TWebForm_regional_compliance_check_overview.DataGrid_requests_ItemCommand
+procedure TWebForm_regional_approval_overview.DataGrid_requests_ItemCommand
   (
   source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs
@@ -133,7 +133,7 @@ procedure TWebForm_regional_compliance_check_overview.DataGrid_requests_ItemComm
 begin
   //
   session.Remove('calling_form');
-  session.Add('calling_form','regional_compliance_check_overview.aspx');
+  session.Add('calling_form','regional_approval_overview.aspx');
   session.Remove('account_descriptor');
   session.Add('account_descriptor',session.Item['regional_staffer_name'].ToString);
   session.Remove('fiscal_year_designator');
@@ -163,7 +163,7 @@ begin
   //
 end;
 
-procedure TWebForm_regional_compliance_check_overview.DataGrid_requests_SortCommand(source: System.Object;
+procedure TWebForm_regional_approval_overview.DataGrid_requests_SortCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
   if e.SortExpression = sort_order then begin
@@ -176,7 +176,7 @@ begin
   Bind;
 end;
 
-procedure TWebForm_regional_compliance_check_overview.LinkButton_logout_Click(sender: System.Object;
+procedure TWebForm_regional_approval_overview.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   formsauthentication.SignOut;
@@ -184,7 +184,7 @@ begin
   server.Transfer('../Default.aspx');
 end;
 
-procedure TWebForm_regional_compliance_check_overview.Bind;
+procedure TWebForm_regional_approval_overview.Bind;
 var be_datagrid_empty: boolean;
 var cmdText: string;
 begin

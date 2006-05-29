@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
   borland.data.provider;
 
+const ID = '$Id$';
+
 type
   TWebForm_template-protected-datagrid-sortable = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -56,8 +58,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 var be_sort_order_ascending: boolean;
 var dgi_id: cardinal; // dgi = DataGrid Index

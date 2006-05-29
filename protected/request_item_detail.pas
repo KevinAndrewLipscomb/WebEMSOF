@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
   system.web.mail, system.web.security;
 
+const ID = '$Id$';
+
 type
   TWebForm_request_item_detail = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -105,8 +107,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-const ID = '$Id$';
 
 var
   additional_service_ante: decimal;

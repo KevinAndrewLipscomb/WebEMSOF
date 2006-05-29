@@ -13,6 +13,8 @@ uses
   system.web.security,
   system.Web.UI.WebControls;
 
+const ID = '$Id$';
+
 const
   APOSTROPHE = '''';
   DOUBLE_APOSTROPHE = '''''';
@@ -68,8 +70,6 @@ function Safe
   : string;
 
 IMPLEMENTATION
-
-const ID = '$Id$';
 
 PROCEDURE DbClose;
 begin
