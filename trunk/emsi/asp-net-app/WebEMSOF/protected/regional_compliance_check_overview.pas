@@ -66,6 +66,11 @@ var dgi_affiliate_num: cardinal;
 var dgi_service_name: cardinal;
 var dgi_sponsor_county: cardinal;
 var dgi_emsof_ante: cardinal;
+var dgi_fiscal_year_designator: cardinal;
+var dgi_county_dictated_appropriation_amount: cardinal;
+var dgi_county_dictated_appropriation_id: cardinal;
+var dgi_service_to_county_submission_deadline: cardinal;
+var dgi_linkbutton_select: cardinal;
 var num_qualifying_requests: cardinal;
 var sort_order: string;
 
@@ -80,12 +85,17 @@ begin
     // Initialize implementation-wide vars.
     //
     be_sort_order_ascending := TRUE;
-    dgi_id := 1;
-    dgi_county_approval_timestamp := 2;
-    dgi_affiliate_num := 3;
-    dgi_service_name := 4;
-    dgi_sponsor_county := 5;
-    dgi_emsof_ante := 6;
+    dgi_id := 0;
+    dgi_county_approval_timestamp := 1;
+    dgi_affiliate_num := 2;
+    dgi_service_name := 3;
+    dgi_sponsor_county := 4;
+    dgi_emsof_ante := 5;
+    dgi_fiscal_year_designator := 6;
+    dgi_county_dictated_appropriation_amount := 7;
+    dgi_county_dictated_appropriation_id := 8;
+    dgi_service_to_county_submission_deadline := 9;
+    dgi_linkbutton_select := 10;
     num_qualifying_requests := 0;
     sort_order := 'county_approval_timestamp';
     //
@@ -118,10 +128,42 @@ begin
   end;
 end;
 
-procedure TWebForm_regional_compliance_check_overview.DataGrid_requests_ItemCommand(source: System.Object;
-  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+procedure TWebForm_regional_compliance_check_overview.DataGrid_requests_ItemCommand
+  (
+  source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs
+  );
 begin
-  
+  //
+  session.Remove('calling_form');
+  session.Add('calling_form','regional_compliance_check_overview.aspx');
+  session.Remove('account_descriptor');
+  session.Add('account_descriptor',session.Item['regional_staffer_name'].ToString);
+  session.Remove('fiscal_year_designator');
+  session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fiscal_year_designator].text,ALPHANUM));
+  session.Remove('service_name');
+  session.Add('service_name',Safe(e.item.cells[dgi_service_name].text,ORG_NAME));
+  session.Remove('affiliate_num');
+  session.Add('affiliate_num',Safe(e.item.cells[dgi_affiliate_num].text,NUM));
+  session.Remove('appropriation_amount');
+  session.Add('appropriation_amount',Safe(e.item.cells[dgi_county_dictated_appropriation_amount].text,REAL_NUM));
+  session.Remove('county_name');
+  session.Add('county_name',Safe(e.item.cells[dgi_sponsor_county].text,ALPHA));
+  session.Remove('county_dictated_appropriation_id');
+  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_county_dictated_appropriation_id].text,NUM));
+  session.Remove('emsof_request_master_status_code');
+  session.Add('emsof_request_master_status_code','4');
+  session.Remove('request_status_this_session_may_approve');
+  session.Add('request_status_this_session_may_approve','4');
+  session.Remove('next_approver_descriptor');
+  session.Add('next_approver_descriptor','Regional Council Executive Director');
+  session.Remove('county_dictated_deadline');
+  session.Add('county_dictated_deadline',Safe(e.item.cells[dgi_service_to_county_submission_deadline].text,DATE_TIME));
+  session.Remove('promotion_status');
+  session.Add('promotion_status','5');
+  //
+  server.Transfer('full_request_review_approve.aspx');
+  //
 end;
 
 procedure TWebForm_regional_compliance_check_overview.DataGrid_requests_SortCommand(source: System.Object;
@@ -150,12 +192,16 @@ var be_datagrid_empty: boolean;
 var cmdText: string;
 begin
   appcommon.DbOpen;
-  cmdText := 'select emsof_request_master.id,'         // column 1
-  + ' emsof_request_master.county_approval_timestamp,' // column 2
-  + ' service.affiliate_num,'                          // column 3
-  + ' service.name as service_name,'                   // column 4
-  + ' county_code_name_map.name as sponsor_county,'    // column 5
-  + ' emsof_request_master.value as emsof_ante'        // column 6
+  cmdText := 'select emsof_request_master.id,'                                       // column 0
+  + ' emsof_request_master.county_approval_timestamp,'                               // column 1
+  + ' service.affiliate_num,'                                                        // column 2
+  + ' service.name as service_name,'                                                 // column 3
+  + ' county_code_name_map.name as sponsor_county,'                                  // column 4
+  + ' emsof_request_master.value as emsof_ante,'                                     // column 5
+  + ' fiscal_year.designator as fiscal_year_designator,'                             // column 6
+  + ' county_dictated_appropriation.amount as county_dictated_appropriation_amount,' // column 7
+  + ' county_dictated_appropriation.id as county_dictated_appropriation_id,'         // column 8
+  + ' service_to_county_submission_deadline'                                         // column 9
   + ' from emsof_request_master'
   +   ' join county_dictated_appropriation'
   +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
@@ -165,6 +211,7 @@ begin
   +   ' join service on (service.id=county_dictated_appropriation.service_id)'
   +   ' join state_dictated_appropriation'
   +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+  +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
   + ' where state_dictated_appropriation_id = ' + session.item['state_dictated_appropriation_id'].tostring
   +   ' and status_code = 4'
   + ' order by ' + sort_order;

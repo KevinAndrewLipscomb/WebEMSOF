@@ -1,5 +1,5 @@
 
-unit county_dictated_appropriation_detail;
+unit full_request_review_approve;
 
 interface
 
@@ -10,7 +10,7 @@ uses
   borland.data.provider, system.web.mail, borland.vcl.sysutils;
 
 type
-  TWebForm_county_dictated_appropriation_detail = class(System.Web.UI.Page)
+  TWebForm_full_request_review_approve = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -50,6 +50,7 @@ type
     TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
     Table_action_required: System.Web.UI.HtmlControls.HtmlTable;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
+    Label_next_approver: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -64,7 +65,7 @@ implementation
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebForm_county_dictated_appropriation_detail.InitializeComponent;
+procedure TWebForm_full_request_review_approve.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
@@ -82,13 +83,14 @@ var
   parent_appropriation_amount: decimal;
   total_emsof_ante: decimal;
 
-procedure TWebForm_county_dictated_appropriation_detail.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_full_request_review_approve.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_appropriation_detail';
-    Label_account_descriptor.text := session.item['county_name'].tostring + ' County';
+    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - full_request_review_approve';
+    HyperLink_back.navigateurl := session.item['calling_form'].tostring;
+    Label_account_descriptor.text := session.item['account_descriptor'].tostring;
     //
     // Initialize implementation-wide vars.
     //
@@ -133,8 +135,11 @@ begin
     Label_unused_amount.text := (parent_appropriation_amount - total_emsof_ante).tostring('C');
     Label_num_items.text := num_items.tostring;
     //
-    if session.item['emsof_request_master_status_code'].tostring = '3' then begin
-      be_before_improvement_deadline := datetime.Now <= datetime(session.item['county_dictated_deadline']);
+    if session.item['emsof_request_master_status_code'].tostring = session.item['request_status_this_session_may_approve'].tostring
+    then begin
+      HyperLink_back_2.navigateurl := session.item['calling_form'].tostring;
+      Label_next_approver.text := session.item['next_approver_descriptor'].tostring;
+      be_before_improvement_deadline := datetime.Now <= datetime.Parse(session.item['county_dictated_deadline'].tostring);
       if be_before_improvement_deadline then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
@@ -152,7 +157,7 @@ begin
   end;
 end;
 
-procedure TWebForm_county_dictated_appropriation_detail.OnInit(e: EventArgs);
+procedure TWebForm_full_request_review_approve.OnInit(e: EventArgs);
 begin
   //
   // Required for Designer support
@@ -161,32 +166,28 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_county_dictated_appropriation_detail.Button_disapprove_Click(sender: System.Object;
-  e: System.EventArgs);
-var
-  BreakChars: array[1..3] of char;
-  cc_email_address: string;
-  region_email_address: string;
-  service_email_address: string;
+procedure TWebForm_full_request_review_approve.Button_disapprove_Click
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
+var BreakChars: array[1..3] of char;
+var other_stakeholder_email_address: string;
+var reviewer_descriptor: string;
+var service_email_address: string;
 begin
   if TextArea_disapproval_reason.Value <> system.string.EMPTY then begin
     appcommon.DbOpen;
     //
-    //   Get the County Coorindator's email address.
+    // Build meaningful approver descriptor.
     //
-    cc_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address'
-      + ' from county_dictated_appropriation'
-      +   ' join region_dictated_appropriation'
-      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-      +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
-      + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
-      appcommon.db
-      )
-      .ExecuteScalar.tostring;
+    if session.item['target_user_table'].tostring = 'county' then begin
+      reviewer_descriptor := 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator';
+    end else if session.item['target_user_table'].tostring = 'regional_staffer' then begin
+      reviewer_descriptor := 'Regional staffer ' + session.Item['regional_staffer_name'].ToString;
+    end;
     //
-    //   Get service's email address of record.
+    // Get service's email address of record.
     //
     service_email_address := borland.data.provider.bdpcommand.Create
       (
@@ -216,14 +217,14 @@ begin
       //
       smtpmail.Send
         (
-        cc_email_address,
+        session.item[session.item['target_user_table'].tostring + '_user_password_reset_email_address'].tostring,
         service_email_address,
         'Return of EMSOF request for improvement',
-        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator did NOT approve '
-        + session.item['service_name'].tostring + '''s ' + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  '
-        + 'Instead, the request has been returned to you for improvement.' + NEW_LINE
+        reviewer_descriptor + ' did NOT approve ' + session.item['service_name'].tostring + '''s '
+        + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  Instead, the request has been returned to you for '
+        + 'improvement.' + NEW_LINE
         + NEW_LINE
-        + 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator gave this reason for this action:' + NEW_LINE
+        + reviewer_descriptor + ' gave this reason for this action:' + NEW_LINE
         + NEW_LINE
         + '   '
         + WrapText
@@ -240,7 +241,7 @@ begin
         + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
         + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/service_overview.aspx' + NEW_LINE
         + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+        + 'Replies to this message will be addressed to ' + reviewer_descriptor
         + NEW_LINE
         + NEW_LINE
         + '-- ' + ConfigurationSettings.AppSettings['application_name']
@@ -257,17 +258,31 @@ begin
         )
         .ExecuteNonQuery;
       //
-      //   Get the Regional Council EMSOF Coordinator's email address.
+      //   Get other stakeholder's email address.
       //
-      region_email_address := borland.data.provider.bdpcommand.Create
-        (
-        'select password_reset_email_address'
-        + ' from regional_staffer_user'
-        +   ' join regional_staffer_role on (regional_staffer_role.regional_staffer_id=regional_staffer_user.id)'
-        + ' where regional_staffer_role.title = "primary-emsof-coordinator"',
-        appcommon.db
-        )
-        .ExecuteScalar.tostring;
+      if session.item['target_user_table'].tostring = 'county' then begin
+        other_stakeholder_email_address := borland.data.provider.bdpcommand.Create
+          (
+          'select password_reset_email_address'
+          + ' from regional_staffer_user'
+          +   ' join regional_staffer_role on (regional_staffer_role.regional_staffer_id=regional_staffer_user.id)'
+          + ' where regional_staffer_role.title = "primary-emsof-coordinator"',
+          appcommon.db
+          )
+          .ExecuteScalar.tostring;
+      end else if session.item['target_user_table'].tostring = 'regional_staffer' then begin
+        other_stakeholder_email_address := borland.data.provider.bdpcommand.Create
+          (
+          'select password_reset_email_address'
+          + ' from county_dictated_appropriation'
+          +   ' join region_dictated_appropriation'
+          +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+          +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
+          + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+          appcommon.db
+          )
+          .ExecuteScalar.tostring;
+      end;
       //
       //   Send notifications to service and region.
       //
@@ -275,14 +290,13 @@ begin
       //
       smtpmail.Send
         (
-        cc_email_address,
+        session.item[session.item['target_user_table'].tostring + '_user_password_reset_email_address'].tostring,
         service_email_address,
         'REJECTION of EMSOF request',
-        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has REJECTED '
-        + session.item['service_name'].tostring + '''s ' + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  '
+        reviewer_descriptor + ' has REJECTED ' + session.item['service_name'].tostring + '''s '
+        + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  ' + NEW_LINE
         + NEW_LINE
-        + NEW_LINE
-        + 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator gave this reason for this action:' + NEW_LINE
+        + reviewer_descriptor + ' gave this reason for this action:' + NEW_LINE
         + NEW_LINE
         + '   '
         + WrapText
@@ -299,21 +313,19 @@ begin
         + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
         + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/service_overview.aspx' + NEW_LINE
         + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
-        + NEW_LINE
+        + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
         + NEW_LINE
         + '-- ' + ConfigurationSettings.AppSettings['application_name']
         );
       smtpmail.Send
         (
-        cc_email_address,
-        region_email_address,
+        session.item[session.item['target_user_table'].tostring + '_user_password_reset_email_address'].tostring,
+        other_stakeholder_email_address,
         'REJECTION of EMSOF request',
-        'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has REJECTED '
-        + session.item['service_name'].tostring + '''s ' + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  '
+        reviewer_descriptor + ' has REJECTED ' + session.item['service_name'].tostring + '''s '
+        + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  ' + NEW_LINE
         + NEW_LINE
-        + NEW_LINE
-        + 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator gave this reason for this action:' + NEW_LINE
+        + reviewer_descriptor + ' gave this reason for this action:' + NEW_LINE
         + NEW_LINE
         + '   '
         + WrapText
@@ -327,88 +339,120 @@ begin
         + NEW_LINE
         + 'This action effectively returns ' + Label_sum_of_emsof_antes.text + ' of EMSOF funds to the regional council.' + NEW_LINE
         + NEW_LINE
-        + 'You can review this EMSOF requests by visiting:' + NEW_LINE
+        + 'You can review this EMSOF request by visiting:' + NEW_LINE
         + NEW_LINE
         + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
         + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/regional_staffer_overview.aspx'
         + NEW_LINE
         + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
-        + NEW_LINE
+        + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
         + NEW_LINE
         + '-- ' + ConfigurationSettings.AppSettings['application_name']
         );
     end;
     appcommon.DbClose;
-    server.Transfer('county_dictated_appropriations.aspx');
+    server.Transfer(session.item['calling_form'].tostring);
   end;
 end;
 
-procedure TWebForm_county_dictated_appropriation_detail.Button_approve_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebForm_full_request_review_approve.Button_approve_Click
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
 var
-  cc_email_address: string;
+  cmdText: string;
   new_status_description: string;
-  region_email_address: string;
+  next_approver_email_address: string;
+  reviewer_descriptor: string;
   service_email_address: string;
 begin
   if CheckBox_approve.checked then begin
     appcommon.DbOpen;
-    borland.data.provider.bdpcommand.Create
-      (
-      'START TRANSACTION;'
+    //
+    if session.item['target_user_table'].tostring = 'state_staffer' then begin
+      cmdText := 'START TRANSACTION;'
+    end else begin
+      cmdText := system.string.EMPTY;
+    end;
+    cmdText := cmdText
       + ' update emsof_request_master'
       + ' join county_dictated_appropriation'
       +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-      + ' set emsof_request_master.status_code = 4,'
-      +   ' county_approval_timestamp = now()'
-      + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring
+      + ' set emsof_request_master.status_code = ' + session.item['promotion_status'].tostring + ',';
+    if session.item['target_user_table'].tostring = 'county' then begin
+      cmdText := cmdText + ' county_approval_timestamp = now()';
+      reviewer_descriptor := 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator';
+    end else if session.item['target_user_table'].tostring = 'regional_staffer' then begin
+      if session.item['emsof_request_master_status_code'].tostring = '4' then begin
+        cmdText := cmdText + ' regional_planner_approval_timestamp = now()';
+      end else if session.item['emsof_request_master_status_code'].tostring = '5' then begin
+        cmdText := cmdText + ' regional_director_approval_timestamp = now()';
+      end;
+      reviewer_descriptor := 'Regional staffer ' + session.Item['regional_staffer_name'].ToString;
+    end else if session.item['target_user_table'].tostring = 'state_staffer' then begin
+      cmdText := cmdText + ' state_approval_timestamp = now()';
+      reviewer_descriptor := 'State staffer ' + session.Item['state_staffer_name'].ToString;
+    end;
+    cmdText := cmdText
+      + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring;
+    if session.item['target_user_table'].tostring = 'state_staffer' then begin
+      cmdText := cmdText
       + ';'
       + ' update emsof_request_detail'
       + ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
       + ' join county_dictated_appropriation on (county_dictated_appropriation.id=emsof_request_detail.master_id)'
       + ' set emsof_request_detail.status_code = 2'
       + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring
+      +   ' and emsof_request_detail.status_code = 1'
       + ';'
-      + 'COMMIT',
-      appcommon.db
-      )
-      .ExecuteNonQuery;
+      + 'COMMIT';
+    end;
+    //
+    borland.data.provider.bdpcommand.Create(cmdText,appcommon.db).ExecuteNonQuery;
     //
     // Send notification messages.
     //
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     //
-    //   Get the County Coorindator's email address.
+    //   Get the next approver's email address.
     //
-    cc_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address'
-      + ' from county_dictated_appropriation'
-      +   ' join region_dictated_appropriation'
-      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-      +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
-      + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
-      appcommon.db
-      )
-      .ExecuteScalar.tostring;
-    //
-    //   Get the Regional Council EMSOF Coordinator's email address.
-    //
-    region_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address'
-      + ' from regional_staffer_user'
-      +   ' join regional_staffer_role on (regional_staffer_role.regional_staffer_id=regional_staffer_user.id)'
-      + ' where regional_staffer_role.title = "primary-emsof-coordinator"',
-      appcommon.db
-      )
-      .ExecuteScalar.tostring;
+    if session.item['target_user_table'].tostring = 'county' then begin
+      next_approver_email_address := borland.data.provider.bdpcommand.Create
+        (
+        'select password_reset_email_address'
+        + ' from regional_staffer_user'
+        +   ' join regional_staffer_role on (regional_staffer_role.regional_staffer_id=regional_staffer_user.id)'
+        + ' where regional_staffer_role.title = "regional-planner"',
+        appcommon.db
+        )
+        .ExecuteScalar.tostring;
+    end else if session.item['target_user_table'].tostring = 'regional_staffer' then begin
+      if session.item['promotion_status'].tostring = '5' then begin
+        next_approver_email_address := borland.data.provider.bdpcommand.Create
+          (
+          'select password_reset_email_address'
+          + ' from regional_staffer_user'
+          +   ' join regional_staffer_role on (regional_staffer_role.regional_staffer_id=regional_staffer_user.id)'
+          + ' where regional_staffer_role.title = "director"',
+          appcommon.db
+          )
+          .ExecuteScalar.tostring;
+      end else if session.item['promotion_status'].tostring = '6' then begin
+        //
+        // Currently undefined
+        //
+      end;
+    end;
     //
     //   Get new status description.
     //
     new_status_description := borland.data.provider.bdpcommand.Create
-      ('select description from request_status_code_description_map where code = 4',appcommon.db).ExecuteScalar.tostring;
+      (
+      'select description from request_status_code_description_map where code = ' + session.item['promotion_status'].tostring,
+      appcommon.db
+      )
+      .ExecuteScalar.tostring;
     //
     //   Get service's email address of record.
     //
@@ -424,23 +468,21 @@ begin
     //
     smtpmail.Send
       (
-      cc_email_address,
+      session.item[session.item['target_user_table'].tostring + '_user_password_reset_email_address'].tostring,
       service_email_address,
       'Approval of EMSOF request',
-      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has approved '
-      + session.item['service_name'].tostring + '''s ' + session.item['fiscal_year_designator'].tostring + ' EMSOF request.'
+      reviewer_descriptor + ' has approved ' + session.item['service_name'].tostring + '''s '
+      + session.item['fiscal_year_designator'].tostring + ' EMSOF request.' + NEW_LINE
       + NEW_LINE
-      + NEW_LINE
-      + 'The status of this EMSOF request is now "' + new_status_description + '".  The Regional Council EMSOF Coordinator''s '
-      + 'email address is ' + region_email_address + '.' + NEW_LINE
+      + 'The status of this EMSOF request is now "' + new_status_description + '".  The next approver''s email address is '
+      + next_approver_email_address + '.' + NEW_LINE
       + NEW_LINE
       + 'You can review your EMSOF requests by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
-      + NEW_LINE
+      + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -449,22 +491,22 @@ begin
     //
     smtpmail.Send
       (
-      cc_email_address,
-      region_email_address,
-      'County approval of EMSOF request',
-      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has approved '
-      + session.item['service_name'].tostring + '''s ' + session.item['fiscal_year_designator'].tostring + ' EMSOF request.'
-      + NEW_LINE
+      session.item[session.item['target_user_table'].tostring + '_user_password_reset_email_address'].tostring,
+      next_approver_email_address,
+      'Promotion of EMSOF request',
+      reviewer_descriptor + ' has approved ' + session.item['service_name'].tostring + '''s '
+      + session.item['fiscal_year_designator'].tostring + ' EMSOF request.' + NEW_LINE
       + NEW_LINE
       + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
       + NEW_LINE
       + 'You can review this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/regional_staffer_overview.aspx'
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/'
+      + session.item['target_user_table'].tostring + '_overview.aspx'
       + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+      + 'Replies to this message will be addressed to ' + reviewer_descriptor
       + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
@@ -475,7 +517,7 @@ begin
   end;
 end;
 
-procedure TWebForm_county_dictated_appropriation_detail.DataGrid_items_ItemDataBound(sender: System.Object;
+procedure TWebForm_full_request_review_approve.DataGrid_items_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
   if (e.item.itemtype = listitemtype.alternatingitem)
@@ -491,7 +533,7 @@ begin
   end;
 end;
 
-procedure TWebForm_county_dictated_appropriation_detail.LinkButton_logout_Click(sender: System.Object;
+procedure TWebForm_full_request_review_approve.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   formsauthentication.SignOut;
