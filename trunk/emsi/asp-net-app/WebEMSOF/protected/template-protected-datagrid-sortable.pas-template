@@ -22,8 +22,14 @@ type
     procedure DataGrid1_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
-    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    be_sort_order_ascending: boolean;
+    dgi_id: cardinal; // dgi = DataGrid Index
+    dgi_field1: cardinal;
+    dgi_field2: cardinal;
+    num_datagrid_rows: cardinal;
+    sort_order: string;
     procedure Bind;
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -58,13 +64,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var be_sort_order_ascending: boolean;
-var dgi_id: cardinal; // dgi = DataGrid Index
-var dgi_field1: cardinal;
-var dgi_field2: cardinal;
-var num_datagrid_rows: cardinal;
-var sort_order: string;
 
 procedure TWebForm_template-protected-datagrid-sortable.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
