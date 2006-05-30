@@ -6,7 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
+  Class_bc_emsof_request_master;
 
 const ID = '$Id$';
 
@@ -27,20 +28,23 @@ type
     HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
+    //
+    HyperLink_maintain_service_accounts: System.Web.UI.WebControls.HyperLink;
+    HyperLink_maintain_county_accounts: System.Web.UI.WebControls.HyperLink;
+    HyperLink_maintain_regional_staffer_accounts: System.Web.UI.WebControls.HyperLink;
+    //
+    HyperLink_maintain_epels: System.Web.UI.WebControls.HyperLink;
+    HyperLink_maintain_region_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
+    //
+    Label_num_requests_needing_development: System.Web.UI.WebControls.Label;
+    Label_county_approval: System.Web.UI.WebControls.Label;
     HyperLink_regional_compliance: System.Web.UI.WebControls.HyperLink;
     HyperLink_exec_dir_approval: System.Web.UI.WebControls.HyperLink;
-    Label_num_requests_needing_development: System.Web.UI.WebControls.Label;
-    Label_exec_dir_approval: System.Web.UI.WebControls.Label;
     HyperLink_transmittal: System.Web.UI.WebControls.HyperLink;
     HyperLink_state_approval: System.Web.UI.WebControls.HyperLink;
     HyperLink_invoice_collection: System.Web.UI.WebControls.HyperLink;
     HyperLink_canceled_check_collection: System.Web.UI.WebControls.HyperLink;
     HyperLink_reimbursement: System.Web.UI.WebControls.Label;
-    HyperLink_maintain_epels: System.Web.UI.WebControls.HyperLink;
-    HyperLink_maintain_region_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
-    HyperLink_maintain_regional_staffer_accounts: System.Web.UI.WebControls.HyperLink;
-    HyperLink_maintain_county_accounts: System.Web.UI.WebControls.HyperLink;
-    HyperLink_maintain_service_accounts: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -70,6 +74,9 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
     Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
     //
+    Label_num_requests_needing_development.text :=
+      Class_bc_emsof_request_master.Create.NumRequestsInStatus(bc_emsof_request_master.INITIALIZED).tostring
+      + Label_num_requests_needing_development.text;
     //
   end;
 end;

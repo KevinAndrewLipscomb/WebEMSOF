@@ -64,7 +64,10 @@ uses
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_compliance_check_overview in 'protected\regional_compliance_check_overview.pas' {regional_compliance_check_overview.TWebForm_regional_compliance_check_overview: System.Web.UI.Page},
   full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
-  regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas';
+  regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas',
+  Class_bc_emsof_request_master in 'component\business\Class_bc_emsof_request_master.pas',
+  Class_dalc_emsof_request_master in 'component\dal\Class_dalc_emsof_request_master.pas',
+  Class_dalc_base in 'component\dal\Class_dalc_base.pas';
 
 //
 // General Information about an assembly is controlled through the following
