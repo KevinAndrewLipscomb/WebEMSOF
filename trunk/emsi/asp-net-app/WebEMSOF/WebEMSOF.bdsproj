@@ -197,6 +197,11 @@
     
     
     
+    
+    
+    
+    
+    
     <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="system" Version="1.0.5000.0" LinkUnits="False"/>
@@ -261,6 +266,9 @@
       <File FileName="protected\regional_compliance_check_overview.pas" ContainerId="PascalCompiler" ModuleName="regional_compliance_check_overview" Parent="protected\regional_compliance_check_overview.aspx"/>
       <File FileName="protected\full_request_review_approve.pas" ContainerId="PascalCompiler" ModuleName="full_request_review_approve" Parent="protected\full_request_review_approve.aspx"/>
       <File FileName="protected\regional_staffer_fiscal_year_selection.pas" ContainerId="PascalCompiler" ModuleName="regional_staffer_fiscal_year_selection" Parent="protected\regional_staffer_fiscal_year_selection.aspx"/>
+      <File FileName="component\business\Class_bc_emsof_request_master.pas" ContainerId="PascalCompiler" ModuleName="Class_bc_emsof_request_master"/>
+      <File FileName="component\dal\Class_dalc_emsof_request_master.pas" ContainerId="PascalCompiler" ModuleName="Class_dalc_emsof_request_master"/>
+      <File FileName="component\dal\Class_dalc_base.pas" ContainerId="PascalCompiler" ModuleName="Class_dalc_base"/>
     </FileList>
   </DelphiDotNet.Personality>
 	<ModelSupport>True</ModelSupport>
