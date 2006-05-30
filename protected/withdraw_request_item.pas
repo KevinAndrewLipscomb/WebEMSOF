@@ -21,6 +21,7 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    saved_emsof_ante: decimal;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -36,9 +37,7 @@ type
     HyperLink_request_item_detail: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
-    { Private Declarations }
   public
-    { Public Declarations }
   end;
 
 implementation
@@ -56,9 +55,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var
-  saved_emsof_ante: decimal;
 
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin

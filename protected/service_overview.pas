@@ -6,9 +6,11 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, 
-  System.Data.Common, Borland.Data.Provider, System.Globalization, 
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon,
+  System.Data.Common, Borland.Data.Provider, System.Globalization,
   Borland.Data.Common, system.configuration, system.web.security;
+
+const ID = '$Id$';
 
 type
   TWebForm_service_overview = class(System.Web.UI.Page)
@@ -23,8 +25,20 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
-    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    be_before_deadline: boolean;
+    dgi_id: cardinal;
+    dgi_fy_designator: cardinal;
+    dgi_county_name: cardinal;
+    dgi_county_dictated_appropriation_id: cardinal;
+    dgi_county_dictated_appropriation_amount: cardinal;
+    dgi_status_code: cardinal;
+    dgi_status: cardinal;
+    dgi_value: cardinal;
+    dgi_linkbutton: cardinal;
+    max_fiscal_year_id_string: string;
+    num_dg_items: cardinal;
     procedure BindDataGrid;
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -43,7 +57,6 @@ type
   private
     { Private Declarations }
   public
-    const ID = '$Id$';
   end;
 
 implementation
@@ -64,20 +77,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var
-  be_before_deadline: boolean;
-  dgi_id: cardinal;
-  dgi_fy_designator: cardinal;
-  dgi_county_name: cardinal;
-  dgi_county_dictated_appropriation_id: cardinal;
-  dgi_county_dictated_appropriation_amount: cardinal;
-  dgi_status_code: cardinal;
-  dgi_status: cardinal;
-  dgi_value: cardinal;
-  dgi_linkbutton: cardinal;
-  max_fiscal_year_id_string: string;
-  num_dg_items: cardinal;
 
 procedure TWebForm_service_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var

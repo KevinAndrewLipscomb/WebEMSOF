@@ -22,6 +22,10 @@ type
     procedure Button_disapprove_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    be_before_improvement_deadline: boolean;
+    num_items: cardinal;
+    parent_appropriation_amount: decimal;
+    total_emsof_ante: decimal;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -76,12 +80,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var
-  be_before_improvement_deadline: boolean;
-  num_items: cardinal;
-  parent_appropriation_amount: decimal;
-  total_emsof_ante: decimal;
 
 procedure TWebForm_full_request_review_approve.Page_Load(sender: System.Object; e: System.EventArgs);
 begin

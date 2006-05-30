@@ -26,9 +26,12 @@ type
     procedure CustomValidator_amount_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
   strict private
-    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    amount: decimal;
+    be_service_list_filtered: boolean;
+    unappropriated_amount: decimal;
     procedure AddAppropriation;
     procedure Bind_services;
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -80,11 +83,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var
-  amount: decimal;
-  be_service_list_filtered: boolean;
-  unappropriated_amount: decimal;
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin

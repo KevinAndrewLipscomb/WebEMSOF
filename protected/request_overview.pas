@@ -22,8 +22,23 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
-    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    be_before_deadline: boolean;
+    be_completely_approved: boolean;
+    be_finalized: boolean;
+    dgi_master_id: cardinal;
+    dgi_priority: cardinal;
+    dgi_code: cardinal;
+    dgi_item_description: cardinal;
+    dgi_status: cardinal;
+    dgi_linkbutton_select: cardinal;
+    dgi_linkbutton_increase_priority: cardinal;
+    dgi_linkbutton_decrease_priority: cardinal;
+    dgi_emsof_ante: cardinal;
+    num_items: cardinal;
+    sum_of_emsof_antes: decimal;
+    unused_amount: decimal;
     procedure Bind_items;
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -51,7 +66,6 @@ type
   private
     { Private Declarations }
   public
-    { Public Declarations }
   end;
 
 implementation
@@ -70,23 +84,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var
-  be_before_deadline: boolean;
-  be_completely_approved: boolean;
-  be_finalized: boolean;
-  dgi_master_id: cardinal;
-  dgi_priority: cardinal;
-  dgi_code: cardinal;
-  dgi_item_description: cardinal;
-  dgi_status: cardinal;
-  dgi_linkbutton_select: cardinal;
-  dgi_linkbutton_increase_priority: cardinal;
-  dgi_linkbutton_decrease_priority: cardinal;
-  dgi_emsof_ante: cardinal;
-  num_items: cardinal;
-  sum_of_emsof_antes: decimal;
-  unused_amount: decimal;
 
 procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var

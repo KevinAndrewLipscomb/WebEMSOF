@@ -9,6 +9,8 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration,
   system.net, system.web.security;
 
+const ID = '$Id$';
+
 type
   TWebForm_change_email_address = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -40,7 +42,6 @@ type
   private
     { Private Declarations }
   public
-    const ID = '$Id$';
   end;
 
 implementation
