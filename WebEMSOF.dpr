@@ -37,6 +37,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\region_dictated_appropriations.aspx'}
 {%AspMarkupContainer 'protected\regional_compliance_check_overview.aspx'}
 {%AspMarkupContainer 'protected\full_request_review_approve.aspx'}
+{%AspMarkupContainer 'protected\regional_staffer_fiscal_year_selection.aspx'}
 
 uses
   System.Reflection,
@@ -52,7 +53,7 @@ uses
   delete_service_appropriation in 'protected\delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page},
   finalize in 'protected\finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},
   profile in 'protected\profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
-  regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_account_overview: System.Web.UI.Page},
+  regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: System.Web.UI.Page},
   request_item_detail in 'protected\request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: System.Web.UI.Page},
   request_overview in 'protected\request_overview.pas' {request_overview.TWebForm_request_overview: System.Web.UI.Page},
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
@@ -62,7 +63,8 @@ uses
   Default in 'Default.pas' {Default.TWebForm_Default: System.Web.UI.Page},
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_compliance_check_overview in 'protected\regional_compliance_check_overview.pas' {regional_compliance_check_overview.TWebForm_regional_compliance_check_overview: System.Web.UI.Page},
-  full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page};
+  full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
+  regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas';
 
 //
 // General Information about an assembly is controlled through the following
