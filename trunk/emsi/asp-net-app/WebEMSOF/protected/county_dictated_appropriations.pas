@@ -33,8 +33,25 @@ type
       e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
   {$ENDREGION}
   strict private
-    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    be_before_deadline: boolean;
+    be_sort_order_ascending: boolean;
+    dgi_id: cardinal;
+    dgi_password_reset_email_address: cardinal;
+    dgi_affiliate_num: cardinal;
+    dgi_name: cardinal;
+    dgi_amount: cardinal;
+    dgi_status_code: cardinal;
+    dgi_status_description: cardinal;
+    dgi_linkbutton_edit: cardinal;
+    dgi_linkbutton_delete: cardinal;
+    num_appropriations: cardinal;
+    region_dictated_appropriation_amount: decimal;
+    saved_amount: decimal;
+    service_appropriations_sort_order: string;
+    sum_of_service_appropriations: decimal;
+    unappropriated_amount: decimal;
     procedure Bind_service_appropriations;
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -86,25 +103,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var
-  be_before_deadline: boolean;
-  be_sort_order_ascending: boolean;
-  dgi_id: cardinal;
-  dgi_password_reset_email_address: cardinal;
-  dgi_affiliate_num: cardinal;
-  dgi_name: cardinal;
-  dgi_amount: cardinal;
-  dgi_status_code: cardinal;
-  dgi_status_description: cardinal;
-  dgi_linkbutton_edit: cardinal;
-  dgi_linkbutton_delete: cardinal;
-  num_appropriations: cardinal;
-  region_dictated_appropriation_amount: decimal;
-  saved_amount: decimal;
-  service_appropriations_sort_order: string;
-  sum_of_service_appropriations: decimal;
-  unappropriated_amount: decimal;
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var

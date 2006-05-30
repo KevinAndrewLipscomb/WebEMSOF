@@ -21,8 +21,22 @@ type TWebForm_regional_approval_overview = class(System.Web.UI.Page)
     procedure DataGrid_requests_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
   {$ENDREGION}
   strict private
-    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    be_sort_order_ascending: boolean;
+    dgi_id: cardinal; // dgi = DataGrid Index
+    dgi_county_approval_timestamp: cardinal;
+    dgi_affiliate_num: cardinal;
+    dgi_service_name: cardinal;
+    dgi_sponsor_county: cardinal;
+    dgi_emsof_ante: cardinal;
+    dgi_fiscal_year_designator: cardinal;
+    dgi_county_dictated_appropriation_amount: cardinal;
+    dgi_county_dictated_appropriation_id: cardinal;
+    dgi_service_to_county_submission_deadline: cardinal;
+    dgi_linkbutton_select: cardinal;
+    num_qualifying_requests: cardinal;
+    sort_order: string;
     procedure Bind;
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
@@ -55,21 +69,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var be_sort_order_ascending: boolean;
-var dgi_id: cardinal; // dgi = DataGrid Index
-var dgi_county_approval_timestamp: cardinal;
-var dgi_affiliate_num: cardinal;
-var dgi_service_name: cardinal;
-var dgi_sponsor_county: cardinal;
-var dgi_emsof_ante: cardinal;
-var dgi_fiscal_year_designator: cardinal;
-var dgi_county_dictated_appropriation_amount: cardinal;
-var dgi_county_dictated_appropriation_id: cardinal;
-var dgi_service_to_county_submission_deadline: cardinal;
-var dgi_linkbutton_select: cardinal;
-var num_qualifying_requests: cardinal;
-var sort_order: string;
 
 procedure TWebForm_regional_approval_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 begin

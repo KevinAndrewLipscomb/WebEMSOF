@@ -30,9 +30,17 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    additional_service_ante: decimal;
+    allowable_cost: decimal;
+    bdri_equipment_category_allowable_cost: cardinal;
+    bdri_equipment_category_funding_level: cardinal;
+    cmdText_get_equipment_category_monetary_details: string;
+    funding_level: decimal;
+    match_level: decimal;
+    saved_emsof_ante: decimal;
+    procedure AddItem;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
     procedure Recalculate;
-    procedure AddItem;
     procedure ShowDependentData;
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -107,16 +115,6 @@ begin
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
-
-var
-  additional_service_ante: decimal;
-  allowable_cost: decimal;
-  bdri_equipment_category_allowable_cost: cardinal;
-  bdri_equipment_category_funding_level: cardinal;
-  cmdText_get_equipment_category_monetary_details: string;
-  funding_level: decimal;
-  match_level: decimal;
-  saved_emsof_ante: decimal;
 
 procedure TWebForm_request_item_detail.Page_Load(sender: System.Object; e: System.EventArgs);
 var
