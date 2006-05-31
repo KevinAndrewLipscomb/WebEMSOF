@@ -22,16 +22,9 @@ begin
   // TODO: Add any constructor code here
 end;
 
-function NumBcInStatus
-  (
-  status: Class_dalc_emsof_request_master.status_type;
-  fiscal_year_id: cardinal
-  )
-  : cardinal;
-var
-  dalc_emsof_request_master: Class_dalc_emsof_request_master.TClass_dalc_emsof_request_master;
+function TClass_bc_emsof_request_master.NumBcInStatus(status: Class_dalc_emsof_request_master.status_type): cardinal;
 begin
-  NumBcInStatus := dalc_emsof_request_master.Create.NumRecsInStatus(status,fiscal_year_id);
+  NumBcInStatus := TClass_dalc_emsof_request_master.Create.NumRecsInStatus(status);
 end;
 
 end.

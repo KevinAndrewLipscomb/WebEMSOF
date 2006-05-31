@@ -458,9 +458,12 @@ INSERT INTO request_status_code_description_map VALUES (6, 'Regional council is 
 INSERT INTO request_status_code_description_map VALUES (7, 'Needs DOH approval');
 INSERT INTO request_status_code_description_map VALUES (8, 'Regional council needs invoice(s)');
 INSERT INTO request_status_code_description_map VALUES (9, 'Regional council needs canceled check(s)');
-INSERT INTO request_status_code_description_map VALUES (10, 'Reimbursement issued');
+INSERT INTO request_status_code_description_map VALUES (10, 'Reimbursement being prepared');
 INSERT INTO request_status_code_description_map VALUES (11, 'Rejected');
 INSERT INTO request_status_code_description_map VALUES (12, 'Withdrawn by service');
+INSERT INTO request_status_code_description_map VALUES (13, 'Reimbursement issued');
+INSERT INTO request_status_code_description_map VALUES (14, 'Deployed');
+INSERT INTO request_status_code_description_map VALUES (15, 'Archived');
 
 -- --------------------------------------------------------
 
