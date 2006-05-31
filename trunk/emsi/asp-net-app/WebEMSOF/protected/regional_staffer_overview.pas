@@ -7,8 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
-  Class_bc_emsof_request_master,
-  Class_dalc_emsof_request_master,
+  Class_bc_emsof_request,
   system.text;
 
 const ID = '$Id$';
@@ -82,8 +81,7 @@ procedure TWebForm_regional_staffer_overview.Page_Load
   e: System.EventArgs
   );
 var
-  bc_emsof_request_master: TClass_bc_emsof_request_master;
-  tally_by_status: Class_dalc_emsof_request_master.tally_by_status_type;
+  bc_emsof_request_master: TClass_bc_emsof_request;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -91,7 +89,7 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
     Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
     //
-    bc_emsof_request_master := TClass_bc_emsof_request_master.Create;
+    bc_emsof_request_master := TClass_bc_emsof_request.Create;
     HyperLink_num_requests_needing_development.text :=
       bc_emsof_request_master.TallyOfStatus(INITIALIZED) + HyperLink_num_requests_needing_development.text;
     HyperLink_num_requests_needing_finalization.text :=
