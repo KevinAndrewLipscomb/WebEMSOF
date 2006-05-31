@@ -65,9 +65,9 @@ uses
   regional_compliance_check_overview in 'protected\regional_compliance_check_overview.pas' {regional_compliance_check_overview.TWebForm_regional_compliance_check_overview: System.Web.UI.Page},
   full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas',
-  Class_bc_emsof_request_master in 'component\business\Class_bc_emsof_request_master.pas',
   Class_dalc_base in 'component\dal\Class_dalc_base.pas',
-  Class_dalc_emsof_request in 'component\dal\Class_dalc_emsof_request.pas';
+  Class_dalc_emsof_request in 'component\dal\Class_dalc_emsof_request.pas',
+  Class_bc_emsof_request in 'component\business\Class_bc_emsof_request.pas';
 
 const ID = '$Id';
 
