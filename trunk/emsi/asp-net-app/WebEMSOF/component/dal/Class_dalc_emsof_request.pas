@@ -1,4 +1,4 @@
-unit Class_dalc_emsof_request_master;
+unit Class_dalc_emsof_request;
 
 interface
 
@@ -32,9 +32,8 @@ type
   tally_by_status_type = array[status_type] of cardinal;
 
 type
-  TClass_dalc_emsof_request_master = class(Class_dalc_base.TClass_dalc_base)
+  TClass_dalc_emsof_request = class(Class_dalc_base.TClass_dalc_base)
   private
-    { Private Declarations }
   public
     constructor Create;
     function TallyByStatus: tally_by_status_type;
@@ -42,13 +41,13 @@ type
 
 implementation
 
-constructor TClass_dalc_emsof_request_master.Create;
+constructor TClass_dalc_emsof_request.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
 end;
 
-function TClass_dalc_emsof_request_master.TallyByStatus: tally_by_status_type;
+function TClass_dalc_emsof_request.TallyByStatus: tally_by_status_type;
 var
   bdr: borland.data.provider.bdpdatareader;
   i: status_type;
