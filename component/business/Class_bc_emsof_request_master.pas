@@ -11,7 +11,7 @@ type
     { Private Declarations }
   public
     constructor Create;
-    function NumBcInStatus(status: Class_dalc_emsof_request_master.status_type): cardinal;
+    function TallyByStatus: Class_dalc_emsof_request_master.tally_by_status_type;
   end;
 
 implementation
@@ -22,9 +22,9 @@ begin
   // TODO: Add any constructor code here
 end;
 
-function TClass_bc_emsof_request_master.NumBcInStatus(status: Class_dalc_emsof_request_master.status_type): cardinal;
+function TClass_bc_emsof_request_master.TallyByStatus: Class_dalc_emsof_request_master.tally_by_status_type;
 begin
-  NumBcInStatus := TClass_dalc_emsof_request_master.Create.NumRecsInStatus(status);
+  TallyByStatus := TClass_dalc_emsof_request_master.Create.TallyByStatus;
 end;
 
 end.
