@@ -69,6 +69,8 @@ uses
   Class_dalc_emsof_request_master in 'component\dal\Class_dalc_emsof_request_master.pas',
   Class_dalc_base in 'component\dal\Class_dalc_base.pas';
 
+const ID = '$Id';
+
 //
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information

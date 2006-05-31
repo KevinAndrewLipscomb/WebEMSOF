@@ -76,7 +76,13 @@ begin
 end;
 {$ENDREGION}
 
-procedure TWebForm_regional_staffer_overview.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_regional_staffer_overview.Page_Load
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
+var
+  tally_by_status: Class_dalc_emsof_request_master.tally_by_status_type;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -84,53 +90,30 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
     Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
     //
+    tally_by_status := TClass_bc_emsof_request_master.Create.TallyByStatus;
     HyperLink_num_requests_needing_development.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.INITIALIZED).tostring
-      + HyperLink_num_requests_needing_development.text;
+      tally_by_status[INITIALIZED].tostring + HyperLink_num_requests_needing_development.text;
     HyperLink_num_requests_needing_finalization.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_SERVICE_FINALIZATION).tostring
-      + HyperLink_num_requests_needing_finalization.text;
+      tally_by_status[NEEDS_SERVICE_FINALIZATION].tostring + HyperLink_num_requests_needing_finalization.text;
     HyperLink_num_requests_needing_county_approval.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_COUNTY_APPROVAL).tostring
-      + HyperLink_num_requests_needing_county_approval.text;
+      tally_by_status[NEEDS_COUNTY_APPROVAL].tostring + HyperLink_num_requests_needing_county_approval.text;
     HyperLink_regional_compliance.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_REGIONAL_COMPLIANCE_CHECK).tostring
-      + HyperLink_regional_compliance.text;
+      tally_by_status[NEEDS_REGIONAL_COMPLIANCE_CHECK].tostring + HyperLink_regional_compliance.text;
     HyperLink_exec_dir_approval.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_REGIONAL_EXEC_DIR_APPROVAL).tostring
-      + HyperLink_exec_dir_approval.text;
-    HyperLink_transmittal.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_SENT_TO_PA_DOH_EMSO).tostring
-      + HyperLink_transmittal.text;
-    HyperLink_state_approval.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_PA_DOH_EMSO_APPROVAL).tostring
-      + HyperLink_state_approval.text;
-    HyperLink_invoice_collection.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_INVOICE_COLLECTION).tostring
-      + HyperLink_invoice_collection.text;
+      tally_by_status[NEEDS_REGIONAL_EXEC_DIR_APPROVAL].tostring + HyperLink_exec_dir_approval.text;
+    HyperLink_transmittal.text := tally_by_status[NEEDS_SENT_TO_PA_DOH_EMSO].tostring + HyperLink_transmittal.text;
+    HyperLink_state_approval.text := tally_by_status[NEEDS_PA_DOH_EMSO_APPROVAL].tostring + HyperLink_state_approval.text;
+    HyperLink_invoice_collection.text := tally_by_status[NEEDS_INVOICE_COLLECTION].tostring + HyperLink_invoice_collection.text;
     HyperLink_canceled_check_collection.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_CANCELED_CHECK_COLLECTION).tostring
-      + HyperLink_canceled_check_collection.text;
-    HyperLink_reimbursement.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.NEEDS_REIMBURSEMENT_ISSUANCE).tostring
-      + HyperLink_reimbursement.text;
+      tally_by_status[NEEDS_CANCELED_CHECK_COLLECTION].tostring + HyperLink_canceled_check_collection.text;
+    HyperLink_reimbursement.text := tally_by_status[NEEDS_REIMBURSEMENT_ISSUANCE].tostring + HyperLink_reimbursement.text;
     //
-    HyperLink_completed.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.REIMBURSEMENT_ISSUED).tostring
-      + HyperLink_completed.text;
-    HyperLink_withdrawn.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.WITHDRAWN).tostring
-      + HyperLink_withdrawn.text;
-    HyperLink_rejected.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.REJECTED).tostring
-      + HyperLink_rejected.text;
+    HyperLink_completed.text := tally_by_status[REIMBURSEMENT_ISSUED].tostring + HyperLink_completed.text;
+    HyperLink_withdrawn.text := tally_by_status[WITHDRAWN].tostring + HyperLink_withdrawn.text;
+    HyperLink_rejected.text := tally_by_status[REJECTED].tostring + HyperLink_rejected.text;
     //
-    HyperLink_deployed.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.DEPLOYED).tostring
-      + HyperLink_deployed.text;
-    HyperLink_archived.text :=
-      TClass_bc_emsof_request_master.Create.NumBcInStatus(Class_dalc_emsof_request_master.ARCHIVED).tostring
-      + HyperLink_archived.text;
+    HyperLink_deployed.text := tally_by_status[DEPLOYED].tostring + HyperLink_deployed.text;
+    HyperLink_archived.text := tally_by_status[ARCHIVED].tostring + HyperLink_archived.text;
     //
   end;
 end;
