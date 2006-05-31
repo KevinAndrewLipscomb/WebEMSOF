@@ -270,6 +270,8 @@ begin
     session.Add('next_approver_descriptor','Regional Council');
     session.Remove('promotion_status');
     session.Add('promotion_status','4');
+    session.Remove('rework_deadline');
+    session.Add('rework_deadline',session.item['county_dictated_deadline'].tostring);
     server.Transfer('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
     saved_amount := decimal.Parse(Safe(e.item.cells[dgi_amount].text,REAL_NUM));

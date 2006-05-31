@@ -137,7 +137,7 @@ begin
     then begin
       HyperLink_back_2.navigateurl := session.item['calling_form'].tostring;
       Label_next_approver.text := session.item['next_approver_descriptor'].tostring;
-      be_before_improvement_deadline := datetime.Now <= datetime.Parse(session.item['county_dictated_deadline'].tostring);
+      be_before_improvement_deadline := datetime.Now <= datetime.Parse(session.item['rework_deadline'].tostring);
       if be_before_improvement_deadline then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';

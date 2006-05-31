@@ -10,14 +10,20 @@ type
   status_type =
     (
     INITIALIZED = 1,
-    NEEDS_COUNTY_APPROVAL = 2,
-    NEEDS_REGIONAL_COMPLIANCE_CHECK = 3,
-    NEEDS_REGIONAL_EXEC_DIR_APPROVAL = 4,
-    NEEDS_SENT_TO_PA_DOH_EMSO = 5,
-    NEEDS_PA_DOH_EMSO_APPROVAL = 6,
-    NEEDS_INVOICE_COLLECTION = 7,
-    NEEDS_CANCELED_CHECK_COLLECTION = 8,
-    NEEDS_REIMBURSEMENT_ISSUANCE = 9
+    NEEDS_SERVICE_FINALIZATION = 2,
+    NEEDS_COUNTY_APPROVAL = 3,
+    NEEDS_REGIONAL_COMPLIANCE_CHECK = 4,
+    NEEDS_REGIONAL_EXEC_DIR_APPROVAL = 5,
+    NEEDS_SENT_TO_PA_DOH_EMSO = 6,
+    NEEDS_PA_DOH_EMSO_APPROVAL = 7,
+    NEEDS_INVOICE_COLLECTION = 8,
+    NEEDS_CANCELED_CHECK_COLLECTION = 9,
+    NEEDS_REIMBURSEMENT_ISSUANCE = 10,
+    REJECTED = 11,
+    WITHDRAWN = 12,
+    REIMBURSEMENT_ISSUED = 13,
+    DEPLOYED = 14,
+    ARCHIVED = 15
     );
 
 type
@@ -26,12 +32,7 @@ type
     { Private Declarations }
   public
     constructor Create;
-    function NumRecsInStatus
-      (
-      status: status_type;
-      fiscal_year_id: cardinal
-      )
-      : cardinal;
+    function NumRecsInStatus(status: status_type): cardinal;
   end;
 
 implementation
@@ -42,16 +43,10 @@ begin
   // TODO: Add any constructor code here
 end;
 
-function TClass_dalc_emsof_request_master.NumRecsInStatus
-  (
-  status: status_type;
-  fiscal_year_id: cardinal
-  )
-  : cardinal;
+function TClass_dalc_emsof_request_master.NumRecsInStatus(status: status_type): cardinal;
 begin
-  NumRecsInStatus := cardinal
-    (
-    borland.data.provider.bdpcommand.Create
+  connection.Open;
+  NumRecsInStatus := borland.data.provider.bdpcommand.Create
       (
       'select count(*)'
       + ' from emsof_request_master'
@@ -62,12 +57,11 @@ begin
       +   ' join state_dictated_appropriation'
       +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
       +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
-      + ' where status_code = ' + convert.toint16(ord(status)).tostring
-      +   ' and fiscal_year_id = ' + fiscal_year_id.tostring,
+      + ' where status_code = ' + convert.toint16(ord(status)).tostring,
       connection
       )
-      .ExecuteScalar
-    );
+      .ExecuteScalar.GetHashCode;
+  connection.Close;
 end;
 
 end.
