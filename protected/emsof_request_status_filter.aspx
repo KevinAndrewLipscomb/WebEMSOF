@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="regional_approval_overview.pas" AutoEventWireup="false" Inherits="regional_approval_overview.TWebForm_regional_approval_overview" %>
+<%@ Page language="c#" Debug="true" Codebehind="emsof_request_status_filter.pas" AutoEventWireup="false" Inherits="emsof_request_status_filter.TWebForm_emsof_request_status_filter" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -13,8 +13,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                  [ Back to <ASP:HyperLink id="HyperLink_back" runat="server">(previous)</ASP:HyperLink>&nbsp;form ]&nbsp;
-			                  [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                    [ Back to <ASP:HyperLink id="HyperLink_back" runat="server">(previous)</ASP:HyperLink>&nbsp;form ]&nbsp;
+			                    [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -26,8 +26,7 @@
               <td>
                 <table cellspacing="0" cellpadding="10" border="0">
                     <tr>
-                      <td bgcolor="#f5f5f5"><strong>Requests in status "
-                          <ASP:Label id="Label_status" runat="server"></ASP:Label>"</strong></td>
+                      <td bgcolor="#f5f5f5"><strong>Requests in status "<ASP:Label id="Label_status" runat="server"></ASP:Label>"</strong></td>
 					</tr>
 					<tr id="TableRow_none" runat="server">
 					  <td><em>--&nbsp;NONE&nbsp;--</em></td>
@@ -44,15 +43,11 @@
                             <ASP:BoundColumn datafield="emsof_ante" sortexpression="emsof_ante" readonly="True" headertext="EMSOF ante" dataformatstring="{0:C}">
                               <ItemStyle horizontalalign="Right"></ItemStyle>
                             </ASP:BoundColumn>
-                            <ASP:BoundColumn visible="False" datafield="status_code" readonly="True"></ASP:BoundColumn>
-                            <ASP:ButtonColumn datatextfield="status_description" sortexpression="status_description" headertext="Status" commandname="Select">
+                            <ASP:ButtonColumn text="Select" commandname="Select">
                               <ItemStyle font-bold="True" horizontalalign="Center"></ItemStyle>
                             </ASP:ButtonColumn>
                             <ASP:BoundColumn visible="False" datafield="fiscal_year_id" readonly="True"></ASP:BoundColumn>
                             <ASP:BoundColumn visible="False" datafield="fiscal_year_designator" readonly="True"></ASP:BoundColumn>
-                            <ASP:BoundColumn visible="False" datafield="county_dictated_appropriation_amount" readonly="True"></ASP:BoundColumn>
-                            <ASP:BoundColumn visible="False" datafield="county_dictated_appropriation_id" readonly="True"></ASP:BoundColumn>
-                            <ASP:BoundColumn visible="False" datafield="rework_deadline" readonly="True"></ASP:BoundColumn>
                           </Columns></ASP:DataGrid></td>
                     </tr>
                 </table></td>

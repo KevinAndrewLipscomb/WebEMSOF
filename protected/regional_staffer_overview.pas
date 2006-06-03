@@ -18,8 +18,10 @@ type
   strict private
     procedure InitializeComponent;
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_regional_compliance_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    bc_emsof_request: TClass_bc_emsof_request;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -37,7 +39,7 @@ type
     HyperLink_num_requests_needing_development: System.Web.UI.WebControls.HyperLink;
     HyperLink_num_requests_needing_finalization: System.Web.UI.WebControls.HyperLink;
     HyperLink_num_requests_needing_county_approval: System.Web.UI.WebControls.HyperLink;
-    HyperLink_regional_compliance: System.Web.UI.WebControls.HyperLink;
+    LinkButton_regional_compliance: System.Web.UI.WebControls.LinkButton;
     HyperLink_exec_dir_approval: System.Web.UI.WebControls.HyperLink;
     HyperLink_transmittal: System.Web.UI.WebControls.HyperLink;
     HyperLink_state_approval: System.Web.UI.WebControls.HyperLink;
@@ -71,6 +73,7 @@ implementation
 procedure TWebForm_regional_staffer_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_regional_compliance.Click, Self.LinkButton_regional_compliance_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -80,8 +83,6 @@ procedure TWebForm_regional_staffer_overview.Page_Load
   sender: System.Object;
   e: System.EventArgs
   );
-var
-  bc_emsof_request_master: TClass_bc_emsof_request;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -89,30 +90,30 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
     Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
     //
-    bc_emsof_request_master := TClass_bc_emsof_request.Create;
+    bc_emsof_request := TClass_bc_emsof_request.Create;
     HyperLink_num_requests_needing_development.text :=
-      bc_emsof_request_master.TallyOfStatus(INITIALIZED) + HyperLink_num_requests_needing_development.text;
+      bc_emsof_request.TallyOfStatus(INITIALIZED) + HyperLink_num_requests_needing_development.text;
     HyperLink_num_requests_needing_finalization.text :=
-      bc_emsof_request_master.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + HyperLink_num_requests_needing_finalization.text;
+      bc_emsof_request.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + HyperLink_num_requests_needing_finalization.text;
     HyperLink_num_requests_needing_county_approval.text :=
-      bc_emsof_request_master.TallyOfStatus(NEEDS_COUNTY_APPROVAL) + HyperLink_num_requests_needing_county_approval.text;
-    HyperLink_regional_compliance.text :=
-      bc_emsof_request_master.TallyOfStatus(NEEDS_REGIONAL_COMPLIANCE_CHECK) + HyperLink_regional_compliance.text;
+      bc_emsof_request.TallyOfStatus(NEEDS_COUNTY_APPROVAL) + HyperLink_num_requests_needing_county_approval.text;
+    LinkButton_regional_compliance.text :=
+      bc_emsof_request.TallyOfStatus(NEEDS_REGIONAL_COMPLIANCE_CHECK) + LinkButton_regional_compliance.text;
     HyperLink_exec_dir_approval.text :=
-      bc_emsof_request_master.TallyOfStatus(NEEDS_REGIONAL_EXEC_DIR_APPROVAL) + HyperLink_exec_dir_approval.text;
-    HyperLink_transmittal.text := bc_emsof_request_master.TallyOfStatus(NEEDS_SENT_TO_PA_DOH_EMSO) + HyperLink_transmittal.text;
-    HyperLink_state_approval.text := bc_emsof_request_master.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL) + HyperLink_state_approval.text;
-    HyperLink_invoice_collection.text := bc_emsof_request_master.TallyOfStatus(NEEDS_INVOICE_COLLECTION) + HyperLink_invoice_collection.text;
+      bc_emsof_request.TallyOfStatus(NEEDS_REGIONAL_EXEC_DIR_APPROVAL) + HyperLink_exec_dir_approval.text;
+    HyperLink_transmittal.text := bc_emsof_request.TallyOfStatus(NEEDS_SENT_TO_PA_DOH_EMSO) + HyperLink_transmittal.text;
+    HyperLink_state_approval.text := bc_emsof_request.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL) + HyperLink_state_approval.text;
+    HyperLink_invoice_collection.text := bc_emsof_request.TallyOfStatus(NEEDS_INVOICE_COLLECTION) + HyperLink_invoice_collection.text;
     HyperLink_canceled_check_collection.text :=
-      bc_emsof_request_master.TallyOfStatus(NEEDS_CANCELED_CHECK_COLLECTION) + HyperLink_canceled_check_collection.text;
-    HyperLink_reimbursement.text := bc_emsof_request_master.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE) + HyperLink_reimbursement.text;
+      bc_emsof_request.TallyOfStatus(NEEDS_CANCELED_CHECK_COLLECTION) + HyperLink_canceled_check_collection.text;
+    HyperLink_reimbursement.text := bc_emsof_request.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE) + HyperLink_reimbursement.text;
     //
-    HyperLink_completed.text := bc_emsof_request_master.TallyOfStatus(REIMBURSEMENT_ISSUED) + HyperLink_completed.text;
-    HyperLink_withdrawn.text := bc_emsof_request_master.TallyOfStatus(WITHDRAWN) + HyperLink_withdrawn.text;
-    HyperLink_rejected.text := bc_emsof_request_master.TallyOfStatus(REJECTED) + HyperLink_rejected.text;
+    HyperLink_completed.text := bc_emsof_request.TallyOfStatus(REIMBURSEMENT_ISSUED) + HyperLink_completed.text;
+    HyperLink_withdrawn.text := bc_emsof_request.TallyOfStatus(WITHDRAWN) + HyperLink_withdrawn.text;
+    HyperLink_rejected.text := bc_emsof_request.TallyOfStatus(REJECTED) + HyperLink_rejected.text;
     //
-    HyperLink_deployed.text := bc_emsof_request_master.TallyOfStatus(DEPLOYED) + HyperLink_deployed.text;
-    HyperLink_archived.text := bc_emsof_request_master.TallyOfStatus(ARCHIVED) + HyperLink_archived.text;
+    HyperLink_deployed.text := bc_emsof_request.TallyOfStatus(DEPLOYED) + HyperLink_deployed.text;
+    HyperLink_archived.text := bc_emsof_request.TallyOfStatus(ARCHIVED) + HyperLink_archived.text;
     //
   end;
 end;
@@ -124,6 +125,16 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_regional_compliance_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('bc_emsof_request');
+  session.Add('bc_emsof_request',bc_emsof_request);
+  session.Remove('status_of_interest');
+  session.Add('status_of_interest',NEEDS_REGIONAL_COMPLIANCE_CHECK);
+  server.Transfer('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_logout_Click(sender: System.Object;

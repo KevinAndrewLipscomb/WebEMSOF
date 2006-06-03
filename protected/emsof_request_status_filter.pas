@@ -1,5 +1,5 @@
 
-unit regional_approval_overview;
+unit emsof_request_status_filter;
 
 interface
 
@@ -7,11 +7,12 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
-  borland.data.provider;
+  borland.data.provider,
+  Class_bc_emsof_request;
 
 const ID = '$Id$';
 
-type TWebForm_regional_approval_overview = class(System.Web.UI.Page)
+type TWebForm_emsof_request_status_filter = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -20,10 +21,19 @@ type TWebForm_regional_approval_overview = class(System.Web.UI.Page)
     procedure DataGrid_requests_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_requests_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
   {$ENDREGION}
+  //
+  // Expected session objects:
+  //
+  //   target_user_table: string
+  //   (target_user_table)_name: string
+  //   bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request
+  //   status_of_interest: Class_bc_emsof_request.status_type
+  //
+  //
   strict private
+    bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request;
     be_sort_order_ascending: boolean;
     dgi_id: cardinal; // dgi = DataGrid Index
-    dgi_county_approval_timestamp: cardinal;
     dgi_affiliate_num: cardinal;
     dgi_service_name: cardinal;
     dgi_sponsor_county: cardinal;
@@ -61,7 +71,7 @@ implementation
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebForm_regional_approval_overview.InitializeComponent;
+procedure TWebForm_emsof_request_status_filter.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
@@ -71,37 +81,35 @@ begin
 end;
 {$ENDREGION}
 
-procedure TWebForm_regional_approval_overview.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_emsof_request_status_filter.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_approval_overview';
-    Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
+    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
+    Label_account_descriptor.text := session.item[session.item['target_user_table'].tostring + '_name'].tostring;
+    Label_status.text := session.item['status_of_interest'].tostring;
     //
     // Initialize implementation-wide vars.
     //
     be_sort_order_ascending := TRUE;
     dgi_id := 0;
-    dgi_county_approval_timestamp := 1;
-    dgi_affiliate_num := 2;
-    dgi_service_name := 3;
-    dgi_sponsor_county := 4;
-    dgi_emsof_ante := 5;
-    dgi_fiscal_year_designator := 6;
-    dgi_county_dictated_appropriation_amount := 7;
-    dgi_county_dictated_appropriation_id := 8;
-    dgi_service_to_county_submission_deadline := 9;
-    dgi_linkbutton_select := 10;
+    dgi_affiliate_num := 1;
+    dgi_service_name := 2;
+    dgi_sponsor_county := 3;
+    dgi_emsof_ante := 4;
+    dgi_fiscal_year_designator := 5;
+    dgi_linkbutton_select := 6;
     num_qualifying_requests := 0;
-    sort_order := 'county_approval_timestamp';
+    sort_order := 'affiliate_num';
     //
+    bc_emsof_request := TClass_bc_emsof_request.Create;
     Bind;
     //
   end;
 end;
 
-procedure TWebForm_regional_approval_overview.OnInit(e: EventArgs);
+procedure TWebForm_emsof_request_status_filter.OnInit(e: EventArgs);
 begin
   //
   // Required for Designer support
@@ -110,7 +118,7 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_regional_approval_overview.DataGrid_requests_ItemDataBound(sender: System.Object;
+procedure TWebForm_emsof_request_status_filter.DataGrid_requests_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
   if (e.item.itemtype = listitemtype.alternatingitem)
@@ -125,7 +133,7 @@ begin
   end;
 end;
 
-procedure TWebForm_regional_approval_overview.DataGrid_requests_ItemCommand
+procedure TWebForm_emsof_request_status_filter.DataGrid_requests_ItemCommand
   (
   source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs
@@ -133,7 +141,7 @@ procedure TWebForm_regional_approval_overview.DataGrid_requests_ItemCommand
 begin
   //
   session.Remove('calling_form');
-  session.Add('calling_form','regional_approval_overview.aspx');
+  session.Add('calling_form','emsof_request_status_filter.aspx');
   session.Remove('account_descriptor');
   session.Add('account_descriptor',session.Item['regional_staffer_name'].ToString);
   session.Remove('fiscal_year_designator');
@@ -163,7 +171,7 @@ begin
   //
 end;
 
-procedure TWebForm_regional_approval_overview.DataGrid_requests_SortCommand(source: System.Object;
+procedure TWebForm_emsof_request_status_filter.DataGrid_requests_SortCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
   if e.SortExpression = sort_order then begin
@@ -176,7 +184,7 @@ begin
   Bind;
 end;
 
-procedure TWebForm_regional_approval_overview.LinkButton_logout_Click(sender: System.Object;
+procedure TWebForm_emsof_request_status_filter.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   formsauthentication.SignOut;
@@ -184,40 +192,16 @@ begin
   server.Transfer('../Default.aspx');
 end;
 
-procedure TWebForm_regional_approval_overview.Bind;
-var be_datagrid_empty: boolean;
-var cmdText: string;
+procedure TWebForm_emsof_request_status_filter.Bind;
+var
+  be_datagrid_empty: boolean;
 begin
-  appcommon.DbOpen;
-  cmdText := 'select emsof_request_master.id,'                                       // column 0
-  + ' emsof_request_master.county_approval_timestamp,'                               // column 1
-  + ' service.affiliate_num,'                                                        // column 2
-  + ' service.name as service_name,'                                                 // column 3
-  + ' county_code_name_map.name as sponsor_county,'                                  // column 4
-  + ' emsof_request_master.value as emsof_ante,'                                     // column 5
-  + ' fiscal_year.designator as fiscal_year_designator,'                             // column 6
-  + ' county_dictated_appropriation.amount as county_dictated_appropriation_amount,' // column 7
-  + ' county_dictated_appropriation.id as county_dictated_appropriation_id,'         // column 8
-  + ' service_to_county_submission_deadline'                                         // column 9
-  + ' from emsof_request_master'
-  +   ' join county_dictated_appropriation'
-  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-  +   ' join region_dictated_appropriation'
-  +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-  +   ' join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)'
-  +   ' join service on (service.id=county_dictated_appropriation.service_id)'
-  +   ' join state_dictated_appropriation'
-  +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
-  +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
-  + ' where state_dictated_appropriation_id = ' + session.item['state_dictated_appropriation_id'].tostring
-  +   ' and status_code = 4'
-  + ' order by ' + sort_order;
-  if be_sort_order_ascending then begin
-    cmdText := cmdText + ' asc';
-  end else begin
-    cmdText := cmdText + ' desc';
-  end;
-  DataGrid_requests.DataSource := borland.data.provider.bdpcommand.Create(cmdText,appcommon.db).ExecuteReader;
+  DataGrid_requests.DataSource := bc_emsof_request.MasterDataSource
+    (
+    Class_bc_emsof_request.status_type(session.item['status_of_interest']),
+    sort_order,
+    be_sort_order_ascending
+    );
   DataGrid_requests.DataBind;
   //
   // Manage control visibilities.
@@ -230,7 +214,6 @@ begin
   //
   num_qualifying_requests := 0;
   //
-  appcommon.DbClose;
 end;
 
 end.
