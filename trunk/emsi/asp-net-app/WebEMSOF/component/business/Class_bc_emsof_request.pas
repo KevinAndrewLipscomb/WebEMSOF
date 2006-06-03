@@ -29,7 +29,7 @@ type
   private
   public
     constructor Create;
-    function TallyOfStatus(status: Class_dalc_emsof_request.status_type): string;
+    function TallyOfStatus(status: status_type): string;
   end;
 
 implementation
@@ -53,12 +53,12 @@ begin
   be_valid_tally_by_status := FALSE;
 end;
 
-function TClass_bc_emsof_request.TallyOfStatus(status: Class_dalc_emsof_request.status_type): string;
+function TClass_bc_emsof_request.TallyOfStatus(status: status_type): string;
 begin
   if not be_valid_tally_by_status then begin
     DoTallyByStatus;
   end;
-  TallyOfStatus := tally_by_status[status].tostring;
+  TallyOfStatus := tally_by_status[ord(status)].tostring;
 end;
 
 end.
