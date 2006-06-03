@@ -38,6 +38,8 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\regional_compliance_check_overview.aspx'}
 {%AspMarkupContainer 'protected\full_request_review_approve.aspx'}
 {%AspMarkupContainer 'protected\regional_staffer_fiscal_year_selection.aspx'}
+{%AspMarkupContainer 'protected\regional_approval_overview.aspx'}
+{%AspMarkupContainer 'protected\emsof_request_status_filter.aspx'}
 
 uses
   System.Reflection,
@@ -67,7 +69,9 @@ uses
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas',
   Class_dalc_base in 'component\dal\Class_dalc_base.pas',
   Class_dalc_emsof_request in 'component\dal\Class_dalc_emsof_request.pas',
-  Class_bc_emsof_request in 'component\business\Class_bc_emsof_request.pas';
+  Class_bc_emsof_request in 'component\business\Class_bc_emsof_request.pas',
+  regional_approval_overview in 'protected\regional_approval_overview.pas' {regional_approval_overview.TWebForm_regional_approval_overview: System.Web.UI.Page},
+  emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page};
 
 const ID = '$Id';
 

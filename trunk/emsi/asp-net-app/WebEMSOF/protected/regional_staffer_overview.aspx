@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                      [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                        [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -40,7 +40,7 @@
 						  <li>
 							<p><ASP:HyperLink id="HyperLink_num_requests_needing_county_approval" runat="server" enabled="False"> request(s) need County Coordinator approval</ASP:HyperLink></p></li>
 						  <li>
-							<p><ASP:HyperLink id="HyperLink_regional_compliance" runat="server" enabled="False"> request(s) need regional compliance check</ASP:HyperLink></p></li>
+							<p><ASP:LinkButton id="LinkButton_regional_compliance" runat="server"> request(s) need regional compliance check</ASP:LinkButton></p></li>
 						  <li>
 							<p><ASP:HyperLink id="HyperLink_exec_dir_approval" runat="server" enabled="False"> request(s) need Executive Director approval</ASP:HyperLink></p></li>
 						  <li>

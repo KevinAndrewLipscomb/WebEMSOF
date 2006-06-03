@@ -3,6 +3,7 @@ unit Class_bc_emsof_request;
 interface
 
 uses
+  borland.data.provider,
   Class_dalc_emsof_request;
 
 type status_type =
@@ -29,36 +30,38 @@ type
   private
   public
     constructor Create;
+    function MasterDataSource
+      (
+      status: status_type;
+      order_by_field_name: string;
+      be_order_ascending: boolean
+      )
+      : borland.data.provider.bdpdatareader;
     function TallyOfStatus(status: status_type): string;
   end;
 
 implementation
 
-var
-  be_valid_tally_by_status: boolean;
-  tally_by_status: tally_by_status_type;
-
-procedure DoTallyByStatus;
-begin
-  if not be_valid_tally_by_status then begin
-    tally_by_status := TClass_dalc_emsof_request.Create.TallyByStatus;
-    be_valid_tally_by_status := TRUE;
-  end;
-end;
-
 constructor TClass_bc_emsof_request.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
-  be_valid_tally_by_status := FALSE;
+end;
+
+function TClass_bc_emsof_request.MasterDataSource
+  (
+  status: status_type;
+  order_by_field_name: string;
+  be_order_ascending: boolean
+  )
+  : borland.data.provider.bdpdatareader;
+begin
+  MasterDataSource := TClass_dalc_emsof_request.Create.MasterDataSource(ord(status),order_by_field_name,be_order_ascending);
 end;
 
 function TClass_bc_emsof_request.TallyOfStatus(status: status_type): string;
 begin
-  if not be_valid_tally_by_status then begin
-    DoTallyByStatus;
-  end;
-  TallyOfStatus := tally_by_status[ord(status)].tostring;
+  TallyOfStatus := TClass_dalc_emsof_request.Create.TallyByStatus[ord(status)].tostring;
 end;
 
 end.
