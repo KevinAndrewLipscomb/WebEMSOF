@@ -26,7 +26,7 @@ type TWebForm_emsof_request_status_filter = class(System.Web.UI.Page)
   //
   //   target_user_table: string
   //   (target_user_table)_name: string
-  //   bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request
+  //   calling_form: string;
   //   status_of_interest: Class_bc_emsof_request.status_type
   //
   //
@@ -76,6 +76,7 @@ begin
   if not IsPostback then begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
+    HyperLink_back.navigateurl := session.item['calling_form'].tostring;
     Label_account_descriptor.text := session.item[session.item['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session.item['status_of_interest'].tostring;
     //
