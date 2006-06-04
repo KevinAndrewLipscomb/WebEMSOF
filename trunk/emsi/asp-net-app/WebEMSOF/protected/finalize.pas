@@ -96,16 +96,16 @@ begin
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
     //
-    Label_service_name.text := session.item['service_name'].tostring;
+    Label_service_name.text := session['service_name'].tostring;
     //
-    if decimal(session.item['unused_amount']) >= 0 then begin
+    if decimal(session['unused_amount']) >= 0 then begin
       //
       Table_sorry.visible := FALSE;
       //
-      if decimal(session.item['unused_amount']) = 0 then begin
+      if decimal(session['unused_amount']) = 0 then begin
         ListItem_remainder_goes_to_region.visible := FALSE;
       end else begin
-        Label_unused_amount.text := decimal(session.item['unused_amount']).tostring('C');
+        Label_unused_amount.text := decimal(session['unused_amount']).tostring('C');
       end;
       //
       appcommon.DbOpen;
@@ -115,7 +115,7 @@ begin
       grand_total_cost_obj := borland.data.provider.bdpcommand.Create
         (
         'select sum(unit_cost*quantity) from emsof_request_detail'
-        + ' where master_id = ' + session.item['emsof_request_master_id'].tostring,
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring,
         appcommon.db
         )
         .ExecuteScalar;
@@ -128,7 +128,7 @@ begin
       //
       // Set Label_max_reimbursement.
       //
-      max_reimbursement := decimal(session.item['sum_of_emsof_antes']);
+      max_reimbursement := decimal(session['sum_of_emsof_antes']);
       Label_max_reimbursement_1.text := max_reimbursement.tostring('C');
       Label_max_reimbursement_2.text := Label_max_reimbursement_1.text;
       //
@@ -209,7 +209,7 @@ var
   service_email_address: string;
 begin
   if CheckBox_understand_read_only_1.checked
-    and ((decimal(session.item['unused_amount']) = 0) or CheckBox_understand_remainder_goes_to_region.checked)
+    and ((decimal(session['unused_amount']) = 0) or CheckBox_understand_remainder_goes_to_region.checked)
     and CheckBox_understand_grand_total_up_front.checked
     and CheckBox_understand_max_reimbursement.checked
     and CheckBox_understand_anticipated_vs_actual.checked
@@ -226,7 +226,7 @@ begin
     //
     borland.data.provider.bdpcommand.Create
       (
-      'update emsof_request_master set status_code = 3 where id = ' + session.item['emsof_request_master_id'].tostring,
+      'update emsof_request_master set status_code = 3 where id = ' + session['emsof_request_master_id'].tostring,
       appcommon.db
       )
       .ExecuteNonQuery;
@@ -244,7 +244,7 @@ begin
     //   Set up the command to get service's email address of record.
     service_email_address := borland.data.provider.bdpcommand.Create
       (
-      'select password_reset_email_address from service_user where id ="' + session.item['service_user_id'].tostring + '"',
+      'select password_reset_email_address from service_user where id ="' + session['service_user_id'].tostring + '"',
       appcommon.db
       )
       .ExecuteScalar.tostring;
@@ -256,7 +256,7 @@ begin
       +   ' join region_dictated_appropriation'
       +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
       +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
-      + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+      + ' where county_dictated_appropriation.id = ' + session['county_dictated_appropriation_id'].tostring,
       appcommon.db
       )
       .ExecuteScalar.tostring;
@@ -266,17 +266,17 @@ begin
       (
       service_email_address,
       cc_email_address,
-      session.item['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
+      session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
       + ' request',
-      session.item['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
-      + ' request for ' + session.item['fiscal_year_designator'].tostring + '.' + NEW_LINE
+      session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
+      + ' request for ' + session['fiscal_year_designator'].tostring + '.' + NEW_LINE
       + NEW_LINE
       + 'Please approve or reject this request by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session.Item['service_name'].ToString + ' EMSOF Coordinator.'
+      + 'Replies to this message will be addressed to the ' + session['service_name'].ToString + ' EMSOF Coordinator.'
       + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']

@@ -55,8 +55,8 @@ begin
     begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
     appcommon.DbOpen;
-    Label_user_name.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
-    if session.item['target_user_table'].tostring = 'county' then begin
+    Label_user_name.Text := session[session['target_user_table'].ToString + '_name'].ToString;
+    if session['target_user_table'].tostring = 'county' then begin
       Label_user_name.Text := Label_user_name.Text + ' County';
     end;
     Label_application_name.text := configurationsettings.appsettings['application_name'];
@@ -69,10 +69,10 @@ begin
     //
     borland.data.provider.bdpcommand.Create
       (
-      'update ' + session.Item['target_user_table'].ToString + '_user'
+      'update ' + session['target_user_table'].ToString + '_user'
       + ' set encoded_password = "' + appcommon.Digest(temporary_password) + '",'
       +   ' be_stale_password = TRUE '
-      + ' where id = ' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString,
+      + ' where id = ' + session[session['target_user_table'].ToString + '_user_id'].ToString,
       appcommon.db
       )
       .ExecuteNonQuery;
@@ -81,8 +81,8 @@ begin
     //
     email_address := borland.data.provider.bdpcommand.Create
       (
-      'select password_reset_email_address from ' + session.Item['target_user_table'].ToString + '_user '
-      + 'where id ="' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
+      'select password_reset_email_address from ' + session['target_user_table'].ToString + '_user '
+      + 'where id ="' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
       appcommon.db
       )
       .ExecuteScalar.tostring;
@@ -93,13 +93,13 @@ begin
       email_address,
       ConfigurationSettings.AppSettings['application_name'] + ' temp password',
       'Someone at the host known as ' + Safe(request.UserHostName,HOSTNAME) + ' (possibly you) requested a new password for the "'
-      + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + '" '
-      + session.Item['target_user_table'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
+      + session[session['target_user_table'].ToString + '_name'].ToString + '" '
+      + session['target_user_table'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
       + ' system.  Please log into ' + ConfigurationSettings.AppSettings['application_name'] + ' using the following credentials.  '
       + 'You will receive further instructions at that time.' + NEW_LINE
       + NEW_LINE
-      + '   ' + session.Item['target_user_table'].ToString + ':' + NEW_LINE
-      + '      ' + session.Item[session.Item['target_user_table'].ToString + '_name'].ToString + NEW_LINE
+      + '   ' + session['target_user_table'].ToString + ':' + NEW_LINE
+      + '      ' + session[session['target_user_table'].ToString + '_name'].ToString + NEW_LINE
       + '   password:' + NEW_LINE
       + '      ' + temporary_password + NEW_LINE
       + NEW_LINE

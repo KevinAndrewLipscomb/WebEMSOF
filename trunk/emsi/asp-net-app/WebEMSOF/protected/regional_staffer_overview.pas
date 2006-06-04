@@ -87,7 +87,7 @@ begin
   if not IsPostback then begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
-    Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
+    Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     HyperLink_num_requests_needing_development.text :=
       TClass_bc_emsof_request.Create.TallyOfStatus(INITIALIZED) + HyperLink_num_requests_needing_development.text;

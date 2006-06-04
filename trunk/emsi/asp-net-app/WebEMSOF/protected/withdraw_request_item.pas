@@ -62,11 +62,11 @@ begin
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - withdraw_request_item';
     //
-    saved_emsof_ante := decimal.Parse(session.item['emsof_request_item_emsof_ante'].tostring);
+    saved_emsof_ante := decimal.Parse(session['emsof_request_item_emsof_ante'].tostring);
     //
-    Label_priority.text := session.item['emsof_request_item_priority'].tostring;
-    Label_description.text := session.item['emsof_request_item_make_model'].tostring + ' '
-    + session.item['emsof_request_item_equipment_category'].tostring;
+    Label_priority.text := session['emsof_request_item_priority'].tostring;
+    Label_description.text := session['emsof_request_item_make_model'].tostring + ' '
+    + session['emsof_request_item_equipment_category'].tostring;
     Label_emsof_ante.text := saved_emsof_ante.tostring('C');
   end;
 end;
@@ -111,12 +111,12 @@ begin
     +   ' additional_service_ante = 0,'
     +   ' emsof_ante = 0,'
     +   ' status_code = 6'
-    + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
-    +   ' and priority = ' + session.item['emsof_request_item_priority'].tostring
+    + ' where master_id = ' + session['emsof_request_master_id'].tostring
+    +   ' and priority = ' + session['emsof_request_item_priority'].tostring
     + ';'
     + 'update emsof_request_master'
     + ' set value = value - ' + saved_emsof_ante.tostring
-    + ' where id = ' + session.Item['emsof_request_master_id'].tostring
+    + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
     appcommon.db
@@ -145,7 +145,7 @@ begin
   //   Get the service's email address.
   //
   service_email_address := borland.data.provider.bdpcommand.Create
-    ('select password_reset_email_address from service_user where id = ' + session.item['service_user_id'].tostring,appcommon.db)
+    ('select password_reset_email_address from service_user where id = ' + session['service_user_id'].tostring,appcommon.db)
     .ExecuteScalar.tostring;
   //
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
@@ -154,12 +154,12 @@ begin
     service_email_address,
     recipient_list_string,
     'Withdrawal of EMSOF request item',
-    session.Item['service_name'].ToString + ' has withdrawn a(n) "' + Label_description.text + '" item from their '
-    + session.item['fiscal_year_designator'].tostring + ' EMSOF request.  The associated sponsor county is '
-    + session.item['sponsor_county'].tostring + ' and the status of this service''s EMSOF request is "'
-    + session.item['emsof_request_master_status'].tostring + '".' + NEW_LINE
+    session['service_name'].ToString + ' has withdrawn a(n) "' + Label_description.text + '" item from their '
+    + session['fiscal_year_designator'].tostring + ' EMSOF request.  The associated sponsor county is '
+    + session['sponsor_county'].tostring + ' and the status of this service''s EMSOF request is "'
+    + session['emsof_request_master_status'].tostring + '".' + NEW_LINE
     + NEW_LINE
-    + session.Item['service_name'].ToString + ' is aware that this action effectively surrenders ' + Label_emsof_ante.text
+    + session['service_name'].ToString + ' is aware that this action effectively surrenders ' + Label_emsof_ante.text
     + ' of EMSOF matching funds back to the Regional Council.' + NEW_LINE
     + NEW_LINE
     + 'You can see the effect of this action by visiting:' + NEW_LINE
@@ -167,7 +167,7 @@ begin
     + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
     + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
     + NEW_LINE
-    + 'Replies to this message will be addressed to the ' + session.Item['service_name'].ToString + ' EMSOF Coordinator.'
+    + 'Replies to this message will be addressed to the ' + session['service_name'].ToString + ' EMSOF Coordinator.'
     + NEW_LINE
     + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']

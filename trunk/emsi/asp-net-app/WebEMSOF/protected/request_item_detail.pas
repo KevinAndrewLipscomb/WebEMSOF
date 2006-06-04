@@ -141,7 +141,7 @@ begin
         (
         'select factor'
         + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
-        + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+        + ' where county_dictated_appropriation.id = ' + session['county_dictated_appropriation_id'].tostring,
         appcommon.db
         )
         .ExecuteScalar.tostring
@@ -168,10 +168,10 @@ begin
     bdri_equipment_category_allowable_cost := 1;
     bdri_equipment_category_funding_level := 2;
     //
-    be_before_deadline := session.item['be_before_service_to_county_submission_deadline'].tostring = 'True'; // Case matters.
-    be_finalized := session.item['be_finalized'].tostring = 'True'; // Case matters.
+    be_before_deadline := session['be_before_service_to_county_submission_deadline'].tostring = 'True'; // Case matters.
+    be_finalized := session['be_finalized'].tostring = 'True'; // Case matters.
     be_locked := (not be_before_deadline) or be_finalized;
-    be_new := session.item['emsof_request_item_priority'].tostring = system.string.EMPTY;
+    be_new := session['emsof_request_item_priority'].tostring = system.string.EMPTY;
     //
     // Manage whether or not the instruction ("-- Select --") appears at the top of DropDownList_equipment_category.
     //
@@ -192,7 +192,7 @@ begin
         + ' (be_bls_amb or be_als_amb) as be_bls_amb,'
         + ' (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs'
         + ' FROM service'
-        + ' WHERE id = ' + session.item['service_user_id'].tostring,
+        + ' WHERE id = ' + session['service_user_id'].tostring,
         appcommon.db
         )
         .ExecuteReader;
@@ -222,8 +222,8 @@ begin
         (
         listitem.Create
           (
-          session.item['emsof_request_item_equipment_category'].tostring,
-          session.item['emsof_request_item_code'].tostring
+          session['emsof_request_item_equipment_category'].tostring,
+          session['emsof_request_item_code'].tostring
           )
         );
       //
@@ -233,7 +233,7 @@ begin
     // options.
     //
     if not (be_new or be_locked) then begin
-      DropDownList_equipment_category.selectedvalue := session.item['emsof_request_item_code'].tostring;
+      DropDownList_equipment_category.selectedvalue := session['emsof_request_item_code'].tostring;
       Button_submit_and_repeat.visible := FALSE;
       Button_submit_and_stop.visible := FALSE;
       Button_update.visible := TRUE;
@@ -255,8 +255,8 @@ begin
         (
         'select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante'
         + ' from emsof_request_detail'
-        + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
-        +   ' and priority = ' + session.item['emsof_request_item_priority'].tostring,
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + session['emsof_request_item_priority'].tostring,
         appcommon.db
         )
         .ExecuteReader;
@@ -370,12 +370,12 @@ begin
     +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
     +   ' additional_service_ante = ' + additional_service_ante.tostring + ','
     +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
-    + ' where master_id = ' + session.Item['emsof_request_master_id'].tostring
-    +   ' and priority = ' + session.Item['emsof_request_item_priority'].tostring
+    + ' where master_id = ' + session['emsof_request_master_id'].tostring
+    +   ' and priority = ' + session['emsof_request_item_priority'].tostring
     + ';'
     + 'update emsof_request_master'
     + ' set value = value - ' + saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
-    + ' where id = ' + session.Item['emsof_request_master_id'].tostring
+    + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
     appcommon.db
@@ -401,17 +401,17 @@ begin
       'START TRANSACTION'
       + ';'
       + 'delete from emsof_request_detail'
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
-      +   ' and priority = ' + session.item['emsof_request_item_priority'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
+      +   ' and priority = ' + session['emsof_request_item_priority'].tostring
       + ';'
       + 'update emsof_request_detail set priority = priority - 1'
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
-      +   ' and priority > ' + session.item['emsof_request_item_priority'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
+      +   ' and priority > ' + session['emsof_request_item_priority'].tostring
       + ';'
       + 'update emsof_request_master'
       + ' set value = value - ' + saved_emsof_ante.tostring + ','
       +   ' num_items = num_items - 1'
-      + ' where id = ' + session.Item['emsof_request_master_id'].tostring
+      + ' where id = ' + session['emsof_request_master_id'].tostring
       + ';'
       + 'COMMIT;',
       appcommon.db
@@ -552,7 +552,7 @@ begin
   //
   priority_string := borland.data.provider.bdpcommand.Create
     (
-    'select (num_items + 1) from emsof_request_master where id = ' + session.Item['emsof_request_master_id'].tostring,
+    'select (num_items + 1) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
     appcommon.db
     )
     .ExecuteScalar.tostring;
@@ -565,7 +565,7 @@ begin
     'START TRANSACTION'
     + ';'
     + 'insert into emsof_request_detail'
-    + ' set master_id = ' + session.Item['emsof_request_master_id'].tostring + ','
+    + ' set master_id = ' + session['emsof_request_master_id'].tostring + ','
     +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
     +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
     +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
@@ -580,7 +580,7 @@ begin
     + ' set status_code = 2,'
     +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
     +   ' num_items = num_items + 1'
-    + ' where id = ' + session.Item['emsof_request_master_id'].tostring
+    + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
     appcommon.db

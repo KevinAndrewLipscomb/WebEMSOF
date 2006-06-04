@@ -76,7 +76,7 @@ begin
   if not IsPostback then begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_compliance_check_overview';
-    Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
+    Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize implementation-wide vars.
     //
@@ -134,7 +134,7 @@ begin
   session.Remove('calling_form');
   session.Add('calling_form','regional_compliance_check_overview.aspx');
   session.Remove('account_descriptor');
-  session.Add('account_descriptor',session.Item['regional_staffer_name'].ToString);
+  session.Add('account_descriptor',session['regional_staffer_name'].ToString);
   session.Remove('fiscal_year_designator');
   session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fiscal_year_designator].text,ALPHANUM));
   session.Remove('service_name');
@@ -208,7 +208,7 @@ begin
   +   ' join state_dictated_appropriation'
   +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
   +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
-  + ' where state_dictated_appropriation_id = ' + session.item['state_dictated_appropriation_id'].tostring
+  + ' where state_dictated_appropriation_id = ' + session['state_dictated_appropriation_id'].tostring
   +   ' and status_code = 4'
   + ' order by ' + sort_order;
   if be_sort_order_ascending then begin
