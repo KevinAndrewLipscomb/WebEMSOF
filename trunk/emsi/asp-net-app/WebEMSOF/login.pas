@@ -42,10 +42,10 @@ type
     DropDownList_user_kind: System.Web.UI.WebControls.DropDownList;
     Label_user: System.Web.UI.WebControls.Label;
     DropDownList_user: System.Web.UI.WebControls.DropDownList;
-    RangeValidator_username: System.Web.UI.WebControls.RangeValidator;
     RegularExpressionValidator_user_kind: System.Web.UI.WebControls.RegularExpressionValidator;
     TextBox_noop_ie_behavior_workaround: System.Web.UI.WebControls.TextBox;
     CustomValidator_account_exists: System.Web.UI.WebControls.CustomValidator;
+    RegularExpressionValidator_user: System.Web.UI.WebControls.RegularExpressionValidator;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -134,7 +134,7 @@ begin
       )
       .ExecuteReader;
     while bdr.Read do begin
-      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
+      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'service-' + bdr['id'].ToString));
     end;
   end else if DropDownList_user_kind.selectedvalue = 'county' then begin
     Label_user.text := 'County';
@@ -148,7 +148,7 @@ begin
       )
       .ExecuteReader;
     while bdr.Read do begin
-      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
+      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'county-' + bdr['id'].ToString));
     end;
   end else if DropDownList_user_kind.selectedvalue = 'regional_staffer' then begin
     Label_user.text := 'Regional staffer';
@@ -163,7 +163,7 @@ begin
       .ExecuteReader;
     while bdr.Read do begin
       DropDownList_user.Items.Add
-        (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,bdr['id'].ToString));
+        (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,'regional-staffer-' + bdr['id'].ToString));
     end;
   end else begin
     session.Remove('target_user_table');
@@ -183,7 +183,8 @@ end;
 procedure TWebForm_login.Button_log_in_Click(sender: System.Object; e: System.EventArgs);
 begin
   if page.isvalid then begin
-    formsauthentication.RedirectFromLoginPage(Safe(DropDownList_user.selecteditem.text,NUM),CheckBox_keep_me_logged_in.checked);
+    formsauthentication.RedirectFromLoginPage
+      (Safe(DropDownList_user.selectedvalue,HYPHENATED_ALPHANUM),CheckBox_keep_me_logged_in.checked);
   end;
 end;
 

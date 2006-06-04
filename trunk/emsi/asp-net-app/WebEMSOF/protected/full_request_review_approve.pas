@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
-  borland.data.provider, system.web.mail, borland.vcl.sysutils,
+  borland.data.provider, system.web.mail, borland.vcl.sysutils, 
   Class_bc_emsof_request;
 
 const ID = '$Id$';
@@ -116,8 +116,7 @@ begin
     Label_unused_amount.text := (parent_appropriation_amount - total_emsof_ante).tostring('C');
     Label_num_items.text := num_items.tostring;
     //
-//    if session.item['emsof_request_master_status_code'].tostring = session.item['request_status_this_session_may_approve'].tostring
-//    then begin
+    if httpcontext.current.user.IsInRole('emsof-planner') then begin
       HyperLink_back_2.navigateurl := session.item['calling_form'].tostring;
 //      Label_next_approver.text := session.item['next_approver_descriptor'].tostring;
 //      be_before_improvement_deadline := datetime.Now <= datetime.Parse(session.item['rework_deadline'].tostring);
@@ -128,10 +127,10 @@ begin
 //        TableRow_return.visible := FALSE;
 //        Button_disapprove.text := 'REJECT';
 //      end;
-//    end else begin
-//      Table_action_required.visible := FALSE;
-//      Table_disposition.visible := FALSE;
-//    end;
+    end else begin
+      Table_action_required.visible := FALSE;
+      Table_disposition.visible := FALSE;
+    end;
     //
     appcommon.DbClose;
     //

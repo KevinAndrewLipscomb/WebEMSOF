@@ -36,6 +36,7 @@ type
     HOSTNAME,
     HUMAN_NAME,
     HUMAN_NAME_CSV,
+    HYPHENATED_ALPHANUM,
     HYPHENATED_NUM,
     MAKE_MODEL,
     NARRATIVE,
@@ -46,6 +47,7 @@ type
     POSTAL_STREET_ADDRESS,
     REAL_NUM
     );
+  string_array = array of string;
 
 var
   db: borland.data.provider.bdpconnection;
@@ -192,6 +194,8 @@ begin
       allow := 'a-zA-Z\-\. ' + APOSTROPHE;
     HUMAN_NAME_CSV:
       allow := 'a-zA-Z\-,\. ' + APOSTROPHE;
+    HYPHENATED_ALPHANUM:
+      allow := 'a-zA-z0-9\-';
     HYPHENATED_NUM:
       allow := '0-9\-';
     MAKE_MODEL:
