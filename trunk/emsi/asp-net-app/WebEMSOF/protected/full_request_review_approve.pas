@@ -7,7 +7,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
-  borland.data.provider, system.web.mail, borland.vcl.sysutils;
+  borland.data.provider, system.web.mail, borland.vcl.sysutils,
+  Class_bc_emsof_request;
 
 const ID = '$Id$';
 
@@ -21,7 +22,15 @@ type
     procedure Button_approve_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_disapprove_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
+  //
+  // Expected session objects:
+  //
+  //   calling_form: string;
+  //   account_descriptor: string;
+  //   e_item: System.Web.UI.WebControls.DataGridItem;
+  //
   strict private
+    bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request;
     be_before_improvement_deadline: boolean;
     num_items: cardinal;
     parent_appropriation_amount: decimal;
@@ -90,65 +99,39 @@ begin
     HyperLink_back.navigateurl := session.item['calling_form'].tostring;
     Label_account_descriptor.text := session.item['account_descriptor'].tostring;
     //
-    // Initialize implementation-wide vars.
+    // Initialize class private data members.
     //
+    bc_emsof_request := Class_bc_emsof_request.TClass_bc_emsof_request.Create;
     num_items := 0;
     total_emsof_ante := 0;
     //
-    Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
-    Label_service_name.text := session.item['service_name'].tostring;
-    Label_affiliate_num.text := session.item['affiliate_num'].tostring;
-    parent_appropriation_amount := decimal.Parse(session.item['appropriation_amount'].tostring);
-    Label_parent_appropriation_amount.text := parent_appropriation_amount.tostring('C');
-    Label_sponsor_county.text := session.item['county_name'].tostring;
+    Label_fiscal_year_designator.text := bc_emsof_request.FyDesignatorOf(session.item['e_item']);
+    Label_service_name.text := bc_emsof_request.ServiceNameOf(session.item['e_item']);
+    Label_affiliate_num.text := bc_emsof_request.AffiliateNumOf(session.item['e_item']);
+    Label_sponsor_county.text := bc_emsof_request.SponsorCountyOf(session.item['e_item']);
     //
-    appcommon.DbOpen;
-    //
-    DataGrid_items.DataSource := borland.data.provider.bdpcommand.Create
-      (
-      'select priority,'
-      + ' make_model,'
-      + ' if(be_refurbished,"(refurbished)","") as be_refurbished,'
-      + ' description as category,'
-      + ' place_kept,'
-      + ' quantity,'
-      + ' unit_cost,'
-      + ' (quantity*unit_cost) as subtotal,'
-      + ' allowable_cost,'
-      + ' emsof_ante,'
-      + ' (emsof_ante/(quantity*unit_cost)) as effective_match_level'
-      + ' from emsof_request_detail'
-      +   ' join eligible_provider_equipment_list'
-      +     ' on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
-      +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
-      + ' where county_dictated_appropriation_id = ' + session.item['county_dictated_appropriation_id'].tostring
-      +   ' and emsof_request_detail.status_code <> 6'
-      + ' order by priority',
-      appcommon.db
-      )
-      .ExecuteReader;
-    DataGrid_items.DataBind;
+    bc_emsof_request.BindDetail(bc_emsof_request.IdOf(session.item['e_item']),DataGrid_items);
     //
     Label_sum_of_emsof_antes.text := total_emsof_ante.tostring('C');
     Label_unused_amount.text := (parent_appropriation_amount - total_emsof_ante).tostring('C');
     Label_num_items.text := num_items.tostring;
     //
-    if session.item['emsof_request_master_status_code'].tostring = session.item['request_status_this_session_may_approve'].tostring
-    then begin
+//    if session.item['emsof_request_master_status_code'].tostring = session.item['request_status_this_session_may_approve'].tostring
+//    then begin
       HyperLink_back_2.navigateurl := session.item['calling_form'].tostring;
-      Label_next_approver.text := session.item['next_approver_descriptor'].tostring;
-      be_before_improvement_deadline := datetime.Now <= datetime.Parse(session.item['rework_deadline'].tostring);
-      if be_before_improvement_deadline then begin
+//      Label_next_approver.text := session.item['next_approver_descriptor'].tostring;
+//      be_before_improvement_deadline := datetime.Now <= datetime.Parse(session.item['rework_deadline'].tostring);
+//      if be_before_improvement_deadline then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
-      end else begin
-        TableRow_return.visible := FALSE;
-        Button_disapprove.text := 'REJECT';
-      end;
-    end else begin
-      Table_action_required.visible := FALSE;
-      Table_disposition.visible := FALSE;
-    end;
+//      end else begin
+//        TableRow_return.visible := FALSE;
+//        Button_disapprove.text := 'REJECT';
+//      end;
+//    end else begin
+//      Table_action_required.visible := FALSE;
+//      Table_disposition.visible := FALSE;
+//    end;
     //
     appcommon.DbClose;
     //

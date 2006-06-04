@@ -31,18 +31,7 @@ type TWebForm_emsof_request_status_filter = class(System.Web.UI.Page)
   //
   //
   strict private
-    bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request;
     be_sort_order_ascending: boolean;
-    dgi_id: cardinal; // dgi = DataGrid Index
-    dgi_affiliate_num: cardinal;
-    dgi_service_name: cardinal;
-    dgi_sponsor_county: cardinal;
-    dgi_emsof_ante: cardinal;
-    dgi_fiscal_year_designator: cardinal;
-    dgi_county_dictated_appropriation_amount: cardinal;
-    dgi_county_dictated_appropriation_id: cardinal;
-    dgi_service_to_county_submission_deadline: cardinal;
-    dgi_linkbutton_select: cardinal;
     num_qualifying_requests: cardinal;
     sort_order: string;
     procedure Bind;
@@ -90,20 +79,12 @@ begin
     Label_account_descriptor.text := session.item[session.item['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session.item['status_of_interest'].tostring;
     //
-    // Initialize implementation-wide vars.
+    // Initialize instance private data members.
     //
     be_sort_order_ascending := TRUE;
-    dgi_id := 0;
-    dgi_affiliate_num := 1;
-    dgi_service_name := 2;
-    dgi_sponsor_county := 3;
-    dgi_emsof_ante := 4;
-    dgi_fiscal_year_designator := 5;
-    dgi_linkbutton_select := 6;
     num_qualifying_requests := 0;
     sort_order := 'affiliate_num';
     //
-    bc_emsof_request := TClass_bc_emsof_request.Create;
     Bind;
     //
   end;
@@ -140,34 +121,23 @@ procedure TWebForm_emsof_request_status_filter.DataGrid_requests_ItemCommand
   );
 begin
   //
-  session.Remove('calling_form');
-  session.Add('calling_form','emsof_request_status_filter.aspx');
-  session.Remove('account_descriptor');
-  session.Add('account_descriptor',session.Item['regional_staffer_name'].ToString);
-  session.Remove('fiscal_year_designator');
-  session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fiscal_year_designator].text,ALPHANUM));
-  session.Remove('service_name');
-  session.Add('service_name',Safe(e.item.cells[dgi_service_name].text,ORG_NAME));
-  session.Remove('affiliate_num');
-  session.Add('affiliate_num',Safe(e.item.cells[dgi_affiliate_num].text,NUM));
-  session.Remove('appropriation_amount');
-  session.Add('appropriation_amount',Safe(e.item.cells[dgi_county_dictated_appropriation_amount].text,REAL_NUM));
-  session.Remove('county_name');
-  session.Add('county_name',Safe(e.item.cells[dgi_sponsor_county].text,ALPHA));
-  session.Remove('county_dictated_appropriation_id');
-  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_county_dictated_appropriation_id].text,NUM));
-  session.Remove('emsof_request_master_status_code');
-  session.Add('emsof_request_master_status_code','4');
-  session.Remove('request_status_this_session_may_approve');
-  session.Add('request_status_this_session_may_approve','4');
-  session.Remove('next_approver_descriptor');
-  session.Add('next_approver_descriptor','Regional Council Executive Director');
-  session.Remove('county_dictated_deadline');
-  session.Add('county_dictated_deadline',Safe(e.item.cells[dgi_service_to_county_submission_deadline].text,DATE_TIME));
-  session.Remove('promotion_status');
-  session.Add('promotion_status','5');
-  //
-  server.Transfer('full_request_review_approve.aspx');
+  if (e.item.itemtype = listitemtype.alternatingitem)
+    or (e.item.itemtype = listitemtype.edititem)
+    or (e.item.itemtype = listitemtype.item)
+    or (e.item.itemtype = listitemtype.selecteditem)
+  then begin
+    //
+    // We are dealing with a data row, not a header or footer row.
+    //
+    session.Remove('calling_form');
+    session.Add('calling_form','emsof_request_status_filter.aspx');
+    session.Remove('account_descriptor');
+    session.Add('account_descriptor',session.Item['regional_staffer_name'].ToString);
+    session.Remove('e_item');
+    session.Add('e_item',e.item);
+    //
+    server.Transfer('full_request_review_approve.aspx');
+  end;
   //
 end;
 
@@ -196,13 +166,13 @@ procedure TWebForm_emsof_request_status_filter.Bind;
 var
   be_datagrid_empty: boolean;
 begin
-  DataGrid_requests.DataSource := bc_emsof_request.MasterDataSource
+  TClass_bc_emsof_request.Create.BindOverview
     (
     Class_bc_emsof_request.status_type(session.item['status_of_interest']),
     sort_order,
-    be_sort_order_ascending
+    be_sort_order_ascending,
+    DataGrid_requests
     );
-  DataGrid_requests.DataBind;
   //
   // Manage control visibilities.
   //
