@@ -49,7 +49,7 @@
 				  <td>
 							<asp:dropdownlist id="DropDownList_user"
 											  runat="server">
-							</asp:dropdownlist><ASP:RangeValidator id="RangeValidator_username" runat="server" errormessage="Please select a user." font-bold="True" controltovalidate="DropDownList_user" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator>
+							</asp:dropdownlist><ASP:RegularExpressionValidator id="RegularExpressionValidator_user" runat="server" errormessage="Please select a user." font-bold="True" controltovalidate="DropDownList_user" validationexpression="[^0].+">!ERR!</ASP:RegularExpressionValidator>
 				  </td>
 				</tr>
 				<tr>

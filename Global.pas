@@ -4,7 +4,9 @@ interface
 
 uses
   System.Collections, System.ComponentModel,
-  System.Web, System.Web.SessionState;
+  System.Web, System.Web.SessionState,
+  Class_bc_user,
+  system.security.principal;
 
 const ID = '$Id$';
 
@@ -24,7 +26,6 @@ type
     procedure Session_End(sender: System.Object; e: EventArgs);
     procedure Application_End(sender: System.Object; e: EventArgs);
   private
-    { Private Declarations }
   public
     constructor Create;
   end;
@@ -76,7 +77,13 @@ end;
 
 procedure TGlobal.Application_AuthenticateRequest(sender: System.Object; e: EventArgs);
 begin
-
+  if request.isauthenticated then begin
+    httpcontext.current.user := system.security.principal.GenericPrincipal.Create
+      (
+      user.identity,
+      Class_bc_user.TClass_bc_user.Create.RolesOf(user.identity.name)
+      );
+  end;
 end;
 
 procedure TGlobal.Application_Error(sender: System.Object; e: EventArgs);

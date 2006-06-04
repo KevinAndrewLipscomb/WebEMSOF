@@ -6,7 +6,11 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  appcommon,
+  Class_bc_user,
+  system.configuration,
+  system.security.principal;
 
 const ID = '$Id$';
 

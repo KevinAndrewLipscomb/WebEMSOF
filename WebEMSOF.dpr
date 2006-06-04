@@ -71,7 +71,9 @@ uses
   Class_dalc_emsof_request in 'component\dal\Class_dalc_emsof_request.pas',
   Class_bc_emsof_request in 'component\business\Class_bc_emsof_request.pas',
   regional_approval_overview in 'protected\regional_approval_overview.pas' {regional_approval_overview.TWebForm_regional_approval_overview: System.Web.UI.Page},
-  emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page};
+  emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
+  Class_bc_user in 'component\business\Class_bc_user.pas',
+  Class_dalc_user in 'component\dal\Class_dalc_user.pas';
 
 const ID = '$Id';
 
