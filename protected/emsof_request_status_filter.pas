@@ -76,9 +76,9 @@ begin
   if not IsPostback then begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
-    HyperLink_back.navigateurl := session.item['calling_form'].tostring;
-    Label_account_descriptor.text := session.item[session.item['target_user_table'].tostring + '_name'].tostring;
-    Label_status.text := session.item['status_of_interest'].tostring;
+    HyperLink_back.navigateurl := session['calling_form'].tostring;
+    Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
+    Label_status.text := session['status_of_interest'].tostring;
     //
     // Initialize instance private data members.
     //
@@ -133,7 +133,7 @@ begin
     session.Remove('calling_form');
     session.Add('calling_form','emsof_request_status_filter.aspx');
     session.Remove('account_descriptor');
-    session.Add('account_descriptor',session.Item['regional_staffer_name'].ToString);
+    session.Add('account_descriptor',session['regional_staffer_name'].ToString);
     session.Remove('e_item');
     session.Add('e_item',e.item);
     //
@@ -169,7 +169,7 @@ var
 begin
   TClass_bc_emsof_request.Create.BindOverview
     (
-    Class_bc_emsof_request.status_type(session.item['status_of_interest']),
+    Class_bc_emsof_request.status_type(session['status_of_interest']),
     sort_order,
     be_sort_order_ascending,
     DataGrid_requests

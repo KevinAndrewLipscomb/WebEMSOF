@@ -72,7 +72,7 @@ begin
     //
     // Set Label_service_name_*.
     //
-    service_name := session.item['service_name_of_appropriation_selected_for_deletion'].tostring;
+    service_name := session['service_name_of_appropriation_selected_for_deletion'].tostring;
     Label_service_name_1.text := service_name;
     Label_service_name_2.text := service_name;
     Label_application_name.text := configurationsettings.appsettings['application_name'];
@@ -89,13 +89,13 @@ begin
       +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
       +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
       + ' where county_dictated_appropriation.id = '
-      +     session.item['id_of_appropriation_selected_for_deletion'].tostring,
+      +     session['id_of_appropriation_selected_for_deletion'].tostring,
       appcommon.db
       )
       .ExecuteReader;
     bdr.Read;
     Label_fiscal_year.text := bdr['designator'].tostring;
-    Label_amount.text := decimal.Parse(session.item['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
+    Label_amount.text := decimal.Parse(session['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
     //
     appcommon.DbClose;
     end;
@@ -128,10 +128,10 @@ begin
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
-    session.item['county_user_password_reset_email_address'].tostring,
-    session.item['email_address_of_service_of_appropriation_selected_for_deletion'].tostring,
+    session['county_user_password_reset_email_address'].tostring,
+    session['email_address_of_service_of_appropriation_selected_for_deletion'].tostring,
     'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-    'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
+    'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
     + 'service for ' + Safe(Label_fiscal_year.text,ALPHANUM) + '.' + NEW_LINE
     + NEW_LINE
     + 'NOTE that the equipment request(s) that you had already entered against this appropriation were also deleted.  This was '
@@ -143,7 +143,7 @@ begin
     + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
     + '/protected/service_overview.aspx' + NEW_LINE
     + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+      + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
       + NEW_LINE
       + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
@@ -152,7 +152,7 @@ begin
   borland.data.provider.bdpcommand.Create
     (
     'delete from county_dictated_appropriation where id = '
-    + session.item['id_of_appropriation_selected_for_deletion'].tostring,
+    + session['id_of_appropriation_selected_for_deletion'].tostring,
     appcommon.db
     )
     .ExecuteNonQuery;

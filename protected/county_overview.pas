@@ -65,13 +65,13 @@ begin
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_overview';
     //
-    Label_county_name.Text := session.Item['county_name'].ToString;
+    Label_county_name.Text := session['county_name'].ToString;
     //
     appcommon.DbOpen;
     bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password, password_reset_email_address FROM county_user'
-      + ' where id = ' + session.item['county_user_id'].tostring,
+      + ' where id = ' + session['county_user_id'].tostring,
       appcommon.db
       )
       .ExecuteReader;
@@ -104,7 +104,7 @@ begin
         +   ' JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id)'
         +   ' JOIN region_code_name_map on (region_code_name_map.code=region_code)'
         +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
-        + ' WHERE county_code = ' + session.Item['county_user_id'].ToString
+        + ' WHERE county_code = ' + session['county_user_id'].ToString
         +   ' and fiscal_year_id >= (' + max_fiscal_year_id_string + ' - 1)',
         appcommon.db
         )

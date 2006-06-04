@@ -91,7 +91,7 @@ begin
     //
     be_stale_password := Borland.Data.Provider.BdpCommand.Create
       (
-      'SELECT be_stale_password FROM service_user where id=' + session.item['service_user_id'].tostring,
+      'SELECT be_stale_password FROM service_user where id=' + session['service_user_id'].tostring,
       appcommon.db
       )
       .ExecuteScalar.tostring;
@@ -118,13 +118,13 @@ begin
     //
     // Set Label_service_name
     //
-    Label_service_name.Text := session.Item['service_name'].ToString;
+    Label_service_name.Text := session['service_name'].ToString;
     //
     // Set Label_profile_status
     //
     bc_get_profile_status := borland.data.provider.bdpCommand.Create
       (
-      'select be_valid_profile from service where id = "' + session.Item['service_user_id'].ToString + '"'
+      'select be_valid_profile from service where id = "' + session['service_user_id'].ToString + '"'
       ,appcommon.db
       );
     if bc_get_profile_status.ExecuteScalar.ToString = '0' then begin
@@ -279,7 +279,7 @@ begin
     +   ' JOIN fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
     +   ' JOIN county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)'
     +   ' JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
-    + ' WHERE service_id = ' + session.item['service_user_id'].tostring
+    + ' WHERE service_id = ' + session['service_user_id'].tostring
     +   ' and fiscal_year.id >= (' + max_fiscal_year_id_string + ' - 1)'
     + ' order by fy_designator,county_name',
     appcommon.db

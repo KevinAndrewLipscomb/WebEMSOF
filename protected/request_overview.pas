@@ -98,7 +98,7 @@ begin
     //
     be_before_deadline := TRUE;
     be_completely_approved := FALSE;
-    county_dictated_appropriation_amount := decimal.Parse(session.item['county_dictated_appropriation_amount'].tostring);
+    county_dictated_appropriation_amount := decimal.Parse(session['county_dictated_appropriation_amount'].tostring);
     dgi_master_id := 0;
     dgi_priority := 1;
     dgi_code := 2;
@@ -116,11 +116,11 @@ begin
     //
     // Set parent appropriation labels.
     //
-    Label_service_name.text := session.Item['service_name'].ToString;
-    Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
-    Label_sponsor_county.text := session.item['sponsor_county'].tostring;
+    Label_service_name.text := session['service_name'].ToString;
+    Label_fiscal_year_designator.text := session['fiscal_year_designator'].tostring;
+    Label_sponsor_county.text := session['sponsor_county'].tostring;
     Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
-    Label_master_status.text := session.item['emsof_request_master_status'].tostring;
+    Label_master_status.text := session['emsof_request_master_status'].tostring;
     //
     // All further rendering is deadline-dependent.
     //
@@ -131,7 +131,7 @@ begin
         'select service_to_county_submission_deadline'
         + ' from county_dictated_appropriation join region_dictated_appropriation'
         +   ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-        + ' where county_dictated_appropriation.id = ' + session.item['county_dictated_appropriation_id'].tostring,
+        + ' where county_dictated_appropriation.id = ' + session['county_dictated_appropriation_id'].tostring,
         appcommon.db
         )
         .ExecuteScalar
@@ -141,7 +141,7 @@ begin
     //
     be_finalized := '1' = borland.data.provider.bdpcommand.Create
       (
-      'select (status_code > 2) from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
+      'select (status_code > 2) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
       appcommon.db
       )
       .ExecuteScalar.tostring;
@@ -168,7 +168,7 @@ begin
     //
     bdr := borland.data.provider.bdpcommand.Create
       (
-      'select num_items,value from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
+      'select num_items,value from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
       appcommon.db
       )
       .ExecuteReader;
@@ -196,7 +196,7 @@ begin
     if be_finalized then begin
       be_completely_approved := '1' = borland.data.provider.bdpcommand.Create
         (
-        'select (status_code between 8 and 10) from emsof_request_master where id = ' + session.item['emsof_request_master_id'].tostring,
+        'select (status_code between 8 and 10) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
         appcommon.db
         )
         .ExecuteScalar.tostring;
@@ -244,15 +244,15 @@ begin
       (
       'START TRANSACTION;'
       + 'update emsof_request_detail set priority = 0'
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
       + ';'
       + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' - 1'
       + ';'
       + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' - 1'
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = 0;'
       + 'COMMIT;',
       appcommon.db
@@ -265,15 +265,15 @@ begin
       (
       'START TRANSACTION;'
       + 'update emsof_request_detail set priority = 0'
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
       + ';'
       + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' + 1'
       + ';'
       + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' + 1'
-      + ' where master_id = ' + session.item['emsof_request_master_id'].tostring
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = 0;'
       + 'COMMIT;',
       appcommon.db
@@ -342,7 +342,7 @@ begin
   + ' from emsof_request_detail'
   +   ' join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
   +   ' join item_status_code_description_map on (item_status_code_description_map.code=emsof_request_detail.status_code)'
-  + ' where master_id = ' + session.Item['emsof_request_master_id'].ToString
+  + ' where master_id = ' + session['emsof_request_master_id'].ToString
   + ' order by priority';
   //
   DataGrid_items.DataSource :=

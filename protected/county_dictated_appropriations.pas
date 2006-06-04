@@ -133,7 +133,7 @@ begin
     dgi_linkbutton_delete            := 8;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
-    Label_county_name.Text := session.Item['county_name'].ToString;
+    Label_county_name.Text := session['county_name'].ToString;
     //
     appcommon.DbOpen;
     //
@@ -146,7 +146,7 @@ begin
       +   'join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) '
       +   'join fiscal_year on (fiscal_year.id = fiscal_year_id) '
       +   'join region_code_name_map on (region_code_name_map.code = region_code) '
-      + 'where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].ToString,
+      + 'where region_dictated_appropriation.id = ' + session['region_dictated_appropriation_id'].ToString,
       appcommon.db
       )
       .ExecuteReader;
@@ -179,7 +179,7 @@ begin
       borland.data.provider.bdpcommand.Create
         (
         'select service_to_county_submission_deadline from region_dictated_appropriation'
-        + ' where id = ' + session.item['region_dictated_appropriation_id'].tostring,
+        + ' where id = ' + session['region_dictated_appropriation_id'].tostring,
         appcommon.db
         )
         .ExecuteScalar
@@ -251,7 +251,7 @@ begin
     session.Remove('calling_form');
     session.Add('calling_form','county_dictated_appropriations.aspx');
     session.Remove('account_descriptor');
-    session.Add('account_descriptor',session.Item['county_name'].ToString + ' County');
+    session.Add('account_descriptor',session['county_name'].ToString + ' County');
     session.Remove('fiscal_year_designator');
     session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
     session.Remove('service_name');
@@ -271,7 +271,7 @@ begin
     session.Remove('promotion_status');
     session.Add('promotion_status','4');
     session.Remove('rework_deadline');
-    session.Add('rework_deadline',session.item['county_dictated_deadline'].tostring);
+    session.Add('rework_deadline',session['county_dictated_deadline'].tostring);
     server.Transfer('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
     saved_amount := decimal.Parse(Safe(e.item.cells[dgi_amount].text,REAL_NUM));
@@ -349,10 +349,10 @@ begin
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      session.item['county_user_password_reset_email_address'].tostring,
+      session['county_user_password_reset_email_address'].tostring,
       Safe(e.item.cells[dgi_password_reset_email_address].text,EMAIL_ADDRESS),
       'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
+      'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
       + 'For an overview of your EMSOF appropriations, visit:' + NEW_LINE
@@ -361,7 +361,7 @@ begin
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
       + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+        + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
         + NEW_LINE
         + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
@@ -444,10 +444,10 @@ begin
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      session.item['county_user_password_reset_email_address'].tostring,
+      session['county_user_password_reset_email_address'].tostring,
       Safe(e.item.cells[dgi_password_reset_email_address].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-      'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
+      'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
       + 'You can work on this appropriation by visiting:' + NEW_LINE
@@ -456,7 +456,7 @@ begin
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
       + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+      + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
       + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
@@ -504,7 +504,7 @@ begin
   +   ' join service_user on (service_user.id=service.id)'
   +   ' join emsof_request_master on (emsof_request_master.county_dictated_appropriation_id=county_dictated_appropriation.id)'
   +   ' join request_status_code_description_map on (request_status_code_description_map.code=emsof_request_master.status_code)'
-  + ' where region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].ToString
+  + ' where region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].ToString
   + ' order by ' + service_appropriations_sort_order;
   if be_sort_order_ascending then begin
     cmdText := cmdText + ' asc';

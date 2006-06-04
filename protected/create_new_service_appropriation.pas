@@ -89,18 +89,18 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_service_appropriation';
-    Label_county_name.text := session.item['county_name'].tostring;
+    Label_county_name.text := session['county_name'].tostring;
     //
     // Initialize implementation-scoped variables.
     //
     amount := 0;
     be_service_list_filtered := TRUE;
     //
-    Label_parent_appropriation_amount.text := decimal.Parse(session.item['parent_appropriation_amount'].tostring).tostring('C');
-    Label_region_name.text := session.item['region_name'].tostring;
-    Label_fiscal_year_designator.text := session.item['fiscal_year_designator'].tostring;
-    Label_sum_of_service_appropriations.text := decimal.Parse(session.item['sum_of_service_appropriations'].tostring).tostring('C');
-    unappropriated_amount := decimal(session.item['unappropriated_amount']);
+    Label_parent_appropriation_amount.text := decimal.Parse(session['parent_appropriation_amount'].tostring).tostring('C');
+    Label_region_name.text := session['region_name'].tostring;
+    Label_fiscal_year_designator.text := session['fiscal_year_designator'].tostring;
+    Label_sum_of_service_appropriations.text := decimal.Parse(session['sum_of_service_appropriations'].tostring).tostring('C');
+    unappropriated_amount := decimal(session['unappropriated_amount']);
     Label_unappropriated_amount.text := unappropriated_amount.tostring('C');
     if unappropriated_amount < 0 then begin
       Label_unappropriated_amount.font.bold := TRUE;
@@ -202,7 +202,7 @@ begin
   borland.data.provider.bdpcommand.Create
     (
     'insert into county_dictated_appropriation'
-    + ' set region_dictated_appropriation_id = ' + session.Item['region_dictated_appropriation_id'].tostring + ','
+    + ' set region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].tostring + ','
     +   ' service_id = ' + service_id_string + ','
     +   ' amount = ' + amount.tostring + ','
     +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM),
@@ -249,17 +249,17 @@ begin
     +   ' join state_dictated_appropriation on (state_dictated_appropriation.fiscal_year_id=fiscal_year.id)'
     +   ' join region_dictated_appropriation'
     +     ' on (region_dictated_appropriation.state_dictated_appropriation_id=state_dictated_appropriation.id)'
-    + ' where region_dictated_appropriation.id = ' + session.Item['region_dictated_appropriation_id'].tostring,
+    + ' where region_dictated_appropriation.id = ' + session['region_dictated_appropriation_id'].tostring,
     appcommon.db
     );
   //   Set up the command to get the County Coorindator's email address.
   bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
     (
-    'select password_reset_email_address from county_user where id = ' + session.item['county_user_id'].tostring,
+    'select password_reset_email_address from county_user where id = ' + session['county_user_id'].tostring,
     appcommon.db
     );
   //   Set up the messageText.
-  messageText := 'The ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
+  messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
   + 'of ' + amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
   + NEW_LINE
   + 'You can work on this appropriation by visiting:' + NEW_LINE
@@ -268,7 +268,7 @@ begin
   + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
   + '/protected/service_overview.aspx' + NEW_LINE
   + NEW_LINE
-  + 'Replies to this message will be addressed to the ' + session.Item['county_name'].ToString + ' County EMSOF Coordinator.'
+  + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
   + NEW_LINE
   + NEW_LINE
   + '-- ' + ConfigurationSettings.AppSettings['application_name'];
@@ -296,7 +296,7 @@ begin
   //
   cmdText := 'SELECT id,name FROM service_user JOIN service using (id) ';
   if be_service_list_filtered then begin
-    cmdText := cmdText + 'where county_code = ' + session.item['county_user_id'].tostring + ' ';
+    cmdText := cmdText + 'where county_code = ' + session['county_user_id'].tostring + ' ';
   end;
   cmdText := cmdText + 'ORDER BY name';
   //

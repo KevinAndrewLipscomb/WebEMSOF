@@ -59,10 +59,10 @@ begin
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_deadline';
     //
-    Label_county_name.text := session.item['county_name'].tostring;
-    Label_current_deadline.text := session.item['county_dictated_deadline'].tostring;
-    Calendar.selecteddate := datetime.Parse(session.item['county_dictated_deadline'].tostring);
-    Calendar.visibledate := datetime.Parse(session.item['county_dictated_deadline'].tostring);
+    Label_county_name.text := session['county_name'].tostring;
+    Label_current_deadline.text := session['county_dictated_deadline'].tostring;
+    Calendar.selecteddate := datetime.Parse(session['county_dictated_deadline'].tostring);
+    Calendar.visibledate := datetime.Parse(session['county_dictated_deadline'].tostring);
     //
   end;
 end;
@@ -92,7 +92,7 @@ begin
     (
     'update region_dictated_appropriation'
     + ' set service_to_county_submission_deadline = "' + Calendar.selecteddate.tostring('yyyyMMdd') + '235959"'
-    + ' where id = ' + session.item['region_dictated_appropriation_id'].tostring,
+    + ' where id = ' + session['region_dictated_appropriation_id'].tostring,
     appcommon.db
     )
     .ExecuteNonQuery;

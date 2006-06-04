@@ -53,8 +53,8 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - Default';
     Label_application_name.text := ConfigurationSettings.AppSettings['application_name'];
     //
-    if session.item['target_user_table'] <> nil then begin
-      server.Transfer('protected/' + session.item['target_user_table'].tostring + '_overview.aspx');
+    if session['target_user_table'] <> nil then begin
+      server.Transfer('protected/' + session['target_user_table'].tostring + '_overview.aspx');
     end;
     //
   end;

@@ -95,7 +95,7 @@ begin
     //
     // Set Label_service_name
     //
-    Label_service_name.Text := session.Item['service_name'].ToString;
+    Label_service_name.Text := session['service_name'].ToString;
     //
     // Set Label_application_name
     //
@@ -105,7 +105,7 @@ begin
     //
     affiliate_num := borland.data.provider.BdpCommand.Create
       (
-      'SELECT affiliate_num FROM service WHERE id = ' + session.Item['service_user_id'].ToString,
+      'SELECT affiliate_num FROM service WHERE id = ' + session['service_user_id'].ToString,
       appcommon.db
       )
       .ExecuteScalar.tostring;

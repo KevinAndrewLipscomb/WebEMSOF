@@ -64,11 +64,11 @@ begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
-    Label_account_descriptor.Text := session.Item[session.Item['target_user_table'].ToString + '_name'].ToString;
-    if session.item['target_user_table'].tostring = 'county' then begin
+    Label_account_descriptor.Text := session[session['target_user_table'].ToString + '_name'].ToString;
+    if session['target_user_table'].tostring = 'county' then begin
       Label_account_descriptor.Text := Label_account_descriptor.Text + ' County';
     end;
-    LinkButton_back_to_overview.text := session.Item['target_user_table'].tostring + ' overview';
+    LinkButton_back_to_overview.text := session['target_user_table'].tostring + ' overview';
   end;
 end;
 
@@ -92,7 +92,7 @@ end;
 procedure TWebForm_change_password.LinkButton_overview_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer(session.item['target_user_table'].tostring + '_overview.aspx');
+  server.Transfer(session['target_user_table'].tostring + '_overview.aspx');
 end;
 
 procedure TWebForm_change_password.Button_submit_Click(sender: System.Object;
@@ -104,14 +104,14 @@ begin
   appcommon.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
-    'UPDATE ' + session.Item['target_user_table'].ToString + '_user'
+    'UPDATE ' + session['target_user_table'].ToString + '_user'
     + ' SET encoded_password = "' + appcommon.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
     +   ' be_stale_password = FALSE'
-    + ' WHERE id = "' + session.Item[session.Item['target_user_table'].ToString + '_user_id'].ToString + '"',
+    + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
     appcommon.db
     ).ExecuteNonQuery;
   appcommon.DbClose;
-  server.Transfer(session.Item['target_user_table'].ToString + '_overview.aspx');
+  server.Transfer(session['target_user_table'].ToString + '_overview.aspx');
 end;
 
 end.

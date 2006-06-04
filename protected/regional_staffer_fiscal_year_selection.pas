@@ -66,14 +66,14 @@ begin
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
     //
-    Label_regional_staffer_name.Text := session.Item['regional_staffer_name'].ToString;
+    Label_regional_staffer_name.Text := session['regional_staffer_name'].ToString;
     //
     appcommon.DbOpen;
     //
     bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password, password_reset_email_address FROM regional_staffer_user'
-      + ' where id = ' + session.item['regional_staffer_user_id'].tostring,
+      + ' where id = ' + session['regional_staffer_user_id'].tostring,
       appcommon.db
       )
       .ExecuteReader;
@@ -105,7 +105,7 @@ begin
         + ' FROM state_dictated_appropriation'
         +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
         +   ' JOIN regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
-        + ' WHERE regional_staffer.id = ' + session.Item['regional_staffer_user_id'].ToString
+        + ' WHERE regional_staffer.id = ' + session['regional_staffer_user_id'].ToString
         +   ' and fiscal_year_id >= (' + max_fiscal_year_id_string + ' - 1)',
         appcommon.db
         )
