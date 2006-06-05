@@ -7,6 +7,9 @@ uses
   system.configuration,
   system.data;
 
+const
+  ID = '$Id$';
+
 type
   TClass_dalc_base = class
   private

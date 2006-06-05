@@ -112,6 +112,12 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     num_qualifying_requests := num_qualifying_requests + 1;
+    //
+    // Ability to select an item should depend on workflow.
+    //
+    LinkButton(e.item.cells[TClass_bc_emsof_request.Create.TcciOfLinkButtonSelect].controls.item[0]).enabled :=
+      TClass_bc_emsof_request.Create.BeOkToDrillDown(Class_bc_emsof_request.status_type(session['status_of_interest']));
+    //
   end;
 end;
 

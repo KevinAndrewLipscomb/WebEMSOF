@@ -19,6 +19,8 @@ type
     procedure InitializeComponent;
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_regional_compliance_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_num_requests_needing_development_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -35,7 +37,7 @@ type
     HyperLink_maintain_county_accounts: System.Web.UI.WebControls.HyperLink;
     HyperLink_maintain_regional_staffer_accounts: System.Web.UI.WebControls.HyperLink;
     //
-    HyperLink_num_requests_needing_development: System.Web.UI.WebControls.HyperLink;
+    LinkButton_num_requests_needing_development: System.Web.UI.WebControls.LinkButton;
     HyperLink_num_requests_needing_finalization: System.Web.UI.WebControls.HyperLink;
     HyperLink_num_requests_needing_county_approval: System.Web.UI.WebControls.HyperLink;
     LinkButton_regional_compliance: System.Web.UI.WebControls.LinkButton;
@@ -72,6 +74,7 @@ implementation
 procedure TWebForm_regional_staffer_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_num_requests_needing_development.Click, Self.LinkButton_num_requests_needing_development_Click);
   Include(Self.LinkButton_regional_compliance.Click, Self.LinkButton_regional_compliance_Click);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -89,8 +92,8 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
-    HyperLink_num_requests_needing_development.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(INITIALIZED) + HyperLink_num_requests_needing_development.text;
+    LinkButton_num_requests_needing_development.text :=
+      TClass_bc_emsof_request.Create.TallyOfStatus(INITIALIZED) + LinkButton_num_requests_needing_development.text;
     HyperLink_num_requests_needing_finalization.text :=
       TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + HyperLink_num_requests_needing_finalization.text;
     HyperLink_num_requests_needing_county_approval.text :=
@@ -127,6 +130,16 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_development_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('calling_form');
+  session.Add('calling_form','regional_staffer_overview.aspx');
+  session.Remove('status_of_interest');
+  session.Add('status_of_interest',INITIALIZED);
+  server.Transfer('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_regional_compliance_Click(sender: System.Object;

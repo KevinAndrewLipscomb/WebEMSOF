@@ -8,6 +8,9 @@ uses
   Class_dalc_base,
   System.Web.UI.WebControls;
 
+const
+  ID = '$Id$';
+
 type
   TClass_dalc_emsof_request = class(Class_dalc_base.TClass_dalc_base)
   private
@@ -31,18 +34,20 @@ type
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyOf(e_item: system.object): string;
     function TallyByStatus(status: cardinal): cardinal;
+    function TcciOfId: cardinal;
+    function TcciOfLinkButtonSelect: cardinal;
   end;
 
 implementation
 
 const
-  DGI_ID = 0;
-  DGI_AFFILIATE_NUM = 1;
-  DGI_SERVICE_NAME = 2;
-  DGI_SPONSOR_COUNTY = 3;
-  DGI_FISCAL_YEAR_DESIGNATOR = 4;
-  DGI_EMSOF_ANTE = 5;
-  DGI_LINKBUTTON_SELECT = 6;
+  TCCI_ID = 0;
+  TCCI_AFFILIATE_NUM = 1;
+  TCCI_SERVICE_NAME = 2;
+  TCCI_SPONSOR_COUNTY = 3;
+  TCCI_FISCAL_YEAR_DESIGNATOR = 4;
+  TCCI_EMSOF_ANTE = 5;
+  TCCI_LINKBUTTON_SELECT = 6;
 
 constructor TClass_dalc_emsof_request.Create;
 begin
@@ -52,7 +57,7 @@ end;
 
 function TClass_dalc_emsof_request.AffiliateNumOf(e_item: system.object): string;
 begin
-  AffiliateNumOf := Safe(DataGridItem(e_item).cells[DGI_AFFILIATE_NUM].text,NUM);
+  AffiliateNumOf := Safe(DataGridItem(e_item).cells[TCCI_AFFILIATE_NUM].text,NUM);
 end;
 
 procedure TClass_dalc_emsof_request.BindDetail
@@ -129,22 +134,22 @@ end;
 
 function TClass_dalc_emsof_request.FyDesignatorOf(e_item: system.object): string;
 begin
-  FyDesignatorOf := Safe(DataGridItem(e_item).cells[DGI_FISCAL_YEAR_DESIGNATOR].text,ALPHANUM);
+  FyDesignatorOf := Safe(DataGridItem(e_item).cells[TCCI_FISCAL_YEAR_DESIGNATOR].text,ALPHANUM);
 end;
 
 function TClass_dalc_emsof_request.IdOf(e_item: system.object): string;
 begin
-  IdOf := Safe(DataGridItem(e_item).cells[DGI_ID].text,NUM);
+  IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
 end;
 
 function TClass_dalc_emsof_request.ServiceNameOf(e_item: system.object): string;
 begin
-  ServiceNameOf := Safe(DataGridItem(e_item).cells[DGI_SERVICE_NAME].text,ORG_NAME);
+  ServiceNameOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_NAME].text,ORG_NAME);
 end;
 
 function TClass_dalc_emsof_request.SponsorCountyOf(e_item: system.object): string;
 begin
-  SponsorCountyOf := Safe(DataGridItem(e_item).cells[DGI_SPONSOR_COUNTY].text,ALPHA);
+  SponsorCountyOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY].text,ALPHA);
 end;
 
 function TClass_dalc_emsof_request.TallyByStatus(status: cardinal): cardinal;
@@ -166,6 +171,16 @@ begin
       )
       .ExecuteScalar.GetHashCode;
   connection.Close;
+end;
+
+function TClass_dalc_emsof_request.TcciOfId: cardinal;
+begin
+  TcciOfId := TCCI_ID;
+end;
+
+function TClass_dalc_emsof_request.TcciOfLinkButtonSelect: cardinal;
+begin
+  TcciOfLinkButtonSelect := TCCI_LINKBUTTON_SELECT;
 end;
 
 end.

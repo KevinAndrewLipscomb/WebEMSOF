@@ -8,6 +8,9 @@ uses
   Class_dalc_base,
   system.collections;
 
+const
+  ID = '$Id$';
+
 type
   TClass_dalc_user = class(Class_dalc_base.TClass_dalc_base)
   private
