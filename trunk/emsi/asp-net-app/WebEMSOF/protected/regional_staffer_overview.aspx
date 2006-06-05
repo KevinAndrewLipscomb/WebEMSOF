@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                        [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                          [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -34,7 +34,7 @@
                       <td>
 						<ul>
 						  <li>
-							<p><ASP:HyperLink id="HyperLink_num_requests_needing_development" runat="server" enabled="False"> request(s) need to be started by services</ASP:HyperLink></p></li>
+							<p><ASP:LinkButton id="LinkButton_num_requests_needing_development" runat="server"> request(s) need to be started by services</ASP:LinkButton></p></li>
 						  <li>
 							<p><ASP:HyperLink id="HyperLink_num_requests_needing_finalization" runat="server" enabled="False"> request(s) need to be finished by services</ASP:HyperLink></p></li>
 						  <li>

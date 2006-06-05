@@ -6,6 +6,9 @@ uses
   appcommon,
   Class_dalc_user;
 
+const
+  ID = '$Id$';
+
 type
   TClass_bc_user = class
   private

@@ -4,7 +4,12 @@ interface
 
 uses
   borland.data.provider,
-  Class_dalc_emsof_request;
+  Class_dalc_emsof_request,
+  system.security.principal,
+  system.web;
+
+const
+  ID = '$Id$';
 
 type status_type =
   (
@@ -31,6 +36,7 @@ type
   public
     constructor Create;
     function AffiliateNumOf(e_item: system.object): string;
+    function BeOkToDrillDown(status: status_type): boolean;
     procedure BindDetail
       (
       master_id: string;
@@ -48,6 +54,8 @@ type
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyOf(e_item: system.object): string;
     function TallyOfStatus(status: status_type): string;
+    function TcciOfId: cardinal;
+    function TcciOfLinkButtonSelect: cardinal;
   end;
 
 implementation
@@ -61,6 +69,27 @@ end;
 function TClass_bc_emsof_request.AffiliateNumOf(e_item: system.object): string;
 begin
   AffiliateNumOf := TClass_dalc_emsof_request.Create.AffiliateNumOf(e_item);
+end;
+
+function TClass_bc_emsof_request.BeOkToDrillDown(status: status_type): boolean;
+begin
+  BeOkToDrillDown := FALSE;
+  if httpcontext.current.user.IsInRole('director')
+    or httpcontext.current.user.IsInRole('emsof-coordinator')
+    or httpcontext.current.user.IsInRole('emsof-planner')
+  then begin
+    BeOkToDrillDown := (status <> INITIALIZED);
+  end else if httpcontext.current.user.IsInRole('emsof-clerk') then begin
+    BeOkToDrillDown := status in
+      [
+      NEEDS_SENT_TO_PA_DOH_EMSO,
+      NEEDS_INVOICE_COLLECTION,
+      NEEDS_CANCELED_CHECK_COLLECTION,
+      DEPLOYED
+      ];
+  end else if httpcontext.current.user.IsInRole('emsof-accountant') then begin
+    BeOkToDrillDown := (status = NEEDS_REIMBURSEMENT_ISSUANCE);
+  end;
 end;
 
 procedure TClass_bc_emsof_request.BindDetail
@@ -106,6 +135,16 @@ end;
 function TClass_bc_emsof_request.TallyOfStatus(status: status_type): string;
 begin
   TallyOfStatus := TClass_dalc_emsof_request.Create.TallyByStatus(ord(status)).tostring;
+end;
+
+function TClass_bc_emsof_request.TcciOfId: cardinal;
+begin
+  TcciOfId := TClass_dalc_emsof_request.Create.TcciOfId;
+end;
+
+function TClass_bc_emsof_request.TcciOfLinkButtonSelect: cardinal;
+begin
+  TcciOfLinkButtonSelect := TClass_dalc_emsof_request.Create.TcciOfLinkButtonSelect;
 end;
 
 end.
