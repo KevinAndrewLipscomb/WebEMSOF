@@ -13,6 +13,18 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    bc1: Class_bc1.TClass_bc1;
+    be_sort_order_ascending: boolean;
+    tcci_id: cardinal; // tcci = TableCellCollection Index
+    tcci_field1: cardinal;
+    tcci_field2: cardinal;
+    num_datagrid_rows: cardinal;
+    sort_order: string;
+    END;
+
+type
   TWebForm_template-protected-datagrid-sortable = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -23,13 +35,7 @@ type
     procedure DataGrid1_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
-    bc1: Class_bc1.TClass_bc1;
-    be_sort_order_ascending: boolean;
-    dgi_id: cardinal; // dgi = DataGrid Index
-    dgi_field1: cardinal;
-    dgi_field2: cardinal;
-    num_datagrid_rows: cardinal;
-    sort_order: string;
+    p: p_type;
     procedure Bind;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
@@ -70,21 +76,22 @@ end;
 procedure TWebForm_template-protected-datagrid-sortable.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template-protected-datagrid-sortable';
-    Label_account_descriptor.text := session.item['_name'].tostring;
+    Label_account_descriptor.text := session['_name'].tostring;
     //
     // Initialize implementation-wide vars.
     //
-    be_sort_order_ascending := TRUE;
-    dgi_id := 1;
-    dgi_field1 := 2;
-    dgi_field2 := 3;
-    num_datagrid_rows := 0;
-    sort_order := 'field1';
+    p.be_sort_order_ascending := TRUE;
+    p.tcci_id := 1;
+    p.tcci_field1 := 2;
+    p.tcci_field2 := 3;
+    p.num_datagrid_rows := 0;
+    p.sort_order := 'field1';
     //
-    bc1 := TClass_bc1.Create;
     Bind;
     //
   end;
@@ -97,6 +104,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_template-protected-datagrid-sortable.DataGrid1_ItemCommand(source: System.Object;
@@ -125,18 +139,18 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    num_datagrid_rows := num_datagrid_rows + 1;
+    p.num_datagrid_rows := p.num_datagrid_rows + 1;
   end;
 end;
 
 procedure TWebForm_template-protected-datagrid-sortable.DataGrid1_SortCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
-  if e.SortExpression = sort_order then begin
-    be_sort_order_ascending := not be_sort_order_ascending;
+  if e.SortExpression = p.sort_order then begin
+    p.be_sort_order_ascending := not p.be_sort_order_ascending;
   end else begin
-    sort_order := e.SortExpression;
-    be_sort_order_ascending := TRUE;
+    p.sort_order := e.SortExpression;
+    p.be_sort_order_ascending := TRUE;
   end;
   DataGrid1.EditItemIndex := -1;
   Bind;
@@ -154,22 +168,22 @@ procedure TWebForm_template-protected-datagrid-sortable.Bind;
 var be_datagrid_empty: boolean;
 var cmdText: string;
 begin
-  bc1.Bind
+  TClass_bc1.Create.Bind
     (
-    sort_order,
-    be_sort_order_ascending,
+    p.sort_order,
+    p.be_sort_order_ascending,
     DataGrid1
     );
   //
   // Manage control visibilities.
   //
-  be_datagrid_empty := (num_datagrid_rows = 0);
-  TableRow_none.visible := be_datagrid_empty;
-  DataGrid1.visible := not be_datagrid_empty;
+  p.be_datagrid_empty := (p.num_datagrid_rows = 0);
+  TableRow_none.visible := p.be_datagrid_empty;
+  DataGrid1.visible := not p.be_datagrid_empty;
   //
   // Clear aggregation vars for next bind, if any.
   //
-  num_datagrid_rows := 0;
+  p.num_datagrid_rows := 0;
   //
 end;
 

@@ -11,6 +11,11 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    END;
+
+type
   TWebForm_template_protected = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -18,6 +23,7 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -52,7 +58,9 @@ end;
 procedure TWebForm_template_protected.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_protected';
     Label_account_descriptor.text := session.item['_name'].tostring;
@@ -68,6 +76,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_template_protected.LinkButton_logout_Click(sender: System.Object;
