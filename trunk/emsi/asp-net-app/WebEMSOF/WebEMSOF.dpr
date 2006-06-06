@@ -40,6 +40,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\regional_staffer_fiscal_year_selection.aspx'}
 {%AspMarkupContainer 'protected\regional_approval_overview.aspx'}
 {%AspMarkupContainer 'protected\emsof_request_status_filter.aspx'}
+{$R 'protected\full_request_review_approve.TWebForm_full_request_review_approve.resources' 'protected\full_request_review_approve.resx'}
 
 uses
   System.Reflection,
