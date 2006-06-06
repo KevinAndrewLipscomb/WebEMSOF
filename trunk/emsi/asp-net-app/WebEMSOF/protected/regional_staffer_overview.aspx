@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                             [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                 [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -22,11 +22,50 @@
 	  <p>
         <table cellspacing="0" cellpadding="10" border="0">
             <tr>
-			  <td>
-		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+			  <td><p></p><p>
+                                <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" width="100%" border="1">
+                                    <tr>
+                                      <td>
+                                        <table cellspacing="0" cellpadding="10" width="100%" border="0">
+                                            <tr>
+                                              <td bgcolor="#f5f5f5"><strong>Funding figures for current cycle</strong></td>
+                                            </tr>
+                                            <tr>
+                                              <td>
+                                                <table cellspacing="0" cellpadding="5" border="0">
+                                                    <tr>
+                                                      <td align="right"></td>
+                                                      <td align="right">
+                                                        <ASP:Label id="Label_parent_appropriation" runat="server"></ASP:Label></td>
+                                                      <td>from PA DOH EMSO</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td align="right">-</td>
+                                                      <td align="right">
+                                                        <ASP:Label id="Label_sum_of_appropriations" runat="server"></ASP:Label></td>
+                                                      <td>appropriated to counties</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td align="right">+</td>
+                                                      <td align="right">
+                                                        <ASP:Label id="Label_unrequested" runat="server"></ASP:Label></td>
+                                                      <td>unrequested</td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td align="right">=</td>
+                                                      <td align="right">
+                                                        <ASP:Label id="Label_remaining" runat="server"></ASP:Label></td>
+                                                      <td>remaining</td>
+                                                    </tr>
+                                                </table></td>
+                                            </tr>
+                                        </table></td>
+                                    </tr>
+                                </table></p><p>
+		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" width="100%">
             <tr>
               <td>
-                <table cellspacing="0" cellpadding="10" border="0">
+                <table cellspacing="0" cellpadding="10" border="0" width="100%">
                     <tr>
                       <td bgcolor="#f5f5f5"><strong>EMSOF workflow items</strong></td>
                     </tr>
@@ -59,7 +98,7 @@
 					</tr>
 				</table></td>
 			</tr>
-		</table><p></p>
+		</table></p>
 <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" width="100%" border="1">
 	<tr>
 	  <td>
