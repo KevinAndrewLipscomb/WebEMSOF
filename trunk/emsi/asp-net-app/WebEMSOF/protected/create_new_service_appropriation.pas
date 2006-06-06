@@ -12,6 +12,14 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    amount: decimal;
+    be_service_list_filtered: boolean;
+    unappropriated_amount: decimal;
+    END;
+
+type
   TWebForm_create_new_service_appropriation = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -24,11 +32,11 @@ type
     procedure CheckBox_unfilter_CheckedChanged(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure CustomValidator_amount_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
-    amount: decimal;
-    be_service_list_filtered: boolean;
-    unappropriated_amount: decimal;
+    p: p_type;
     procedure AddAppropriation;
     procedure Bind_services;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -81,28 +89,31 @@ begin
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.CustomValidator_amount.ServerValidate, Self.CustomValidator_amount_ServerValidate);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_create_new_service_appropriation_PreRender);
 end;
 {$ENDREGION}
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_service_appropriation';
     Label_county_name.text := session['county_name'].tostring;
     //
     // Initialize implementation-scoped variables.
     //
-    amount := 0;
-    be_service_list_filtered := TRUE;
+    p.amount := 0;
+    p.be_service_list_filtered := TRUE;
     //
     Label_parent_appropriation_amount.text := decimal.Parse(session['parent_appropriation_amount'].tostring).tostring('C');
     Label_region_name.text := session['region_name'].tostring;
     Label_fiscal_year_designator.text := session['fiscal_year_designator'].tostring;
     Label_sum_of_service_appropriations.text := decimal.Parse(session['sum_of_service_appropriations'].tostring).tostring('C');
-    unappropriated_amount := decimal(session['unappropriated_amount']);
-    Label_unappropriated_amount.text := unappropriated_amount.tostring('C');
-    if unappropriated_amount < 0 then begin
+    p.unappropriated_amount := decimal(session['unappropriated_amount']);
+    Label_unappropriated_amount.text := p.unappropriated_amount.tostring('C');
+    if p.unappropriated_amount < 0 then begin
       Label_unappropriated_amount.font.bold := TRUE;
       Label_unappropriated_amount.forecolor := color.red;
     end;
@@ -120,6 +131,13 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_create_new_service_appropriation.TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
 procedure TWebForm_create_new_service_appropriation.CustomValidator_amount_ServerValidate(source: System.Object;
   args: System.Web.UI.WebControls.ServerValidateEventArgs);
 var
@@ -129,8 +147,8 @@ begin
   if amount_string = system.string.EMPTY then begin
     args.isvalid := FALSE;
   end else begin
-    amount := decimal.Parse(amount_string);
-    args.isvalid := (amount > 0) and (amount <= unappropriated_amount);
+    p.amount := decimal.Parse(amount_string);
+    args.isvalid := (p.amount > 0) and (p.amount <= p.unappropriated_amount);
   end;
 end;
 
@@ -145,7 +163,7 @@ end;
 procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object; 
   e: System.EventArgs);
 begin
-  be_service_list_filtered := not CheckBox_unfilter.checked;
+  p.be_service_list_filtered := not CheckBox_unfilter.checked;
   Bind_services;
 end;
 
@@ -175,10 +193,10 @@ begin
     // Update labels in the Parent appropriation section.
     //
     Label_sum_of_service_appropriations.text :=
-      (decimal.parse(Safe(Label_sum_of_service_appropriations.text,REAL_NUM)) + amount).tostring('C');
-    unappropriated_amount := unappropriated_amount - amount;
-    Label_unappropriated_amount.text := unappropriated_amount.tostring('C');
-    if unappropriated_amount < 0 then begin
+      (decimal.parse(Safe(Label_sum_of_service_appropriations.text,REAL_NUM)) + p.amount).tostring('C');
+    p.unappropriated_amount := p.unappropriated_amount - p.amount;
+    Label_unappropriated_amount.text := p.unappropriated_amount.tostring('C');
+    if p.unappropriated_amount < 0 then begin
       Label_unappropriated_amount.font.bold := TRUE;
       Label_unappropriated_amount.forecolor := color.red;
     end;
@@ -204,7 +222,7 @@ begin
     'insert into county_dictated_appropriation'
     + ' set region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].tostring + ','
     +   ' service_id = ' + service_id_string + ','
-    +   ' amount = ' + amount.tostring + ','
+    +   ' amount = ' + p.amount.tostring + ','
     +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM),
     appcommon.db
     )
@@ -260,7 +278,7 @@ begin
     );
   //   Set up the messageText.
   messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
-  + 'of ' + amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
+  + 'of ' + p.amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
   + NEW_LINE
   + 'You can work on this appropriation by visiting:' + NEW_LINE
   + NEW_LINE
@@ -295,7 +313,7 @@ begin
   DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
   //
   cmdText := 'SELECT id,name FROM service_user JOIN service using (id) ';
-  if be_service_list_filtered then begin
+  if p.be_service_list_filtered then begin
     cmdText := cmdText + 'where county_code = ' + session['county_user_id'].tostring + ' ';
   end;
   cmdText := cmdText + 'ORDER BY name';

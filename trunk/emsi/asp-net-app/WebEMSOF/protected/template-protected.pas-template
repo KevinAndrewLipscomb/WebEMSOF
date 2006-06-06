@@ -21,6 +21,8 @@ type
   strict private
     procedure InitializeComponent;
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_template_protected_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -52,6 +54,7 @@ procedure TWebForm_template_protected.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_template_protected_PreRender);
 end;
 {$ENDREGION}
 

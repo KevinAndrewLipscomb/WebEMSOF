@@ -13,6 +13,16 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request;
+    be_before_improvement_deadline: boolean;
+    num_items: cardinal;
+    parent_appropriation_amount: decimal;
+    total_emsof_ante: decimal;
+    END;
+
+type
   TWebForm_full_request_review_approve = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -21,6 +31,8 @@ type
     procedure DataGrid_items_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure Button_approve_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_disapprove_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_full_request_review_approve_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
@@ -30,11 +42,7 @@ type
   //   e_item: System.Web.UI.WebControls.DataGridItem;
   //
   strict private
-    bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request;
-    be_before_improvement_deadline: boolean;
-    num_items: cardinal;
-    parent_appropriation_amount: decimal;
-    total_emsof_ante: decimal;
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -87,13 +95,16 @@ begin
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_full_request_review_approve_PreRender);
 end;
 {$ENDREGION}
 
 procedure TWebForm_full_request_review_approve.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - full_request_review_approve';
     HyperLink_back.navigateurl := session['calling_form'].tostring;
@@ -101,26 +112,26 @@ begin
     //
     // Initialize class private data members.
     //
-    bc_emsof_request := Class_bc_emsof_request.TClass_bc_emsof_request.Create;
-    num_items := 0;
-    total_emsof_ante := 0;
+    p.bc_emsof_request := Class_bc_emsof_request.TClass_bc_emsof_request.Create;
+    p.num_items := 0;
+    p.total_emsof_ante := 0;
     //
-    Label_fiscal_year_designator.text := bc_emsof_request.FyDesignatorOf(session['e_item']);
-    Label_service_name.text := bc_emsof_request.ServiceNameOf(session['e_item']);
-    Label_affiliate_num.text := bc_emsof_request.AffiliateNumOf(session['e_item']);
-    Label_sponsor_county.text := bc_emsof_request.SponsorCountyOf(session['e_item']);
+    Label_fiscal_year_designator.text := p.bc_emsof_request.FyDesignatorOf(session['e_item']);
+    Label_service_name.text := p.bc_emsof_request.ServiceNameOf(session['e_item']);
+    Label_affiliate_num.text := p.bc_emsof_request.AffiliateNumOf(session['e_item']);
+    Label_sponsor_county.text := p.bc_emsof_request.SponsorCountyOf(session['e_item']);
     //
-    bc_emsof_request.BindDetail(bc_emsof_request.IdOf(session['e_item']),DataGrid_items);
+    p.bc_emsof_request.BindDetail(p.bc_emsof_request.IdOf(session['e_item']),DataGrid_items);
     //
-    Label_sum_of_emsof_antes.text := total_emsof_ante.tostring('C');
-    Label_unused_amount.text := (parent_appropriation_amount - total_emsof_ante).tostring('C');
-    Label_num_items.text := num_items.tostring;
+    Label_sum_of_emsof_antes.text := p.total_emsof_ante.tostring('C');
+    Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
+    Label_num_items.text := p.num_items.tostring;
     //
     if httpcontext.current.user.IsInRole('emsof-planner') then begin
       HyperLink_back_2.navigateurl := session['calling_form'].tostring;
 //      Label_next_approver.text := session['next_approver_descriptor'].tostring;
-//      be_before_improvement_deadline := datetime.Now <= datetime.Parse(session['rework_deadline'].tostring);
-//      if be_before_improvement_deadline then begin
+//      p.be_before_improvement_deadline := datetime.Now <= datetime.Parse(session['rework_deadline'].tostring);
+//      if p.be_before_improvement_deadline then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
 //      end else begin
@@ -144,6 +155,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.TWebForm_full_request_review_approve_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_full_request_review_approve.Button_disapprove_Click
@@ -181,7 +199,7 @@ begin
     BreakChars[2] := appcommon.TAB;
     BreakChars[3] := '-';
     //
-    if be_before_improvement_deadline then begin
+    if p.be_before_improvement_deadline then begin
       borland.data.provider.bdpcommand.Create
         (
         'update emsof_request_master'
@@ -508,8 +526,8 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    num_items := num_items + 1;
-    total_emsof_ante := total_emsof_ante + decimal.Parse(databinder.Eval(e.item.dataitem,'emsof_ante').tostring);
+    p.num_items := p.num_items + 1;
+    p.total_emsof_ante := p.total_emsof_ante + decimal.Parse(databinder.Eval(e.item.dataitem,'emsof_ante').tostring);
   end;
 end;
 

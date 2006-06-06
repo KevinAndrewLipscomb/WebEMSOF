@@ -1,5 +1,5 @@
 
-unit template-protected-datagrid-sortable;
+unit template_protected_datagrid_sortable;
 
 interface
 
@@ -33,6 +33,8 @@ type
     procedure DataGrid1_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure DataGrid1_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid1_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure TWebForm_template-protected-datagrid-sortable_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -70,6 +72,7 @@ begin
   Include(Self.DataGrid1.SortCommand, Self.DataGrid1_SortCommand);
   Include(Self.DataGrid1.ItemDataBound, Self.DataGrid1_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_template-protected-datagrid-sortable_PreRender);
 end;
 {$ENDREGION}
 

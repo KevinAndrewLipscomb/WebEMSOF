@@ -12,6 +12,12 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    saved_emsof_ante: decimal;
+    END;
+
+type
   TWebForm_withdraw_request_item = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -19,9 +25,11 @@ type
     procedure Button_yes_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_no_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_withdraw_request_item_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
-    saved_emsof_ante: decimal;
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -53,21 +61,24 @@ begin
   Include(Self.Button_yes.Click, Self.Button_yes_Click);
   Include(Self.Button_no.Click, Self.Button_no_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_withdraw_request_item_PreRender);
 end;
 {$ENDREGION}
 
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - withdraw_request_item';
     //
-    saved_emsof_ante := decimal.Parse(session['emsof_request_item_emsof_ante'].tostring);
+    p.saved_emsof_ante := decimal.Parse(session['emsof_request_item_emsof_ante'].tostring);
     //
     Label_priority.text := session['emsof_request_item_priority'].tostring;
     Label_description.text := session['emsof_request_item_make_model'].tostring + ' '
     + session['emsof_request_item_equipment_category'].tostring;
-    Label_emsof_ante.text := saved_emsof_ante.tostring('C');
+    Label_emsof_ante.text := p.saved_emsof_ante.tostring('C');
   end;
 end;
 
@@ -78,6 +89,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_withdraw_request_item.TWebForm_withdraw_request_item_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_withdraw_request_item.LinkButton_logout_Click(sender: System.Object;
@@ -115,7 +133,7 @@ begin
     +   ' and priority = ' + session['emsof_request_item_priority'].tostring
     + ';'
     + 'update emsof_request_master'
-    + ' set value = value - ' + saved_emsof_ante.tostring
+    + ' set value = value - ' + p.saved_emsof_ante.tostring
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',

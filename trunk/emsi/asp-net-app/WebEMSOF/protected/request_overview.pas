@@ -12,6 +12,26 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    be_before_deadline: boolean;
+    be_completely_approved: boolean;
+    be_finalized: boolean;
+    tcci_master_id: cardinal;
+    tcci_priority: cardinal;
+    tcci_code: cardinal;
+    tcci_item_description: cardinal;
+    tcci_status: cardinal;
+    tcci_linkbutton_select: cardinal;
+    tcci_linkbutton_increase_priority: cardinal;
+    tcci_linkbutton_decrease_priority: cardinal;
+    tcci_emsof_ante: cardinal;
+    num_items: cardinal;
+    sum_of_emsof_antes: decimal;
+    unused_amount: decimal;
+    END;
+
+type
   TWebForm_request_overview = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -20,23 +40,11 @@ type
     procedure DataGrid_items_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_finalize_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_request_overview_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
-    be_before_deadline: boolean;
-    be_completely_approved: boolean;
-    be_finalized: boolean;
-    dgi_master_id: cardinal;
-    dgi_priority: cardinal;
-    dgi_code: cardinal;
-    dgi_item_description: cardinal;
-    dgi_status: cardinal;
-    dgi_linkbutton_select: cardinal;
-    dgi_linkbutton_increase_priority: cardinal;
-    dgi_linkbutton_decrease_priority: cardinal;
-    dgi_emsof_ante: cardinal;
-    num_items: cardinal;
-    sum_of_emsof_antes: decimal;
-    unused_amount: decimal;
+    p: p_type;
     procedure Bind_items;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
@@ -82,6 +90,7 @@ begin
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_request_overview_PreRender);
 end;
 {$ENDREGION}
 
@@ -92,24 +101,26 @@ var
   make_item_requests_deadline: system.datetime;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     //
     // Initialize implementation-global variables.
     //
-    be_before_deadline := TRUE;
-    be_completely_approved := FALSE;
+    p.be_before_deadline := TRUE;
+    p.be_completely_approved := FALSE;
     county_dictated_appropriation_amount := decimal.Parse(session['county_dictated_appropriation_amount'].tostring);
-    dgi_master_id := 0;
-    dgi_priority := 1;
-    dgi_code := 2;
-    dgi_item_description := 3;
-    dgi_emsof_ante := 4;
-    dgi_status := 5;
-    dgi_linkbutton_select := 6;
-    dgi_linkbutton_increase_priority := 7;
-    dgi_linkbutton_decrease_priority := 8;
-    num_items := 0;
-    sum_of_emsof_antes := 0;
+    p.tcci_master_id := 0;
+    p.tcci_priority := 1;
+    p.tcci_code := 2;
+    p.tcci_item_description := 3;
+    p.tcci_emsof_ante := 4;
+    p.tcci_status := 5;
+    p.tcci_linkbutton_select := 6;
+    p.tcci_linkbutton_increase_priority := 7;
+    p.tcci_linkbutton_decrease_priority := 8;
+    p.num_items := 0;
+    p.sum_of_emsof_antes := 0;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
     appcommon.DbOpen;
@@ -137,16 +148,16 @@ begin
         .ExecuteScalar
       );
     //
-    be_before_deadline := (datetime.Now <= make_item_requests_deadline);
+    p.be_before_deadline := (datetime.Now <= make_item_requests_deadline);
     //
-    be_finalized := '1' = borland.data.provider.bdpcommand.Create
+    p.be_finalized := '1' = borland.data.provider.bdpcommand.Create
       (
       'select (status_code > 2) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
       appcommon.db
       )
       .ExecuteScalar.tostring;
     //
-    if (not be_before_deadline) or be_finalized then begin
+    if (not p.be_before_deadline) or p.be_finalized then begin
       TableRow_sum_of_emsof_antes.visible := FALSE;
       TableRow_unrequested_amount.visible := FALSE;
       Table_deadlines.visible := FALSE;
@@ -159,9 +170,9 @@ begin
     end;
     //
     session.Remove('be_before_service_to_county_submission_deadline');
-    session.Add('be_before_service_to_county_submission_deadline',be_before_deadline.tostring);
+    session.Add('be_before_service_to_county_submission_deadline',p.be_before_deadline.tostring);
     session.Remove('be_finalized');
-    session.Add('be_finalized',be_finalized.tostring);
+    session.Add('be_finalized',p.be_finalized.tostring);
     //
     // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
     // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
@@ -173,28 +184,28 @@ begin
       )
       .ExecuteReader;
     bdr.Read;
-    num_items := bdr['num_items'].GetHashCode;
-    if be_before_deadline and (not be_finalized) then begin
-      sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
-      unused_amount := county_dictated_appropriation_amount - sum_of_emsof_antes;
+    p.num_items := bdr['num_items'].GetHashCode;
+    if p.be_before_deadline and (not p.be_finalized) then begin
+      p.sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
+      p.unused_amount := county_dictated_appropriation_amount - p.sum_of_emsof_antes;
       //
-      Label_sum_of_emsof_antes.text := sum_of_emsof_antes.tostring('C');
-      Label_unused_amount.Text := unused_amount.tostring('C');
-      if unused_amount < 0 then begin
+      Label_sum_of_emsof_antes.text := p.sum_of_emsof_antes.tostring('C');
+      Label_unused_amount.Text := p.unused_amount.tostring('C');
+      if p.unused_amount < 0 then begin
         Label_unused_amount.font.bold := TRUE;
         Label_unused_amount.forecolor := color.red;
       end;
     end;
     bdr.Close;
     //
-    if num_items = 0 then begin
+    if p.num_items = 0 then begin
       Label_no_appropriations.Visible := TRUE;
     end else begin
       DataGrid_items.Visible := TRUE;
     end;
     //
-    if be_finalized then begin
-      be_completely_approved := '1' = borland.data.provider.bdpcommand.Create
+    if p.be_finalized then begin
+      p.be_completely_approved := '1' = borland.data.provider.bdpcommand.Create
         (
         'select (status_code between 8 and 10) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
         appcommon.db
@@ -217,6 +228,13 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_request_overview.TWebForm_request_overview_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
 procedure TWebForm_request_overview.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -229,9 +247,9 @@ procedure TWebForm_request_overview.LinkButton_finalize_Click(sender: System.Obj
   e: System.EventArgs);
 begin
   session.Remove('sum_of_emsof_antes');
-  session.Add('sum_of_emsof_antes',sum_of_emsof_antes);
+  session.Add('sum_of_emsof_antes',p.sum_of_emsof_antes);
   session.Remove('unused_amount');
-  session.Add('unused_amount',unused_amount);
+  session.Add('unused_amount',p.unused_amount);
   server.Transfer('finalize.aspx');
 end;
 
@@ -245,13 +263,13 @@ begin
       'START TRANSACTION;'
       + 'update emsof_request_detail set priority = 0'
       + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
       + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
       + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' - 1'
+      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' - 1'
       + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' - 1'
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' - 1'
       + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = 0;'
       + 'COMMIT;',
@@ -266,13 +284,13 @@ begin
       'START TRANSACTION;'
       + 'update emsof_request_detail set priority = 0'
       + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
       + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM)
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
       + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' + 1'
+      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' + 1'
       + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[dgi_priority].text,NUM) + ' + 1'
+      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' + 1'
       + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = 0;'
       + 'COMMIT;',
@@ -282,11 +300,11 @@ begin
     appcommon.DbClose;
   end else begin // e.commandname = 'Select'
     session.Remove('emsof_request_item_priority');
-    session.Add('emsof_request_item_priority',Safe(e.item.cells[dgi_priority].text,NUM));
+    session.Add('emsof_request_item_priority',Safe(e.item.cells[p.tcci_priority].text,NUM));
     session.Remove('emsof_request_item_code');
-    session.Add('emsof_request_item_code',Safe(e.item.cells[dgi_code].text,NUM));
+    session.Add('emsof_request_item_code',Safe(e.item.cells[p.tcci_code].text,NUM));
     session.Remove('emsof_request_item_equipment_category');
-    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[dgi_item_description].text,NARRATIVE));
+    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[p.tcci_item_description].text,NARRATIVE));
     server.Transfer('request_item_detail.aspx');
   end;
   Bind_items;
@@ -298,7 +316,7 @@ begin
   //
   // Manage column visibility.
   //
-  e.item.Cells[dgi_status].visible := be_completely_approved;
+  e.item.Cells[p.tcci_status].visible := p.be_completely_approved;
   //
   // Manage cells in visible columns.
   //
@@ -310,18 +328,18 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    if e.item.cells[dgi_status].text = 'WITHDRAWN' then begin
-      e.item.cells[dgi_priority].enabled := FALSE;
-      e.item.cells[dgi_item_description].enabled := FALSE;
-      e.item.cells[dgi_emsof_ante].enabled := FALSE;
-      LinkButton(e.item.cells[dgi_linkbutton_select].controls.item[0]).text := 'WITHDRAWN';
-      LinkButton(e.item.cells[dgi_linkbutton_select].controls.item[0]).enabled := FALSE;
+    if e.item.cells[p.tcci_status].text = 'WITHDRAWN' then begin
+      e.item.cells[p.tcci_priority].enabled := FALSE;
+      e.item.cells[p.tcci_item_description].enabled := FALSE;
+      e.item.cells[p.tcci_emsof_ante].enabled := FALSE;
+      LinkButton(e.item.cells[p.tcci_linkbutton_select].controls.item[0]).text := 'WITHDRAWN';
+      LinkButton(e.item.cells[p.tcci_linkbutton_select].controls.item[0]).enabled := FALSE;
     end;
     //
-    e.item.Cells[dgi_linkbutton_increase_priority].controls.item[0].visible :=
-      (e.item.itemindex > 0) and be_before_deadline and not be_finalized;
-    e.item.Cells[dgi_linkbutton_decrease_priority].controls.item[0].visible :=
-      (e.item.itemindex < integer(num_items) - 1) and be_before_deadline and not be_finalized;
+    e.item.Cells[p.tcci_linkbutton_increase_priority].controls.item[0].visible :=
+      (e.item.itemindex > 0) and p.be_before_deadline and not p.be_finalized;
+    e.item.Cells[p.tcci_linkbutton_decrease_priority].controls.item[0].visible :=
+      (e.item.itemindex < integer(p.num_items) - 1) and p.be_before_deadline and not p.be_finalized;
   end;
 end;
 
