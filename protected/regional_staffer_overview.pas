@@ -73,6 +73,10 @@ type
     //
     LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
     LinkButton_archived: System.Web.UI.WebControls.LinkButton;
+    Label_parent_appropriation: System.Web.UI.WebControls.Label;
+    Label_sum_of_appropriations: System.Web.UI.WebControls.Label;
+    Label_unrequested: System.Web.UI.WebControls.Label;
+    Label_remaining: System.Web.UI.WebControls.Label;
     //
     procedure OnInit(e: EventArgs); override;
   private
