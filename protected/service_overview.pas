@@ -13,6 +13,23 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    be_before_deadline: boolean;
+    tcci_id: cardinal;
+    tcci_fy_designator: cardinal;
+    tcci_county_name: cardinal;
+    tcci_county_dictated_appropriation_id: cardinal;
+    tcci_county_dictated_appropriation_amount: cardinal;
+    tcci_status_code: cardinal;
+    tcci_status: cardinal;
+    tcci_value: cardinal;
+    tcci_linkbutton: cardinal;
+    max_fiscal_year_id_string: string;
+    num_dg_items: cardinal;
+    END;
+
+type
   TWebForm_service_overview = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -23,20 +40,11 @@ type
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_service_overview_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
-    be_before_deadline: boolean;
-    dgi_id: cardinal;
-    dgi_fy_designator: cardinal;
-    dgi_county_name: cardinal;
-    dgi_county_dictated_appropriation_id: cardinal;
-    dgi_county_dictated_appropriation_amount: cardinal;
-    dgi_status_code: cardinal;
-    dgi_status: cardinal;
-    dgi_value: cardinal;
-    dgi_linkbutton: cardinal;
-    max_fiscal_year_id_string: string;
-    num_dg_items: cardinal;
+    p: p_type;
     procedure BindDataGrid;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
@@ -75,6 +83,7 @@ begin
   Include(Self.DataGrid.ItemCommand, Self.DataGrid_ItemCommand);
   Include(Self.DataGrid.ItemDataBound, Self.DataGrid_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_service_overview_PreRender);
 end;
 {$ENDREGION}
 
@@ -85,7 +94,9 @@ var
 //  make_item_requests_deadline: system.datetime;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     //
     appcommon.DbOpen;
     //
@@ -104,17 +115,17 @@ begin
     //
     // Initialize implementation-scoped vars.
     //
-    be_before_deadline := TRUE;
-    dgi_id := 0;
-    dgi_fy_designator := 1;
-    dgi_county_name := 2;
-    dgi_county_dictated_appropriation_id := 3;
-    dgi_county_dictated_appropriation_amount := 4;
-    dgi_status_code := 5;
-    dgi_status := 6;
-    dgi_value := 7;
-    dgi_linkbutton := 8;
-    num_dg_items := 0;
+    p.be_before_deadline := TRUE;
+    p.tcci_id := 0;
+    p.tcci_fy_designator := 1;
+    p.tcci_county_name := 2;
+    p.tcci_county_dictated_appropriation_id := 3;
+    p.tcci_county_dictated_appropriation_amount := 4;
+    p.tcci_status_code := 5;
+    p.tcci_status := 6;
+    p.tcci_value := 7;
+    p.tcci_linkbutton := 8;
+    p.num_dg_items := 0;
     //
     // Set Label_service_name
     //
@@ -139,7 +150,7 @@ begin
       //
       // Determine current fiscal year
       //
-      max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
+      p.max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
         appcommon.db
@@ -181,6 +192,13 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_service_overview.TWebForm_service_overview_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
 procedure TWebForm_service_overview.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -205,17 +223,17 @@ procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   session.Remove('emsof_request_master_id');
-  session.Add('emsof_request_master_id',Safe(e.item.cells[dgi_id].text,NUM));
+  session.Add('emsof_request_master_id',Safe(e.item.cells[p.tcci_id].text,NUM));
   session.Remove('emsof_request_master_status');
-  session.Add('emsof_request_master_status',Safe(e.item.cells[dgi_status].text,NARRATIVE));
+  session.Add('emsof_request_master_status',Safe(e.item.cells[p.tcci_status].text,NARRATIVE));
   session.Remove('fiscal_year_designator');
-  session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fy_designator].text,ALPHANUM));
+  session.Add('fiscal_year_designator',Safe(e.item.cells[p.tcci_fy_designator].text,ALPHANUM));
   session.Remove('sponsor_county');
-  session.Add('sponsor_county',Safe(e.item.cells[dgi_county_name].text,POSTAL_CITY));
+  session.Add('sponsor_county',Safe(e.item.cells[p.tcci_county_name].text,POSTAL_CITY));
   session.Remove('county_dictated_appropriation_id');
-  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_county_dictated_appropriation_id].text,REAL_NUM));
+  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[p.tcci_county_dictated_appropriation_id].text,REAL_NUM));
   session.Remove('county_dictated_appropriation_amount');
-  session.Add('county_dictated_appropriation_amount',Safe(e.item.cells[dgi_county_dictated_appropriation_amount].text,REAL_NUM));
+  session.Add('county_dictated_appropriation_amount',Safe(e.item.cells[p.tcci_county_dictated_appropriation_amount].text,REAL_NUM));
   server.Transfer('request_overview.aspx');
 end;
 
@@ -230,18 +248,18 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    num_dg_items := num_dg_items + 1;
+    p.num_dg_items := p.num_dg_items + 1;
     //
     // Drop the appropriate LinkButton in the Action column.
     //
-    if be_before_deadline then begin
-      if e.item.cells[dgi_status_code].text = '1' then begin
-        LinkButton(e.item.cells[dgi_linkbutton].controls.item[0]).text := 'Start making item requests';
-      end else if e.item.cells[dgi_status_code].text = '2' then begin
-        LinkButton(e.item.cells[dgi_linkbutton].controls.item[0]).text := 'Continue making item requests';
+    if p.be_before_deadline then begin
+      if e.item.cells[p.tcci_status_code].text = '1' then begin
+        LinkButton(e.item.cells[p.tcci_linkbutton].controls.item[0]).text := 'Start making item requests';
+      end else if e.item.cells[p.tcci_status_code].text = '2' then begin
+        LinkButton(e.item.cells[p.tcci_linkbutton].controls.item[0]).text := 'Continue making item requests';
       end;
     end;
-    e.item.Cells[dgi_linkbutton].controls.item[0].visible := be_before_deadline;
+    e.item.Cells[p.tcci_linkbutton].controls.item[0].visible := p.be_before_deadline;
   end;
 end;
 
@@ -280,13 +298,13 @@ begin
     +   ' JOIN county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)'
     +   ' JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
     + ' WHERE service_id = ' + session['service_user_id'].tostring
-    +   ' and fiscal_year.id >= (' + max_fiscal_year_id_string + ' - 1)'
+    +   ' and fiscal_year.id >= (' + p.max_fiscal_year_id_string + ' - 1)'
     + ' order by fy_designator,county_name',
     appcommon.db
     )
     .ExecuteReader;
   DataGrid.DataBind;
-  be_datagrid_empty := (num_dg_items = 0);
+  be_datagrid_empty := (p.num_dg_items = 0);
   //
   // Manage control visibilities.
   //
@@ -295,7 +313,7 @@ begin
   //
   // Clear aggregation vars for next bind, if any.
   //
-  num_dg_items := 0;
+  p.num_dg_items := 0;
   appcommon.DbClose;
 end;
 

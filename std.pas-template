@@ -20,6 +20,8 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
+    procedure TWebForm_template_std_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -45,6 +47,7 @@ implementation
 procedure TWebForm_template_std.InitializeComponent;
 begin
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_template_std_PreRender);
 end;
 {$ENDREGION}
 
@@ -67,7 +70,7 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
+procedure TWebForm_template_std.TWebForm_template_std_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
   session.Remove('p');

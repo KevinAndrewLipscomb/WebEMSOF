@@ -16,15 +16,15 @@ type
     RECORD
     be_before_deadline: boolean;
     be_sort_order_ascending: boolean;
-    dgi_id: cardinal;
-    dgi_password_reset_email_address: cardinal;
-    dgi_affiliate_num: cardinal;
-    dgi_name: cardinal;
-    dgi_amount: cardinal;
-    dgi_status_code: cardinal;
-    dgi_status_description: cardinal;
-    dgi_linkbutton_edit: cardinal;
-    dgi_linkbutton_delete: cardinal;
+    tcci_id: cardinal;
+    tcci_password_reset_email_address: cardinal;
+    tcci_affiliate_num: cardinal;
+    tcci_name: cardinal;
+    tcci_amount: cardinal;
+    tcci_status_code: cardinal;
+    tcci_status_description: cardinal;
+    tcci_linkbutton_edit: cardinal;
+    tcci_linkbutton_delete: cardinal;
     num_appropriations: cardinal;
     region_dictated_appropriation_amount: decimal;
     saved_amount: decimal;
@@ -133,15 +133,15 @@ begin
     p.sum_of_service_appropriations := 0;
     p.unappropriated_amount := 0;
     //   Set up symbolic DataGrid Indices for use in other event handlers.
-    p.dgi_id                           := 0;
-    p.dgi_password_reset_email_address := 1;
-    p.dgi_affiliate_num                := 2;
-    p.dgi_name                         := 3;
-    p.dgi_amount                       := 4;
-    p.dgi_status_code                  := 5;
-    p.dgi_status_description           := 6;
-    p.dgi_linkbutton_edit              := 7;
-    p.dgi_linkbutton_delete            := 8;
+    p.tcci_id                           := 0;
+    p.tcci_password_reset_email_address := 1;
+    p.tcci_affiliate_num                := 2;
+    p.tcci_name                         := 3;
+    p.tcci_amount                       := 4;
+    p.tcci_status_code                  := 5;
+    p.tcci_status_description           := 6;
+    p.tcci_linkbutton_edit              := 7;
+    p.tcci_linkbutton_delete            := 8;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session['county_name'].ToString;
@@ -273,15 +273,15 @@ begin
     session.Remove('fiscal_year_designator');
     session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
     session.Remove('service_name');
-    session.Add('service_name',Safe(e.item.cells[p.dgi_name].text,ORG_NAME));
+    session.Add('service_name',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
     session.Remove('affiliate_num');
-    session.Add('affiliate_num',Safe(e.item.cells[p.dgi_affiliate_num].text,NUM));
+    session.Add('affiliate_num',Safe(e.item.cells[p.tcci_affiliate_num].text,NUM));
     session.Remove('appropriation_amount');
-    session.Add('appropriation_amount',Safe(e.item.cells[p.dgi_amount].text,REAL_NUM));
+    session.Add('appropriation_amount',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
     session.Remove('county_dictated_appropriation_id');
-    session.Add('county_dictated_appropriation_id',Safe(e.item.cells[p.dgi_id].text,NUM));
+    session.Add('county_dictated_appropriation_id',Safe(e.item.cells[p.tcci_id].text,NUM));
     session.Remove('emsof_request_master_status_code');
-    session.Add('emsof_request_master_status_code',Safe(e.item.cells[p.dgi_status_code].text,NUM));
+    session.Add('emsof_request_master_status_code',Safe(e.item.cells[p.tcci_status_code].text,NUM));
     session.Remove('request_status_this_session_may_approve');
     session.Add('request_status_this_session_may_approve','3');
     session.Remove('next_approver_descriptor');
@@ -292,7 +292,7 @@ begin
     session.Add('rework_deadline',session['county_dictated_deadline'].tostring);
     server.Transfer('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
-    p.saved_amount := decimal.Parse(Safe(e.item.cells[p.dgi_amount].text,REAL_NUM));
+    p.saved_amount := decimal.Parse(Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
   end;
 end;
 
@@ -319,7 +319,7 @@ var
   id_string: string;
 begin
   appcommon.DbOpen;
-  id_string := Safe(e.Item.Cells[p.dgi_id].Text,NUM);
+  id_string := Safe(e.Item.Cells[p.tcci_id].Text,NUM);
   bc := borland.data.provider.bdpcommand.Create
     (
     'select count(master_id)'  // Leaving the star out prevents inclusion of nulls in count
@@ -341,14 +341,14 @@ begin
     session.Add
       (
       'email_address_of_service_of_appropriation_selected_for_deletion',
-      Safe(e.item.cells[p.dgi_password_reset_email_address].text,EMAIL_ADDRESS)
+      Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS)
       );
     //
     session.Remove('service_name_of_appropriation_selected_for_deletion');
-    session.Add('service_name_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.dgi_name].text,ORG_NAME));
+    session.Add('service_name_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
     //
     session.Remove('amount_of_appropriation_selected_for_deletion');
-    session.Add('amount_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.dgi_amount].text,REAL_NUM));
+    session.Add('amount_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
     //
     server.Transfer('delete_service_appropriation.aspx');
   end else begin
@@ -368,7 +368,7 @@ begin
     smtpmail.Send
       (
       session['county_user_password_reset_email_address'].tostring,
-      Safe(e.item.cells[p.dgi_password_reset_email_address].text,EMAIL_ADDRESS),
+      Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),
       'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
@@ -399,8 +399,8 @@ begin
   //
   // Manage column visibility
   //
-  e.item.cells[p.dgi_linkbutton_edit].visible := p.be_before_deadline;
-  e.item.cells[p.dgi_linkbutton_delete].visible := p.be_before_deadline;
+  e.item.cells[p.tcci_linkbutton_edit].visible := p.be_before_deadline;
+  e.item.cells[p.tcci_linkbutton_delete].visible := p.be_before_deadline;
   //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
@@ -413,20 +413,20 @@ begin
     p.num_appropriations := p.num_appropriations + 1;
     p.sum_of_service_appropriations :=
       p.sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
-    if convert.ToInt16(e.item.cells[p.dgi_status_code].text) > 2 then begin
-      LinkButton(e.item.cells[p.dgi_status_description].controls.item[0]).enabled := TRUE;
-      LinkButton(e.item.cells[p.dgi_status_description].controls.item[0]).forecolor := color.BLUE;
-      if convert.ToInt16(e.item.cells[p.dgi_status_code].text) >= 3 then begin
-        if convert.ToInt16(e.item.cells[p.dgi_status_code].text) = 3 then begin
-          LinkButton(e.item.cells[p.dgi_status_description].controls.item[0]).font.bold := TRUE;
-          LinkButton(e.item.cells[p.dgi_status_description].controls.item[0]).text :=
-            '>' + LinkButton(e.item.cells[p.dgi_status_description].controls.item[0]).text.ToUpper + '<';
+    if convert.ToInt16(e.item.cells[p.tcci_status_code].text) > 2 then begin
+      LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).enabled := TRUE;
+      LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).forecolor := color.BLUE;
+      if convert.ToInt16(e.item.cells[p.tcci_status_code].text) >= 3 then begin
+        if convert.ToInt16(e.item.cells[p.tcci_status_code].text) = 3 then begin
+          LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).font.bold := TRUE;
+          LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).text :=
+            '>' + LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).text.ToUpper + '<';
         end;
-        LinkButton(e.item.cells[p.dgi_linkbutton_edit].controls.item[0]).visible := FALSE;
-        LinkButton(e.item.cells[p.dgi_linkbutton_delete].controls.item[0]).visible := FALSE;
+        LinkButton(e.item.cells[p.tcci_linkbutton_edit].controls.item[0]).visible := FALSE;
+        LinkButton(e.item.cells[p.tcci_linkbutton_delete].controls.item[0]).visible := FALSE;
       end;
     end else begin
-      LinkButton(e.item.cells[p.dgi_status_description].controls.item[0]).enabled := FALSE;
+      LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).enabled := FALSE;
     end;
   end;
 end;
@@ -440,8 +440,8 @@ var
 begin
   appcommon.DbOpen;
   //
-  appropriation_id_string := Safe(e.Item.Cells[p.dgi_id].Text,NUM);
-  amount_string := Safe(TextBox(e.Item.Cells[p.dgi_amount].controls[0]).Text.Trim,REAL_NUM);
+  appropriation_id_string := Safe(e.Item.Cells[p.tcci_id].Text,NUM);
+  amount_string := Safe(TextBox(e.Item.Cells[p.tcci_amount].controls[0]).Text.Trim,REAL_NUM);
   //
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
@@ -463,7 +463,7 @@ begin
     smtpmail.Send
       (
       session['county_user_password_reset_email_address'].tostring,
-      Safe(e.item.cells[p.dgi_password_reset_email_address].text,EMAIL_ADDRESS),
+      Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE

@@ -12,6 +12,19 @@ uses
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    additional_service_ante: decimal;
+    allowable_cost: decimal;
+    bdri_equipment_category_allowable_cost: cardinal;
+    bdri_equipment_category_funding_level: cardinal;
+    cmdText_get_equipment_category_monetary_details: string;
+    funding_level: decimal;
+    match_level: decimal;
+    saved_emsof_ante: decimal;
+    END;
+
+type
   TWebForm_request_item_detail = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -28,16 +41,11 @@ type
     procedure Button_update_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_withdraw_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_request_item_detail_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
-    additional_service_ante: decimal;
-    allowable_cost: decimal;
-    bdri_equipment_category_allowable_cost: cardinal;
-    bdri_equipment_category_funding_level: cardinal;
-    cmdText_get_equipment_category_monetary_details: string;
-    funding_level: decimal;
-    match_level: decimal;
-    saved_emsof_ante: decimal;
+    p: p_type;
     procedure AddItem;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
     procedure Recalculate;
@@ -113,6 +121,7 @@ begin
   Include(Self.Button_delete.Click, Self.Button_delete_Click);
   Include(Self.Button_withdraw.Click, Self.Button_withdraw_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_request_item_detail_PreRender);
 end;
 {$ENDREGION}
 
@@ -128,14 +137,16 @@ var
   cmdText: string;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
     //
     appcommon.DbOpen;
     //
     // Set Label_match_level.
     //
-    match_level := decimal.Parse
+    p.match_level := decimal.Parse
       (
       borland.data.provider.bdpcommand.Create
         (
@@ -149,24 +160,24 @@ begin
     //
     // Build cmdText_get_equipment_category_monetary_details
     //
-    cmdText_get_equipment_category_monetary_details := 'select life_expectancy_years,'
+    p.cmdText_get_equipment_category_monetary_details := 'select life_expectancy_years,'
     + ' allowable_cost,';
-    if match_level = 0.60 then begin
-      cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+    if p.match_level = 0.60 then begin
+      p.cmdText_get_equipment_category_monetary_details := p.cmdText_get_equipment_category_monetary_details
       + 'funding_level_rural as funding_level';
-    end else if match_level = 1.00 then begin
-      cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+    end else if p.match_level = 1.00 then begin
+      p.cmdText_get_equipment_category_monetary_details := p.cmdText_get_equipment_category_monetary_details
       + 'allowable_cost as funding_level';
     end else begin
-      cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+      p.cmdText_get_equipment_category_monetary_details := p.cmdText_get_equipment_category_monetary_details
       + 'funding_level_nonrural as funding_level';
     end;
-    cmdText_get_equipment_category_monetary_details := cmdText_get_equipment_category_monetary_details
+    p.cmdText_get_equipment_category_monetary_details := p.cmdText_get_equipment_category_monetary_details
     + ' from eligible_provider_equipment_list'
     + ' where code = ';
     //    Mind these indices if the query changes.
-    bdri_equipment_category_allowable_cost := 1;
-    bdri_equipment_category_funding_level := 2;
+    p.bdri_equipment_category_allowable_cost := 1;
+    p.bdri_equipment_category_funding_level := 2;
     //
     be_before_deadline := session['be_before_service_to_county_submission_deadline'].tostring = 'True'; // Case matters.
     be_finalized := session['be_finalized'].tostring = 'True'; // Case matters.
@@ -244,7 +255,7 @@ begin
     // Manage the filling of the other data elements.
     //
     if be_new then begin
-      Label_match_level.text := match_level.tostring('P0');
+      Label_match_level.text := p.match_level.tostring('P0');
     end else begin
       //
       appcommon.DbClose;
@@ -271,8 +282,8 @@ begin
       TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
       TextBox_quantity.text := bdr_user_details['quantity'].tostring;
       TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
-      saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
-      Label_emsof_ante.text := saved_emsof_ante.tostring('N2');
+      p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
+      Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
       //
       Recalculate;
       //
@@ -328,6 +339,13 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_request_item_detail.TWebForm_request_item_detail_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
 procedure TWebForm_request_item_detail.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -368,13 +386,13 @@ begin
     +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
     +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
     +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
-    +   ' additional_service_ante = ' + additional_service_ante.tostring + ','
+    +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
     +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
     + ' where master_id = ' + session['emsof_request_master_id'].tostring
     +   ' and priority = ' + session['emsof_request_item_priority'].tostring
     + ';'
     + 'update emsof_request_master'
-    + ' set value = value - ' + saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
+    + ' set value = value - ' + p.saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
@@ -409,7 +427,7 @@ begin
       +   ' and priority > ' + session['emsof_request_item_priority'].tostring
       + ';'
       + 'update emsof_request_master'
-      + ' set value = value - ' + saved_emsof_ante.tostring + ','
+      + ' set value = value - ' + p.saved_emsof_ante.tostring + ','
       +   ' num_items = num_items - 1'
       + ' where id = ' + session['emsof_request_master_id'].tostring
       + ';'
@@ -460,7 +478,7 @@ begin
   TextBox_unit_cost.text := '';
   TextBox_quantity.text := '';
   Label_total_cost.text := '';
-  Label_match_level.text := match_level.tostring('P0');
+  Label_match_level.text := p.match_level.tostring('P0');
   Label_min_service_ante.text := '';
   TextBox_additional_service_ante.text := '';
   Label_emsof_ante.text := '';
@@ -491,22 +509,22 @@ begin
     unit_cost := decimal.Parse(TextBox_unit_cost.text);
     quantity := decimal.Parse(TextBox_quantity.text);
     if TextBox_additional_service_ante.text <> system.string.EMPTY then begin
-      additional_service_ante := decimal.Parse(TextBox_additional_service_ante.text);
+      p.additional_service_ante := decimal.Parse(TextBox_additional_service_ante.text);
     end else begin
-      additional_service_ante := 0;
+      p.additional_service_ante := 0;
     end;
     //
     total_cost := unit_cost*quantity;
     Label_total_cost.text := total_cost.tostring('N2');
     //
-    if ((match_level = 1.00) and (allowable_cost = decimal.maxvalue))
+    if ((p.match_level = 1.00) and (p.allowable_cost = decimal.maxvalue))
         //
         // This is the zebra case where a distressed service wants an item with no specified allowable cost (initially an ambulance
         // or squad/response vehicle).  Basically, they can have whatever they want, up to the limit of the remainder of their
         // appropriation.  Consideration of their appropriation is not within the scope of this form, so we can indicate that the
         // request can be fully funded.
         //
-      or ((unit_cost <= allowable_cost) and (funding_level = allowable_cost))
+      or ((unit_cost <= p.allowable_cost) and (p.funding_level = p.allowable_cost))
         //
         // This is the case where items in an "equipment category" are always fully funded (up to the limit of a service's
         // appropriation, which is not within the scope of this form).  This initially describes only Data Collection Software.
@@ -517,10 +535,10 @@ begin
       //
     end else begin
       //
-      if unit_cost > allowable_cost then begin
-        max_emsof_ante := math.Max(allowable_cost*match_level,funding_level)*quantity;
+      if unit_cost > p.allowable_cost then begin
+        max_emsof_ante := math.Max(p.allowable_cost*p.match_level,p.funding_level)*quantity;
       end else begin
-        max_emsof_ante := total_cost*match_level;
+        max_emsof_ante := total_cost*p.match_level;
       end;
       //
     end;
@@ -529,7 +547,7 @@ begin
     // their other request items, would draw more EMSOF funds than they were appropriated.  So account for if they want to ante up
     // more of the cost themselves.
     //
-    effective_emsof_ante := max_emsof_ante - additional_service_ante;
+    effective_emsof_ante := max_emsof_ante - p.additional_service_ante;
     //
     Label_match_level.text := (effective_emsof_ante/total_cost).tostring('P0');
     Label_emsof_ante.text := effective_emsof_ante.tostring('N2');
@@ -572,7 +590,7 @@ begin
     +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
     +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
     +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
-    +   ' additional_service_ante = ' + additional_service_ante.tostring + ','
+    +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
     +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
     +   ' priority = ' + priority_string
     + ';'
@@ -598,7 +616,7 @@ begin
   appcommon.DbOpen;
   bdr_state_details := borland.data.provider.bdpcommand.Create
     (
-    cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
+    p.cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
     appcommon.db
     )
     .ExecuteReader;
@@ -614,24 +632,24 @@ begin
       Label_life_expectancy.font.bold := FALSE;
     end;
     //
-    if not bdr_state_details.IsDbNull(bdri_equipment_category_allowable_cost) then begin
+    if not bdr_state_details.IsDbNull(p.bdri_equipment_category_allowable_cost) then begin
       Label_allowable_cost.text := decimal.Parse(bdr_state_details['allowable_cost'].tostring).tostring('N2');
-      allowable_cost := decimal.Parse(Label_allowable_cost.text);
+      p.allowable_cost := decimal.Parse(Label_allowable_cost.text);
     end else begin
       Label_allowable_cost.text := '(none specified)';
-      allowable_cost := decimal.maxvalue;
+      p.allowable_cost := decimal.maxvalue;
     end;
     //
-    if not bdr_state_details.IsDbNull(bdri_equipment_category_funding_level) then begin
-      funding_level := decimal.Parse(bdr_state_details['funding_level'].tostring);
+    if not bdr_state_details.IsDbNull(p.bdri_equipment_category_funding_level) then begin
+      p.funding_level := decimal.Parse(bdr_state_details['funding_level'].tostring);
     end else begin
-      funding_level := decimal.maxvalue;
+      p.funding_level := decimal.maxvalue;
     end;
     //
-    if funding_level = allowable_cost then begin
+    if p.funding_level = p.allowable_cost then begin
       Label_match_level.text := '100%';
     end else begin
-      Label_match_level.text := match_level.tostring('P0');
+      Label_match_level.text := p.match_level.tostring('P0');
     end;
     //
   end;

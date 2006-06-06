@@ -11,6 +11,25 @@ uses
 
 const ID = '$Id$';
 
+type
+  p_type =
+    RECORD
+    be_sort_order_ascending: boolean;
+    tcci_id: cardinal; // dgi = DataGrid Index
+    tcci_county_approval_timestamp: cardinal;
+    tcci_affiliate_num: cardinal;
+    tcci_service_name: cardinal;
+    tcci_sponsor_county: cardinal;
+    tcci_emsof_ante: cardinal;
+    tcci_fiscal_year_designator: cardinal;
+    tcci_county_dictated_appropriation_amount: cardinal;
+    tcci_county_dictated_appropriation_id: cardinal;
+    tcci_service_to_county_submission_deadline: cardinal;
+    tcci_linkbutton_select: cardinal;
+    num_qualifying_requests: cardinal;
+    sort_order: string;
+    END;
+
 type TWebForm_regional_approval_overview = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -19,22 +38,11 @@ type TWebForm_regional_approval_overview = class(System.Web.UI.Page)
     procedure DataGrid_requests_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure DataGrid_requests_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_requests_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
+    procedure TWebForm_regional_approval_overview_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
-    be_sort_order_ascending: boolean;
-    dgi_id: cardinal; // dgi = DataGrid Index
-    dgi_county_approval_timestamp: cardinal;
-    dgi_affiliate_num: cardinal;
-    dgi_service_name: cardinal;
-    dgi_sponsor_county: cardinal;
-    dgi_emsof_ante: cardinal;
-    dgi_fiscal_year_designator: cardinal;
-    dgi_county_dictated_appropriation_amount: cardinal;
-    dgi_county_dictated_appropriation_id: cardinal;
-    dgi_service_to_county_submission_deadline: cardinal;
-    dgi_linkbutton_select: cardinal;
-    num_qualifying_requests: cardinal;
-    sort_order: string;
+    p: p_type;
     procedure Bind;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
@@ -68,33 +76,36 @@ begin
   Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
   Include(Self.DataGrid_requests.ItemDataBound, Self.DataGrid_requests_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_regional_approval_overview_PreRender);
 end;
 {$ENDREGION}
 
 procedure TWebForm_regional_approval_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_approval_overview';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize implementation-wide vars.
     //
-    be_sort_order_ascending := TRUE;
-    dgi_id := 0;
-    dgi_county_approval_timestamp := 1;
-    dgi_affiliate_num := 2;
-    dgi_service_name := 3;
-    dgi_sponsor_county := 4;
-    dgi_emsof_ante := 5;
-    dgi_fiscal_year_designator := 6;
-    dgi_county_dictated_appropriation_amount := 7;
-    dgi_county_dictated_appropriation_id := 8;
-    dgi_service_to_county_submission_deadline := 9;
-    dgi_linkbutton_select := 10;
-    num_qualifying_requests := 0;
-    sort_order := 'county_approval_timestamp';
+    p.be_sort_order_ascending := TRUE;
+    p.tcci_id := 0;
+    p.tcci_county_approval_timestamp := 1;
+    p.tcci_affiliate_num := 2;
+    p.tcci_service_name := 3;
+    p.tcci_sponsor_county := 4;
+    p.tcci_emsof_ante := 5;
+    p.tcci_fiscal_year_designator := 6;
+    p.tcci_county_dictated_appropriation_amount := 7;
+    p.tcci_county_dictated_appropriation_id := 8;
+    p.tcci_service_to_county_submission_deadline := 9;
+    p.tcci_linkbutton_select := 10;
+    p.num_qualifying_requests := 0;
+    p.sort_order := 'county_approval_timestamp';
     //
     Bind;
     //
@@ -110,6 +121,13 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_regional_approval_overview.TWebForm_regional_approval_overview_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
 procedure TWebForm_regional_approval_overview.DataGrid_requests_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
@@ -121,7 +139,7 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    num_qualifying_requests := num_qualifying_requests + 1;
+    p.num_qualifying_requests := p.num_qualifying_requests + 1;
   end;
 end;
 
@@ -137,17 +155,17 @@ begin
   session.Remove('account_descriptor');
   session.Add('account_descriptor',session['regional_staffer_name'].ToString);
   session.Remove('fiscal_year_designator');
-  session.Add('fiscal_year_designator',Safe(e.item.cells[dgi_fiscal_year_designator].text,ALPHANUM));
+  session.Add('fiscal_year_designator',Safe(e.item.cells[p.tcci_fiscal_year_designator].text,ALPHANUM));
   session.Remove('service_name');
-  session.Add('service_name',Safe(e.item.cells[dgi_service_name].text,ORG_NAME));
+  session.Add('service_name',Safe(e.item.cells[p.tcci_service_name].text,ORG_NAME));
   session.Remove('affiliate_num');
-  session.Add('affiliate_num',Safe(e.item.cells[dgi_affiliate_num].text,NUM));
+  session.Add('affiliate_num',Safe(e.item.cells[p.tcci_affiliate_num].text,NUM));
   session.Remove('appropriation_amount');
-  session.Add('appropriation_amount',Safe(e.item.cells[dgi_county_dictated_appropriation_amount].text,REAL_NUM));
+  session.Add('appropriation_amount',Safe(e.item.cells[p.tcci_county_dictated_appropriation_amount].text,REAL_NUM));
   session.Remove('county_name');
-  session.Add('county_name',Safe(e.item.cells[dgi_sponsor_county].text,ALPHA));
+  session.Add('county_name',Safe(e.item.cells[p.tcci_sponsor_county].text,ALPHA));
   session.Remove('county_dictated_appropriation_id');
-  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[dgi_county_dictated_appropriation_id].text,NUM));
+  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[p.tcci_county_dictated_appropriation_id].text,NUM));
   session.Remove('emsof_request_master_status_code');
   session.Add('emsof_request_master_status_code','4');
   session.Remove('request_status_this_session_may_approve');
@@ -155,7 +173,7 @@ begin
   session.Remove('next_approver_descriptor');
   session.Add('next_approver_descriptor','Regional Council Executive Director');
   session.Remove('county_dictated_deadline');
-  session.Add('county_dictated_deadline',Safe(e.item.cells[dgi_service_to_county_submission_deadline].text,DATE_TIME));
+  session.Add('county_dictated_deadline',Safe(e.item.cells[p.tcci_service_to_county_submission_deadline].text,DATE_TIME));
   session.Remove('promotion_status');
   session.Add('promotion_status','5');
   //
@@ -166,11 +184,11 @@ end;
 procedure TWebForm_regional_approval_overview.DataGrid_requests_SortCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
-  if e.SortExpression = sort_order then begin
-    be_sort_order_ascending := not be_sort_order_ascending;
+  if e.SortExpression = p.sort_order then begin
+    p.be_sort_order_ascending := not p.be_sort_order_ascending;
   end else begin
-    sort_order := e.SortExpression;
-    be_sort_order_ascending := TRUE;
+    p.sort_order := e.SortExpression;
+    p.be_sort_order_ascending := TRUE;
   end;
   DataGrid_requests.EditItemIndex := -1;
   Bind;
@@ -211,8 +229,8 @@ begin
   +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
   + ' where state_dictated_appropriation_id = ' + session['state_dictated_appropriation_id'].tostring
   +   ' and status_code = 4'
-  + ' order by ' + sort_order;
-  if be_sort_order_ascending then begin
+  + ' order by ' + p.sort_order;
+  if p.be_sort_order_ascending then begin
     cmdText := cmdText + ' asc';
   end else begin
     cmdText := cmdText + ' desc';
@@ -222,13 +240,13 @@ begin
   //
   // Manage control visibilities.
   //
-  be_datagrid_empty := (num_qualifying_requests = 0);
+  be_datagrid_empty := (p.num_qualifying_requests = 0);
   TableRow_none.visible := be_datagrid_empty;
   Datagrid_requests.visible := not be_datagrid_empty;
   //
   // Clear aggregation vars for next bind, if any.
   //
-  num_qualifying_requests := 0;
+  p.num_qualifying_requests := 0;
   //
   appcommon.DbClose;
 end;
