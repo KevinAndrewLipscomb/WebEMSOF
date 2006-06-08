@@ -4,6 +4,8 @@ interface
 
 uses
   borland.data.provider,
+  Class_bc_fiscal_years,
+  Class_bc_user,
   Class_dalc_emsof_request,
   system.security.principal,
   system.web;
@@ -53,6 +55,7 @@ type
     function IdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyOf(e_item: system.object): string;
+    function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
     function TcciOfId: cardinal;
     function TcciOfLinkButtonSelect: cardinal;
@@ -130,6 +133,19 @@ end;
 function TClass_bc_emsof_request.SponsorCountyOf(e_item: system.object): string;
 begin
   SponsorCountyOf := TClass_dalc_emsof_request.Create.SponsorCountyOf(e_item);
+end;
+
+function TClass_bc_emsof_request.SumOfRequestValues(fy_id: string = ''): decimal;
+var
+  bc_user: TClass_bc_user;
+begin
+  bc_user := TClass_bc_user.Create;
+  if fy_id = system.string.EMPTY then begin
+    SumOfRequestValues := TClass_dalc_emsof_request.Create.SumOfRequestValues
+      (bc_user.Kind,bc_user.IdNum,TClass_bc_fiscal_years.Create.IdOfCurrent);
+  end else begin
+    SumOfRequestValues := TClass_dalc_emsof_request.Create.SumOfRequestValues(bc_user.Kind,bc_user.IdNum,fy_id);
+  end;
 end;
 
 function TClass_bc_emsof_request.TallyOfStatus(status: status_type): string;

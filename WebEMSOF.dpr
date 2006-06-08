@@ -73,7 +73,11 @@ uses
   regional_approval_overview in 'protected\regional_approval_overview.pas' {regional_approval_overview.TWebForm_regional_approval_overview: System.Web.UI.Page},
   emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
   Class_bc_user in 'component\business\Class_bc_user.pas',
-  Class_dalc_user in 'component\dal\Class_dalc_user.pas';
+  Class_dalc_user in 'component\dal\Class_dalc_user.pas',
+  Class_bc_appropriations in 'component\business\Class_bc_appropriations.pas',
+  Class_dalc_appropriations in 'component\dal\Class_dalc_appropriations.pas',
+  Class_dalc_fiscal_years in 'component\dal\Class_dalc_fiscal_years.pas',
+  Class_bc_fiscal_years in 'component\business\Class_bc_fiscal_years.pas';
 
 const ID = '$Id';
 

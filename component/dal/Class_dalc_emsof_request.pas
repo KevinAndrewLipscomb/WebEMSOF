@@ -33,6 +33,13 @@ type
     function IdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyOf(e_item: system.object): string;
+    function SumOfRequestValues
+      (
+      user_kind: string;
+      user_id: string;
+      fy_id: string
+      )
+      : decimal;
     function TallyByStatus(status: cardinal): cardinal;
     function TcciOfId: cardinal;
     function TcciOfLinkButtonSelect: cardinal;
@@ -150,6 +157,45 @@ end;
 function TClass_dalc_emsof_request.SponsorCountyOf(e_item: system.object): string;
 begin
   SponsorCountyOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY].text,ALPHA);
+end;
+
+function TClass_dalc_emsof_request.SumOfRequestValues
+  (
+  user_kind: string;
+  user_id: string;
+  fy_id: string
+  )
+  : decimal;
+var
+  cmdText: string;
+begin
+  if user_kind = 'regional-staffer' then begin
+    cmdText := 'select sum(value)'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    +   ' join regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
+    + ' where regional_staffer.id = ' + user_id
+    +   ' and fiscal_year_id = ' + fy_id;
+  end else if user_kind = 'county' then begin
+    cmdText := 'select sum(value)'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' where county_code = ' + user_id
+    +   ' and fiscal_year_id = ' + fy_id;
+  end;
+  connection.Open;
+  SumOfRequestValues := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  connection.Close;
 end;
 
 function TClass_dalc_emsof_request.TallyByStatus(status: cardinal): cardinal;

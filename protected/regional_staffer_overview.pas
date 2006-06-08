@@ -7,7 +7,9 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
+  Class_bc_appropriations,
   Class_bc_emsof_request,
+  Class_bc_fiscal_years,
   system.text;
 
 const ID = '$Id$';
@@ -49,6 +51,11 @@ type
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     //
+    Label_parent_appropriation: System.Web.UI.WebControls.Label;
+    Label_sum_of_appropriations: System.Web.UI.WebControls.Label;
+    Label_unrequested: System.Web.UI.WebControls.Label;
+    Label_remaining: System.Web.UI.WebControls.Label;
+    //
     LinkButton_num_requests_needing_development: System.Web.UI.WebControls.LinkButton;
     LinkButton_num_requests_needing_finalization: System.Web.UI.WebControls.LinkButton;
     LinkButton_num_requests_needing_county_approval: System.Web.UI.WebControls.LinkButton;
@@ -73,10 +80,6 @@ type
     //
     LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
     LinkButton_archived: System.Web.UI.WebControls.LinkButton;
-    Label_parent_appropriation: System.Web.UI.WebControls.Label;
-    Label_sum_of_appropriations: System.Web.UI.WebControls.Label;
-    Label_unrequested: System.Web.UI.WebControls.Label;
-    Label_remaining: System.Web.UI.WebControls.Label;
     //
     procedure OnInit(e: EventArgs); override;
   private
@@ -119,6 +122,12 @@ procedure TWebForm_regional_staffer_overview.Page_Load
   sender: System.Object;
   e: System.EventArgs
   );
+var
+  bc_appropriations: TClass_bc_appropriations;
+  bc_emsof_requests: TClass_bc_emsof_request;
+  parent_appropriation: decimal;
+  sum_of_appropriations: decimal;
+  unrequested_amount: decimal;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -126,33 +135,44 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
+    bc_appropriations := TClass_bc_appropriations.Create;
+    bc_emsof_requests := TClass_bc_emsof_request.Create;
+    //
+    parent_appropriation := bc_appropriations.AppropriationFromOnlyParent;
+    Label_parent_appropriation.text := parent_appropriation.tostring('C');
+    sum_of_appropriations := bc_appropriations.SumOfSelfDictatedAppropriations;
+    Label_sum_of_appropriations.text := sum_of_appropriations.tostring('C');
+    unrequested_amount := sum_of_appropriations - bc_emsof_requests.SumOfRequestValues;
+    Label_unrequested.text := unrequested_amount.tostring('C');
+    Label_remaining.text := (parent_appropriation - sum_of_appropriations + unrequested_amount).tostring('C');
+    //
     LinkButton_num_requests_needing_development.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(INITIALIZED) + LinkButton_num_requests_needing_development.text;
+      bc_emsof_requests.TallyOfStatus(INITIALIZED) + LinkButton_num_requests_needing_development.text;
     LinkButton_num_requests_needing_finalization.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + LinkButton_num_requests_needing_finalization.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + LinkButton_num_requests_needing_finalization.text;
     LinkButton_num_requests_needing_county_approval.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_COUNTY_APPROVAL) + LinkButton_num_requests_needing_county_approval.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_COUNTY_APPROVAL) + LinkButton_num_requests_needing_county_approval.text;
     LinkButton_regional_compliance.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_REGIONAL_COMPLIANCE_CHECK) + LinkButton_regional_compliance.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_COMPLIANCE_CHECK) + LinkButton_regional_compliance.text;
     LinkButton_exec_dir_approval.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_REGIONAL_EXEC_DIR_APPROVAL) + LinkButton_exec_dir_approval.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_EXEC_DIR_APPROVAL) + LinkButton_exec_dir_approval.text;
     LinkButton_transmittal.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_SENT_TO_PA_DOH_EMSO) + LinkButton_transmittal.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_SENT_TO_PA_DOH_EMSO) + LinkButton_transmittal.text;
     LinkButton_state_approval.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL) + LinkButton_state_approval.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL) + LinkButton_state_approval.text;
     LinkButton_invoice_collection.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_INVOICE_COLLECTION) + LinkButton_invoice_collection.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_INVOICE_COLLECTION) + LinkButton_invoice_collection.text;
     LinkButton_canceled_check_collection.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_CANCELED_CHECK_COLLECTION) + LinkButton_canceled_check_collection.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_CANCELED_CHECK_COLLECTION) + LinkButton_canceled_check_collection.text;
     LinkButton_reimbursement.text :=
-      TClass_bc_emsof_request.Create.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE) + LinkButton_reimbursement.text;
+      bc_emsof_requests.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE) + LinkButton_reimbursement.text;
     //
-    LinkButton_completed.text := TClass_bc_emsof_request.Create.TallyOfStatus(REIMBURSEMENT_ISSUED) + LinkButton_completed.text;
-    LinkButton_withdrawn.text := TClass_bc_emsof_request.Create.TallyOfStatus(WITHDRAWN) + LinkButton_withdrawn.text;
-    LinkButton_rejected.text := TClass_bc_emsof_request.Create.TallyOfStatus(REJECTED) + LinkButton_rejected.text;
+    LinkButton_completed.text := bc_emsof_requests.TallyOfStatus(REIMBURSEMENT_ISSUED) + LinkButton_completed.text;
+    LinkButton_withdrawn.text := bc_emsof_requests.TallyOfStatus(WITHDRAWN) + LinkButton_withdrawn.text;
+    LinkButton_rejected.text := bc_emsof_requests.TallyOfStatus(REJECTED) + LinkButton_rejected.text;
     //
-    LinkButton_deployed.text := TClass_bc_emsof_request.Create.TallyOfStatus(DEPLOYED) + LinkButton_deployed.text;
-    LinkButton_archived.text := TClass_bc_emsof_request.Create.TallyOfStatus(ARCHIVED) + LinkButton_archived.text;
+    LinkButton_deployed.text := bc_emsof_requests.TallyOfStatus(DEPLOYED) + LinkButton_deployed.text;
+    LinkButton_archived.text := bc_emsof_requests.TallyOfStatus(ARCHIVED) + LinkButton_archived.text;
     //
     session.Remove('calling_form');
     session.Add('calling_form','regional_staffer_overview.aspx');

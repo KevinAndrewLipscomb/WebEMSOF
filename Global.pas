@@ -78,11 +78,8 @@ end;
 procedure TGlobal.Application_AuthenticateRequest(sender: System.Object; e: EventArgs);
 begin
   if request.isauthenticated then begin
-    httpcontext.current.user := system.security.principal.GenericPrincipal.Create
-      (
-      user.identity,
-      Class_bc_user.TClass_bc_user.Create.RolesOf(user.identity.name)
-      );
+    httpcontext.current.user :=
+      system.security.principal.GenericPrincipal.Create(user.identity,Class_bc_user.TClass_bc_user.Create.Roles);
   end;
 end;
 

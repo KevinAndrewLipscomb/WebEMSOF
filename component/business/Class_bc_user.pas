@@ -4,7 +4,8 @@ interface
 
 uses
   appcommon,
-  Class_dalc_user;
+  Class_dalc_user,
+  system.web;
 
 const
   ID = '$Id$';
@@ -15,13 +16,15 @@ type
     { Private Declarations }
   public
     constructor Create;
-    function RolesOf(id: string): appcommon.string_array;
+    function Kind: string;
+    function IdNum: string;
+    function Roles: appcommon.string_array;
   end;
 
 implementation
 
 const
-  ID_THAT_HAS_ROLES_TOKEN = 'regional-staffer-';
+  KIND_THAT_HAS_ROLES = 'regional-staffer';
 
 constructor TClass_bc_user.Create;
 begin
@@ -29,14 +32,29 @@ begin
   // TODO: Add any constructor code here
 end;
 
-function TClass_bc_user.RolesOf(id: string): appcommon.string_array;
+function TClass_bc_user.Kind: string;
+var
+  name: string;
 begin
-  if id.StartsWith(ID_THAT_HAS_ROLES_TOKEN) then begin
-    RolesOf := Class_dalc_user.TClass_dalc_user.Create.RolesOf
-      (
-      'regional_staffer_',
-      id.Replace(ID_THAT_HAS_ROLES_TOKEN,system.string.EMPTY)
-      );
+  name := httpcontext.current.user.identity.name;
+  Kind := name.Substring(0,name.LastIndexOf('-'));
+end;
+
+function TClass_bc_user.IdNum: string;
+var
+  name: string;
+begin
+  name := httpcontext.current.user.identity.name;
+  IdNum := name.Substring(name.LastIndexOf('-') + 1);
+end;
+
+function TClass_bc_user.Roles: appcommon.string_array;
+var
+  name: string;
+begin
+  name := httpcontext.current.user.identity.name;
+  if Kind = KIND_THAT_HAS_ROLES then begin
+    Roles := Class_dalc_user.TClass_dalc_user.Create.RolesOf('regional_staffer_',IdNum);
   end;
 end;
 

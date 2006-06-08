@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                 [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                  [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -28,7 +28,7 @@
                                       <td>
                                         <table cellspacing="0" cellpadding="10" width="100%" border="0">
                                             <tr>
-                                              <td bgcolor="#f5f5f5"><strong>Funding figures for current cycle</strong></td>
+                                              <td bgcolor="#f5f5f5"><strong>Financial snapshot&nbsp;of current cycle</strong></td>
                                             </tr>
                                             <tr>
                                               <td>
@@ -48,14 +48,14 @@
                                                     <tr>
                                                       <td align="right">+</td>
                                                       <td align="right">
-                                                        <ASP:Label id="Label_unrequested" runat="server"></ASP:Label></td>
+                                                        <ASP:Label id="Label_unrequested" runat="server" font-underline="True"></ASP:Label></td>
                                                       <td>unrequested</td>
                                                     </tr>
                                                     <tr>
                                                       <td align="right">=</td>
                                                       <td align="right">
-                                                        <ASP:Label id="Label_remaining" runat="server"></ASP:Label></td>
-                                                      <td>remaining</td>
+                                                        <ASP:Label id="Label_remaining" runat="server" font-bold="True"></ASP:Label></td>
+                                                      <td><strong>remaining</strong></td>
                                                     </tr>
                                                 </table></td>
                                             </tr>
