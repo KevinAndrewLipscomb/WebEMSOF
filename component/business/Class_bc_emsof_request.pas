@@ -5,6 +5,7 @@ interface
 uses
   borland.data.provider,
   Class_bc_fiscal_years,
+  Class_bc_fy_calendar,
   Class_bc_user,
   Class_dalc_emsof_request,
   system.security.principal,
@@ -38,6 +39,7 @@ type
   public
     constructor Create;
     function AffiliateNumOf(e_item: system.object): string;
+    function BeOkToApproveEmsofRequest(status: status_type): boolean;
     function BeOkToDrillDown(status: status_type): boolean;
     procedure BindDetail
       (
@@ -53,6 +55,8 @@ type
       );
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
+    function NextApproverOfEmsofRequest(status: status_type): string;
+    function ReworkDeadline(e_item: system.object): datetime;
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyOf(e_item: system.object): string;
     function SumOfRequestValues(fy_id: string = ''): decimal;
@@ -72,6 +76,22 @@ end;
 function TClass_bc_emsof_request.AffiliateNumOf(e_item: system.object): string;
 begin
   AffiliateNumOf := TClass_dalc_emsof_request.Create.AffiliateNumOf(e_item);
+end;
+
+function TClass_bc_emsof_request.BeOkToApproveEmsofRequest(status: status_type): boolean;
+begin
+  BeOkToApproveEmsofRequest := FALSE;
+  case status of
+  NEEDS_COUNTY_APPROVAL:
+    BeOkToApproveEmsofRequest := httpcontext.current.user.IsInRole('county-coord');
+  NEEDS_REGIONAL_COMPLIANCE_CHECK:
+    BeOkToApproveEmsofRequest := httpcontext.current.user.IsInRole('director')
+      or httpcontext.current.user.IsInRole('emsof-coordinator')
+      or httpcontext.current.user.IsInRole('emsof-planner');
+  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
+    BeOkToApproveEmsofRequest :=
+      httpcontext.current.user.IsInRole('director');
+  end;
 end;
 
 function TClass_bc_emsof_request.BeOkToDrillDown(status: status_type): boolean;
@@ -123,6 +143,16 @@ end;
 function TClass_bc_emsof_request.FyDesignatorOf(e_item: system.object): string;
 begin
   FyDesignatorOf := TClass_dalc_emsof_request.Create.FyDesignatorOf(e_item);
+end;
+
+function TClass_bc_emsof_request.NextApproverOfEmsofRequest(status: status_type): string;
+begin
+  NextApproverOfEmsofRequest := 'to be determined';
+end;
+
+function TClass_bc_emsof_request.ReworkDeadline(e_item: system.object): datetime;
+begin
+  ReworkDeadline := TClass_dalc_emsof_request.Create.ReworkDeadline(e_item);
 end;
 
 function TClass_bc_emsof_request.ServiceNameOf(e_item: system.object): string;

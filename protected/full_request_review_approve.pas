@@ -40,6 +40,7 @@ type
   //   calling_form: string;
   //   account_descriptor: string;
   //   e_item: System.Web.UI.WebControls.DataGridItem;
+  //   status_of_interest: Class_bc_emsof_request.status_type;
   //
   strict private
     p: p_type;
@@ -99,7 +100,11 @@ begin
 end;
 {$ENDREGION}
 
-procedure TWebForm_full_request_review_approve.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_full_request_review_approve.Page_Load
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback then begin
@@ -127,23 +132,26 @@ begin
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
-    if httpcontext.current.user.IsInRole('emsof-planner') then begin
+    if p.bc_emsof_request.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
       HyperLink_back_2.navigateurl := session['calling_form'].tostring;
-//      Label_next_approver.text := session['next_approver_descriptor'].tostring;
-//      p.be_before_improvement_deadline := datetime.Now <= datetime.Parse(session['rework_deadline'].tostring);
-//      if p.be_before_improvement_deadline then begin
+      Label_next_approver.text :=
+        p.bc_emsof_request.NextApproverOfEmsofRequest(status_type(session['status_of_interest']));
+      if datetime.Now <= p.bc_emsof_request.ReworkDeadline(session['e_item']) then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
-//      end else begin
-//        TableRow_return.visible := FALSE;
-//        Button_disapprove.text := 'REJECT';
-//      end;
-    end else begin
+      end else begin
+        TableRow_return.visible := FALSE;
+        Button_disapprove.text := 'REJECT';
+      end;
       Table_action_required.visible := FALSE;
       Table_disposition.visible := FALSE;
     end;
-    //
-    appcommon.DbClose;
+
+
+//      p.be_before_improvement_deadline := ;
+//      if p.be_before_improvement_deadline then begin
+//      end else begin
+//      end;
     //
   end;
 end;
