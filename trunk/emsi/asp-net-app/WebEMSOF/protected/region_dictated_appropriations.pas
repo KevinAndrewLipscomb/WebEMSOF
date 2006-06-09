@@ -384,7 +384,7 @@ begin
       + NEW_LINE
       + 'For an overview of your EMSOF appropriations, visit:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
       + '/protected/county_overview.aspx' + NEW_LINE
       + NEW_LINE

@@ -236,7 +236,7 @@ begin
         + NEW_LINE
         + 'You can work on this EMSOF request by visiting:' + NEW_LINE
         + NEW_LINE
-        + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+        + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
         + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/service_overview.aspx' + NEW_LINE
         + NEW_LINE
         + 'Replies to this message will be addressed to ' + reviewer_descriptor
@@ -308,7 +308,7 @@ begin
         + NEW_LINE
         + 'You can review your EMSOF requests by visiting:' + NEW_LINE
         + NEW_LINE
-        + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+        + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
         + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/service_overview.aspx' + NEW_LINE
         + NEW_LINE
         + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
@@ -339,7 +339,7 @@ begin
         + NEW_LINE
         + 'You can review this EMSOF request by visiting:' + NEW_LINE
         + NEW_LINE
-        + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+        + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
         + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/regional_staffer_overview.aspx'
         + NEW_LINE
         + NEW_LINE
@@ -477,7 +477,7 @@ begin
       + NEW_LINE
       + 'You can review your EMSOF requests by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
       + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
@@ -499,7 +499,7 @@ begin
       + NEW_LINE
       + 'You can review this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/'
       + session['target_user_table'].tostring + '_overview.aspx'
       + NEW_LINE
