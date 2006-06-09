@@ -31,6 +31,7 @@ type
       );
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
+    function ReworkDeadline(e_item: system.object): datetime;
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyOf(e_item: system.object): string;
     function SumOfRequestValues
@@ -147,6 +148,26 @@ end;
 function TClass_dalc_emsof_request.IdOf(e_item: system.object): string;
 begin
   IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
+end;
+
+function TClass_dalc_emsof_request.ReworkDeadline(e_item: system.object): datetime;
+begin
+  connection.Open;
+  ReworkDeadline := datetime
+    (
+    borland.data.provider.bdpcommand.Create
+      (
+      'select service_to_county_submission_deadline'
+      + ' from region_dictated_appropriation'
+      +   ' join county_dictated_appropriation'
+      +     ' on (county_dictated_appropriation.region_dictated_appropriation_id=region_dictated_appropriation.id)'
+      +   ' join emsof_request_master on (emsof_request_master.county_dictated_appropriation_id=county_dictated_appropriation.id)'
+      + ' where emsof_request_master.id = ' + IdOf(e_item),
+      connection
+      )
+      .ExecuteScalar
+    );
+  connection.Close;
 end;
 
 function TClass_dalc_emsof_request.ServiceNameOf(e_item: system.object): string;

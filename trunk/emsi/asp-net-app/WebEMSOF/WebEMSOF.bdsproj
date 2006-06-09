@@ -198,6 +198,21 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="system" Version="1.0.5000.0" LinkUnits="False"/>
@@ -275,6 +290,8 @@
       <File FileName="component\dal\Class_dalc_appropriations.pas" ContainerId="PascalCompiler" ModuleName="Class_dalc_appropriations"/>
       <File FileName="component\dal\Class_dalc_fiscal_years.pas" ContainerId="PascalCompiler" ModuleName="Class_dalc_fiscal_years"/>
       <File FileName="component\business\Class_bc_fiscal_years.pas" ContainerId="PascalCompiler" ModuleName="Class_bc_fiscal_years"/>
+      <File FileName="component\dal\Class_dalc_fy_calendar.pas" ContainerId="PascalCompiler" ModuleName="Class_dalc_fy_calendar"/>
+      <File FileName="component\business\Class_bc_fy_calendar.pas" ContainerId="PascalCompiler" ModuleName="Class_bc_fy_calendar"/>
     </FileList>
   </DelphiDotNet.Personality>
 	<ModelSupport>True</ModelSupport>
