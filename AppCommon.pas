@@ -109,10 +109,14 @@ begin
     + '<table cellpadding=5>'
     +   '<tr>'
     +     '<td valign=top width=1>'
-    +       '<img src="http://www.emsi.org/images/logo_left.gif" align="center" valign="middle" width="113" height="99" />'
+    +       '<img src="https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+    +         ConfigurationSettings.AppSettings['application_name']
+    +         '/protected/image/logo_left.gif" align="center" valign="middle" width="113" height="99" />'
     +     '</td>'
     +     '<td align="left" valign="top" width=1>'
-    +       '<img src="http://www.emsi.org/images/logo_right.gif" align="left" valign="top" width="135" height="100" />'
+    +       '<img src="https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+    +         ConfigurationSettings.AppSettings['application_name']
+    +         '/protected/image/logo_right.gif" align="left" valign="top" width="135" height="100" />'
     +     '</td>'
     +     '<td nowrap valign=top>'
     +       '<p>'
