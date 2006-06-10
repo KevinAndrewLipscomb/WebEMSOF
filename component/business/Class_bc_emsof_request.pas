@@ -5,7 +5,6 @@ interface
 uses
   borland.data.provider,
   Class_bc_fiscal_years,
-  Class_bc_fy_calendar,
   Class_bc_user,
   Class_dalc_emsof_request,
   system.security.principal,
@@ -147,7 +146,7 @@ end;
 
 function TClass_bc_emsof_request.NextApproverOfEmsofRequest(status: status_type): string;
 begin
-  NextApproverOfEmsofRequest := 'to be determined';
+  NextApproverOfEmsofRequest := '(to be determined)';
 end;
 
 function TClass_bc_emsof_request.ReworkDeadline(e_item: system.object): datetime;

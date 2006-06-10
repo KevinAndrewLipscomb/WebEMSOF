@@ -77,9 +77,7 @@ uses
   Class_bc_appropriations in 'component\business\Class_bc_appropriations.pas',
   Class_dalc_appropriations in 'component\dal\Class_dalc_appropriations.pas',
   Class_dalc_fiscal_years in 'component\dal\Class_dalc_fiscal_years.pas',
-  Class_bc_fiscal_years in 'component\business\Class_bc_fiscal_years.pas',
-  Class_dalc_fy_calendar in 'component\dal\Class_dalc_fy_calendar.pas',
-  Class_bc_fy_calendar in 'component\business\Class_bc_fy_calendar.pas';
+  Class_bc_fiscal_years in 'component\business\Class_bc_fiscal_years.pas';
 
 const ID = '$Id';
 

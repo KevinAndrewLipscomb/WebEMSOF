@@ -7,7 +7,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
-  borland.data.provider, system.web.mail, borland.vcl.sysutils, 
+  borland.data.provider, system.web.mail, borland.vcl.sysutils,
+  Class_bc_appropriations,
   Class_bc_emsof_request;
 
 const ID = '$Id$';
@@ -15,7 +16,7 @@ const ID = '$Id$';
 type
   p_type =
     RECORD
-    bc_emsof_request: Class_bc_emsof_request.TClass_bc_emsof_request;
+    bc_emsof_requests: Class_bc_emsof_request.TClass_bc_emsof_request;
     be_before_improvement_deadline: boolean;
     num_items: cardinal;
     parent_appropriation_amount: decimal;
@@ -117,41 +118,43 @@ begin
     //
     // Initialize class private data members.
     //
-    p.bc_emsof_request := Class_bc_emsof_request.TClass_bc_emsof_request.Create;
+    p.bc_emsof_requests := Class_bc_emsof_request.TClass_bc_emsof_request.Create;
     p.num_items := 0;
     p.total_emsof_ante := 0;
     //
-    Label_fiscal_year_designator.text := p.bc_emsof_request.FyDesignatorOf(session['e_item']);
-    Label_service_name.text := p.bc_emsof_request.ServiceNameOf(session['e_item']);
-    Label_affiliate_num.text := p.bc_emsof_request.AffiliateNumOf(session['e_item']);
-    Label_sponsor_county.text := p.bc_emsof_request.SponsorCountyOf(session['e_item']);
+    Label_fiscal_year_designator.text := p.bc_emsof_requests.FyDesignatorOf(session['e_item']);
+    Label_service_name.text := p.bc_emsof_requests.ServiceNameOf(session['e_item']);
+    Label_affiliate_num.text := p.bc_emsof_requests.AffiliateNumOf(session['e_item']);
+    Label_parent_appropriation_amount.text := TClass_bc_appropriations.Create.AppropriationFromNamedParent
+      (
+      p.bc_emsof_requests.SponsorCountyOf(session['e_item']),
+      'service',
+      p.bc_emsof_requests.IdOf(session['e_item'])
+      )
+      .tostring('C');
+    Label_sponsor_county.text := p.bc_emsof_requests.SponsorCountyOf(session['e_item']);
     //
-    p.bc_emsof_request.BindDetail(p.bc_emsof_request.IdOf(session['e_item']),DataGrid_items);
+    p.bc_emsof_requests.BindDetail(p.bc_emsof_requests.IdOf(session['e_item']),DataGrid_items);
     //
     Label_sum_of_emsof_antes.text := p.total_emsof_ante.tostring('C');
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
-    if p.bc_emsof_request.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
+    if p.bc_emsof_requests.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
       HyperLink_back_2.navigateurl := session['calling_form'].tostring;
       Label_next_approver.text :=
-        p.bc_emsof_request.NextApproverOfEmsofRequest(status_type(session['status_of_interest']));
-      if datetime.Now <= p.bc_emsof_request.ReworkDeadline(session['e_item']) then begin
+        p.bc_emsof_requests.NextApproverOfEmsofRequest(status_type(session['status_of_interest']));
+      if datetime.Now <= p.bc_emsof_requests.ReworkDeadline(session['e_item']) then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
       end else begin
         TableRow_return.visible := FALSE;
         Button_disapprove.text := 'REJECT';
       end;
+    end else begin
       Table_action_required.visible := FALSE;
       Table_disposition.visible := FALSE;
     end;
-
-
-//      p.be_before_improvement_deadline := ;
-//      if p.be_before_improvement_deadline then begin
-//      end else begin
-//      end;
     //
   end;
 end;
