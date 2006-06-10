@@ -143,7 +143,7 @@ begin
     if p.bc_emsof_requests.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
       HyperLink_back_2.navigateurl := session['calling_form'].tostring;
       Label_next_approver.text :=
-        p.bc_emsof_requests.NextApproverOfEmsofRequest(status_type(session['status_of_interest']));
+        p.bc_emsof_requests.NextApprover(status_type(session['status_of_interest']));
       if datetime.Now <= p.bc_emsof_requests.ReworkDeadline(session['e_item']) then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
