@@ -54,7 +54,7 @@ type
       );
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
-    function NextApproverOfEmsofRequest(status: status_type): string;
+    function NextApprover(status: status_type): string;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyOf(e_item: system.object): string;
@@ -144,9 +144,16 @@ begin
   FyDesignatorOf := TClass_dalc_emsof_request.Create.FyDesignatorOf(e_item);
 end;
 
-function TClass_bc_emsof_request.NextApproverOfEmsofRequest(status: status_type): string;
+function TClass_bc_emsof_request.NextApprover(status: status_type): string;
 begin
-  NextApproverOfEmsofRequest := '(to be determined)';
+  case status of
+  NEEDS_COUNTY_APPROVAL:
+    NextApprover := 'Regional Council EMSOF Coordinator';
+  NEEDS_REGIONAL_COMPLIANCE_CHECK:
+    NextApprover := 'Regional Council Executive Director';
+  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
+    NextApprover := 'Regional Council EMSOF Coordinator (for transmittal to PA DOH EMSO)';
+  end;
 end;
 
 function TClass_bc_emsof_request.ReworkDeadline(e_item: system.object): datetime;
