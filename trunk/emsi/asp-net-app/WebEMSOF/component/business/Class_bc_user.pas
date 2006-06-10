@@ -24,7 +24,7 @@ type
 implementation
 
 const
-  KIND_THAT_HAS_ROLES = 'regional-staffer';
+  KIND_THAT_HAS_ROLES = 'regional_staffer';
 
 constructor TClass_bc_user.Create;
 begin
@@ -37,7 +37,7 @@ var
   name: string;
 begin
   name := httpcontext.current.user.identity.name;
-  Kind := name.Substring(0,name.LastIndexOf('-'));
+  Kind := name.Substring(0,name.LastIndexOf('_'));
 end;
 
 function TClass_bc_user.IdNum: string;
@@ -45,7 +45,7 @@ var
   name: string;
 begin
   name := httpcontext.current.user.identity.name;
-  IdNum := name.Substring(name.LastIndexOf('-') + 1);
+  IdNum := name.Substring(name.LastIndexOf('_') + 1);
 end;
 
 function TClass_bc_user.Roles: appcommon.string_array;

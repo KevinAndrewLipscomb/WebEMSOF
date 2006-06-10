@@ -17,9 +17,9 @@ type
     { Private Declarations }
   public
     constructor Create;
-    function AppropriationFromNamedParent
+    function AppropriationFromSpecificParent
       (
-      parent_name: string;
+      parent_id: string;
       recipient_kind: string = '';
       recipient_id: string = '';
       fy_id: string = ''
@@ -43,9 +43,9 @@ begin
   // TODO: Add any constructor code here
 end;
 
-function TClass_bc_appropriations.AppropriationFromNamedParent
+function TClass_bc_appropriations.AppropriationFromSpecificParent
   (
-  parent_name: string;
+  parent_id: string;
   recipient_kind: string = '';
   recipient_id: string = '';
   fy_id: string = ''
@@ -64,8 +64,8 @@ begin
   if fy_id = system.string.EMPTY then begin
     fy_id := TClass_bc_fiscal_years.Create.IdOfCurrent;
   end;
-  AppropriationFromNamedParent :=
-    TClass_dalc_appropriations.Create.AppropriationFromNamedParent(parent_name,recipient_kind,recipient_id,fy_id);
+  AppropriationFromSpecificParent :=
+    TClass_dalc_appropriations.Create.AppropriationFromSpecificParent(parent_id,recipient_kind,recipient_id,fy_id);
 end;
 
 function TClass_bc_appropriations.AppropriationFromOnlyParent
