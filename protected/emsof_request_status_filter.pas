@@ -20,7 +20,8 @@ type
     sort_order: string;
     END;
 
-type TWebForm_emsof_request_status_filter = class(System.Web.UI.Page)
+type
+  TWebForm_emsof_request_status_filter = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;

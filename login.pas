@@ -134,7 +134,7 @@ begin
       )
       .ExecuteReader;
     while bdr.Read do begin
-      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'service-' + bdr['id'].ToString));
+      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'service_' + bdr['id'].ToString));
     end;
   end else if DropDownList_user_kind.selectedvalue = 'county' then begin
     Label_user.text := 'County';
@@ -148,7 +148,7 @@ begin
       )
       .ExecuteReader;
     while bdr.Read do begin
-      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'county-' + bdr['id'].ToString));
+      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'county_' + bdr['id'].ToString));
     end;
   end else if DropDownList_user_kind.selectedvalue = 'regional_staffer' then begin
     Label_user.text := 'Regional staffer';
@@ -163,7 +163,7 @@ begin
       .ExecuteReader;
     while bdr.Read do begin
       DropDownList_user.Items.Add
-        (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,'regional-staffer-' + bdr['id'].ToString));
+        (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,'regional_staffer_' + bdr['id'].ToString));
     end;
   end else begin
     session.Remove('target_user_table');

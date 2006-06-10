@@ -30,6 +30,7 @@ type
     NONE,
     ALPHA,
     ALPHANUM,
+    CURRENCY_USA,
     DATE_TIME,
     ECMASCRIPT_WORD,
     EMAIL_ADDRESS,
@@ -186,6 +187,8 @@ begin
       allow := 'a-zA-Z';
     ALPHANUM:
       allow := '0-9a-zA-Z';
+    CURRENCY_USA:
+      allow := '0-9\$\,\.';
     DATE_TIME:
       allow := '0-9AMPamp:\/ ';
     ECMASCRIPT_WORD:

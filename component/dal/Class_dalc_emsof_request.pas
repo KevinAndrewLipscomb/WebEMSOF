@@ -29,11 +29,27 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    procedure Demote
+      (
+      master_id: string;
+      next_status: cardinal;
+      user_kind: string;
+      role: string
+      );
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
+    procedure Promote
+      (
+      master_id: string;
+      next_status: cardinal;
+      user_kind: string;
+      role: string
+      );
     function ReworkDeadline(e_item: system.object): datetime;
+    function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
-    function SponsorCountyOf(e_item: system.object): string;
+    function SponsorCountyCodeOf(e_item: system.object): string;
+    function SponsorCountyNameOf(e_item: system.object): string;
     function SumOfRequestValues
       (
       user_kind: string;
@@ -50,12 +66,14 @@ implementation
 
 const
   TCCI_ID = 0;
-  TCCI_AFFILIATE_NUM = 1;
-  TCCI_SERVICE_NAME = 2;
-  TCCI_SPONSOR_COUNTY = 3;
-  TCCI_FISCAL_YEAR_DESIGNATOR = 4;
-  TCCI_EMSOF_ANTE = 5;
-  TCCI_LINKBUTTON_SELECT = 6;
+  TCCI_SERVICE_ID = 1;
+  TCCI_AFFILIATE_NUM = 2;
+  TCCI_SERVICE_NAME = 3;
+  TCCI_SPONSOR_COUNTY_ID = 4;
+  TCCI_SPONSOR_COUNTY_NAME = 5;
+  TCCI_FISCAL_YEAR_DESIGNATOR = 6;
+  TCCI_EMSOF_ANTE = 7;
+  TCCI_LINKBUTTON_SELECT = 8;
 
 constructor TClass_dalc_emsof_request.Create;
 begin
@@ -112,11 +130,13 @@ var
   cmdText: string;
 begin
   cmdText := 'select emsof_request_master.id'             // column 0
-  + ' , service.affiliate_num'                            // column 1
-  + ' , service.name as service_name'                     // column 2
-  + ' , county_code_name_map.name as sponsor_county'      // column 3
-  + ' , fiscal_year.designator as fiscal_year_designator' // column 4
-  + ' , emsof_request_master.value as emsof_ante'         // column 5
+  + ' , service.id as service_id'                         // column 1
+  + ' , service.affiliate_num'                            // column 2
+  + ' , service.name as service_name'                     // column 3
+  + ' , county_code_name_map.code as county_code'         // column 4
+  + ' , county_code_name_map.name as sponsor_county'      // column 5
+  + ' , fiscal_year.designator as fiscal_year_designator' // column 6
+  + ' , emsof_request_master.value as emsof_ante'         // column 7
   + ' from emsof_request_master'
   +   ' join county_dictated_appropriation'
   +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
@@ -140,6 +160,28 @@ begin
   connection.Close;
 end;
 
+procedure TClass_dalc_emsof_request.Demote
+  (
+  master_id: string;
+  next_status: cardinal;
+  user_kind: string;
+  role: string
+  );
+begin
+  connection.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update emsof_request_master'
+    + ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    + ' set emsof_request_master.status_code = ' + next_status.tostring
+    + ' where emsof_request_master.id = ' + master_id,
+    connection
+    )
+    .ExecuteNonQuery;
+  connection.Close;
+end;
+
 function TClass_dalc_emsof_request.FyDesignatorOf(e_item: system.object): string;
 begin
   FyDesignatorOf := Safe(DataGridItem(e_item).cells[TCCI_FISCAL_YEAR_DESIGNATOR].text,ALPHANUM);
@@ -148,6 +190,35 @@ end;
 function TClass_dalc_emsof_request.IdOf(e_item: system.object): string;
 begin
   IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
+end;
+
+procedure TClass_dalc_emsof_request.Promote
+  (
+  master_id: string;
+  next_status: cardinal;
+  user_kind: string;
+  role: string
+  );
+var
+  cmdText: string;
+begin
+  cmdText :=
+  'update emsof_request_master'
+  + ' join county_dictated_appropriation'
+  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+  + ' set emsof_request_master.status_code = ' + next_status.tostring
+  +   ' , ' + role + '_approval_timestamp = now()'
+  + ' where emsof_request_master.id = ' + master_id;
+  if user_kind = 'state-staffer' then begin
+    cmdText :=
+    'START TRANSACTION; '
+    + cmdText + ';'
+    + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1;'
+    + ' COMMIT';
+  end;
+  connection.Open;
+  borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
+  connection.Close;
 end;
 
 function TClass_dalc_emsof_request.ReworkDeadline(e_item: system.object): datetime;
@@ -170,14 +241,24 @@ begin
   connection.Close;
 end;
 
+function TClass_dalc_emsof_request.ServiceIdOf(e_item: system.object): string;
+begin
+  ServiceIdOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_ID].text,NUM);
+end;
+
 function TClass_dalc_emsof_request.ServiceNameOf(e_item: system.object): string;
 begin
   ServiceNameOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_NAME].text,ORG_NAME);
 end;
 
-function TClass_dalc_emsof_request.SponsorCountyOf(e_item: system.object): string;
+function TClass_dalc_emsof_request.SponsorCountyCodeOf(e_item: system.object): string;
 begin
-  SponsorCountyOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY].text,ALPHA);
+  SponsorCountyCodeOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY_ID].text,NUM);
+end;
+
+function TClass_dalc_emsof_request.SponsorCountyNameOf(e_item: system.object): string;
+begin
+  SponsorCountyNameOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY_NAME].text,ALPHA);
 end;
 
 function TClass_dalc_emsof_request.SumOfRequestValues
@@ -190,7 +271,7 @@ function TClass_dalc_emsof_request.SumOfRequestValues
 var
   cmdText: string;
 begin
-  if user_kind = 'regional-staffer' then begin
+  if user_kind = 'regional_staffer' then begin
     cmdText := 'select sum(value)'
     + ' from emsof_request_master'
     +   ' join county_dictated_appropriation'

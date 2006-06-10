@@ -4,6 +4,7 @@ interface
 
 uses
   borland.data.provider,
+  Class_biz_accounts,
   Class_bc_fiscal_years,
   Class_bc_user,
   Class_dalc_emsof_request,
@@ -52,12 +53,28 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    procedure Demote
+      (
+      e_item: system.object;
+      status: status_type;
+      demoter: string;
+      reason: string;
+      emsof_ante: string
+      );
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
     function NextApprover(status: status_type): string;
+    procedure Promote
+      (
+      e_item: system.object;
+      status: status_type;
+      promoter: string
+      );
     function ReworkDeadline(e_item: system.object): datetime;
+    function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
-    function SponsorCountyOf(e_item: system.object): string;
+    function SponsorCountyCodeOf(e_item: system.object): string;
+    function SponsorCountyNameOf(e_item: system.object): string;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
     function TcciOfId: cardinal;
@@ -139,6 +156,69 @@ begin
   IdOf := TClass_dalc_emsof_request.Create.IdOf(e_item);
 end;
 
+procedure TClass_bc_emsof_request.Demote
+  (
+  e_item: system.object;
+  status: status_type;
+  demoter: string;
+  reason: string;
+  emsof_ante: string
+  );
+var
+  be_ok_to_rework: boolean;
+  next_status: status_type;
+  reviewer_descriptor: string;
+  role: string;
+begin
+  //
+  be_ok_to_rework := (datetime.Now <= ReworkDeadline(e_item));
+  //
+  case status of
+  NEEDS_COUNTY_APPROVAL:
+    BEGIN
+    role := 'county';
+    reviewer_descriptor := 'The ' + demoter + ' County EMSOF Coordinator';
+    END;
+  NEEDS_REGIONAL_COMPLIANCE_CHECK:
+    BEGIN
+    role := 'regional_planner';
+    reviewer_descriptor := 'Regional planner ' + demoter;
+    END;
+  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
+    BEGIN
+    role := 'regional_director';
+    reviewer_descriptor := 'Regional Executive Director ' + demoter;
+    END;
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    BEGIN
+    role := 'state';
+    reviewer_descriptor := 'State staffer ' + demoter;
+    END;
+  end;
+  //
+  if be_ok_to_rework then begin
+    next_status := NEEDS_SERVICE_FINALIZATION;
+  end else begin
+    next_status := REJECTED;
+  end;
+  //
+  TClass_dalc_emsof_request.Create.Demote(IdOf(e_item),ord(next_status),TClass_bc_user.Create.Kind,role);
+  TClass_biz_accounts.Create.MakeDemotionNotification
+    (
+    role,
+    reviewer_descriptor,
+    system.object(next_status).tostring,
+    ServiceIdOf(e_item),
+    ServiceNameOf(e_item),
+    FyDesignatorOf(e_item),
+    be_ok_to_rework,
+    reason,
+    SponsorCountyCodeOf(e_item),
+    emsof_ante
+    );
+  //
+end;
+
 function TClass_bc_emsof_request.FyDesignatorOf(e_item: system.object): string;
 begin
   FyDesignatorOf := TClass_dalc_emsof_request.Create.FyDesignatorOf(e_item);
@@ -156,9 +236,65 @@ begin
   end;
 end;
 
+procedure TClass_bc_emsof_request.Promote
+  (
+  e_item: system.object;
+  status: status_type;
+  promoter: string
+  );
+var
+  next_status: status_type;
+  reviewer_descriptor: string;
+  role: string;
+begin
+  next_status := status; // Better initialize it to something.
+  case status of
+  NEEDS_COUNTY_APPROVAL:
+    BEGIN
+    role := 'county';
+    reviewer_descriptor := 'The ' + promoter + ' County EMSOF Coordinator';
+    next_status := NEEDS_REGIONAL_COMPLIANCE_CHECK;
+    END;
+  NEEDS_REGIONAL_COMPLIANCE_CHECK:
+    BEGIN
+    role := 'regional_planner';
+    reviewer_descriptor := 'Regional planner ' + promoter;
+    next_status := NEEDS_REGIONAL_EXEC_DIR_APPROVAL;
+    END;
+  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
+    BEGIN
+    role := 'regional_director';
+    reviewer_descriptor := 'Regional Executive Director ' + promoter;
+    next_status := NEEDS_SENT_TO_PA_DOH_EMSO;
+    END;
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    BEGIN
+    role := 'state';
+    reviewer_descriptor := 'State staffer ' + promoter;
+    next_status := NEEDS_INVOICE_COLLECTION;
+    END;
+  end;
+  TClass_dalc_emsof_request.Create.Promote(IdOf(e_item),ord(next_status),TClass_bc_user.Create.Kind,role);
+  TClass_biz_accounts.Create.MakePromotionNotification
+    (
+    role,
+    reviewer_descriptor,
+    system.object(next_status).tostring,
+    ServiceIdOf(e_item),
+    ServiceNameOf(e_item),
+    FyDesignatorOf(e_item)
+    );
+  //
+end;
+
 function TClass_bc_emsof_request.ReworkDeadline(e_item: system.object): datetime;
 begin
   ReworkDeadline := TClass_dalc_emsof_request.Create.ReworkDeadline(e_item);
+end;
+
+function TClass_bc_emsof_request.ServiceIdOf(e_item: system.object): string;
+begin
+  ServiceIdOf := TClass_dalc_emsof_request.Create.ServiceIdOf(e_item);
 end;
 
 function TClass_bc_emsof_request.ServiceNameOf(e_item: system.object): string;
@@ -166,9 +302,14 @@ begin
   ServiceNameOf := TClass_dalc_emsof_request.Create.ServiceNameOf(e_item);
 end;
 
-function TClass_bc_emsof_request.SponsorCountyOf(e_item: system.object): string;
+function TClass_bc_emsof_request.SponsorCountyCodeOf(e_item: system.object): string;
 begin
-  SponsorCountyOf := TClass_dalc_emsof_request.Create.SponsorCountyOf(e_item);
+  SponsorCountyCodeOf := TClass_dalc_emsof_request.Create.SponsorCountyCodeOf(e_item);
+end;
+
+function TClass_bc_emsof_request.SponsorCountyNameOf(e_item: system.object): string;
+begin
+  SponsorCountyNameOf := TClass_dalc_emsof_request.Create.SponsorCountyNameOf(e_item);
 end;
 
 function TClass_bc_emsof_request.SumOfRequestValues(fy_id: string = ''): decimal;
