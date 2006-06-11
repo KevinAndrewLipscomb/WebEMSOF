@@ -120,7 +120,7 @@
 							<ASP:CheckBox id="CheckBox_understand_deadlines" runat="server" text="Yes"></ASP:CheckBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <ASP:HyperLink id="HyperLink_request_overview_8" runat="server" navigateurl="request_overview.aspx">No, take me back</ASP:HyperLink><br></p></li>
 						<li>
 					  <p>Have you read, do you understand, and do you agree to abide by the
-							<ASP:HyperLink id="HyperLink_terms_and_conditions" runat="server" font-bold="True" navigateurl="terms-and-conditions.pdf" target="_blank">Terms & Conditions</ASP:HyperLink>&nbsp;of this cycle's EMSOF program?<br>
+							<ASP:HyperLink id="HyperLink_terms_and_conditions" runat="server" font-bold="True" navigateurl="../resource/terms-and-conditions.pdf" target="_blank">Terms & Conditions</ASP:HyperLink>&nbsp;of this cycle's EMSOF program?<br>
 							<br>
 							<ASP:CheckBox id="CheckBox_agree_to_terms_and_conditions" runat="server" text="Yes"></ASP:CheckBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <ASP:HyperLink id="HyperLink_request_overview_9" runat="server"
                  navigateurl="request_overview.aspx">No, take me back</ASP:HyperLink></p></li>
