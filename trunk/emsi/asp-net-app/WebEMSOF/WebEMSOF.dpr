@@ -40,6 +40,8 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\regional_staffer_fiscal_year_selection.aspx'}
 {%AspMarkupContainer 'protected\regional_approval_overview.aspx'}
 {%AspMarkupContainer 'protected\emsof_request_status_filter.aspx'}
+{%AspFolderContainer 'component\biz'}
+{%AspFolderContainer 'component\db'}
 
 uses
   System.Reflection,
@@ -67,19 +69,19 @@ uses
   regional_compliance_check_overview in 'protected\regional_compliance_check_overview.pas' {regional_compliance_check_overview.TWebForm_regional_compliance_check_overview: System.Web.UI.Page},
   full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas' {regional_staffer_fiscal_year_selection.TWebForm_account_overview: System.Web.UI.Page},
-  Class_dalc_base in 'component\dal\Class_dalc_base.pas',
-  Class_dalc_emsof_request in 'component\dal\Class_dalc_emsof_request.pas',
-  Class_bc_emsof_request in 'component\business\Class_bc_emsof_request.pas',
   regional_approval_overview in 'protected\regional_approval_overview.pas' {regional_approval_overview.TWebForm_regional_approval_overview: System.Web.UI.Page},
   emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
-  Class_bc_user in 'component\business\Class_bc_user.pas',
-  Class_dalc_user in 'component\dal\Class_dalc_user.pas',
-  Class_bc_appropriations in 'component\business\Class_bc_appropriations.pas',
-  Class_dalc_appropriations in 'component\dal\Class_dalc_appropriations.pas',
-  Class_dalc_fiscal_years in 'component\dal\Class_dalc_fiscal_years.pas',
-  Class_bc_fiscal_years in 'component\business\Class_bc_fiscal_years.pas',
-  Class_biz_accounts in 'component\business\Class_biz_accounts.pas',
-  Class_db_accounts in 'component\dal\Class_db_accounts.pas';
+  Class_biz_accounts in 'component\biz\Class_biz_accounts.pas',
+  Class_biz_appropriations in 'component\biz\Class_biz_appropriations.pas',
+  Class_biz_emsof_requests in 'component\biz\Class_biz_emsof_requests.pas',
+  Class_biz_fiscal_years in 'component\biz\Class_biz_fiscal_years.pas',
+  Class_biz_user in 'component\biz\Class_biz_user.pas',
+  Class_db in 'component\db\Class_db.pas',
+  Class_db_accounts in 'component\db\Class_db_accounts.pas',
+  Class_db_appropriations in 'component\db\Class_db_appropriations.pas',
+  Class_db_emsof_requests in 'component\db\Class_db_emsof_requests.pas',
+  Class_db_fiscal_years in 'component\db\Class_db_fiscal_years.pas',
+  Class_db_user in 'component\db\Class_db_user.pas';
 
 const ID = '$Id$';
 

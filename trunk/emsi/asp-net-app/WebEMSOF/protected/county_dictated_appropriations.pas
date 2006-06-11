@@ -9,7 +9,7 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   appcommon,
   borland.data.provider,
-  Class_bc_emsof_request,
+  Class_biz_emsof_requests,
   system.configuration,
   system.web.mail,
   system.web.security;
@@ -19,7 +19,7 @@ const ID = '$Id$';
 type
   p_type =
     RECORD
-    bc_emsof_requests: TClass_bc_emsof_request;
+    biz_emsof_requests: TClass_biz_emsof_requests;
     be_before_deadline: boolean;
     be_sort_order_ascending: boolean;
     num_appropriations: cardinal;
@@ -128,7 +128,7 @@ begin
     //
     // Initialize implementation-global variables.
     //
-    p.bc_emsof_requests := TClass_bc_emsof_request.Create;
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.be_before_deadline := TRUE;
     p.be_sort_order_ascending := TRUE;
     p.num_appropriations := 0;
@@ -270,11 +270,11 @@ begin
     session.Add
       (
       'status_of_interest',
-      Class_bc_emsof_request.status_type(convert.ToInt16(Safe(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text,NUM)))
+      Class_biz_emsof_requests.status_type(convert.ToInt16(Safe(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text,NUM)))
       );
     server.Transfer('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
-    p.saved_amount := decimal.Parse(Safe(e.item.cells[p.bc_emsof_requests.TcciOfAppropriation].text,REAL_NUM));
+    p.saved_amount := decimal.Parse(Safe(e.item.cells[p.biz_emsof_requests.TcciOfAppropriation].text,REAL_NUM));
   end;
 end;
 
@@ -301,7 +301,7 @@ var
   id_string: string;
 begin
   appcommon.DbOpen;
-  id_string := Safe(e.Item.Cells[p.bc_emsof_requests.TcciOfId].Text,NUM);
+  id_string := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfId].Text,NUM);
   bc := borland.data.provider.bdpcommand.Create
     (
     'select count(master_id)'  // Leaving the star out prevents inclusion of nulls in count
@@ -323,21 +323,21 @@ begin
     session.Add
       (
       'email_address_of_service_of_appropriation_selected_for_deletion',
-      Safe(e.item.cells[p.bc_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS)
+      Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS)
       );
     //
     session.Remove('service_name_of_appropriation_selected_for_deletion');
     session.Add
       (
       'service_name_of_appropriation_selected_for_deletion',
-      Safe(e.item.cells[p.bc_emsof_requests.TcciOfServiceName].text,ORG_NAME)
+      Safe(e.item.cells[p.biz_emsof_requests.TcciOfServiceName].text,ORG_NAME)
       );
     //
     session.Remove('amount_of_appropriation_selected_for_deletion');
     session.Add
       (
       'amount_of_appropriation_selected_for_deletion',
-      Safe(e.item.cells[p.bc_emsof_requests.TcciOfAppropriation].text,REAL_NUM)
+      Safe(e.item.cells[p.biz_emsof_requests.TcciOfAppropriation].text,REAL_NUM)
       );
     //
     server.Transfer('delete_service_appropriation.aspx');
@@ -358,7 +358,7 @@ begin
     smtpmail.Send
       (
       session['county_user_password_reset_email_address'].tostring,
-      Safe(e.item.cells[p.bc_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
+      Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
       'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
@@ -402,21 +402,21 @@ begin
     //
     p.num_appropriations := p.num_appropriations + 1;
     p.sum_of_service_appropriations := p.sum_of_service_appropriations
-      + decimal.Parse(databinder.Eval(e.item.dataitem,p.bc_emsof_requests.PropertyNameOfEmsofAnte).tostring);
-    if convert.ToInt16(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text) > 2 then begin
-      LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := TRUE;
-      LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).forecolor := color.BLUE;
-      if convert.ToInt16(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text) >= 3 then begin
-        if convert.ToInt16(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text) = 3 then begin
-          LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).font.bold := TRUE;
-          LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).text :=
-            '>' + LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).text.ToUpper + '<';
+      + decimal.Parse(databinder.Eval(e.item.dataitem,p.biz_emsof_requests.PropertyNameOfEmsofAnte).tostring);
+    if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) > 2 then begin
+      LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := TRUE;
+      LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).forecolor := color.BLUE;
+      if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) >= 3 then begin
+        if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) = 3 then begin
+          LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).font.bold := TRUE;
+          LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).text :=
+            '>' + LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).text.ToUpper + '<';
         end;
         LinkButton(e.item.cells[TCCI_LINKBUTTON_EDIT].controls.item[0]).visible := FALSE;
         LinkButton(e.item.cells[TCCI_LINKBUTTON_DELETE].controls.item[0]).visible := FALSE;
       end;
     end else begin
-      LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := FALSE;
+      LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := FALSE;
     end;
   end;
 end;
@@ -430,8 +430,8 @@ var
 begin
   appcommon.DbOpen;
   //
-  appropriation_id_string := Safe(e.Item.Cells[p.bc_emsof_requests.TcciOfId].Text,NUM);
-  amount_string := Safe(TextBox(e.Item.Cells[p.bc_emsof_requests.TcciOfAppropriation].controls[0]).Text.Trim,REAL_NUM);
+  appropriation_id_string := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfId].Text,NUM);
+  amount_string := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfAppropriation].controls[0]).Text.Trim,REAL_NUM);
   //
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
@@ -453,7 +453,7 @@ begin
     smtpmail.Send
       (
       session['county_user_password_reset_email_address'].tostring,
-      Safe(e.item.cells[p.bc_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
+      Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
@@ -495,7 +495,7 @@ procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
   be_datagrid_empty: boolean;
 begin
-  p.bc_emsof_requests.BindOverviewByRegionDictatedAppropriation
+  p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriation
     (
     session['region_dictated_appropriation_id'].tostring,
     p.sort_order,

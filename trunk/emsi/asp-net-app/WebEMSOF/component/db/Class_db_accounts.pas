@@ -4,10 +4,10 @@ interface
 
 uses
   borland.data.provider,
-  Class_dalc_base;
+  Class_db;
 
 type
-  TClass_db_accounts = class(TClass_dalc_base)
+  TClass_db_accounts = class(TClass_db)
   private
     { Private Declarations }
   public

@@ -205,9 +205,9 @@ end;
 
 procedure TWebForm_create_new_service_appropriation.AddAppropriation;
 var
-  bc_get_cc_email_address: borland.data.provider.bdpcommand;
-  bc_get_fy_designator: borland.data.provider.bdpcommand;
-  bc_get_service_email_address: borland.data.provider.bdpcommand;
+  biz_get_cc_email_address: borland.data.provider.bdpcommand;
+  biz_get_fy_designator: borland.data.provider.bdpcommand;
+  biz_get_service_email_address: borland.data.provider.bdpcommand;
   max_county_dictated_appropriation_id_string: string;
   messageText: string;
   service_id_string: string;
@@ -253,14 +253,14 @@ begin
   // Send notice of the appropriation to the service's email address of record.
   //
   //   Set up the command to get service's email address of record.
-  bc_get_service_email_address := borland.data.provider.bdpcommand.Create
+  biz_get_service_email_address := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address from service_user '
     + 'where id = ' + service_id_string,
     appcommon.db
     );
   //   Set up the command to get the appropriate fiscal year designator.
-  bc_get_fy_designator := borland.data.provider.bdpcommand.Create
+  biz_get_fy_designator := borland.data.provider.bdpcommand.Create
     (
     'select designator'
     + ' from fiscal_year'
@@ -271,14 +271,14 @@ begin
     appcommon.db
     );
   //   Set up the command to get the County Coorindator's email address.
-  bc_get_cc_email_address := borland.data.provider.bdpcommand.Create
+  biz_get_cc_email_address := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address from county_user where id = ' + session['county_user_id'].tostring,
     appcommon.db
     );
   //   Set up the messageText.
   messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
-  + 'of ' + p.amount.tostring('C') + ' to your service for ' + bc_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
+  + 'of ' + p.amount.tostring('C') + ' to your service for ' + biz_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
   + NEW_LINE
   + 'You can work on this appropriation by visiting:' + NEW_LINE
   + NEW_LINE
@@ -294,8 +294,8 @@ begin
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
-    bc_get_cc_email_address.ExecuteScalar.tostring,
-    bc_get_service_email_address.ExecuteScalar.tostring,
+    biz_get_cc_email_address.ExecuteScalar.tostring,
+    biz_get_service_email_address.ExecuteScalar.tostring,
     'New ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
     messageText
     );

@@ -1,13 +1,13 @@
-unit Class_bc_emsof_request;
+unit Class_biz_emsof_requests;
 
 interface
 
 uses
   borland.data.provider,
   Class_biz_accounts,
-  Class_bc_fiscal_years,
-  Class_bc_user,
-  Class_dalc_emsof_request,
+  Class_biz_fiscal_years,
+  Class_biz_user,
+  Class_db_emsof_requests,
   system.security.principal,
   system.web;
 
@@ -34,7 +34,7 @@ type status_type =
   );
 
 type
-  TClass_bc_emsof_request = class
+  TClass_biz_emsof_requests = class
   private
   public
     constructor Create;
@@ -110,23 +110,23 @@ type
 
 implementation
 
-constructor TClass_bc_emsof_request.Create;
+constructor TClass_biz_emsof_requests.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
 end;
 
-function TClass_bc_emsof_request.AffiliateNumOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.AffiliateNumOf(e_item: system.object): string;
 begin
-  AffiliateNumOf := TClass_dalc_emsof_request.Create.AffiliateNumOf(e_item);
+  AffiliateNumOf := TClass_db_emsof_requests.Create.AffiliateNumOf(e_item);
 end;
 
-function TClass_bc_emsof_request.BeOkToApproveEmsofRequest(status: status_type): boolean;
+function TClass_biz_emsof_requests.BeOkToApproveEmsofRequest(status: status_type): boolean;
 begin
   BeOkToApproveEmsofRequest := FALSE;
   case status of
   NEEDS_COUNTY_APPROVAL:
-    BeOkToApproveEmsofRequest := (TClass_bc_user.Create.Kind = 'county');
+    BeOkToApproveEmsofRequest := (TClass_biz_user.Create.Kind = 'county');
   NEEDS_REGIONAL_COMPLIANCE_CHECK:
     BeOkToApproveEmsofRequest := httpcontext.current.user.IsInRole('director')
       or httpcontext.current.user.IsInRole('emsof-coordinator')
@@ -137,7 +137,7 @@ begin
   end;
 end;
 
-function TClass_bc_emsof_request.BeOkToDrillDown(status: status_type): boolean;
+function TClass_biz_emsof_requests.BeOkToDrillDown(status: status_type): boolean;
 begin
   BeOkToDrillDown := FALSE;
   if httpcontext.current.user.IsInRole('director')
@@ -158,26 +158,26 @@ begin
   end;
 end;
 
-procedure TClass_bc_emsof_request.BindDetail
+procedure TClass_biz_emsof_requests.BindDetail
   (
   master_id: string;
   target: system.object
   );
 begin
-  TClass_dalc_emsof_request.Create.BindDetail(master_id,target);
+  TClass_db_emsof_requests.Create.BindDetail(master_id,target);
 end;
 
-procedure TClass_bc_emsof_request.BindOverviewAll
+procedure TClass_biz_emsof_requests.BindOverviewAll
   (
   order_by_field_name: string;
   be_order_ascending: boolean;
   target: system.object
   );
 begin
-  TClass_dalc_emsof_request.Create.BindOverviewAll(order_by_field_name,be_order_ascending,target);
+  TClass_db_emsof_requests.Create.BindOverviewAll(order_by_field_name,be_order_ascending,target);
 end;
 
-procedure TClass_bc_emsof_request.BindOverviewByRegionDictatedAppropriation
+procedure TClass_biz_emsof_requests.BindOverviewByRegionDictatedAppropriation
   (
   region_dictated_appropriation_id: string;
   order_by_field_name: string;
@@ -185,11 +185,11 @@ procedure TClass_bc_emsof_request.BindOverviewByRegionDictatedAppropriation
   target: system.object
   );
 begin
-  TClass_dalc_emsof_request.Create.BindOverviewByRegionDictatedAppropriation
+  TClass_db_emsof_requests.Create.BindOverviewByRegionDictatedAppropriation
     (region_dictated_appropriation_id,order_by_field_name,be_order_ascending,target);
 end;
 
-procedure TClass_bc_emsof_request.BindOverviewByRegionDictatedAppropriationAndStatus
+procedure TClass_biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus
   (
   region_dictated_appropriation_id: string;
   status: status_type;
@@ -198,12 +198,12 @@ procedure TClass_bc_emsof_request.BindOverviewByRegionDictatedAppropriationAndSt
   target: system.object
   );
 begin
-  TClass_dalc_emsof_request.Create.BindOverviewByRegionDictatedAppropriationAndStatus
+  TClass_db_emsof_requests.Create.BindOverviewByRegionDictatedAppropriationAndStatus
     (region_dictated_appropriation_id,ord(status),order_by_field_name,be_order_ascending,target);
 end;
 
 
-procedure TClass_bc_emsof_request.BindOverviewByStatus
+procedure TClass_biz_emsof_requests.BindOverviewByStatus
   (
   status: status_type;
   order_by_field_name: string;
@@ -211,15 +211,15 @@ procedure TClass_bc_emsof_request.BindOverviewByStatus
   target: system.object
   );
 begin
-  TClass_dalc_emsof_request.Create.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
+  TClass_db_emsof_requests.Create.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
 end;
 
-function TClass_bc_emsof_request.IdOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.IdOf(e_item: system.object): string;
 begin
-  IdOf := TClass_dalc_emsof_request.Create.IdOf(e_item);
+  IdOf := TClass_db_emsof_requests.Create.IdOf(e_item);
 end;
 
-procedure TClass_bc_emsof_request.Demote
+procedure TClass_biz_emsof_requests.Demote
   (
   e_item: system.object;
   status: status_type;
@@ -265,7 +265,7 @@ begin
     next_status := REJECTED;
   end;
   //
-  TClass_dalc_emsof_request.Create.Demote(IdOf(e_item),ord(next_status),TClass_bc_user.Create.Kind,role);
+  TClass_db_emsof_requests.Create.Demote(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,role);
   TClass_biz_accounts.Create.MakeDemotionNotification
     (
     role,
@@ -282,12 +282,12 @@ begin
   //
 end;
 
-function TClass_bc_emsof_request.FyDesignatorOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.FyDesignatorOf(e_item: system.object): string;
 begin
-  FyDesignatorOf := TClass_dalc_emsof_request.Create.FyDesignatorOf(e_item);
+  FyDesignatorOf := TClass_db_emsof_requests.Create.FyDesignatorOf(e_item);
 end;
 
-function TClass_bc_emsof_request.NextApprover(status: status_type): string;
+function TClass_biz_emsof_requests.NextApprover(status: status_type): string;
 begin
   case status of
   NEEDS_COUNTY_APPROVAL:
@@ -299,12 +299,12 @@ begin
   end;
 end;
 
-function TClass_bc_emsof_request.PropertyNameOfEmsofAnte: string;
+function TClass_biz_emsof_requests.PropertyNameOfEmsofAnte: string;
 begin
-  PropertyNameOfEmsofAnte := TClass_dalc_emsof_request.Create.PropertyNameOfEmsofAnte;
+  PropertyNameOfEmsofAnte := TClass_db_emsof_requests.Create.PropertyNameOfEmsofAnte;
 end;
 
-procedure TClass_bc_emsof_request.Promote
+procedure TClass_biz_emsof_requests.Promote
   (
   e_item: system.object;
   status: status_type;
@@ -342,7 +342,7 @@ begin
     next_status := NEEDS_INVOICE_COLLECTION;
     END;
   end;
-  TClass_dalc_emsof_request.Create.Promote(IdOf(e_item),ord(next_status),TClass_bc_user.Create.Kind,role);
+  TClass_db_emsof_requests.Create.Promote(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,role);
   TClass_biz_accounts.Create.MakePromotionNotification
     (
     role,
@@ -355,82 +355,82 @@ begin
   //
 end;
 
-function TClass_bc_emsof_request.ReworkDeadline(e_item: system.object): datetime;
+function TClass_biz_emsof_requests.ReworkDeadline(e_item: system.object): datetime;
 begin
-  ReworkDeadline := TClass_dalc_emsof_request.Create.ReworkDeadline(e_item);
+  ReworkDeadline := TClass_db_emsof_requests.Create.ReworkDeadline(e_item);
 end;
 
-function TClass_bc_emsof_request.ServiceIdOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.ServiceIdOf(e_item: system.object): string;
 begin
-  ServiceIdOf := TClass_dalc_emsof_request.Create.ServiceIdOf(e_item);
+  ServiceIdOf := TClass_db_emsof_requests.Create.ServiceIdOf(e_item);
 end;
 
-function TClass_bc_emsof_request.ServiceNameOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
-  ServiceNameOf := TClass_dalc_emsof_request.Create.ServiceNameOf(e_item);
+  ServiceNameOf := TClass_db_emsof_requests.Create.ServiceNameOf(e_item);
 end;
 
-function TClass_bc_emsof_request.SponsorCountyCodeOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.SponsorCountyCodeOf(e_item: system.object): string;
 begin
-  SponsorCountyCodeOf := TClass_dalc_emsof_request.Create.SponsorCountyCodeOf(e_item);
+  SponsorCountyCodeOf := TClass_db_emsof_requests.Create.SponsorCountyCodeOf(e_item);
 end;
 
-function TClass_bc_emsof_request.SponsorCountyNameOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.SponsorCountyNameOf(e_item: system.object): string;
 begin
-  SponsorCountyNameOf := TClass_dalc_emsof_request.Create.SponsorCountyNameOf(e_item);
+  SponsorCountyNameOf := TClass_db_emsof_requests.Create.SponsorCountyNameOf(e_item);
 end;
 
-function TClass_bc_emsof_request.SumOfRequestValues(fy_id: string = ''): decimal;
+function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;
 var
-  bc_user: TClass_bc_user;
+  biz_user: TClass_biz_user;
 begin
-  bc_user := TClass_bc_user.Create;
+  biz_user := TClass_biz_user.Create;
   if fy_id = system.string.EMPTY then begin
-    SumOfRequestValues := TClass_dalc_emsof_request.Create.SumOfRequestValues
-      (bc_user.Kind,bc_user.IdNum,TClass_bc_fiscal_years.Create.IdOfCurrent);
+    SumOfRequestValues := TClass_db_emsof_requests.Create.SumOfRequestValues
+      (biz_user.Kind,biz_user.IdNum,TClass_biz_fiscal_years.Create.IdOfCurrent);
   end else begin
-    SumOfRequestValues := TClass_dalc_emsof_request.Create.SumOfRequestValues(bc_user.Kind,bc_user.IdNum,fy_id);
+    SumOfRequestValues := TClass_db_emsof_requests.Create.SumOfRequestValues(biz_user.Kind,biz_user.IdNum,fy_id);
   end;
 end;
 
-function TClass_bc_emsof_request.TallyOfStatus(status: status_type): string;
+function TClass_biz_emsof_requests.TallyOfStatus(status: status_type): string;
 begin
-  TallyOfStatus := TClass_dalc_emsof_request.Create.TallyByStatus(ord(status)).tostring;
+  TallyOfStatus := TClass_db_emsof_requests.Create.TallyByStatus(ord(status)).tostring;
 end;
 
-function TClass_bc_emsof_request.TcciOfAppropriation: cardinal;
+function TClass_biz_emsof_requests.TcciOfAppropriation: cardinal;
 begin
-  TcciOfAppropriation := TClass_dalc_emsof_request.Create.TcciOfAppropriation;
+  TcciOfAppropriation := TClass_db_emsof_requests.Create.TcciOfAppropriation;
 end;
 
-function TClass_bc_emsof_request.TcciOfId: cardinal;
+function TClass_biz_emsof_requests.TcciOfId: cardinal;
 begin
-  TcciOfId := TClass_dalc_emsof_request.Create.TcciOfId;
+  TcciOfId := TClass_db_emsof_requests.Create.TcciOfId;
 end;
 
-function TClass_bc_emsof_request.TcciOfEmsofAnte: cardinal;
+function TClass_biz_emsof_requests.TcciOfEmsofAnte: cardinal;
 begin
-  TcciOfEmsofAnte := TClass_dalc_emsof_request.Create.TcciOfEmsofAnte;
+  TcciOfEmsofAnte := TClass_db_emsof_requests.Create.TcciOfEmsofAnte;
 end;
 
-function TClass_bc_emsof_request.TcciOfPasswordResetEmailAddress: cardinal;
+function TClass_biz_emsof_requests.TcciOfPasswordResetEmailAddress: cardinal;
 begin
-  TcciOfPasswordResetEmailAddress := TClass_dalc_emsof_request.Create.TcciOfPasswordResetEmailAddress;
+  TcciOfPasswordResetEmailAddress := TClass_db_emsof_requests.Create.TcciOfPasswordResetEmailAddress;
 end;
 
-function TClass_bc_emsof_request.TcciOfServiceName: cardinal;
+function TClass_biz_emsof_requests.TcciOfServiceName: cardinal;
 begin
-  TcciOfServiceName := TClass_dalc_emsof_request.Create.TcciOfServiceName;
+  TcciOfServiceName := TClass_db_emsof_requests.Create.TcciOfServiceName;
 end;
 
-function TClass_bc_emsof_request.TcciOfStatusCode: cardinal;
+function TClass_biz_emsof_requests.TcciOfStatusCode: cardinal;
 begin
-  TcciOfStatusCode := TClass_dalc_emsof_request.Create.TcciOfStatusCode;
+  TcciOfStatusCode := TClass_db_emsof_requests.Create.TcciOfStatusCode;
 end;
 
-function TClass_bc_emsof_request.TcciOfStatusDescription: cardinal;
+function TClass_biz_emsof_requests.TcciOfStatusDescription: cardinal;
 begin
-  TcciOfStatusDescription := TClass_dalc_emsof_request.Create.TcciOfStatusDescription;
+  TcciOfStatusDescription := TClass_db_emsof_requests.Create.TcciOfStatusDescription;
 end;
 
 end.
