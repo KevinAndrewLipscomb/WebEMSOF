@@ -81,7 +81,7 @@ uses
   Class_biz_accounts in 'component\business\Class_biz_accounts.pas',
   Class_db_accounts in 'component\dal\Class_db_accounts.pas';
 
-const ID = '$Id';
+const ID = '$Id$';
 
 //
 // General Information about an assembly is controlled through the following

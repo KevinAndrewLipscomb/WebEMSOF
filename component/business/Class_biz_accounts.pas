@@ -226,11 +226,11 @@ begin
   //   Get the next approver's email address.
   //
   if role = 'county' then begin
-    next_approver_email_target := EmailTargetByRole('regional-planner');
+    next_approver_email_target := EmailTargetByRole('emsof-planner');
   end else if role = 'regional_planner' then begin
     next_approver_email_target := EmailTargetByRole('director');
   end else if role = 'regional_director' then begin
-    next_approver_email_target := EmailTargetByRole('regional-coordinator');
+    next_approver_email_target := EmailTargetByRole('emsof-coordinator');
   end;
   //
   //   Send notification to service.

@@ -6,41 +6,33 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, appcommon,
-  system.web.mail, system.web.security;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  appcommon,
+  borland.data.provider,
+  Class_bc_emsof_request,
+  system.configuration,
+  system.web.mail,
+  system.web.security;
 
 const ID = '$Id$';
 
 type
   p_type =
     RECORD
+    bc_emsof_requests: TClass_bc_emsof_request;
     be_before_deadline: boolean;
     be_sort_order_ascending: boolean;
-    tcci_id: cardinal;
-    tcci_password_reset_email_address: cardinal;
-    tcci_affiliate_num: cardinal;
-    tcci_name: cardinal;
-    tcci_amount: cardinal;
-    tcci_status_code: cardinal;
-    tcci_status_description: cardinal;
-    tcci_linkbutton_edit: cardinal;
-    tcci_linkbutton_delete: cardinal;
     num_appropriations: cardinal;
     region_dictated_appropriation_amount: decimal;
     saved_amount: decimal;
-    service_appropriations_sort_order: string;
+    sort_order: string;
     sum_of_service_appropriations: decimal;
     unappropriated_amount: decimal;
     END;
-
-type
   TWebForm_county_dictated_appropriations = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure EditCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure CancelCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure UpdateCommand_service_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
       e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid_service_appropriations_DeleteCommand(source: System.Object;
@@ -55,6 +47,12 @@ type
       e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure TWebForm_county_dictated_appropriations_PreRender(sender: System.Object; 
       e: System.EventArgs);
+    procedure DataGrid_service_appropriations_EditCommand(source: System.Object; 
+      e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure DataGrid_service_appropriations_CancelCommand(source: System.Object; 
+      e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure DataGrid_service_appropriations_UpdateCommand(source: System.Object; 
+      e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -91,6 +89,10 @@ type
 
 implementation
 
+const
+  TCCI_LINKBUTTON_EDIT = 12;
+  TCCI_LINKBUTTON_DELETE = 13;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -102,10 +104,10 @@ begin
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
   Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.DataGrid_service_appropriations.ItemCommand, Self.DataGrid_service_appropriations_ItemCommand);
-  Include(Self.DataGrid_service_appropriations.CancelCommand, Self.CancelCommand_service_appropriations);
-  Include(Self.DataGrid_service_appropriations.EditCommand, Self.EditCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.CancelCommand, Self.DataGrid_service_appropriations_CancelCommand);
+  Include(Self.DataGrid_service_appropriations.EditCommand, Self.DataGrid_service_appropriations_EditCommand);
   Include(Self.DataGrid_service_appropriations.SortCommand, Self.DataGrid_service_appropriations_SortCommand);
-  Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.UpdateCommand_service_appropriations);
+  Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.DataGrid_service_appropriations_UpdateCommand);
   Include(Self.DataGrid_service_appropriations.DeleteCommand, Self.DataGrid_service_appropriations_DeleteCommand);
   Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
@@ -126,22 +128,14 @@ begin
     //
     // Initialize implementation-global variables.
     //
+    p.bc_emsof_requests := TClass_bc_emsof_request.Create;
     p.be_before_deadline := TRUE;
     p.be_sort_order_ascending := TRUE;
     p.num_appropriations := 0;
-    p.service_appropriations_sort_order := 'name';
+    p.sort_order := 'service_name';
     p.sum_of_service_appropriations := 0;
     p.unappropriated_amount := 0;
     //   Set up symbolic DataGrid Indices for use in other event handlers.
-    p.tcci_id                           := 0;
-    p.tcci_password_reset_email_address := 1;
-    p.tcci_affiliate_num                := 2;
-    p.tcci_name                         := 3;
-    p.tcci_amount                       := 4;
-    p.tcci_status_code                  := 5;
-    p.tcci_status_description           := 6;
-    p.tcci_linkbutton_edit              := 7;
-    p.tcci_linkbutton_delete            := 8;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session['county_name'].ToString;
@@ -235,10 +229,10 @@ end;
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_SortCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
-  if e.SortExpression = p.service_appropriations_sort_order then begin
+  if e.SortExpression = p.sort_order then begin
     p.be_sort_order_ascending := not p.be_sort_order_ascending;
   end else begin
-    p.service_appropriations_sort_order := e.SortExpression;
+    p.sort_order := e.SortExpression;
     p.be_sort_order_ascending := TRUE;
   end;
   Table_warning_forced_amount.visible := FALSE;
@@ -270,29 +264,17 @@ begin
     session.Add('calling_form','county_dictated_appropriations.aspx');
     session.Remove('account_descriptor');
     session.Add('account_descriptor',session['county_name'].ToString + ' County');
-    session.Remove('fiscal_year_designator');
-    session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
-    session.Remove('service_name');
-    session.Add('service_name',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
-    session.Remove('affiliate_num');
-    session.Add('affiliate_num',Safe(e.item.cells[p.tcci_affiliate_num].text,NUM));
-    session.Remove('appropriation_amount');
-    session.Add('appropriation_amount',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
-    session.Remove('county_dictated_appropriation_id');
-    session.Add('county_dictated_appropriation_id',Safe(e.item.cells[p.tcci_id].text,NUM));
-    session.Remove('emsof_request_master_status_code');
-    session.Add('emsof_request_master_status_code',Safe(e.item.cells[p.tcci_status_code].text,NUM));
-    session.Remove('request_status_this_session_may_approve');
-    session.Add('request_status_this_session_may_approve','3');
-    session.Remove('next_approver_descriptor');
-    session.Add('next_approver_descriptor','Regional Council');
-    session.Remove('promotion_status');
-    session.Add('promotion_status','4');
-    session.Remove('rework_deadline');
-    session.Add('rework_deadline',session['county_dictated_deadline'].tostring);
+    session.Remove('e_item');
+    session.Add('e_item',e.item);
+    session.Remove('status_of_interest');
+    session.Add
+      (
+      'status_of_interest',
+      Class_bc_emsof_request.status_type(convert.ToInt16(Safe(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text,NUM)))
+      );
     server.Transfer('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
-    p.saved_amount := decimal.Parse(Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
+    p.saved_amount := decimal.Parse(Safe(e.item.cells[p.bc_emsof_requests.TcciOfAppropriation].text,REAL_NUM));
   end;
 end;
 
@@ -319,7 +301,7 @@ var
   id_string: string;
 begin
   appcommon.DbOpen;
-  id_string := Safe(e.Item.Cells[p.tcci_id].Text,NUM);
+  id_string := Safe(e.Item.Cells[p.bc_emsof_requests.TcciOfId].Text,NUM);
   bc := borland.data.provider.bdpcommand.Create
     (
     'select count(master_id)'  // Leaving the star out prevents inclusion of nulls in count
@@ -341,14 +323,22 @@ begin
     session.Add
       (
       'email_address_of_service_of_appropriation_selected_for_deletion',
-      Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS)
+      Safe(e.item.cells[p.bc_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS)
       );
     //
     session.Remove('service_name_of_appropriation_selected_for_deletion');
-    session.Add('service_name_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
+    session.Add
+      (
+      'service_name_of_appropriation_selected_for_deletion',
+      Safe(e.item.cells[p.bc_emsof_requests.TcciOfServiceName].text,ORG_NAME)
+      );
     //
     session.Remove('amount_of_appropriation_selected_for_deletion');
-    session.Add('amount_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
+    session.Add
+      (
+      'amount_of_appropriation_selected_for_deletion',
+      Safe(e.item.cells[p.bc_emsof_requests.TcciOfAppropriation].text,REAL_NUM)
+      );
     //
     server.Transfer('delete_service_appropriation.aspx');
   end else begin
@@ -368,7 +358,7 @@ begin
     smtpmail.Send
       (
       session['county_user_password_reset_email_address'].tostring,
-      Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),
+      Safe(e.item.cells[p.bc_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
       'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
@@ -399,8 +389,8 @@ begin
   //
   // Manage column visibility
   //
-  e.item.cells[p.tcci_linkbutton_edit].visible := p.be_before_deadline;
-  e.item.cells[p.tcci_linkbutton_delete].visible := p.be_before_deadline;
+  e.item.cells[TCCI_LINKBUTTON_EDIT].visible := p.be_before_deadline;
+  e.item.cells[TCCI_LINKBUTTON_DELETE].visible := p.be_before_deadline;
   //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
@@ -411,27 +401,27 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     p.num_appropriations := p.num_appropriations + 1;
-    p.sum_of_service_appropriations :=
-      p.sum_of_service_appropriations + decimal.Parse(databinder.Eval(e.item.dataitem,'amount').tostring);
-    if convert.ToInt16(e.item.cells[p.tcci_status_code].text) > 2 then begin
-      LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).enabled := TRUE;
-      LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).forecolor := color.BLUE;
-      if convert.ToInt16(e.item.cells[p.tcci_status_code].text) >= 3 then begin
-        if convert.ToInt16(e.item.cells[p.tcci_status_code].text) = 3 then begin
-          LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).font.bold := TRUE;
-          LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).text :=
-            '>' + LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).text.ToUpper + '<';
+    p.sum_of_service_appropriations := p.sum_of_service_appropriations
+      + decimal.Parse(databinder.Eval(e.item.dataitem,p.bc_emsof_requests.PropertyNameOfEmsofAnte).tostring);
+    if convert.ToInt16(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text) > 2 then begin
+      LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := TRUE;
+      LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).forecolor := color.BLUE;
+      if convert.ToInt16(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text) >= 3 then begin
+        if convert.ToInt16(e.item.cells[p.bc_emsof_requests.TcciOfStatusCode].text) = 3 then begin
+          LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).font.bold := TRUE;
+          LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).text :=
+            '>' + LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).text.ToUpper + '<';
         end;
-        LinkButton(e.item.cells[p.tcci_linkbutton_edit].controls.item[0]).visible := FALSE;
-        LinkButton(e.item.cells[p.tcci_linkbutton_delete].controls.item[0]).visible := FALSE;
+        LinkButton(e.item.cells[TCCI_LINKBUTTON_EDIT].controls.item[0]).visible := FALSE;
+        LinkButton(e.item.cells[TCCI_LINKBUTTON_DELETE].controls.item[0]).visible := FALSE;
       end;
     end else begin
-      LinkButton(e.item.cells[p.tcci_status_description].controls.item[0]).enabled := FALSE;
+      LinkButton(e.item.cells[p.bc_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := FALSE;
     end;
   end;
 end;
 
-procedure TWebForm_county_dictated_appropriations.UpdateCommand_service_appropriations(source: System.Object;
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_UpdateCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
   amount: decimal;
@@ -440,8 +430,8 @@ var
 begin
   appcommon.DbOpen;
   //
-  appropriation_id_string := Safe(e.Item.Cells[p.tcci_id].Text,NUM);
-  amount_string := Safe(TextBox(e.Item.Cells[p.tcci_amount].controls[0]).Text.Trim,REAL_NUM);
+  appropriation_id_string := Safe(e.Item.Cells[p.bc_emsof_requests.TcciOfId].Text,NUM);
+  amount_string := Safe(TextBox(e.Item.Cells[p.bc_emsof_requests.TcciOfAppropriation].controls[0]).Text.Trim,REAL_NUM);
   //
   if amount_string <> system.string.EMPTY then begin
     amount := decimal.Parse(amount_string);
@@ -463,7 +453,7 @@ begin
     smtpmail.Send
       (
       session['county_user_password_reset_email_address'].tostring,
-      Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),
+      Safe(e.item.cells[p.bc_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
@@ -486,7 +476,7 @@ begin
   end;
 end;
 
-procedure TWebForm_county_dictated_appropriations.CancelCommand_service_appropriations(source: System.Object;
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_CancelCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   Table_warning_forced_amount.visible := FALSE;
@@ -494,7 +484,7 @@ begin
   Bind_service_appropriations;
 end;
 
-procedure TWebForm_county_dictated_appropriations.EditCommand_service_appropriations(source: System.Object;
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_EditCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   DataGrid_service_appropriations.EditItemIndex := e.Item.ItemIndex;
@@ -504,39 +494,18 @@ end;
 procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
   be_datagrid_empty: boolean;
-  cmdText: string;
 begin
-  appcommon.DbOpen;
-  //
-  // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
-  //
-  cmdText := 'select county_dictated_appropriation.id,' // column 0
-  + ' password_reset_email_address,'                    // column 1
-  + ' affiliate_num,'                                   // column 2
-  + ' name,'                                            // column 3
-  + ' county_dictated_appropriation.amount,'            // column 4
-  + ' status_code,'                                     // column 5
-  + ' description as status_description'                // column 6
-  + ' from county_dictated_appropriation'
-  +   ' join service on (service.id=service_id)'
-  +   ' join service_user on (service_user.id=service.id)'
-  +   ' join emsof_request_master on (emsof_request_master.county_dictated_appropriation_id=county_dictated_appropriation.id)'
-  +   ' join request_status_code_description_map on (request_status_code_description_map.code=emsof_request_master.status_code)'
-  + ' where region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].ToString
-  + ' order by ' + p.service_appropriations_sort_order;
-  if p.be_sort_order_ascending then begin
-    cmdText := cmdText + ' asc';
-  end else begin
-    cmdText := cmdText + ' desc';
-  end;
-  //
-  DataGrid_service_appropriations.DataSource :=
-    borland.data.provider.bdpcommand.Create(cmdText,appcommon.db).ExecuteReader;
-  DataGrid_service_appropriations.DataBind;
-  be_datagrid_empty := (p.num_appropriations = 0);
+  p.bc_emsof_requests.BindOverviewByRegionDictatedAppropriation
+    (
+    session['region_dictated_appropriation_id'].tostring,
+    p.sort_order,
+    p.be_sort_order_ascending,
+    DataGrid_service_appropriations
+    );
   //
   // Manage control visibilities.
   //
+  be_datagrid_empty := (p.num_appropriations = 0);
   Label_no_appropriations.Visible := be_datagrid_empty;
   Datagrid_service_appropriations.Visible := not be_datagrid_empty;
   //
@@ -554,7 +523,6 @@ begin
   //
   p.num_appropriations := 0;
   p.sum_of_service_appropriations := 0;
-  appcommon.DbClose;
 end;
 
 end.

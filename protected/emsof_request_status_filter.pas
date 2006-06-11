@@ -19,8 +19,6 @@ type
     num_qualifying_requests: cardinal;
     sort_order: string;
     END;
-
-type
   TWebForm_emsof_request_status_filter = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -63,6 +61,9 @@ type
   end;
 
 implementation
+
+const
+  TCCI_LINKBUTTON_SELECT = 12;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -125,7 +126,7 @@ begin
   //
   // Manage column visibility
   //
-  e.item.cells[TClass_bc_emsof_request.Create.TcciOfLinkButtonSelect].visible :=
+  e.item.cells[tcci_linkbutton_select].visible :=
     TClass_bc_emsof_request.Create.BeOkToDrillDown(Class_bc_emsof_request.status_type(session['status_of_interest']));
   //
   if (e.item.itemtype = listitemtype.alternatingitem)
@@ -193,7 +194,7 @@ procedure TWebForm_emsof_request_status_filter.Bind;
 var
   be_datagrid_empty: boolean;
 begin
-  TClass_bc_emsof_request.Create.BindOverview
+  TClass_bc_emsof_request.Create.BindOverviewByStatus
     (
     Class_bc_emsof_request.status_type(session['status_of_interest']),
     p.sort_order,
