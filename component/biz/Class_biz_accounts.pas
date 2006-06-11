@@ -269,9 +269,7 @@ begin
     + 'You can review this EMSOF request by visiting:' + NEW_LINE
     + NEW_LINE
     + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-    + ConfigurationSettings.AppSettings['application_name'] + '/protected/'
-    + TClass_biz_user.Create.Kind + '_overview.aspx'
-    + NEW_LINE
+    + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
     + NEW_LINE
     + 'Replies to this message will be addressed to ' + reviewer_descriptor
     + NEW_LINE

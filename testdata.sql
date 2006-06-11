@@ -44,7 +44,8 @@ INSERT INTO `fiscal_year` (`id`, `designator`) VALUES (2, 'FY0607');
 -- Dumping data for table `fy_calendar`
 -- 
 
-INSERT INTO `fy_calendar` (`id`, `fiscal_year_id`, `milestone_code`, `value`) VALUES (5, 2, 1, '2006-11-30 23:59:59'),
+INSERT INTO `fy_calendar` (`id`, `fiscal_year_id`, `milestone_code`, `value`) VALUES
+(5, 2, 1, '2006-11-30 23:59:59'),
 (6, 2, 2, '2007-01-31 23:59:59'),
 (7, 2, 3, '2007-02-28 23:59:59'),
 (8, 2, 4, '2007-05-31 23:59:59');
@@ -70,39 +71,41 @@ INSERT INTO `region_dictated_appropriation` (`id`, `state_dictated_appropriation
 
 INSERT INTO `regional_staffer` (`id`, `region_code`, `last_name`, `first_name`) VALUES 
 (1, 1, 'McElree', 'Tom'),
-(2, 1, 'Cameron', 'Amos P');
+(2, 1, 'Cameron', 'Amos P'),
+(3, 1, 'Arrington', 'Gloria'),
+(4, 1, 'Brown', 'Jessika');
 
--- 
+--
 -- Dumping data for table `regional_staffer_group`
--- 
+--
 
-INSERT INTO `regional_staffer_group` (`id`, `name`) VALUES 
+INSERT INTO `regional_staffer_group` (`id`, `name`) VALUES
 (1, 'director'),
 (2, 'emsof-coordinator'),
 (3, 'emsof-clerk'),
 (4, 'emsof-accountant'),
 (5, 'emsof-planner');
 
--- 
+--
 -- Dumping data for table `regional_staffer_role`
--- 
+--
 
-INSERT INTO `regional_staffer_role` (`id`, `user_id`, `group_id`) VALUES (1, 1, 1),
-(2, 1, 2),
-(3, 1, 3),
-(4, 1, 4),
-(5, 1, 5),
-(6, 2, 2),
-(7, 2, 3),
-(8, 2, 5);
+INSERT INTO `regional_staffer_role` (`id`, `user_id`, `group_id`) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 2, 5),
+(4, 3, 4),
+(5, 4, 3);
 
--- 
+--
 -- Dumping data for table `regional_staffer_user`
--- 
+--
 
-INSERT INTO `regional_staffer_user` (`id`, `encoded_password`, `be_stale_password`, `password_reset_email_address`, `be_active`) VALUES 
+INSERT INTO `regional_staffer_user` (`id`, `encoded_password`, `be_stale_password`, `password_reset_email_address`, `be_active`) VALUES
 (1, sha('regionpass'), 0, 'finances@kvrs.org', 1),
-(2, sha('regionpass'), 0, 'finances@kvrs.org', 1);
+(2, sha('regionpass'), 0, 'finances@kvrs.org', 1),
+(3, sha('regionpass'), 0, 'finances@kvrs.org', 1),
+(4, sha('regionpass'), 0, 'finances@kvrs.org', 1);
 
 -- 
 -- Dumping data for table `service`
