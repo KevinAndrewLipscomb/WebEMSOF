@@ -29,14 +29,15 @@ type
     procedure DataGrid_requests_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure TWebForm_emsof_request_status_filter_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
   //
   //   target_user_table: string
   //   (target_user_table)_name: string
-  //   calling_form: string;
   //   status_of_interest: Class_biz_emsof_requests.status_type
+  //   waypoint_stack: system.collections.stack;
   //
   //
   strict private
@@ -51,10 +52,10 @@ type
     HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
-    HyperLink_back: System.Web.UI.WebControls.HyperLink;
     DataGrid_requests: System.Web.UI.WebControls.DataGrid;
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
     Label_status: System.Web.UI.WebControls.Label;
+    LinkButton_back: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -76,6 +77,7 @@ begin
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
   Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
   Include(Self.DataGrid_requests.ItemDataBound, Self.DataGrid_requests_ItemDataBound);
+  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_emsof_request_status_filter_PreRender);
 end;
@@ -89,7 +91,6 @@ begin
   end else begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
-    HyperLink_back.navigateurl := session['calling_form'].tostring;
     Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session['status_of_interest'].tostring;
     //
@@ -111,6 +112,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
 procedure TWebForm_emsof_request_status_filter.TWebForm_emsof_request_status_filter_PreRender(sender: System.Object;
@@ -157,8 +164,7 @@ begin
     //
     // We are dealing with a data row, not a header or footer row.
     //
-    session.Remove('calling_form');
-    session.Add('calling_form','emsof_request_status_filter.aspx');
+    system.collections.stack(session['waypoint_stack']).Push('emsof_request_status_filter.aspx');
     session.Remove('account_descriptor');
     session.Add('account_descriptor',session['regional_staffer_name'].ToString);
     session.Remove('e_item');

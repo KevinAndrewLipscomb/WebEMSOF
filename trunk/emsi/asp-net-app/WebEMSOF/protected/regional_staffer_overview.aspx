@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                  [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                   [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -151,9 +151,10 @@
 					</tr>
 					<tr>
 					  <td>
-						<ul><li><p>
-							  <ASP:HyperLink id="HyperLink_maintain_epels" runat="server" enabled="False">Maintain Eligible Provider Equipment Lists</ASP:HyperLink></p></li><li><p>
-							  <ASP:HyperLink id="HyperLink_maintain_region_dictated_appropriations" runat="server" enabled="False">Maintain county fund appropriations</ASP:HyperLink></p></li>
+						<ul>
+						  <li><p><ASP:HyperLink id="HyperLink_init_new_fy" runat="server" enabled="False">Initialize new fiscal year</ASP:HyperLink></p></li>
+						  <li><p><ASP:HyperLink id="HyperLink_maintain_epels" runat="server" enabled="False">Maintain Eligible Provider Equipment Lists</ASP:HyperLink></p></li>
+						  <li><p><ASP:HyperLink id="HyperLink_maintain_region_dictated_appropriations" runat="server" enabled="False">Maintain county fund appropriations</ASP:HyperLink></p></li>
 						</ul></td>
 					</tr>
 				</table>

@@ -258,6 +258,8 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+var
+  waypoint_stack: stack;
 begin
   if e.commandname = 'Select' then begin
     session.Remove('calling_form');
@@ -272,6 +274,10 @@ begin
       'status_of_interest',
       Class_biz_emsof_requests.status_type(convert.ToInt16(Safe(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text,NUM)))
       );
+    session.Remove('waypoint_stack');
+    waypoint_stack := system.collections.stack.Create;
+    waypoint_stack.Push('county_dictated_appropriations.aspx');
+    session.Add('waypoint_stack',waypoint_stack);
     server.Transfer('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
     p.saved_amount := decimal.Parse(Safe(e.item.cells[p.biz_emsof_requests.TcciOfAppropriation].text,REAL_NUM));

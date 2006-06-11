@@ -22,8 +22,6 @@ type
     parent_appropriation_amount: decimal;
     total_emsof_ante: decimal;
     END;
-
-type
   TWebForm_full_request_review_approve = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -34,14 +32,15 @@ type
     procedure Button_disapprove_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_full_request_review_approve_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
   //
-  //   calling_form: string;
   //   account_descriptor: string;
   //   e_item: System.Web.UI.WebControls.DataGridItem;
   //   status_of_interest: Class_biz_emsof_requests.status_type;
+  //   waypoint_stack: system.collections.stack;
   //
   strict private
     p: p_type;
@@ -54,7 +53,6 @@ type
     HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
-    HyperLink_back: System.Web.UI.WebControls.HyperLink;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
@@ -66,7 +64,6 @@ type
     TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     Label_num_items: System.Web.UI.WebControls.Label;
-    HyperLink_back_2: System.Web.UI.WebControls.HyperLink;
     CheckBox_approve: System.Web.UI.WebControls.CheckBox;
     Button_approve: System.Web.UI.WebControls.Button;
     Button_disapprove: System.Web.UI.WebControls.Button;
@@ -76,6 +73,8 @@ type
     Table_action_required: System.Web.UI.HtmlControls.HtmlTable;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
     Label_next_approver: System.Web.UI.WebControls.Label;
+    LinkButton_back: System.Web.UI.WebControls.LinkButton;
+    LinkButton_back_2: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -93,9 +92,11 @@ implementation
 procedure TWebForm_full_request_review_approve.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
+  Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_full_request_review_approve_PreRender);
 end;
@@ -113,7 +114,6 @@ begin
   end else begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - full_request_review_approve';
-    HyperLink_back.navigateurl := session['calling_form'].tostring;
     Label_account_descriptor.text := session['account_descriptor'].tostring;
     //
     // Initialize class private data members.
@@ -141,7 +141,6 @@ begin
     Label_num_items.text := p.num_items.tostring;
     //
     if p.biz_emsof_requests.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
-      HyperLink_back_2.navigateurl := session['calling_form'].tostring;
       Label_next_approver.text :=
         p.biz_emsof_requests.NextApprover(status_type(session['status_of_interest']));
       if datetime.Now <= p.biz_emsof_requests.ReworkDeadline(session['e_item']) then begin
@@ -168,6 +167,12 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_full_request_review_approve.LinkButton_back_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+end;
+
 procedure TWebForm_full_request_review_approve.TWebForm_full_request_review_approve_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -190,7 +195,7 @@ begin
       Safe(TextArea_disapproval_reason.value,NARRATIVE),
       Safe(Label_sum_of_emsof_antes.text,CURRENCY_USA)
       );
-    server.Transfer(session['calling_form'].tostring);
+    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
   end;
 end;
 
@@ -203,7 +208,7 @@ begin
   if CheckBox_approve.checked then begin
     p.biz_emsof_requests.Promote
       (session['e_item'],status_type(session['status_of_interest']),session['account_descriptor'].tostring);
-    server.Transfer(session['calling_form'].tostring);
+    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
   end;
 end;
 
@@ -219,7 +224,8 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     p.num_items := p.num_items + 1;
-    p.total_emsof_ante := p.total_emsof_ante + decimal.Parse(databinder.Eval(e.item.dataitem,'emsof_ante').tostring);
+    p.total_emsof_ante := p.total_emsof_ante
+      + decimal.Parse(databinder.Eval(e.item.dataitem,p.biz_emsof_requests.PropertyNameOfEmsofAnte).tostring);
   end;
 end;
 
