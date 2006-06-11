@@ -35,14 +35,13 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\county_overview.aspx'}
 {%AspMarkupContainer 'Default.aspx'}
 {%AspMarkupContainer 'protected\region_dictated_appropriations.aspx'}
-{%AspMarkupContainer 'protected\regional_compliance_check_overview.aspx'}
 {%AspMarkupContainer 'protected\full_request_review_approve.aspx'}
 {%AspMarkupContainer 'protected\regional_staffer_fiscal_year_selection.aspx'}
-{%AspMarkupContainer 'protected\regional_approval_overview.aspx'}
 {%AspMarkupContainer 'protected\emsof_request_status_filter.aspx'}
 {%AspFolderContainer 'component\biz'}
 {%AspFolderContainer 'component\db'}
 {%File 'resource\terms-and-conditions.pdf'}
+{%File 'testdata.sql'}
 
 uses
   System.Reflection,
@@ -67,10 +66,8 @@ uses
   county_overview in 'protected\county_overview.pas' {county_overview.TWebForm_county_appropriation: System.Web.UI.Page},
   Default in 'Default.pas' {Default.TWebForm_Default: System.Web.UI.Page},
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
-  regional_compliance_check_overview in 'protected\regional_compliance_check_overview.pas' {regional_compliance_check_overview.TWebForm_regional_compliance_check_overview: System.Web.UI.Page},
   full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas' {regional_staffer_fiscal_year_selection.TWebForm_account_overview: System.Web.UI.Page},
-  regional_approval_overview in 'protected\regional_approval_overview.pas' {regional_approval_overview.TWebForm_regional_approval_overview: System.Web.UI.Page},
   emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
   Class_biz_accounts in 'component\biz\Class_biz_accounts.pas',
   Class_biz_appropriations in 'component\biz\Class_biz_appropriations.pas',
