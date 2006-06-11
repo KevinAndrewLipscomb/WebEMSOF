@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                              [ Back to <asp:hyperlink id="HyperLink_back" runat="server">previous</asp:hyperlink>&nbsp;form ]&nbsp;
+		                                 [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
@@ -178,7 +178,7 @@
                 <td>
                   <p>
                     If you are not ready to disposition this 
-					request, <asp:hyperlink id="HyperLink_back_2" runat="server">go back to the previous form</asp:hyperlink>.
+					request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>
@@ -197,10 +197,10 @@
 					  </td>
 					</tr>
 					<tr id="TableRow_return" runat="server">
-					  <td bgcolor="#f5f5f5"><strong>To return to service for improvement...</strong></td>
+					  <td bgcolor="#f5f5f5"><strong>To return to service for rework...</strong></td>
 					</tr>
 					<tr id="TableRow_reject" runat="server">
-					  <td bgcolor="#f5f5f5"><strong>&nbsp;To REJECT...</strong></td>
+					  <td bgcolor="#f5f5f5"><strong>To REJECT...</strong></td>
 					</tr>
 					<tr>
 					  <td>

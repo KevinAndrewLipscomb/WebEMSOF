@@ -42,6 +42,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\emsof_request_status_filter.aspx'}
 {%AspFolderContainer 'component\biz'}
 {%AspFolderContainer 'component\db'}
+{%File 'protected\terms-and-conditions.pdf'}
 
 uses
   System.Reflection,

@@ -80,6 +80,7 @@ type
     //
     LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
     LinkButton_archived: System.Web.UI.WebControls.LinkButton;
+    HyperLink_init_new_fy: System.Web.UI.WebControls.HyperLink;
     //
     procedure OnInit(e: EventArgs); override;
   private
@@ -128,6 +129,7 @@ var
   parent_appropriation: decimal;
   sum_of_appropriations: decimal;
   unrequested_amount: decimal;
+  waypoint_stack: stack;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
@@ -174,8 +176,10 @@ begin
     LinkButton_deployed.text := biz_emsof_requests.TallyOfStatus(DEPLOYED) + LinkButton_deployed.text;
     LinkButton_archived.text := biz_emsof_requests.TallyOfStatus(ARCHIVED) + LinkButton_archived.text;
     //
-    session.Remove('calling_form');
-    session.Add('calling_form','regional_staffer_overview.aspx');
+    session.Remove('waypoint_stack');
+    waypoint_stack := system.collections.stack.Create;
+    waypoint_stack.Push('regional_staffer_overview.aspx');
+    session.Add('waypoint_stack',waypoint_stack);
     //
   end;
 end;
