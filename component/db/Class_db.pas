@@ -1,4 +1,4 @@
-unit Class_dalc_base;
+unit Class_db;
 
 interface
 
@@ -11,7 +11,7 @@ const
   ID = '$Id$';
 
 type
-  TClass_dalc_base = class
+  TClass_db = class
   private
     { Private Declarations }
   protected
@@ -24,7 +24,7 @@ type
 
 implementation
 
-constructor TClass_dalc_base.Create;
+constructor TClass_db.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
@@ -33,12 +33,12 @@ begin
   connection.ConnectionString := ConfigurationSettings.AppSettings['bdp_connection_string'];
 end;
 
-procedure TClass_dalc_base.Close;
+procedure TClass_db.Close;
 begin
   connection.Close;
 end;
 
-procedure TClass_dalc_base.Open;
+procedure TClass_db.Open;
 begin
   if connection.State <> connectionstate.OPEN then begin
     connection.Open;

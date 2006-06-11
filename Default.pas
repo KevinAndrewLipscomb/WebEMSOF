@@ -8,7 +8,6 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   appcommon,
-  Class_bc_user,
   system.configuration,
   system.security.principal;
 

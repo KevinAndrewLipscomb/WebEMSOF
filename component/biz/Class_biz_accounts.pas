@@ -5,7 +5,7 @@ interface
 uses
   appcommon,
   borland.vcl.sysutils,
-  Class_bc_user,
+  Class_biz_user,
   Class_db_accounts,
   system.configuration,
   system.web.mail;
@@ -59,10 +59,10 @@ end;
 
 function SelfEmailAddress: string;
 var
-  bc_user: TClass_bc_user;
+  biz_user: TClass_biz_user;
 begin
-  bc_user := TClass_bc_user.Create;
-  SelfEmailAddress := EmailAddressByKindId(bc_user.Kind,bc_user.IdNum);
+  biz_user := TClass_biz_user.Create;
+  SelfEmailAddress := EmailAddressByKindId(biz_user.Kind,biz_user.IdNum);
 end;
 
 constructor TClass_biz_accounts.Create;
@@ -136,9 +136,9 @@ begin
     //
     //   Get other stakeholder's email address.
     //
-    if TClass_bc_user.Create.Kind = 'county' then begin
+    if TClass_biz_user.Create.Kind = 'county' then begin
       other_stakeholder_email_address := EmailTargetByRole('emsof-coordinator');
-    end else if TClass_bc_user.Create.Kind = 'regional_staffer' then begin
+    end else if TClass_biz_user.Create.Kind = 'regional_staffer' then begin
       other_stakeholder_email_address := EmailAddressByKindId('county',county_code);
     end;
     //
@@ -270,7 +270,7 @@ begin
     + NEW_LINE
     + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
     + ConfigurationSettings.AppSettings['application_name'] + '/protected/'
-    + TClass_bc_user.Create.Kind + '_overview.aspx'
+    + TClass_biz_user.Create.Kind + '_overview.aspx'
     + NEW_LINE
     + NEW_LINE
     + 'Replies to this message will be addressed to ' + reviewer_descriptor

@@ -1,18 +1,18 @@
-unit Class_dalc_emsof_request;
+unit Class_db_emsof_requests;
 
 interface
 
 uses
   appcommon,
   borland.data.provider,
-  Class_dalc_base,
+  Class_db,
   System.Web.UI.WebControls;
 
 const
   ID = '$Id$';
 
 type
-  TClass_dalc_emsof_request = class(Class_dalc_base.TClass_dalc_base)
+  TClass_db_emsof_requests = class(Class_db.TClass_db)
   private
     procedure BindOverview
       (
@@ -113,7 +113,7 @@ const
   TCCI_STATUS_CODE = 10;
   TCCI_STATUS_DESCRIPTION = 11;
 
-procedure TClass_dalc_emsof_request.BindOverview
+procedure TClass_db_emsof_requests.BindOverview
   (
   order_by_field_name: string;
   be_order_ascending: boolean;
@@ -168,18 +168,18 @@ begin
   connection.Close;
 end;
 
-constructor TClass_dalc_emsof_request.Create;
+constructor TClass_db_emsof_requests.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
 end;
 
-function TClass_dalc_emsof_request.AffiliateNumOf(e_item: system.object): string;
+function TClass_db_emsof_requests.AffiliateNumOf(e_item: system.object): string;
 begin
   AffiliateNumOf := Safe(DataGridItem(e_item).cells[TCCI_AFFILIATE_NUM].text,NUM);
 end;
 
-procedure TClass_dalc_emsof_request.BindDetail
+procedure TClass_db_emsof_requests.BindDetail
   (
   master_id: string;
   target: system.object
@@ -212,7 +212,7 @@ begin
   connection.Close;
 end;
 
-procedure TClass_dalc_emsof_request.BindOverviewAll
+procedure TClass_db_emsof_requests.BindOverviewAll
   (
   order_by_field_name: string;
   be_order_ascending: boolean;
@@ -222,7 +222,7 @@ begin
   BindOverview(order_by_field_name,be_order_ascending,target);
 end;
 
-procedure TClass_dalc_emsof_request.BindOverviewByRegionDictatedAppropriation
+procedure TClass_db_emsof_requests.BindOverviewByRegionDictatedAppropriation
   (
   region_dictated_appropriation_id: string;
   order_by_field_name: string;
@@ -234,7 +234,7 @@ begin
     (order_by_field_name,be_order_ascending,target,'region_dictated_appropriation_id = ' + region_dictated_appropriation_id);
 end;
 
-procedure TClass_dalc_emsof_request.BindOverviewByRegionDictatedAppropriationAndStatus
+procedure TClass_db_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus
   (
   region_dictated_appropriation_id: string;
   status: cardinal;
@@ -253,7 +253,7 @@ begin
     );
 end;
 
-procedure TClass_dalc_emsof_request.BindOverviewByStatus
+procedure TClass_db_emsof_requests.BindOverviewByStatus
   (
   status: cardinal;
   order_by_field_name: string;
@@ -264,7 +264,7 @@ begin
   BindOverview(order_by_field_name,be_order_ascending,target,'status_code = ' + status.tostring);
 end;
 
-procedure TClass_dalc_emsof_request.Demote
+procedure TClass_db_emsof_requests.Demote
   (
   master_id: string;
   next_status: cardinal;
@@ -286,22 +286,22 @@ begin
   connection.Close;
 end;
 
-function TClass_dalc_emsof_request.FyDesignatorOf(e_item: system.object): string;
+function TClass_db_emsof_requests.FyDesignatorOf(e_item: system.object): string;
 begin
   FyDesignatorOf := Safe(DataGridItem(e_item).cells[TCCI_FISCAL_YEAR_DESIGNATOR].text,ALPHANUM);
 end;
 
-function TClass_dalc_emsof_request.IdOf(e_item: system.object): string;
+function TClass_db_emsof_requests.IdOf(e_item: system.object): string;
 begin
   IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
 end;
 
-function TClass_dalc_emsof_request.PropertyNameOfEmsofAnte: string;
+function TClass_db_emsof_requests.PropertyNameOfEmsofAnte: string;
 begin
   PropertyNameOfEmsofAnte := 'emsof_ante';
 end;
 
-procedure TClass_dalc_emsof_request.Promote
+procedure TClass_db_emsof_requests.Promote
   (
   master_id: string;
   next_status: cardinal;
@@ -330,7 +330,7 @@ begin
   connection.Close;
 end;
 
-function TClass_dalc_emsof_request.ReworkDeadline(e_item: system.object): datetime;
+function TClass_db_emsof_requests.ReworkDeadline(e_item: system.object): datetime;
 begin
   connection.Open;
   ReworkDeadline := datetime
@@ -350,27 +350,27 @@ begin
   connection.Close;
 end;
 
-function TClass_dalc_emsof_request.ServiceIdOf(e_item: system.object): string;
+function TClass_db_emsof_requests.ServiceIdOf(e_item: system.object): string;
 begin
   ServiceIdOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_ID].text,NUM);
 end;
 
-function TClass_dalc_emsof_request.ServiceNameOf(e_item: system.object): string;
+function TClass_db_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
   ServiceNameOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_NAME].text,ORG_NAME);
 end;
 
-function TClass_dalc_emsof_request.SponsorCountyCodeOf(e_item: system.object): string;
+function TClass_db_emsof_requests.SponsorCountyCodeOf(e_item: system.object): string;
 begin
   SponsorCountyCodeOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY_ID].text,NUM);
 end;
 
-function TClass_dalc_emsof_request.SponsorCountyNameOf(e_item: system.object): string;
+function TClass_db_emsof_requests.SponsorCountyNameOf(e_item: system.object): string;
 begin
   SponsorCountyNameOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY_NAME].text,ALPHA);
 end;
 
-function TClass_dalc_emsof_request.SumOfRequestValues
+function TClass_db_emsof_requests.SumOfRequestValues
   (
   user_kind: string;
   user_id: string;
@@ -409,7 +409,7 @@ begin
   connection.Close;
 end;
 
-function TClass_dalc_emsof_request.TallyByStatus(status: cardinal): cardinal;
+function TClass_db_emsof_requests.TallyByStatus(status: cardinal): cardinal;
 begin
   connection.Open;
   TallyByStatus := borland.data.provider.bdpcommand.Create
@@ -430,37 +430,37 @@ begin
   connection.Close;
 end;
 
-function TClass_dalc_emsof_request.TcciOfAppropriation: cardinal;
+function TClass_db_emsof_requests.TcciOfAppropriation: cardinal;
 begin
   TcciOfAppropriation := TCCI_APPROPRIATION;
 end;
 
-function TClass_dalc_emsof_request.TcciOfId: cardinal;
+function TClass_db_emsof_requests.TcciOfId: cardinal;
 begin
   TcciOfId := TCCI_ID;
 end;
 
-function TClass_dalc_emsof_request.TcciOfEmsofAnte: cardinal;
+function TClass_db_emsof_requests.TcciOfEmsofAnte: cardinal;
 begin
   TcciOfEmsofAnte := TCCI_EMSOF_ANTE;
 end;
 
-function TClass_dalc_emsof_request.TcciOfPasswordResetEmailAddress: cardinal;
+function TClass_db_emsof_requests.TcciOfPasswordResetEmailAddress: cardinal;
 begin
   TcciOfPasswordResetEmailAddress := TCCI_PASSWORD_RESET_EMAIL_ADDRESS;
 end;
 
-function TClass_dalc_emsof_request.TcciOfServiceName: cardinal;
+function TClass_db_emsof_requests.TcciOfServiceName: cardinal;
 begin
   TcciOfServiceName := TCCI_SERVICE_NAME;
 end;
 
-function TClass_dalc_emsof_request.TcciOfStatusCode: cardinal;
+function TClass_db_emsof_requests.TcciOfStatusCode: cardinal;
 begin
   TcciOfStatusCode := TCCI_STATUS_CODE;
 end;
 
-function TClass_dalc_emsof_request.TcciOfStatusDescription: cardinal;
+function TClass_db_emsof_requests.TcciOfStatusDescription: cardinal;
 begin
   TcciOfStatusDescription := TCCI_STATUS_DESCRIPTION;
 end;

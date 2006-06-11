@@ -5,7 +5,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Web, System.Web.SessionState,
-  Class_bc_user,
+  Class_biz_user,
   system.security.principal;
 
 const ID = '$Id$';
@@ -79,7 +79,7 @@ procedure TGlobal.Application_AuthenticateRequest(sender: System.Object; e: Even
 begin
   if request.isauthenticated then begin
     httpcontext.current.user :=
-      system.security.principal.GenericPrincipal.Create(user.identity,Class_bc_user.TClass_bc_user.Create.Roles);
+      system.security.principal.GenericPrincipal.Create(user.identity,Class_biz_user.TClass_biz_user.Create.Roles);
   end;
 end;
 

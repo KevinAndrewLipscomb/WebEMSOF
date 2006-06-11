@@ -1,18 +1,18 @@
-unit Class_dalc_user;
+unit Class_db_user;
 
 interface
 
 uses
   appcommon,
   borland.data.provider,
-  Class_dalc_base,
+  Class_db,
   system.collections;
 
 const
   ID = '$Id$';
 
 type
-  TClass_dalc_user = class(Class_dalc_base.TClass_dalc_base)
+  TClass_db_user = class(Class_db.TClass_db)
   private
     { Private Declarations }
   public
@@ -27,13 +27,13 @@ type
 
 implementation
 
-constructor TClass_dalc_user.Create;
+constructor TClass_db_user.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
 end;
 
-function TClass_dalc_user.RolesOf
+function TClass_db_user.RolesOf
   (
   target_user_table: string;
   id: string

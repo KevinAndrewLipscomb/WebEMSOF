@@ -1,13 +1,13 @@
-unit Class_dalc_appropriations;
+unit Class_db_appropriations;
 
 interface
 
 uses
   borland.data.provider,
-  Class_dalc_base;
+  Class_db;
 
 type
-  TClass_dalc_appropriations = class(TClass_dalc_base)
+  TClass_db_appropriations = class(TClass_db)
   private
     { Private Declarations }
   public
@@ -38,13 +38,13 @@ type
 
 implementation
 
-constructor TClass_dalc_appropriations.Create;
+constructor TClass_db_appropriations.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
 end;
 
-function TClass_dalc_appropriations.AppropriationFromSpecificParent
+function TClass_db_appropriations.AppropriationFromSpecificParent
   (
   parent_id: string;
   recipient_kind: string;
@@ -79,7 +79,7 @@ begin
   connection.Close;
 end;
 
-function TClass_dalc_appropriations.AppropriationFromOnlyParent
+function TClass_db_appropriations.AppropriationFromOnlyParent
   (
   recipient_kind: string;
   recipient_id: string;
@@ -108,7 +108,7 @@ begin
   connection.Close;
 end;
 
-function TClass_dalc_appropriations.SumOfSelfDictatedAppropriations
+function TClass_db_appropriations.SumOfSelfDictatedAppropriations
   (
   self_kind: string;
   self_id: string;

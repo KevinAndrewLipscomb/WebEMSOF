@@ -8,15 +8,15 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
   borland.data.provider,
-  Class_bc_appropriations,
-  Class_bc_emsof_request;
+  Class_biz_appropriations,
+  Class_biz_emsof_requests;
 
 const ID = '$Id$';
 
 type
   p_type =
     RECORD
-    bc_emsof_requests: Class_bc_emsof_request.TClass_bc_emsof_request;
+    biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
     be_before_improvement_deadline: boolean;
     num_items: cardinal;
     parent_appropriation_amount: decimal;
@@ -41,7 +41,7 @@ type
   //   calling_form: string;
   //   account_descriptor: string;
   //   e_item: System.Web.UI.WebControls.DataGridItem;
-  //   status_of_interest: Class_bc_emsof_request.status_type;
+  //   status_of_interest: Class_biz_emsof_requests.status_type;
   //
   strict private
     p: p_type;
@@ -118,33 +118,33 @@ begin
     //
     // Initialize class private data members.
     //
-    p.bc_emsof_requests := Class_bc_emsof_request.TClass_bc_emsof_request.Create;
+    p.biz_emsof_requests := Class_biz_emsof_requests.TClass_biz_emsof_requests.Create;
     p.num_items := 0;
     p.total_emsof_ante := 0;
     //
-    Label_fiscal_year_designator.text := p.bc_emsof_requests.FyDesignatorOf(session['e_item']);
-    Label_service_name.text := p.bc_emsof_requests.ServiceNameOf(session['e_item']);
-    Label_affiliate_num.text := p.bc_emsof_requests.AffiliateNumOf(session['e_item']);
-    p.parent_appropriation_amount := TClass_bc_appropriations.Create.AppropriationFromSpecificParent
+    Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
+    Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
+    Label_affiliate_num.text := p.biz_emsof_requests.AffiliateNumOf(session['e_item']);
+    p.parent_appropriation_amount := TClass_biz_appropriations.Create.AppropriationFromSpecificParent
       (
-      p.bc_emsof_requests.SponsorCountyCodeOf(session['e_item']),
+      p.biz_emsof_requests.SponsorCountyCodeOf(session['e_item']),
       'service',
-      p.bc_emsof_requests.ServiceIdOf(session['e_item'])
+      p.biz_emsof_requests.ServiceIdOf(session['e_item'])
       );
     Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
-    Label_sponsor_county.text := p.bc_emsof_requests.SponsorCountyNameOf(session['e_item']);
+    Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
     //
-    p.bc_emsof_requests.BindDetail(p.bc_emsof_requests.IdOf(session['e_item']),DataGrid_items);
+    p.biz_emsof_requests.BindDetail(p.biz_emsof_requests.IdOf(session['e_item']),DataGrid_items);
     //
     Label_sum_of_emsof_antes.text := p.total_emsof_ante.tostring('C');
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
-    if p.bc_emsof_requests.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
+    if p.biz_emsof_requests.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
       HyperLink_back_2.navigateurl := session['calling_form'].tostring;
       Label_next_approver.text :=
-        p.bc_emsof_requests.NextApprover(status_type(session['status_of_interest']));
-      if datetime.Now <= p.bc_emsof_requests.ReworkDeadline(session['e_item']) then begin
+        p.biz_emsof_requests.NextApprover(status_type(session['status_of_interest']));
+      if datetime.Now <= p.biz_emsof_requests.ReworkDeadline(session['e_item']) then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
       end else begin
@@ -182,7 +182,7 @@ procedure TWebForm_full_request_review_approve.Button_disapprove_Click
   );
 begin
   if TextArea_disapproval_reason.Value <> system.string.EMPTY then begin
-    p.bc_emsof_requests.Demote
+    p.biz_emsof_requests.Demote
       (
       session['e_item'],
       status_type(session['status_of_interest']),
@@ -201,7 +201,7 @@ procedure TWebForm_full_request_review_approve.Button_approve_Click
   );
 begin
   if CheckBox_approve.checked then begin
-    p.bc_emsof_requests.Promote
+    p.biz_emsof_requests.Promote
       (session['e_item'],status_type(session['status_of_interest']),session['account_descriptor'].tostring);
     server.Transfer(session['calling_form'].tostring);
   end;

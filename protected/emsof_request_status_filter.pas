@@ -8,7 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.security,
   borland.data.provider,
-  Class_bc_emsof_request;
+  Class_biz_emsof_requests;
 
 const ID = '$Id$';
 
@@ -36,7 +36,7 @@ type
   //   target_user_table: string
   //   (target_user_table)_name: string
   //   calling_form: string;
-  //   status_of_interest: Class_bc_emsof_request.status_type
+  //   status_of_interest: Class_biz_emsof_requests.status_type
   //
   //
   strict private
@@ -127,7 +127,7 @@ begin
   // Manage column visibility
   //
   e.item.cells[tcci_linkbutton_select].visible :=
-    TClass_bc_emsof_request.Create.BeOkToDrillDown(Class_bc_emsof_request.status_type(session['status_of_interest']));
+    TClass_biz_emsof_requests.Create.BeOkToDrillDown(Class_biz_emsof_requests.status_type(session['status_of_interest']));
   //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
@@ -194,9 +194,9 @@ procedure TWebForm_emsof_request_status_filter.Bind;
 var
   be_datagrid_empty: boolean;
 begin
-  TClass_bc_emsof_request.Create.BindOverviewByStatus
+  TClass_biz_emsof_requests.Create.BindOverviewByStatus
     (
-    Class_bc_emsof_request.status_type(session['status_of_interest']),
+    Class_biz_emsof_requests.status_type(session['status_of_interest']),
     p.sort_order,
     p.be_sort_order_ascending,
     DataGrid_requests

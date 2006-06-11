@@ -89,7 +89,7 @@ end;
 
 procedure TWebForm_service_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bc_get_profile_status: borland.data.provider.BdpCommand;
+  biz_get_profile_status: borland.data.provider.BdpCommand;
   be_stale_password: string;
 //  make_item_requests_deadline: system.datetime;
 begin
@@ -133,12 +133,12 @@ begin
     //
     // Set Label_profile_status
     //
-    bc_get_profile_status := borland.data.provider.bdpCommand.Create
+    biz_get_profile_status := borland.data.provider.bdpCommand.Create
       (
       'select be_valid_profile from service where id = "' + session['service_user_id'].ToString + '"'
       ,appcommon.db
       );
-    if bc_get_profile_status.ExecuteScalar.ToString = '0' then begin
+    if biz_get_profile_status.ExecuteScalar.ToString = '0' then begin
       Label_profile_status.Text := 'Not saved.';
       LinkButton_profile_action.Text := 'Create profile';
       TableRow_separator.visible := FALSE;
