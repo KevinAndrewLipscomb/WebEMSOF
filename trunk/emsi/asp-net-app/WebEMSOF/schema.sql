@@ -1,22 +1,26 @@
 -- phpMyAdmin SQL Dump
--- version 2.7.0-pl1
+-- version 2.6.4-pl4
 -- http://www.phpmyadmin.net
---
--- Host: db4free.org
--- Generation Time: Apr 28, 2006 at 11:26 PM
+-- 
+-- Host: localhost
+-- Generation Time: Jun 11, 2006 at 07:10 PM
 -- Server version: 5.0.20
--- PHP Version: 5.0.3
+-- PHP Version: 4.4.2
 
 SET FOREIGN_KEY_CHECKS=0;
---
+
+SET AUTOCOMMIT=0;
+START TRANSACTION;
+
+-- 
 -- Database: `emsidb`
---
+-- 
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `county_code_name_map`
---
+-- 
 
 DROP TABLE IF EXISTS county_code_name_map;
 CREATE TABLE county_code_name_map (
@@ -26,26 +30,27 @@ CREATE TABLE county_code_name_map (
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
+-- 
 -- Dumping data for table `county_code_name_map`
---
+-- 
 
-INSERT INTO county_code_name_map VALUES (1, 'Allegheny');
-INSERT INTO county_code_name_map VALUES (2, 'Armstrong');
-INSERT INTO county_code_name_map VALUES (3, 'Beaver');
-INSERT INTO county_code_name_map VALUES (4, 'Butler');
-INSERT INTO county_code_name_map VALUES (5, 'Fayette');
-INSERT INTO county_code_name_map VALUES (6, 'Greene');
-INSERT INTO county_code_name_map VALUES (7, 'Indiana');
-INSERT INTO county_code_name_map VALUES (8, 'Lawrence');
-INSERT INTO county_code_name_map VALUES (9, 'Washington');
-INSERT INTO county_code_name_map VALUES (10, 'Westmoreland');
+INSERT INTO county_code_name_map (code, name) VALUES 
+(1, 'Allegheny'),
+(2, 'Armstrong'),
+(3, 'Beaver'),
+(4, 'Butler'),
+(5, 'Fayette'),
+(6, 'Greene'),
+(7, 'Indiana'),
+(8, 'Lawrence'),
+(9, 'Washington'),
+(10, 'Westmoreland');
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `county_dictated_appropriation`
---
+-- 
 
 DROP TABLE IF EXISTS county_dictated_appropriation;
 CREATE TABLE county_dictated_appropriation (
@@ -60,16 +65,43 @@ CREATE TABLE county_dictated_appropriation (
   KEY match_level_id (match_level_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `county_dictated_appropriation`
---
+-- --------------------------------------------------------
 
+-- 
+-- Table structure for table `county_region_map`
+-- 
+
+DROP TABLE IF EXISTS county_region_map;
+CREATE TABLE county_region_map (
+  id smallint(5) unsigned NOT NULL auto_increment,
+  county_code tinyint(3) unsigned NOT NULL,
+  region_code tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY  (id),
+  KEY region_code (region_code),
+  KEY county_code (county_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table `county_region_map`
+-- 
+
+INSERT INTO county_region_map (id, county_code, region_code) VALUES 
+(1, 1, 1),
+(2, 2, 1),
+(3, 3, 1),
+(4, 4, 1),
+(5, 5, 1),
+(6, 6, 1),
+(7, 7, 1),
+(8, 8, 1),
+(9, 9, 1),
+(10, 10, 1);
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `county_user`
---
+-- 
 
 DROP TABLE IF EXISTS county_user;
 CREATE TABLE county_user (
@@ -80,11 +112,6 @@ CREATE TABLE county_user (
   be_active tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `county_user`
--- 
-
 
 -- --------------------------------------------------------
 
@@ -112,41 +139,39 @@ CREATE TABLE eligible_provider_equipment_list (
 -- Dumping data for table `eligible_provider_equipment_list`
 -- 
 
-insert into eligible_provider_equipment_list
-values
-  (1,"EKG monitor/defibrillator w/pacer",5,1,1,0,0,12000,6000,7200),
-  (2,"12 lead EKG",5,1,1,0,0,20000,10000,12000),
-  (3,"AED",5,0,0,1,1,3500,1750,2100),
-  (4,"Oxygen system parts",5,1,1,1,1,500,250,300),
-  (5,"Capnography",3,1,1,0,0,3000,1500,1800),
-  (6,"CPAP",5,1,1,0,0,900,450,540),
-  (7,"Pulse oximeter",5,1,1,0,0,700,350,420),
-  (8,"Nitrous oxide delivery system",5,1,1,0,0,2000,1000,1200),
-  (9,"IV infusion pump",5,1,1,0,0,2000,1000,1200),
-  (10,"Intubation, durable",5,1,1,0,0,600,300,360),
-  (11,"Transtracheal jet insufflators",5,1,1,0,0,200,100,120),
-  (12,"Splinting/immobilization devices",3,1,1,1,1,500,250,300),
-  (13,"Stairchair",5,1,0,1,0,2000,1000,1200),
-  (14,"Stretcher, primary",5,1,0,1,0,4000,2000,2400),
-  (15,"Stretcher/chair combination",5,1,0,1,0,700,350,420),
-  (16,"Suction, portable, battery operated",3,1,1,1,1,900,450,540),
-  (17,"Ventilator, automatic",5,1,1,1,1,3000,1500,1800),
-  (18,"Ambulance",null,1,0,1,0,33333.33,15000,20000),
-  (19,"Squad/response vehicle",null,0,1,0,1,15000,7500,9000),
-  (20,"Data collection software",null,1,1,1,1,1700,1700,1700),
-  (21,"Data collection hardware",3,1,1,1,1,1500,750,900),
-  (22,"Radio, mobile (up to 2/vehicle)",5,1,1,1,1,3000,1500,1800),
-  (23,"Radio, portable (1/vehicle)",5,1,1,1,1,3000,1500,1800),
-  (24,"Triage vest set",5,1,1,1,1,150,75,90),
-  (25,"Triage system",5,1,1,1,1,500,250,300),
-  (26,"Alerting (up to 5)",5,1,1,1,1,400,200,240),
-  (27,"Vehicle safety monitoring system",5,1,1,1,1,3500,1750,2100),
-  (28,"PPE/turnout gear",5,1,1,1,1,1200,600,720),
-  (29,"Protective ballistic vest (over garment style)",5,1,1,1,1,1000,500,600),
-  (30,"Traffic safety",5,1,1,1,1,500,250,300),
-  (31,"Large patient moving/carrying device",10,1,1,1,1,300,150,180),
-  (32,"SCBA (up to 2/licensed vehicle)",10,1,1,1,1,3000,1500,1800);
-
+INSERT INTO eligible_provider_equipment_list (code, description, life_expectancy_years, be_eligible_als_amb, be_eligible_als_squad, be_eligible_bls_amb, be_eligible_qrs, allowable_cost, funding_level_nonrural, funding_level_rural) VALUES 
+(1, 'EKG monitor/defibrillator w/pacer', 5, 1, 1, 0, 0, 12000.00, 6000.00, 7200.00),
+(2, '12 lead EKG', 5, 1, 1, 0, 0, 20000.00, 10000.00, 12000.00),
+(3, 'AED', 5, 0, 0, 1, 1, 3500.00, 1750.00, 2100.00),
+(4, 'Oxygen system parts', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(5, 'Capnography', 3, 1, 1, 0, 0, 3000.00, 1500.00, 1800.00),
+(6, 'CPAP', 5, 1, 1, 0, 0, 900.00, 450.00, 540.00),
+(7, 'Pulse oximeter', 5, 1, 1, 0, 0, 700.00, 350.00, 420.00),
+(8, 'Nitrous oxide delivery system', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
+(9, 'IV infusion pump', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
+(10, 'Intubation, durable', 5, 1, 1, 0, 0, 600.00, 300.00, 360.00),
+(11, 'Transtracheal jet insufflators', 5, 1, 1, 0, 0, 200.00, 100.00, 120.00),
+(12, 'Splinting/immobilization devices', 3, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(13, 'Stairchair', 5, 1, 0, 1, 0, 2000.00, 1000.00, 1200.00),
+(14, 'Stretcher, primary', 5, 1, 0, 1, 0, 4000.00, 2000.00, 2400.00),
+(15, 'Stretcher/chair combination', 5, 1, 0, 1, 0, 700.00, 350.00, 420.00),
+(16, 'Suction, portable, battery operated', 3, 1, 1, 1, 1, 900.00, 450.00, 540.00),
+(17, 'Ventilator, automatic', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
+(18, 'Ambulance', NULL, 1, 0, 1, 0, 33333.33, 15000.00, 20000.00),
+(19, 'Squad/response vehicle', NULL, 0, 1, 0, 1, 15000.00, 7500.00, 9000.00),
+(20, 'Data collection software', NULL, 1, 1, 1, 1, 1700.00, 1700.00, 1700.00),
+(21, 'Data collection hardware', 3, 1, 1, 1, 1, 1500.00, 750.00, 900.00),
+(22, 'Radio, mobile (up to 2/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
+(23, 'Radio, portable (1/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
+(24, 'Triage vest set', 5, 1, 1, 1, 1, 150.00, 75.00, 90.00),
+(25, 'Triage system', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(26, 'Alerting (up to 5)', 5, 1, 1, 1, 1, 400.00, 200.00, 240.00),
+(27, 'Vehicle safety monitoring system', 5, 1, 1, 1, 1, 3500.00, 1750.00, 2100.00),
+(28, 'PPE/turnout gear', 5, 1, 1, 1, 1, 1200.00, 600.00, 720.00),
+(29, 'Protective ballistic vest (over garment style)', 5, 1, 1, 1, 1, 1000.00, 500.00, 600.00),
+(30, 'Traffic safety', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(31, 'Large patient moving/carrying device', 10, 1, 1, 1, 1, 300.00, 150.00, 180.00),
+(32, 'SCBA (up to 2/licensed vehicle)', 10, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00);
 
 -- --------------------------------------------------------
 
@@ -172,11 +197,6 @@ CREATE TABLE emsof_request_detail (
   KEY status_code (status_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
--- Dumping data for table `emsof_request_detail`
--- 
-
-
 -- --------------------------------------------------------
 
 -- 
@@ -199,11 +219,6 @@ CREATE TABLE emsof_request_master (
   KEY county_dictated_appropriation_id (county_dictated_appropriation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
--- Dumping data for table `emsof_request_master`
--- 
-
-
 -- --------------------------------------------------------
 
 -- 
@@ -222,7 +237,8 @@ CREATE TABLE fiscal_year (
 -- Dumping data for table `fiscal_year`
 -- 
 
-INSERT INTO fiscal_year VALUES (1, 'FY0506');
+INSERT INTO fiscal_year (id, designator) VALUES 
+(1, 'FY0506');
 
 -- --------------------------------------------------------
 
@@ -245,10 +261,11 @@ CREATE TABLE fy_calendar (
 -- Dumping data for table `fy_calendar`
 -- 
 
-INSERT INTO fy_calendar VALUES (1, 1, 1, '2005-11-30 23:59:59');
-INSERT INTO fy_calendar VALUES (2, 1, 2, '2006-01-31 23:59:59');
-INSERT INTO fy_calendar VALUES (3, 1, 3, '2006-02-28 23:59:59');
-INSERT INTO fy_calendar VALUES (4, 1, 4, '2006-05-31 23:59:59');
+INSERT INTO fy_calendar (id, fiscal_year_id, milestone_code, value) VALUES 
+(1, 1, 1, '2005-11-30 23:59:59'),
+(2, 1, 2, '2006-01-31 23:59:59'),
+(3, 1, 3, '2006-02-28 23:59:59'),
+(4, 1, 4, '2006-05-31 23:59:59');
 
 -- --------------------------------------------------------
 
@@ -267,12 +284,13 @@ CREATE TABLE item_status_code_description_map (
 -- Dumping data for table `item_status_code_description_map`
 -- 
 
-INSERT INTO item_status_code_description_map VALUES (1, 'Master is not yet approved');
-INSERT INTO item_status_code_description_map VALUES (2, 'NO invoice on file at regional council');
-INSERT INTO item_status_code_description_map VALUES (3, 'Invoice on file at regional council');
-INSERT INTO item_status_code_description_map VALUES (4, 'NO canceled check on file at regional council');
-INSERT INTO item_status_code_description_map VALUES (5, 'Canceled check on file at regional council');
-INSERT INTO item_status_code_description_map VALUES (6, 'WITHDRAWN');
+INSERT INTO item_status_code_description_map (code, description) VALUES 
+(1, 'Master is not yet approved'),
+(2, 'NO invoice on file at regional council'),
+(3, 'Invoice on file at regional council'),
+(4, 'NO canceled check on file at regional council'),
+(5, 'Canceled check on file at regional council'),
+(6, 'WITHDRAWN');
 
 -- --------------------------------------------------------
 
@@ -294,9 +312,10 @@ CREATE TABLE match_level (
 -- Dumping data for table `match_level`
 -- 
 
-INSERT INTO match_level VALUES (1, 'Standard', 0.50);
-INSERT INTO match_level VALUES (2, 'Rural', 0.60);
-INSERT INTO match_level VALUES (3, 'Distressed', 1.00);
+INSERT INTO match_level (id, name, factor) VALUES 
+(1, 'Standard', 0.50),
+(2, 'Rural', 0.60),
+(3, 'Distressed', 1.00);
 
 -- --------------------------------------------------------
 
@@ -315,10 +334,11 @@ CREATE TABLE milestone_code_name_map (
 -- Dumping data for table `milestone_code_name_map`
 -- 
 
-INSERT INTO milestone_code_name_map VALUES (1, 'emsof-county-dictated-appropriation-deadline');
-INSERT INTO milestone_code_name_map VALUES (2, 'emsof-service-purchase-completion-deadline');
-INSERT INTO milestone_code_name_map VALUES (3, 'emsof-service-invoice-submission-deadline');
-INSERT INTO milestone_code_name_map VALUES (4, 'emsof-service-canceled-check-submission-deadline');
+INSERT INTO milestone_code_name_map (code, name) VALUES 
+(1, 'emsof-county-dictated-appropriation-deadline'),
+(2, 'emsof-service-purchase-completion-deadline'),
+(3, 'emsof-service-invoice-submission-deadline'),
+(4, 'emsof-service-canceled-check-submission-deadline');
 
 -- --------------------------------------------------------
 
@@ -338,7 +358,8 @@ CREATE TABLE region_code_name_map (
 -- Dumping data for table `region_code_name_map`
 -- 
 
-INSERT INTO region_code_name_map VALUES (1, 'EMSI');
+INSERT INTO region_code_name_map (code, name) VALUES 
+(1, 'EMSI');
 
 -- --------------------------------------------------------
 
@@ -358,26 +379,27 @@ CREATE TABLE region_dictated_appropriation (
   KEY state_dictated_appropriation_id (state_dictated_appropriation_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
+-- 
 -- Dumping data for table `region_dictated_appropriation`
---
+-- 
 
-INSERT INTO region_dictated_appropriation VALUES (1,1,1,97368.00,null);
-INSERT INTO region_dictated_appropriation VALUES (2,1,2,19578.00,null);
-INSERT INTO region_dictated_appropriation VALUES (3,1,3,24998.00,null);
-INSERT INTO region_dictated_appropriation VALUES (4,1,4,35270.00,null);
-INSERT INTO region_dictated_appropriation VALUES (5,1,5,30140.00,null);
-INSERT INTO region_dictated_appropriation VALUES (6,1,6,13618.00,null);
-INSERT INTO region_dictated_appropriation VALUES (7,1,7,24329.00,null);
-INSERT INTO region_dictated_appropriation VALUES (8,1,8,16846.00,null);
-INSERT INTO region_dictated_appropriation VALUES (9,1,9,35959.00,null);
-INSERT INTO region_dictated_appropriation VALUES (10,1,10,52066.00,null);
+INSERT INTO region_dictated_appropriation (id, state_dictated_appropriation_id, county_code, amount, service_to_county_submission_deadline) VALUES 
+(1, 1, 1, 97368.00, NULL),
+(2, 1, 2, 19578.00, NULL),
+(3, 1, 3, 24998.00, NULL),
+(4, 1, 4, 35270.00, NULL),
+(5, 1, 5, 30140.00, NULL),
+(6, 1, 6, 13618.00, NULL),
+(7, 1, 7, 24329.00, NULL),
+(8, 1, 8, 16846.00, NULL),
+(9, 1, 9, 35959.00, NULL),
+(10, 1, 10, 52066.00, NULL);
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `regional_staffer`
---
+-- 
 
 DROP TABLE IF EXISTS regional_staffer;
 CREATE TABLE regional_staffer (
@@ -390,32 +412,51 @@ CREATE TABLE regional_staffer (
   KEY region_code (region_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `regional_staffer`
---
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `regional_staffer_group`
+-- 
+
+DROP TABLE IF EXISTS regional_staffer_group;
+CREATE TABLE regional_staffer_group (
+  id smallint(5) unsigned NOT NULL auto_increment,
+  `name` varchar(63) NOT NULL,
+  PRIMARY KEY  (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table `regional_staffer_group`
+-- 
+
+INSERT INTO regional_staffer_group (id, name) VALUES 
+(1, 'director'),
+(2, 'emsof-coordinator'),
+(3, 'emsof-clerk'),
+(4, 'emsof-accountant'),
+(5, 'emsof-planner');
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `regional_staffer_role`
---
+-- 
 
 DROP TABLE IF EXISTS regional_staffer_role;
 CREATE TABLE regional_staffer_role (
   id smallint(5) unsigned NOT NULL auto_increment,
-  region_code tinyint(3) unsigned NOT NULL,
-  title varchar(63) NOT NULL,
-  regional_staffer_id smallint(5) unsigned NOT NULL,
+  user_id smallint(5) unsigned NOT NULL,
+  group_id smallint(5) unsigned NOT NULL,
   PRIMARY KEY  (id),
-  KEY regional_staffer_id (regional_staffer_id),
-  KEY region_code (region_code)
+  KEY user_id (user_id),
+  KEY group_id (group_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `regional_staffer_user`
---
+-- 
 
 DROP TABLE IF EXISTS regional_staffer_user;
 CREATE TABLE regional_staffer_user (
@@ -426,11 +467,6 @@ CREATE TABLE regional_staffer_user (
   be_active tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `regional_staffer_user`
--- 
-
 
 -- --------------------------------------------------------
 
@@ -449,21 +485,22 @@ CREATE TABLE request_status_code_description_map (
 -- Dumping data for table `request_status_code_description_map`
 -- 
 
-INSERT INTO request_status_code_description_map VALUES (1, 'Initialized');
-INSERT INTO request_status_code_description_map VALUES (2, 'Started by service, not finalized');
-INSERT INTO request_status_code_description_map VALUES (3, 'Needs county approval');
-INSERT INTO request_status_code_description_map VALUES (4, 'Needs regional compliance check');
-INSERT INTO request_status_code_description_map VALUES (5, 'Needs regional executive director approval');
-INSERT INTO request_status_code_description_map VALUES (6, 'Regional council is submitting to DOH');
-INSERT INTO request_status_code_description_map VALUES (7, 'Needs DOH approval');
-INSERT INTO request_status_code_description_map VALUES (8, 'Regional council needs invoice(s)');
-INSERT INTO request_status_code_description_map VALUES (9, 'Regional council needs canceled check(s)');
-INSERT INTO request_status_code_description_map VALUES (10, 'Reimbursement being prepared');
-INSERT INTO request_status_code_description_map VALUES (11, 'Rejected');
-INSERT INTO request_status_code_description_map VALUES (12, 'Withdrawn by service');
-INSERT INTO request_status_code_description_map VALUES (13, 'Reimbursement issued');
-INSERT INTO request_status_code_description_map VALUES (14, 'Deployed');
-INSERT INTO request_status_code_description_map VALUES (15, 'Archived');
+INSERT INTO request_status_code_description_map (code, description) VALUES 
+(1, 'Initialized'),
+(2, 'Started by service, not finalized'),
+(3, 'Needs county approval'),
+(4, 'Needs regional compliance check'),
+(5, 'Needs regional executive director approval'),
+(6, 'Regional council is submitting to DOH'),
+(7, 'Needs DOH approval'),
+(8, 'Regional council needs invoice(s)'),
+(9, 'Regional council needs canceled check(s)'),
+(10, 'Reimbursement being prepared'),
+(11, 'Rejected'),
+(12, 'Withdrawn by service'),
+(13, 'Reimbursement issued'),
+(14, 'Deployed'),
+(15, 'Archived');
 
 -- --------------------------------------------------------
 
@@ -497,11 +534,6 @@ CREATE TABLE service (
   KEY county_code (county_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
--- Dumping data for table `service`
--- 
-
-
 -- --------------------------------------------------------
 
 -- 
@@ -517,11 +549,6 @@ CREATE TABLE service_user (
   be_active tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 
--- Dumping data for table `service_user`
--- 
-
 
 -- --------------------------------------------------------
 
@@ -544,7 +571,8 @@ CREATE TABLE state_dictated_appropriation (
 -- Dumping data for table `state_dictated_appropriation`
 -- 
 
-INSERT INTO state_dictated_appropriation VALUES (1,1,1,350172.00);
+INSERT INTO state_dictated_appropriation (id, region_code, fiscal_year_id, amount) VALUES 
+(1, 1, 1, 350172.00);
 
 -- 
 -- Constraints for dumped tables
@@ -558,44 +586,51 @@ ALTER TABLE `county_dictated_appropriation`
   ADD CONSTRAINT county_dictated_appropriation_ibfk_2 FOREIGN KEY (service_id) REFERENCES service (id),
   ADD CONSTRAINT county_dictated_appropriation_ibfk_3 FOREIGN KEY (match_level_id) REFERENCES match_level (id);
 
---
+-- 
+-- Constraints for table `county_region_map`
+-- 
+ALTER TABLE `county_region_map`
+  ADD CONSTRAINT county_region_map_ibfk_2 FOREIGN KEY (county_code) REFERENCES county_code_name_map (`code`),
+  ADD CONSTRAINT county_region_map_ibfk_3 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`);
+
+-- 
 -- Constraints for table `county_user`
---
+-- 
 ALTER TABLE `county_user`
   ADD CONSTRAINT county_user_ibfk_1 FOREIGN KEY (id) REFERENCES county_code_name_map (`code`);
 
---
+-- 
 -- Constraints for table `emsof_request_detail`
---
+-- 
 ALTER TABLE `emsof_request_detail`
   ADD CONSTRAINT emsof_request_detail_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id),
   ADD CONSTRAINT emsof_request_detail_ibfk_2 FOREIGN KEY (equipment_code) REFERENCES eligible_provider_equipment_list (`code`),
   ADD CONSTRAINT emsof_request_detail_ibfk_3 FOREIGN KEY (status_code) REFERENCES item_status_code_description_map (`code`);
 
---
+-- 
 -- Constraints for table `emsof_request_master`
---
+-- 
 ALTER TABLE `emsof_request_master`
   ADD CONSTRAINT emsof_request_master_ibfk_1 FOREIGN KEY (county_dictated_appropriation_id) REFERENCES county_dictated_appropriation (id) ON DELETE CASCADE,
   ADD CONSTRAINT emsof_request_master_ibfk_2 FOREIGN KEY (status_code) REFERENCES request_status_code_description_map (`code`);
 
---
+-- 
 -- Constraints for table `fy_calendar`
---
+-- 
 ALTER TABLE `fy_calendar`
   ADD CONSTRAINT fy_calendar_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id),
   ADD CONSTRAINT fy_calendar_ibfk_2 FOREIGN KEY (milestone_code) REFERENCES milestone_code_name_map (`code`);
 
---
+-- 
 -- Constraints for table `region_dictated_appropriation`
---
+-- 
 ALTER TABLE `region_dictated_appropriation`
   ADD CONSTRAINT region_dictated_appropriation_ibfk_1 FOREIGN KEY (state_dictated_appropriation_id) REFERENCES state_dictated_appropriation (id),
   ADD CONSTRAINT region_dictated_appropriation_ibfk_2 FOREIGN KEY (county_code) REFERENCES county_code_name_map (`code`);
 
---
+-- 
 -- Constraints for table `regional_staffer`
---
+-- 
 ALTER TABLE `regional_staffer`
   ADD CONSTRAINT regional_staffer_ibfk_1 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`);
 
@@ -603,12 +638,12 @@ ALTER TABLE `regional_staffer`
 -- Constraints for table `regional_staffer_role`
 -- 
 ALTER TABLE `regional_staffer_role`
-  ADD CONSTRAINT regional_staffer_role_ibfk_3 FOREIGN KEY (regional_staffer_id) REFERENCES regional_staffer (id),
-  ADD CONSTRAINT regional_staffer_role_ibfk_2 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`);
+  ADD CONSTRAINT regional_staffer_role_ibfk_1 FOREIGN KEY (user_id) REFERENCES regional_staffer_user (id),
+  ADD CONSTRAINT regional_staffer_role_ibfk_2 FOREIGN KEY (group_id) REFERENCES regional_staffer_group (id);
 
---
+-- 
 -- Constraints for table `regional_staffer_user`
---
+-- 
 ALTER TABLE `regional_staffer_user`
   ADD CONSTRAINT regional_staffer_user_ibfk_1 FOREIGN KEY (id) REFERENCES regional_staffer (id);
 
@@ -632,3 +667,5 @@ ALTER TABLE `state_dictated_appropriation`
   ADD CONSTRAINT state_dictated_appropriation_ibfk_2 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id);
 
 SET FOREIGN_KEY_CHECKS=1;
+
+COMMIT;
