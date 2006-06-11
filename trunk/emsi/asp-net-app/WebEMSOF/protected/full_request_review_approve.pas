@@ -125,13 +125,13 @@ begin
     Label_fiscal_year_designator.text := p.bc_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.bc_emsof_requests.ServiceNameOf(session['e_item']);
     Label_affiliate_num.text := p.bc_emsof_requests.AffiliateNumOf(session['e_item']);
-    Label_parent_appropriation_amount.text := TClass_bc_appropriations.Create.AppropriationFromSpecificParent
+    p.parent_appropriation_amount := TClass_bc_appropriations.Create.AppropriationFromSpecificParent
       (
       p.bc_emsof_requests.SponsorCountyCodeOf(session['e_item']),
       'service',
-      p.bc_emsof_requests.IdOf(session['e_item'])
-      )
-      .tostring('C');
+      p.bc_emsof_requests.ServiceIdOf(session['e_item'])
+      );
+    Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
     Label_sponsor_county.text := p.bc_emsof_requests.SponsorCountyNameOf(session['e_item']);
     //
     p.bc_emsof_requests.BindDetail(p.bc_emsof_requests.IdOf(session['e_item']),DataGrid_items);
@@ -199,12 +199,6 @@ procedure TWebForm_full_request_review_approve.Button_approve_Click
   sender: System.Object;
   e: System.EventArgs
   );
-var
-  cmdText: string;
-  new_status_description: string;
-  next_approver_email_address: string;
-  reviewer_descriptor: string;
-  service_email_address: string;
 begin
   if CheckBox_approve.checked then begin
     p.bc_emsof_requests.Promote

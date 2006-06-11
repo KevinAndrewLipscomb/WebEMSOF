@@ -148,13 +148,18 @@
                           <ASP:BoundColumn visible="False" datafield="id" sortexpression="id" readonly="True" headertext="WebEMSOF ID#">
                             <ItemStyle horizontalalign="Center" forecolor="Gray"></ItemStyle>
                           </ASP:BoundColumn>
-                          <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="service_id" sortexpression="service_id" readonly="True"></ASP:BoundColumn>
                           <ASP:BoundColumn datafield="affiliate_num" sortexpression="affiliate_num" readonly="True" headertext="Affiliate #"></ASP:BoundColumn>
-                          <ASP:BoundColumn datafield="name" sortexpression="name" readonly="True" headertext="Name"></ASP:BoundColumn>
-                          <ASP:BoundColumn datafield="amount" sortexpression="amount" headertext="Amount" dataformatstring="{0:C}">
+                          <ASP:BoundColumn datafield="service_name" sortexpression="service_name" readonly="True" headertext="Name"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="county_code" sortexpression="county_code" readonly="True"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="sponsor_county" sortexpression="sponsor_county" readonly="True" headertext="Sponsor county"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="fiscal_year_designator" sortexpression="fiscal_year_designator" readonly="True" headertext="Cycle"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="emsof_ante" sortexpression="emsof_ante" headertext="EMSOF ante" dataformatstring="{0:C}">
                             <ItemStyle horizontalalign="Right"></ItemStyle>
                           </ASP:BoundColumn>
-                          <ASP:BoundColumn visible="False" datafield="status_code" readonly="True"></ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="appropriation" sortexpression="appropriation" headertext="Amount" dataformatstring="{0:C}"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
+                          <ASP:BoundColumn visible="False" datafield="status_code" sortexpression="status_code" readonly="True"></ASP:BoundColumn>
                           <ASP:ButtonColumn datatextfield="status_description" sortexpression="status_description" headertext="Status" commandname="Select">
                             <ItemStyle horizontalalign="Center" forecolor="Silver"></ItemStyle>
                           </ASP:ButtonColumn>

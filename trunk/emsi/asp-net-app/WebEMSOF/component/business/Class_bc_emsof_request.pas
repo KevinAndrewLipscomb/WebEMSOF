@@ -46,7 +46,28 @@ type
       master_id: string;
       target: system.object
       );
-    procedure BindOverview
+    procedure BindOverviewAll
+      (
+      order_by_field_name: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
+    procedure BindOverviewByRegionDictatedAppropriation
+      (
+      region_dictated_appropriation_id: string;
+      order_by_field_name: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
+    procedure BindOverviewByRegionDictatedAppropriationAndStatus
+      (
+      region_dictated_appropriation_id: string;
+      status: status_type;
+      order_by_field_name: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
+    procedure BindOverviewByStatus
       (
       status: status_type;
       order_by_field_name: string;
@@ -70,6 +91,7 @@ type
       status: status_type;
       promoter: string
       );
+    function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
@@ -77,8 +99,13 @@ type
     function SponsorCountyNameOf(e_item: system.object): string;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
+    function TcciOfAppropriation: cardinal;
     function TcciOfId: cardinal;
-    function TcciOfLinkButtonSelect: cardinal;
+    function TcciOfEmsofAnte: cardinal;
+    function TcciOfPasswordResetEmailAddress: cardinal;
+    function TcciOfServiceName: cardinal;
+    function TcciOfStatusCode: cardinal;
+    function TcciOfStatusDescription: cardinal;
   end;
 
 implementation
@@ -99,7 +126,7 @@ begin
   BeOkToApproveEmsofRequest := FALSE;
   case status of
   NEEDS_COUNTY_APPROVAL:
-    BeOkToApproveEmsofRequest := httpcontext.current.user.IsInRole('county-coord');
+    BeOkToApproveEmsofRequest := (TClass_bc_user.Create.Kind = 'county');
   NEEDS_REGIONAL_COMPLIANCE_CHECK:
     BeOkToApproveEmsofRequest := httpcontext.current.user.IsInRole('director')
       or httpcontext.current.user.IsInRole('emsof-coordinator')
@@ -140,7 +167,43 @@ begin
   TClass_dalc_emsof_request.Create.BindDetail(master_id,target);
 end;
 
-procedure TClass_bc_emsof_request.BindOverview
+procedure TClass_bc_emsof_request.BindOverviewAll
+  (
+  order_by_field_name: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  TClass_dalc_emsof_request.Create.BindOverviewAll(order_by_field_name,be_order_ascending,target);
+end;
+
+procedure TClass_bc_emsof_request.BindOverviewByRegionDictatedAppropriation
+  (
+  region_dictated_appropriation_id: string;
+  order_by_field_name: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  TClass_dalc_emsof_request.Create.BindOverviewByRegionDictatedAppropriation
+    (region_dictated_appropriation_id,order_by_field_name,be_order_ascending,target);
+end;
+
+procedure TClass_bc_emsof_request.BindOverviewByRegionDictatedAppropriationAndStatus
+  (
+  region_dictated_appropriation_id: string;
+  status: status_type;
+  order_by_field_name: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  TClass_dalc_emsof_request.Create.BindOverviewByRegionDictatedAppropriationAndStatus
+    (region_dictated_appropriation_id,ord(status),order_by_field_name,be_order_ascending,target);
+end;
+
+
+procedure TClass_bc_emsof_request.BindOverviewByStatus
   (
   status: status_type;
   order_by_field_name: string;
@@ -148,7 +211,7 @@ procedure TClass_bc_emsof_request.BindOverview
   target: system.object
   );
 begin
-  TClass_dalc_emsof_request.Create.BindOverview(ord(status),order_by_field_name,be_order_ascending,target);
+  TClass_dalc_emsof_request.Create.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
 end;
 
 function TClass_bc_emsof_request.IdOf(e_item: system.object): string;
@@ -234,6 +297,11 @@ begin
   NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
     NextApprover := 'Regional Council EMSOF Coordinator (for transmittal to PA DOH EMSO)';
   end;
+end;
+
+function TClass_bc_emsof_request.PropertyNameOfEmsofAnte: string;
+begin
+  PropertyNameOfEmsofAnte := TClass_dalc_emsof_request.Create.PropertyNameOfEmsofAnte;
 end;
 
 procedure TClass_bc_emsof_request.Promote
@@ -330,14 +398,39 @@ begin
   TallyOfStatus := TClass_dalc_emsof_request.Create.TallyByStatus(ord(status)).tostring;
 end;
 
+function TClass_bc_emsof_request.TcciOfAppropriation: cardinal;
+begin
+  TcciOfAppropriation := TClass_dalc_emsof_request.Create.TcciOfAppropriation;
+end;
+
 function TClass_bc_emsof_request.TcciOfId: cardinal;
 begin
   TcciOfId := TClass_dalc_emsof_request.Create.TcciOfId;
 end;
 
-function TClass_bc_emsof_request.TcciOfLinkButtonSelect: cardinal;
+function TClass_bc_emsof_request.TcciOfEmsofAnte: cardinal;
 begin
-  TcciOfLinkButtonSelect := TClass_dalc_emsof_request.Create.TcciOfLinkButtonSelect;
+  TcciOfEmsofAnte := TClass_dalc_emsof_request.Create.TcciOfEmsofAnte;
+end;
+
+function TClass_bc_emsof_request.TcciOfPasswordResetEmailAddress: cardinal;
+begin
+  TcciOfPasswordResetEmailAddress := TClass_dalc_emsof_request.Create.TcciOfPasswordResetEmailAddress;
+end;
+
+function TClass_bc_emsof_request.TcciOfServiceName: cardinal;
+begin
+  TcciOfServiceName := TClass_dalc_emsof_request.Create.TcciOfServiceName;
+end;
+
+function TClass_bc_emsof_request.TcciOfStatusCode: cardinal;
+begin
+  TcciOfStatusCode := TClass_dalc_emsof_request.Create.TcciOfStatusCode;
+end;
+
+function TClass_bc_emsof_request.TcciOfStatusDescription: cardinal;
+begin
+  TcciOfStatusDescription := TClass_dalc_emsof_request.Create.TcciOfStatusDescription;
 end;
 
 end.
