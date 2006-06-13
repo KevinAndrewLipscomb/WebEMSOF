@@ -81,6 +81,8 @@ type
     LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
     LinkButton_archived: System.Web.UI.WebControls.LinkButton;
     HyperLink_init_new_fy: System.Web.UI.WebControls.HyperLink;
+    LinkButton_set_deadlines: System.Web.UI.WebControls.LinkButton;
+    LinkButton1: System.Web.UI.WebControls.LinkButton;
     //
     procedure OnInit(e: EventArgs); override;
   private
@@ -109,11 +111,11 @@ begin
   Include(Self.LinkButton_invoice_collection.Click, Self.LinkButton_invoice_collection_Click);
   Include(Self.LinkButton_canceled_check_collection.Click, Self.LinkButton_canceled_check_collection_Click);
   Include(Self.LinkButton_reimbursement.Click, Self.LinkButton_reimbursement_Click);
+  Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
+  Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
   Include(Self.LinkButton_completed.Click, Self.LinkButton_completed_Click);
   Include(Self.LinkButton_withdrawn.Click, Self.LinkButton_withdrawn_Click);
   Include(Self.LinkButton_rejected.Click, Self.LinkButton_rejected_Click);
-  Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
-  Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -128,6 +130,7 @@ var
   biz_emsof_requests: TClass_biz_emsof_requests;
   parent_appropriation: decimal;
   sum_of_appropriations: decimal;
+  tally: string;
   unrequested_amount: decimal;
   waypoint_stack: stack;
 begin
@@ -154,10 +157,21 @@ begin
       biz_emsof_requests.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + LinkButton_num_requests_needing_finalization.text;
     LinkButton_num_requests_needing_county_approval.text :=
       biz_emsof_requests.TallyOfStatus(NEEDS_COUNTY_APPROVAL) + LinkButton_num_requests_needing_county_approval.text;
-    LinkButton_regional_compliance.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_COMPLIANCE_CHECK) + LinkButton_regional_compliance.text;
-    LinkButton_exec_dir_approval.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_EXEC_DIR_APPROVAL) + LinkButton_exec_dir_approval.text;
+    //
+    tally := biz_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_COMPLIANCE_CHECK);
+    LinkButton_regional_compliance.text := tally + LinkButton_regional_compliance.text;
+    if (tally <> '0') and biz_emsof_requests.BeOkToApproveEmsofRequest(NEEDS_REGIONAL_COMPLIANCE_CHECK) then begin
+      LinkButton_regional_compliance.font.bold := TRUE;
+      LinkButton_regional_compliance.text := LinkButton_regional_compliance.text.ToUpper;
+    end;
+    //
+    tally := biz_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_EXEC_DIR_APPROVAL);
+    LinkButton_exec_dir_approval.text := tally + LinkButton_exec_dir_approval.text;
+    if (tally <> '0') and biz_emsof_requests.BeOkToApproveEmsofRequest(NEEDS_REGIONAL_EXEC_DIR_APPROVAL) then begin
+      LinkButton_exec_dir_approval.font.bold := TRUE;
+      LinkButton_exec_dir_approval.text := LinkButton_exec_dir_approval.text.ToUpper;
+    end;
+    //
     LinkButton_transmittal.text :=
       biz_emsof_requests.TallyOfStatus(NEEDS_SENT_TO_PA_DOH_EMSO) + LinkButton_transmittal.text;
     LinkButton_state_approval.text :=
