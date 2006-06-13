@@ -123,21 +123,26 @@
 	  <table cellspacing="0" cellpadding="10" border="0">
 		<tr bgcolor="#f5f5f5">
 		  <td>
-			<strong>Service appropriations</strong>
+			<table border="0" cellpadding="10" cellspacing="0" width="100%">
+			  <tr>
+				<td>
+				  <strong>Service appropriations</strong>
+				</td>
+				<td align="center"><ASP:CheckBox id="CheckBox_hide_nonapproval_requests" runat="server" text="Only show requests needing approval" font-size="Small" autopostback="True"></ASP:CheckBox></td>
+				<td align="right">
+				  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True">New</asp:LinkButton>
+				</td>
+			  </tr>
+			</table>
 		  </td>
+		</tr>
+		<tr>
 		  <td>
-			<div align="center">
-			  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True">New</asp:LinkButton>
-			</div>
+			<ASP:Label id="Label_no_appropriations" runat="server" font-italic="True">-- NONE --</ASP:Label>
 		  </td>
 		</tr>
 		<tr>
-		  <td colspan="4">
-                        <ASP:Label id="Label_no_appropriations" runat="server" font-italic="True">-- NONE --</ASP:Label>
-		  </td>
-		</tr>
-		<tr>
-		  <td colspan="4">
+		  <td>
 		<asp:datagrid id="DataGrid_service_appropriations" runat="server"
 		bordercolor="Gainsboro" borderstyle="None" borderwidth="1px" backcolor="White" cellpadding="10" gridlines="Horizontal" forecolor="Black"
 		allowsorting="True" useaccessibleheader="True" autogeneratecolumns="False" visible="False">

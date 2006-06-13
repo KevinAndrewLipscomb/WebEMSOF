@@ -21,6 +21,7 @@ type
     RECORD
     biz_emsof_requests: TClass_biz_emsof_requests;
     be_before_deadline: boolean;
+    be_filtered: boolean;
     be_sort_order_ascending: boolean;
     num_appropriations: cardinal;
     region_dictated_appropriation_amount: decimal;
@@ -53,6 +54,8 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_service_appropriations_UpdateCommand(source: System.Object; 
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -82,6 +85,7 @@ type
     LinkButton_new_appropriation: System.Web.UI.WebControls.LinkButton;
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
+    CheckBox_hide_nonapproval_requests: System.Web.UI.WebControls.CheckBox;
     procedure OnInit(e: EventArgs); override;
   public
     { Public Declarations }
@@ -102,6 +106,7 @@ procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
+  Include(Self.CheckBox_hide_nonapproval_requests.CheckedChanged, Self.CheckBox_hide_nonapproval_requests_CheckedChanged);
   Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.DataGrid_service_appropriations.ItemCommand, Self.DataGrid_service_appropriations_ItemCommand);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.DataGrid_service_appropriations_CancelCommand);
@@ -130,6 +135,7 @@ begin
     //
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.be_before_deadline := TRUE;
+    p.be_filtered := FALSE;
     p.be_sort_order_ascending := TRUE;
     p.num_appropriations := 0;
     p.sort_order := 'service_name';
@@ -217,6 +223,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_appropriations.CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  p.be_filtered := not p.be_filtered;
+  Bind_service_appropriations;
 end;
 
 procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
@@ -501,13 +514,24 @@ procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
   be_datagrid_empty: boolean;
 begin
-  p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriation
-    (
-    session['region_dictated_appropriation_id'].tostring,
-    p.sort_order,
-    p.be_sort_order_ascending,
-    DataGrid_service_appropriations
-    );
+  if p.be_filtered then begin
+    p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus
+      (
+      session['region_dictated_appropriation_id'].tostring,
+      Class_biz_emsof_requests.NEEDS_COUNTY_APPROVAL,
+      p.sort_order,
+      p.be_sort_order_ascending,
+      DataGrid_service_appropriations
+      );
+  end else begin
+    p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriation
+      (
+      session['region_dictated_appropriation_id'].tostring,
+      p.sort_order,
+      p.be_sort_order_ascending,
+      DataGrid_service_appropriations
+      );
+  end;
   //
   // Manage control visibilities.
   //
