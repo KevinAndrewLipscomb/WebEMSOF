@@ -39,6 +39,7 @@ type
     procedure LinkButton_rejected_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_deployed_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_archived_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_all_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -83,6 +84,7 @@ type
     HyperLink_init_new_fy: System.Web.UI.WebControls.HyperLink;
     LinkButton_set_deadlines: System.Web.UI.WebControls.LinkButton;
     LinkButton1: System.Web.UI.WebControls.LinkButton;
+    LinkButton_all: System.Web.UI.WebControls.LinkButton;
     //
     procedure OnInit(e: EventArgs); override;
   private
@@ -111,11 +113,12 @@ begin
   Include(Self.LinkButton_invoice_collection.Click, Self.LinkButton_invoice_collection_Click);
   Include(Self.LinkButton_canceled_check_collection.Click, Self.LinkButton_canceled_check_collection_Click);
   Include(Self.LinkButton_reimbursement.Click, Self.LinkButton_reimbursement_Click);
-  Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
-  Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
   Include(Self.LinkButton_completed.Click, Self.LinkButton_completed_Click);
   Include(Self.LinkButton_withdrawn.Click, Self.LinkButton_withdrawn_Click);
   Include(Self.LinkButton_rejected.Click, Self.LinkButton_rejected_Click);
+  Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
+  Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
+  Include(Self.LinkButton_all.Click, Self.LinkButton_all_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -205,6 +208,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_all_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('all_emsof_requests.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_archived_Click(sender: System.Object;
