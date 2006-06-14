@@ -42,6 +42,10 @@ library WebEMSOF;
 {%AspFolderContainer 'component\db'}
 {%File 'resource\terms-and-conditions.pdf'}
 {%File 'testdata.sql'}
+{%AspFolderContainer 'protected\image'}
+{$R 'protected\image\logo_left.gif' 'protected\image\logo_left.gif'}
+{$R 'protected\image\logo_right.gif' 'protected\image\logo_right.gif'}
+{%AspMarkupContainer 'protected\all_emsof_requests.aspx'}
 
 uses
   System.Reflection,
@@ -79,7 +83,8 @@ uses
   Class_db_appropriations in 'component\db\Class_db_appropriations.pas',
   Class_db_emsof_requests in 'component\db\Class_db_emsof_requests.pas',
   Class_db_fiscal_years in 'component\db\Class_db_fiscal_years.pas',
-  Class_db_user in 'component\db\Class_db_user.pas';
+  Class_db_user in 'component\db\Class_db_user.pas',
+  all_emsof_requests in 'protected\all_emsof_requests.pas' {all_emsof_requests.TWebForm_all_emsof_requests: System.Web.UI.Page};
 
 const ID = '$Id$';
 

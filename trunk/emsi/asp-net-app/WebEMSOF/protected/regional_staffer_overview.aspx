@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                    [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                     [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -67,7 +67,16 @@
               <td>
                 <table cellspacing="0" cellpadding="10" border="0" width="100%">
                     <tr>
-                      <td bgcolor="#f5f5f5"><strong>EMSOF workflow items</strong></td>
+                      <td bgcolor="#f5f5f5"><strong>
+                                    <table cellspacing="0" cellpadding="5" width="100%" border="0">
+                                        <tr>
+                                          <td><strong>EMSOF workflow items</strong></td>
+                                          <td>
+                                            <p align="right">
+                                              <ASP:LinkButton id="LinkButton_all" runat="server">All</ASP:LinkButton>
+                                            </p></td>
+                                        </tr>
+                                    </table></strong></td>
                     </tr>
                     <tr>
                       <td>
