@@ -77,7 +77,6 @@ type
     procedure Demote
       (
       e_item: system.object;
-      status: status_type;
       demoter: string;
       reason: string;
       emsof_ante: string
@@ -88,7 +87,6 @@ type
     procedure Promote
       (
       e_item: system.object;
-      status: status_type;
       promoter: string
       );
     function PropertyNameOfEmsofAnte: string;
@@ -223,7 +221,6 @@ end;
 procedure TClass_biz_emsof_requests.Demote
   (
   e_item: system.object;
-  status: status_type;
   demoter: string;
   reason: string;
   emsof_ante: string
@@ -237,7 +234,7 @@ begin
   //
   be_ok_to_rework := (datetime.Now <= ReworkDeadline(e_item));
   //
-  case status of
+  case StatusOf(e_item) of
   NEEDS_COUNTY_APPROVAL:
     BEGIN
     role := 'county';
@@ -308,7 +305,6 @@ end;
 procedure TClass_biz_emsof_requests.Promote
   (
   e_item: system.object;
-  status: status_type;
   promoter: string
   );
 var
@@ -316,8 +312,8 @@ var
   reviewer_descriptor: string;
   role: string;
 begin
-  next_status := status; // Better initialize it to something.
-  case status of
+  next_status := StatusOf(e_item); // Better initialize it to something.
+  case StatusOf(e_item) of
   NEEDS_COUNTY_APPROVAL:
     BEGIN
     role := 'county';
