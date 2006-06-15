@@ -189,7 +189,6 @@ begin
     p.biz_emsof_requests.Demote
       (
       session['e_item'],
-      p.biz_emsof_requests.StatusOf(session['e_item']),
       session['account_descriptor'].tostring,
       Safe(TextArea_disapproval_reason.value,NARRATIVE),
       Safe(Label_sum_of_emsof_antes.text,CURRENCY_USA)
@@ -205,8 +204,7 @@ procedure TWebForm_full_request_review_approve.Button_approve_Click
   );
 begin
   if CheckBox_approve.checked then begin
-    p.biz_emsof_requests.Promote
-      (session['e_item'],p.biz_emsof_requests.StatusOf(session['e_item']),session['account_descriptor'].tostring);
+    p.biz_emsof_requests.Promote(session['e_item'],session['account_descriptor'].tostring);
     server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
   end;
 end;
