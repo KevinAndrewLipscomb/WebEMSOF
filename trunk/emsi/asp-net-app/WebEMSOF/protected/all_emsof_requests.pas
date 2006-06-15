@@ -27,9 +27,6 @@ type
     procedure InitializeComponent;
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
-    procedure DataGrid1_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
-    procedure DataGrid1_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
-    procedure DataGrid1_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure TWebForm_all_emsof_requests_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure DataGrid_requests_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
@@ -110,8 +107,6 @@ end;
 
 procedure TWebForm_all_emsof_requests.DataGrid_requests_ItemCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-var
-  waypoint_stack: stack;
 begin
   if e.commandname = 'Select' then begin
     session.Remove('account_descriptor');
@@ -172,53 +167,6 @@ begin
   session.Add('p',p);
 end;
 
-procedure TWebForm_all_emsof_requests.DataGrid1_ItemCommand(source: System.Object;
-  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-begin
-  if (e.item.itemtype = listitemtype.alternatingitem)
-    or (e.item.itemtype = listitemtype.edititem)
-    or (e.item.itemtype = listitemtype.item)
-    or (e.item.itemtype = listitemtype.selecteditem)
-  then begin
-    //
-    // We are dealing with a data row, not a header or footer row.
-    //
-    if e.commandname = 'Select' then begin
-      system.collections.stack(session['waypoint_stack']).Push('emsof_request_status_filter.aspx');
-      server.Transfer('full_request_review_approve.aspx');
-    end;
-    //
-  end;
-end;
-
-procedure TWebForm_all_emsof_requests.DataGrid1_ItemDataBound(sender: System.Object;
-  e: System.Web.UI.WebControls.DataGridItemEventArgs);
-begin
-  if (e.item.itemtype = listitemtype.alternatingitem)
-    or (e.item.itemtype = listitemtype.edititem)
-    or (e.item.itemtype = listitemtype.item)
-    or (e.item.itemtype = listitemtype.selecteditem)
-  then begin
-    //
-    // We are dealing with a data row, not a header or footer row.
-    //
-    p.num_datagrid_rows := p.num_datagrid_rows + 1;
-  end;
-end;
-
-procedure TWebForm_all_emsof_requests.DataGrid1_SortCommand(source: System.Object;
-  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
-begin
-  if e.SortExpression = p.sort_order then begin
-    p.be_sort_order_ascending := not p.be_sort_order_ascending;
-  end else begin
-    p.sort_order := e.SortExpression;
-    p.be_sort_order_ascending := TRUE;
-  end;
-  DataGrid_requests.EditItemIndex := -1;
-  Bind;
-end;
-
 procedure TWebForm_all_emsof_requests.LinkButton_back_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -234,8 +182,6 @@ begin
 end;
 
 procedure TWebForm_all_emsof_requests.Bind;
-var be_datagrid_empty: boolean;
-var cmdText: string;
 begin
   TClass_biz_emsof_requests.Create.BindOverviewAll
     (

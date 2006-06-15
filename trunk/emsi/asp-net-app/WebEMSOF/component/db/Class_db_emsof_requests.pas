@@ -80,6 +80,7 @@ type
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyCodeOf(e_item: system.object): string;
     function SponsorCountyNameOf(e_item: system.object): string;
+    function StatusCodeOf(e_item: system.object): cardinal;
     function SumOfRequestValues
       (
       user_kind: string;
@@ -368,6 +369,11 @@ end;
 function TClass_db_emsof_requests.SponsorCountyNameOf(e_item: system.object): string;
 begin
   SponsorCountyNameOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY_NAME].text,ALPHA);
+end;
+
+function TClass_db_emsof_requests.StatusCodeOf(e_item: system.object): cardinal;
+begin
+  StatusCodeOf := convert.ToInt16(Safe(DataGridItem(e_item).cells[TCCI_STATUS_CODE].text,NUM));
 end;
 
 function TClass_db_emsof_requests.SumOfRequestValues
