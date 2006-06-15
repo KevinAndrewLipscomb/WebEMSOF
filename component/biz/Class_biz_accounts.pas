@@ -69,6 +69,7 @@ constructor TClass_biz_accounts.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
 end;
 
 procedure TClass_biz_accounts.MakeDemotionNotification
@@ -144,8 +145,6 @@ begin
     //
     //   Send notifications to service and region.
     //
-    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-    //
     smtpmail.Send
       (
       SelfEmailAddress,
@@ -220,8 +219,6 @@ procedure TClass_biz_accounts.MakePromotionNotification
 var
   next_approver_email_target: string;
 begin
-  //
-  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   //
   //   Get the next approver's email address.
   //
