@@ -39,7 +39,6 @@ type
   //
   //   account_descriptor: string;
   //   e_item: System.Web.UI.WebControls.DataGridItem;
-  //   status_of_interest: Class_biz_emsof_requests.status_type;
   //   waypoint_stack: system.collections.stack;
   //
   strict private
@@ -140,9 +139,9 @@ begin
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
-    if p.biz_emsof_requests.BeOkToApproveEmsofRequest(status_type(session['status_of_interest'])) then begin
+    if p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.biz_emsof_requests.StatusOf(session['e_item'])) then begin
       Label_next_approver.text :=
-        p.biz_emsof_requests.NextApprover(status_type(session['status_of_interest']));
+        p.biz_emsof_requests.NextApprover(p.biz_emsof_requests.StatusOf(session['e_item']));
       if datetime.Now <= p.biz_emsof_requests.ReworkDeadline(session['e_item']) then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
@@ -190,7 +189,7 @@ begin
     p.biz_emsof_requests.Demote
       (
       session['e_item'],
-      status_type(session['status_of_interest']),
+      p.biz_emsof_requests.StatusOf(session['e_item']),
       session['account_descriptor'].tostring,
       Safe(TextArea_disapproval_reason.value,NARRATIVE),
       Safe(Label_sum_of_emsof_antes.text,CURRENCY_USA)
@@ -207,7 +206,7 @@ procedure TWebForm_full_request_review_approve.Button_approve_Click
 begin
   if CheckBox_approve.checked then begin
     p.biz_emsof_requests.Promote
-      (session['e_item'],status_type(session['status_of_interest']),session['account_descriptor'].tostring);
+      (session['e_item'],p.biz_emsof_requests.StatusOf(session['e_item']),session['account_descriptor'].tostring);
     server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
   end;
 end;

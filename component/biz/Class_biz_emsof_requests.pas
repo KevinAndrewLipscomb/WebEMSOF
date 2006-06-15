@@ -97,6 +97,7 @@ type
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyCodeOf(e_item: system.object): string;
     function SponsorCountyNameOf(e_item: system.object): string;
+    function StatusOf(e_item: system.object): status_type;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
     function TcciOfAppropriation: cardinal;
@@ -378,6 +379,11 @@ end;
 function TClass_biz_emsof_requests.SponsorCountyNameOf(e_item: system.object): string;
 begin
   SponsorCountyNameOf := TClass_db_emsof_requests.Create.SponsorCountyNameOf(e_item);
+end;
+
+function TClass_biz_emsof_requests.StatusOf(e_item: system.object): status_type;
+begin
+  StatusOf := status_type(TClass_db_emsof_requests.Create.StatusCodeOf(e_item));
 end;
 
 function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;

@@ -281,12 +281,6 @@ begin
     session.Add('account_descriptor',session['county_name'].ToString + ' County');
     session.Remove('e_item');
     session.Add('e_item',e.item);
-    session.Remove('status_of_interest');
-    session.Add
-      (
-      'status_of_interest',
-      Class_biz_emsof_requests.status_type(convert.ToInt16(Safe(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text,NUM)))
-      );
     session.Remove('waypoint_stack');
     waypoint_stack := system.collections.stack.Create;
     waypoint_stack.Push('county_dictated_appropriations.aspx');
