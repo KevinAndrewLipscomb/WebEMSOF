@@ -36,11 +36,18 @@ type status_type =
 type
   TClass_biz_emsof_requests = class
   private
+    db_emsof_requests: TClass_db_emsof_requests;
   public
     constructor Create;
     function AffiliateNumOf(e_item: system.object): string;
+    procedure Approve
+      (
+      e_item: system.object;
+      promoter: string
+      );
     function BeOkToApproveEmsofRequest(status: status_type): boolean;
     function BeOkToDrillDown(status: status_type): boolean;
+    function BeOkToMarkDone(status: status_type): boolean;
     procedure BindDetail
       (
       master_id: string;
@@ -74,6 +81,7 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
       (
       e_item: system.object;
@@ -83,18 +91,21 @@ type
       );
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
-    function NextApprover(status: status_type): string;
-    procedure Promote
+    procedure MarkDone
       (
       e_item: system.object;
       promoter: string
       );
+    function NextReviewer(status: status_type): string;
     function PropertyNameOfEmsofAnte: string;
+    function RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
+    function RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyCodeOf(e_item: system.object): string;
     function SponsorCountyNameOf(e_item: system.object): string;
+    function SponsorRegionNameOf(master_id: string): string;
     function StatusOf(e_item: system.object): status_type;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
@@ -113,11 +124,77 @@ constructor TClass_biz_emsof_requests.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  db_emsof_requests := TClass_db_emsof_requests.Create;
 end;
 
 function TClass_biz_emsof_requests.AffiliateNumOf(e_item: system.object): string;
 begin
-  AffiliateNumOf := TClass_db_emsof_requests.Create.AffiliateNumOf(e_item);
+  AffiliateNumOf := db_emsof_requests.AffiliateNumOf(e_item);
+end;
+
+procedure TClass_biz_emsof_requests.Approve
+  (
+  e_item: system.object;
+  promoter: string
+  );
+var
+  approvable: boolean;
+  next_approver_role: string;
+  next_status: status_type;
+  reviewer_descriptor: string;
+  approval_timestamp_column: Class_db_emsof_requests.approval_timestamp_column_type;
+begin
+  approvable := TRUE;
+  next_status := StatusOf(e_item); // Better initialize it to something.
+  case StatusOf(e_item) of
+  NEEDS_COUNTY_APPROVAL:
+    BEGIN
+    approval_timestamp_column := COUNTY;
+    next_approver_role := 'emsof-planner';
+    reviewer_descriptor := 'The ' + promoter + ' County EMSOF Coordinator';
+    next_status := NEEDS_REGIONAL_COMPLIANCE_CHECK;
+    END;
+  NEEDS_REGIONAL_COMPLIANCE_CHECK:
+    BEGIN
+    approval_timestamp_column := REGIONAL_PLANNER;
+    next_approver_role := 'director';
+    reviewer_descriptor := 'Regional planner ' + promoter;
+    next_status := NEEDS_REGIONAL_EXEC_DIR_APPROVAL;
+    END;
+  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
+    BEGIN
+    approval_timestamp_column := REGIONAL_DIRECTOR;
+    next_approver_role := 'emsof-coordinator';
+    reviewer_descriptor := 'Regional Executive Director ' + promoter;
+    next_status := NEEDS_SENT_TO_PA_DOH_EMSO;
+    END;
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    BEGIN
+    approval_timestamp_column := STATE;
+    next_approver_role := system.string.EMPTY;
+    reviewer_descriptor := 'State staffer ' + promoter;
+    next_status := NEEDS_INVOICE_COLLECTION;
+    END;
+  else
+    approvable := FALSE;
+  end;
+  if approvable then begin
+    db_emsof_requests.Approve(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,approval_timestamp_column);
+    if next_status <> NEEDS_INVOICE_COLLECTION then begin
+      TClass_biz_accounts.Create.MakePromotionNotification
+        (
+        next_approver_role,
+        reviewer_descriptor,
+        system.object(next_status).tostring,
+        ServiceIdOf(e_item),
+        ServiceNameOf(e_item),
+        FyDesignatorOf(e_item)
+        );
+//    end else begin
+//      TClass_biz_accounts.Create.MakeFinalApprovalNotification;
+    end;
+  end;
+  //
 end;
 
 function TClass_biz_emsof_requests.BeOkToApproveEmsofRequest(status: status_type): boolean;
@@ -157,13 +234,30 @@ begin
   end;
 end;
 
+function TClass_biz_emsof_requests.BeOkToMarkDone(status: status_type): boolean;
+begin
+  BeOkToMarkDone := FALSE;
+  case status of
+  NEEDS_SENT_TO_PA_DOH_EMSO:
+    BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-clerk')
+      or httpcontext.current.user.IsInRole('emsof-coordinator')
+      or httpcontext.current.user.IsInRole('director');
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-coordinator')
+      or httpcontext.current.user.IsInRole('director');
+  NEEDS_REIMBURSEMENT_ISSUANCE:
+    BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-accountant')
+      or httpcontext.current.user.IsInRole('director');
+  end;
+end;
+
 procedure TClass_biz_emsof_requests.BindDetail
   (
   master_id: string;
   target: system.object
   );
 begin
-  TClass_db_emsof_requests.Create.BindDetail(master_id,target);
+  db_emsof_requests.BindDetail(master_id,target);
 end;
 
 procedure TClass_biz_emsof_requests.BindOverviewAll
@@ -173,7 +267,7 @@ procedure TClass_biz_emsof_requests.BindOverviewAll
   target: system.object
   );
 begin
-  TClass_db_emsof_requests.Create.BindOverviewAll(order_by_field_name,be_order_ascending,target);
+  db_emsof_requests.BindOverviewAll(order_by_field_name,be_order_ascending,target);
 end;
 
 procedure TClass_biz_emsof_requests.BindOverviewByRegionDictatedAppropriation
@@ -184,7 +278,7 @@ procedure TClass_biz_emsof_requests.BindOverviewByRegionDictatedAppropriation
   target: system.object
   );
 begin
-  TClass_db_emsof_requests.Create.BindOverviewByRegionDictatedAppropriation
+  db_emsof_requests.BindOverviewByRegionDictatedAppropriation
     (region_dictated_appropriation_id,order_by_field_name,be_order_ascending,target);
 end;
 
@@ -197,7 +291,7 @@ procedure TClass_biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAnd
   target: system.object
   );
 begin
-  TClass_db_emsof_requests.Create.BindOverviewByRegionDictatedAppropriationAndStatus
+  db_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus
     (region_dictated_appropriation_id,ord(status),order_by_field_name,be_order_ascending,target);
 end;
 
@@ -210,12 +304,12 @@ procedure TClass_biz_emsof_requests.BindOverviewByStatus
   target: system.object
   );
 begin
-  TClass_db_emsof_requests.Create.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
+  db_emsof_requests.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
 end;
 
-function TClass_biz_emsof_requests.IdOf(e_item: system.object): string;
+function TClass_biz_emsof_requests.CountyApprovalTimestampOf(master_id: string): system.datetime;
 begin
-  IdOf := TClass_db_emsof_requests.Create.IdOf(e_item);
+  CountyApprovalTimestampOf := db_emsof_requests.CountyApprovalTimestampOf(master_id);
 end;
 
 procedure TClass_biz_emsof_requests.Demote
@@ -263,7 +357,7 @@ begin
     next_status := REJECTED;
   end;
   //
-  TClass_db_emsof_requests.Create.Demote(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,role);
+  db_emsof_requests.Demote(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,role);
   TClass_biz_accounts.Create.MakeDemotionNotification
     (
     role,
@@ -282,27 +376,15 @@ end;
 
 function TClass_biz_emsof_requests.FyDesignatorOf(e_item: system.object): string;
 begin
-  FyDesignatorOf := TClass_db_emsof_requests.Create.FyDesignatorOf(e_item);
+  FyDesignatorOf := db_emsof_requests.FyDesignatorOf(e_item);
 end;
 
-function TClass_biz_emsof_requests.NextApprover(status: status_type): string;
+function TClass_biz_emsof_requests.IdOf(e_item: system.object): string;
 begin
-  case status of
-  NEEDS_COUNTY_APPROVAL:
-    NextApprover := 'Regional Council EMSOF Coordinator';
-  NEEDS_REGIONAL_COMPLIANCE_CHECK:
-    NextApprover := 'Regional Council Executive Director';
-  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
-    NextApprover := 'Regional Council EMSOF Coordinator (for transmittal to PA DOH EMSO)';
-  end;
+  IdOf := db_emsof_requests.IdOf(e_item);
 end;
 
-function TClass_biz_emsof_requests.PropertyNameOfEmsofAnte: string;
-begin
-  PropertyNameOfEmsofAnte := TClass_db_emsof_requests.Create.PropertyNameOfEmsofAnte;
-end;
-
-procedure TClass_biz_emsof_requests.Promote
+procedure TClass_biz_emsof_requests.MarkDone
   (
   e_item: system.object;
   promoter: string
@@ -310,39 +392,27 @@ procedure TClass_biz_emsof_requests.Promote
 var
   next_status: status_type;
   reviewer_descriptor: string;
-  role: string;
 begin
+  reviewer_descriptor := db_emsof_requests.SponsorRegionNameOf(db_emsof_requests.IdOf(e_item));
   next_status := StatusOf(e_item); // Better initialize it to something.
   case StatusOf(e_item) of
-  NEEDS_COUNTY_APPROVAL:
+  NEEDS_SENT_TO_PA_DOH_EMSO:
     BEGIN
-    role := 'county';
-    reviewer_descriptor := 'The ' + promoter + ' County EMSOF Coordinator';
-    next_status := NEEDS_REGIONAL_COMPLIANCE_CHECK;
-    END;
-  NEEDS_REGIONAL_COMPLIANCE_CHECK:
-    BEGIN
-    role := 'regional_planner';
-    reviewer_descriptor := 'Regional planner ' + promoter;
-    next_status := NEEDS_REGIONAL_EXEC_DIR_APPROVAL;
-    END;
-  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
-    BEGIN
-    role := 'regional_director';
-    reviewer_descriptor := 'Regional Executive Director ' + promoter;
-    next_status := NEEDS_SENT_TO_PA_DOH_EMSO;
+    next_status := NEEDS_PA_DOH_EMSO_APPROVAL;
     END;
   NEEDS_PA_DOH_EMSO_APPROVAL:
     BEGIN
-    role := 'state';
-    reviewer_descriptor := 'State staffer ' + promoter;
     next_status := NEEDS_INVOICE_COLLECTION;
     END;
+  NEEDS_REIMBURSEMENT_ISSUANCE:
+    BEGIN
+    next_status := REIMBURSEMENT_ISSUED;
+    END;
   end;
-  TClass_db_emsof_requests.Create.Promote(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,role);
+  db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind);
   TClass_biz_accounts.Create.MakePromotionNotification
     (
-    role,
+    system.string.EMPTY,
     reviewer_descriptor,
     system.object(next_status).tostring,
     ServiceIdOf(e_item),
@@ -352,34 +422,66 @@ begin
   //
 end;
 
+function TClass_biz_emsof_requests.NextReviewer(status: status_type): string;
+begin
+  case status of
+  NEEDS_COUNTY_APPROVAL:
+    NextReviewer := 'Regional Council EMSOF Coordinator';
+  NEEDS_REGIONAL_COMPLIANCE_CHECK:
+    NextReviewer := 'Regional Council Executive Director';
+  NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
+    NextReviewer := 'Regional Council EMSOF Coordinator (for transmittal to PA DOH EMSO)';
+  end;
+end;
+
+function TClass_biz_emsof_requests.PropertyNameOfEmsofAnte: string;
+begin
+  PropertyNameOfEmsofAnte := db_emsof_requests.PropertyNameOfEmsofAnte;
+end;
+
+function TClass_biz_emsof_requests.RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
+begin
+  RegionalExecDirApprovalTimestampOf := db_emsof_requests.RegionalExecDirApprovalTimestampOf(master_id);
+end;
+
+function TClass_biz_emsof_requests.RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
+begin
+  RegionalPlannerApprovalTimestampOf := db_emsof_requests.RegionalPlannerApprovalTimestampOf(master_id);
+end;
+
 function TClass_biz_emsof_requests.ReworkDeadline(e_item: system.object): datetime;
 begin
-  ReworkDeadline := TClass_db_emsof_requests.Create.ReworkDeadline(e_item);
+  ReworkDeadline := db_emsof_requests.ReworkDeadline(e_item);
 end;
 
 function TClass_biz_emsof_requests.ServiceIdOf(e_item: system.object): string;
 begin
-  ServiceIdOf := TClass_db_emsof_requests.Create.ServiceIdOf(e_item);
+  ServiceIdOf := db_emsof_requests.ServiceIdOf(e_item);
 end;
 
 function TClass_biz_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
-  ServiceNameOf := TClass_db_emsof_requests.Create.ServiceNameOf(e_item);
+  ServiceNameOf := db_emsof_requests.ServiceNameOf(e_item);
 end;
 
 function TClass_biz_emsof_requests.SponsorCountyCodeOf(e_item: system.object): string;
 begin
-  SponsorCountyCodeOf := TClass_db_emsof_requests.Create.SponsorCountyCodeOf(e_item);
+  SponsorCountyCodeOf := db_emsof_requests.SponsorCountyCodeOf(e_item);
 end;
 
 function TClass_biz_emsof_requests.SponsorCountyNameOf(e_item: system.object): string;
 begin
-  SponsorCountyNameOf := TClass_db_emsof_requests.Create.SponsorCountyNameOf(e_item);
+  SponsorCountyNameOf := db_emsof_requests.SponsorCountyNameOf(e_item);
+end;
+
+function TClass_biz_emsof_requests.SponsorRegionNameOf(master_id: string): string;
+begin
+  SponsorRegionNameOf := db_emsof_requests.SponsorRegionNameOf(master_id);
 end;
 
 function TClass_biz_emsof_requests.StatusOf(e_item: system.object): status_type;
 begin
-  StatusOf := status_type(TClass_db_emsof_requests.Create.StatusCodeOf(e_item));
+  StatusOf := status_type(db_emsof_requests.StatusCodeOf(e_item));
 end;
 
 function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;
@@ -388,51 +490,51 @@ var
 begin
   biz_user := TClass_biz_user.Create;
   if fy_id = system.string.EMPTY then begin
-    SumOfRequestValues := TClass_db_emsof_requests.Create.SumOfRequestValues
+    SumOfRequestValues := db_emsof_requests.SumOfRequestValues
       (biz_user.Kind,biz_user.IdNum,TClass_biz_fiscal_years.Create.IdOfCurrent);
   end else begin
-    SumOfRequestValues := TClass_db_emsof_requests.Create.SumOfRequestValues(biz_user.Kind,biz_user.IdNum,fy_id);
+    SumOfRequestValues := db_emsof_requests.SumOfRequestValues(biz_user.Kind,biz_user.IdNum,fy_id);
   end;
 end;
 
 function TClass_biz_emsof_requests.TallyOfStatus(status: status_type): string;
 begin
-  TallyOfStatus := TClass_db_emsof_requests.Create.TallyByStatus(ord(status)).tostring;
+  TallyOfStatus := db_emsof_requests.TallyByStatus(ord(status)).tostring;
 end;
 
 function TClass_biz_emsof_requests.TcciOfAppropriation: cardinal;
 begin
-  TcciOfAppropriation := TClass_db_emsof_requests.Create.TcciOfAppropriation;
+  TcciOfAppropriation := db_emsof_requests.TcciOfAppropriation;
 end;
 
 function TClass_biz_emsof_requests.TcciOfId: cardinal;
 begin
-  TcciOfId := TClass_db_emsof_requests.Create.TcciOfId;
+  TcciOfId := db_emsof_requests.TcciOfId;
 end;
 
 function TClass_biz_emsof_requests.TcciOfEmsofAnte: cardinal;
 begin
-  TcciOfEmsofAnte := TClass_db_emsof_requests.Create.TcciOfEmsofAnte;
+  TcciOfEmsofAnte := db_emsof_requests.TcciOfEmsofAnte;
 end;
 
 function TClass_biz_emsof_requests.TcciOfPasswordResetEmailAddress: cardinal;
 begin
-  TcciOfPasswordResetEmailAddress := TClass_db_emsof_requests.Create.TcciOfPasswordResetEmailAddress;
+  TcciOfPasswordResetEmailAddress := db_emsof_requests.TcciOfPasswordResetEmailAddress;
 end;
 
 function TClass_biz_emsof_requests.TcciOfServiceName: cardinal;
 begin
-  TcciOfServiceName := TClass_db_emsof_requests.Create.TcciOfServiceName;
+  TcciOfServiceName := db_emsof_requests.TcciOfServiceName;
 end;
 
 function TClass_biz_emsof_requests.TcciOfStatusCode: cardinal;
 begin
-  TcciOfStatusCode := TClass_db_emsof_requests.Create.TcciOfStatusCode;
+  TcciOfStatusCode := db_emsof_requests.TcciOfStatusCode;
 end;
 
 function TClass_biz_emsof_requests.TcciOfStatusDescription: cardinal;
 begin
-  TcciOfStatusDescription := TClass_db_emsof_requests.Create.TcciOfStatusDescription;
+  TcciOfStatusDescription := db_emsof_requests.TcciOfStatusDescription;
 end;
 
 end.

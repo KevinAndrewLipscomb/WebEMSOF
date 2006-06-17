@@ -85,8 +85,9 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - all_emsof_requests';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
-    // Initialize implementation-wide vars.
+    // Initialize private class instance vars.
     //
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.be_sort_order_ascending := TRUE;
     p.num_datagrid_rows := 0;
     p.sort_order := 'service_name';
@@ -183,7 +184,7 @@ end;
 
 procedure TWebForm_all_emsof_requests.Bind;
 begin
-  TClass_biz_emsof_requests.Create.BindOverviewAll
+  p.biz_emsof_requests.BindOverviewAll
     (
     p.sort_order,
     p.be_sort_order_ascending,

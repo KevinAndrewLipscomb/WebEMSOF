@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                                 [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+		                                           [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
@@ -25,12 +25,20 @@
 		<asp:label id="Label_service_name" runat="server"></asp:label>&nbsp;(#
 	    <asp:label id="Label_affiliate_num" runat="server"></asp:label>)</h3>
 	  <p>
-        <table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_action_required" runat="server">
-            <tr>
-              <td bgcolor="#98fb98"><strong>ACTION REQUIRED:</strong></td>
-              <td>Please review the following information, then indicate your disposition at the bottom of this form.</td>
-            </tr>
-        </table></p>
+		<table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_action_required" runat="server">
+			<tr>
+			  <td bgcolor="#98fb98"><strong>ACTION REQUIRED:</strong></td>
+			  <td>Please review the following information, then indicate your disposition at the bottom of this form.</td>
+			</tr>
+		</table>
+		<table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_action_pending" runat="server">
+			<tr>
+			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
+			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
+				          that the pending action has been completed.</td>
+			</tr>
+		</table>
+	  </p>
 	  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
         <tr>
           <td>
@@ -91,6 +99,31 @@
           </td>
         </tr>
 	  </table>
+      <p>
+		<table id="Table_prior_approvals" bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" runat="server">
+            <tr><td>
+                <table cellspacing="0" cellpadding="5" border="0">
+      <tr>
+                      <td bgcolor="#f5f5f5" colspan="2"><strong>Prior approvals</strong></td>
+			  </tr>
+	  <tr>
+		<td><ASP:Label id="Label_sponsor_county_2" runat="server"></ASP:Label>&nbsp;County:</td>
+		<td><ASP:Label id="Label_county_approval_timestamp" runat="server"></ASP:Label></td>
+	  </tr>
+	  <tr id="TableRow_regional_planner_approval_timestamp" runat="server">
+		<td>
+                        <ASP:Label id="Label_region_name_1" runat="server"></ASP:Label>&nbsp;planner:</td>
+		<td><ASP:Label id="Label_regional_planner_approval_timestamp" runat="server"></ASP:Label></td>
+	  </tr>
+	  <tr id="TableRow_regional_exec_dir_approval_timestamp" runat="server">
+		<td>
+                        <ASP:Label id="Label_region_name_2" runat="server"></ASP:Label>&nbsp;Executive Director:</td>
+		<td><ASP:Label id="Label_regional_exec_dir_approval_timestamp" runat="server"></ASP:Label></td>
+	  </tr>
+				</table></td>
+			</tr>
+        </table>
+      </p>
 	  <p></p>
       <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
         <tr>
@@ -166,27 +199,27 @@
 	  </table>
 	  <p></p>
 	  <table cellspacing="0" cellpadding="0" border="1" id="Table_disposition" runat="server" bordercolor="#98fb98">
-        <tr>
-          <td>
-            <table cellspacing="0" cellpadding="10" border="0">
-              <tr>
+		<tr>
+		  <td>
+			<table cellspacing="0" cellpadding="10" border="0">
+			  <tr>
 				<td bgcolor="#98fb98">
-                  <strong>Disposition</strong>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p>
-                    If you are not ready to disposition this 
-					request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
+				  <strong>Disposition</strong>
+				</td>
+			  </tr>
+			  <tr>
+				<td>
+				  <p>
+					If you are not ready to disposition this
+					          request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>
 				<td>
 				  <table cellspacing="0" cellpadding="10" border="0">
 					<tr>
-					  <td bgcolor="#f5f5f5"><strong>To APPROVE and send to 
-                                <ASP:Label id="Label_next_approver" runat="server"></ASP:Label>...</strong></td>
+					  <td bgcolor="#f5f5f5"><strong>To APPROVE and send to
+								<ASP:Label id="Label_next_reviewer" runat="server"></ASP:Label>...</strong></td>
 					</tr>
 					<tr>
 					  <td>
@@ -222,13 +255,52 @@
 					</tr>
 				  </table>
 				</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+	  </table>
+	  <table cellspacing="0" cellpadding="0" border="1" id="Table_mark_done" runat="server" bordercolor="#98fb98">
+		<tr>
+		  <td>
+			<table cellspacing="0" cellpadding="10" border="0">
+			  <tr>
+				<td bgcolor="#98fb98">
+				  <strong>Action pending</strong>
+				</td>
+			  </tr>
+			  <tr>
+				<td>
+				  <p>The current status of this request in WebEMSOF is 
+                        <ASP:Label id="Label_current_status" runat="server" font-bold="True"></ASP:Label>.</p>
+				</td>
+			  </tr>
+			  <tr id="TableRow_printable_version" runat="server">
+				<td><ASP:HyperLink id="HyperLink_printable_version" runat="server" enabled="False">Printable version of request</ASP:HyperLink></td>
+			  </tr>
+			  <tr>
+				<td>
+				  <table cellspacing="0" cellpadding="10" border="0">
+					<tr>
+					  <td bgcolor="#f5f5f5"><strong>To mark the pending action as DONE...</td>
+					</tr>
+					<tr>
+					  <td>
+						Check&nbsp;
+						<asp:checkbox id="CheckBox_mark_done" runat="server">
+						</asp:checkbox>&nbsp;and click
+						<asp:button id="Button_mark_done" runat="server" text="DONE"></asp:button>.
+					  </td>
+					</tr>
+				  </table>
+				</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
 	  </table>
 	  <p></p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
-    </form>
+	</form>
   </body>
 </html>
