@@ -31,7 +31,7 @@ type
       );
     procedure MakePromotionNotification
       (
-      role: string;
+      next_reviewer_role: string;
       reviewer_descriptor: string;
       new_status_description: string;
       service_id: string;
@@ -209,7 +209,7 @@ end;
 
 procedure TClass_biz_accounts.MakePromotionNotification
   (
-  role: string;
+  next_reviewer_role: string;
   reviewer_descriptor: string;
   new_status_description: string;
   service_id: string;
@@ -217,62 +217,66 @@ procedure TClass_biz_accounts.MakePromotionNotification
   fy_designator: string
   );
 var
-  next_approver_email_target: string;
+  messageText: string;
+  next_reviewer_email_target: string;
 begin
   //
   //   Get the next approver's email address.
   //
-  if role = 'county' then begin
-    next_approver_email_target := EmailTargetByRole('emsof-planner');
-  end else if role = 'regional_planner' then begin
-    next_approver_email_target := EmailTargetByRole('director');
-  end else if role = 'regional_director' then begin
-    next_approver_email_target := EmailTargetByRole('emsof-coordinator');
+  if next_reviewer_role <> system.string.EMPTY then begin
+    next_reviewer_email_target := EmailTargetByRole(next_reviewer_role);
+  end else begin
+    next_reviewer_email_target := system.string.EMPTY
   end;
+  //
+  messageText := reviewer_descriptor + ' has promoted ' + service_name + '''s '+ fy_designator + ' EMSOF request.' + NEW_LINE
+    + NEW_LINE
+    + 'The status of this EMSOF request is now "' + new_status_description + '".  ';
+  if next_reviewer_email_target <> system.string.EMPTY then begin
+    messageText := messageText + 'The next reviewer''s email address is <' + next_reviewer_email_target + '>.';
+  end;
+  messageText := messageText
+  + NEW_LINE
+  + NEW_LINE
+  + 'NOTE that this message is *not* a "Notice To Proceed", so you must *not* purchase any of the items in your EMSOF request '
+  + 'yet.' + NEW_LINE
+  + NEW_LINE
+  + 'You can review your EMSOF requests by visiting:' + NEW_LINE
+  + NEW_LINE
+  + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+  + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
+  + NEW_LINE
+  + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
+  + NEW_LINE
+  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   //
   //   Send notification to service.
   //
-  smtpmail.Send
-    (
-    SelfEmailAddress,
-    EmailAddressByKindId('service',service_id),
-    'Approval of EMSOF request',
-    reviewer_descriptor + ' has approved ' + service_name + '''s '+ fy_designator + ' EMSOF request.' + NEW_LINE
-    + NEW_LINE
-    + 'The status of this EMSOF request is now "' + new_status_description + '".  The next approver''s email address is <'
-    + next_approver_email_target + '>.' + NEW_LINE
-    + NEW_LINE
-    + 'You can review your EMSOF requests by visiting:' + NEW_LINE
-    + NEW_LINE
-    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-    + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
-    + NEW_LINE
-    + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
-    + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
-    );
+  smtpmail.Send(SelfEmailAddress,EmailAddressByKindId('service',service_id),'Promotion of EMSOF request',messageText);
   //
   //   Send notification to region.
   //
-  smtpmail.Send
-    (
-    SelfEmailAddress,
-    next_approver_email_target,
-    'Promotion of EMSOF request',
-    reviewer_descriptor + ' has approved ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
-    + NEW_LINE
-    + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
-    + NEW_LINE
-    + 'You can review this EMSOF request by visiting:' + NEW_LINE
-    + NEW_LINE
-    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-    + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
-    + NEW_LINE
-    + 'Replies to this message will be addressed to ' + reviewer_descriptor
-    + NEW_LINE
-    + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
-    );
+  if next_reviewer_email_target <> system.string.EMPTY then begin
+    smtpmail.Send
+      (
+      SelfEmailAddress,
+      next_reviewer_email_target,
+      'Promotion of EMSOF request',
+      reviewer_descriptor + ' has promoted ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
+      + NEW_LINE
+      + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
+      + NEW_LINE
+      + 'You can review this EMSOF request by visiting:' + NEW_LINE
+      + NEW_LINE
+      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
+      + NEW_LINE
+      + 'Replies to this message will be addressed to ' + reviewer_descriptor
+      + NEW_LINE
+      + NEW_LINE
+      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      );
+  end;
 end;
 
 end.

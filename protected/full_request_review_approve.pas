@@ -33,6 +33,7 @@ type
     procedure TWebForm_full_request_review_approve_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_mark_done_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
@@ -71,9 +72,25 @@ type
     TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
     Table_action_required: System.Web.UI.HtmlControls.HtmlTable;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
-    Label_next_approver: System.Web.UI.WebControls.Label;
+    Label_next_reviewer: System.Web.UI.WebControls.Label;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
     LinkButton_back_2: System.Web.UI.WebControls.LinkButton;
+    CheckBox_mark_done: System.Web.UI.WebControls.CheckBox;
+    Button_mark_done: System.Web.UI.WebControls.Button;
+    Table_action_pending: System.Web.UI.HtmlControls.HtmlTable;
+    Table_mark_done: System.Web.UI.HtmlControls.HtmlTable;
+    Label_current_status: System.Web.UI.WebControls.Label;
+    Label_sponsor_county_2: System.Web.UI.WebControls.Label;
+    Label_county_approval_timestamp: System.Web.UI.WebControls.Label;
+    Label_regional_planner_approval_timestamp: System.Web.UI.WebControls.Label;
+    Label_regional_exec_dir_approval_timestamp: System.Web.UI.WebControls.Label;
+    Table_prior_approvals: System.Web.UI.HtmlControls.HtmlTable;
+    TableRow_regional_planner_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_regional_exec_dir_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
+    Label_region_name_1: System.Web.UI.WebControls.Label;
+    Label_region_name_2: System.Web.UI.WebControls.Label;
+    HyperLink_printable_version: System.Web.UI.WebControls.HyperLink;
+    TableRow_printable_version: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -93,9 +110,10 @@ begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
+  Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_Click);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
-  Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_Click);
+  Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_full_request_review_approve_PreRender);
 end;
@@ -106,6 +124,9 @@ procedure TWebForm_full_request_review_approve.Page_Load
   sender: System.Object;
   e: System.EventArgs
   );
+var
+  request_id: string;
+  status: Class_biz_emsof_requests.status_type;
 begin
   AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback then begin
@@ -121,6 +142,11 @@ begin
     p.num_items := 0;
     p.total_emsof_ante := 0;
     //
+    // Initialize local vars.
+    //
+    request_id := p.biz_emsof_requests.IdOf(session['e_item']);
+    status := p.biz_emsof_requests.StatusOf(session['e_item']);
+    //
     Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
     Label_affiliate_num.text := p.biz_emsof_requests.AffiliateNumOf(session['e_item']);
@@ -133,15 +159,40 @@ begin
     Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
     Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
     //
-    p.biz_emsof_requests.BindDetail(p.biz_emsof_requests.IdOf(session['e_item']),DataGrid_items);
+    Table_prior_approvals.visible := FALSE;
+    TableRow_regional_planner_approval_timestamp.visible := FALSE;
+    TableRow_regional_exec_dir_approval_timestamp.visible := FALSE;
+    TableRow_printable_version.visible := FALSE;
+    //
+    if status > NEEDS_COUNTY_APPROVAL then begin
+      Table_prior_approvals.visible := TRUE;
+      Label_sponsor_county_2.text := Label_sponsor_county.text;
+      Label_county_approval_timestamp.text :=
+        p.biz_emsof_requests.CountyApprovalTimestampOf(request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
+      if status > NEEDS_REGIONAL_COMPLIANCE_CHECK then begin
+        TableRow_regional_planner_approval_timestamp.visible := TRUE;
+        Label_region_name_1.text := p.biz_emsof_requests.SponsorRegionNameOf(p.biz_emsof_requests.IdOf(session['e_item']));
+        Label_regional_planner_approval_timestamp.text :=
+          p.biz_emsof_requests.RegionalPlannerApprovalTimestampOf(request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
+        if status > NEEDS_REGIONAL_EXEC_DIR_APPROVAL then begin
+          TableRow_regional_exec_dir_approval_timestamp.visible := TRUE;
+          Label_region_name_2.text := Label_region_name_1.text;
+          Label_regional_exec_dir_approval_timestamp.text :=
+            p.biz_emsof_requests.RegionalExecDirApprovalTimestampOf(request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
+          TableRow_printable_version.visible := (status = NEEDS_SENT_TO_PA_DOH_EMSO);
+        end;
+      end;
+    end;
+    //
+    p.biz_emsof_requests.BindDetail(request_id,DataGrid_items);
     //
     Label_sum_of_emsof_antes.text := p.total_emsof_ante.tostring('C');
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
-    if p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.biz_emsof_requests.StatusOf(session['e_item'])) then begin
-      Label_next_approver.text :=
-        p.biz_emsof_requests.NextApprover(p.biz_emsof_requests.StatusOf(session['e_item']));
+    if p.biz_emsof_requests.BeOkToApproveEmsofRequest(status) then begin
+      Label_next_reviewer.text :=
+        p.biz_emsof_requests.NextReviewer(status);
       if datetime.Now <= p.biz_emsof_requests.ReworkDeadline(session['e_item']) then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
@@ -154,6 +205,13 @@ begin
       Table_disposition.visible := FALSE;
     end;
     //
+    if p.biz_emsof_requests.BeOkToMarkDone(status) then begin
+      Label_current_status.text := system.object(status).tostring;
+    end else begin
+      Table_action_pending.visible := FALSE;
+      Table_mark_done.visible := FALSE;
+    end;
+    //
   end;
 end;
 
@@ -164,6 +222,15 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.Button_mark_done_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  if CheckBox_mark_done.checked then begin
+    p.biz_emsof_requests.MarkDone(session['e_item'],session['account_descriptor'].tostring);
+    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+  end;
 end;
 
 procedure TWebForm_full_request_review_approve.LinkButton_back_Click(sender: System.Object;
@@ -204,7 +271,7 @@ procedure TWebForm_full_request_review_approve.Button_approve_Click
   );
 begin
   if CheckBox_approve.checked then begin
-    p.biz_emsof_requests.Promote(session['e_item'],session['account_descriptor'].tostring);
+    p.biz_emsof_requests.Approve(session['e_item'],session['account_descriptor'].tostring);
     server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
   end;
 end;

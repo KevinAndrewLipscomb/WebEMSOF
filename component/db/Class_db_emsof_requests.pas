@@ -12,6 +12,13 @@ const
   ID = '$Id$';
 
 type
+  approval_timestamp_column_type =
+    (
+    COUNTY,
+    REGIONAL_PLANNER,
+    REGIONAL_DIRECTOR,
+    STATE
+    );
   TClass_db_emsof_requests = class(Class_db.TClass_db)
   private
     procedure BindOverview
@@ -25,6 +32,13 @@ type
   public
     constructor Create;
     function AffiliateNumOf(e_item: system.object): string;
+    procedure Approve
+      (
+      master_id: string;
+      next_status: cardinal;
+      user_kind: string;
+      approval_timestamp_column: approval_timestamp_column_type 
+      );
     procedure BindDetail
       (
       master_id: string;
@@ -58,6 +72,7 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
       (
       master_id: string;
@@ -67,19 +82,21 @@ type
       );
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
-    function PropertyNameOfEmsofAnte: string;
-    procedure Promote
+    procedure MarkDone
       (
       master_id: string;
       next_status: cardinal;
-      user_kind: string;
-      role: string
+      user_kind: string
       );
+    function PropertyNameOfEmsofAnte: string;
+    function RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
+    function RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
     function SponsorCountyCodeOf(e_item: system.object): string;
     function SponsorCountyNameOf(e_item: system.object): string;
+    function SponsorRegionNameOf(master_id: string): string;
     function StatusCodeOf(e_item: system.object): cardinal;
     function SumOfRequestValues
       (
@@ -126,7 +143,9 @@ var
   cmdText: string;
   where_clause: string;
 begin
-  if where_parm <> system.string.EMPTY then begin
+  if where_parm = system.string.EMPTY then begin
+    where_clause := system.string.EMPTY;
+  end else begin
     where_clause := 'where ' + where_parm;
     if and_parm <> system.string.EMPTY then begin
       where_clause := where_clause + ' and ' + and_parm;
@@ -178,6 +197,35 @@ end;
 function TClass_db_emsof_requests.AffiliateNumOf(e_item: system.object): string;
 begin
   AffiliateNumOf := Safe(DataGridItem(e_item).cells[TCCI_AFFILIATE_NUM].text,NUM);
+end;
+
+procedure TClass_db_emsof_requests.Approve
+  (
+  master_id: string;
+  next_status: cardinal;
+  user_kind: string;
+  approval_timestamp_column: approval_timestamp_column_type
+  );
+var
+  cmdText: string;
+begin
+  cmdText :=
+  'update emsof_request_master'
+  + ' join county_dictated_appropriation'
+  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+  + ' set emsof_request_master.status_code = ' + next_status.tostring
+  +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()'
+  + ' where emsof_request_master.id = ' + master_id;
+  if user_kind = 'state-staffer' then begin
+    cmdText :=
+    'START TRANSACTION; '
+    + cmdText + ';'
+    + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1;'
+    + ' COMMIT';
+  end;
+  connection.Open;
+  borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
+  connection.Close;
 end;
 
 procedure TClass_db_emsof_requests.BindDetail
@@ -265,6 +313,18 @@ begin
   BindOverview(order_by_field_name,be_order_ascending,target,'status_code = ' + status.tostring);
 end;
 
+function TClass_db_emsof_requests.CountyApprovalTimestampOf(master_id: string): datetime;
+begin
+  connection.Open;
+  CountyApprovalTimestampOf := datetime
+    (
+    borland.data.provider.bdpcommand.Create
+      ('select county_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
+      .ExecuteScalar
+    );
+  connection.Close;
+end;
+
 procedure TClass_db_emsof_requests.Demote
   (
   master_id: string;
@@ -297,28 +357,16 @@ begin
   IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
 end;
 
-function TClass_db_emsof_requests.PropertyNameOfEmsofAnte: string;
-begin
-  PropertyNameOfEmsofAnte := 'emsof_ante';
-end;
-
-procedure TClass_db_emsof_requests.Promote
+procedure TClass_db_emsof_requests.MarkDone
   (
   master_id: string;
   next_status: cardinal;
-  user_kind: string;
-  role: string
+  user_kind: string
   );
 var
   cmdText: string;
 begin
-  cmdText :=
-  'update emsof_request_master'
-  + ' join county_dictated_appropriation'
-  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-  + ' set emsof_request_master.status_code = ' + next_status.tostring
-  +   ' , ' + role + '_approval_timestamp = now()'
-  + ' where emsof_request_master.id = ' + master_id;
+  cmdText := 'update emsof_request_master set status_code = ' + next_status.tostring + ' where id = ' + master_id;
   if user_kind = 'state-staffer' then begin
     cmdText :=
     'START TRANSACTION; '
@@ -328,6 +376,35 @@ begin
   end;
   connection.Open;
   borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
+  connection.Close;
+end;
+
+function TClass_db_emsof_requests.PropertyNameOfEmsofAnte: string;
+begin
+  PropertyNameOfEmsofAnte := 'emsof_ante';
+end;
+
+function TClass_db_emsof_requests.RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
+begin
+  connection.Open;
+  RegionalExecDirApprovalTimestampOf := datetime
+    (
+    borland.data.provider.bdpcommand.Create
+      ('select regional_director_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
+      .ExecuteScalar
+    );
+  connection.Close;
+end;
+
+function TClass_db_emsof_requests.RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
+begin
+  connection.Open;
+  RegionalPlannerApprovalTimestampOf := datetime
+    (
+    borland.data.provider.bdpcommand.Create
+      ('select regional_planner_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
+      .ExecuteScalar
+    );
   connection.Close;
 end;
 
@@ -369,6 +446,27 @@ end;
 function TClass_db_emsof_requests.SponsorCountyNameOf(e_item: system.object): string;
 begin
   SponsorCountyNameOf := Safe(DataGridItem(e_item).cells[TCCI_SPONSOR_COUNTY_NAME].text,ALPHA);
+end;
+
+function TClass_db_emsof_requests.SponsorRegionNameOf(master_id: string): string;
+begin
+  connection.Open;
+  SponsorRegionNameOf := borland.data.provider.bdpcommand.Create
+    (
+    'select name'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    +   ' join region_code_name_map on (region_code_name_map.code=state_dictated_appropriation.region_code)'
+    + ' where emsof_request_master.id = ' + master_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  connection.Close;
 end;
 
 function TClass_db_emsof_requests.StatusCodeOf(e_item: system.object): cardinal;
