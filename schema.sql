@@ -1,3 +1,5 @@
+﻿-- $Id$
+--
 -- phpMyAdmin SQL Dump
 -- version 2.6.4-pl4
 -- http://www.phpmyadmin.net
@@ -434,7 +436,8 @@ INSERT INTO regional_staffer_group (id, name) VALUES
 (2, 'emsof-coordinator'),
 (3, 'emsof-clerk'),
 (4, 'emsof-accountant'),
-(5, 'emsof-planner');
+(5, 'emsof-planner'),
+(6, 'emsof-request-withdrawal-stakeholder');
 
 -- --------------------------------------------------------
 
