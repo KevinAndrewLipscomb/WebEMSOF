@@ -1,4 +1,5 @@
--- $Id$
+﻿-- $Id$
+--
 -- phpMyAdmin SQL Dump
 -- version 2.6.4-pl4
 -- http://www.phpmyadmin.net
@@ -74,17 +75,6 @@ INSERT INTO `regional_staffer` (`id`, `region_code`, `last_name`, `first_name`) 
 (2, 1, 'Cameron', 'Amos P'),
 (3, 1, 'Arrington', 'Gloria'),
 (4, 1, 'Brown', 'Jessika');
-
---
--- Dumping data for table `regional_staffer_group`
---
-
-INSERT INTO `regional_staffer_group` (`id`, `name`) VALUES
-(1, 'director'),
-(2, 'emsof-coordinator'),
-(3, 'emsof-clerk'),
-(4, 'emsof-accountant'),
-(5, 'emsof-planner');
 
 --
 -- Dumping data for table `regional_staffer_role`
