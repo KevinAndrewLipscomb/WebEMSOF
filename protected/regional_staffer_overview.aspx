@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                     [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                      [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -119,6 +119,7 @@
 							  <td>
 								<ul>
 								  <li><p><ASP:LinkButton id="LinkButton_completed" runat="server"> request(s) COMPLETED</ASP:LinkButton></p></li>
+								  <li><p><ASP:LinkButton id="LinkButton_missed_deadlines" runat="server" enabled="False"> request(s) FAILED DEADLINE</ASP:LinkButton></p></li>
 								  <li><p><ASP:LinkButton id="LinkButton_withdrawn" runat="server"> request(s) WITHDRAWN</ASP:LinkButton></p></li>
 								  <li><p><ASP:LinkButton id="LinkButton_rejected" runat="server"> request(s) REJECTED</ASP:LinkButton></p></li>
 								</ul>

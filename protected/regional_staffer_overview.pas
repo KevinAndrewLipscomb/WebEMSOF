@@ -85,6 +85,7 @@ type
     LinkButton_set_deadlines: System.Web.UI.WebControls.LinkButton;
     LinkButton1: System.Web.UI.WebControls.LinkButton;
     LinkButton_all: System.Web.UI.WebControls.LinkButton;
+    LinkButton_missed_deadlines: System.Web.UI.WebControls.LinkButton;
     //
     procedure OnInit(e: EventArgs); override;
   private
@@ -103,6 +104,7 @@ implementation
 procedure TWebForm_regional_staffer_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_all.Click, Self.LinkButton_all_Click);
   Include(Self.LinkButton_num_requests_needing_development.Click, Self.LinkButton_num_requests_needing_development_Click);
   Include(Self.LinkButton_num_requests_needing_finalization.Click, Self.LinkButton_num_requests_needing_finalization_Click);
   Include(Self.LinkButton_num_requests_needing_county_approval.Click, Self.LinkButton_num_requests_needing_county_approval_Click);
@@ -118,7 +120,6 @@ begin
   Include(Self.LinkButton_rejected.Click, Self.LinkButton_rejected_Click);
   Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
   Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
-  Include(Self.LinkButton_all.Click, Self.LinkButton_all_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}

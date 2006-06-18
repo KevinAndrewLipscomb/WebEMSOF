@@ -14,6 +14,7 @@ const
 type
   approval_timestamp_column_type =
     (
+    NONE,
     COUNTY,
     REGIONAL_PLANNER,
     REGIONAL_DIRECTOR,
@@ -209,23 +210,25 @@ procedure TClass_db_emsof_requests.Approve
 var
   cmdText: string;
 begin
-  cmdText :=
-  'update emsof_request_master'
-  + ' join county_dictated_appropriation'
-  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-  + ' set emsof_request_master.status_code = ' + next_status.tostring
-  +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()'
-  + ' where emsof_request_master.id = ' + master_id;
-  if user_kind = 'state-staffer' then begin
+  if approval_timestamp_column <> NONE then begin
     cmdText :=
-    'START TRANSACTION; '
-    + cmdText + ';'
-    + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1;'
-    + ' COMMIT';
+    'update emsof_request_master'
+    + ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    + ' set emsof_request_master.status_code = ' + next_status.tostring
+    +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()'
+    + ' where emsof_request_master.id = ' + master_id;
+    if user_kind = 'state-staffer' then begin
+      cmdText :=
+      'START TRANSACTION; '
+      + cmdText + ';'
+      + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1;'
+      + ' COMMIT';
+    end;
+    connection.Open;
+    borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
+    connection.Close;
   end;
-  connection.Open;
-  borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
-  connection.Close;
 end;
 
 procedure TClass_db_emsof_requests.BindDetail

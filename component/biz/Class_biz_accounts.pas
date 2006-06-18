@@ -10,12 +10,21 @@ uses
   system.configuration,
   system.web.mail;
 
+const ID = '$Id$';
+
 type
   TClass_biz_accounts = class
   private
-    { Private Declarations }
+    function SelfEmailAddress: string;
   public
     constructor Create;
+    function EmailAddressByKindId
+      (
+      user_kind: string;
+      user_id: string
+      )
+      : string;
+    function EmailTargetByRole(role: string): string;
     procedure MakeDemotionNotification
       (
       role: string;
@@ -42,7 +51,14 @@ type
 
 implementation
 
-function EmailAddressByKindId
+constructor TClass_biz_accounts.Create;
+begin
+  inherited Create;
+  // TODO: Add any constructor code here
+  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
+end;
+
+function TClass_biz_accounts.EmailAddressByKindId
   (
   user_kind: string;
   user_id: string
@@ -52,24 +68,9 @@ begin
   EmailAddressByKindId := TClass_db_accounts.Create.EmailAddressByKindId(user_kind,user_id);
 end;
 
-function EmailTargetByRole(role: string): string;
+function TClass_biz_accounts.EmailTargetByRole(role: string): string;
 begin
   EmailTargetByRole := TClass_db_accounts.Create.EmailTargetByRole(role);
-end;
-
-function SelfEmailAddress: string;
-var
-  biz_user: TClass_biz_user;
-begin
-  biz_user := TClass_biz_user.Create;
-  SelfEmailAddress := EmailAddressByKindId(biz_user.Kind,biz_user.IdNum);
-end;
-
-constructor TClass_biz_accounts.Create;
-begin
-  inherited Create;
-  // TODO: Add any constructor code here
-  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
 end;
 
 procedure TClass_biz_accounts.MakeDemotionNotification
@@ -230,8 +231,8 @@ begin
   end;
   //
   messageText := reviewer_descriptor + ' has promoted ' + service_name + '''s '+ fy_designator + ' EMSOF request.' + NEW_LINE
-    + NEW_LINE
-    + 'The status of this EMSOF request is now "' + new_status_description + '".  ';
+  + NEW_LINE
+  + 'The status of this EMSOF request is now "' + new_status_description + '".  ';
   if next_reviewer_email_target <> system.string.EMPTY then begin
     messageText := messageText + 'The next reviewer''s email address is <' + next_reviewer_email_target + '>.';
   end;
@@ -260,9 +261,9 @@ begin
     smtpmail.Send
       (
       SelfEmailAddress,
-      next_reviewer_email_target,
+        next_reviewer_email_target,
       'Promotion of EMSOF request',
-      reviewer_descriptor + ' has promoted ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
+        reviewer_descriptor + ' has promoted ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
       + NEW_LINE
       + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
       + NEW_LINE
@@ -277,6 +278,14 @@ begin
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
   end;
+end;
+
+function TClass_biz_accounts.SelfEmailAddress: string;
+var
+  biz_user: TClass_biz_user;
+begin
+  biz_user := TClass_biz_user.Create;
+  SelfEmailAddress := EmailAddressByKindId(biz_user.Kind,biz_user.IdNum);
 end;
 
 end.
