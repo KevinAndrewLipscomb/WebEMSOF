@@ -486,6 +486,7 @@ function TClass_db_emsof_requests.SumOfRequestValues
   : decimal;
 var
   cmdText: string;
+  sum_obj: system.object;
 begin
   if user_kind = 'regional_staffer' then begin
     cmdText := 'select sum(value)'
@@ -512,8 +513,13 @@ begin
     +   ' and fiscal_year_id = ' + fy_id;
   end;
   connection.Open;
-  SumOfRequestValues := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
   connection.Close;
+  if sum_obj <> dbnull.value then begin
+    SumOfRequestValues := decimal(sum_obj);
+  end else begin
+    SumOfRequestValues := 0;
+  end;
 end;
 
 function TClass_db_emsof_requests.TallyByStatus(status: cardinal): cardinal;
