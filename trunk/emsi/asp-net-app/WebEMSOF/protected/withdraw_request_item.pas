@@ -6,8 +6,13 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, system.web.mail,
-  borland.data.provider, system.web.security;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  AppCommon,
+  borland.data.provider,
+  Class_biz_accounts,
+  system.configuration,
+  system.web.mail,
+  system.web.security;
 
 const ID = '$Id$';
 
@@ -16,8 +21,6 @@ type
     RECORD
     saved_emsof_ante: decimal;
     END;
-
-type
   TWebForm_withdraw_request_item = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -112,15 +115,15 @@ begin
   server.Transfer('request_overview.aspx');
 end;
 
-procedure TWebForm_withdraw_request_item.Button_yes_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebForm_withdraw_request_item.Button_yes_Click
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
 var
-  bdr: borland.data.provider.bdpdatareader;
-  recipient_list_string: string;
-  service_email_address: string;
+  biz_accounts: TClass_biz_accounts;
 begin
   appcommon.DbOpen;
-  //
   borland.data.provider.bdpcommand.Create
     (
     'START TRANSACTION;'
@@ -140,37 +143,16 @@ begin
     appcommon.db
     )
     .ExecuteNonQuery;
+  appcommon.DbClose;
   //
   // Send the notification message.
   //
-  //   Build the recipient list
-  //
-  bdr := borland.data.provider.bdpcommand.Create
-    (
-    'select password_reset_email_address as email_address'
-    + ' from regional_staffer_user'
-    +   ' join regional_staffer_role on (regional_staffer_role.regional_staffer_id=regional_staffer_user.id)'
-    + ' where title = "emsof-request-item-withdrawal-notice-recipient"',
-    appcommon.db
-    )
-    .ExecuteReader;
-  bdr.Read;
-  recipient_list_string := bdr['email_address'].tostring;
-  while bdr.Read do begin
-    recipient_list_string := recipient_list_string + ',' + bdr['email_address'].tostring;
-  end;
-  //
-  //   Get the service's email address.
-  //
-  service_email_address := borland.data.provider.bdpcommand.Create
-    ('select password_reset_email_address from service_user where id = ' + session['service_user_id'].tostring,appcommon.db)
-    .ExecuteScalar.tostring;
-  //
+  biz_accounts := TClass_biz_accounts.Create;
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
-    service_email_address,
-    recipient_list_string,
+    biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring),
+    biz_accounts.EmailTargetByRole('emsof-request-withdrawal-stakeholder'),
     'Withdrawal of EMSOF request item',
     session['service_name'].ToString + ' has withdrawn a(n) "' + Label_description.text + '" item from their '
     + session['fiscal_year_designator'].tostring + ' EMSOF request.  The associated sponsor county is '
@@ -191,7 +173,6 @@ begin
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
   //
-  appcommon.DbClose;
   server.Transfer('request_overview.aspx');
 end;
 

@@ -138,13 +138,12 @@ procedure TClass_biz_emsof_requests.Approve
   promoter: string
   );
 var
-  approvable: boolean;
+  approval_timestamp_column: Class_db_emsof_requests.approval_timestamp_column_type;
   next_approver_role: string;
   next_status: status_type;
   reviewer_descriptor: string;
-  approval_timestamp_column: Class_db_emsof_requests.approval_timestamp_column_type;
 begin
-  approvable := TRUE;
+  approval_timestamp_column := NONE;
   next_status := StatusOf(e_item); // Better initialize it to something.
   case StatusOf(e_item) of
   NEEDS_COUNTY_APPROVAL:
@@ -175,10 +174,8 @@ begin
     reviewer_descriptor := 'State staffer ' + promoter;
     next_status := NEEDS_INVOICE_COLLECTION;
     END;
-  else
-    approvable := FALSE;
   end;
-  if approvable then begin
+  if approval_timestamp_column <> NONE then begin
     db_emsof_requests.Approve(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,approval_timestamp_column);
     if next_status <> NEEDS_INVOICE_COLLECTION then begin
       TClass_biz_accounts.Create.MakePromotionNotification
