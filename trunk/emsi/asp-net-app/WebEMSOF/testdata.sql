@@ -85,7 +85,9 @@ INSERT INTO `regional_staffer_role` (`id`, `user_id`, `group_id`) VALUES
 (2, 2, 2),
 (3, 2, 5),
 (4, 3, 4),
-(5, 4, 3);
+(5, 4, 3),
+(6, 1, 6),
+(7, 2, 6);
 
 --
 -- Dumping data for table `regional_staffer_user`
