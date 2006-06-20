@@ -504,12 +504,13 @@ var
   total_cost: decimal;
   unit_cost: decimal;
 begin
-  if (TextBox_unit_cost.text <> system.string.EMPTY) and (TextBox_quantity.text <> system.string.EMPTY) then begin
+  if (Safe(TextBox_unit_cost.text,REAL_NUM) <> system.string.EMPTY) and (Safe(TextBox_quantity.text,NUM) <> system.string.EMPTY)
+  then begin
     //
-    unit_cost := decimal.Parse(TextBox_unit_cost.text);
-    quantity := decimal.Parse(TextBox_quantity.text);
+    unit_cost := decimal.Parse(Safe(TextBox_unit_cost.text,REAL_NUM));
+    quantity := decimal.Parse(Safe(TextBox_quantity.text,NUM));
     if TextBox_additional_service_ante.text <> system.string.EMPTY then begin
-      p.additional_service_ante := decimal.Parse(TextBox_additional_service_ante.text);
+      p.additional_service_ante := decimal.Parse(Safe(TextBox_additional_service_ante.text,REAL_NUM));
     end else begin
       p.additional_service_ante := 0;
     end;

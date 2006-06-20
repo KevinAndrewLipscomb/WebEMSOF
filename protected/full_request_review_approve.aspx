@@ -180,7 +180,7 @@
 							  <td><%# DataBinder.Eval(Container.DataItem, "allowable_cost", "{0:C}") %></td>
 							</tr>
 							<tr>
-							  <td>EMSOF ante/effective match level:</td>
+							  <td>EMSOF amount/effective match level:</td>
 							  <td>
 								<strong><%# DataBinder.Eval(Container.DataItem, "emsof_ante", "{0:C}") %></strong>&nbsp;
 																																																																																																																																																																																																																																																																(<%# DataBinder.Eval(Container.DataItem, "effective_match_level", "{0:P0}") %>)
