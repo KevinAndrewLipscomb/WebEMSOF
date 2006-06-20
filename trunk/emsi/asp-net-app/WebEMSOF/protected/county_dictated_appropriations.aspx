@@ -159,7 +159,7 @@
                           <ASP:BoundColumn visible="False" datafield="county_code" sortexpression="county_code" readonly="True"></ASP:BoundColumn>
                           <ASP:BoundColumn visible="False" datafield="sponsor_county" sortexpression="sponsor_county" readonly="True" headertext="Sponsor county"></ASP:BoundColumn>
                           <ASP:BoundColumn visible="False" datafield="fiscal_year_designator" sortexpression="fiscal_year_designator" readonly="True" headertext="Cycle"></ASP:BoundColumn>
-                          <ASP:BoundColumn visible="False" datafield="emsof_ante" sortexpression="emsof_ante" headertext="EMSOF ante" dataformatstring="{0:C}">
+                          <ASP:BoundColumn visible="False" datafield="emsof_ante" sortexpression="emsof_ante" headertext="EMSOF amount" dataformatstring="{0:C}">
                             <ItemStyle horizontalalign="Right"></ItemStyle>
                           </ASP:BoundColumn>
                           <ASP:BoundColumn datafield="appropriation" sortexpression="appropriation" headertext="Amount" dataformatstring="{0:C}"></ASP:BoundColumn>

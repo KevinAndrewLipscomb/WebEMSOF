@@ -122,7 +122,7 @@
                             </ASP:BoundColumn>
                             <ASP:BoundColumn visible="False" datafield="code" readonly="True"></ASP:BoundColumn>
                             <ASP:BoundColumn datafield="item_description" readonly="True" headertext="Description"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF ante" dataformatstring="{0:C}">
+                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF amount" dataformatstring="{0:C}">
                               <ItemStyle horizontalalign="Right"></ItemStyle>
                             </ASP:BoundColumn>
                             <ASP:BoundColumn datafield="status" readonly="True" headertext="Status"></ASP:BoundColumn>
