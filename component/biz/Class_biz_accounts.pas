@@ -3,7 +3,7 @@ unit Class_biz_accounts;
 interface
 
 uses
-  appcommon,
+  ki.common,
   borland.vcl.sysutils,
   Class_biz_user,
   Class_db_accounts,
@@ -96,8 +96,8 @@ begin
   //
   service_email_address := EmailAddressByKindId('service',service_id);
   //
-  BreakChars[1] := appcommon.SPACE;
-  BreakChars[2] := appcommon.TAB;
+  BreakChars[1] := ki.common.SPACE;
+  BreakChars[2] := ki.common.TAB;
   BreakChars[3] := '-';
   //
   if be_ok_to_rework then begin

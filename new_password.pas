@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common,
   Borland.Data.Provider, system.web.mail, system.configuration;
 
 const ID = '$Id$';
@@ -50,11 +50,11 @@ var
   email_address: string;
   temporary_password: string[8];
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
-    appcommon.DbOpen;
+    ki.common.DbOpen;
     Label_user_name.Text := session[session['target_user_table'].ToString + '_name'].ToString;
     if session['target_user_table'].tostring = 'county' then begin
       Label_user_name.Text := Label_user_name.Text + ' County';
@@ -70,10 +70,10 @@ begin
     borland.data.provider.bdpcommand.Create
       (
       'update ' + session['target_user_table'].ToString + '_user'
-      + ' set encoded_password = "' + appcommon.Digest(temporary_password) + '",'
+      + ' set encoded_password = "' + ki.common.Digest(temporary_password) + '",'
       +   ' be_stale_password = TRUE '
       + ' where id = ' + session[session['target_user_table'].ToString + '_user_id'].ToString,
-      appcommon.db
+      ki.common.db
       )
       .ExecuteNonQuery;
     //
@@ -83,7 +83,7 @@ begin
       (
       'select password_reset_email_address from ' + session['target_user_table'].ToString + '_user '
       + 'where id ="' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteScalar.tostring;
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
@@ -115,7 +115,7 @@ begin
     //
     Label_email_address.Text := email_address;
     //
-    appcommon.DbClose;
+    ki.common.DbClose;
     end;
 end;
 

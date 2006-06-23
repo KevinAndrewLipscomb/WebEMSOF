@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
   system.web.mail, system.web.security;
 
 const ID = '$Id$';
@@ -92,7 +92,7 @@ var
   grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
     //
@@ -108,7 +108,7 @@ begin
         Label_unused_amount.text := decimal(session['unused_amount']).tostring('C');
       end;
       //
-      appcommon.DbOpen;
+      ki.common.DbOpen;
       //
       // Set Label_grand_total_cost.
       //
@@ -116,7 +116,7 @@ begin
         (
         'select sum(unit_cost*quantity) from emsof_request_detail'
         + ' where master_id = ' + session['emsof_request_master_id'].tostring,
-        appcommon.db
+        ki.common.db
         )
         .ExecuteScalar;
       if grand_total_cost_obj = dbnull.value then begin
@@ -144,7 +144,7 @@ begin
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-purchase-completion-deadline"',
-        appcommon.db
+        ki.common.db
         )
         .ExecuteReader;
       bdr.Read;
@@ -157,7 +157,7 @@ begin
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-invoice-submission-deadline"',
-        appcommon.db
+        ki.common.db
         )
         .ExecuteReader;
       bdr.Read;
@@ -170,7 +170,7 @@ begin
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-canceled-check-submission-deadline"',
-        appcommon.db
+        ki.common.db
         )
         .ExecuteReader;
       bdr.Read;
@@ -178,7 +178,7 @@ begin
         datetime.Parse(bdr['emsof_service_canceled_check_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
       bdr.Close;
       //
-      appcommon.DbClose;
+      ki.common.DbClose;
       //
     end else begin
       Table_summary.visible := FALSE;
@@ -220,21 +220,21 @@ begin
     and CheckBox_understand_wait_for_approval_to_order.checked
   then begin
     //
-    appcommon.DbOpen;
+    ki.common.DbOpen;
     //
     // Update database.
     //
     borland.data.provider.bdpcommand.Create
       (
       'update emsof_request_master set status_code = 3 where id = ' + session['emsof_request_master_id'].tostring,
-      appcommon.db
+      ki.common.db
       )
       .ExecuteNonQuery;
     //
     // Update the appropriate session object.
     //
     emsof_request_master_status := borland.data.provider.bdpcommand.Create
-      ('select description from request_status_code_description_map where code = 3',appcommon.db)
+      ('select description from request_status_code_description_map where code = 3',ki.common.db)
       .ExecuteScalar.tostring;
     session.Remove('emsof_request_master_status');
     session.Add('emsof_request_master_status',emsof_request_master_status);
@@ -245,7 +245,7 @@ begin
     service_email_address := borland.data.provider.bdpcommand.Create
       (
       'select password_reset_email_address from service_user where id ="' + session['service_user_id'].tostring + '"',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteScalar.tostring;
     //   Set up the command to get the County Coorindator's email address.
@@ -257,7 +257,7 @@ begin
       +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
       +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
       + ' where county_dictated_appropriation.id = ' + session['county_dictated_appropriation_id'].tostring,
-      appcommon.db
+      ki.common.db
       )
       .ExecuteScalar.tostring;
     //
@@ -282,7 +282,7 @@ begin
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
-    appcommon.DbClose;
+    ki.common.DbClose;
     //
     server.Transfer('request_overview.aspx');
     //

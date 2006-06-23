@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  AppCommon,
+  ki.common,
   borland.data.provider,
   Class_biz_accounts,
   system.configuration,
@@ -70,7 +70,7 @@ end;
 
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback then begin
     p := p_type(session['p']);
   end else begin
@@ -123,7 +123,7 @@ procedure TWebForm_withdraw_request_item.Button_yes_Click
 var
   biz_accounts: TClass_biz_accounts;
 begin
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
     'START TRANSACTION;'
@@ -140,10 +140,10 @@ begin
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
-    appcommon.db
+    ki.common.db
     )
     .ExecuteNonQuery;
-  appcommon.DbClose;
+  ki.common.DbClose;
   //
   // Send the notification message.
   //

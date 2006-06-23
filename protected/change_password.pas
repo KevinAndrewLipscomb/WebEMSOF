@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, borland.data.provider, system.configuration,
   system.web.security;
 
 const ID = '$Id$';
@@ -61,7 +61,7 @@ end;
 
 procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
     Label_account_descriptor.Text := session[session['target_user_table'].ToString + '_name'].ToString;
@@ -101,16 +101,16 @@ begin
   //
   // Commit the data to the database.
   //
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session['target_user_table'].ToString + '_user'
-    + ' SET encoded_password = "' + appcommon.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
+    + ' SET encoded_password = "' + ki.common.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
     +   ' be_stale_password = FALSE'
     + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
-    appcommon.db
+    ki.common.db
     ).ExecuteNonQuery;
-  appcommon.DbClose;
+  ki.common.DbClose;
   server.Transfer(session['target_user_table'].ToString + '_overview.aspx');
 end;
 

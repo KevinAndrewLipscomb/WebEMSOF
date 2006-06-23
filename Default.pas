@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  appcommon,
+  ki.common,
   system.configuration,
   system.security.principal;
 
@@ -47,7 +47,7 @@ end;
 
 procedure TWebForm_Default.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - Default';
     Label_application_name.text := ConfigurationSettings.AppSettings['application_name'];

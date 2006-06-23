@@ -3,7 +3,7 @@ unit Class_db_emsof_requests;
 interface
 
 uses
-  appcommon,
+  ki.common,
   borland.data.provider,
   Class_db,
   System.Web.UI.WebControls;

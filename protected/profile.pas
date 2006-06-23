@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common,
   Borland.Data.Common, Borland.Data.Provider, System.Globalization,
   System.Data.Common, system.configuration, system.web.security;
 
@@ -88,10 +88,10 @@ var
   affiliate_num: string;
   bdr: borland.data.provider.BdpDataReader;
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
-    appcommon.DbOpen;
+    ki.common.DbOpen;
     //
     // Set Label_service_name
     //
@@ -106,7 +106,7 @@ begin
     affiliate_num := borland.data.provider.BdpCommand.Create
       (
       'SELECT affiliate_num FROM service WHERE id = ' + session['service_user_id'].ToString,
-      appcommon.db
+      ki.common.db
       )
       .ExecuteScalar.tostring;
     Label_affiliate_num.Text := affiliate_num;
@@ -131,7 +131,7 @@ begin
       + 'contact_person_phone_num '
       + 'FROM service '
       + 'WHERE affiliate_num = "' + affiliate_num + '"',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteReader;
     bdr.Read;
@@ -151,7 +151,7 @@ begin
     TextBox_contact_person_name.Text := bdr['contact_person_name'].tostring;
     TextBox_contact_person_phone_num.Text := bdr['contact_person_phone_num'].tostring;
     //
-    appcommon.DbClose;
+    ki.common.DbClose;
   end;
 end;
 
@@ -181,7 +181,7 @@ begin
   //
   // Commit the displayed data to the database.
   //
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
     'UPDATE service '
@@ -201,10 +201,10 @@ begin
     +   'contact_person_phone_num = "' + Safe(TextBox_contact_person_phone_num.Text.trim,PHONE_NUM) + '",'
     +   'be_valid_profile = TRUE '
     + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUM) + '"',
-    appcommon.db
+    ki.common.db
     )
     .ExecuteNonQuery;
-  appcommon.DbClose;
+  ki.common.DbClose;
   server.Transfer('service_overview.aspx');
 end;
 
