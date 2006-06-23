@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
   system.web.mail, system.web.security;
 
 const ID = '$Id$';
@@ -64,10 +64,10 @@ var
   bdr: borland.data.provider.bdpdatareader;
   service_name: string;
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
-    appcommon.DbOpen;
+    ki.common.DbOpen;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - delete_service_appropriation';
     //
     // Set Label_service_name_*.
@@ -90,14 +90,14 @@ begin
       +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
       + ' where county_dictated_appropriation.id = '
       +     session['id_of_appropriation_selected_for_deletion'].tostring,
-      appcommon.db
+      ki.common.db
       )
       .ExecuteReader;
     bdr.Read;
     Label_fiscal_year.text := bdr['designator'].tostring;
     Label_amount.text := decimal.Parse(session['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
     //
-    appcommon.DbClose;
+    ki.common.DbClose;
     end;
 end;
 
@@ -121,7 +121,7 @@ end;
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   //
   // Send the notification message.
   //
@@ -153,11 +153,11 @@ begin
     (
     'delete from county_dictated_appropriation where id = '
     + session['id_of_appropriation_selected_for_deletion'].tostring,
-    appcommon.db
+    ki.common.db
     )
     .ExecuteNonQuery;
   //
-  appcommon.DbClose;
+  ki.common.DbClose;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 

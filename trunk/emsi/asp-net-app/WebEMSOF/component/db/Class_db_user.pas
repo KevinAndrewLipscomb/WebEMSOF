@@ -3,7 +3,7 @@ unit Class_db_user;
 interface
 
 uses
-  appcommon,
+  ki.common,
   borland.data.provider,
   Class_db,
   system.collections;
@@ -22,7 +22,7 @@ type
       target_user_table: string;
       id: string
       )
-      : appcommon.string_array;
+      : ki.common.string_array;
   end;
 
 implementation
@@ -38,10 +38,10 @@ function TClass_db_user.RolesOf
   target_user_table: string;
   id: string
   )
-  : appcommon.string_array;
+  : ki.common.string_array;
 var
   bdr: borland.data.provider.bdpdatareader;
-  roles_of: appcommon.string_array;
+  roles_of: ki.common.string_array;
   roles_of_len: cardinal;
 begin
   connection.Open;

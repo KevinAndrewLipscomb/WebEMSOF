@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
   system.web.security;
 
 const ID = '$Id$';
@@ -55,7 +55,7 @@ end;
 
 procedure TWebForm_county_dictated_deadline.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_deadline';
     //
@@ -87,16 +87,16 @@ end;
 procedure TWebForm_county_dictated_deadline.Calendar_SelectionChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   borland.data.provider.bdpcommand.Create
     (
     'update region_dictated_appropriation'
     + ' set service_to_county_submission_deadline = "' + Calendar.selecteddate.tostring('yyyyMMdd') + '235959"'
     + ' where id = ' + session['region_dictated_appropriation_id'].tostring,
-    appcommon.db
+    ki.common.db
     )
     .ExecuteNonQuery;
-  appcommon.DbClose;
+  ki.common.DbClose;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 

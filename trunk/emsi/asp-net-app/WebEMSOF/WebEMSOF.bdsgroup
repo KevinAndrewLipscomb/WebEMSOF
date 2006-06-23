@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{F0FA2736-FBD6-4829-987F-156BF95A2578}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  <Projects>
+      <Projects Name="WebEMSOF.dll">WebEMSOF.bdsproj</Projects>
+      <Projects Name="WebEMSOF_biz.dll">component\biz\WebEMSOF_biz.bdsproj</Projects>
+      <Projects Name="WebEMSOF_db.dll">component\db\WebEMSOF_db.bdsproj</Projects>
+      <Projects Name="ki.dll">..\..\..\Documents and Settings\Administrator\My Documents\SANDBOX\kveo-it-project\foundation\dotnet\ki\ki.bdsproj</Projects>
+      <Projects Name="Targets">WebEMSOF.dll WebEMSOF_biz.dll WebEMSOF_db.dll ki.dll</Projects>
+    </Projects>
+    <Dependencies>
+      <Dependency GUID="{9E2BFA05-69B8-4F2C-9BB6-7B24F4B9B7C9}">
+        <Dependency GUID="{3C80DA79-5DE6-4E02-A8DE-74BDC4DBEE3D}"/>
+        <Dependency GUID="{0B5DAB81-FDAB-4BF5-8252-DA8112F24D92}"/>
+      </Dependency>
+      <Dependency GUID="{3C80DA79-5DE6-4E02-A8DE-74BDC4DBEE3D}">
+        <Dependency GUID="{83860F53-AC33-4F34-9E19-7BF66AE2F6B3}"/>
+        <Dependency GUID="{0B5DAB81-FDAB-4BF5-8252-DA8112F24D92}"/>
+      </Dependency>
+      <Dependency GUID="{83860F53-AC33-4F34-9E19-7BF66AE2F6B3}">
+        <Dependency GUID="{0B5DAB81-FDAB-4BF5-8252-DA8112F24D92}"/>
+      </Dependency>
+    </Dependencies>
+  </Default.Personality>
+	<StarTeamAssociation></StarTeamAssociation>
+	<StarTeamNonRelativeFiles></StarTeamNonRelativeFiles>
+</BorlandProject>

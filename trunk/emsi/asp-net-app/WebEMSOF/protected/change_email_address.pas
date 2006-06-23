@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, borland.data.provider, system.configuration,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, borland.data.provider, system.configuration,
   system.net, system.web.security;
 
 const ID = '$Id$';
@@ -65,11 +65,11 @@ procedure TWebForm_change_email_address.Page_Load(sender: System.Object; e: Syst
 var
   email_address: string;
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
-    appcommon.DbOpen;
+    ki.common.DbOpen;
     //
     // Set Label_account descriptor
     //
@@ -86,13 +86,13 @@ begin
       'SELECT password_reset_email_address '
       + 'FROM ' + session['target_user_table'].ToString + '_user '
       + 'WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteScalar.tostring;
     TextBox_nominal_email_address.Text := email_address;
     TextBox_confirmation_email_address.Text := email_address;
     //
-    appcommon.DbClose;
+    ki.common.DbClose;
     end;
 end;
 
@@ -134,7 +134,7 @@ procedure TWebForm_change_email_address.Button_submit_Click(sender: System.Objec
   e: System.EventArgs);
 begin
   if page.isvalid then begin
-    appcommon.DbOpen;
+    ki.common.DbOpen;
     //
     // Commit the data to the database.
     //
@@ -143,10 +143,10 @@ begin
       'UPDATE ' + session['target_user_table'].ToString + '_user '
       + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
       + 'WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteNonQuery;
-    appcommon.DbClose;
+    ki.common.DbClose;
     server.Transfer(session['target_user_table'].ToString + '_overview.aspx');
   end;
 end;

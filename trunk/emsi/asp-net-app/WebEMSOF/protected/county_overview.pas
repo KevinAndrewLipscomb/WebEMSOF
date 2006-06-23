@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
   system.web.security;
 
 const ID = '$Id$';
@@ -61,18 +61,18 @@ var
   county_user_email_address: string;
   max_fiscal_year_id_string: string;
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_overview';
     //
     Label_county_name.Text := session['county_name'].ToString;
     //
-    appcommon.DbOpen;
+    ki.common.DbOpen;
     bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password, password_reset_email_address FROM county_user'
       + ' where id = ' + session['county_user_id'].tostring,
-      appcommon.db
+      ki.common.db
       )
       .ExecuteReader;
     bdr.Read;
@@ -91,7 +91,7 @@ begin
       max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
-        appcommon.db
+        ki.common.db
         )
         .ExecuteScalar.tostring;
       //
@@ -106,13 +106,13 @@ begin
         +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
         + ' WHERE county_code = ' + session['county_user_id'].ToString
         +   ' and fiscal_year_id >= (' + max_fiscal_year_id_string + ' - 1)',
-        appcommon.db
+        ki.common.db
         )
         .ExecuteReader;
       while bdr.Read do begin
         RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
       end;
-      appcommon.DbClose;
+      ki.common.DbClose;
       if RadioButtonList_appropriation.items.Count = 0 then begin
         server.Transfer('no_appropriation.aspx');
       end else begin
@@ -129,7 +129,7 @@ begin
         end;
       end;
     end else begin
-      appcommon.DbClose;
+      ki.common.DbClose;
       server.Transfer('change_password.aspx');
     end;
   end;

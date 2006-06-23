@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration, borland.data.provider,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
   system.web.mail, system.web.security;
 
 const ID = '$Id$';
@@ -95,7 +95,7 @@ end;
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback then begin
     p := p_type(session['p']);
   end else begin
@@ -213,7 +213,7 @@ var
   service_id_string: string;
 begin
   service_id_string := Safe(DropDownList_services.SelectedValue,NUM);
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   //
   // Record the new appropriation.
   //
@@ -224,7 +224,7 @@ begin
     +   ' service_id = ' + service_id_string + ','
     +   ' amount = ' + p.amount.tostring + ','
     +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM),
-    appcommon.db
+    ki.common.db
     )
     .ExecuteNonQuery;
   //
@@ -237,7 +237,7 @@ begin
   max_county_dictated_appropriation_id_string := borland.data.provider.bdpcommand.Create
     (
     'select max(id) from county_dictated_appropriation',
-    appcommon.db
+    ki.common.db
     )
     .ExecuteScalar.tostring;
   //
@@ -246,7 +246,7 @@ begin
   borland.data.provider.bdpcommand.Create
     (
     'insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string,
-    appcommon.db
+    ki.common.db
     )
     .ExecuteNonQuery;
   //
@@ -257,7 +257,7 @@ begin
     (
     'select password_reset_email_address from service_user '
     + 'where id = ' + service_id_string,
-    appcommon.db
+    ki.common.db
     );
   //   Set up the command to get the appropriate fiscal year designator.
   biz_get_fy_designator := borland.data.provider.bdpcommand.Create
@@ -268,13 +268,13 @@ begin
     +   ' join region_dictated_appropriation'
     +     ' on (region_dictated_appropriation.state_dictated_appropriation_id=state_dictated_appropriation.id)'
     + ' where region_dictated_appropriation.id = ' + session['region_dictated_appropriation_id'].tostring,
-    appcommon.db
+    ki.common.db
     );
   //   Set up the command to get the County Coorindator's email address.
   biz_get_cc_email_address := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address from county_user where id = ' + session['county_user_id'].tostring,
-    appcommon.db
+    ki.common.db
     );
   //   Set up the messageText.
   messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
@@ -300,7 +300,7 @@ begin
     messageText
     );
   //
-  appcommon.DbClose;
+  ki.common.DbClose;
 end;
 
 procedure TWebForm_create_new_service_appropriation.Bind_services;
@@ -308,7 +308,7 @@ var
   bdr_services: borland.data.provider.BdpDataReader;
   cmdText: string;
 begin
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   DropDownList_services.Items.Clear;
   DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
   //
@@ -318,11 +318,11 @@ begin
   end;
   cmdText := cmdText + 'ORDER BY name';
   //
-  bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,appcommon.db).ExecuteReader;
+  bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,ki.common.db).ExecuteReader;
   while bdr_services.Read do begin
     DropDownList_services.Items.Add(listitem.Create(bdr_services['name'].tostring,bdr_services['id'].ToString));
   end;
-  appcommon.DbClose;
+  ki.common.DbClose;
 end;
 
 end.

@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  AppCommon, Borland.Data.Provider, System.Globalization,
+  ki.common, Borland.Data.Provider, System.Globalization,
   System.Data.SqlClient, System.Data.Common, system.configuration,
   system.text.regularexpressions, system.web.security, system.io;
 
@@ -71,7 +71,7 @@ end;
 
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
     Label_application_name.text := configurationsettings.appsettings['application_name'];
@@ -92,16 +92,16 @@ procedure TWebForm_login.CustomValidator_account_exists_ServerValidate(source: S
 var
   obj: system.object;
 begin
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   obj := Borland.Data.Provider.BdpCommand.Create
     (
     'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD) + '_user'
     +  ' where id = ' + Safe(DropDownList_user.selectedvalue,NUM)
-    +     ' and encoded_password = "' + appcommon.Digest(Safe(TextBox_password.Text.trim,ALPHANUM)) + '"'
-    ,appcommon.db
+    +     ' and encoded_password = "' + ki.common.Digest(Safe(TextBox_password.Text.trim,ALPHANUM)) + '"'
+    ,ki.common.db
     )
     .ExecuteScalar;
-  appcommon.DbClose;
+  ki.common.DbClose;
   args.isvalid := (obj <> nil);
 end;
 
@@ -119,7 +119,7 @@ procedure TWebForm_login.DropDownList_user_kind_SelectedIndexChanged(sender: Sys
 var
   bdr: borland.data.provider.BdpDataReader;
 begin
-  appcommon.DbOpen;
+  ki.common.DbOpen;
   session.Remove('target_user_table');
   session.Add('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD));
   Label_user.enabled := TRUE;
@@ -130,7 +130,7 @@ begin
     bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ORDER BY name',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteReader;
     while bdr.Read do begin
@@ -144,7 +144,7 @@ begin
       + 'FROM county_user JOIN county_code_name_map on (county_code_name_map.code = county_user.id) '
       + 'WHERE be_active = TRUE '
       + 'ORDER BY name',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteReader;
     while bdr.Read do begin
@@ -158,7 +158,7 @@ begin
       + 'FROM regional_staffer_user JOIN regional_staffer using (id) '
       + 'WHERE be_active = TRUE '
       + 'ORDER BY last_name,first_name',
-      appcommon.db
+      ki.common.db
       )
       .ExecuteReader;
     while bdr.Read do begin
@@ -171,7 +171,7 @@ begin
     Label_user.text := 'User';
     DropDownList_user.items.Clear;
   end;
-  appcommon.DbClose;
+  ki.common.DbClose;
 end;
 
 procedure TWebForm_login.Button_new_password_Click(sender: System.Object;
