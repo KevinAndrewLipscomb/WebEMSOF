@@ -6,8 +6,13 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
-  system.web.mail, system.web.security;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  borland.data.provider,
+  Class_biz_services,
+  ki.common,
+  system.configuration,
+  system.web.mail,
+  system.web.security;
 
 const ID = '$Id$';
 
@@ -16,10 +21,9 @@ type
     RECORD
     amount: decimal;
     be_service_list_filtered: boolean;
+    biz_services: TClass_biz_services;
     unappropriated_amount: decimal;
     END;
-
-type
   TWebForm_create_new_service_appropriation = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -35,10 +39,21 @@ type
     procedure TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  //
+  // Expected session objects:
+  //
+  //   county_name: string;
+  //   county_user_id: string;
+  //   fiscal_year_designator: string;
+  //   parent_appropriation_amount: decimal;
+  //   region_dictated_appropriation_id: string;
+  //   region_name: string;
+  //   sum_of_service_appropriations: decimal;
+  //   unappropriated_amount: decimal;
+  //
   strict private
     p: p_type;
     procedure AddAppropriation;
-    procedure Bind_services;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -118,7 +133,8 @@ begin
       Label_unappropriated_amount.forecolor := color.red;
     end;
     //
-    Bind_services;
+    p.biz_services := TClass_biz_services.Create;
+    p.biz_services.BindDropDownList(session['county_user_id'].tostring,DropDownList_services,CheckBox_unfilter.checked);
   end;
 end;
 
@@ -164,7 +180,7 @@ procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedCha
   e: System.EventArgs);
 begin
   p.be_service_list_filtered := not CheckBox_unfilter.checked;
-  Bind_services;
+  p.biz_services.BindDropDownList(session['county_user_id'].tostring,DropDownList_services,CheckBox_unfilter.checked);
 end;
 
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_stop_Click(sender: System.Object;
@@ -300,28 +316,6 @@ begin
     messageText
     );
   //
-  ki.common.DbClose;
-end;
-
-procedure TWebForm_create_new_service_appropriation.Bind_services;
-var
-  bdr_services: borland.data.provider.BdpDataReader;
-  cmdText: string;
-begin
-  ki.common.DbOpen;
-  DropDownList_services.Items.Clear;
-  DropDownList_services.Items.Add(listitem.Create('-- Select --','0'));
-  //
-  cmdText := 'SELECT id,name FROM service_user JOIN service using (id) ';
-  if p.be_service_list_filtered then begin
-    cmdText := cmdText + 'where county_code = ' + session['county_user_id'].tostring + ' ';
-  end;
-  cmdText := cmdText + 'ORDER BY name';
-  //
-  bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,ki.common.db).ExecuteReader;
-  while bdr_services.Read do begin
-    DropDownList_services.Items.Add(listitem.Create(bdr_services['name'].tostring,bdr_services['id'].ToString));
-  end;
   ki.common.DbClose;
 end;
 
