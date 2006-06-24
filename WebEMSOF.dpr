@@ -15,13 +15,18 @@ library WebEMSOF;
 {%ConfigurationCompiler 'unpublished.config'}
 {%File 'resource\terms-and-conditions.pdf'}
 {%File 'testdata.sql'}
+{%AspFolderContainer 'protected'}
+{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
+{%AspFolderContainer 'component'}
+{%AspFolderContainer 'component\biz'}
+{%AspFolderContainer 'component\db'}
 {%AspMarkupContainer 'Default.aspx'}
 {%AspMarkupContainer 'Global.asax'}
 {%AspMarkupContainer 'login.aspx'}
 {%AspMarkupContainer 'new_password.aspx'}
-{%AspFolderContainer 'protected'}
-{%AspMarkupContainer 'protected\change_email_address.aspx'}
 {%AspMarkupContainer 'protected\withdraw_request_item.aspx'}
+{%AspMarkupContainer 'protected\all_emsof_requests.aspx'}
+{%AspMarkupContainer 'protected\change_email_address.aspx'}
 {%AspMarkupContainer 'protected\change_password.aspx'}
 {%AspMarkupContainer 'protected\county_dictated_appropriations.aspx'}
 {%AspMarkupContainer 'protected\county_dictated_deadline.aspx'}
@@ -38,38 +43,10 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\request_item_detail.aspx'}
 {%AspMarkupContainer 'protected\request_overview.aspx'}
 {%AspMarkupContainer 'protected\service_overview.aspx'}
-{%AspMarkupContainer 'protected\all_emsof_requests.aspx'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
-{%AspFolderContainer 'component'}
-{%AspFolderContainer 'component\biz'}
-{%AspFolderContainer 'component\db'}
 
 uses
   System.Reflection,
   System.Runtime.CompilerServices,
-  Default in 'Default.pas',
-  Global in 'Global.pas',
-  login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
-  new_password in 'new_password.pas',
-  change_email_address in 'protected\change_email_address.pas',
-  withdraw_request_item in 'protected\withdraw_request_item.pas',
-  change_password in 'protected\change_password.pas',
-  county_dictated_appropriations in 'protected\county_dictated_appropriations.pas',
-  county_dictated_deadline in 'protected\county_dictated_deadline.pas',
-  county_overview in 'protected\county_overview.pas',
-  create_new_service_appropriation in 'protected\create_new_service_appropriation.pas' {create_new_service_appropriation.TWebForm_create_new_service_appropriation: System.Web.UI.Page},
-  delete_service_appropriation in 'protected\delete_service_appropriation.pas',
-  emsof_request_status_filter in 'protected\emsof_request_status_filter.pas',
-  finalize in 'protected\finalize.pas',
-  full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
-  profile in 'protected\profile.pas',
-  region_dictated_appropriations in 'protected\region_dictated_appropriations.pas',
-  regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas',
-  regional_staffer_overview in 'protected\regional_staffer_overview.pas',
-  request_item_detail in 'protected\request_item_detail.pas',
-  request_overview in 'protected\request_overview.pas',
-  service_overview in 'protected\service_overview.pas',
-  all_emsof_requests in 'protected\all_emsof_requests.pas',
   Class_biz_user in 'component\biz\Class_biz_user.pas',
   Class_biz_accounts in 'component\biz\Class_biz_accounts.pas',
   Class_biz_appropriations in 'component\biz\Class_biz_appropriations.pas',
@@ -83,7 +60,30 @@ uses
   Class_db_emsof_requests in 'component\db\Class_db_emsof_requests.pas',
   Class_db_fiscal_years in 'component\db\Class_db_fiscal_years.pas',
   Class_db_services in 'component\db\Class_db_services.pas',
-  ki.common;
+  ki.common,
+  Default in 'Default.pas',
+  Global in 'Global.pas',
+  login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
+  new_password in 'new_password.pas',
+  withdraw_request_item in 'protected\withdraw_request_item.pas',
+  all_emsof_requests in 'protected\all_emsof_requests.pas',
+  change_email_address in 'protected\change_email_address.pas',
+  change_password in 'protected\change_password.pas',
+  county_dictated_appropriations in 'protected\county_dictated_appropriations.pas',
+  county_dictated_deadline in 'protected\county_dictated_deadline.pas',
+  county_overview in 'protected\county_overview.pas',
+  create_new_service_appropriation in 'protected\create_new_service_appropriation.pas',
+  delete_service_appropriation in 'protected\delete_service_appropriation.pas',
+  emsof_request_status_filter in 'protected\emsof_request_status_filter.pas',
+  finalize in 'protected\finalize.pas',
+  full_request_review_approve in 'protected\full_request_review_approve.pas',
+  profile in 'protected\profile.pas',
+  region_dictated_appropriations in 'protected\region_dictated_appropriations.pas',
+  regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas',
+  regional_staffer_overview in 'protected\regional_staffer_overview.pas',
+  request_item_detail in 'protected\request_item_detail.pas',
+  request_overview in 'protected\request_overview.pas',
+  service_overview in 'protected\service_overview.pas';
 
 const ID = '$Id$';
 
