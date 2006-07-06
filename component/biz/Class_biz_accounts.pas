@@ -5,8 +5,6 @@ interface
 uses
   ki.common,
   borland.vcl.sysutils,
-  Class_biz_user,
-  Class_db_accounts,
   system.configuration,
   system.web.mail;
 
@@ -50,6 +48,10 @@ type
   end;
 
 implementation
+
+uses
+  Class_biz_user,
+  Class_db_accounts;
 
 constructor TClass_biz_accounts.Create;
 begin

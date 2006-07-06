@@ -4,9 +4,6 @@ interface
 
 uses
   borland.data.provider,
-  Class_biz_accounts,
-  Class_biz_fiscal_years,
-  Class_biz_user,
   Class_db_emsof_requests,
   system.security.principal,
   system.web;
@@ -119,6 +116,11 @@ type
   end;
 
 implementation
+
+uses
+  Class_biz_accounts,
+  Class_biz_fiscal_years,
+  Class_biz_user;
 
 constructor TClass_biz_emsof_requests.Create;
 begin

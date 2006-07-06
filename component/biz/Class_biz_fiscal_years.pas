@@ -2,9 +2,6 @@ unit Class_biz_fiscal_years;
 
 interface
 
-uses
-  Class_db_fiscal_years;
-
 type
   TClass_biz_fiscal_years = class
   private
@@ -15,6 +12,9 @@ type
   end;
 
 implementation
+
+uses
+  Class_db_fiscal_years;
 
 constructor TClass_biz_fiscal_years.Create;
 begin

@@ -7,9 +7,6 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, system.web.security,
-  Class_biz_appropriations,
-  Class_biz_emsof_requests,
-  Class_biz_fiscal_years,
   system.text;
 
 const ID = '$Id$';
@@ -95,6 +92,10 @@ type
   end;
 
 implementation
+
+uses
+  Class_biz_appropriations,
+  Class_biz_emsof_requests;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>

@@ -9,7 +9,6 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   ki.common,
   borland.data.provider,
-  Class_biz_accounts,
   system.configuration,
   system.web.mail,
   system.web.security;
@@ -52,6 +51,9 @@ type
   end;
 
 implementation
+
+uses
+  Class_biz_accounts;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>

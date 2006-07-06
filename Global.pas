@@ -5,7 +5,6 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Web, System.Web.SessionState,
-  Class_biz_user,
   system.security.principal;
 
 const ID = '$Id$';
@@ -31,6 +30,9 @@ type
   end;
 
 implementation
+
+uses
+  Class_biz_user;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
