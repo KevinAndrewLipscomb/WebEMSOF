@@ -4,7 +4,6 @@ interface
 
 uses
   ki.common,
-  Class_db_user,
   system.web;
 
 const
@@ -22,6 +21,9 @@ type
   end;
 
 implementation
+
+uses
+  Class_db_user;
 
 const
   KIND_THAT_HAS_ROLES = 'regional_staffer';

@@ -3,9 +3,6 @@ unit Class_biz_appropriations;
 interface
 
 uses
-  Class_biz_fiscal_years,
-  Class_biz_user,
-  Class_db_appropriations,
   system.web;
 
 const
@@ -36,6 +33,11 @@ type
   end;
 
 implementation
+
+uses
+  Class_biz_fiscal_years,
+  Class_biz_user,
+  Class_db_appropriations;
 
 constructor TClass_biz_appropriations.Create;
 begin

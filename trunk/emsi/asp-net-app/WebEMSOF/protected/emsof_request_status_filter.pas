@@ -7,8 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, system.web.security,
-  borland.data.provider,
-  Class_biz_emsof_requests;
+  borland.data.provider;
 
 const ID = '$Id$';
 
@@ -62,6 +61,9 @@ type
   end;
 
 implementation
+
+uses
+  Class_biz_emsof_requests;
 
 const
   TCCI_LINKBUTTON_SELECT = 12;
