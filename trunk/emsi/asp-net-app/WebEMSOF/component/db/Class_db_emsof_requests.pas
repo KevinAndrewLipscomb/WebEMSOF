@@ -250,7 +250,6 @@ begin
     + ' ,(quantity*unit_cost) as subtotal'
     + ' ,allowable_cost'
     + ' ,emsof_ante'
-    + ' ,(emsof_ante/(quantity*unit_cost)) as effective_match_level'
     + ' from emsof_request_detail'
     +   ' join eligible_provider_equipment_list'
     +     ' on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'

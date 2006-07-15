@@ -60,7 +60,7 @@
 			  </tr>
 			<tr>
 			  <td>
-			  <p align="right">Maximum&nbsp;unit cost supported by EMSOF:&nbsp; $
+			  <p align="right">Maximum&nbsp;unit cost allowed by EMSOF:&nbsp; $
   <br><small><i>If you excede this amount <strong>per unit</strong>, your service must pay the overage.</i></small></p></td>
 			  <td>
 				<ASP:Label id="Label_allowable_cost" runat="server"></ASP:Label></td>
@@ -100,13 +100,6 @@
 			</tr>
 			<tr>
 			  <td>
-			  <p align="right">Effective match level:</p></td>
-			  <td>
-				<ASP:Label id="Label_match_level" runat="server"></ASP:Label></td>
-			  <td></td>
-			</tr>
-			<tr>
-			  <td>
 			  <p align="right">Minimum portion of total cost that your service will pay, <strong>unreimbursed</strong>:&nbsp; $</p></td>
 			  <td>
 				<ASP:Label id="Label_min_service_ante" runat="server" font-bold="True"></ASP:Label></td>
@@ -139,7 +132,7 @@
 						</div></td>
 			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>
 								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp;
-													     &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
+													       &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
 
 			  </td>
 			  <td></td>

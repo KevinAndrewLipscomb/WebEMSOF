@@ -81,7 +81,7 @@ uses
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas' {regional_staffer_fiscal_year_selection.TWebForm_account_overview: System.Web.UI.Page},
   regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: System.Web.UI.Page},
-  request_item_detail in 'protected\request_item_detail.pas',
+  request_item_detail in 'protected\request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: System.Web.UI.Page},
   request_overview in 'protected\request_overview.pas' {request_overview.TWebForm_request_overview: System.Web.UI.Page},
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page};
 

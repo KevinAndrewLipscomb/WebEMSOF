@@ -111,11 +111,11 @@ procedure TWebForm_full_request_review_approve.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-  Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_Click);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
+  Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_full_request_review_approve_PreRender);
 end;
