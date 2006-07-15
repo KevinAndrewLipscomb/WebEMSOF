@@ -23,8 +23,6 @@ type
     match_level: decimal;
     saved_emsof_ante: decimal;
     END;
-
-type
   TWebForm_request_item_detail = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -71,7 +69,6 @@ type
     RequiredFieldValidator_quantity: System.Web.UI.WebControls.RequiredFieldValidator;
     RegularExpressionValidator_quantity: System.Web.UI.WebControls.RegularExpressionValidator;
     Label_total_cost: System.Web.UI.WebControls.Label;
-    Label_match_level: System.Web.UI.WebControls.Label;
     Label_min_service_ante: System.Web.UI.WebControls.Label;
     TextBox_additional_service_ante: System.Web.UI.WebControls.TextBox;
     Label_emsof_ante: System.Web.UI.WebControls.Label;
@@ -254,40 +251,34 @@ begin
     //
     // Manage the filling of the other data elements.
     //
-    if be_new then begin
-      Label_match_level.text := p.match_level.tostring('P0');
+    ki.common.DbClose;
+    ShowDependentData;
+    ki.common.DbOpen;
+    //
+    bdr_user_details := borland.data.provider.bdpcommand.Create
+      (
+      'select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante'
+      + ' from emsof_request_detail'
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
+      +   ' and priority = ' + session['emsof_request_item_priority'].tostring,
+      ki.common.db
+      )
+      .ExecuteReader;
+    bdr_user_details.Read;
+    TextBox_make_model.text := bdr_user_details['make_model'].tostring;
+    TextBox_place_kept.text := bdr_user_details['place_kept'].tostring;
+    if bdr_user_details['be_refurbished'].tostring = '0' then begin
+       RadioButtonList_condition.selectedindex := 0;
     end else begin
-      //
-      ki.common.DbClose;
-      ShowDependentData;
-      ki.common.DbOpen;
-      //
-      bdr_user_details := borland.data.provider.bdpcommand.Create
-        (
-        'select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante'
-        + ' from emsof_request_detail'
-        + ' where master_id = ' + session['emsof_request_master_id'].tostring
-        +   ' and priority = ' + session['emsof_request_item_priority'].tostring,
-        ki.common.db
-        )
-        .ExecuteReader;
-      bdr_user_details.Read;
-      TextBox_make_model.text := bdr_user_details['make_model'].tostring;
-      TextBox_place_kept.text := bdr_user_details['place_kept'].tostring;
-      if bdr_user_details['be_refurbished'].tostring = '0' then begin
-         RadioButtonList_condition.selectedindex := 0;
-      end else begin
-         RadioButtonList_condition.selectedindex := 1;
-      end;
-      TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
-      TextBox_quantity.text := bdr_user_details['quantity'].tostring;
-      TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
-      p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
-      Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
-      //
-      Recalculate;
-      //
+       RadioButtonList_condition.selectedindex := 1;
     end;
+    TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
+    TextBox_quantity.text := bdr_user_details['quantity'].tostring;
+    TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
+    p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
+    Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
+    //
+    Recalculate;
     //
     // Manage the availability of the remaining item-detail-related controls.
     //
@@ -478,7 +469,6 @@ begin
   TextBox_unit_cost.text := '';
   TextBox_quantity.text := '';
   Label_total_cost.text := '';
-  Label_match_level.text := p.match_level.tostring('P0');
   Label_min_service_ante.text := '';
   TextBox_additional_service_ante.text := '';
   Label_emsof_ante.text := '';
@@ -550,7 +540,6 @@ begin
     //
     effective_emsof_ante := max_emsof_ante - p.additional_service_ante;
     //
-    Label_match_level.text := (effective_emsof_ante/total_cost).tostring('P0');
     Label_emsof_ante.text := effective_emsof_ante.tostring('N2');
     Label_min_service_ante.text := (total_cost - max_emsof_ante).tostring('N2');
   end;
@@ -645,12 +634,6 @@ begin
       p.funding_level := decimal.Parse(bdr_state_details['funding_level'].tostring);
     end else begin
       p.funding_level := decimal.maxvalue;
-    end;
-    //
-    if p.funding_level = p.allowable_cost then begin
-      Label_match_level.text := '100%';
-    end else begin
-      Label_match_level.text := p.match_level.tostring('P0');
     end;
     //
   end;
