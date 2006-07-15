@@ -13,7 +13,7 @@ const
 
 type status_type =
   (
-  INITIALIZED = 1,
+  ALLOCATED = 1,
   NEEDS_SERVICE_FINALIZATION = 2,
   NEEDS_COUNTY_APPROVAL = 3,
   NEEDS_REGIONAL_COMPLIANCE_CHECK = 4,
@@ -219,7 +219,7 @@ begin
     or httpcontext.current.user.IsInRole('emsof-coordinator')
     or httpcontext.current.user.IsInRole('emsof-planner')
   then begin
-    BeOkToDrillDown := (status <> INITIALIZED);
+    BeOkToDrillDown := (status <> ALLOCATED);
   end else if httpcontext.current.user.IsInRole('emsof-clerk') then begin
     BeOkToDrillDown := status in
       [
