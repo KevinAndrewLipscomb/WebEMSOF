@@ -26,7 +26,7 @@
 	  <table cellspacing="0" cellpadding="5" border="0">
 			<tr>
 			  <td bgcolor="#f5f5f5">
-				<p align="right"><strong>Parent appropriation:</strong></p></td>
+				<p align="right"><strong>You were allocated:</strong></p></td>
 			  <td>
 			  <p align="right"><ASP:Label id="Label_parent_appropriation_amount" runat="server"></ASP:Label></p></td>
 			  <td>from

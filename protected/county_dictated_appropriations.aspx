@@ -30,7 +30,7 @@
               <tr>
 				<td bgcolor="#f5f5f5">
                   <p align="right">
-					<strong>Parent appropriation:</strong>
+					<strong>You were allocated:</strong>
                   </p>
                 </td>
                 <td>
@@ -56,7 +56,7 @@
 				  <asp:label id="Label_sum_of_service_appropriations" runat="server" font-underline="True"></asp:label>
 				  </p>
 				</td>
-				<td>appropriated to services (below)</td>
+				<td>alloacted to services (below)</td>
 			  </tr>
 			  <tr id="TableRow_unappropriated_amount" runat="server">
 				<td>
@@ -90,7 +90,7 @@
 			</tr>
 			<tr>
 			  <td>
-				<p align="left">You must&nbsp;make service appropriations&nbsp;by
+				<p align="left">You must&nbsp;make service allocations by
 			  <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>.</p></td>
 			</tr>
 			<tr>
@@ -110,8 +110,8 @@
                     <td bgcolor="#ffd700"><strong>Warning</strong></td>
                   </tr>
                   <tr>
-                    <td>To prevent you from exceeding your own appropriation, 
-                      <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;reduced the amount of the service appropriation that you just updated.</td>
+                    <td>To prevent you from exceeding your own allocation, 
+                      <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;reduced the amount of the service allocation that you just updated.</td>
                   </tr>
               </table></td>
             </tr>
@@ -126,7 +126,7 @@
 			<table border="0" cellpadding="10" cellspacing="0" width="100%">
 			  <tr>
 				<td>
-				  <strong>Service appropriations</strong>
+				  <strong>Service allocations</strong>
 				</td>
 				<td align="center"><ASP:CheckBox id="CheckBox_hide_nonapproval_requests" runat="server" text="Only show requests needing approval" font-size="Small" autopostback="True"></ASP:CheckBox></td>
 				<td align="right">
