@@ -157,7 +157,7 @@ begin
     Label_remaining.text := (parent_appropriation - sum_of_appropriations + unrequested_amount).tostring('C');
     //
     LinkButton_num_requests_needing_development.text :=
-      biz_emsof_requests.TallyOfStatus(INITIALIZED) + LinkButton_num_requests_needing_development.text;
+      biz_emsof_requests.TallyOfStatus(ALLOCATED) + LinkButton_num_requests_needing_development.text;
     LinkButton_num_requests_needing_finalization.text :=
       biz_emsof_requests.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + LinkButton_num_requests_needing_finalization.text;
     LinkButton_num_requests_needing_county_approval.text :=
@@ -326,7 +326,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_dev
   e: System.EventArgs);
 begin
   session.Remove('status_of_interest');
-  session.Add('status_of_interest',INITIALIZED);
+  session.Add('status_of_interest',ALLOCATED);
   server.Transfer('emsof_request_status_filter.aspx');
 end;
 
