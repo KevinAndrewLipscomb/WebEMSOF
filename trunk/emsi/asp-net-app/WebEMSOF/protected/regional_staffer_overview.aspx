@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                      [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                       [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -43,7 +43,7 @@
                                                       <td align="right">-</td>
                                                       <td align="right">
                                                         <ASP:Label id="Label_sum_of_appropriations" runat="server"></ASP:Label></td>
-                                                      <td>appropriated to counties</td>
+                                                      <td>allocated to counties</td>
                                                     </tr>
                                                     <tr>
                                                       <td align="right">+</td>
@@ -183,7 +183,7 @@
 						  <li><p><ASP:HyperLink id="HyperLink_maintain_epels" runat="server" enabled="False">Maintain Eligible Provider Equipment Lists</ASP:HyperLink></p></li>
 						  <li><p>
                                       <ASP:LinkButton id="LinkButton_set_deadlines" runat="server" enabled="False">Set deadlines</ASP:LinkButton></p></li>
-						  <li><ASP:HyperLink id="HyperLink_maintain_region_dictated_appropriations" runat="server" enabled="False">Maintain county fund appropriations</ASP:HyperLink></li>
+						  <li><ASP:HyperLink id="HyperLink_maintain_region_dictated_appropriations" runat="server" enabled="False">Maintain county fund allocations</ASP:HyperLink></li>
 						</ul></td>
 					</tr>
 				</table>

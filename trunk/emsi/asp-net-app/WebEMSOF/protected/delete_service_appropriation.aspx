@@ -26,9 +26,9 @@
                     <tr>
 					  <td>
 <p><ASP:Label id="Label_service_name_1" runat="server"></ASP:Label>&nbsp;has&nbsp;already entered equipment requests in association with the
-		<ASP:Label id="Label_fiscal_year" runat="server"></ASP:Label>&nbsp;appropriation of
-		<ASP:Label id="Label_amount" runat="server"></ASP:Label>&nbsp;that you made to them.&nbsp; If you delete the appropriation, <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;will also <strong>permanently delete</strong> the associated equipment requests.&nbsp; The equipment requests will <strong>not</strong> automatically carry over to any other appropriation.</p>
-<p>Are you sure you want to permanently delete this appropriation (and all equipment requests that
+		<ASP:Label id="Label_fiscal_year" runat="server"></ASP:Label>&nbsp;allocation of
+		<ASP:Label id="Label_amount" runat="server"></ASP:Label>&nbsp;that you made to them.&nbsp; If you delete the allocation, <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;will also <strong>permanently delete</strong> the associated equipment requests.&nbsp; The equipment requests will <strong>not</strong> automatically carry over to any other allocation.</p>
+<p>Are you sure you want to permanently delete this allocation (and all equipment requests that
 		<ASP:Label id="Label_service_name_2" runat="server"></ASP:Label>&nbsp;has already entered against it)?</p>
 <p>
 		<table cellspacing="0" cellpadding="10" border="0">
@@ -37,13 +37,13 @@
 				<div align="center">
 		<ASP:Button id="Button_yes" runat="server" text="Yes"></ASP:Button>
 				</div></td>
-			  <td>-- Delete the appropriation and the linked equipment requests.</td>
+			  <td>-- Delete the allocation and the linked equipment requests.</td>
 			</tr>
 			<tr>
 			  <td>
 				<div align="center"><ASP:Button id="Button_no" runat="server" text="No"></ASP:Button>
 				</div></td>
-			  <td>-- Leave the appropriation the way it is.</td>
+			  <td>-- Leave the allocation the way it is.</td>
 			</tr>
 		</table>
 		</p>

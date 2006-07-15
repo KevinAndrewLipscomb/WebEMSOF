@@ -38,7 +38,7 @@
               <td>
                 <table cellspacing="0" cellpadding="10" border="0">
 					<tr>
-					  <td bgcolor="#f5f5f5"><a name="Appropriations" /><strong>Appropriations</strong></td>
+					  <td bgcolor="#f5f5f5"><a name="Appropriations" /><strong>Allocations</strong></td>
 					</tr>
 					<tr>
 					  <td>
@@ -49,7 +49,7 @@
 			  <tr>
 				<td bgcolor="#f5f5f5">
 				  <p align="right">
-					<strong>Parent appropriation:</strong>
+					<strong>Allocation:</strong>
 				  </p>
 				</td>
 				<td>
@@ -73,7 +73,7 @@
 				  <asp:label id="Label_sum_of_county_appropriations" runat="server" font-underline="True"></asp:label>
 				  </p>
 				</td>
-				<td>appropriated to&nbsp;counties (below)</td>
+				<td>allocated to&nbsp;counties (below)</td>
 			  </tr>
 			  <tr id="TableRow_unappropriated_amount" runat="server">
 				<td>
@@ -122,8 +122,8 @@
 					<td bgcolor="#ffd700"><strong>Warning</strong></td>
                   </tr>
 				  <tr>
-                    <td>To prevent you from exceeding your own appropriation, 
-					  <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;reduced the amount of the county appropriation that you just updated.</td>
+                    <td>To prevent you from exceeding your own allocation, 
+					  <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;reduced the amount of the county allocation that you just updated.</td>
                   </tr>
 			  </table></td>
             </tr>
@@ -135,7 +135,7 @@
 	  <table cellspacing="0" cellpadding="10" border="0">
 		<tr bgcolor="#f5f5f5">
 		  <td>
-			<strong>County appropriations</strong>
+			<strong>County allocations</strong>
 		  </td>
 		  <td>
 			<div align="center">

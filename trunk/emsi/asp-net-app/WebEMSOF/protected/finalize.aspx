@@ -28,9 +28,9 @@
 					<tr>
 					  <td>
 						<p>You've requested too much.</p>
-						<p>The specified EMSOF reimbursement is more than the appropriation you received from the sponsoring county.</p>
-						<p>Please&nbsp;<ASP:HyperLink id="HyperLink_request_overview_0" runat="server" font-bold="True" navigateurl="request_overview.aspx">go back to the request overview form</ASP:HyperLink> and&nbsp;adjust your request to fit your appropriation.</p>
-						<p>HINT:&nbsp; Make a note of the negative "remaining" amount.&nbsp; Select one of your request items.&nbsp; Enter an equivalent [positive] amount in the field labeled, "<strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>".&nbsp; Your request will no longer exceed your appropriation, and finalization will proceed normally.</p></td>
+						<p>The specified EMSOF reimbursement is more than the allocation you received from the sponsoring county.</p>
+						<p>Please&nbsp;<ASP:HyperLink id="HyperLink_request_overview_0" runat="server" font-bold="True" navigateurl="request_overview.aspx">go back to the request overview form</ASP:HyperLink> and&nbsp;adjust your request to fit your allocation.</p>
+						<p>HINT:&nbsp; Make a note of the negative "remaining" amount.&nbsp; Select one of your request items.&nbsp; Enter an equivalent [positive] amount in the field labeled, "<strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>".&nbsp; Your request will no longer exceed your allocation, and finalization will proceed normally.</p></td>
 					</tr>
 				</table></td>
 			</tr>
@@ -54,7 +54,7 @@
                                            id="HyperLink_request_overview_1" runat="server" navigateurl="request_overview.aspx">No, take me back</ASP:HyperLink><br></p></li>
 						<li id="ListItem_remainder_goes_to_region" runat="server">
 					  <p>Do you realize that you will forfeit the remaining 
-                            <ASP:Label id="Label_unused_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;of your appropriation?<br>
+                            <ASP:Label id="Label_unused_amount" runat="server" font-bold="True"></ASP:Label>&nbsp;of your allocation?<br>
                             <br>
                             <ASP:CheckBox id="CheckBox_understand_remainder_goes_to_region" runat="server" text="Yes"></ASP:CheckBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <ASP:HyperLink id="HyperLink_request_overview_2" runat="server"
                  navigateurl="request_overview.aspx">No, take me back</ASP:HyperLink></p></li>
@@ -83,12 +83,12 @@
                  navigateurl="request_overview.aspx">No, take me back</ASP:HyperLink><br></p></li>
 						<li>
 					  <p>Do you understand that you must 
-                            <u>not</u> order any of the items you have requested until <u>after</u> you receive an Approval To Proceed notice from the Regional Council?<br>
+                            <u>not</u> order any of the items you have requested until <u>after</u> you receive a Notice To Proceed message from the Regional Council?<br>
                             <br>
                             <ASP:CheckBox id="CheckBox_understand_wait_for_approval_to_order" runat="server" text="Yes"></ASP:CheckBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <ASP:HyperLink id="HyperLink_request_overview_7" runat="server"
                  navigateurl="request_overview.aspx">No, take me back</ASP:HyperLink></p></li>
 						<li>
-					  <p>After you receive the Approval To Proceed notice, these deadlines will apply:<br>
+					  <p>After you receive the Notice To Proceed message, these deadlines will apply:<br>
                             <br>
                             <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
                                 <tr>

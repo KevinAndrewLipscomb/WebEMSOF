@@ -28,8 +28,6 @@ type
     max_fiscal_year_id_string: string;
     num_dg_items: cardinal;
     END;
-
-type
   TWebForm_service_overview = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
