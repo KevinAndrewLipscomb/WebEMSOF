@@ -53,7 +53,7 @@ begin
     Label_application_name.text := ConfigurationSettings.AppSettings['application_name'];
     //
     if session['target_user_table'] <> nil then begin
-      server.Transfer('protected/' + session['target_user_table'].tostring + '_overview.aspx');
+      response.Redirect('protected/' + session['target_user_table'].tostring + '_overview.aspx');
     end;
     //
   end;
