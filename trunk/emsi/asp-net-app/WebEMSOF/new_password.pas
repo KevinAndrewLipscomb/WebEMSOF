@@ -7,7 +7,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common,
-  Borland.Data.Provider, system.web.mail, system.configuration;
+  system.web.mail, system.configuration;
 
 const ID = '$Id$';
 
@@ -34,6 +34,9 @@ type
 
 implementation
 
+uses
+  Class_biz_accounts;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -47,6 +50,7 @@ end;
 
 procedure TWebForm_new_password.Page_Load(sender: System.Object; e: System.EventArgs);
 var
+  biz_accounts: TClass_biz_accounts;
   email_address: string;
   temporary_password: string[8];
 begin
@@ -54,7 +58,7 @@ begin
   if not IsPostback then
     begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
-    ki.common.DbOpen;
+    biz_accounts := TClass_biz_accounts.Create;
     Label_user_name.Text := session[session['target_user_table'].ToString + '_name'].ToString;
     if session['target_user_table'].tostring = 'county' then begin
       Label_user_name.Text := Label_user_name.Text + ' County';
@@ -67,25 +71,17 @@ begin
     //
     // Make the password string the service's new temporary password, and set the stale flag to force an immediate password change.
     //
-    borland.data.provider.bdpcommand.Create
+    biz_accounts.SetTemporaryPassword
       (
-      'update ' + session['target_user_table'].ToString + '_user'
-      + ' set encoded_password = "' + ki.common.Digest(temporary_password) + '",'
-      +   ' be_stale_password = TRUE '
-      + ' where id = ' + session[session['target_user_table'].ToString + '_user_id'].ToString,
-      ki.common.db
-      )
-      .ExecuteNonQuery;
+      session['target_user_table'].ToString,
+      session[session['target_user_table'].ToString + '_user_id'].ToString,
+      ki.common.Digest(temporary_password)
+      );
     //
     // Send the new password to the service's email address of record.
     //
-    email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address from ' + session['target_user_table'].ToString + '_user '
-      + 'where id ="' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
-      ki.common.db
-      )
-      .ExecuteScalar.tostring;
+    email_address := biz_accounts.EmailAddressByKindId
+      (session['target_user_table'].ToString,session[session['target_user_table'].ToString + '_user_id'].ToString);
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
@@ -115,7 +111,6 @@ begin
     //
     Label_email_address.Text := email_address;
     //
-    ki.common.DbClose;
     end;
 end;
 

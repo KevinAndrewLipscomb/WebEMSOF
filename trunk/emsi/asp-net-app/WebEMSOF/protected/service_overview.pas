@@ -56,9 +56,8 @@ type
     Label_no_dg_items: System.Web.UI.WebControls.Label;
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
-    TableRow_separator: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_item_requests_section: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    Table_item_requests_section: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -139,8 +138,7 @@ begin
     if biz_get_profile_status.ExecuteScalar.ToString = '0' then begin
       Label_profile_status.Text := 'Not saved.';
       LinkButton_profile_action.Text := '[Create profile]';
-      TableRow_separator.visible := FALSE;
-      TableRow_item_requests_section.visible := FALSE;
+      Table_item_requests_section.visible := FALSE;
       ki.common.DbClose;
     end else begin
       Label_profile_status.Text := 'Saved.';
