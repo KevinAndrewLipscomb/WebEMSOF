@@ -138,13 +138,13 @@ begin
       );
     if biz_get_profile_status.ExecuteScalar.ToString = '0' then begin
       Label_profile_status.Text := 'Not saved.';
-      LinkButton_profile_action.Text := 'Create profile';
+      LinkButton_profile_action.Text := '[Create profile]';
       TableRow_separator.visible := FALSE;
       TableRow_item_requests_section.visible := FALSE;
       ki.common.DbClose;
     end else begin
       Label_profile_status.Text := 'Saved.';
-      LinkButton_profile_action.Text := 'Edit profile';
+      LinkButton_profile_action.Text := '[Edit profile]';
       //
       // Determine current fiscal year
       //
