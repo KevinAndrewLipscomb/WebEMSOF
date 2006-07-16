@@ -3,6 +3,8 @@ unit Class_biz_accounts;
 interface
 
 uses
+  Class_biz_user,
+  Class_db_accounts,
   ki.common,
   borland.vcl.sysutils,
   system.configuration,
@@ -13,9 +15,14 @@ const ID = '$Id$';
 type
   TClass_biz_accounts = class
   private
+    biz_user: TClass_biz_user;
+    db_accounts: TClass_db_accounts;
     function SelfEmailAddress: string;
   public
     constructor Create;
+    procedure BindCounties(target: system.object);
+    procedure BindRegionalStaffers(target: system.object);
+    procedure BindServices(target: system.object);
     function EmailAddressByKindId
       (
       user_kind: string;
@@ -23,6 +30,13 @@ type
       )
       : string;
     function EmailTargetByRole(role: string): string;
+    function Exists
+      (
+      user_kind: string;
+      user_id: string;
+      encoded_password: string
+      )
+      : boolean;
     procedure MakeDemotionNotification
       (
       role: string;
@@ -45,20 +59,40 @@ type
       service_name: string;
       fy_designator: string
       );
+    procedure SetTemporaryPassword
+      (
+      user_kind: string;
+      user_id: string;
+      encoded_password: string
+      );
   end;
 
 implementation
-
-uses
-  Class_biz_user,
-  Class_db_accounts;
 
 constructor TClass_biz_accounts.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  biz_user := TClass_biz_user.Create;
+  db_accounts := TClass_db_accounts.Create;
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
 end;
+
+procedure TClass_biz_accounts.BindCounties(target: system.object);
+begin
+  db_accounts.BindCounties(target);
+end;
+
+procedure TClass_biz_accounts.BindRegionalStaffers(target: system.object);
+begin
+  db_accounts.BindRegionalStaffers(target);
+end;
+
+procedure TClass_biz_accounts.BindServices(target: system.object);
+begin
+  db_accounts.BindServices(target);
+end;
+
 
 function TClass_biz_accounts.EmailAddressByKindId
   (
@@ -67,12 +101,23 @@ function TClass_biz_accounts.EmailAddressByKindId
   )
   : string;
 begin
-  EmailAddressByKindId := TClass_db_accounts.Create.EmailAddressByKindId(user_kind,user_id);
+  EmailAddressByKindId := db_accounts.EmailAddressByKindId(user_kind,user_id);
 end;
 
 function TClass_biz_accounts.EmailTargetByRole(role: string): string;
 begin
-  EmailTargetByRole := TClass_db_accounts.Create.EmailTargetByRole(role);
+  EmailTargetByRole := db_accounts.EmailTargetByRole(role);
+end;
+
+function TClass_biz_accounts.Exists
+  (
+  user_kind: string;
+  user_id: string;
+  encoded_password: string
+  )
+  : boolean;
+begin
+  Exists := db_accounts.Exists(user_kind,user_id,encoded_password);
 end;
 
 procedure TClass_biz_accounts.MakeDemotionNotification
@@ -140,9 +185,9 @@ begin
     //
     //   Get other stakeholder's email address.
     //
-    if TClass_biz_user.Create.Kind = 'county' then begin
+    if biz_user.Kind = 'county' then begin
       other_stakeholder_email_address := EmailTargetByRole('emsof-coordinator');
-    end else if TClass_biz_user.Create.Kind = 'regional_staffer' then begin
+    end else if biz_user.Kind = 'regional_staffer' then begin
       other_stakeholder_email_address := EmailAddressByKindId('county',county_code);
     end;
     //
@@ -283,11 +328,18 @@ begin
 end;
 
 function TClass_biz_accounts.SelfEmailAddress: string;
-var
-  biz_user: TClass_biz_user;
 begin
-  biz_user := TClass_biz_user.Create;
   SelfEmailAddress := EmailAddressByKindId(biz_user.Kind,biz_user.IdNum);
+end;
+
+procedure TClass_biz_accounts.SetTemporaryPassword
+  (
+  user_kind: string;
+  user_id: string;
+  encoded_password: string
+  );
+begin
+  db_accounts.SetTemporaryPassword(user_kind,user_id,encoded_password);
 end;
 
 end.

@@ -30,19 +30,19 @@
             </tr>
         </table></h3>
 	  <h3>
-        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
-            <tr>
-              <td>
-                <table cellspacing="0" cellpadding="10" width="100%" border="0">
-                    <tr>
-                      <td bgcolor="#f5f5f5"><strong>Your EMSOF requests</strong>
+        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_item_requests_section" runat="server">
+			<tr>
+			  <td>
+				<table cellspacing="0" cellpadding="10" width="100%" border="0">
+					<tr>
+					  <td bgcolor="#f5f5f5"><strong>Your EMSOF requests</strong>
 		</td>
-                    </tr>
-                    <tr>
-                      <td>
-        <p><ASP:Label id="Label_no_dg_items" runat="server" visible="False">-- No county allocations yet --</ASP:Label></p></td>
-                    </tr>
-                    <tr>
+					</tr>
+					<tr>
+					  <td>
+		<p><ASP:Label id="Label_no_dg_items" runat="server" visible="False">-- No county allocations yet --</ASP:Label></p></td>
+					</tr>
+					<tr>
                       <td>
 		<ASP:DataGrid id="DataGrid" runat="server"
 			bordercolor="#CCCCCC"

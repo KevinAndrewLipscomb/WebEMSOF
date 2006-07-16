@@ -7,13 +7,18 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki.common, Borland.Data.Provider, System.Globalization,
+  ki.common, System.Globalization,
   System.Data.SqlClient, System.Data.Common, system.configuration,
-  system.text.regularexpressions, system.web.security, system.io;
+  system.text.regularexpressions, system.web.security, system.io,
+  Class_biz_accounts;
 
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    biz_accounts: TClass_biz_accounts;
+    END;
   TWebForm_login = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -26,8 +31,10 @@ type
       e: System.EventArgs);
     procedure CustomValidator_account_exists_ServerValidate(source: System.Object; 
       args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure TWebForm_login_PreRender(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -66,15 +73,19 @@ begin
   Include(Self.Button_log_in.Click, Self.Button_log_in_Click);
   Include(Self.Button_new_password.Click, Self.Button_new_password_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_login_PreRender);
 end;
 {$ENDREGION}
 
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
     Label_application_name.text := configurationsettings.appsettings['application_name'];
+    p.biz_accounts := TClass_biz_accounts.Create;
   end;
 end;
 
@@ -87,22 +98,21 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_login.TWebForm_login_PreRender(sender: System.Object; e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
 procedure TWebForm_login.CustomValidator_account_exists_ServerValidate(source: System.Object;
   args: System.Web.UI.WebControls.ServerValidateEventArgs);
-var
-  obj: system.object;
 begin
-  ki.common.DbOpen;
-  obj := Borland.Data.Provider.BdpCommand.Create
+  args.isvalid := p.biz_accounts.Exists
     (
-    'SELECT 1 FROM ' + Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD) + '_user'
-    +  ' where id = ' + Safe(DropDownList_user.selectedvalue,NUM)
-    +     ' and encoded_password = "' + ki.common.Digest(Safe(TextBox_password.Text.trim,ALPHANUM)) + '"'
-    ,ki.common.db
-    )
-    .ExecuteScalar;
-  ki.common.DbClose;
-  args.isvalid := (obj <> nil);
+    Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD),
+    Safe(DropDownList_user.selectedvalue,NUM),
+    ki.common.Digest(Safe(TextBox_password.Text.trim,ALPHANUM))
+    );
 end;
 
 procedure TWebForm_login.DropDownList_user_SelectedIndexChanged(sender: System.Object;
@@ -116,62 +126,25 @@ end;
 
 procedure TWebForm_login.DropDownList_user_kind_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
-var
-  bdr: borland.data.provider.BdpDataReader;
 begin
-  ki.common.DbOpen;
   session.Remove('target_user_table');
   session.Add('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD));
   Label_user.enabled := TRUE;
-  DropDownList_user.items.Clear;
-  DropDownList_user.items.Add(listitem.Create('-- Select --','0'));
   if DropDownList_user_kind.selectedvalue = 'service' then begin
     Label_user.text := 'Service';
-    bdr := Borland.Data.Provider.BdpCommand.Create
-      (
-      'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ORDER BY name',
-      ki.common.db
-      )
-      .ExecuteReader;
-    while bdr.Read do begin
-      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'service_' + bdr['id'].ToString));
-    end;
+    p.biz_accounts.BindServices(DropDownList_user);
   end else if DropDownList_user_kind.selectedvalue = 'county' then begin
     Label_user.text := 'County';
-    bdr := Borland.Data.Provider.BdpCommand.Create
-      (
-      'SELECT id,name '
-      + 'FROM county_user JOIN county_code_name_map on (county_code_name_map.code = county_user.id) '
-      + 'WHERE be_active = TRUE '
-      + 'ORDER BY name',
-      ki.common.db
-      )
-      .ExecuteReader;
-    while bdr.Read do begin
-      DropDownList_user.Items.Add(listitem.Create(bdr['name'].tostring,'county_' + bdr['id'].ToString));
-    end;
+    p.biz_accounts.BindCounties(DropDownList_user);
   end else if DropDownList_user_kind.selectedvalue = 'regional_staffer' then begin
     Label_user.text := 'Regional staffer';
-    bdr := Borland.Data.Provider.BdpCommand.Create
-      (
-      'SELECT id,last_name,first_name '
-      + 'FROM regional_staffer_user JOIN regional_staffer using (id) '
-      + 'WHERE be_active = TRUE '
-      + 'ORDER BY last_name,first_name',
-      ki.common.db
-      )
-      .ExecuteReader;
-    while bdr.Read do begin
-      DropDownList_user.Items.Add
-        (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,'regional_staffer_' + bdr['id'].ToString));
-    end;
+    p.biz_accounts.BindRegionalStaffers(DropDownList_user);
   end else begin
     session.Remove('target_user_table');
     Label_user.enabled := FALSE;
     Label_user.text := 'User';
     DropDownList_user.items.Clear;
   end;
-  ki.common.DbClose;
 end;
 
 procedure TWebForm_login.Button_new_password_Click(sender: System.Object;
