@@ -77,7 +77,7 @@ uses
   emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
   finalize in 'protected\finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},
   full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
-  profile in 'protected\profile.pas',
+  profile in 'protected\profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas' {regional_staffer_fiscal_year_selection.TWebForm_account_overview: System.Web.UI.Page},
   regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: System.Web.UI.Page},

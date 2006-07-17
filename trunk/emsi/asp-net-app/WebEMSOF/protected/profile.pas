@@ -7,20 +7,28 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common,
-  Borland.Data.Common, Borland.Data.Provider, System.Globalization,
-  System.Data.Common, system.configuration, system.web.security;
+  Borland.Data.Common, System.Globalization,
+  System.Data.Common, system.configuration, system.web.security,
+  Class_biz_services;
 
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    be_profile_initially_valid: boolean;
+    biz_services: Class_biz_services.TClass_biz_services;
+    END;
   TWebForm_profile = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_submit_PreRender(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -70,6 +78,9 @@ type
 
 implementation
 
+uses
+  Class_biz_accounts;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -78,6 +89,7 @@ implementation
 procedure TWebForm_profile.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.Button_submit.PreRender, Self.Button_submit_PreRender);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -85,13 +97,29 @@ end;
 
 procedure TWebForm_profile.Page_Load(sender: System.Object; e: System.EventArgs);
 var
+  address_line_1: string;
+  address_line_2: string;
   affiliate_num: string;
-  bdr: borland.data.provider.BdpDataReader;
+  be_air_amb: boolean;
+  be_als_amb: boolean;
+  be_als_squad: boolean;
+  be_bls_amb: boolean;
+  be_qrs: boolean;
+  be_rescue: boolean;
+  be_valid_profile: boolean;
+  city: string;
+  contact_person_name: string;
+  contact_person_phone_num: string;
+  federal_tax_id_num: string;
+  name: string;
+  zip_code: string;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback then begin
+    p := p_type(session['p']);
+  end else begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
-    ki.common.DbOpen;
+    p.biz_services := TClass_biz_services.Create;
     //
     // Set Label_service_name
     //
@@ -103,55 +131,45 @@ begin
     //
     // Get affiliate_num and set Label_affiliate_num
     //
-    affiliate_num := borland.data.provider.BdpCommand.Create
-      (
-      'SELECT affiliate_num FROM service WHERE id = ' + session['service_user_id'].ToString,
-      ki.common.db
-      )
-      .ExecuteScalar.tostring;
+    affiliate_num := p.biz_services.AffiliateNumOfId(session['service_user_id'].ToString);
     Label_affiliate_num.Text := affiliate_num;
     //
     // Get profile
     //
-    bdr := borland.data.provider.BdpCommand.Create
+    p.biz_services.GetProfile
       (
-      'SELECT name,'
-      + 'be_qrs,'
-      + 'be_bls_amb,'
-      + 'be_als_amb,'
-      + 'be_als_squad,'
-      + 'be_air_amb,'
-      + 'be_rescue,'
-      + 'address_line_1,'
-      + 'address_line_2,'
-      + 'city,'
-      + 'zip_code,'
-      + 'federal_tax_id_num,'
-      + 'contact_person_name,'
-      + 'contact_person_phone_num '
-      + 'FROM service '
-      + 'WHERE affiliate_num = "' + affiliate_num + '"',
-      ki.common.db
-      )
-      .ExecuteReader;
-    bdr.Read;
-    //
-    TextBox_service_name.Text := bdr['name'].tostring;
-    CheckBox_qrs.Checked := (bdr['be_qrs'].tostring = '1');
-    CheckBox_bls_amb.Checked := (bdr['be_bls_amb'].tostring = '1');
-    CheckBox_als_amb.Checked := (bdr['be_als_amb'].tostring = '1');
-    CheckBox_als_squad.Checked := (bdr['be_als_squad'].tostring = '1');
-    CheckBox_air_amb.Checked := (bdr['be_air_amb'].tostring = '1');
-    CheckBox_rescue.Checked := (bdr['be_rescue'].tostring = '1');
-    TextBox_address_line_1.Text := bdr['address_line_1'].tostring;
-    TextBox_address_line_2.Text := bdr['address_line_2'].tostring;
-    TextBox_city.Text := bdr['city'].tostring;
-    TextBox_zip_code.Text := bdr['zip_code'].tostring;
-    TextBox_federal_tax_id_num.Text := bdr['federal_tax_id_num'].tostring;
-    TextBox_contact_person_name.Text := bdr['contact_person_name'].tostring;
-    TextBox_contact_person_phone_num.Text := bdr['contact_person_phone_num'].tostring;
-    //
-    ki.common.DbClose;
+      affiliate_num,
+      name,
+      be_qrs,
+      be_bls_amb,
+      be_als_amb,
+      be_als_squad,
+      be_air_amb,
+      be_rescue,
+      address_line_1,
+      address_line_2,
+      city,
+      zip_code,
+      federal_tax_id_num,
+      contact_person_name,
+      contact_person_phone_num,
+      be_valid_profile
+      );
+    TextBox_service_name.Text := name;
+    CheckBox_qrs.Checked := be_qrs;
+    CheckBox_bls_amb.Checked := be_bls_amb;
+    CheckBox_als_amb.Checked := be_als_amb;
+    CheckBox_als_squad.Checked := be_als_squad;
+    CheckBox_air_amb.Checked := be_air_amb;
+    CheckBox_rescue.Checked := be_rescue;
+    TextBox_address_line_1.Text := address_line_1;
+    TextBox_address_line_2.Text := address_line_2;
+    TextBox_city.Text := city;
+    TextBox_zip_code.Text := zip_code;
+    TextBox_federal_tax_id_num.Text := federal_tax_id_num;
+    TextBox_contact_person_name.Text := contact_person_name;
+    TextBox_contact_person_phone_num.Text := contact_person_phone_num;
+    p.be_profile_initially_valid := be_valid_profile;
   end;
 end;
 
@@ -164,6 +182,12 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_profile.Button_submit_PreRender(sender: System.Object; e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
 procedure TWebForm_profile.LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
 begin
   formsauthentication.SignOut;
@@ -172,39 +196,42 @@ begin
 end;
 
 procedure TWebForm_profile.Button_submit_Click(sender: System.Object; e: System.EventArgs);
-  //IpHostEntry: System.Net.IpHostEntry;
+var
+  contact_person_name: string;
+  service_name: string;
 begin
   //
-  // See if the domain part of the given email address actually resolves.
-  //
-  //IpHostEntry := Dns.Resolve(TextBox_contact_person_email_address.Text);
+  contact_person_name := Safe(TextBox_contact_person_name.Text.trim,HUMAN_NAME);
+  service_name := Safe(TextBox_service_name.Text.trim,ORG_NAME);
   //
   // Commit the displayed data to the database.
   //
-  ki.common.DbOpen;
-  borland.data.provider.bdpcommand.Create
+  p.biz_services.SetProfile
     (
-    'UPDATE service '
-    + 'SET name = "' + Safe(TextBox_service_name.Text.trim,ORG_NAME) + '",'
-    +   'be_qrs = ' + CheckBox_qrs.Checked.ToString + ','
-    +   'be_bls_amb = ' + CheckBox_bls_amb.Checked.ToString + ','
-    +   'be_als_amb = ' + CheckBox_als_amb.Checked.ToString + ','
-    +   'be_als_squad = ' + CheckBox_als_squad.Checked.ToString + ','
-    +   'be_air_amb = ' + CheckBox_air_amb.Checked.ToString + ','
-    +   'be_rescue = ' + CheckBox_rescue.Checked.ToString + ','
-    +   'address_line_1 = "' + Safe(TextBox_address_line_1.Text.trim,POSTAL_STREET_ADDRESS) + '",'
-    +   'address_line_2 = "' + Safe(TextBox_address_line_2.Text.trim,POSTAL_STREET_ADDRESS) + '",'
-    +   'city = "' + Safe(TextBox_city.Text.Trim,POSTAL_CITY) + '",'
-    +   'zip_code = "' + Safe(TextBox_zip_code.Text.Trim,HYPHENATED_NUM) + '",'
-    +   'federal_tax_id_num = "' + Safe(TextBox_federal_tax_id_num.Text.trim,HYPHENATED_NUM) + '",'
-    +   'contact_person_name = "' + Safe(TextBox_contact_person_name.Text.trim,HUMAN_NAME) + '",'
-    +   'contact_person_phone_num = "' + Safe(TextBox_contact_person_phone_num.Text.trim,PHONE_NUM) + '",'
-    +   'be_valid_profile = TRUE '
-    + 'WHERE affiliate_num = "' + Safe(Label_affiliate_num.Text,NUM) + '"',
-    ki.common.db
-    )
-    .ExecuteNonQuery;
-  ki.common.DbClose;
+    Safe(Label_affiliate_num.Text,NUM),
+    service_name,
+    CheckBox_qrs.Checked.ToString,
+    CheckBox_bls_amb.Checked.ToString,
+    CheckBox_als_amb.Checked.ToString,
+    CheckBox_als_squad.Checked.ToString,
+    CheckBox_air_amb.Checked.ToString,
+    CheckBox_rescue.Checked.ToString,
+    Safe(TextBox_address_line_1.Text.trim,POSTAL_STREET_ADDRESS),
+    Safe(TextBox_address_line_2.Text.trim,POSTAL_STREET_ADDRESS),
+    Safe(TextBox_city.Text.Trim,POSTAL_CITY),
+    Safe(TextBox_zip_code.Text.Trim,HYPHENATED_NUM),
+    Safe(TextBox_federal_tax_id_num.Text.trim,HYPHENATED_NUM),
+    contact_person_name,
+    Safe(TextBox_contact_person_phone_num.Text.trim,PHONE_NUM)
+    );
+  //
+  if not p.be_profile_initially_valid then begin
+    //
+    // Notify regional council that contact person has affirmed responsibilities.
+    //
+    TClass_biz_accounts.Create.NotifyRegionOfServicePocAffirmation(service_name,contact_person_name);
+  end;
+  //
   server.Transfer('service_overview.aspx');
 end;
 
