@@ -59,6 +59,12 @@ type
       service_name: string;
       fy_designator: string
       );
+    procedure NotifyRegionOfServicePocAffirmation
+      (
+      service_id: string;
+      service_name: string;
+      contact_person_name: string
+      );
     procedure SetTemporaryPassword
       (
       user_kind: string;
@@ -330,6 +336,30 @@ end;
 function TClass_biz_accounts.SelfEmailAddress: string;
 begin
   SelfEmailAddress := EmailAddressByKindId(biz_user.Kind,biz_user.IdNum);
+end;
+
+procedure TClass_biz_accounts.NotifyRegionOfServicePocAffirmation
+  (
+  service_id: string;
+  service_name: string;
+  contact_person_name: string
+  );
+begin
+  smtpmail.Send
+    (
+    EmailAddressByKindId('service',service_id),
+    EmailTargetByRole('emsof-coordinator'),
+    'POC has assumed EMSOF resposibility for Service',
+    contact_person_name + ' has successfully logged into WebEMSOF and has agreed to assume EMSOF Point Of Contact responsibilities '
+    + 'for ' + service_name + '.  Furthermore, ' + contact_person_name + ' has agreed to give '
+    + 'reasonable advance notice to both the service and the regional council if it becomes necessary to relinquish such '
+    + 'responsibilities.'   + NEW_LINE
+    + NEW_LINE
+    + 'Replies to this message will be addressed to ' + contact_person_name + '.' + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
+
 end;
 
 procedure TClass_biz_accounts.SetTemporaryPassword

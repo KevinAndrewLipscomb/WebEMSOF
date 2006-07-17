@@ -27,6 +27,12 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_submit_PreRender(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
+  //
+  // Expected session objects:
+  //
+  //   service_name: string;
+  //   service_user_id: string;
+  //
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -197,10 +203,12 @@ end;
 
 procedure TWebForm_profile.Button_submit_Click(sender: System.Object; e: System.EventArgs);
 var
+  affiliate_num: string;
   contact_person_name: string;
   service_name: string;
 begin
   //
+  affiliate_num := Safe(Label_affiliate_num.Text,NUM);
   contact_person_name := Safe(TextBox_contact_person_name.Text.trim,HUMAN_NAME);
   service_name := Safe(TextBox_service_name.Text.trim,ORG_NAME);
   //
@@ -208,7 +216,7 @@ begin
   //
   p.biz_services.SetProfile
     (
-    Safe(Label_affiliate_num.Text,NUM),
+    affiliate_num,
     service_name,
     CheckBox_qrs.Checked.ToString,
     CheckBox_bls_amb.Checked.ToString,
@@ -229,7 +237,12 @@ begin
     //
     // Notify regional council that contact person has affirmed responsibilities.
     //
-    TClass_biz_accounts.Create.NotifyRegionOfServicePocAffirmation(service_name,contact_person_name);
+    TClass_biz_accounts.Create.NotifyRegionOfServicePocAffirmation
+      (
+      session['service_user_id'].tostring,
+      service_name,
+      contact_person_name
+      );
   end;
   //
   server.Transfer('service_overview.aspx');

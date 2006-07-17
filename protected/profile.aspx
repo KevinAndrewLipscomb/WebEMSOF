@@ -109,7 +109,7 @@
                     <tr>
                       <td></td>
                       <td>
-                <p>By submitting this form to WebEMSOF, you are affirming that you are the contact person listed above, and that you are agreeing to serve as the above service's EMSOF point of contact for this EMSOF cycle.&nbsp; You further affirm that if you must relinquish your responsibilities the service's EMSOF point of contact during this cycle, you will give reasonable advanced notice to the service and to the regional council.</p>
+                <p>By submitting this form to WebEMSOF, you are affirming that you are the contact person listed above, and you are agreeing to serve as the above service's EMSOF point of contact for this EMSOF cycle.&nbsp; You further affirm that if you must relinquish your responsibilities as the service's EMSOF point of contact during this cycle, you will give reasonable advanced notice to the service and to the regional council.</p>
                 <p>
                         <ASP:Button id="Button_submit" runat="server" text="Submit"></ASP:Button></p></td>
                       <td></td>
