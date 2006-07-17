@@ -350,7 +350,9 @@ begin
     EmailAddressByKindId('service',service_id),
     EmailTargetByRole('emsof-coordinator'),
     'POC has assumed EMSOF resposibility for Service',
-    contact_person_name + ' has successfully logged into WebEMSOF and has agreed to assume EMSOF Point Of Contact responsibilities '
+    'Dear Regional Council EMSOF Coordinator,' + NEW_LINE
+    + NEW_LINE
+    + contact_person_name + ' has successfully logged into WebEMSOF and has agreed to assume EMSOF Point Of Contact responsibilities '
     + 'for ' + service_name + '.  Furthermore, ' + contact_person_name + ' has agreed to give '
     + 'reasonable advance notice to both the service and the regional council if it becomes necessary to relinquish such '
     + 'responsibilities.'   + NEW_LINE
