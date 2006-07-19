@@ -29,6 +29,8 @@ type
       fy_id: string = ''
       )
       : decimal;
+    function CountyCodeOfCountyDictum(county_dictum_id: string): string;
+    function RegionCodeOfCountyDictum(county_dictum_id: string): string;
     function SumOfSelfDictatedAppropriations(fy_id: string = ''): decimal;
   end;
 
@@ -92,6 +94,18 @@ begin
   end;
   AppropriationFromOnlyParent :=
     TClass_db_appropriations.Create.AppropriationFromOnlyParent(recipient_kind,recipient_id,fy_id);
+end;
+
+function TClass_biz_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
+begin
+  CountyCodeOfCountyDictum :=
+    TClass_db_appropriations.Create.CountyCodeOfCountyDictum(county_dictum_id);
+end;
+
+function TClass_biz_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
+begin
+  RegionCodeOfCountyDictum :=
+    TClass_db_appropriations.Create.RegionCodeOfCountyDictum(county_dictum_id);
 end;
 
 function TClass_biz_appropriations.SumOfSelfDictatedAppropriations(fy_id: string = ''): decimal;

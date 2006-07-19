@@ -72,6 +72,11 @@ type
 
 implementation
 
+uses
+  Class_biz_accounts,
+  Class_biz_appropriations,
+  Class_biz_emsof_requests;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -204,6 +209,7 @@ end;
 
 procedure TWebForm_finalize.Button_finalize_Click(sender: System.Object; e: System.EventArgs);
 var
+  biz_accounts: TClass_biz_accounts;
   cc_email_address: string;
   emsof_request_master_status: string;
   service_email_address: string;
@@ -220,46 +226,23 @@ begin
     and CheckBox_understand_wait_for_approval_to_order.checked
   then begin
     //
-    ki.common.DbOpen;
-    //
     // Update database.
     //
-    borland.data.provider.bdpcommand.Create
-      (
-      'update emsof_request_master set status_code = 3 where id = ' + session['emsof_request_master_id'].tostring,
-      ki.common.db
-      )
-      .ExecuteNonQuery;
+    TClass_biz_emsof_requests.Create.Finalize(session['emsof_request_master_id'].tostring);
     //
     // Update the appropriate session object.
     //
-    emsof_request_master_status := borland.data.provider.bdpcommand.Create
-      ('select description from request_status_code_description_map where code = 3',ki.common.db)
-      .ExecuteScalar.tostring;
+    emsof_request_master_status := system.object(Class_biz_emsof_requests.status_type(3)).tostring;
     session.Remove('emsof_request_master_status');
     session.Add('emsof_request_master_status',emsof_request_master_status);
     //
-    // Send notification to county coordinator.
+    // Send notifications to county and regional coordinators.
     //
-    //   Set up the command to get service's email address of record.
-    service_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address from service_user where id ="' + session['service_user_id'].tostring + '"',
-      ki.common.db
-      )
-      .ExecuteScalar.tostring;
-    //   Set up the command to get the County Coorindator's email address.
-    cc_email_address := borland.data.provider.bdpcommand.Create
-      (
-      'select password_reset_email_address'
-      + ' from county_dictated_appropriation'
-      +   ' join region_dictated_appropriation'
-      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-      +   ' join county_user on (county_user.id=region_dictated_appropriation.county_code)'
-      + ' where county_dictated_appropriation.id = ' + session['county_dictated_appropriation_id'].tostring,
-      ki.common.db
-      )
-      .ExecuteScalar.tostring;
+    biz_accounts := TClass_biz_accounts.Create;
+    //
+    service_email_address := biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring);
+    cc_email_address := biz_accounts.EmailAddressByKindId
+      ('county',TClass_biz_appropriations.Create.CountyCodeOfCountyDictum(session['county_dictated_appropriation_id'].tostring));
     //
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
@@ -281,8 +264,27 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    //
-    ki.common.DbClose;
+    smtpmail.Send
+      (
+      service_email_address,
+      biz_accounts.EmailTargetByRole('emsof-coordinator'),
+      session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
+      + ' request',
+      session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
+      + ' request for ' + session['fiscal_year_designator'].tostring + '.' + NEW_LINE
+      + NEW_LINE
+      + 'WebEMSOF has forwarded the finalized request to <' + cc_email_address + '> for county approval.' + NEW_LINE
+      + NEW_LINE
+      + 'You can use WebEMSOF by visiting:' + NEW_LINE
+      + NEW_LINE
+      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
+      + NEW_LINE
+      + 'Replies to this message will be addressed to the ' + session['service_name'].ToString + ' EMSOF Coordinator.'
+      + NEW_LINE
+      + NEW_LINE
+      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      );
     //
     server.Transfer('request_overview.aspx');
     //
