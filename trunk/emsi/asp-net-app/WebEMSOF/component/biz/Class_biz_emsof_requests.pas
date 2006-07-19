@@ -86,6 +86,7 @@ type
       reason: string;
       emsof_ante: string
       );
+    procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
     procedure MarkDone
@@ -371,6 +372,11 @@ begin
     emsof_ante
     );
   //
+end;
+
+procedure TClass_biz_emsof_requests.Finalize(master_id: string);
+begin
+  db_emsof_requests.Finalize(master_id);
 end;
 
 function TClass_biz_emsof_requests.FyDesignatorOf(e_item: system.object): string;

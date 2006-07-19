@@ -27,6 +27,8 @@ type
       fy_id: string
       )
       : decimal;
+    function CountyCodeOfCountyDictum(county_dictum_id: string): string;
+    function RegionCodeOfCountyDictum(county_dictum_id: string): string;
     function SumOfSelfDictatedAppropriations
       (
       self_kind: string;
@@ -105,6 +107,40 @@ begin
   end;
   connection.Open;
   AppropriationFromOnlyParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  connection.Close;
+end;
+
+function TClass_db_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
+begin
+  connection.Open;
+  CountyCodeOfCountyDictum := borland.data.provider.bdpcommand.Create
+    (
+    'select county_code'
+    + ' from county_dictated_appropriation'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    + ' where county_dictated_appropriation.id = ' + county_dictum_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  connection.Close;
+end;
+
+function TClass_db_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
+begin
+  connection.Open;
+  RegionCodeOfCountyDictum := borland.data.provider.bdpcommand.Create
+    (
+    'select region_code'
+    + ' from county_dictated_appropriation'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' where county_dictated_appropriation.id = ' + county_dictum_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
   connection.Close;
 end;
 

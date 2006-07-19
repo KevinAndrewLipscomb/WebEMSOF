@@ -81,6 +81,7 @@ type
       user_kind: string;
       role: string
       );
+    procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
     procedure MarkDone
@@ -345,6 +346,15 @@ begin
     + ' where emsof_request_master.id = ' + master_id,
     connection
     )
+    .ExecuteNonQuery;
+  connection.Close;
+end;
+
+procedure TClass_db_emsof_requests.Finalize(master_id: string);
+begin
+  connection.Open;
+  borland.data.provider.bdpcommand.Create
+    ('update emsof_request_master set status_code = 3 where id = ' + master_id,connection)
     .ExecuteNonQuery;
   connection.Close;
 end;
