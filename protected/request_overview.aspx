@@ -20,7 +20,7 @@
 	  </small></p>
 <h3>
 		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3></small>
-		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_parent_appropriation_outer" runat="server">
               <tr>
 				<td>
 	  <table cellspacing="0" cellpadding="5" border="0">

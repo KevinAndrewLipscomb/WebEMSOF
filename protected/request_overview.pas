@@ -30,8 +30,6 @@ type
     sum_of_emsof_antes: decimal;
     unused_amount: decimal;
     END;
-
-type
   TWebForm_request_overview = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -70,6 +68,7 @@ type
     LinkButton_finalize: System.Web.UI.WebControls.LinkButton;
     Label_master_status: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    Table_parent_appropriation_outer: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -125,12 +124,7 @@ begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
     ki.common.DbOpen;
     //
-    // Set parent appropriation labels.
-    //
     Label_service_name.text := session['service_name'].ToString;
-    Label_fiscal_year_designator.text := session['fiscal_year_designator'].tostring;
-    Label_sponsor_county.text := session['sponsor_county'].tostring;
-    Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
     Label_master_status.text := session['emsof_request_master_status'].tostring;
     //
     // All further rendering is deadline-dependent.
@@ -158,12 +152,14 @@ begin
       .ExecuteScalar.tostring;
     //
     if (not p.be_before_deadline) or p.be_finalized then begin
-      TableRow_sum_of_emsof_antes.visible := FALSE;
-      TableRow_unrequested_amount.visible := FALSE;
+      Table_parent_appropriation_outer.visible := FALSE;
       Table_deadlines.visible := FALSE;
       HyperLink_add_item_to_request.visible := FALSE;
       LinkButton_finalize.visible := FALSE;
     end else begin
+      Label_fiscal_year_designator.text := session['fiscal_year_designator'].tostring;
+      Label_sponsor_county.text := session['sponsor_county'].tostring;
+      Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
       Label_make_requests_deadline.text := make_item_requests_deadline.tostring('HH:mm:ss dddd, MMMM dd, yyyy');
       session.Remove('emsof_request_item_priority');
       session.Add('emsof_request_item_priority',system.string.EMPTY);
