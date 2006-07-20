@@ -12,8 +12,12 @@
       <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
-      <p><small>[ 
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_service_overview" runat="server" navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ]</small></p>
+	  <p>
+		<small>[
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_service_overview" runat="server" navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ] 
+          [ Change your WebEMSOF
+		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>&nbsp;]
+		</small></p>
       <p>
         <ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
 <p><strong>
