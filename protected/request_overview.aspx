@@ -79,6 +79,7 @@
             </tr>
         </table>
 	  </p>
+	  <p><small>[ Open <ASP:HyperLink id="HyperLink_epel_doc" runat="server" target="_blank" navigateurl="C:\Inetpub\wwwroot\WebEMSOF\resource\funding-priorities-epel-fy0607.pdf">DOH Notice of EMSOF Funding Priorities / Eligible Provider Equipment List</ASP:HyperLink> in new window ]</small></p>
 	  <p>
 		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
 			<tr>

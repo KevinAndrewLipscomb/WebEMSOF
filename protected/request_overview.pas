@@ -69,6 +69,7 @@ type
     Label_master_status: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     Table_parent_appropriation_outer: System.Web.UI.HtmlControls.HtmlTable;
+    HyperLink_epel_doc: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
