@@ -124,6 +124,7 @@ CREATE TABLE county_user (
 DROP TABLE IF EXISTS eligible_provider_equipment_list;
 CREATE TABLE eligible_provider_equipment_list (
   `code` smallint(5) unsigned NOT NULL auto_increment,
+  fiscal_year_id smallint(5) unsigned NOT NULL,
   description varchar(127) NOT NULL,
   life_expectancy_years tinyint(3) unsigned default NULL,
   be_eligible_als_amb tinyint(1) NOT NULL,
@@ -141,43 +142,43 @@ CREATE TABLE eligible_provider_equipment_list (
 -- Dumping data for table `eligible_provider_equipment_list`
 -- 
 
-INSERT INTO eligible_provider_equipment_list (code, description, life_expectancy_years, be_eligible_als_amb, be_eligible_als_squad, be_eligible_bls_amb, be_eligible_qrs, allowable_cost, funding_level_nonrural, funding_level_rural) VALUES 
-(1, 'EKG monitor/defibrillator w/pacer', 5, 1, 1, 0, 0, 12000.00, 6000.00, 7200.00),
-(2, '12 lead EKG', 5, 1, 1, 0, 0, 20000.00, 10000.00, 12000.00),
-(3, 'AED', 5, 0, 0, 1, 1, 3500.00, 1750.00, 2100.00),
-(4, 'Oxygen system parts', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
-(5, 'Capnography', 3, 1, 1, 0, 0, 3000.00, 1500.00, 1800.00),
-(6, 'CPAP', 5, 1, 1, 0, 0, 900.00, 450.00, 540.00),
-(7, 'Pulse oximeter', 5, 1, 1, 0, 0, 700.00, 350.00, 420.00),
-(8, 'Nitrous oxide delivery system', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
-(9, 'IV infusion pump', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
-(10, 'Intubation, durable', 5, 1, 1, 0, 0, 600.00, 300.00, 360.00),
-(11, 'Transtracheal jet insufflators', 5, 1, 1, 0, 0, 200.00, 100.00, 120.00),
-(12, 'Splinting/immobilization devices', 3, 1, 1, 1, 1, 500.00, 250.00, 300.00),
-(13, 'Stairchair', 5, 1, 0, 1, 0, 2000.00, 1000.00, 1200.00),
-(14, 'Stretcher, primary', 5, 1, 0, 1, 0, 4000.00, 2000.00, 2400.00),
-(15, 'Stretcher/chair combination', 5, 1, 0, 1, 0, 700.00, 350.00, 420.00),
-(16, 'Suction, portable, battery operated', 3, 1, 1, 1, 1, 900.00, 450.00, 540.00),
-(17, 'Ventilator, automatic', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
-(18, 'Ambulance', NULL, 1, 0, 1, 0, 33333.33, 15000.00, 20000.00),
-(19, 'Squad/response vehicle', NULL, 0, 1, 0, 1, 15000.00, 7500.00, 9000.00),
-(20, 'Data collection software', NULL, 1, 1, 1, 1, 1700.00, 1700.00, 1700.00),
-(21, 'Data collection hardware', 3, 1, 1, 1, 1, 1500.00, 750.00, 900.00),
-(22, 'Radio, mobile (up to 2/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
-(23, 'Radio, portable (1/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
-(24, 'Triage vest set', 5, 1, 1, 1, 1, 150.00, 75.00, 90.00),
-(25, 'Triage system', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
-(26, 'Alerting (up to 5)', 5, 1, 1, 1, 1, 400.00, 200.00, 240.00),
-(27, 'Vehicle safety monitoring system', 5, 1, 1, 1, 1, 3500.00, 1750.00, 2100.00),
-(28, 'PPE/turnout gear', 5, 1, 1, 1, 1, 1200.00, 600.00, 720.00),
-(29, 'Protective ballistic vest (over garment style)', 5, 1, 1, 1, 1, 1000.00, 500.00, 600.00),
-(30, 'Traffic safety', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
-(31, 'Large patient moving/carrying device', 10, 1, 1, 1, 1, 300.00, 150.00, 180.00),
-(32, 'SCBA (up to 2/licensed vehicle)', 10, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00);
+INSERT INTO eligible_provider_equipment_list (code, fiscal_year_id, description, life_expectancy_years, be_eligible_als_amb, be_eligible_als_squad, be_eligible_bls_amb, be_eligible_qrs, allowable_cost, funding_level_nonrural, funding_level_rural) VALUES
+(1, 1, 'EKG monitor/defibrillator w/pacer', 5, 1, 1, 0, 0, 12000.00, 6000.00, 7200.00),
+(2, 1, '12 lead EKG', 5, 1, 1, 0, 0, 20000.00, 10000.00, 12000.00),
+(3, 1, 'AED', 5, 0, 0, 1, 1, 3500.00, 1750.00, 2100.00),
+(4, 1, 'Oxygen system parts', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(5, 1, 'Capnography', 3, 1, 1, 0, 0, 3000.00, 1500.00, 1800.00),
+(6, 1, 'CPAP', 5, 1, 1, 0, 0, 900.00, 450.00, 540.00),
+(7, 1, 'Pulse oximeter', 5, 1, 1, 0, 0, 700.00, 350.00, 420.00),
+(8, 1, 'Nitrous oxide delivery system', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
+(9, 1, 'IV infusion pump', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
+(10, 1, 'Intubation, durable', 5, 1, 1, 0, 0, 600.00, 300.00, 360.00),
+(11, 1, 'Transtracheal jet insufflators', 5, 1, 1, 0, 0, 200.00, 100.00, 120.00),
+(12, 1, 'Splinting/immobilization devices', 3, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(13, 1, 'Stairchair', 5, 1, 0, 1, 0, 2000.00, 1000.00, 1200.00),
+(14, 1, 'Stretcher, primary', 5, 1, 0, 1, 0, 4000.00, 2000.00, 2400.00),
+(15, 1, 'Stretcher/chair combination', 5, 1, 0, 1, 0, 700.00, 350.00, 420.00),
+(16, 1, 'Suction, portable, battery operated', 3, 1, 1, 1, 1, 900.00, 450.00, 540.00),
+(17, 1, 'Ventilator, automatic', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
+(18, 1, 'Ambulance', NULL, 1, 0, 1, 0, 33333.33, 15000.00, 20000.00),
+(19, 1, 'Squad/response vehicle', NULL, 0, 1, 0, 1, 15000.00, 7500.00, 9000.00),
+(20, 1, 'Data collection software', NULL, 1, 1, 1, 1, 1700.00, 1700.00, 1700.00),
+(21, 1, 'Data collection hardware', 3, 1, 1, 1, 1, 1500.00, 750.00, 900.00),
+(22, 1, 'Radio, mobile (up to 2/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
+(23, 1, 'Radio, portable (1/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
+(24, 1, 'Triage vest set', 5, 1, 1, 1, 1, 150.00, 75.00, 90.00),
+(25, 1, 'Triage system', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(26, 1, 'Alerting (up to 5)', 5, 1, 1, 1, 1, 400.00, 200.00, 240.00),
+(27, 1, 'Vehicle safety monitoring system', 5, 1, 1, 1, 1, 3500.00, 1750.00, 2100.00),
+(28, 1, 'PPE/turnout gear', 5, 1, 1, 1, 1, 1200.00, 600.00, 720.00),
+(29, 1, 'Protective ballistic vest (over garment style)', 5, 1, 1, 1, 1, 1000.00, 500.00, 600.00),
+(30, 1, 'Traffic safety', 5, 1, 1, 1, 1, 500.00, 250.00, 300.00),
+(31, 1, 'Large patient moving/carrying device', 10, 1, 1, 1, 1, 300.00, 150.00, 180.00),
+(32, 1, 'SCBA (up to 2/licensed vehicle)', 10, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00);
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `emsof_request_detail`
 -- 
 
@@ -601,6 +602,12 @@ ALTER TABLE `county_region_map`
 -- 
 ALTER TABLE `county_user`
   ADD CONSTRAINT county_user_ibfk_1 FOREIGN KEY (id) REFERENCES county_code_name_map (`code`);
+
+--
+-- Constraints for table `eligible_provider_equipment_list`
+--
+ALTER TABLE `eligible_provider_equipment_list`
+  ADD CONSTRAINT eligible_provider_equipment_list_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id);
 
 -- 
 -- Constraints for table `emsof_request_detail`
