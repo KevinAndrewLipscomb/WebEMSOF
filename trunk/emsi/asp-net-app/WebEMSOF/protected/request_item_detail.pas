@@ -543,7 +543,8 @@ begin
       or ((unit_cost <= p.allowable_cost) and (p.funding_level = p.allowable_cost))
         //
         // This is the case where items in an "equipment category" are always fully funded (up to the limit of a service's
-        // appropriation, which is not within the scope of this form).  This initially describes only Data Collection Software.
+        // appropriation, which is not within the scope of this form).  This initially describes only Data Collection Software and
+        // the EMT-P Written Test.
         //
     then begin
       //
