@@ -42,6 +42,19 @@ type
     procedure TWebForm_request_item_detail_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  //
+  // Expected session objects:
+  //
+  //   be_before_service_to_county_submission_deadline: string;
+  //   be_finalized: string;
+  //   county_dictated_appropriation_id: string;
+  //   emsof_request_item_code: string;
+  //   emsof_request_item_equipment_category: string;
+  //   emsof_request_item_priority: string;
+  //   emsof_request_master_id: string;
+  //   fiscal_year_designator: string;
+  //   service_user_id: string;
+  //
   strict private
     p: p_type;
     procedure AddItem;
@@ -99,6 +112,9 @@ type
 
 implementation
 
+uses
+  Class_biz_fiscal_years;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -131,6 +147,7 @@ var
   be_finalized: boolean;
   be_locked: boolean;
   be_new: boolean;
+  biz_fiscal_years: TClass_biz_fiscal_years;
   cmdText: string;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -138,10 +155,11 @@ begin
     p := p_type(session['p']);
   end else begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
+    biz_fiscal_years := TClass_biz_fiscal_years.Create;
     //
     ki.common.DbOpen;
     //
-    // Set Label_match_level.
+    // Set default match_level.
     //
     p.match_level := decimal.Parse
       (
@@ -171,7 +189,8 @@ begin
     end;
     p.cmdText_get_equipment_category_monetary_details := p.cmdText_get_equipment_category_monetary_details
     + ' from eligible_provider_equipment_list'
-    + ' where code = ';
+    + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfDesignator(session['fiscal_year_designator'].tostring)
+    +   ' and code = ';
     //    Mind these indices if the query changes.
     p.bdri_equipment_category_allowable_cost := 1;
     p.bdri_equipment_category_funding_level := 2;
@@ -205,7 +224,9 @@ begin
         )
         .ExecuteReader;
       bdr_factors.Read;
-      cmdText := 'SELECT code,description FROM eligible_provider_equipment_list WHERE FALSE '; // Default to empty set
+      cmdText := 'SELECT code,description FROM eligible_provider_equipment_list'
+      + ' WHERE fiscal_year_id = ' + biz_fiscal_years.IdOfDesignator(session['fiscal_year_designator'].tostring)
+      +   ' and (FALSE '; // Default to empty set
       if bdr_factors['be_als_amb'].tostring = '1' then begin
         cmdText := cmdText + 'or be_eligible_als_amb = 1 ';
       end;
@@ -218,7 +239,7 @@ begin
       if bdr_factors['be_qrs'].tostring = '1' then begin
         cmdText := cmdText + 'or be_eligible_qrs = 1 ';
       end;
-      cmdText := cmdText + 'ORDER BY description';
+      cmdText := cmdText + ') ORDER BY description';
       bdr_factors.Close;
       //
       bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,ki.common.db).ExecuteReader;
@@ -251,34 +272,38 @@ begin
     //
     // Manage the filling of the other data elements.
     //
-    ki.common.DbClose;
-    ShowDependentData;
-    ki.common.DbOpen;
-    //
-    bdr_user_details := borland.data.provider.bdpcommand.Create
-      (
-      'select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante'
-      + ' from emsof_request_detail'
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + session['emsof_request_item_priority'].tostring,
-      ki.common.db
-      )
-      .ExecuteReader;
-    bdr_user_details.Read;
-    TextBox_make_model.text := bdr_user_details['make_model'].tostring;
-    TextBox_place_kept.text := bdr_user_details['place_kept'].tostring;
-    if bdr_user_details['be_refurbished'].tostring = '0' then begin
-       RadioButtonList_condition.selectedindex := 0;
-    end else begin
-       RadioButtonList_condition.selectedindex := 1;
+    if not be_new then begin
+      //
+      ki.common.DbClose;
+      ShowDependentData;
+      ki.common.DbOpen;
+      //
+      bdr_user_details := borland.data.provider.bdpcommand.Create
+        (
+        'select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante'
+        + ' from emsof_request_detail'
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + session['emsof_request_item_priority'].tostring,
+        ki.common.db
+        )
+        .ExecuteReader;
+      bdr_user_details.Read;
+      TextBox_make_model.text := bdr_user_details['make_model'].tostring;
+      TextBox_place_kept.text := bdr_user_details['place_kept'].tostring;
+      if bdr_user_details['be_refurbished'].tostring = '0' then begin
+         RadioButtonList_condition.selectedindex := 0;
+      end else begin
+         RadioButtonList_condition.selectedindex := 1;
+      end;
+      TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
+      TextBox_quantity.text := bdr_user_details['quantity'].tostring;
+      TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
+      p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
+      Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
+      //
+      Recalculate;
+      //
     end;
-    TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
-    TextBox_quantity.text := bdr_user_details['quantity'].tostring;
-    TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
-    p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
-    Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
-    //
-    Recalculate;
     //
     // Manage the availability of the remaining item-detail-related controls.
     //

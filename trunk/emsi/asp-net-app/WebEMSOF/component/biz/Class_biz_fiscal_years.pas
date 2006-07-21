@@ -9,6 +9,7 @@ type
   public
     constructor Create;
     function IdOfCurrent: string;
+    function IdOfDesignator(designator: string): string;
   end;
 
 implementation
@@ -25,6 +26,11 @@ end;
 function TClass_biz_fiscal_years.IdOfCurrent: string;
 begin
   IdOfCurrent := TClass_db_fiscal_years.Create.IdOfCurrent;
+end;
+
+function TClass_biz_fiscal_years.IdOfDesignator(designator: string): string;
+begin
+  IdOfDesignator := TClass_db_fiscal_years.Create.IdOfDesignator(designator);
 end;
 
 end.

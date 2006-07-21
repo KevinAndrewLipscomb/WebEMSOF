@@ -13,6 +13,7 @@ type
   public
     constructor Create;
     function IdOfCurrent: string;
+    function IdOfDesignator(designator: string): string;
   end;
 
 implementation
@@ -27,6 +28,14 @@ function TClass_db_fiscal_years.IdOfCurrent: string;
 begin
   connection.Open;
   IdOfCurrent := borland.data.provider.bdpcommand.Create('select max(id) from fiscal_year',connection).ExecuteScalar.tostring;
+  connection.Close;
+end;
+
+function TClass_db_fiscal_years.IdOfDesignator(designator: string): string;
+begin
+  connection.Open;
+  IdOfDesignator := borland.data.provider.bdpcommand.Create
+    ('select id from fiscal_year where designator = "' + designator + '"',connection).ExecuteScalar.tostring;
   connection.Close;
 end;
 
