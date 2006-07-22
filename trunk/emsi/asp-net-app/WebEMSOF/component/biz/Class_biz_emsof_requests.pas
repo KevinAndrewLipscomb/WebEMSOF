@@ -45,6 +45,18 @@ type
     function BeOkToApproveEmsofRequest(status: status_type): boolean;
     function BeOkToDrillDown(status: status_type): boolean;
     function BeOkToMarkDone(status: status_type): boolean;
+    function BeValidRegionalExecDirApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
+    function BeValidRegionalPlannerApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
     procedure BindDetail
       (
       master_id: string;
@@ -96,8 +108,6 @@ type
       );
     function NextReviewer(status: status_type): string;
     function PropertyNameOfEmsofAnte: string;
-    function RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
-    function RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
@@ -444,14 +454,24 @@ begin
   PropertyNameOfEmsofAnte := db_emsof_requests.PropertyNameOfEmsofAnte;
 end;
 
-function TClass_biz_emsof_requests.RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
+function TClass_biz_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
 begin
-  RegionalExecDirApprovalTimestampOf := db_emsof_requests.RegionalExecDirApprovalTimestampOf(master_id);
+  BeValidRegionalExecDirApprovalTimestampOf := db_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf(master_id,timestamp);
 end;
 
-function TClass_biz_emsof_requests.RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
+function TClass_biz_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
 begin
-  RegionalPlannerApprovalTimestampOf := db_emsof_requests.RegionalPlannerApprovalTimestampOf(master_id);
+  BeValidRegionalPlannerApprovalTimestampOf := db_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf(master_id,timestamp);
 end;
 
 function TClass_biz_emsof_requests.ReworkDeadline(e_item: system.object): datetime;
