@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                            [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                             [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -31,7 +31,7 @@
                                               <td bgcolor="#f5f5f5"><strong>Financial snapshot&nbsp;of current cycle</strong></td>
                                             </tr>
                                             <tr>
-                                              <td>
+                                              <td align="center">
                                                 <table cellspacing="0" cellpadding="5" border="0">
                                                     <tr>
 													  <td align="right">

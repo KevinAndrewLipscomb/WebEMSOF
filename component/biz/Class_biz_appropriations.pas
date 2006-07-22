@@ -14,7 +14,10 @@ type
     { Private Declarations }
   public
     constructor Create;
-    function AppropriationFromSpecificParent
+    function CountyCodeOfCountyDictum(county_dictum_id: string): string;
+    function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
+    function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    function SumOfAppropriationsFromSpecificParent
       (
       parent_id: string;
       recipient_kind: string = '';
@@ -22,15 +25,19 @@ type
       fy_id: string = ''
       )
       : decimal;
-    function AppropriationFromOnlyParent
+    function SumOfAppropriationsFromOnlyParent
       (
       recipient_kind: string = '';
       recipient_id: string = '';
       fy_id: string = ''
       )
       : decimal;
-    function CountyCodeOfCountyDictum(county_dictum_id: string): string;
-    function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    function SumOfAppropriationsToServicesInRegion
+      (
+      region_id: string;
+      fy_id: string
+      )
+      : decimal;
     function SumOfSelfDictatedAppropriations(fy_id: string = ''): decimal;
   end;
 
@@ -47,7 +54,24 @@ begin
   // TODO: Add any constructor code here
 end;
 
-function TClass_biz_appropriations.AppropriationFromSpecificParent
+function TClass_biz_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
+begin
+  CountyCodeOfCountyDictum :=
+    TClass_db_appropriations.Create.CountyCodeOfCountyDictum(county_dictum_id);
+end;
+
+function TClass_biz_appropriations.ParentAppropriationOfEmsofRequest(master_id: string): decimal;
+begin
+  ParentAppropriationOfEmsofRequest := TClass_db_appropriations.Create.ParentAppropriationOfEmsofRequest(master_id);
+end;
+
+function TClass_biz_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
+begin
+  RegionCodeOfCountyDictum :=
+    TClass_db_appropriations.Create.RegionCodeOfCountyDictum(county_dictum_id);
+end;
+
+function TClass_biz_appropriations.SumOfAppropriationsFromSpecificParent
   (
   parent_id: string;
   recipient_kind: string = '';
@@ -68,11 +92,11 @@ begin
   if fy_id = system.string.EMPTY then begin
     fy_id := TClass_biz_fiscal_years.Create.IdOfCurrent;
   end;
-  AppropriationFromSpecificParent :=
-    TClass_db_appropriations.Create.AppropriationFromSpecificParent(parent_id,recipient_kind,recipient_id,fy_id);
+  SumOfAppropriationsFromSpecificParent :=
+    TClass_db_appropriations.Create.SumOfAppropriationsFromSpecificParent(parent_id,recipient_kind,recipient_id,fy_id);
 end;
 
-function TClass_biz_appropriations.AppropriationFromOnlyParent
+function TClass_biz_appropriations.SumOfAppropriationsFromOnlyParent
   (
   recipient_kind: string = '';
   recipient_id: string = '';
@@ -92,20 +116,18 @@ begin
   if fy_id = system.string.EMPTY then begin
     fy_id := TClass_biz_fiscal_years.Create.IdOfCurrent;
   end;
-  AppropriationFromOnlyParent :=
-    TClass_db_appropriations.Create.AppropriationFromOnlyParent(recipient_kind,recipient_id,fy_id);
+  SumOfAppropriationsFromOnlyParent :=
+    TClass_db_appropriations.Create.SumOfAppropriationsFromOnlyParent(recipient_kind,recipient_id,fy_id);
 end;
 
-function TClass_biz_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
+function TClass_biz_appropriations.SumOfAppropriationsToServicesInRegion
+  (
+  region_id: string;
+  fy_id: string
+  )
+  : decimal;
 begin
-  CountyCodeOfCountyDictum :=
-    TClass_db_appropriations.Create.CountyCodeOfCountyDictum(county_dictum_id);
-end;
-
-function TClass_biz_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
-begin
-  RegionCodeOfCountyDictum :=
-    TClass_db_appropriations.Create.RegionCodeOfCountyDictum(county_dictum_id);
+  SumOfAppropriationsToServicesInRegion := TClass_db_appropriations.Create.SumOfAppropriationsToServicesInRegion(region_id,fy_id);
 end;
 
 function TClass_biz_appropriations.SumOfSelfDictatedAppropriations(fy_id: string = ''): decimal;
