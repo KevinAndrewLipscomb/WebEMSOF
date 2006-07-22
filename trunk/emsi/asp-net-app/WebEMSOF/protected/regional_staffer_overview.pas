@@ -97,7 +97,9 @@ implementation
 
 uses
   Class_biz_appropriations,
-  Class_biz_emsof_requests;
+  Class_biz_emsof_requests,
+  Class_biz_fiscal_years,
+  Class_biz_regional_staffers;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -149,11 +151,16 @@ begin
     biz_appropriations := TClass_biz_appropriations.Create;
     biz_emsof_requests := TClass_biz_emsof_requests.Create;
     //
-    parent_appropriation := biz_appropriations.AppropriationFromOnlyParent;
+    parent_appropriation := biz_appropriations.SumOfAppropriationsFromOnlyParent;
     Label_parent_appropriation.text := parent_appropriation.tostring('C');
     sum_of_appropriations := biz_appropriations.SumOfSelfDictatedAppropriations;
     Label_sum_of_appropriations.text := sum_of_appropriations.tostring('C');
-//    Label_appropriated_to_services.text :=
+    Label_appropriated_to_services.text := biz_appropriations.SumOfAppropriationsToServicesInRegion
+      (
+      TClass_biz_regional_staffers.Create.RegionCodeOf(session['regional_staffer_user_id'].tostring),
+      TClass_biz_fiscal_years.Create.IdOfCurrent
+      )
+      .tostring('C');
     Label_requested_by_services.text := biz_emsof_requests.SumOfRequestValues.tostring('C');
 //    Label_actually_spent.text :=
 //    Label_remaining.text := (parent_appropriation - amount_actually_spent).tostring('C');

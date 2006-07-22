@@ -12,7 +12,10 @@ type
     { Private Declarations }
   public
     constructor Create;
-    function AppropriationFromSpecificParent
+    function CountyCodeOfCountyDictum(county_dictum_id: string): string;
+    function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
+    function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    function SumOfAppropriationsFromSpecificParent
       (
       parent_id: string;
       recipient_kind: string;
@@ -20,15 +23,19 @@ type
       fy_id: string
       )
       : decimal;
-    function AppropriationFromOnlyParent
+    function SumOfAppropriationsFromOnlyParent
       (
       recipient_kind: string;
       recipient_id: string;
       fy_id: string
       )
       : decimal;
-    function CountyCodeOfCountyDictum(county_dictum_id: string): string;
-    function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    function SumOfAppropriationsToServicesInRegion
+      (
+      region_id: string;
+      fy_id: string
+      )
+      : decimal;
     function SumOfSelfDictatedAppropriations
       (
       self_kind: string;
@@ -44,70 +51,6 @@ constructor TClass_db_appropriations.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
-end;
-
-function TClass_db_appropriations.AppropriationFromSpecificParent
-  (
-  parent_id: string;
-  recipient_kind: string;
-  recipient_id: string;
-  fy_id: string
-  )
-  : decimal;
-var
-  cmdText: string;
-begin
-  if recipient_kind = 'service' then begin
-    cmdText := 'select county_dictated_appropriation.amount'
-      + ' from county_dictated_appropriation'
-      +   ' join region_dictated_appropriation'
-      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-      +   ' join state_dictated_appropriation'
-      +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
-      + ' where service_id = ' + recipient_id
-      +   ' and county_code = ' + parent_id
-      +   ' and fiscal_year_id = ' + fy_id;
-  end else if recipient_kind = 'county' then begin
-    cmdText := 'select region_dictated_appropriation.amount'
-      + ' from region_dictated_appropriation'
-      +   ' join state_dictated_appropriation'
-      +     ' on (state_dictated_appropriation.region_code=region_dictated_appropriation.state_dictated_appropriation_id)'
-      + ' where county_code = ' + recipient_id
-      +   ' and region_code = ' + parent_id
-      +   ' and fiscal_year_id = ' + fy_id;
-  end;
-  connection.Open;
-  AppropriationFromSpecificParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
-  connection.Close;
-end;
-
-function TClass_db_appropriations.AppropriationFromOnlyParent
-  (
-  recipient_kind: string;
-  recipient_id: string;
-  fy_id: string
-  )
-  : decimal;
-var
-  cmdText: string;
-begin
-  if recipient_kind = 'regional_staffer' then begin
-    cmdText := 'select state_dictated_appropriation.amount'
-      + ' from state_dictated_appropriation'
-      +   ' join regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
-      + ' where regional_staffer.id = ' + recipient_id
-      +   ' and fiscal_year_id = ' + fy_id;
-  end else if recipient_kind = 'county' then begin
-    cmdText := 'select region_dictated_appropriation.amount'
-      + ' from region_dictated_appropriation'
-      +   ' join state_dictated_appropriation'
-      +     ' on (state_dictated_appropriation.region_code=region_dictated_appropriation.state_dictated_appropriation_id)'
-      + ' where county_code = ' + recipient_id
-      +   ' and fiscal_year_id = ' + fy_id;
-  end;
-  connection.Open;
-  AppropriationFromOnlyParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
-  connection.Close;
 end;
 
 function TClass_db_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
@@ -126,6 +69,24 @@ begin
   connection.Close;
 end;
 
+function TClass_db_appropriations.ParentAppropriationOfEmsofRequest(master_id: string): decimal;
+begin
+  connection.Open;
+  ParentAppropriationOfEmsofRequest := decimal
+    (
+    borland.data.provider.bdpcommand.Create
+      (
+      'select county_dictated_appropriation.amount'
+      + ' from county_dictated_appropriation'
+      +   ' join emsof_request_master on (emsof_request_master.county_dictated_appropriation_id=county_dictated_appropriation.id)'
+      + ' where emsof_request_master.id = ' + master_id,
+      connection
+      )
+      .ExecuteScalar
+    );
+  connection.Close;
+end;
+
 function TClass_db_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
 begin
   connection.Open;
@@ -141,6 +102,97 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
+  connection.Close;
+end;
+
+function TClass_db_appropriations.SumOfAppropriationsFromSpecificParent
+  (
+  parent_id: string;
+  recipient_kind: string;
+  recipient_id: string;
+  fy_id: string
+  )
+  : decimal;
+var
+  cmdText: string;
+begin
+  if recipient_kind = 'service' then begin
+    cmdText := 'select sum(county_dictated_appropriation.amount)'
+      + ' from county_dictated_appropriation'
+      +   ' join region_dictated_appropriation'
+      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+      +   ' join state_dictated_appropriation'
+      +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+      + ' where service_id = ' + recipient_id
+      +   ' and county_code = ' + parent_id
+      +   ' and fiscal_year_id = ' + fy_id;
+  end else if recipient_kind = 'county' then begin
+    cmdText := 'select sum(region_dictated_appropriation.amount)'
+      + ' from region_dictated_appropriation'
+      +   ' join state_dictated_appropriation'
+      +     ' on (state_dictated_appropriation.region_code=region_dictated_appropriation.state_dictated_appropriation_id)'
+      + ' where county_code = ' + recipient_id
+      +   ' and region_code = ' + parent_id
+      +   ' and fiscal_year_id = ' + fy_id;
+  end;
+  connection.Open;
+  SumOfAppropriationsFromSpecificParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  connection.Close;
+end;
+
+function TClass_db_appropriations.SumOfAppropriationsFromOnlyParent
+  (
+  recipient_kind: string;
+  recipient_id: string;
+  fy_id: string
+  )
+  : decimal;
+var
+  cmdText: string;
+begin
+  if recipient_kind = 'regional_staffer' then begin
+    cmdText := 'select sum(state_dictated_appropriation.amount)'
+      + ' from state_dictated_appropriation'
+      +   ' join regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
+      + ' where regional_staffer.id = ' + recipient_id
+      +   ' and fiscal_year_id = ' + fy_id;
+  end else if recipient_kind = 'county' then begin
+    cmdText := 'select sum(region_dictated_appropriation.amount)'
+      + ' from region_dictated_appropriation'
+      +   ' join state_dictated_appropriation'
+      +     ' on (state_dictated_appropriation.region_code=region_dictated_appropriation.state_dictated_appropriation_id)'
+      + ' where county_code = ' + recipient_id
+      +   ' and fiscal_year_id = ' + fy_id;
+  end;
+  connection.Open;
+  SumOfAppropriationsFromOnlyParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  connection.Close;
+end;
+
+function TClass_db_appropriations.SumOfAppropriationsToServicesInRegion
+  (
+  region_id: string;
+  fy_id: string
+  )
+  : decimal;
+begin
+  connection.Open;
+  SumOfAppropriationsToServicesInRegion := decimal
+    (
+    borland.data.provider.bdpcommand.Create
+      (
+      'select sum(county_dictated_appropriation.amount)'
+      + ' from county_dictated_appropriation'
+      +   ' join region_dictated_appropriation'
+      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+      +   ' join state_dictated_appropriation'
+      +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+      + ' where region_code = ' + region_id
+      +   ' and fiscal_year_id = ' + fy_id,
+      connection
+      )
+      .ExecuteScalar
+    );
   connection.Close;
 end;
 

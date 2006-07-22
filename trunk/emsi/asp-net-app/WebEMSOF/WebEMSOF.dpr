@@ -43,6 +43,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\request_item_detail.aspx'}
 {%AspMarkupContainer 'protected\request_overview.aspx'}
 {%AspMarkupContainer 'protected\service_overview.aspx'}
+{%AspWebConfigContainer 'protected\Web.config'}
 
 uses
   System.Reflection,
@@ -83,7 +84,9 @@ uses
   regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: System.Web.UI.Page},
   request_item_detail in 'protected\request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: System.Web.UI.Page},
   request_overview in 'protected\request_overview.pas' {request_overview.TWebForm_request_overview: System.Web.UI.Page},
-  service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page};
+  service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
+  Class_biz_regional_staffers in 'component\biz\Class_biz_regional_staffers.pas',
+  Class_db_regional_staffers in 'component\db\Class_db_regional_staffers.pas';
 
 const ID = '$Id$';
 

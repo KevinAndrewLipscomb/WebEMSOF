@@ -153,12 +153,8 @@ begin
     Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
     Label_affiliate_num.text := p.biz_emsof_requests.AffiliateNumOf(session['e_item']);
-    p.parent_appropriation_amount := TClass_biz_appropriations.Create.AppropriationFromSpecificParent
-      (
-      p.biz_emsof_requests.SponsorCountyCodeOf(session['e_item']),
-      'service',
-      p.biz_emsof_requests.ServiceIdOf(session['e_item'])
-      );
+    p.parent_appropriation_amount :=
+      TClass_biz_appropriations.Create.ParentAppropriationOfEmsofRequest(p.biz_emsof_requests.IdOf(session['e_item']));
     Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
     Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
     //
