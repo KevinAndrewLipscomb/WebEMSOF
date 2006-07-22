@@ -155,6 +155,7 @@ begin
     if (not p.be_before_deadline) or p.be_finalized then begin
       Table_parent_appropriation_outer.visible := FALSE;
       Table_deadlines.visible := FALSE;
+      HyperLink_epel_doc.visible := FALSE;
       HyperLink_add_item_to_request.visible := FALSE;
       LinkButton_finalize.visible := FALSE;
     end else begin
