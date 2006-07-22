@@ -76,11 +76,10 @@
 			  <td>You must finalize your item requests by <ASP:Label id="Label_make_requests_deadline" runat="server" font-bold="True" font-size="Medium"></ASP:Label>.</td>
 			</tr>
 		</table></td>
-            </tr>
-        </table>
+			</tr>
+		</table>
 	  </p>
-	  <p><small>[ Open <ASP:HyperLink id="HyperLink_epel_doc" runat="server" target="_blank" navigateurl="C:\Inetpub\wwwroot\WebEMSOF\resource\funding-priorities-epel-fy0607.pdf">DOH Notice of EMSOF Funding Priorities / Eligible Provider Equipment List</ASP:HyperLink> in new window ]</small></p>
-	  <p>
+<p>
 		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
 			<tr>
 			  <td>
@@ -91,13 +90,16 @@
 			  <div align="center"><ASP:HyperLink id="HyperLink_add_item_to_request" runat="server" navigateurl="request_item_detail.aspx">New</ASP:HyperLink>
 			  </div></td>
 			  <td>
-                        <p align="center">
-                          <ASP:LinkButton id="LinkButton_finalize" runat="server" font-bold="True">FINALIZE...</ASP:LinkButton>
-                        </p></td>
+						<p align="center">
+						  <ASP:LinkButton id="LinkButton_finalize" runat="server" font-bold="True">FINALIZE...</ASP:LinkButton>
+						</p></td>
 			</tr>
 			<tr>
 			  <td colspan="3"><ASP:Label id="Label_no_appropriations" runat="server" visible="False" font-italic="True">-- NONE --</ASP:Label></td>
 			</tr>
+			<tr>
+			  <td colspan="3"><ASP:HyperLink id="HyperLink_epel_doc" runat="server" target="_blank" navigateurl="..\resource\funding-priorities-epel-fy0607.pdf" font-size="X-Small">[ Open DOH Notice of EMSOF Funding Priorities / Eligible Provider Equipment List in new window ]</ASP:HyperLink></td>
+            </tr>
 		  <tr>
 			<td colspan="3">
 		  <ASP:DataGrid id="DataGrid_items" runat="server"
