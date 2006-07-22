@@ -129,6 +129,7 @@ procedure TWebForm_full_request_review_approve.Page_Load
 var
   request_id: string;
   status: Class_biz_emsof_requests.status_type;
+  timestamp: datetime;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback then begin
@@ -172,15 +173,17 @@ begin
       Label_county_approval_timestamp.text :=
         p.biz_emsof_requests.CountyApprovalTimestampOf(request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
       if status > NEEDS_REGIONAL_COMPLIANCE_CHECK then begin
-        TableRow_regional_planner_approval_timestamp.visible := TRUE;
-        Label_region_name_1.text := p.biz_emsof_requests.SponsorRegionNameOf(p.biz_emsof_requests.IdOf(session['e_item']));
-        Label_regional_planner_approval_timestamp.text :=
-          p.biz_emsof_requests.RegionalPlannerApprovalTimestampOf(request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
+        if p.biz_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf(request_id,timestamp) then begin
+          TableRow_regional_planner_approval_timestamp.visible := TRUE;
+          Label_region_name_1.text := p.biz_emsof_requests.SponsorRegionNameOf(p.biz_emsof_requests.IdOf(session['e_item']));
+          Label_regional_planner_approval_timestamp.text := timestamp.tostring('HH:mm:ss dddd, MMMM d, yyyy');
+        end;
         if status > NEEDS_REGIONAL_EXEC_DIR_APPROVAL then begin
-          TableRow_regional_exec_dir_approval_timestamp.visible := TRUE;
-          Label_region_name_2.text := Label_region_name_1.text;
-          Label_regional_exec_dir_approval_timestamp.text :=
-            p.biz_emsof_requests.RegionalExecDirApprovalTimestampOf(request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
+          if p.biz_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf(request_id,timestamp) then begin
+            TableRow_regional_exec_dir_approval_timestamp.visible := TRUE;
+            Label_region_name_2.text := Label_region_name_1.text;
+            Label_regional_exec_dir_approval_timestamp.text := timestamp.tostring('HH:mm:ss dddd, MMMM d, yyyy');
+          end;
           TableRow_printable_version.visible := (status = NEEDS_SENT_TO_PA_DOH_EMSO);
         end;
       end;

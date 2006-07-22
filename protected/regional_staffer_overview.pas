@@ -51,7 +51,9 @@ type
     //
     Label_parent_appropriation: System.Web.UI.WebControls.Label;
     Label_sum_of_appropriations: System.Web.UI.WebControls.Label;
-    Label_unrequested: System.Web.UI.WebControls.Label;
+    Label_appropriated_to_services: System.Web.UI.WebControls.Label;
+    Label_requested_by_services: System.Web.UI.WebControls.Label;
+    Label_actually_spent: System.Web.UI.WebControls.Label;
     Label_remaining: System.Web.UI.WebControls.Label;
     //
     LinkButton_num_requests_needing_development: System.Web.UI.WebControls.LinkButton;
@@ -136,7 +138,6 @@ var
   parent_appropriation: decimal;
   sum_of_appropriations: decimal;
   tally: string;
-  unrequested_amount: decimal;
   waypoint_stack: stack;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -152,9 +153,10 @@ begin
     Label_parent_appropriation.text := parent_appropriation.tostring('C');
     sum_of_appropriations := biz_appropriations.SumOfSelfDictatedAppropriations;
     Label_sum_of_appropriations.text := sum_of_appropriations.tostring('C');
-    unrequested_amount := sum_of_appropriations - biz_emsof_requests.SumOfRequestValues;
-    Label_unrequested.text := unrequested_amount.tostring('C');
-    Label_remaining.text := (parent_appropriation - sum_of_appropriations + unrequested_amount).tostring('C');
+//    Label_appropriated_to_services.text :=
+    Label_requested_by_services.text := biz_emsof_requests.SumOfRequestValues.tostring('C');
+//    Label_actually_spent.text :=
+//    Label_remaining.text := (parent_appropriation - amount_actually_spent).tostring('C');
     //
     LinkButton_num_requests_needing_development.text :=
       biz_emsof_requests.TallyOfStatus(ALLOCATED) + LinkButton_num_requests_needing_development.text;

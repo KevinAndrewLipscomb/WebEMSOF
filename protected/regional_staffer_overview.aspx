@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                       [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                            [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -34,26 +34,32 @@
                                               <td>
                                                 <table cellspacing="0" cellpadding="5" border="0">
                                                     <tr>
-                                                      <td align="right"></td>
-                                                      <td align="right">
+													  <td align="right">
                                                         <ASP:Label id="Label_parent_appropriation" runat="server"></ASP:Label></td>
-                                                      <td>from PA DOH EMSO</td>
+                                                      <td>allocated to region</td>
                                                     </tr>
                                                     <tr>
-                                                      <td align="right">-</td>
-                                                      <td align="right">
+													  <td align="right">
                                                         <ASP:Label id="Label_sum_of_appropriations" runat="server"></ASP:Label></td>
                                                       <td>allocated to counties</td>
                                                     </tr>
-                                                    <tr>
-                                                      <td align="right">+</td>
-                                                      <td align="right">
-                                                        <ASP:Label id="Label_unrequested" runat="server" font-underline="True"></ASP:Label></td>
-                                                      <td>unrequested</td>
+													<tr>
+													  <td align="right">
+														<ASP:Label id="Label_appropriated_to_services" runat="server"></ASP:Label></td>
+													  <td>allocated to services</td>
+													</tr>
+													<tr>
+													  <td align="right">
+														<ASP:Label id="Label_requested_by_services" runat="server"></ASP:Label></td>
+													  <td>requested by services</td>
+													</tr>
+													<tr>
+													  <td align="right">
+														<ASP:Label id="Label_actually_spent" runat="server"></ASP:Label></td>
+                                                      <td>actually_spent</td>
                                                     </tr>
                                                     <tr>
-                                                      <td align="right">=</td>
-                                                      <td align="right">
+													  <td align="right">
                                                         <ASP:Label id="Label_remaining" runat="server" font-bold="True"></ASP:Label></td>
                                                       <td><strong>remaining</strong></td>
                                                     </tr>

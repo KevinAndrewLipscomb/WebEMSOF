@@ -38,8 +38,20 @@ type
       master_id: string;
       next_status: cardinal;
       user_kind: string;
-      approval_timestamp_column: approval_timestamp_column_type 
+      approval_timestamp_column: approval_timestamp_column_type
       );
+    function BeValidRegionalExecDirApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
+    function BeValidRegionalPlannerApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
     procedure BindDetail
       (
       master_id: string;
@@ -91,8 +103,6 @@ type
       user_kind: string
       );
     function PropertyNameOfEmsofAnte: string;
-    function RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
-    function RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
@@ -230,6 +240,52 @@ begin
     borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
     connection.Close;
   end;
+end;
+
+function TClass_db_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
+var
+  bdr: borland.data.provider.bdpdatareader;
+begin
+  connection.Open;
+  bdr := borland.data.provider.bdpcommand.Create
+    ('select regional_director_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
+    .ExecuteReader;
+  bdr.Read;
+  if bdr.IsDbNull(0) then begin
+    BeValidRegionalExecDirApprovalTimestampOf := FALSE;
+  end else begin
+    BeValidRegionalExecDirApprovalTimestampOf := TRUE;
+    timestamp := datetime(bdr['regional_director_approval_timestamp']);
+  end;
+  connection.Close;
+end;
+
+function TClass_db_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
+var
+  bdr: borland.data.provider.bdpdatareader;
+begin
+  connection.Open;
+  bdr := borland.data.provider.bdpcommand.Create
+    ('select regional_planner_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
+    .ExecuteReader;
+  bdr.Read;
+  if bdr.IsDbNull(0) then begin
+    BeValidRegionalPlannerApprovalTimestampOf := FALSE;
+  end else begin
+    BeValidRegionalPlannerApprovalTimestampOf := TRUE;
+    timestamp := datetime(bdr['regional_planner_approval_timestamp']);
+  end;
+  connection.Close;
 end;
 
 procedure TClass_db_emsof_requests.BindDetail
@@ -394,30 +450,6 @@ end;
 function TClass_db_emsof_requests.PropertyNameOfEmsofAnte: string;
 begin
   PropertyNameOfEmsofAnte := 'emsof_ante';
-end;
-
-function TClass_db_emsof_requests.RegionalExecDirApprovalTimestampOf(master_id: string): datetime;
-begin
-  connection.Open;
-  RegionalExecDirApprovalTimestampOf := datetime
-    (
-    borland.data.provider.bdpcommand.Create
-      ('select regional_director_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
-      .ExecuteScalar
-    );
-  connection.Close;
-end;
-
-function TClass_db_emsof_requests.RegionalPlannerApprovalTimestampOf(master_id: string): datetime;
-begin
-  connection.Open;
-  RegionalPlannerApprovalTimestampOf := datetime
-    (
-    borland.data.provider.bdpcommand.Create
-      ('select regional_planner_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
-      .ExecuteScalar
-    );
-  connection.Close;
 end;
 
 function TClass_db_emsof_requests.ReworkDeadline(e_item: system.object): datetime;
