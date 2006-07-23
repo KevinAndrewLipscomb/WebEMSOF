@@ -69,7 +69,6 @@ type
     Label_master_status: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     Table_parent_appropriation_outer: System.Web.UI.HtmlControls.HtmlTable;
-    HyperLink_epel_doc: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -155,7 +154,6 @@ begin
     if (not p.be_before_deadline) or p.be_finalized then begin
       Table_parent_appropriation_outer.visible := FALSE;
       Table_deadlines.visible := FALSE;
-      HyperLink_epel_doc.visible := FALSE;
       HyperLink_add_item_to_request.visible := FALSE;
       LinkButton_finalize.visible := FALSE;
     end else begin

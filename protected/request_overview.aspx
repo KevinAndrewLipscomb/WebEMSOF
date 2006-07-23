@@ -97,9 +97,6 @@
 			<tr>
 			  <td colspan="3"><ASP:Label id="Label_no_appropriations" runat="server" visible="False" font-italic="True">-- NONE --</ASP:Label></td>
 			</tr>
-			<tr>
-			  <td colspan="3"><ASP:HyperLink id="HyperLink_epel_doc" runat="server" target="_blank" navigateurl="..\resource\funding-priorities-epel-fy0607.pdf" font-size="X-Small">[ Open DOH Notice of EMSOF Funding Priorities / Eligible Provider Equipment List in new window ]</ASP:HyperLink></td>
-            </tr>
 		  <tr>
 			<td colspan="3">
 		  <ASP:DataGrid id="DataGrid_items" runat="server"
