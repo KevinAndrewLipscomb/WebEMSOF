@@ -44,6 +44,8 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\request_overview.aspx'}
 {%AspMarkupContainer 'protected\service_overview.aspx'}
 {%AspWebConfigContainer 'protected\Web.config'}
+{%File 'resource\funding-priorities-epel-fy0607.pdf'}
+{%File 'resource\emsi-emsof-allocations-memo-fy0607.pdf'}
 
 uses
   System.Reflection,
