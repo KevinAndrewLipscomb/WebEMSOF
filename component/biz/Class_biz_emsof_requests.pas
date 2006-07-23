@@ -107,6 +107,7 @@ type
       promoter: string
       );
     function NextReviewer(status: status_type): string;
+    function PropertyNameOfAppropriation: string;
     function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
@@ -447,6 +448,11 @@ begin
   NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
     NextReviewer := 'Regional Council EMSOF Coordinator (for transmittal to PA DOH EMSO)';
   end;
+end;
+
+function TClass_biz_emsof_requests.PropertyNameOfAppropriation: string;
+begin
+  PropertyNameOfAppropriation := db_emsof_requests.PropertyNameOfAppropriation;
 end;
 
 function TClass_biz_emsof_requests.PropertyNameOfEmsofAnte: string;

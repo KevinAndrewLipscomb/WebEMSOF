@@ -415,7 +415,7 @@ begin
     //
     p.num_appropriations := p.num_appropriations + 1;
     p.sum_of_service_appropriations := p.sum_of_service_appropriations
-      + decimal.Parse(databinder.Eval(e.item.dataitem,p.biz_emsof_requests.PropertyNameOfEmsofAnte).tostring);
+      + decimal.Parse(databinder.Eval(e.item.dataitem,p.biz_emsof_requests.PropertyNameOfAppropriation).tostring);
     if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) > 2 then begin
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := TRUE;
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).forecolor := color.BLUE;
