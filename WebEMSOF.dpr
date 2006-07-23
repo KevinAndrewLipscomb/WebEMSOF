@@ -73,7 +73,7 @@ uses
   county_dictated_appropriations in 'protected\county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page},
   county_dictated_deadline in 'protected\county_dictated_deadline.pas',
   county_overview in 'protected\county_overview.pas' {county_overview.TWebForm_county_appropriation: System.Web.UI.Page},
-  create_new_service_appropriation in 'protected\create_new_service_appropriation.pas',
+  create_new_service_appropriation in 'protected\create_new_service_appropriation.pas' {create_new_service_appropriation.TWebForm_create_new_service_appropriation: System.Web.UI.Page},
   delete_service_appropriation in 'protected\delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page},
   emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
   finalize in 'protected\finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},

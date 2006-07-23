@@ -93,7 +93,7 @@
 			  <p align="right">Service:</p></td>
 			  <td nowrap="true">
 				<ASP:DropDownList id="DropDownList_services" runat="server"></ASP:DropDownList>&nbsp;&nbsp; 
-                <ASP:CheckBox id="CheckBox_unfilter" runat="server" font-size="Small" text="Check this box to include out-of-county services in the drop-down list" autopostback="True"></ASP:CheckBox></td>
+                <ASP:CheckBox id="CheckBox_show_out_of_county_services" runat="server" font-size="Small" text="Check this box to include out-of-county services in the drop-down list" autopostback="True"></ASP:CheckBox></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_service" runat="server" errormessage="Please select a service." font-bold="True" controltovalidate="DropDownList_services">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_service" runat="server" errormessage="Please select a service for a new appropriation." font-bold="True" controltovalidate="DropDownList_services" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
 			  </tr>
 			<tr>

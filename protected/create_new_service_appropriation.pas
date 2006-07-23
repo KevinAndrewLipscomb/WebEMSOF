@@ -20,7 +20,6 @@ type
   p_type =
     RECORD
     amount: decimal;
-    be_service_list_filtered: boolean;
     biz_services: TClass_biz_services;
     unappropriated_amount: decimal;
     END;
@@ -68,7 +67,7 @@ type
     RequiredFieldValidator_service: System.Web.UI.WebControls.RequiredFieldValidator;
     Button_add_appropriation_and_stop: System.Web.UI.WebControls.Button;
     Button_cancel: System.Web.UI.WebControls.Button;
-    CheckBox_unfilter: System.Web.UI.WebControls.CheckBox;
+    CheckBox_show_out_of_county_services: System.Web.UI.WebControls.CheckBox;
     RadioButtonList_match_level: System.Web.UI.WebControls.RadioButtonList;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
@@ -98,11 +97,11 @@ implementation
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.CheckBox_unfilter.CheckedChanged, Self.CheckBox_unfilter_CheckedChanged);
+  Include(Self.CheckBox_show_out_of_county_services.CheckedChanged, Self.CheckBox_unfilter_CheckedChanged);
+  Include(Self.CustomValidator_amount.ServerValidate, Self.CustomValidator_amount_ServerValidate);
   Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
   Include(Self.Button_add_appropriation_and_stop.Click, Self.Button_add_appropriation_and_stop_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
-  Include(Self.CustomValidator_amount.ServerValidate, Self.CustomValidator_amount_ServerValidate);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_create_new_service_appropriation_PreRender);
 end;
@@ -120,7 +119,6 @@ begin
     // Initialize implementation-scoped variables.
     //
     p.amount := 0;
-    p.be_service_list_filtered := TRUE;
     //
     Label_parent_appropriation_amount.text := decimal.Parse(session['parent_appropriation_amount'].tostring).tostring('C');
     Label_region_name.text := session['region_name'].tostring;
@@ -134,7 +132,8 @@ begin
     end;
     //
     p.biz_services := TClass_biz_services.Create;
-    p.biz_services.BindDropDownList(session['county_user_id'].tostring,DropDownList_services,CheckBox_unfilter.checked);
+    p.biz_services.BindDropDownList
+      (session['county_user_id'].tostring,DropDownList_services,CheckBox_show_out_of_county_services.checked);
   end;
 end;
 
@@ -179,8 +178,8 @@ end;
 procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object; 
   e: System.EventArgs);
 begin
-  p.be_service_list_filtered := not CheckBox_unfilter.checked;
-  p.biz_services.BindDropDownList(session['county_user_id'].tostring,DropDownList_services,CheckBox_unfilter.checked);
+  p.biz_services.BindDropDownList
+    (session['county_user_id'].tostring,DropDownList_services,CheckBox_show_out_of_county_services.checked);
 end;
 
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_stop_Click(sender: System.Object;
