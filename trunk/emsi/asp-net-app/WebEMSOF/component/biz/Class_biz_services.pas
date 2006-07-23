@@ -16,7 +16,7 @@ type
       (
       county_user_id: string;
       target: system.object;
-      be_filtered: boolean = TRUE
+      be_unfiltered: boolean = FALSE
       );
     procedure GetProfile
       (
@@ -75,10 +75,10 @@ procedure TClass_biz_services.BindDropDownList
   (
   county_user_id: string;
   target: system.object;
-  be_filtered: boolean = TRUE
+  be_unfiltered: boolean = FALSE
   );
 begin
-  db_services.BindDropDownList(county_user_id,target,be_filtered);
+  db_services.BindDropDownList(county_user_id,target,be_unfiltered);
 end;
 
 procedure TClass_biz_services.GetProfile
