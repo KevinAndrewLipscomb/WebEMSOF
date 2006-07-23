@@ -102,6 +102,7 @@ type
       next_status: cardinal;
       user_kind: string
       );
+    function PropertyNameOfAppropriation: string;
     function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
@@ -445,6 +446,11 @@ begin
   connection.Open;
   borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
   connection.Close;
+end;
+
+function TClass_db_emsof_requests.PropertyNameOfAppropriation: string;
+begin
+  PropertyNameOfAppropriation := 'appropriation';
 end;
 
 function TClass_db_emsof_requests.PropertyNameOfEmsofAnte: string;

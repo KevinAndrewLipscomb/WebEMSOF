@@ -56,7 +56,7 @@
 				  <asp:label id="Label_sum_of_service_appropriations" runat="server" font-underline="True"></asp:label>
 				  </p>
 				</td>
-				<td>alloacted to services (below)</td>
+				<td>allocated to services (below)</td>
 			  </tr>
 			  <tr id="TableRow_unappropriated_amount" runat="server">
 				<td>
