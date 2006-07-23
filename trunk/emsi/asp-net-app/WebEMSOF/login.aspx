@@ -9,23 +9,22 @@
 
   <body ms_positioning="FlowLayout">
   <form runat="server">
-		  <asp:placeholder id="PlaceHolder_precontent" runat="server">
-	  </asp:placeholder>
+		  <asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
 			  <tr>
 				<td>
 				  <table cellspacing="0" cellpadding="5" border="0">
 					  <tr>
 						<td bgcolor="#f5f5f5"><strong>
-                        <table cellspacing="0" cellpadding="0" width="100%" border="0">
-                            <tr>
-                              <td><strong>Log in</strong></td>
-                              <td>
-                                <div align="right">
-                              <ASP:CustomValidator id="CustomValidator_account_exists" runat="server" errormessage="Invalid user/password combination. Please try again." font-bold="True">!ERR!</ASP:CustomValidator>
-                                </div></td>
-                            </tr>
-                        </table></strong></td>
+						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+							<tr>
+							  <td><strong>Log in</strong></td>
+							  <td>
+								<div align="right">
+							  <ASP:CustomValidator id="CustomValidator_account_exists" runat="server" errormessage="Invalid user/password combination. Please try again." font-bold="True">!ERR!</ASP:CustomValidator>
+								</div></td>
+							</tr>
+						</table></strong></td>
 					  </tr>
 					  <tr>
 						<td>
@@ -33,13 +32,13 @@
 			  <tbody>
 				<tr>
 				  <td>What kind of
-                              <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;user are you?</td>
+							  <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;user are you?</td>
 				  <td>
 									  <ASP:DropDownList id="DropDownList_user_kind" runat="server" autopostback="True">
-                                <ASP:ListItem value="0">-- Select (then wait for form to refresh) --</ASP:ListItem>
-                                <ASP:ListItem value="service">Service (Ambulance, QRS, ALS Squad, etc)</ASP:ListItem>
-                                <ASP:ListItem value="county">County Coordinator</ASP:ListItem>
-                                <ASP:ListItem value="regional_staffer">Regional staffer</ASP:ListItem></ASP:DropDownList><ASP:RegularExpressionValidator id="RegularExpressionValidator_user_kind" runat="server" errormessage="Please select a user kind." font-bold="True" controltovalidate="DropDownList_user_kind" validationexpression="[a-z_]+">!ERR!</ASP:RegularExpressionValidator>
+								<ASP:ListItem value="0">-- Select (then wait for form to refresh) --</ASP:ListItem>
+								<ASP:ListItem value="service">Service (Ambulance, QRS, ALS Squad, etc)</ASP:ListItem>
+								<ASP:ListItem value="county">County Coordinator</ASP:ListItem>
+								<ASP:ListItem value="regional_staffer">Regional staffer</ASP:ListItem></ASP:DropDownList><ASP:RegularExpressionValidator id="RegularExpressionValidator_user_kind" runat="server" errormessage="Please select a user kind." font-bold="True" controltovalidate="DropDownList_user_kind" validationexpression="[a-z_]+">!ERR!</ASP:RegularExpressionValidator>
 									</td>
 				</tr>
 				<tr>
@@ -57,37 +56,37 @@
 					<p align="right">Password:</p>
 				  </td>
 				  <td>
-				    <asp:textbox id="TextBox_noop_ie_behavior_workaround" runat="server" style="DISPLAY: none; VISIBILITY: hidden" /><!-- To work around an IE bug that otherwise prevents Enter in a textbox from submitting a form. -->
+					<asp:textbox id="TextBox_noop_ie_behavior_workaround" runat="server" style="DISPLAY: none; VISIBILITY: hidden" /><!-- To work around an IE bug that otherwise prevents Enter in a textbox from submitting a form. -->
 					<asp:textbox id="TextBox_password" runat="server" textmode="Password"></asp:textbox><ASP:RegularExpressionValidator id="RegularExpressionValidator_password" runat="server" errormessage='Please use only letters, numbers, and the underscore ("_") character (or local equivalents) in your password.' font-bold="True" controltovalidate="TextBox_password" validationexpression="\w+">!ERR!</ASP:RegularExpressionValidator>
 				  </td>
 				</tr>
-                <tr>
+				<tr>
 				  <td>
-                  </td>
+				  </td>
 				  <td>
-                    <asp:checkbox id="CheckBox_keep_me_logged_in" 
+					<asp:checkbox id="CheckBox_keep_me_logged_in"
 								  runat="server"
-                                  text="Keep me logged in on this computer">
+								  text="Keep me logged in on this computer">
 					</asp:checkbox>
-                  </td>
+				  </td>
 				</tr>
-                <tr>
+				<tr>
 				  <td valign="top">
-                  </td>
+				  </td>
 				  <td>
-                    
+
 						<table cellspacing="0" cellpadding="5" width="1%">
-                            <tr>
+							<tr>
 							  <td><asp:button id="Button_log_in"
-                                runat="server" text="Log in" font-bold="True">
+								runat="server" text="Log in" font-bold="True">
 					</asp:button></td>
-                              <td nowrap="true">
+							  <td nowrap="true">
 								<ASP:button id="Button_new_password" runat="server" text="Email new password"></ASP:button></td>
 							</tr>
 						</table>
-                  </td>
+				  </td>
 				</tr>
-              </tbody>
+			  </tbody>
 			</table>
 						</td>
 					  </tr>
@@ -95,34 +94,7 @@
 				</td>
 			  </tr>
 		  </table>
-      <p></p>
-      <p>
-        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
-            <tr>
-              <td>
-                <table cellspacing="0" cellpadding="5" border="0">
-                    <tr>
-                      <td bgcolor="#f5f5f5"><strong>EMSOF documentation</strong></td>
-                    </tr>
-                    <tr>
-                      <td>
-<ul>
-  <li>
-	<a href="http://www.emsi.org/programs/emsof">Relevant sections of EMS Act </a>
-  <li>
-	  <a href="http://www.emsi.org/programs/emsof">Current EMSOF-related PA Bulletin(s)</a> <li>
-		<a href="http://www.emsi.org/programs/emsof">Regional policies, deadlines, etc</a>
-  </li>
-</ul></td>
-                    </tr>
-                </table></td>
-            </tr>
-        </table></p>
-	  <p></p>
-<h3>
-</h3>
-	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
-	</asp:placeholder>
+  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
 </form>
 </body>
 </html>
