@@ -85,6 +85,7 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    procedure BindStateExportBatch(target: system.object);
     function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
       (
@@ -371,6 +372,38 @@ procedure TClass_db_emsof_requests.BindOverviewByStatus
   );
 begin
   BindOverview(order_by_field_name,be_order_ascending,target,'status_code = ' + status.tostring);
+end;
+
+procedure TClass_db_emsof_requests.BindStateExportBatch(target: system.object);
+begin
+  connection.Open;
+  DataGrid(target).datasource := borland.data.provider.bdpcommand.Create
+    (
+    'select service.name as service_name'
+    + ' , "ALS" as life_support_level'
+    + ' , description as equipment_description'
+    + ' , quantity'
+    + ' , unit_cost'
+    + ' , quantity*unit_cost as total_cost'
+    + ' , emsof_ante'
+    + ' , (quantity*unit_cost - emsof_ante + additional_service_ante) as provider_match'
+    + ' , "YES" as recommendation'
+    + ' , NULL as approved'
+    + ' , NULL as actual_total'
+    + ' from emsof_request_detail'
+    +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join service on (service.id=county_dictated_appropriation.service_id)'
+    +   ' join eligible_provider_equipment_list'
+    +     ' on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+    + ' where emsof_request_master.status_code = 6'
+    + ' order by service_name',
+    connection
+    )
+    .ExecuteReader;
+  DataGrid(target).DataBind;
+  connection.Close;
 end;
 
 function TClass_db_emsof_requests.CountyApprovalTimestampOf(master_id: string): datetime;

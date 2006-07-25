@@ -90,6 +90,7 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    procedure BindStateExportBatch(target: system.object);
     function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
       (
@@ -321,6 +322,11 @@ end;
 function TClass_biz_emsof_requests.CountyApprovalTimestampOf(master_id: string): system.datetime;
 begin
   CountyApprovalTimestampOf := db_emsof_requests.CountyApprovalTimestampOf(master_id);
+end;
+
+procedure TClass_biz_emsof_requests.BindStateExportBatch(target: system.object);
+begin
+  db_emsof_requests.BindStateExportBatch(target);
 end;
 
 procedure TClass_biz_emsof_requests.Demote
