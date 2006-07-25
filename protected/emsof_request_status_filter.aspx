@@ -13,8 +13,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                        [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                        [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                          [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                          [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -67,19 +67,17 @@
 					</tr>
 					<tr id="TableRow_spreadsheet" runat="server">
 					  <td>
-					  <ASP:DataGrid id="DataGrid_state_export_batch" runat="server" autogeneratecolumns="False">
+					  <ASP:DataGrid id="DataGrid_state_export_batch" runat="server" autogeneratecolumns="False" visible="False">
                           <Columns>
-                            <ASP:BoundColumn datafield="service_name" readonly="True" headertext="service_name"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="life_support_level" readonly="True" headertext="life_support_level"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="equipment_description" readonly="True" headertext="equipment_description"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="quantity" readonly="True" headertext="quantity"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="unit_cost" readonly="True" headertext="unit_cost"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="total_cost" readonly="True" headertext="total_cost"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="emsof_ante"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="provider_match" readonly="True" headertext="provider_match"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="recommendation" readonly="True" headertext="recommendation"></ASP:BoundColumn>
-                            <ASP:BoundColumn readonly="True" headertext="approved" dataformatstring="approved"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="actual_total" readonly="True" headertext="actual_total"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="service_name" readonly="True" headertext="Organization Name"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="life_support_level" readonly="True" headertext="Type of Organization"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="equipment_description" readonly="True" headertext="Equipment/Program"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="quantity" readonly="True" headertext="# Units"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="unit_cost" readonly="True" headertext="Unit Cost"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="total_cost" readonly="True" headertext="Total Cost Amount"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF Amount"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="provider_match" readonly="True" headertext="Provider Match"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="recommendation" readonly="True" headertext="Recomm"></ASP:BoundColumn>
                           </Columns></ASP:DataGrid></td>
 					</tr>
                 </table></td>

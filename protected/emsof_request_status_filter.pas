@@ -137,7 +137,13 @@ procedure TWebForm_emsof_request_status_filter.LinkButton_generate_state_export_
 var
   stringwriter: system.io.stringwriter;
 begin
+  DataGrid_state_export_batch.visible := TRUE;
   page.response.Clear;
+  page.response.AppendHeader
+    (
+    'Content-Disposition',
+    'attachment; filename=WebEmsofStateExportBatch_' + datetime.Now.tostring('yyyyMMddHHmmssf') + '.xls'
+    );
   page.response.bufferoutput := TRUE;
   page.response.contenttype := 'application/vnd.ms-excel';
 //  response.charset := '';
@@ -146,6 +152,7 @@ begin
   DataGrid_state_export_batch.RenderControl(system.web.ui.htmltextwriter.Create(stringwriter));
   page.response.Write(stringwriter.tostring);
   page.response.&End;
+  DataGrid_state_export_batch.visible := FALSE;
 end;
 
 procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click
