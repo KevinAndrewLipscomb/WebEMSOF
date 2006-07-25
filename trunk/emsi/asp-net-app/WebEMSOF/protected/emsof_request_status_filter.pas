@@ -7,7 +7,9 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, system.web.security,
-  borland.data.provider;
+  borland.data.provider,
+  system.io,
+  Class_biz_emsof_requests;
 
 const ID = '$Id$';
 
@@ -15,6 +17,7 @@ type
   p_type =
     RECORD
     be_sort_order_ascending: boolean;
+    biz_emsof_requests: TClass_biz_emsof_requests;
     num_qualifying_requests: cardinal;
     sort_order: string;
     END;
@@ -29,6 +32,8 @@ type
     procedure TWebForm_emsof_request_status_filter_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_generate_state_export_batch_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
@@ -41,7 +46,8 @@ type
   //
   strict private
     p: p_type;
-    procedure Bind;
+    procedure BindOverview;
+    procedure BindStateExportBatch;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -55,15 +61,15 @@ type
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
     Label_status: System.Web.UI.WebControls.Label;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
+    TableRow_spreadsheet: System.Web.UI.HtmlControls.HtmlTableRow;
+    LinkButton_generate_state_export_batch: System.Web.UI.WebControls.LinkButton;
+    DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
   end;
 
 implementation
-
-uses
-  Class_biz_emsof_requests;
 
 const
   TCCI_LINKBUTTON_SELECT = 12;
@@ -76,10 +82,11 @@ const
 procedure TWebForm_emsof_request_status_filter.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
+  Include(Self.LinkButton_generate_state_export_batch.Click, Self.LinkButton_generate_state_export_batch_Click);
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
   Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
   Include(Self.DataGrid_requests.ItemDataBound, Self.DataGrid_requests_ItemDataBound);
-  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_emsof_request_status_filter_PreRender);
 end;
@@ -92,6 +99,8 @@ begin
     p := p_type(session['p']);
   end else begin
     //
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
+    //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
     Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session['status_of_interest'].tostring;
@@ -102,7 +111,11 @@ begin
     p.num_qualifying_requests := 0;
     p.sort_order := 'affiliate_num';
     //
-    Bind;
+    BindOverview;
+    if status_type(session['status_of_interest']) = NEEDS_SENT_TO_PA_DOH_EMSO then begin
+      BindStateExportBatch;
+      LinkButton_generate_state_export_batch.visible := TRUE;
+    end;
     //
   end;
 end;
@@ -116,27 +129,55 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebForm_emsof_request_status_filter.LinkButton_generate_state_export_batch_Click
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
+var
+  stringwriter: system.io.stringwriter;
+begin
+  page.response.Clear;
+  page.response.bufferoutput := TRUE;
+  page.response.contenttype := 'application/vnd.ms-excel';
+//  response.charset := '';
+  page.enableviewstate := FALSE;
+  stringwriter := system.io.stringwriter.Create;
+  DataGrid_state_export_batch.RenderControl(system.web.ui.htmltextwriter.Create(stringwriter));
+  page.response.Write(stringwriter.tostring);
+  page.response.&End;
+end;
+
+procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
 begin
   server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
-procedure TWebForm_emsof_request_status_filter.TWebForm_emsof_request_status_filter_PreRender(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebForm_emsof_request_status_filter.TWebForm_emsof_request_status_filter_PreRender
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
 begin
   session.Remove('p');
   session.Add('p',p);
 end;
 
-procedure TWebForm_emsof_request_status_filter.DataGrid_requests_ItemDataBound(sender: System.Object;
-  e: System.Web.UI.WebControls.DataGridItemEventArgs);
+procedure TWebForm_emsof_request_status_filter.DataGrid_requests_ItemDataBound
+  (
+  sender: System.Object;
+  e: System.Web.UI.WebControls.DataGridItemEventArgs
+  );
 begin
   //
   // Manage column visibility
   //
   e.item.cells[tcci_linkbutton_select].visible :=
-    TClass_biz_emsof_requests.Create.BeOkToDrillDown(Class_biz_emsof_requests.status_type(session['status_of_interest']));
+    p.biz_emsof_requests.BeOkToDrillDown(Class_biz_emsof_requests.status_type(session['status_of_interest']));
   //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
@@ -177,8 +218,11 @@ begin
   //
 end;
 
-procedure TWebForm_emsof_request_status_filter.DataGrid_requests_SortCommand(source: System.Object;
-  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
+procedure TWebForm_emsof_request_status_filter.DataGrid_requests_SortCommand
+  (
+  source: System.Object;
+  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs
+  );
 begin
   if e.SortExpression = p.sort_order then begin
     p.be_sort_order_ascending := not p.be_sort_order_ascending;
@@ -187,22 +231,26 @@ begin
     p.be_sort_order_ascending := TRUE;
   end;
   DataGrid_requests.EditItemIndex := -1;
-  Bind;
+  BindOverview;
 end;
 
-procedure TWebForm_emsof_request_status_filter.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebForm_emsof_request_status_filter.LinkButton_logout_Click
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
 begin
   formsauthentication.SignOut;
   session.Clear;
   server.Transfer('../Default.aspx');
 end;
 
-procedure TWebForm_emsof_request_status_filter.Bind;
+procedure TWebForm_emsof_request_status_filter.BindOverview;
 var
   be_datagrid_empty: boolean;
 begin
-  TClass_biz_emsof_requests.Create.BindOverviewByStatus
+  //
+  p.biz_emsof_requests.BindOverviewByStatus
     (
     Class_biz_emsof_requests.status_type(session['status_of_interest']),
     p.sort_order,
@@ -220,6 +268,11 @@ begin
   //
   p.num_qualifying_requests := 0;
   //
+end;
+
+procedure TWebForm_emsof_request_status_filter.BindStateExportBatch;
+begin
+  p.biz_emsof_requests.BindStateExportBatch(DataGrid_state_export_batch);
 end;
 
 end.
