@@ -47,7 +47,7 @@ type
   strict private
     p: p_type;
     procedure BindOverview;
-    procedure BindStateExportBatch;
+    procedure BindStateExportBatch(status: status_type);
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -112,8 +112,8 @@ begin
     p.sort_order := 'affiliate_num';
     //
     BindOverview;
-    if status_type(session['status_of_interest']) = NEEDS_SENT_TO_PA_DOH_EMSO then begin
-      BindStateExportBatch;
+    if status_type(session['status_of_interest']) in [NEEDS_SENT_TO_PA_DOH_EMSO,NEEDS_PA_DOH_EMSO_APPROVAL] then begin
+      BindStateExportBatch(status_type(session['status_of_interest']));
       LinkButton_generate_state_export_batch.visible := TRUE;
     end;
     //
@@ -134,15 +134,25 @@ procedure TWebForm_emsof_request_status_filter.LinkButton_generate_state_export_
   sender: System.Object;
   e: System.EventArgs
   );
+var
+  excel_string: string;
+  qualifier: string;
 begin
+  case status_type(session['status_of_interest']) of
+  NEEDS_SENT_TO_PA_DOH_EMSO:
+    qualifier := 'fresh';
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    qualifier := 'repeat';
+  end;
   DataGrid_state_export_batch.visible := TRUE;
+  excel_string := ki.common.ExcelStringOf(DataGrid_state_export_batch);
+  DataGrid_state_export_batch.visible := FALSE;
   ki.common.ExportToExcel
     (
     self,
-    DataGrid_state_export_batch,
-    'WebEmsofStateExportBatch_' + datetime.Now.tostring('yyyyMMddHHmmssf')
+    'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf'),
+    excel_string
     );
-  DataGrid_state_export_batch.visible := FALSE;
 end;
 
 procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click
@@ -267,9 +277,9 @@ begin
   //
 end;
 
-procedure TWebForm_emsof_request_status_filter.BindStateExportBatch;
+procedure TWebForm_emsof_request_status_filter.BindStateExportBatch(status: status_type);
 begin
-  p.biz_emsof_requests.BindStateExportBatch(DataGrid_state_export_batch);
+  p.biz_emsof_requests.BindStateExportBatch(DataGrid_state_export_batch,status);
 end;
 
 end.

@@ -85,7 +85,11 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
-    procedure BindStateExportBatch(target: system.object);
+    procedure BindStateExportBatch
+      (
+      target: system.object;
+      status: cardinal
+      );
     function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
       (
@@ -374,7 +378,11 @@ begin
   BindOverview(order_by_field_name,be_order_ascending,target,'status_code = ' + status.tostring);
 end;
 
-procedure TClass_db_emsof_requests.BindStateExportBatch(target: system.object);
+procedure TClass_db_emsof_requests.BindStateExportBatch
+  (
+  target: system.object;
+  status: cardinal
+  );
 begin
   connection.Open;
   DataGrid(target).datasource := borland.data.provider.bdpcommand.Create
@@ -396,7 +404,7 @@ begin
     +   ' join service on (service.id=county_dictated_appropriation.service_id)'
     +   ' join eligible_provider_equipment_list'
     +     ' on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
-    + ' where emsof_request_master.status_code = 6'
+    + ' where emsof_request_master.status_code = ' + status.tostring
     +   ' and quantity > 0'
     + ' order by service_name',
     connection
