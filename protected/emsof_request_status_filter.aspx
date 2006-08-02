@@ -13,8 +13,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                             [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                             [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                              [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                              [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -32,7 +32,8 @@
                                 <td><strong>Requests in status "</strong><ASP:Label id="Label_status" runat="server" font-bold="True"></ASP:Label><strong>"</strong></td>
                                 <td>
                                   <p align="right">
-                                    <ASP:LinkButton id="LinkButton_generate_state_export_batch" runat="server" font-size="X-Small" visible="False">Generate state-required spreadsheet</ASP:LinkButton></p></td>
+                                    <ASP:LinkButton id="LinkButton_generate_state_export_batch" runat="server" font-size="X-Small" visible="False">Generate state-required spreadsheet</ASP:LinkButton></p>
+                                  <p align="right"><ASP:HyperLink id="HyperLink_generate_state_required_report" runat="server" target="_blank">Generate state-required report</ASP:HyperLink></p></td>
                               </tr>
                           </table></strong></td>
 					</tr>
