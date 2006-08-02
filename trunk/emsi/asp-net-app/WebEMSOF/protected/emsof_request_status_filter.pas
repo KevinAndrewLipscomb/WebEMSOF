@@ -32,8 +32,8 @@ type
     procedure TWebForm_emsof_request_status_filter_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_generate_state_export_batch_Click(sender: System.Object; 
-      e: System.EventArgs);
+//    procedure LinkButton_generate_state_export_batch_Click(sender: System.Object;
+//      e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
@@ -84,7 +84,7 @@ procedure TWebForm_emsof_request_status_filter.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-  Include(Self.LinkButton_generate_state_export_batch.Click, Self.LinkButton_generate_state_export_batch_Click);
+//  Include(Self.LinkButton_generate_state_export_batch.Click, Self.LinkButton_generate_state_export_batch_Click);
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
   Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
   Include(Self.DataGrid_requests.ItemDataBound, Self.DataGrid_requests_ItemDataBound);
@@ -130,31 +130,31 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_emsof_request_status_filter.LinkButton_generate_state_export_batch_Click
-  (
-  sender: System.Object;
-  e: System.EventArgs
-  );
-var
-  excel_string: string;
-  qualifier: string;
-begin
-  case status_type(session['status_of_interest']) of
-  NEEDS_SENT_TO_PA_DOH_EMSO:
-    qualifier := 'fresh';
-  NEEDS_PA_DOH_EMSO_APPROVAL:
-    qualifier := 'repeat';
-  end;
-  DataGrid_state_export_batch.visible := TRUE;
-  excel_string := ki.common.ExcelStringOf(DataGrid_state_export_batch);
-  DataGrid_state_export_batch.visible := FALSE;
-  ki.common.ExportToExcel
-    (
-    self,
-    'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf'),
-    excel_string
-    );
-end;
+//procedure TWebForm_emsof_request_status_filter.LinkButton_generate_state_export_batch_Click
+//  (
+//  sender: System.Object;
+//  e: System.EventArgs
+//  );
+//var
+//  excel_string: string;
+//  qualifier: string;
+//begin
+//  case status_type(session['status_of_interest']) of
+//  NEEDS_SENT_TO_PA_DOH_EMSO:
+//    qualifier := 'fresh';
+//  NEEDS_PA_DOH_EMSO_APPROVAL:
+//    qualifier := 'repeat';
+//  end;
+//  DataGrid_state_export_batch.visible := TRUE;
+//  excel_string := ki.common.ExcelStringOf(DataGrid_state_export_batch);
+//  DataGrid_state_export_batch.visible := FALSE;
+//  ki.common.ExportToExcel
+//    (
+//    self,
+//    'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf'),
+//    excel_string
+//    );
+//end;
 
 procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click
   (

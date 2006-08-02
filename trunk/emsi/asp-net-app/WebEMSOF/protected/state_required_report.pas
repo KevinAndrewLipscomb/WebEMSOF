@@ -30,6 +30,7 @@ type
     procedure DataGrid_state_export_batch_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure TWebForm_state_required_report_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure LinkButton_export_to_excel_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -44,7 +45,8 @@ type
     Label_submission_date: System.Web.UI.WebControls.Label;
     Label_amount_available: System.Web.UI.WebControls.Label;
     DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
-    LinkButton_print_version: System.Web.UI.WebControls.LinkButton;
+    LinkButton_export_to_excel: System.Web.UI.WebControls.LinkButton;
+    Table_report: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -61,6 +63,7 @@ implementation
 /// </summary>
 procedure TWebForm_state_required_report.InitializeComponent;
 begin
+  Include(Self.LinkButton_export_to_excel.Click, Self.LinkButton_export_to_excel_Click);
   Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_state_required_report_PreRender);
@@ -95,6 +98,27 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_state_required_report.LinkButton_export_to_excel_Click(sender: System.Object;
+  e: System.EventArgs);
+var
+  excel_string: string;
+  qualifier: string;
+begin
+  case status_type(session['status_of_interest']) of
+  NEEDS_SENT_TO_PA_DOH_EMSO:
+    qualifier := 'fresh';
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    qualifier := 'repeat';
+  end;
+  excel_string := ki.common.StringOfControl(Table_report);
+  ki.common.ExportToExcel
+    (
+    self,
+    'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf'),
+    excel_string
+    );
 end;
 
 procedure TWebForm_state_required_report.DataGrid_state_export_batch_ItemDataBound
