@@ -46,6 +46,7 @@ library WebEMSOF;
 {%AspWebConfigContainer 'protected\Web.config'}
 {%File 'resource\funding-priorities-epel-fy0607.pdf'}
 {%File 'resource\emsi-emsof-allocations-memo-fy0607.pdf'}
+{%AspMarkupContainer 'protected\state_required_report.aspx'}
 
 uses
   System.Reflection,
@@ -88,7 +89,8 @@ uses
   request_overview in 'protected\request_overview.pas' {request_overview.TWebForm_request_overview: System.Web.UI.Page},
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
   Class_biz_regional_staffers in 'component\biz\Class_biz_regional_staffers.pas',
-  Class_db_regional_staffers in 'component\db\Class_db_regional_staffers.pas';
+  Class_db_regional_staffers in 'component\db\Class_db_regional_staffers.pas',
+  state_required_report in 'protected\state_required_report.pas' {state_required_report.TWebForm_state_required_report: System.Web.UI.Page};
 
 const ID = '$Id$';
 

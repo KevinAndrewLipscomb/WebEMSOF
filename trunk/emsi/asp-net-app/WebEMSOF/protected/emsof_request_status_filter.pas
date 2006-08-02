@@ -64,6 +64,7 @@ type
     TableRow_spreadsheet: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_generate_state_export_batch: System.Web.UI.WebControls.LinkButton;
     DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
+    HyperLink_generate_state_required_report: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
