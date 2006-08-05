@@ -22,7 +22,6 @@ library WebEMSOF;
 {%AspFolderContainer 'component\db'}
 {%AspMarkupContainer 'Default.aspx'}
 {%AspMarkupContainer 'Global.asax'}
-{%AspMarkupContainer 'login.aspx'}
 {%AspMarkupContainer 'new_password.aspx'}
 {%AspMarkupContainer 'protected\withdraw_request_item.aspx'}
 {%AspMarkupContainer 'protected\all_emsof_requests.aspx'}
@@ -47,6 +46,8 @@ library WebEMSOF;
 {%File 'resource\funding-priorities-epel-fy0607.pdf'}
 {%File 'resource\emsi-emsof-allocations-memo-fy0607.pdf'}
 {%AspMarkupContainer 'protected\state_required_report.aspx'}
+{%AspMarkupContainer 'salogin.aspx'}
+{%AspMarkupContainer 'login.aspx'}
 
 uses
   System.Reflection,
@@ -67,7 +68,7 @@ uses
   ki.common,
   Default in 'Default.pas' {Default.TWebForm_Default: System.Web.UI.Page},
   Global in 'Global.pas' {Global.TGlobal: System.Web.HttpApplication},
-  login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
+  salogin in 'salogin.pas' {salogin.TWebForm_salogin: System.Web.UI.Page},
   new_password in 'new_password.pas' {new_password.TWebForm_new_password: System.Web.UI.Page},
   withdraw_request_item in 'protected\withdraw_request_item.pas' {withdraw_request_item.TWebForm_withdraw_request_item: System.Web.UI.Page},
   all_emsof_requests in 'protected\all_emsof_requests.pas' {all_emsof_requests.TWebForm_all_emsof_requests: System.Web.UI.Page},
@@ -90,7 +91,8 @@ uses
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
   Class_biz_regional_staffers in 'component\biz\Class_biz_regional_staffers.pas',
   Class_db_regional_staffers in 'component\db\Class_db_regional_staffers.pas',
-  state_required_report in 'protected\state_required_report.pas' {state_required_report.TWebForm_state_required_report: System.Web.UI.Page};
+  state_required_report in 'protected\state_required_report.pas' {state_required_report.TWebForm_state_required_report: System.Web.UI.Page},
+  login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page};
 
 const ID = '$Id$';
 

@@ -13,8 +13,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                              [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                              [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                                [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -26,16 +26,8 @@
               <td>
                 <table cellspacing="0" cellpadding="10" border="0">
                     <tr>
-                      <td bgcolor="#f5f5f5"><strong>
-                          <table cellspacing="0" cellpadding="5" width="100%" border="0">
-                              <tr>
-                                <td><strong>Requests in status "</strong><ASP:Label id="Label_status" runat="server" font-bold="True"></ASP:Label><strong>"</strong></td>
-                                <td>
-                                  <p align="right">
-                                    <ASP:LinkButton id="LinkButton_generate_state_export_batch" runat="server" font-size="X-Small" visible="False">Generate state-required spreadsheet</ASP:LinkButton></p>
-                                  <p align="right"><ASP:HyperLink id="HyperLink_generate_state_required_report" runat="server" target="_blank">Generate state-required report</ASP:HyperLink></p></td>
-                              </tr>
-                          </table></strong></td>
+                      <td bgcolor="#f5f5f5"><strong>Requests in status "
+                          <ASP:Label id="Label_status" runat="server" font-bold="True"></ASP:Label>" </strong></td>
 					</tr>
 					<tr id="TableRow_none" runat="server">
 					  <td><em>--&nbsp;NONE&nbsp;--</em></td>
@@ -67,19 +59,6 @@
 						  </Columns></ASP:DataGrid></td>
 					</tr>
 					<tr id="TableRow_spreadsheet" runat="server">
-					  <td>
-					  <ASP:DataGrid id="DataGrid_state_export_batch" runat="server" autogeneratecolumns="False" visible="False" font-size="XX-Small">
-                          <Columns>
-                            <ASP:BoundColumn datafield="service_name" readonly="True" headertext="Organization Name"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="life_support_level" readonly="True" headertext="Type of Organization"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="equipment_description" readonly="True" headertext="Equipment/Program"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="quantity" readonly="True" headertext="# Units"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="unit_cost" readonly="True" headertext="Unit Cost"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="total_cost" readonly="True" headertext="Total Cost Amount"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF Amount"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="provider_match" readonly="True" headertext="Provider Match"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="recommendation" readonly="True" headertext="Recomm"></ASP:BoundColumn>
-                          </Columns></ASP:DataGrid></td>
 					</tr>
                 </table></td>
             </tr>

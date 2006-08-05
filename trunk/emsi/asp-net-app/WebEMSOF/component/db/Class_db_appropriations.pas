@@ -175,24 +175,28 @@ function TClass_db_appropriations.SumOfAppropriationsToServicesInRegion
   fy_id: string
   )
   : decimal;
+var
+  sum_obj: system.object;
 begin
   connection.Open;
-  SumOfAppropriationsToServicesInRegion := decimal
+  sum_obj := borland.data.provider.bdpcommand.Create
     (
-    borland.data.provider.bdpcommand.Create
-      (
-      'select sum(county_dictated_appropriation.amount)'
-      + ' from county_dictated_appropriation'
-      +   ' join region_dictated_appropriation'
-      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-      +   ' join state_dictated_appropriation'
-      +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
-      + ' where region_code = ' + region_id
-      +   ' and fiscal_year_id = ' + fy_id,
-      connection
-      )
-      .ExecuteScalar
-    );
+    'select sum(county_dictated_appropriation.amount)'
+    + ' from county_dictated_appropriation'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' where region_code = ' + region_id
+    +   ' and fiscal_year_id = ' + fy_id,
+    connection
+    )
+    .ExecuteScalar;
+  if sum_obj = dbnull.value then begin
+    SumOfAppropriationsToServicesInRegion := 0;
+  end else begin
+    SumOfAppropriationsToServicesInRegion := decimal(sum_obj);
+  end;
   connection.Close;
 end;
 
