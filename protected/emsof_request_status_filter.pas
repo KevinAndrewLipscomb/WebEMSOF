@@ -47,7 +47,6 @@ type
   strict private
     p: p_type;
     procedure BindOverview;
-    procedure BindStateExportBatch(status: status_type);
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -62,9 +61,6 @@ type
     Label_status: System.Web.UI.WebControls.Label;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
     TableRow_spreadsheet: System.Web.UI.HtmlControls.HtmlTableRow;
-    LinkButton_generate_state_export_batch: System.Web.UI.WebControls.LinkButton;
-    DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
-    HyperLink_generate_state_required_report: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -84,7 +80,6 @@ procedure TWebForm_emsof_request_status_filter.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-//  Include(Self.LinkButton_generate_state_export_batch.Click, Self.LinkButton_generate_state_export_batch_Click);
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
   Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
   Include(Self.DataGrid_requests.ItemDataBound, Self.DataGrid_requests_ItemDataBound);
@@ -113,10 +108,6 @@ begin
     p.sort_order := 'affiliate_num';
     //
     BindOverview;
-    if status_type(session['status_of_interest']) in [NEEDS_SENT_TO_PA_DOH_EMSO,NEEDS_PA_DOH_EMSO_APPROVAL] then begin
-      BindStateExportBatch(status_type(session['status_of_interest']));
-      LinkButton_generate_state_export_batch.visible := TRUE;
-    end;
     //
   end;
 end;
@@ -129,32 +120,6 @@ begin
   InitializeComponent;
   inherited OnInit(e);
 end;
-
-//procedure TWebForm_emsof_request_status_filter.LinkButton_generate_state_export_batch_Click
-//  (
-//  sender: System.Object;
-//  e: System.EventArgs
-//  );
-//var
-//  excel_string: string;
-//  qualifier: string;
-//begin
-//  case status_type(session['status_of_interest']) of
-//  NEEDS_SENT_TO_PA_DOH_EMSO:
-//    qualifier := 'fresh';
-//  NEEDS_PA_DOH_EMSO_APPROVAL:
-//    qualifier := 'repeat';
-//  end;
-//  DataGrid_state_export_batch.visible := TRUE;
-//  excel_string := ki.common.ExcelStringOf(DataGrid_state_export_batch);
-//  DataGrid_state_export_batch.visible := FALSE;
-//  ki.common.ExportToExcel
-//    (
-//    self,
-//    'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf'),
-//    excel_string
-//    );
-//end;
 
 procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click
   (
@@ -276,11 +241,6 @@ begin
   //
   p.num_qualifying_requests := 0;
   //
-end;
-
-procedure TWebForm_emsof_request_status_filter.BindStateExportBatch(status: status_type);
-begin
-  p.biz_emsof_requests.BindStateExportBatch(DataGrid_state_export_batch,status);
 end;
 
 end.

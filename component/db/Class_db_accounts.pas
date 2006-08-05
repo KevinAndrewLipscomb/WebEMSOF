@@ -12,6 +12,7 @@ type
     { Private Declarations }
   public
     constructor Create;
+    function BeValidSysAdminCredentials(encoded_password: string): boolean;
     procedure BindCounties(target: system.object);
     procedure BindRegionalStaffers(target: system.object);
     procedure BindServices(target: system.object);
@@ -46,6 +47,20 @@ constructor TClass_db_accounts.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+end;
+
+function TClass_db_accounts.BeValidSysAdminCredentials(encoded_password: string): boolean;
+begin
+  connection.Open;
+  BeValidSysAdminCredentials := nil <> borland.data.provider.bdpcommand.Create
+    (
+    'SELECT 1 FROM control_parm'
+    +  ' where name = "sysadmin_encoded_password"'
+    +     ' and value = "' + encoded_password + '"',
+    connection
+    )
+    .ExecuteScalar;
+  connection.Close;
 end;
 
 procedure TClass_db_accounts.BindCounties(target: system.object);

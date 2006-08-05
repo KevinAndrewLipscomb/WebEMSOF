@@ -14,7 +14,7 @@
 		  Change your WebEMSOF
 		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>&nbsp;]
 	  </small></p>
-	  <h1><ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h1>
+	  <h1><ASP:Label id="Label_service_name" runat="server" font-bold="True"></ASP:Label></h1>
 	  <h3>Account overview</h3>
 	  <h3>
         <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
