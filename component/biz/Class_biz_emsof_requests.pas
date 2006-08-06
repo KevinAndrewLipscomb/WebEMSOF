@@ -121,6 +121,13 @@ type
     function SponsorCountyNameOf(e_item: system.object): string;
     function SponsorRegionNameOf(master_id: string): string;
     function StatusOf(e_item: system.object): status_type;
+    procedure SubmitToState
+      (
+      Table_report: system.object;
+      request_physical_path: string;
+      status_of_interest: status_type;
+      regional_staffer_user_id: string
+      );
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
     function TcciOfAppropriation: cardinal;
@@ -137,7 +144,11 @@ implementation
 uses
   Class_biz_accounts,
   Class_biz_fiscal_years,
-  Class_biz_user;
+  Class_biz_regional_staffers,
+  Class_biz_user,
+  ki.common,
+  system.configuration,
+  system.io;
 
 constructor TClass_biz_emsof_requests.Create;
 begin
@@ -162,7 +173,7 @@ var
   next_status: status_type;
   reviewer_descriptor: string;
 begin
-  approval_timestamp_column := NONE;
+  approval_timestamp_column := Class_db_emsof_requests.approval_timestamp_column_type(NONE);
   next_status := StatusOf(e_item); // Better initialize it to something.
   case StatusOf(e_item) of
   NEEDS_COUNTY_APPROVAL:
@@ -194,7 +205,7 @@ begin
     next_status := NEEDS_INVOICE_COLLECTION;
     END;
   end;
-  if approval_timestamp_column <> NONE then begin
+  if approval_timestamp_column <> Class_db_emsof_requests.approval_timestamp_column_type(NONE) then begin
     db_emsof_requests.Approve(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,approval_timestamp_column);
     if next_status <> NEEDS_INVOICE_COLLECTION then begin
       TClass_biz_accounts.Create.MakePromotionNotification
@@ -527,6 +538,44 @@ end;
 function TClass_biz_emsof_requests.StatusOf(e_item: system.object): status_type;
 begin
   StatusOf := status_type(db_emsof_requests.StatusCodeOf(e_item));
+end;
+
+procedure TClass_biz_emsof_requests.SubmitToState
+  (
+  Table_report: system.object;
+  request_physical_path: string;
+  status_of_interest: status_type;
+  regional_staffer_user_id: string
+  );
+var
+  qualifier: string;
+  region_name: string;
+begin
+  case status_of_interest of
+  NEEDS_SENT_TO_PA_DOH_EMSO:
+    qualifier := 'fresh';
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    qualifier := 'repeat';
+  end;
+  region_name := TClass_biz_regional_staffers.Create.RegionNameOf(regional_staffer_user_id);
+  ki.common.SendControlAsAttachmentToEmailMessage
+    (
+    Table_report,
+    path.GetDirectoryName(request_physical_path) + '/' + configurationsettings.appsettings['scratch_folder'] + '/'
+    + 'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf') + '.xls',
+    TClass_biz_accounts.Create.EmailTargetByRole('emsof-coordinator'),
+    configurationsettings.AppSettings['state_report_to_target'],
+    configurationsettings.AppSettings['state_report_cc_target'],
+    'EMSOF requests from ' + region_name + ' region',
+    'Dear PA DOH EMSO EMSOF Coordinator,' + NEW_LINE
+    + NEW_LINE
+    + 'The attached Excel spreadsheet contains new EMSOF request items that have been approved by ' + region_name + '''s Executive '
+    + 'Director.  Please process this report at your earliest convenience.' + NEW_LINE
+    + NEW_LINE
+    + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
 end;
 
 function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;

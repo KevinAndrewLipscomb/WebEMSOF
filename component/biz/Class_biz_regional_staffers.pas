@@ -12,6 +12,7 @@ type
   public
     constructor Create;
     function RegionCodeOf(id: string): string;
+    function RegionNameOf(id: string): string;
   end;
 
 implementation
@@ -26,6 +27,11 @@ end;
 function TClass_biz_regional_staffers.RegionCodeOf(id: string): string;
 begin
   RegionCodeOf := db_regional_staffers.RegionCodeOf(id);
+end;
+
+function TClass_biz_regional_staffers.RegionNameOf(id: string): string;
+begin
+  RegionNameOf := db_regional_staffers.RegionNameOf(id);
 end;
 
 end.

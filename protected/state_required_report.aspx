@@ -7,7 +7,17 @@
   <body>
     <form runat="server">
       <asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder>
-      <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+	  <p>
+		<small>[
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
+			                                                  [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                  [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			|
+			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
+		</small>
+	  </p>
+	  <p><asp:label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></asp:label></p>
+	  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
         <tr>
           <td>
             <table cellspacing="0" cellpadding="10" border="0">
@@ -116,7 +126,7 @@
                             </td>
                             <td></td>
                             <td valign="top">
-                              <strong>William E. Groft</strong><br>President
+                              <strong>William E. Groft</strong><br>President 
 
                             </td>
                           </tr>
@@ -124,7 +134,7 @@
                             <td></td>
                             <td></td>
                             <td valign="top">
-                              <strong>Thomas J. McElree</strong><br>Regional EMS Council Director
+                              <strong>Thomas J. McElree</strong><br>Regional EMS Council Director 
 
                             </td>
                           </tr>
