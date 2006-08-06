@@ -87,7 +87,7 @@ end;
 
 function TClass_biz_accounts.BeValidSysAdminCredentials(encoded_password: string): boolean;
 begin
-  BeValidSysAdminCredentials := db_accounts.BeValidSysAdminCredentials(encoded_password);
+  BeValidSysAdminCredentials := (encoded_password = configurationsettings.appsettings['sysadmin_encoded_password']);
 end;
 
 procedure TClass_biz_accounts.BindCounties(target: system.object);

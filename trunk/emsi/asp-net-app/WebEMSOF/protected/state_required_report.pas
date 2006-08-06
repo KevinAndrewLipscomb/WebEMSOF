@@ -31,7 +31,16 @@ type
     procedure TWebForm_state_required_report_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure LinkButton_export_to_excel_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
+  //
+  // Expected session objects:
+  //
+  //   status_of_interest: Class_biz_emsof_requests.status_type
+  //   waypoint_stack: system.collections.stack;
+  //
+  //
   strict private
     p: p_type;
     procedure Bind;
@@ -47,6 +56,11 @@ type
     DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
     LinkButton_export_to_excel: System.Web.UI.WebControls.LinkButton;
     Table_report: System.Web.UI.HtmlControls.HtmlTable;
+    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    LinkButton_back: System.Web.UI.WebControls.LinkButton;
+    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
+    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    Label_account_descriptor: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -63,6 +77,8 @@ implementation
 /// </summary>
 procedure TWebForm_state_required_report.InitializeComponent;
 begin
+  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.LinkButton_export_to_excel.Click, Self.LinkButton_export_to_excel_Click);
   Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
@@ -100,24 +116,32 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_state_required_report.LinkButton_export_to_excel_Click(sender: System.Object;
+procedure TWebForm_state_required_report.LinkButton_back_Click(sender: System.Object;
   e: System.EventArgs);
-var
-  excel_string: string;
-  qualifier: string;
 begin
-  case status_type(session['status_of_interest']) of
-  NEEDS_SENT_TO_PA_DOH_EMSO:
-    qualifier := 'fresh';
-  NEEDS_PA_DOH_EMSO_APPROVAL:
-    qualifier := 'repeat';
-  end;
-  excel_string := ki.common.StringOfControl(Table_report);
-  ki.common.ExportToExcel
+  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+end;
+
+procedure TWebForm_state_required_report.LinkButton_logout_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  formsauthentication.SignOut;
+  session.Clear;
+  server.Transfer('../Default.aspx');
+end;
+
+procedure TWebForm_state_required_report.LinkButton_export_to_excel_Click
+  (
+  sender: System.Object;
+  e: System.EventArgs
+  );
+begin
+  p.biz_emsof_requests.SubmitToState
     (
-    self,
-    'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf'),
-    excel_string
+    Table_report,
+    request.physicalpath,
+    status_type(session['status_of_interest']),
+    session['regional_staffer_user_id'].tostring
     );
 end;
 
