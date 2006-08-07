@@ -30,7 +30,7 @@ type
     procedure DataGrid_state_export_batch_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure TWebForm_state_required_report_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_export_to_excel_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_transmit_to_state_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
@@ -54,13 +54,13 @@ type
     Label_submission_date: System.Web.UI.WebControls.Label;
     Label_amount_available: System.Web.UI.WebControls.Label;
     DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
-    LinkButton_export_to_excel: System.Web.UI.WebControls.LinkButton;
     Table_report: System.Web.UI.HtmlControls.HtmlTable;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
     HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
+    LinkButton_transmit_to_state: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -79,7 +79,7 @@ procedure TWebForm_state_required_report.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-  Include(Self.LinkButton_export_to_excel.Click, Self.LinkButton_export_to_excel_Click);
+  Include(Self.LinkButton_transmit_to_state.Click, Self.LinkButton_transmit_to_state_Click);
   Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_state_required_report_PreRender);
@@ -130,7 +130,7 @@ begin
   server.Transfer('../Default.aspx');
 end;
 
-procedure TWebForm_state_required_report.LinkButton_export_to_excel_Click
+procedure TWebForm_state_required_report.LinkButton_transmit_to_state_Click
   (
   sender: System.Object;
   e: System.EventArgs
@@ -143,6 +143,7 @@ begin
     status_type(session['status_of_interest']),
     session['regional_staffer_user_id'].tostring
     );
+  server.Transfer('state_transmittal_complete.aspx');
 end;
 
 procedure TWebForm_state_required_report.DataGrid_state_export_batch_ItemDataBound
@@ -191,6 +192,7 @@ begin
   p.be_datagrid_empty := (p.num_datagrid_rows = 0);
   TableRow_none.visible := p.be_datagrid_empty;
   DataGrid_state_export_batch.visible := not p.be_datagrid_empty;
+  LinkButton_transmit_to_state.enabled := not p.be_datagrid_empty; 
   //
   // Clear aggregation vars for next bind, if any.
   //

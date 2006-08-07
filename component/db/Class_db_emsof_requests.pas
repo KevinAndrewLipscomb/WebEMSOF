@@ -107,6 +107,12 @@ type
       next_status: cardinal;
       user_kind: string
       );
+    procedure MarkSubmittedToState
+      (
+      region_code: string;
+      current_status: cardinal;
+      next_status: cardinal
+      );
     function PropertyNameOfAppropriation: string;
     function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
@@ -486,6 +492,32 @@ begin
   end;
   connection.Open;
   borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
+  connection.Close;
+end;
+
+procedure TClass_db_emsof_requests.MarkSubmittedToState
+  (
+  region_code: string;
+  current_status: cardinal;
+  next_status: cardinal
+  );
+begin
+  connection.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update emsof_request_master'
+    + ' join county_dictated_appropriation'
+    +   ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    + ' join region_dictated_appropriation'
+    +   ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    + ' join state_dictated_appropriation'
+    +   ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' set status_code = ' + next_status.tostring
+    + ' where region_code = ' + region_code
+    +   ' and status_code = ' + current_status.tostring,
+    connection
+    )
+    .ExecuteNonQuery;
   connection.Close;
 end;
 

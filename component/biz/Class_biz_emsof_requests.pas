@@ -322,7 +322,6 @@ begin
     (region_dictated_appropriation_id,ord(status),order_by_field_name,be_order_ascending,target);
 end;
 
-
 procedure TClass_biz_emsof_requests.BindOverviewByStatus
   (
   status: status_type;
@@ -548,16 +547,18 @@ procedure TClass_biz_emsof_requests.SubmitToState
   regional_staffer_user_id: string
   );
 var
+  biz_regional_staffers: TClass_biz_regional_staffers;
   qualifier: string;
   region_name: string;
 begin
+  biz_regional_staffers := TClass_biz_regional_staffers.Create;
   case status_of_interest of
   NEEDS_SENT_TO_PA_DOH_EMSO:
     qualifier := 'fresh';
   NEEDS_PA_DOH_EMSO_APPROVAL:
     qualifier := 'repeat';
   end;
-  region_name := TClass_biz_regional_staffers.Create.RegionNameOf(regional_staffer_user_id);
+  region_name := biz_regional_staffers.RegionNameOf(regional_staffer_user_id);
   ki.common.SendControlAsAttachmentToEmailMessage
     (
     Table_report,
@@ -576,6 +577,14 @@ begin
     + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
+  if status_of_interest = NEEDS_SENT_TO_PA_DOH_EMSO then begin
+    TClass_db_emsof_requests.Create.MarkSubmittedToState
+      (
+      biz_regional_staffers.RegionCodeOf(regional_staffer_user_id),
+      ord(NEEDS_SENT_TO_PA_DOH_EMSO),
+      ord(NEEDS_PA_DOH_EMSO_APPROVAL)
+      );
+  end;
 end;
 
 function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;

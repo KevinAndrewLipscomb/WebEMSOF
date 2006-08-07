@@ -10,8 +10,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                                  [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                                  [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                                     [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                     [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -29,9 +29,7 @@
                         <strong>State-required report</strong>
                       </td>
                       <td>
-                        <asp:linkbutton id="LinkButton_export_to_excel" runat="server">
-                          Export to Excel
-                        </asp:linkbutton>
+						<asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False">Transmit to State</asp:linkbutton>
                       </td>
                     </tr>
                   </table>
