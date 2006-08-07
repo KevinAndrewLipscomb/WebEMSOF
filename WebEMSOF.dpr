@@ -49,6 +49,10 @@ library WebEMSOF;
 {%AspMarkupContainer 'salogin.aspx'}
 {%AspMarkupContainer 'login.aspx'}
 {%AspMarkupContainer 'protected\state_transmittal_complete.aspx'}
+{%AspFolderContainer 'protected\scratch'}
+{%AspFolderContainer 'protected\image'}
+{$R 'protected\image\logo_left.gif' 'protected\image\logo_left.gif'}
+{$R 'protected\image\logo_right.gif' 'protected\image\logo_right.gif'}
 
 uses
   System.Reflection,
