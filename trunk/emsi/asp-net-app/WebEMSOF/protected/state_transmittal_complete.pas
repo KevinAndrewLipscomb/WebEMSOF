@@ -22,6 +22,7 @@ type
     procedure TWebForm_state_transmittal_complete_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_return_to_overview_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
@@ -41,7 +42,8 @@ type
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
-    LinkButton_drill_down: System.Web.UI.WebControls.LinkButton;
+    Label_application_name: System.Web.UI.WebControls.Label;
+    Button_return_to_overview: System.Web.UI.WebControls.Button;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -60,7 +62,7 @@ procedure TWebForm_state_transmittal_complete.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-  Include(Self.LinkButton_drill_down.Click, Self.LinkButton_drill_down_Click);
+  Include(Self.Button_return_to_overview.Click, Self.Button_return_to_overview_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_state_transmittal_complete_PreRender);
 end;
@@ -74,14 +76,8 @@ begin
   end else begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_transmittal_complete';
-    Label_account_descriptor.text := session.item['_name'].tostring;
-    //
-    {$REGION 'Keep this block iff the user lands on this form immediately after login.'}
-    session.Remove('waypoint_stack');
-    waypoint_stack := system.collections.stack.Create;
-    waypoint_stack.Push('regional_staffer_overview.aspx');
-    session.Add('waypoint_stack',waypoint_stack);
-    {$ENDREGION}
+    Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
+    Label_application_name.text := configurationsettings.appsettings['application_name'];
     //
   end;
 end;
@@ -95,22 +91,19 @@ begin
   inherited OnInit(e);
 end;
 
-{$REGION 'Waypoint management code for drill-down server.Transfer calls.'}
-procedure TWebForm_regional_staffer_overview.LinkButton_drill_down_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  system.collections.stack(session['waypoint_stack']).Push('state_transmittal_complete.aspx');
-  server.Transfer('detail.aspx');
-end;
-{$ENDREGION}
-
-procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click(sender: System.Object;
+procedure TWebForm_state_transmittal_complete.Button_return_to_overview_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
-procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
+procedure TWebForm_state_transmittal_complete.LinkButton_back_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+end;
+
+procedure TWebForm_state_transmittal_complete.TWebForm_state_transmittal_complete_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
   session.Remove('p');
