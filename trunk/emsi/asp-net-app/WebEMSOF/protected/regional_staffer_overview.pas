@@ -296,7 +296,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_state_approval_Click(sen
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_PA_DOH_EMSO_APPROVAL);
-  server.Transfer('state_required_report.aspx');
+  server.Transfer('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_transmittal_Click(sender: System.Object;

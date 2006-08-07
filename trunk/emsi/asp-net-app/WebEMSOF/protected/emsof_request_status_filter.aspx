@@ -13,8 +13,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                                [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                                [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                                  [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                  [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -26,8 +26,14 @@
               <td>
                 <table cellspacing="0" cellpadding="10" border="0">
                     <tr>
-                      <td bgcolor="#f5f5f5"><strong>Requests in status "
-                          <ASP:Label id="Label_status" runat="server" font-bold="True"></ASP:Label>" </strong></td>
+                      <td bgcolor="#f5f5f5"><strong>
+
+  <table cellspacing="0" cellpadding="5" width="100%" border="0">
+      <tr>
+        <td><strong>Requests in status "<ASP:Label id="Label_status" runat="server" font-bold="True"></ASP:Label>" </strong></td>
+        <td><ASP:LinkButton id="LinkButton_retransmit_to_state" runat="server" enabled="False" visible="False">Retransmit to State</ASP:LinkButton></td>
+      </tr>
+  </table></strong></td>
 					</tr>
 					<tr id="TableRow_none" runat="server">
 					  <td><em>--&nbsp;NONE&nbsp;--</em></td>
