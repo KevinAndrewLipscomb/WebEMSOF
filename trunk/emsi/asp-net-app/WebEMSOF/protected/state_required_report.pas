@@ -8,6 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, system.web.security,
   borland.data.provider,
+  Class_biz_appropriations,
   Class_biz_emsof_requests,
   ki.common;
 
@@ -16,8 +17,10 @@ const ID = '$Id$';
 type
   p_type =
     RECORD
+    amendment_num_string: string;
     be_datagrid_empty: boolean;
-    biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
+    biz_appropriations: TClass_biz_appropriations;
+    biz_emsof_requests: TClass_biz_emsof_requests;
     grand_total_cost: decimal;
     num_datagrid_rows: cardinal;
     total_emsof_ante: decimal;
@@ -33,10 +36,13 @@ type
     procedure LinkButton_transmit_to_state_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
+    procedure DropDownList_amendment_SelectedIndexChanged(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
   //
+  //   regional_stafer_user_id: string;
   //   status_of_interest: Class_biz_emsof_requests.status_type
   //   waypoint_stack: system.collections.stack;
   //
@@ -61,6 +67,12 @@ type
     HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     LinkButton_transmit_to_state: System.Web.UI.WebControls.LinkButton;
+    TableRow_this_is_everything: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_this_is_just_some: System.Web.UI.HtmlControls.HtmlTableRow;
+    Label_total_num_requests_2: System.Web.UI.WebControls.Label;
+    Label_num_filtered_requests: System.Web.UI.WebControls.Label;
+    DropDownList_amendment: System.Web.UI.WebControls.DropDownList;
+    Label_total_num_requests: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -80,6 +92,7 @@ begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.LinkButton_transmit_to_state.Click, Self.LinkButton_transmit_to_state_Click);
+  Include(Self.DropDownList_amendment.SelectedIndexChanged, Self.DropDownList_amendment_SelectedIndexChanged);
   Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_state_required_report_PreRender);
@@ -87,6 +100,9 @@ end;
 {$ENDREGION}
 
 procedure TWebForm_state_required_report.Page_Load(sender: System.Object; e: System.EventArgs);
+var
+  i: cardinal;
+  num_active_amendments: cardinal;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback then begin
@@ -95,14 +111,36 @@ begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_required_report';
     //
+    p.biz_appropriations := TClass_biz_appropriations.Create;
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
+    //
+    Label_total_num_requests.text := p.biz_emsof_requests.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL);
+    num_active_amendments := p.biz_appropriations.NumActiveAmendments(session['regional_staffer_user_id'].tostring);
+    if num_active_amendments = 0 then begin
+      TableRow_this_is_everything.visible := TRUE;
+      Label_total_num_requests_2.text := Label_total_num_requests.text;
+    end else begin
+      TableRow_this_is_just_some.visible := TRUE;
+      DropDownList_amendment.items.Add(listitem.Create('the original contract','0'));
+      for i := 1 to num_active_amendments do
+        BEGIN
+        DropDownList_amendment.items.Add(listitem.Create('contract amendment #' + i.tostring,i.tostring));
+        END;
+    end;
+    Label_funding_round.text :=
+      cardinal(p.biz_appropriations.FundingRoundsGenerated(session['regional_staffer_user_id'].tostring) + 1).tostring;
+    //
     // Initialize implementation-wide vars.
     //
+    p.amendment_num_string := '0';
     p.grand_total_cost := 0;
     p.num_datagrid_rows := 0;
     p.total_emsof_ante := 0;
     p.total_provider_match := 0;
     //
     Bind;
+    //
+    Label_submission_date.text := datetime.Today.tostring('d MMM yyyy');
     //
   end;
 end;
@@ -114,6 +152,21 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_state_required_report.DropDownList_amendment_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  Label_funding_round.text := cardinal
+    (
+    1 + p.biz_appropriations.FundingRoundsGenerated
+      (
+      session['regional_staffer_id'].tostring,
+      DropDownList_amendment.selectedvalue
+      )
+    )
+    .tostring;
+  p.amendment_num_string := DropDownList_amendment.selectedvalue;
 end;
 
 procedure TWebForm_state_required_report.LinkButton_back_Click(sender: System.Object;
@@ -141,7 +194,8 @@ begin
     Table_report,
     request.physicalpath,
     status_type(session['status_of_interest']),
-    session['regional_staffer_user_id'].tostring
+    session['regional_staffer_user_id'].tostring,
+    p.amendment_num_string
     );
   server.Transfer('state_transmittal_complete.aspx');
 end;
