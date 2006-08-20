@@ -599,10 +599,12 @@ CREATE TABLE state_dictated_appropriation (
   id smallint(5) unsigned NOT NULL auto_increment,
   region_code tinyint(3) unsigned NOT NULL,
   fiscal_year_id smallint(5) unsigned NOT NULL,
+  amendment_num tinyint(3) unsigned NOT NULL default '0',
   amount decimal(10,2) unsigned NOT NULL,
+  funding_rounds_generated smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (id),
-  KEY fiscal_year_id (fiscal_year_id),
-  KEY region_code (region_code)
+  UNIQUE KEY region_code (region_code,fiscal_year_id,amendment_num),
+  KEY fiscal_year_id (fiscal_year_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 
