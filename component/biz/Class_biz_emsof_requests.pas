@@ -95,7 +95,8 @@ type
     procedure BindStateExportBatch
       (
       target: system.object;
-      status: status_type
+      status: status_type;
+      amendment_num_string: string
       );
     function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
@@ -345,10 +346,11 @@ end;
 procedure TClass_biz_emsof_requests.BindStateExportBatch
   (
   target: system.object;
-  status: status_type
+  status: status_type;
+  amendment_num_string: string
   );
 begin
-  db_emsof_requests.BindStateExportBatch(target,ord(status));
+  db_emsof_requests.BindStateExportBatch(target,ord(status),amendment_num_string);
 end;
 
 procedure TClass_biz_emsof_requests.Demote

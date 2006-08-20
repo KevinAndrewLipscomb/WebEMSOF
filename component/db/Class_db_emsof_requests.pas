@@ -88,7 +88,8 @@ type
     procedure BindStateExportBatch
       (
       target: system.object;
-      status: cardinal
+      status: cardinal;
+      amendment_num_string: string
       );
     function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
@@ -387,7 +388,8 @@ end;
 procedure TClass_db_emsof_requests.BindStateExportBatch
   (
   target: system.object;
-  status: cardinal
+  status: cardinal;
+  amendment_num_string: string
   );
 begin
   connection.Open;
@@ -407,11 +409,16 @@ begin
     +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
     +   ' join county_dictated_appropriation'
     +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
     +   ' join service on (service.id=county_dictated_appropriation.service_id)'
     +   ' join eligible_provider_equipment_list'
     +     ' on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
     + ' where emsof_request_master.status_code = ' + status.tostring
     +   ' and quantity > 0'
+    +   ' and amendment_num = ' + amendment_num_string
     + ' order by service_name',
     connection
     )
