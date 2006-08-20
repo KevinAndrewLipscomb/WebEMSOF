@@ -162,11 +162,11 @@ begin
     1 + p.biz_appropriations.FundingRoundsGenerated
       (
       session['regional_staffer_id'].tostring,
-      DropDownList_amendment.selectedvalue
+      Safe(DropDownList_amendment.selectedvalue,NUM)
       )
     )
     .tostring;
-  p.amendment_num_string := DropDownList_amendment.selectedvalue;
+  p.amendment_num_string := Safe(DropDownList_amendment.selectedvalue,NUM);
 end;
 
 procedure TWebForm_state_required_report.LinkButton_back_Click(sender: System.Object;
