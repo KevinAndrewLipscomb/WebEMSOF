@@ -126,6 +126,7 @@ begin
         BEGIN
         DropDownList_amendment.items.Add(listitem.Create('contract amendment #' + i.tostring,i.tostring));
         END;
+      Label_num_filtered_requests.text := '(not yet implemented)';
     end;
     Label_funding_round.text :=
       cardinal(p.biz_appropriations.FundingRoundsGenerated(session['regional_staffer_user_id'].tostring) + 1).tostring;
@@ -157,16 +158,9 @@ end;
 procedure TWebForm_state_required_report.DropDownList_amendment_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  Label_funding_round.text := cardinal
-    (
-    1 + p.biz_appropriations.FundingRoundsGenerated
-      (
-      session['regional_staffer_id'].tostring,
-      Safe(DropDownList_amendment.selectedvalue,NUM)
-      )
-    )
-    .tostring;
   p.amendment_num_string := Safe(DropDownList_amendment.selectedvalue,NUM);
+  Label_funding_round.text := cardinal
+    (1 + p.biz_appropriations.FundingRoundsGenerated(session['regional_staffer_user_id'].tostring,p.amendment_num_string)).tostring;
 end;
 
 procedure TWebForm_state_required_report.LinkButton_back_Click(sender: System.Object;
@@ -239,14 +233,19 @@ end;
 
 procedure TWebForm_state_required_report.Bind;
 begin
-  TClass_biz_emsof_requests.Create.BindStateExportBatch(DataGrid_state_export_batch,status_type(session['status_of_interest']));
+  p.biz_emsof_requests.BindStateExportBatch
+    (
+    DataGrid_state_export_batch,
+    status_type(session['status_of_interest']),
+    p.amendment_num_string
+    );
   //
   // Manage control visibilities.
   //
   p.be_datagrid_empty := (p.num_datagrid_rows = 0);
   TableRow_none.visible := p.be_datagrid_empty;
   DataGrid_state_export_batch.visible := not p.be_datagrid_empty;
-  LinkButton_transmit_to_state.enabled := not p.be_datagrid_empty; 
+  LinkButton_transmit_to_state.enabled := not p.be_datagrid_empty;
   //
   // Clear aggregation vars for next bind, if any.
   //
