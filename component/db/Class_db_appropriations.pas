@@ -4,15 +4,31 @@ interface
 
 uses
   borland.data.provider,
-  Class_db;
+  Class_db,
+  Class_biz_fiscal_years,
+  Class_biz_regional_staffers;
+
 
 type
   TClass_db_appropriations = class(TClass_db)
   private
-    { Private Declarations }
+    biz_fiscal_years: TClass_biz_fiscal_years;
+    biz_regional_staffers: TClass_biz_regional_staffers;
   public
     constructor Create;
     function CountyCodeOfCountyDictum(county_dictum_id: string): string;
+    function FundingRoundsGenerated
+      (
+      regional_staffer_id: string;
+      amendment_num_string: string
+      )
+      : cardinal;
+    procedure IncFundingRoundsGenerated
+      (
+      regional_staffer_id: string;
+      amendment_num_string: string
+      );
+    function NumActiveAmendments(regional_staffer_id: string): cardinal;
     function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
     function RegionCodeOfCountyDictum(county_dictum_id: string): string;
     function SumOfAppropriationsFromSpecificParent
@@ -51,6 +67,8 @@ constructor TClass_db_appropriations.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  biz_fiscal_years := TClass_biz_fiscal_years.Create;
+  biz_regional_staffers := TClass_biz_regional_staffers.Create;
 end;
 
 function TClass_db_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
@@ -66,6 +84,62 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
+  connection.Close;
+end;
+
+function TClass_db_appropriations.FundingRoundsGenerated
+  (
+  regional_staffer_id: string;
+  amendment_num_string: string
+  )
+  : cardinal;
+begin
+  connection.Open;
+  FundingRoundsGenerated := borland.data.provider.bdpcommand.Create
+    (
+    'select funding_rounds_generated'
+    + ' from state_dictated_appropriation'
+    + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent
+    +   ' and region_code = ' + biz_regional_staffers.RegionCodeOf(regional_staffer_id)
+    +   ' and amendment_num = ' + amendment_num_string,
+    connection
+    )
+    .ExecuteScalar.GetHashCode;
+  connection.Close;
+end;
+
+procedure TClass_db_appropriations.IncFundingRoundsGenerated
+  (
+  regional_staffer_id: string;
+  amendment_num_string: string
+  );
+begin
+  connection.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update state_dictated_appropriation'
+    + ' set funding_rounds_generated = funding_rounds_generated + 1'
+    + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent
+    +   ' and region_code = ' + biz_regional_staffers.RegionCodeOf(regional_staffer_id)
+    +   ' and amendment_num = ' + amendment_num_string,
+    connection
+    )
+    .ExecuteNonQuery;
+  connection.Close;
+end;
+
+function TClass_db_appropriations.NumActiveAmendments(regional_staffer_id: string): cardinal;
+begin
+  connection.Open;
+  NumActiveAmendments := -1 + borland.data.provider.bdpcommand.Create
+    (
+    'select count(id)'
+    + ' from state_dictated_appropriation'
+    + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent
+    +   ' and region_code = ' + biz_regional_staffers.RegionCodeOf(regional_staffer_id),
+    connection
+    )
+    .ExecuteScalar.GetHashCode;
   connection.Close;
 end;
 

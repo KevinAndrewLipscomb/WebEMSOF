@@ -10,8 +10,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                                     [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                                     [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                                             [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                             [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -23,17 +23,29 @@
             <table cellspacing="0" cellpadding="10" border="0">
               <tr>
                 <td bgcolor="#f5f5f5">
-                  <table cellspacing="0" cellpadding="5" width="50%" border="0">
+                  <table cellspacing="0" cellpadding="5" width="75%" border="0">
                     <tr>
                       <td>
                         <strong>State-required report</strong>
                       </td>
                       <td>
+                              <div align="center">
 						<asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False">Transmit to State</asp:linkbutton>
+                              </div>
                       </td>
-                    </tr>
-                  </table>
-                </td>
+					</tr>
+					<tr>
+					  <td colspan="2"><small>A total of <ASP:Label id="Label_total_num_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests are ready to be transmitted to the state.</small></td>
+					</tr>
+					<tr id="TableRow_this_is_everything" runat="server" visible="False">
+					  <td colspan="2"><small>This report includes request items from all&nbsp;<ASP:Label id="Label_total_num_requests_2" runat="server" font-bold="True"></ASP:Label> requests.</small></td>
+					</tr>
+					<tr id="TableRow_this_is_just_some" runat="server" visible="False">
+					  <td colspan="2"><small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests that were made against
+					   <ASP:DropDownList id="DropDownList_amendment" runat="server"></ASP:DropDownList>.</small></td>
+					</tr>
+				  </table>
+				</td>
               </tr>
               <tr>
                 <td>
@@ -92,7 +104,7 @@
                               <itemstyle horizontalalign="Right"></itemstyle>
                               <footerstyle horizontalalign="Right"></footerstyle>
                             </asp:boundcolumn>
-                            <asp:boundcolumn datafield="recommendation" readonly="true" headertext="Recomm*">
+                            <asp:boundcolumn datafield="recommendation" readonly="true" headertext="Recomm">
                               <headerstyle horizontalalign="Center"></headerstyle>
                               <itemstyle horizontalalign="Center"></itemstyle>
                             </asp:boundcolumn>
@@ -110,22 +122,13 @@
                       <td>
                         <table cellspacing="0" cellpadding="5" border="0">
                           <tr>
-                            <td align="right">
-                              ME:
-                            </td>
-                            <td></td>
-                            <td>
-                              __________________________________
-                            </td>
-                          </tr>
-                          <tr>
                             <td align="right" valign="top">
                               Reviewed and Recommended by Regional EMS Council (name):
                             </td>
                             <td></td>
                             <td valign="top">
-                              <strong>William E. Groft</strong><br>President 
-
+                              <strong>William E. Groft</strong><br>
+                              President
                             </td>
                           </tr>
                           <tr>

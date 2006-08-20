@@ -4,6 +4,7 @@ interface
 
 uses
   borland.data.provider,
+  Class_db_appropriations,
   Class_db_emsof_requests,
   system.security.principal,
   system.web;
@@ -33,6 +34,7 @@ type status_type =
 type
   TClass_biz_emsof_requests = class
   private
+    db_appropriations: TClass_db_appropriations;
     db_emsof_requests: TClass_db_emsof_requests;
   public
     constructor Create;
@@ -126,7 +128,8 @@ type
       Table_report: system.object;
       request_physical_path: string;
       status_of_interest: status_type;
-      regional_staffer_user_id: string
+      regional_staffer_user_id: string;
+      amendment_num_string: string
       );
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
@@ -154,6 +157,7 @@ constructor TClass_biz_emsof_requests.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  db_appropriations := TClass_db_appropriations.Create;
   db_emsof_requests := TClass_db_emsof_requests.Create;
 end;
 
@@ -544,20 +548,37 @@ procedure TClass_biz_emsof_requests.SubmitToState
   Table_report: system.object;
   request_physical_path: string;
   status_of_interest: status_type;
-  regional_staffer_user_id: string
+  regional_staffer_user_id: string;
+  amendment_num_string: string
   );
 var
   biz_regional_staffers: TClass_biz_regional_staffers;
+  body: string;
   qualifier: string;
   region_name: string;
 begin
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
+  body := 'Dear PA DOH EMSO EMSOF Coordinator,' + NEW_LINE
+    + NEW_LINE
+    + 'The attached Excel spreadsheet contains ';
   case status_of_interest of
   NEEDS_SENT_TO_PA_DOH_EMSO:
+    BEGIN
     qualifier := 'fresh';
+    body := body + 'new';
+    END;
   NEEDS_PA_DOH_EMSO_APPROVAL:
+    BEGIN
     qualifier := 'repeat';
+    body := body + 'a RE-TRANSMISSION of'
+    END;
   end;
+  body := body + ' EMSOF request items that have been approved by ' + region_name + '''s Executive '
+    + 'Director.  Please process this report at your earliest convenience.' + NEW_LINE
+    + NEW_LINE
+    + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   region_name := biz_regional_staffers.RegionNameOf(regional_staffer_user_id);
   ki.common.SendControlAsAttachmentToEmailMessage
     (
@@ -568,22 +589,16 @@ begin
     configurationsettings.AppSettings['state_report_to_target'],
     configurationsettings.AppSettings['state_report_cc_target'],
     'EMSOF requests from ' + region_name + ' region',
-    'Dear PA DOH EMSO EMSOF Coordinator,' + NEW_LINE
-    + NEW_LINE
-    + 'The attached Excel spreadsheet contains new EMSOF request items that have been approved by ' + region_name + '''s Executive '
-    + 'Director.  Please process this report at your earliest convenience.' + NEW_LINE
-    + NEW_LINE
-    + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
-    + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    body
     );
   if status_of_interest = NEEDS_SENT_TO_PA_DOH_EMSO then begin
-    TClass_db_emsof_requests.Create.MarkSubmittedToState
+    db_emsof_requests.MarkSubmittedToState
       (
       biz_regional_staffers.RegionCodeOf(regional_staffer_user_id),
       ord(NEEDS_SENT_TO_PA_DOH_EMSO),
       ord(NEEDS_PA_DOH_EMSO_APPROVAL)
       );
+    db_appropriations.IncFundingRoundsGenerated(regional_staffer_user_id,amendment_num_string);
   end;
 end;
 
