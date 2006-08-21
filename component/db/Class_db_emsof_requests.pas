@@ -89,7 +89,8 @@ type
       (
       target: system.object;
       status: cardinal;
-      amendment_num_string: string
+      amendment_num_string: string;
+      region_code: string
       );
     function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
@@ -111,9 +112,17 @@ type
     procedure MarkSubmittedToState
       (
       region_code: string;
+      amendment_num_string: string;
       current_status: cardinal;
       next_status: cardinal
       );
+    function NumRequestsInStateExportBatch
+      (
+      status: cardinal;
+      amendment_num_string: string;
+      region_code: string
+      )
+      : cardinal;
     function PropertyNameOfAppropriation: string;
     function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
@@ -389,7 +398,8 @@ procedure TClass_db_emsof_requests.BindStateExportBatch
   (
   target: system.object;
   status: cardinal;
-  amendment_num_string: string
+  amendment_num_string: string;
+  region_code: string
   );
 begin
   connection.Open;
@@ -419,6 +429,7 @@ begin
     + ' where emsof_request_master.status_code = ' + status.tostring
     +   ' and quantity > 0'
     +   ' and amendment_num = ' + amendment_num_string
+    +   ' and region_code = ' + region_code
     + ' order by service_name',
     connection
     )
@@ -505,6 +516,7 @@ end;
 procedure TClass_db_emsof_requests.MarkSubmittedToState
   (
   region_code: string;
+  amendment_num_string: string;
   current_status: cardinal;
   next_status: cardinal
   );
@@ -521,10 +533,40 @@ begin
     +   ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
     + ' set status_code = ' + next_status.tostring
     + ' where region_code = ' + region_code
+    +   ' and amendment_num = ' + amendment_num_string
     +   ' and status_code = ' + current_status.tostring,
     connection
     )
     .ExecuteNonQuery;
+  connection.Close;
+end;
+
+function TClass_db_emsof_requests.NumRequestsInStateExportBatch
+  (
+  status: cardinal;
+  amendment_num_string: string;
+  region_code: string
+  )
+  : cardinal;
+begin
+  connection.Open;
+  NumRequestsInStateExportBatch := borland.data.provider.bdpcommand.Create
+    (
+    'select count(*)'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' where status_code = ' + status.tostring
+    +   ' and value > 0'
+    +   ' and amendment_num = ' + amendment_num_string
+    +   ' and region_code = ' + region_code,
+    connection
+    )
+    .ExecuteScalar.GetHashCode;
   connection.Close;
 end;
 

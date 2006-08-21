@@ -6,6 +6,7 @@ uses
   borland.data.provider,
   Class_db_appropriations,
   Class_db_emsof_requests,
+  Class_biz_regional_staffers,
   system.security.principal,
   system.web;
 
@@ -36,6 +37,7 @@ type
   private
     db_appropriations: TClass_db_appropriations;
     db_emsof_requests: TClass_db_emsof_requests;
+    biz_regional_staffers: TClass_biz_regional_staffers;
   public
     constructor Create;
     function AffiliateNumOf(e_item: system.object): string;
@@ -96,7 +98,8 @@ type
       (
       target: system.object;
       status: status_type;
-      amendment_num_string: string
+      amendment_num_string: string;
+      regional_staffer_user_id: string
       );
     function CountyApprovalTimestampOf(master_id: string): datetime;
     procedure Demote
@@ -115,6 +118,13 @@ type
       promoter: string
       );
     function NextReviewer(status: status_type): string;
+    function NumRequestsInStateExportBatch
+      (
+      status: status_type;
+      amendment_num_string: string;
+      regional_staffer_user_id: string
+      )
+      : cardinal;
     function PropertyNameOfAppropriation: string;
     function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
@@ -148,7 +158,6 @@ implementation
 uses
   Class_biz_accounts,
   Class_biz_fiscal_years,
-  Class_biz_regional_staffers,
   Class_biz_user,
   ki.common,
   system.configuration,
@@ -160,6 +169,7 @@ begin
   // TODO: Add any constructor code here
   db_appropriations := TClass_db_appropriations.Create;
   db_emsof_requests := TClass_db_emsof_requests.Create;
+  biz_regional_staffers := TClass_biz_regional_staffers.Create;
 end;
 
 function TClass_biz_emsof_requests.AffiliateNumOf(e_item: system.object): string;
@@ -347,10 +357,17 @@ procedure TClass_biz_emsof_requests.BindStateExportBatch
   (
   target: system.object;
   status: status_type;
-  amendment_num_string: string
+  amendment_num_string: string;
+  regional_staffer_user_id: string
   );
 begin
-  db_emsof_requests.BindStateExportBatch(target,ord(status),amendment_num_string);
+  db_emsof_requests.BindStateExportBatch
+    (
+    target,
+    ord(status),
+    amendment_num_string,
+    biz_regional_staffers.RegionCodeOf(regional_staffer_user_id)
+    );
 end;
 
 procedure TClass_biz_emsof_requests.Demote
@@ -480,6 +497,22 @@ begin
   end;
 end;
 
+function TClass_biz_emsof_requests.NumRequestsInStateExportBatch
+  (
+  status: status_type;
+  amendment_num_string: string;
+  regional_staffer_user_id: string
+  )
+  : cardinal;
+begin
+  NumRequestsInStateExportBatch := db_emsof_requests.NumRequestsInStateExportBatch
+    (
+    ord(status),
+    amendment_num_string,
+    biz_regional_staffers.RegionCodeOf(regional_staffer_user_id)
+    );
+end;
+
 function TClass_biz_emsof_requests.PropertyNameOfAppropriation: string;
 begin
   PropertyNameOfAppropriation := db_emsof_requests.PropertyNameOfAppropriation;
@@ -554,12 +587,10 @@ procedure TClass_biz_emsof_requests.SubmitToState
   amendment_num_string: string
   );
 var
-  biz_regional_staffers: TClass_biz_regional_staffers;
   body: string;
   qualifier: string;
   region_name: string;
 begin
-  biz_regional_staffers := TClass_biz_regional_staffers.Create;
   body := 'Dear PA DOH EMSO EMSOF Coordinator,' + NEW_LINE
     + NEW_LINE
     + 'The attached Excel spreadsheet contains ';
@@ -597,6 +628,7 @@ begin
     db_emsof_requests.MarkSubmittedToState
       (
       biz_regional_staffers.RegionCodeOf(regional_staffer_user_id),
+      amendment_num_string,
       ord(NEEDS_SENT_TO_PA_DOH_EMSO),
       ord(NEEDS_PA_DOH_EMSO_APPROVAL)
       );
