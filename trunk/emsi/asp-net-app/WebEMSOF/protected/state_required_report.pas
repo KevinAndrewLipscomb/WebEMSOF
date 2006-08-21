@@ -111,8 +111,15 @@ begin
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_required_report';
     //
+    // Initialize implementation-wide vars.
+    //
+    p.amendment_num_string := '0';
     p.biz_appropriations := TClass_biz_appropriations.Create;
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
+    p.grand_total_cost := 0;
+    p.num_datagrid_rows := 0;
+    p.total_emsof_ante := 0;
+    p.total_provider_match := 0;
     //
     Label_total_num_requests.text := p.biz_emsof_requests.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL);
     num_active_amendments := p.biz_appropriations.NumActiveAmendments(session['regional_staffer_user_id'].tostring);
@@ -126,18 +133,11 @@ begin
         BEGIN
         DropDownList_amendment.items.Add(listitem.Create('contract amendment #' + i.tostring,i.tostring));
         END;
-      Label_num_filtered_requests.text := '(not yet implemented)';
+      Label_num_filtered_requests.text := p.biz_emsof_requests.NumRequestsInStateExportBatch
+        (status_type(session['status_of_interest']),p.amendment_num_string,session['regional_staffer_user_id'].tostring).tostring;
     end;
     Label_funding_round.text :=
       cardinal(p.biz_appropriations.FundingRoundsGenerated(session['regional_staffer_user_id'].tostring) + 1).tostring;
-    //
-    // Initialize implementation-wide vars.
-    //
-    p.amendment_num_string := '0';
-    p.grand_total_cost := 0;
-    p.num_datagrid_rows := 0;
-    p.total_emsof_ante := 0;
-    p.total_provider_match := 0;
     //
     Bind;
     //
@@ -159,8 +159,11 @@ procedure TWebForm_state_required_report.DropDownList_amendment_SelectedIndexCha
   e: System.EventArgs);
 begin
   p.amendment_num_string := Safe(DropDownList_amendment.selectedvalue,NUM);
+  Label_num_filtered_requests.text := p.biz_emsof_requests.NumRequestsInStateExportBatch
+    (status_type(session['status_of_interest']),p.amendment_num_string,session['regional_staffer_user_id'].tostring).tostring;
   Label_funding_round.text := cardinal
     (1 + p.biz_appropriations.FundingRoundsGenerated(session['regional_staffer_user_id'].tostring,p.amendment_num_string)).tostring;
+  Bind;    
 end;
 
 procedure TWebForm_state_required_report.LinkButton_back_Click(sender: System.Object;
@@ -237,7 +240,8 @@ begin
     (
     DataGrid_state_export_batch,
     status_type(session['status_of_interest']),
-    p.amendment_num_string
+    p.amendment_num_string,
+    session['regional_staffer_user_id'].tostring
     );
   //
   // Manage control visibilities.
