@@ -98,14 +98,14 @@ begin
       bdr := borland.data.provider.bdpcommand.Create
         (
         'SELECT region_dictated_appropriation.id,'
-        + ' concat(designator,"  ($",format(region_dictated_appropriation.amount,2)," from ",name,")")'
+        + ' concat("$",format(region_dictated_appropriation.amount,2)," from ",name,"''s ",designator," contract (amendment ",amendment_num,")")'
         +   ' as appropriation_description'
         + ' FROM region_dictated_appropriation'
         +   ' JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id)'
         +   ' JOIN region_code_name_map on (region_code_name_map.code=region_code)'
         +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
         + ' WHERE county_code = ' + session['county_user_id'].ToString
-        +   ' and fiscal_year_id >= (' + max_fiscal_year_id_string + ' - 1)',
+        +   ' and fiscal_year_id = ' + max_fiscal_year_id_string,
         ki.common.db
         )
         .ExecuteReader;
