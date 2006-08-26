@@ -98,7 +98,7 @@ begin
       bdr := borland.data.provider.bdpcommand.Create
         (
         'SELECT region_dictated_appropriation.id,'
-        + ' concat("$",format(region_dictated_appropriation.amount,2)," from ",name,"''s ",designator," contract (amendment ",amendment_num,")")'
+        + ' concat("$",format(region_dictated_appropriation.amount,2)," from the ",name," ",designator," contract (amendment ",amendment_num,")")'
         +   ' as appropriation_description'
         + ' FROM region_dictated_appropriation'
         +   ' JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id)'
