@@ -124,7 +124,7 @@ begin
         session.Add('county_user_password_reset_email_address',county_user_email_address);
         if RadioButtonList_appropriation.items.Count = 1 then begin
           session.Remove('region_dictated_appropriation_id');
-          session.Add('region_dictated_appropriation_id',bdr['id'].tostring);
+          session.Add('region_dictated_appropriation_id',RadioButtonList_appropriation.items[0].value);
           server.Transfer('county_dictated_appropriations.aspx');
         end;
       end;
