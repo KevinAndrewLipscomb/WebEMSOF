@@ -26,17 +26,17 @@ end;
 
 function TClass_db_fiscal_years.IdOfCurrent: string;
 begin
-  connection.Open;
+  self.Open;
   IdOfCurrent := borland.data.provider.bdpcommand.Create('select max(id) from fiscal_year',connection).ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_fiscal_years.IdOfDesignator(designator: string): string;
 begin
-  connection.Open;
+  self.Open;
   IdOfDesignator := borland.data.provider.bdpcommand.Create
     ('select id from fiscal_year where designator = "' + designator + '"',connection).ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 end.

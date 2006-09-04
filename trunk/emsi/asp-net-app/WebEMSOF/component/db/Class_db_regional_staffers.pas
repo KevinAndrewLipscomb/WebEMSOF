@@ -26,19 +26,19 @@ end;
 
 function TClass_db_regional_staffers.RegionCodeOf(id: string): string;
 begin
-  connection.Open;
+  self.Open;
   RegionCodeOf := borland.data.provider.BdpCommand.Create
     (
     'SELECT region_code FROM regional_staffer WHERE id = ' + id,
     connection
     )
     .ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_regional_staffers.RegionNameOf(id: string): string;
 begin
-  connection.Open;
+  self.Open;
   RegionNameOf := borland.data.provider.BdpCommand.Create
     (
     'SELECT name'
@@ -47,7 +47,7 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 end.
