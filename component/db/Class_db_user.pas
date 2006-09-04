@@ -44,7 +44,7 @@ var
   roles_of: ki.common.string_array;
   roles_of_len: cardinal;
 begin
-  connection.Open;
+  self.Open;
   bdr := borland.data.provider.bdpcommand.Create
     (
     'select ' + target_user_table + 'group.name as group_name'
@@ -61,7 +61,7 @@ begin
     SetLength(roles_of,roles_of_len);
     roles_of[roles_of_len - 1] := bdr['group_name'].tostring;
   end;
-  connection.Close;
+  self.Close;
   RolesOf := roles_of;
 end;
 

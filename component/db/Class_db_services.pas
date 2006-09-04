@@ -69,14 +69,14 @@ end;
 
 function TClass_db_services.AffiliateNumOfId(id: string): string;
 begin
-  connection.Open;
+  self.Open;
   AffiliateNumOfId := borland.data.provider.BdpCommand.Create
     (
     'SELECT affiliate_num FROM service WHERE id = ' + id,
     connection
     )
     .ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_services.BindDropDownList
@@ -89,7 +89,7 @@ var
   bdr: borland.data.provider.bdpdatareader;
   cmdText: string;
 begin
-  connection.Open;
+  self.Open;
   DropDownList(target).Items.Clear;
   DropDownList(target).Items.Add(listitem.Create('-- Select --','0'));
   //
@@ -103,7 +103,7 @@ begin
   while bdr.Read do begin
     DropDownList(target).Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
   end;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_services.GetProfile
@@ -128,7 +128,7 @@ procedure TClass_db_services.GetProfile
 var
   bdr: borland.data.provider.BdpDataReader;
 begin
-  connection.Open;
+  self.Open;
   bdr := borland.data.provider.BdpCommand.Create
     (
     'SELECT name,'
@@ -167,7 +167,7 @@ begin
   contact_person_name := bdr['contact_person_name'].tostring;
   contact_person_phone_num := bdr['contact_person_phone_num'].tostring;
   be_valid_profile := (bdr['be_valid_profile'].tostring = '1');
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_services.SetProfile
@@ -189,7 +189,7 @@ procedure TClass_db_services.SetProfile
   contact_person_phone_num: string
   );
 begin
-  connection.Open;
+  self.Open;
   borland.data.provider.bdpcommand.Create
     (
     'UPDATE service '
@@ -212,7 +212,7 @@ begin
     connection
     )
     .ExecuteNonQuery;
-  connection.Close;
+  self.Close;
 end;
 
 end.

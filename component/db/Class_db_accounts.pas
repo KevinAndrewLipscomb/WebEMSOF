@@ -52,7 +52,7 @@ procedure TClass_db_accounts.BindCounties(target: system.object);
 var
   bdr: borland.data.provider.bdpdatareader;
 begin
-  connection.Open;
+  self.Open;
   DropDownList(target).items.Clear;
   DropDownList(target).items.Add(listitem.Create('-- Select --','0'));
   bdr := Borland.Data.Provider.BdpCommand.Create
@@ -67,14 +67,14 @@ begin
   while bdr.Read do begin
     DropDownList(target).Items.Add(listitem.Create(bdr['name'].tostring,'county_' + bdr['id'].ToString));
   end;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_accounts.BindRegionalStaffers(target: system.object);
 var
   bdr: borland.data.provider.bdpdatareader;
 begin
-  connection.Open;
+  self.Open;
   DropDownList(target).items.Clear;
   DropDownList(target).items.Add(listitem.Create('-- Select --','0'));
   bdr := Borland.Data.Provider.BdpCommand.Create
@@ -90,14 +90,14 @@ begin
     DropDownList(target).Items.Add
       (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,'regional_staffer_' + bdr['id'].ToString));
   end;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_accounts.BindServices(target: system.object);
 var
   bdr: borland.data.provider.bdpdatareader;
 begin
-  connection.Open;
+  self.Open;
   DropDownList(target).items.Clear;
   DropDownList(target).items.Add(listitem.Create('-- Select --','0'));
   bdr := Borland.Data.Provider.BdpCommand.Create
@@ -109,7 +109,7 @@ begin
   while bdr.Read do begin
     DropDownList(target).Items.Add(listitem.Create(bdr['name'].tostring,'service_' + bdr['id'].ToString));
   end;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_accounts.EmailAddressByKindId
@@ -119,14 +119,14 @@ function TClass_db_accounts.EmailAddressByKindId
   )
   : string;
 begin
-  connection.Open;
+  self.Open;
   EmailAddressByKindId := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address from ' + user_kind + '_user where id = ' + user_id,
     connection
     )
     .ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_accounts.EmailTargetByRole
@@ -139,7 +139,7 @@ var
   email_target: string;
 begin
   email_target := system.string.EMPTY;
-  connection.Open;
+  self.Open;
   bdr := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address'
@@ -153,7 +153,7 @@ begin
   while bdr.Read do begin
     email_target := email_target + bdr['password_reset_email_address'].tostring + ',';
   end;
-  connection.Close;
+  self.Close;
   EmailTargetByRole := email_target.Substring(0,email_target.Length - 1);
 end;
 
@@ -165,7 +165,7 @@ function TClass_db_accounts.Exists
   )
   : boolean;
 begin
-  connection.Open;
+  self.Open;
   Exists := nil <> borland.data.provider.bdpcommand.Create
     (
     'SELECT 1 FROM ' + user_kind + '_user'
@@ -174,7 +174,7 @@ begin
     connection
     )
     .ExecuteScalar;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_accounts.SetTemporaryPassword
@@ -184,7 +184,7 @@ procedure TClass_db_accounts.SetTemporaryPassword
   encoded_password: string
   );
 begin
-  connection.Open;
+  self.Open;
   borland.data.provider.bdpcommand.Create
     (
     'update ' + user_kind + '_user'
@@ -194,7 +194,7 @@ begin
     connection
     )
     .ExecuteNonQuery;
-  connection.Close;
+  self.Close;
 end;
 
 end.

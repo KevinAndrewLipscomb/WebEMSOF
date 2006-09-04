@@ -73,7 +73,7 @@ end;
 
 function TClass_db_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
 begin
-  connection.Open;
+  self.Open;
   CountyCodeOfCountyDictum := borland.data.provider.bdpcommand.Create
     (
     'select county_code'
@@ -84,7 +84,7 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.FundingRoundsGenerated
@@ -94,7 +94,7 @@ function TClass_db_appropriations.FundingRoundsGenerated
   )
   : cardinal;
 begin
-  connection.Open;
+  self.Open;
   FundingRoundsGenerated := borland.data.provider.bdpcommand.Create
     (
     'select funding_rounds_generated'
@@ -105,7 +105,7 @@ begin
     connection
     )
     .ExecuteScalar.GetHashCode;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_appropriations.IncFundingRoundsGenerated
@@ -114,7 +114,7 @@ procedure TClass_db_appropriations.IncFundingRoundsGenerated
   amendment_num_string: string
   );
 begin
-  connection.Open;
+  self.Open;
   borland.data.provider.bdpcommand.Create
     (
     'update state_dictated_appropriation'
@@ -125,12 +125,12 @@ begin
     connection
     )
     .ExecuteNonQuery;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.NumActiveAmendments(regional_staffer_id: string): cardinal;
 begin
-  connection.Open;
+  self.Open;
   NumActiveAmendments := -1 + borland.data.provider.bdpcommand.Create
     (
     'select count(id)'
@@ -140,12 +140,12 @@ begin
     connection
     )
     .ExecuteScalar.GetHashCode;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.ParentAppropriationOfEmsofRequest(master_id: string): decimal;
 begin
-  connection.Open;
+  self.Open;
   ParentAppropriationOfEmsofRequest := decimal
     (
     borland.data.provider.bdpcommand.Create
@@ -158,12 +158,12 @@ begin
       )
       .ExecuteScalar
     );
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
 begin
-  connection.Open;
+  self.Open;
   RegionCodeOfCountyDictum := borland.data.provider.bdpcommand.Create
     (
     'select region_code'
@@ -176,7 +176,7 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.SumOfAppropriationsFromSpecificParent
@@ -209,9 +209,9 @@ begin
       +   ' and region_code = ' + parent_id
       +   ' and fiscal_year_id = ' + fy_id;
   end;
-  connection.Open;
+  self.Open;
   SumOfAppropriationsFromSpecificParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.SumOfAppropriationsFromOnlyParent
@@ -238,9 +238,9 @@ begin
       + ' where county_code = ' + recipient_id
       +   ' and fiscal_year_id = ' + fy_id;
   end;
-  connection.Open;
+  self.Open;
   SumOfAppropriationsFromOnlyParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.SumOfAppropriationsToServicesInRegion
@@ -252,7 +252,7 @@ function TClass_db_appropriations.SumOfAppropriationsToServicesInRegion
 var
   sum_obj: system.object;
 begin
-  connection.Open;
+  self.Open;
   sum_obj := borland.data.provider.bdpcommand.Create
     (
     'select sum(county_dictated_appropriation.amount)'
@@ -271,7 +271,7 @@ begin
   end else begin
     SumOfAppropriationsToServicesInRegion := decimal(sum_obj);
   end;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_appropriations.SumOfSelfDictatedAppropriations
@@ -302,9 +302,9 @@ begin
     + ' where county_code = ' + self_id
     +   ' and fiscal_year_id = ' + fy_id;
   end;
-  connection.Open;
+  self.Open;
   SumOfSelfDictatedAppropriations := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
-  connection.Close;
+  self.Close;
 end;
 
 end.

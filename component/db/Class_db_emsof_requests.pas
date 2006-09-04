@@ -216,10 +216,10 @@ begin
   end else begin
     cmdText := cmdText + ' desc';
   end;
-  connection.Open;
+  self.Open;
   DataGrid(target).datasource := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteReader;
   DataGrid(target).DataBind;
-  connection.Close;
+  self.Close;
 end;
 
 constructor TClass_db_emsof_requests.Create;
@@ -258,9 +258,9 @@ begin
       + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1;'
       + ' COMMIT';
     end;
-    connection.Open;
+    self.Open;
     borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
-    connection.Close;
+    self.Close;
   end;
 end;
 
@@ -273,7 +273,7 @@ function TClass_db_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf
 var
   bdr: borland.data.provider.bdpdatareader;
 begin
-  connection.Open;
+  self.Open;
   bdr := borland.data.provider.bdpcommand.Create
     ('select regional_director_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
     .ExecuteReader;
@@ -284,7 +284,7 @@ begin
     BeValidRegionalExecDirApprovalTimestampOf := TRUE;
     timestamp := datetime(bdr['regional_director_approval_timestamp']);
   end;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf
@@ -296,7 +296,7 @@ function TClass_db_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf
 var
   bdr: borland.data.provider.bdpdatareader;
 begin
-  connection.Open;
+  self.Open;
   bdr := borland.data.provider.bdpcommand.Create
     ('select regional_planner_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
     .ExecuteReader;
@@ -307,7 +307,7 @@ begin
     BeValidRegionalPlannerApprovalTimestampOf := TRUE;
     timestamp := datetime(bdr['regional_planner_approval_timestamp']);
   end;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_emsof_requests.BindDetail
@@ -316,7 +316,7 @@ procedure TClass_db_emsof_requests.BindDetail
   target: system.object
   );
 begin
-  connection.Open;
+  self.Open;
   DataGrid(target).datasource := borland.data.provider.bdpcommand.Create
     (
     'select priority'
@@ -339,7 +339,7 @@ begin
     )
     .ExecuteReader;
   DataGrid(target).DataBind;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_emsof_requests.BindOverviewAll
@@ -402,7 +402,7 @@ procedure TClass_db_emsof_requests.BindStateExportBatch
   region_code: string
   );
 begin
-  connection.Open;
+  self.Open;
   DataGrid(target).datasource := borland.data.provider.bdpcommand.Create
     (
     'select service.name as service_name'
@@ -435,19 +435,19 @@ begin
     )
     .ExecuteReader;
   DataGrid(target).DataBind;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.CountyApprovalTimestampOf(master_id: string): datetime;
 begin
-  connection.Open;
+  self.Open;
   CountyApprovalTimestampOf := datetime
     (
     borland.data.provider.bdpcommand.Create
       ('select county_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
       .ExecuteScalar
     );
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_emsof_requests.Demote
@@ -458,7 +458,7 @@ procedure TClass_db_emsof_requests.Demote
   role: string
   );
 begin
-  connection.Open;
+  self.Open;
   borland.data.provider.bdpcommand.Create
     (
     'update emsof_request_master'
@@ -469,16 +469,16 @@ begin
     connection
     )
     .ExecuteNonQuery;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_emsof_requests.Finalize(master_id: string);
 begin
-  connection.Open;
+  self.Open;
   borland.data.provider.bdpcommand.Create
     ('update emsof_request_master set status_code = 3 where id = ' + master_id,connection)
     .ExecuteNonQuery;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.FyDesignatorOf(e_item: system.object): string;
@@ -508,9 +508,9 @@ begin
     + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1;'
     + ' COMMIT';
   end;
-  connection.Open;
+  self.Open;
   borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
-  connection.Close;
+  self.Close;
 end;
 
 procedure TClass_db_emsof_requests.MarkSubmittedToState
@@ -521,7 +521,7 @@ procedure TClass_db_emsof_requests.MarkSubmittedToState
   next_status: cardinal
   );
 begin
-  connection.Open;
+  self.Open;
   borland.data.provider.bdpcommand.Create
     (
     'update emsof_request_master'
@@ -538,7 +538,7 @@ begin
     connection
     )
     .ExecuteNonQuery;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.NumRequestsInStateExportBatch
@@ -549,7 +549,7 @@ function TClass_db_emsof_requests.NumRequestsInStateExportBatch
   )
   : cardinal;
 begin
-  connection.Open;
+  self.Open;
   NumRequestsInStateExportBatch := borland.data.provider.bdpcommand.Create
     (
     'select count(*)'
@@ -567,7 +567,7 @@ begin
     connection
     )
     .ExecuteScalar.GetHashCode;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.PropertyNameOfAppropriation: string;
@@ -582,7 +582,7 @@ end;
 
 function TClass_db_emsof_requests.ReworkDeadline(e_item: system.object): datetime;
 begin
-  connection.Open;
+  self.Open;
   ReworkDeadline := datetime
     (
     borland.data.provider.bdpcommand.Create
@@ -597,7 +597,7 @@ begin
       )
       .ExecuteScalar
     );
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.ServiceIdOf(e_item: system.object): string;
@@ -622,7 +622,7 @@ end;
 
 function TClass_db_emsof_requests.SponsorRegionNameOf(master_id: string): string;
 begin
-  connection.Open;
+  self.Open;
   SponsorRegionNameOf := borland.data.provider.bdpcommand.Create
     (
     'select name'
@@ -638,7 +638,7 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.StatusCodeOf(e_item: system.object): cardinal;
@@ -681,9 +681,9 @@ begin
     + ' where county_code = ' + user_id
     +   ' and fiscal_year_id = ' + fy_id;
   end;
-  connection.Open;
+  self.Open;
   sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
-  connection.Close;
+  self.Close;
   if sum_obj <> dbnull.value then begin
     SumOfRequestValues := decimal(sum_obj);
   end else begin
@@ -693,7 +693,7 @@ end;
 
 function TClass_db_emsof_requests.TallyByStatus(status: cardinal): cardinal;
 begin
-  connection.Open;
+  self.Open;
   TallyByStatus := borland.data.provider.bdpcommand.Create
       (
       'select count(*) as count'
@@ -709,7 +709,7 @@ begin
       connection
       )
       .ExecuteScalar.GetHashCode;
-  connection.Close;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.TcciOfAppropriation: cardinal;
