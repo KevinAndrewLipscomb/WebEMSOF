@@ -124,6 +124,7 @@ procedure TWebForm_withdraw_request_item.Button_yes_Click
   );
 var
   biz_accounts: TClass_biz_accounts;
+  service_email_address: string;
 begin
   ki.common.DbOpen;
   borland.data.provider.bdpcommand.Create
@@ -150,6 +151,7 @@ begin
   // Send the notification message.
   //
   biz_accounts := TClass_biz_accounts.Create;
+  service_email_address := biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring);
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
@@ -172,7 +174,7 @@ begin
     + NEW_LINE
     + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
     + NEW_LINE
-    + '   ' + biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring) + NEW_LINE
+    + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
     + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );

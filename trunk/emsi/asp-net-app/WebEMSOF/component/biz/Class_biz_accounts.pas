@@ -153,12 +153,14 @@ procedure TClass_biz_accounts.MakeDemotionNotification
 var
   BreakChars: array[1..3] of char;
   other_stakeholder_email_address: string;
+  self_email_address: string;
   service_email_address: string;
 begin
   //
   // Get service's email address of record.
   //
   service_email_address := EmailAddressByKindId('service',service_id);
+  self_email_address := SelfEmailAddress;
   //
   BreakChars[1] := ki.common.SPACE;
   BreakChars[2] := ki.common.TAB;
@@ -195,7 +197,7 @@ begin
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
-      + '   ' + SelfEmailAddress + NEW_LINE
+      + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -237,7 +239,7 @@ begin
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
-      + '   ' + SelfEmailAddress + NEW_LINE
+      + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -270,7 +272,7 @@ begin
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
-      + '   ' + SelfEmailAddress + NEW_LINE
+      + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -289,6 +291,7 @@ procedure TClass_biz_accounts.MakePromotionNotification
 var
   messageText: string;
   next_reviewer_email_target: string;
+  self_email_address: string;
 begin
   //
   //   Get the next approver's email address.
@@ -298,6 +301,8 @@ begin
   end else begin
     next_reviewer_email_target := system.string.EMPTY
   end;
+  //
+  self_email_address := SelfEmailAddress;
   //
   messageText := reviewer_descriptor + ' has promoted ' + service_name + '''s '+ fy_designator + ' EMSOF request.' + NEW_LINE
   + NEW_LINE
@@ -318,7 +323,7 @@ begin
   + NEW_LINE
   + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
   + NEW_LINE
-  + '   ' + SelfEmailAddress
+  + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
   + NEW_LINE
   + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   //
@@ -351,7 +356,7 @@ begin
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
-      + '   ' + SelfEmailAddress + NEW_LINE
+      + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -369,7 +374,10 @@ procedure TClass_biz_accounts.NotifyRegionOfServicePocAffirmation
   service_name: string;
   contact_person_name: string
   );
+var
+  poc_email_address: string;
 begin
+  poc_email_address := EmailAddressByKindId('service',service_id);
   smtpmail.Send
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
@@ -384,7 +392,7 @@ begin
     + NEW_LINE
     + 'You can contact ' + contact_person_name + ' at:' + NEW_LINE
     + NEW_LINE
-    + '   ' + EmailAddressByKindId('service',service_id) + NEW_LINE
+    + '   ' + poc_email_address + '  (mailto:' + poc_email_address + ')' + NEW_LINE
     + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
