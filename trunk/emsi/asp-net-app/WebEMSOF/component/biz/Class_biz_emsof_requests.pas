@@ -6,7 +6,9 @@ uses
   borland.data.provider,
   Class_db_appropriations,
   Class_db_emsof_requests,
+  Class_biz_accounts,
   Class_biz_regional_staffers,
+  Class_biz_user,
   system.security.principal,
   system.web;
 
@@ -37,7 +39,9 @@ type
   private
     db_appropriations: TClass_db_appropriations;
     db_emsof_requests: TClass_db_emsof_requests;
+    biz_accounts: TClass_biz_accounts;
     biz_regional_staffers: TClass_biz_regional_staffers;
+    biz_user: TClass_biz_user;
   public
     constructor Create;
     function AffiliateNumOf(e_item: system.object): string;
@@ -112,6 +116,7 @@ type
     procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
+    function HasWishList(master_id: string): boolean;
     procedure MarkDone
       (
       e_item: system.object;
@@ -130,6 +135,11 @@ type
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
+    procedure SetHasWishList
+      (
+      master_id: string;
+      value: boolean
+      );
     function SponsorCountyCodeOf(e_item: system.object): string;
     function SponsorCountyNameOf(e_item: system.object): string;
     function SponsorRegionNameOf(master_id: string): string;
@@ -156,9 +166,7 @@ type
 implementation
 
 uses
-  Class_biz_accounts,
   Class_biz_fiscal_years,
-  Class_biz_user,
   ki.common,
   system.configuration,
   system.io;
@@ -169,7 +177,9 @@ begin
   // TODO: Add any constructor code here
   db_appropriations := TClass_db_appropriations.Create;
   db_emsof_requests := TClass_db_emsof_requests.Create;
+  biz_accounts := TClass_biz_accounts.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
+  biz_user := TClass_biz_user.Create;
 end;
 
 function TClass_biz_emsof_requests.AffiliateNumOf(e_item: system.object): string;
@@ -221,9 +231,9 @@ begin
     END;
   end;
   if approval_timestamp_column <> Class_db_emsof_requests.approval_timestamp_column_type(NONE) then begin
-    db_emsof_requests.Approve(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,approval_timestamp_column);
+    db_emsof_requests.Approve(IdOf(e_item),ord(next_status),biz_user.Kind,approval_timestamp_column);
     if next_status <> NEEDS_INVOICE_COLLECTION then begin
-      TClass_biz_accounts.Create.MakePromotionNotification
+      biz_accounts.MakePromotionNotification
         (
         next_approver_role,
         reviewer_descriptor,
@@ -233,7 +243,7 @@ begin
         FyDesignatorOf(e_item)
         );
 //    end else begin
-//      TClass_biz_accounts.Create.MakeFinalApprovalNotification;
+//      biz_accounts.MakeFinalApprovalNotification;
     end;
   end;
   //
@@ -416,7 +426,7 @@ begin
   end;
   //
   db_emsof_requests.Demote(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,role);
-  TClass_biz_accounts.Create.MakeDemotionNotification
+  biz_accounts.MakeDemotionNotification
     (
     role,
     reviewer_descriptor,
@@ -442,6 +452,11 @@ begin
   FyDesignatorOf := db_emsof_requests.FyDesignatorOf(e_item);
 end;
 
+function TClass_biz_emsof_requests.HasWishList(master_id: string): boolean;
+begin
+  HasWishList := db_emsof_requests.HasWishList(master_id);
+end;
+
 function TClass_biz_emsof_requests.IdOf(e_item: system.object): string;
 begin
   IdOf := db_emsof_requests.IdOf(e_item);
@@ -462,26 +477,30 @@ begin
   NEEDS_SENT_TO_PA_DOH_EMSO:
     BEGIN
     next_status := NEEDS_PA_DOH_EMSO_APPROVAL;
+    db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
+    biz_accounts.MakePromotionNotification
+      (
+      system.string.EMPTY,
+      reviewer_descriptor,
+      system.object(next_status).tostring,
+      ServiceIdOf(e_item),
+      ServiceNameOf(e_item),
+      FyDesignatorOf(e_item)
+      );
     END;
   NEEDS_PA_DOH_EMSO_APPROVAL:
     BEGIN
     next_status := NEEDS_INVOICE_COLLECTION;
+    db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
+    biz_accounts.SendNoticeToProceed(ServiceIdOf(e_item),ServiceNameOf(e_item),FyDesignatorOf(e_item));
     END;
   NEEDS_REIMBURSEMENT_ISSUANCE:
     BEGIN
     next_status := REIMBURSEMENT_ISSUED;
+    db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
     END;
   end;
-  db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind);
-  TClass_biz_accounts.Create.MakePromotionNotification
-    (
-    system.string.EMPTY,
-    reviewer_descriptor,
-    system.object(next_status).tostring,
-    ServiceIdOf(e_item),
-    ServiceNameOf(e_item),
-    FyDesignatorOf(e_item)
-    );
+  db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
   //
 end;
 
@@ -558,6 +577,15 @@ begin
   ServiceNameOf := db_emsof_requests.ServiceNameOf(e_item);
 end;
 
+procedure TClass_biz_emsof_requests.SetHasWishList
+  (
+  master_id: string;
+  value: boolean
+  );
+begin
+  db_emsof_requests.SetHasWishList(master_id,value);
+end;
+
 function TClass_biz_emsof_requests.SponsorCountyCodeOf(e_item: system.object): string;
 begin
   SponsorCountyCodeOf := db_emsof_requests.SponsorCountyCodeOf(e_item);
@@ -618,7 +646,7 @@ begin
     Table_report,
     path.GetDirectoryName(request_physical_path) + '/' + configurationsettings.appsettings['scratch_folder'] + '/'
     + 'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf') + '.xls',
-    TClass_biz_accounts.Create.EmailTargetByRole('emsof-coordinator'),
+    biz_accounts.EmailTargetByRole('emsof-coordinator'),
     configurationsettings.AppSettings['state_report_to_target'],
     configurationsettings.AppSettings['state_report_cc_target'],
     'EMSOF requests from ' + region_name + ' region',

@@ -94,8 +94,8 @@ type
 implementation
 
 const
-  TCCI_LINKBUTTON_EDIT = 12;
-  TCCI_LINKBUTTON_DELETE = 13;
+  TCCI_LINKBUTTON_EDIT = 13;
+  TCCI_LINKBUTTON_DELETE = 14;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>

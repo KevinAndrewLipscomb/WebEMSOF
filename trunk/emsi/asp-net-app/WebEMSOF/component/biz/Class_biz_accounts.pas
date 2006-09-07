@@ -66,6 +66,12 @@ type
       service_name: string;
       contact_person_name: string
       );
+    procedure SendNoticeToProceed
+      (
+      service_id: string;
+      service_name: string;
+      fy_designator: string
+      );
     procedure SetTemporaryPassword
       (
       user_kind: string;
@@ -367,6 +373,47 @@ begin
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
 
+end;
+
+procedure TClass_biz_accounts.SendNoticeToProceed
+  (
+  service_id: string;
+  service_name: string;
+  fy_designator: string
+  );
+begin
+//  //
+//  //   Send notification to service.
+//  //
+//  smtpmail.Send
+//    (
+//    SelfEmailAddress,
+//    EmailAddressByKindId('service',service_id),
+//    '** EMSOF Notice To Proceed **',
+//    'The Pennsylvania Department of Health EMS Office has approved ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
+//    );
+//  //
+//  //   Send notification to region.
+//  //
+//  smtpmail.Send
+//    (
+//    '',
+//    next_reviewer_email_target,
+//    'WebEMSOF has issued a Notice To Proceed',
+//    'WebEMSOF has issued a Notice To Proceed to ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
+//    + NEW_LINE
+//    + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
+//    + NEW_LINE
+//    + 'You can review this EMSOF request by visiting:' + NEW_LINE
+//    + NEW_LINE
+//    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+//    + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
+//    + NEW_LINE
+//    + 'Replies to this message will be addressed to ' + reviewer_descriptor
+//    + NEW_LINE
+//    + NEW_LINE
+//    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+//    );
 end;
 
 procedure TClass_biz_accounts.SetTemporaryPassword

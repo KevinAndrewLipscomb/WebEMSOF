@@ -144,10 +144,26 @@
 			</tr>
 		</table>
 	  </p>
-		<p></p>
-	  <p>
-	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
-	</asp:placeholder></p>
+<p>
+        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+            <tr>
+              <td>
+                <table cellspacing="0" cellpadding="10" border="0">
+                    <tr>
+                      <td bgcolor="#f5f5f5"><strong>Wish list</strong></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>If your County EMSOF Coordinator could find a way to allocate more EMSOF money to your service, would you <strong>want</strong> to, and could you <strong>afford</strong> to add more items to your EMSOF request in this cycle? &nbsp;(Keep in mind that your service would have to pay for the additional item(s) up front, with only partial reimbursement.)</p>
+                        <p>
+                          <ASP:CheckBox id="CheckBox_has_wish_list" runat="server" autopostback="True" text='Yes, we have a "wish list".'></ASP:CheckBox></p>
+                        <p><small>When changing this setting, wait for the page to refresh.</small></p></td>
+                    </tr>
+                </table></td>
+            </tr>
+        </table>
+	  </p>
+	<asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
 	 </form>
   </body>
 </html>
