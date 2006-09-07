@@ -247,41 +247,44 @@ begin
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      service_email_address,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       cc_email_address,
       session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
       + ' request',
       session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
       + ' request for ' + session['fiscal_year_designator'].tostring + '.' + NEW_LINE
       + NEW_LINE
-      + 'Please approve or reject this request by visiting:' + NEW_LINE
+      + 'Please approve or return/reject this request by visiting:' + NEW_LINE
       + NEW_LINE
       + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session['service_name'].ToString + ' EMSOF Coordinator.'
+      + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
+      + '   ' + service_email_address + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     smtpmail.Send
       (
-      service_email_address,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       biz_accounts.EmailTargetByRole('emsof-coordinator'),
       session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
       + ' request',
       session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
       + ' request for ' + session['fiscal_year_designator'].tostring + '.' + NEW_LINE
       + NEW_LINE
-      + 'WebEMSOF has forwarded the finalized request to <' + cc_email_address + '> for county approval.' + NEW_LINE
+      + 'WebEMSOF has forwarded the finalized request to <' + cc_email_address + '> for county approval.  No action is required '
+      + 'from you at this time.' + NEW_LINE
       + NEW_LINE
       + 'You can use WebEMSOF by visiting:' + NEW_LINE
       + NEW_LINE
       + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
+      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/regional_staffer_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session['service_name'].ToString + ' EMSOF Coordinator.'
+      + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:'
       + NEW_LINE
+      + '   ' + service_email_address + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );

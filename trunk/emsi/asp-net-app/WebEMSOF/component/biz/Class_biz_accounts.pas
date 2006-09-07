@@ -170,7 +170,7 @@ begin
     //
     smtpmail.Send
       (
-      SelfEmailAddress,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       service_email_address,
       'Return of EMSOF request for rework',
       reviewer_descriptor + ' did NOT approve ' + service_name + '''s ' + fy_designator + ' EMSOF request.  Instead, the request '
@@ -193,8 +193,9 @@ begin
       + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to ' + reviewer_descriptor
+      + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
+      + '   ' + SelfEmailAddress + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -212,7 +213,7 @@ begin
     //
     smtpmail.Send
       (
-      SelfEmailAddress,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       service_email_address,
       'REJECTION of EMSOF request',
       reviewer_descriptor + ' has REJECTED ' + service_name + '''s ' + fy_designator + ' EMSOF request.  ' + NEW_LINE
@@ -234,13 +235,15 @@ begin
       + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
+      + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
+      + NEW_LINE
+      + '   ' + SelfEmailAddress + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     smtpmail.Send
       (
-      SelfEmailAddress,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       other_stakeholder_email_address,
       'REJECTION of EMSOF request',
       reviewer_descriptor + ' has REJECTED ' + service_name + '''s '+ fy_designator + ' EMSOF request.  ' + NEW_LINE
@@ -257,15 +260,17 @@ begin
         )
       + NEW_LINE
       + NEW_LINE
-      + 'This action effectively returns ' + emsof_ante + ' of EMSOF funds to the regional council.' + NEW_LINE
+      + 'This action effectively returns ' + emsof_ante + ' of EMSOF funds for use by others.' + NEW_LINE
       + NEW_LINE
       + 'You can review this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx'
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name']
       + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
+      + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
+      + NEW_LINE
+      + '   ' + SelfEmailAddress + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -311,20 +316,28 @@ begin
   + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
   + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
   + NEW_LINE
-  + 'Replies to this message will be addressed to ' + reviewer_descriptor + NEW_LINE
+  + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
+  + NEW_LINE
+  + '   ' + SelfEmailAddress
   + NEW_LINE
   + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   //
   //   Send notification to service.
   //
-  smtpmail.Send(SelfEmailAddress,EmailAddressByKindId('service',service_id),'Promotion of EMSOF request',messageText);
+  smtpmail.Send
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    EmailAddressByKindId('service',service_id),
+    'Promotion of EMSOF request',
+    messageText
+    );
   //
   //   Send notification to region.
   //
   if next_reviewer_email_target <> system.string.EMPTY then begin
     smtpmail.Send
       (
-      SelfEmailAddress,
+      ConfigurationSettings.AppSettings['sender_email_address'],
         next_reviewer_email_target,
       'Promotion of EMSOF request',
         reviewer_descriptor + ' has promoted ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
@@ -336,8 +349,9 @@ begin
       + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to ' + reviewer_descriptor
+      + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
+      + '   ' + SelfEmailAddress + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -358,7 +372,7 @@ procedure TClass_biz_accounts.NotifyRegionOfServicePocAffirmation
 begin
   smtpmail.Send
     (
-    EmailAddressByKindId('service',service_id),
+    ConfigurationSettings.AppSettings['sender_email_address'],
     EmailTargetByRole('emsof-coordinator'),
     'POC has assumed EMSOF resposibility for Service',
     'Dear Regional Council EMSOF Coordinator,' + NEW_LINE
@@ -368,7 +382,9 @@ begin
     + 'reasonable advance notice to both the service and the regional council if it becomes necessary to relinquish such '
     + 'responsibilities.'   + NEW_LINE
     + NEW_LINE
-    + 'Replies to this message will be addressed to ' + contact_person_name + '.' + NEW_LINE
+    + 'You can contact ' + contact_person_name + ' at:' + NEW_LINE
+    + NEW_LINE
+    + '   ' + EmailAddressByKindId('service',service_id) + NEW_LINE
     + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
@@ -387,7 +403,7 @@ begin
 //  //
 //  smtpmail.Send
 //    (
-//    SelfEmailAddress,
+//    ConfigurationSettings.AppSettings['sender_email_address'],
 //    EmailAddressByKindId('service',service_id),
 //    '** EMSOF Notice To Proceed **',
 //    'The Pennsylvania Department of Health EMS Office has approved ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
@@ -397,7 +413,7 @@ begin
 //  //
 //  smtpmail.Send
 //    (
-//    '',
+//    ConfigurationSettings.AppSettings['sender_email_address'],
 //    next_reviewer_email_target,
 //    'WebEMSOF has issued a Notice To Proceed',
 //    'WebEMSOF has issued a Notice To Proceed to ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
@@ -408,9 +424,6 @@ begin
 //    + NEW_LINE
 //    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
 //    + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
-//    + NEW_LINE
-//    + 'Replies to this message will be addressed to ' + reviewer_descriptor
-//    + NEW_LINE
 //    + NEW_LINE
 //    + '-- ' + ConfigurationSettings.AppSettings['application_name']
 //    );

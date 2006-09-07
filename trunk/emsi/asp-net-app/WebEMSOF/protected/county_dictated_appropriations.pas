@@ -370,21 +370,22 @@ begin
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      session['county_user_password_reset_email_address'].tostring,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
-      'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-      'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
+      'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
+      'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF allocation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
-      + 'For an overview of your EMSOF appropriations, visit:' + NEW_LINE
+      + 'For an overview of your EMSOF allocations, visit:' + NEW_LINE
       + NEW_LINE
       + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
       + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
-        + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
-        + NEW_LINE
-        + NEW_LINE
+      + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
+      + NEW_LINE
+      + '   ' + session['county_user_password_reset_email_address'].tostring + NEW_LINE
+      + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
@@ -465,10 +466,10 @@ begin
     smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
     smtpmail.Send
       (
-      session['county_user_password_reset_email_address'].tostring,
+      ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
-      'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-      'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF appropriation for your '
+      'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
+      'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF allocation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
       + 'You can work on this appropriation by visiting:' + NEW_LINE
@@ -477,8 +478,9 @@ begin
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
       + '/protected/service_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
+      + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
+      + '   ' + session['county_user_password_reset_email_address'].tostring + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );

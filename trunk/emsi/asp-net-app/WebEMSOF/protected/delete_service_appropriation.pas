@@ -128,24 +128,25 @@ begin
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
-    session['county_user_password_reset_email_address'].tostring,
+    ConfigurationSettings.AppSettings['sender_email_address'],
     session['email_address_of_service_of_appropriation_selected_for_deletion'].tostring,
-    'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
-    'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF appropriation from your '
+    'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
+    'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF allocation from your '
     + 'service for ' + Safe(Label_fiscal_year.text,ALPHANUM) + '.' + NEW_LINE
     + NEW_LINE
-    + 'NOTE that the equipment request(s) that you had already entered against this appropriation were also deleted.  This was '
-    + 'done with the County Coordinator''s knowledge.' + NEW_LINE
+    + 'NOTE that the equipment request(s) that you had already entered against this allocation were also deleted.  WebEMSOF had '
+    + 'made the County Coordinator aware that this would happen.' + NEW_LINE
     + NEW_LINE
-    + 'You can view your appropriations by visiting:' + NEW_LINE
+    + 'You can view your allocations by visiting:' + NEW_LINE
     + NEW_LINE
     + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
     + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
     + '/protected/service_overview.aspx' + NEW_LINE
     + NEW_LINE
-      + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
-      + NEW_LINE
-      + NEW_LINE
+    + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
+    + NEW_LINE
+    + '   ' + session['county_user_password_reset_email_address'].tostring + NEW_LINE
+    + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
   //
