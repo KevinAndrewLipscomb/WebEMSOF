@@ -71,7 +71,7 @@ type
 implementation
 
 const
-  TCCI_LINKBUTTON_SELECT = 12;
+  TCCI_LINKBUTTON_SELECT = 13;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>

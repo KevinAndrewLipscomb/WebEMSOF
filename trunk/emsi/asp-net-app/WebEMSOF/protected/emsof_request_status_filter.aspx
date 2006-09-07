@@ -13,8 +13,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                                  [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                                  [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                                   [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                   [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
 			|
 			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
 		</small>
@@ -54,6 +54,7 @@
                               <ItemStyle horizontalalign="Right"></ItemStyle>
                             </ASP:BoundColumn>
                             <ASP:BoundColumn visible="False" datafield="appropriation" sortexpression="appropriation" readonly="True"></ASP:BoundColumn>
+                            <ASP:BoundColumn visible="False" datafield="has_wish_list" readonly="True"></ASP:BoundColumn>
                             <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
                             <ASP:BoundColumn visible="False" datafield="status_code" sortexpression="status_code" readonly="True"></ASP:BoundColumn>
                             <ASP:ButtonColumn visible="False" datatextfield="status_description" sortexpression="status_description" headertext="Status" commandname="Select">
@@ -62,7 +63,7 @@
                             <ASP:ButtonColumn text="Select" commandname="Select">
                               <ItemStyle font-bold="True" horizontalalign="Center"></ItemStyle>
                             </ASP:ButtonColumn>
-						  </Columns></ASP:DataGrid></td>
+                          </Columns></ASP:DataGrid></td>
 					</tr>
 					<tr id="TableRow_spreadsheet" runat="server">
 					</tr>
