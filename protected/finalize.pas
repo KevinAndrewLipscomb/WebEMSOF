@@ -261,7 +261,7 @@ begin
       + NEW_LINE
       + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
-      + '   ' + service_email_address + NEW_LINE
+      + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -284,7 +284,7 @@ begin
       + NEW_LINE
       + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:'
       + NEW_LINE
-      + '   ' + service_email_address + NEW_LINE
+      + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );

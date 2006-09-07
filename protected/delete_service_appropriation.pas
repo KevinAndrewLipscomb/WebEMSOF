@@ -145,7 +145,7 @@ begin
     + NEW_LINE
     + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
     + NEW_LINE
-    + '   ' + session['county_user_password_reset_email_address'].tostring + NEW_LINE
+    + '   ' + session['county_user_password_reset_email_address'].tostring + '  (mailto:' + session['county_user_password_reset_email_address'].tostring + ')' + NEW_LINE
     + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );

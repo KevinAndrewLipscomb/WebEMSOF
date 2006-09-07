@@ -238,7 +238,7 @@ begin
       + NEW_LINE
       + 'You can contact Regional Staffer ' + session['regional_staffer_name'].ToString + ' at:' + NEW_LINE
       + NEW_LINE
-      + '   ' + session['regional_staffer_user_password_reset_email_address'].tostring + NEW_LINE
+      + '   ' + session['regional_staffer_user_password_reset_email_address'].tostring + '  (mailto:' + session['regional_staffer_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
@@ -391,7 +391,7 @@ begin
       + NEW_LINE
       + 'You can contact the ' + session['region_name'].ToString + ' Regional Council EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
-      + '   ' + session['regional_staffer_user_password_reset_email_address'].tostring + NEW_LINE
+      + '   ' + session['regional_staffer_user_password_reset_email_address'].tostring + '  (mailto:' + session['regional_staffer_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
