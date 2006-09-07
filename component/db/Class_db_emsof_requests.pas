@@ -201,7 +201,7 @@ begin
   + ' , fiscal_year.designator as fiscal_year_designator'                      // column 6
   + ' , emsof_request_master.value as emsof_ante'                              // column 7
   + ' , county_dictated_appropriation.amount as appropriation'                 // column 8
-  + ' , if(has_wish_list,"Y",NULL) as has_wish_list'                           // column 9
+  + ' , if(has_wish_list,"YES","no") as has_wish_list'                         // column 9
   + ' , password_reset_email_address'                                          // column 10
   + ' , status_code'                                                           // column 11
   + ' , request_status_code_description_map.description as status_description' // column 12
