@@ -1,0 +1,1 @@
+alter table emsof_request_master add has_wish_list boolean default '0' not null after num_items;

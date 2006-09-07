@@ -163,6 +163,9 @@
                             <ItemStyle horizontalalign="Right"></ItemStyle>
                           </ASP:BoundColumn>
                           <ASP:BoundColumn datafield="appropriation" sortexpression="appropriation" headertext="Amount" dataformatstring="{0:C}"></ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="has_wish_list" sortexpression="has_wish_list" readonly="True" headertext="Wish list">
+                            <ItemStyle horizontalalign="Center"></ItemStyle>
+                          </ASP:BoundColumn>
                           <ASP:BoundColumn visible="False" datafield="password_reset_email_address" sortexpression="password_reset_email_address" readonly="True"></ASP:BoundColumn>
                           <ASP:BoundColumn visible="False" datafield="status_code" sortexpression="status_code" readonly="True"></ASP:BoundColumn>
                           <ASP:ButtonColumn datatextfield="status_description" sortexpression="status_code" headertext="Status" commandname="Select">

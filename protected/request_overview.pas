@@ -7,7 +7,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
-  system.web.security;
+  system.web.security,
+  Class_biz_emsof_requests;
 
 const ID = '$Id$';
 
@@ -17,6 +18,7 @@ type
     be_before_deadline: boolean;
     be_completely_approved: boolean;
     be_finalized: boolean;
+    biz_emsof_requests: TClass_biz_emsof_requests;
     tcci_master_id: cardinal;
     tcci_priority: cardinal;
     tcci_code: cardinal;
@@ -40,6 +42,7 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_request_overview_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure CheckBox_has_wish_list_CheckedChanged(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -69,6 +72,7 @@ type
     Label_master_status: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     Table_parent_appropriation_outer: System.Web.UI.HtmlControls.HtmlTable;
+    CheckBox_has_wish_list: System.Web.UI.WebControls.CheckBox;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -88,6 +92,7 @@ begin
   Include(Self.LinkButton_finalize.Click, Self.LinkButton_finalize_Click);
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
+  Include(Self.CheckBox_has_wish_list.CheckedChanged, Self.CheckBox_has_wish_list_CheckedChanged);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_request_overview_PreRender);
 end;
@@ -108,6 +113,7 @@ begin
     //
     p.be_before_deadline := TRUE;
     p.be_completely_approved := FALSE;
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     county_dictated_appropriation_amount := decimal.Parse(session['county_dictated_appropriation_amount'].tostring);
     p.tcci_master_id := 0;
     p.tcci_priority := 1;
@@ -212,6 +218,9 @@ begin
     ki.common.DbClose;
     //
     Bind_items;  // also affected by be_before_deadline
+    //
+    CheckBox_has_wish_list.checked := p.biz_emsof_requests.HasWishList(session['emsof_request_master_id'].tostring);
+    //
   end;
 end;
 
@@ -222,6 +231,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_overview.CheckBox_has_wish_list_CheckedChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  p.biz_emsof_requests.SetHasWishList(session['emsof_request_master_id'].tostring,CheckBox_has_wish_list.checked);
 end;
 
 procedure TWebForm_request_overview.TWebForm_request_overview_PreRender(sender: System.Object;

@@ -102,6 +102,7 @@ type
       );
     procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
+    function HasWishList(master_id: string): boolean;
     function IdOf(e_item: system.object): string;
     procedure MarkDone
       (
@@ -128,6 +129,11 @@ type
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
+    procedure SetHasWishList
+      (
+      master_id: string;
+      value: boolean
+      );
     function SponsorCountyCodeOf(e_item: system.object): string;
     function SponsorCountyNameOf(e_item: system.object): string;
     function SponsorRegionNameOf(master_id: string): string;
@@ -161,9 +167,10 @@ const
   TCCI_FISCAL_YEAR_DESIGNATOR = 6;
   TCCI_EMSOF_ANTE = 7;
   TCCI_APPROPRIATION = 8;
-  TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 9;
-  TCCI_STATUS_CODE = 10;
-  TCCI_STATUS_DESCRIPTION = 11;
+  TCCI_HAS_WISH_LIST = 9;
+  TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 10;
+  TCCI_STATUS_CODE = 11;
+  TCCI_STATUS_DESCRIPTION = 12;
 
 procedure TClass_db_emsof_requests.BindOverview
   (
@@ -194,9 +201,10 @@ begin
   + ' , fiscal_year.designator as fiscal_year_designator'                      // column 6
   + ' , emsof_request_master.value as emsof_ante'                              // column 7
   + ' , county_dictated_appropriation.amount as appropriation'                 // column 8
-  + ' , password_reset_email_address'                                          // column 9
-  + ' , status_code'                                                           // column 10
-  + ' , request_status_code_description_map.description as status_description' // column 11
+  + ' , if(has_wish_list,"Y",NULL) as has_wish_list'                           // column 9
+  + ' , password_reset_email_address'                                          // column 10
+  + ' , status_code'                                                           // column 11
+  + ' , request_status_code_description_map.description as status_description' // column 12
   + ' from emsof_request_master'
   +   ' join county_dictated_appropriation'
   +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
@@ -486,6 +494,18 @@ begin
   FyDesignatorOf := Safe(DataGridItem(e_item).cells[TCCI_FISCAL_YEAR_DESIGNATOR].text,ALPHANUM);
 end;
 
+function TClass_db_emsof_requests.HasWishList(master_id: string): boolean;
+begin
+  self.Open;
+  HasWishList := '1' = borland.data.provider.bdpcommand.Create
+    (
+    'select has_wish_list from emsof_request_master where id = ' + master_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
+end;
+
 function TClass_db_emsof_requests.IdOf(e_item: system.object): string;
 begin
   IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
@@ -608,6 +628,24 @@ end;
 function TClass_db_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
   ServiceNameOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_NAME].text,ORG_NAME);
+end;
+
+procedure TClass_db_emsof_requests.SetHasWishList
+  (
+  master_id: string;
+  value: boolean
+  );
+begin
+  self.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update emsof_request_master'
+    + ' set has_wish_list = ' + value.tostring
+    + ' where id = ' + master_id,
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.SponsorCountyCodeOf(e_item: system.object): string;
