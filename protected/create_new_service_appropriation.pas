@@ -220,9 +220,9 @@ end;
 
 procedure TWebForm_create_new_service_appropriation.AddAppropriation;
 var
-  biz_get_cc_email_address: borland.data.provider.bdpcommand;
-  biz_get_fy_designator: borland.data.provider.bdpcommand;
-  biz_get_service_email_address: borland.data.provider.bdpcommand;
+  bdp_get_cc_email_address: borland.data.provider.bdpcommand;
+  bdp_get_fy_designator: borland.data.provider.bdpcommand;
+  bdp_get_service_email_address: borland.data.provider.bdpcommand;
   max_county_dictated_appropriation_id_string: string;
   messageText: string;
   service_id_string: string;
@@ -268,14 +268,14 @@ begin
   // Send notice of the appropriation to the service's email address of record.
   //
   //   Set up the command to get service's email address of record.
-  biz_get_service_email_address := borland.data.provider.bdpcommand.Create
+  bdp_get_service_email_address := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address from service_user '
     + 'where id = ' + service_id_string,
     ki.common.db
     );
   //   Set up the command to get the appropriate fiscal year designator.
-  biz_get_fy_designator := borland.data.provider.bdpcommand.Create
+  bdp_get_fy_designator := borland.data.provider.bdpcommand.Create
     (
     'select designator'
     + ' from fiscal_year'
@@ -286,32 +286,33 @@ begin
     ki.common.db
     );
   //   Set up the command to get the County Coorindator's email address.
-  biz_get_cc_email_address := borland.data.provider.bdpcommand.Create
+  bdp_get_cc_email_address := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address from county_user where id = ' + session['county_user_id'].tostring,
     ki.common.db
     );
   //   Set up the messageText.
-  messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF appropriation '
-  + 'of ' + p.amount.tostring('C') + ' to your service for ' + biz_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
+  messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF allocation '
+  + 'of ' + p.amount.tostring('C') + ' to your service for ' + bdp_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
   + NEW_LINE
-  + 'You can work on this appropriation by visiting:' + NEW_LINE
+  + 'You can work on this allocation by visiting:' + NEW_LINE
   + NEW_LINE
   + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
   + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
   + '/protected/service_overview.aspx' + NEW_LINE
   + NEW_LINE
-  + 'Replies to this message will be addressed to the ' + session['county_name'].ToString + ' County EMSOF Coordinator.'
+  + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
   + NEW_LINE
+  + '   ' + bdp_get_cc_email_address.ExecuteScalar.tostring + NEW_LINE
   + NEW_LINE
   + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   //   Send the email message.
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
-    biz_get_cc_email_address.ExecuteScalar.tostring,
-    biz_get_service_email_address.ExecuteScalar.tostring,
-    'New ' + ConfigurationSettings.AppSettings['application_name'] + ' appropriation for your service',
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    bdp_get_service_email_address.ExecuteScalar.tostring,
+    'New ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
     messageText
     );
   //

@@ -153,7 +153,7 @@ begin
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
   smtpmail.Send
     (
-    biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring),
+    ConfigurationSettings.AppSettings['sender_email_address'],
     biz_accounts.EmailTargetByRole('emsof-request-withdrawal-stakeholder'),
     'Withdrawal of EMSOF request item',
     session['service_name'].ToString + ' has withdrawn a(n) "' + Label_description.text + '" item from their '
@@ -162,7 +162,7 @@ begin
     + session['emsof_request_master_status'].tostring + '".' + NEW_LINE
     + NEW_LINE
     + session['service_name'].ToString + ' is aware that this action effectively surrenders ' + Label_emsof_ante.text
-    + ' of EMSOF matching funds back to the Regional Council.' + NEW_LINE
+    + ' of EMSOF matching funds for use by others.' + NEW_LINE
     + NEW_LINE
     + 'You can see the effect of this action by visiting:' + NEW_LINE
     + NEW_LINE
@@ -170,8 +170,9 @@ begin
     + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/regional_staffer_overview.aspx'
     + NEW_LINE
     + NEW_LINE
-    + 'Replies to this message will be addressed to the ' + session['service_name'].ToString + ' EMSOF Coordinator.'
+    + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
     + NEW_LINE
+    + '   ' + biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring) + NEW_LINE
     + NEW_LINE
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
