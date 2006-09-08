@@ -9,6 +9,7 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   ki.common,
   borland.data.provider,
+  Class_biz_appropriations,
   Class_biz_emsof_requests,
   system.configuration,
   system.web.mail,
@@ -19,6 +20,7 @@ const ID = '$Id$';
 type
   p_type =
     RECORD
+    biz_appropriations: TClass_biz_appropriations;
     biz_emsof_requests: TClass_biz_emsof_requests;
     be_before_deadline: boolean;
     be_filtered: boolean;
@@ -133,6 +135,7 @@ begin
     //
     // Initialize implementation-global variables.
     //
+    p.biz_appropriations := TClass_biz_appropriations.Create;
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.be_before_deadline := TRUE;
     p.be_filtered := FALSE;
@@ -415,8 +418,6 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     p.num_appropriations := p.num_appropriations + 1;
-    p.sum_of_service_appropriations := p.sum_of_service_appropriations
-      + decimal.Parse(databinder.Eval(e.item.dataitem,p.biz_emsof_requests.PropertyNameOfAppropriation).tostring);
     if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) > 2 then begin
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := TRUE;
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).forecolor := color.BLUE;
@@ -537,7 +538,8 @@ begin
   //
   // Manage non-DataGrid control properties.
   //
-  Label_sum_of_service_appropriations.text := p.sum_of_service_appropriations.ToString('C');
+  p.sum_of_service_appropriations := p.biz_appropriations.SumOfSelfDictatedAppropriations;
+  Label_sum_of_service_appropriations.text := p.sum_of_service_appropriations.tostring('C');
   p.unappropriated_amount := p.region_dictated_appropriation_amount - p.sum_of_service_appropriations;
   Label_unappropriated_amount.Text := p.unappropriated_amount.tostring('C');
   if p.unappropriated_amount < 0 then begin
