@@ -159,10 +159,16 @@
                           <ASP:BoundColumn visible="False" datafield="county_code" sortexpression="county_code" readonly="True"></ASP:BoundColumn>
                           <ASP:BoundColumn visible="False" datafield="sponsor_county" sortexpression="sponsor_county" readonly="True" headertext="Sponsor county"></ASP:BoundColumn>
                           <ASP:BoundColumn visible="False" datafield="fiscal_year_designator" sortexpression="fiscal_year_designator" readonly="True" headertext="Cycle"></ASP:BoundColumn>
-                          <ASP:BoundColumn visible="False" datafield="emsof_ante" sortexpression="emsof_ante" headertext="EMSOF amount" dataformatstring="{0:C}">
+                          <ASP:BoundColumn visible="False" datafield="emsof_ante" sortexpression="emsof_ante" readonly="True" headertext="EMSOF amount" dataformatstring="{0:C}">
                             <ItemStyle horizontalalign="Right"></ItemStyle>
                           </ASP:BoundColumn>
-                          <ASP:BoundColumn datafield="appropriation" sortexpression="appropriation" headertext="Amount" dataformatstring="{0:C}"></ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="appropriation" sortexpression="appropriation" headertext="Amount" dataformatstring="{0:C}">
+                            <ItemStyle font-bold="True"></ItemStyle>
+                          </ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="leftover_or_shortage" sortexpression="leftover_or_shortage" readonly="True" headertext="Leftover / Shortage">
+                            <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                            <ItemStyle horizontalalign="Center"></ItemStyle>
+                          </ASP:BoundColumn>
                           <ASP:BoundColumn datafield="has_wish_list" sortexpression="has_wish_list" readonly="True" headertext="Wish list">
                             <ItemStyle horizontalalign="Center"></ItemStyle>
                           </ASP:BoundColumn>

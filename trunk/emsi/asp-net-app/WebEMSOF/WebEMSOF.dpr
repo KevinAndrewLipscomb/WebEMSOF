@@ -53,6 +53,7 @@ library WebEMSOF;
 {%AspFolderContainer 'protected\image'}
 {$R 'protected\image\logo_left.gif' 'protected\image\logo_left.gif'}
 {$R 'protected\image\logo_right.gif' 'protected\image\logo_right.gif'}
+{%AspFolderContainer 'dbscript'}
 
 uses
   System.Reflection,

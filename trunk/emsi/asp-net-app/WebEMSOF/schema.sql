@@ -247,6 +247,7 @@ CREATE TABLE emsof_request_master (
   status_code tinyint(3) NOT NULL default '1',
   `value` decimal(10,2) unsigned NOT NULL default '0.00',
   num_items smallint(5) unsigned NOT NULL default '0',
+  shortage decimal(10,2) unsigned NOT NULL default '0.00',
   has_wish_list boolean default '0' not null,
   county_approval_timestamp datetime default NULL,
   regional_planner_approval_timestamp datetime default NULL,

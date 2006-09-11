@@ -7,6 +7,7 @@ uses
   Class_db_appropriations,
   Class_db_emsof_requests,
   Class_biz_accounts,
+  Class_biz_appropriations,
   Class_biz_regional_staffers,
   Class_biz_user,
   system.security.principal,
@@ -40,6 +41,7 @@ type
     db_appropriations: TClass_db_appropriations;
     db_emsof_requests: TClass_db_emsof_requests;
     biz_accounts: TClass_biz_accounts;
+    biz_appropriations: TClass_biz_appropriations;
     biz_regional_staffers: TClass_biz_regional_staffers;
     biz_user: TClass_biz_user;
   public
@@ -106,6 +108,7 @@ type
       regional_staffer_user_id: string
       );
     function CountyApprovalTimestampOf(master_id: string): datetime;
+    function CountyDictumIdOf(master_id: string): string;
     procedure Demote
       (
       e_item: system.object;
@@ -117,6 +120,7 @@ type
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
+    function LeftoverOrShortageOf(e_item: system.object): decimal;
     procedure MarkDone
       (
       e_item: system.object;
@@ -159,6 +163,7 @@ type
     function TcciOfEmsofAnte: cardinal;
     function TcciOfPasswordResetEmailAddress: cardinal;
     function TcciOfServiceName: cardinal;
+    function TcciOfLeftoverOrShortage: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
   end;
@@ -178,6 +183,7 @@ begin
   db_appropriations := TClass_db_appropriations.Create;
   db_emsof_requests := TClass_db_emsof_requests.Create;
   biz_accounts := TClass_biz_accounts.Create;
+  biz_appropriations := TClass_biz_appropriations.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
   biz_user := TClass_biz_user.Create;
 end;
@@ -194,13 +200,17 @@ procedure TClass_biz_emsof_requests.Approve
   );
 var
   approval_timestamp_column: Class_db_emsof_requests.approval_timestamp_column_type;
+  id: string;
+  leftover_or_shortage: decimal;
   next_approver_role: string;
   next_status: status_type;
   reviewer_descriptor: string;
+  status: status_type;
 begin
   approval_timestamp_column := Class_db_emsof_requests.approval_timestamp_column_type(NONE);
-  next_status := StatusOf(e_item); // Better initialize it to something.
-  case StatusOf(e_item) of
+  status := StatusOf(e_item);
+  next_status := status; // Better initialize it to something.
+  case status of
   NEEDS_COUNTY_APPROVAL:
     BEGIN
     approval_timestamp_column := COUNTY;
@@ -231,7 +241,12 @@ begin
     END;
   end;
   if approval_timestamp_column <> Class_db_emsof_requests.approval_timestamp_column_type(NONE) then begin
-    db_emsof_requests.Approve(IdOf(e_item),ord(next_status),biz_user.Kind,approval_timestamp_column);
+    id := IdOf(e_item);
+    db_emsof_requests.Approve(id,ord(next_status),biz_user.Kind,approval_timestamp_column);
+    leftover_or_shortage := LeftoverOrShortageOf(e_item);
+    if leftover_or_shortage > 0 then begin
+      biz_appropriations.ReduceBy(leftover_or_shortage,CountyDictumIdOf(id));
+    end;
     if next_status <> NEEDS_INVOICE_COLLECTION then begin
       biz_accounts.MakePromotionNotification
         (
@@ -380,6 +395,11 @@ begin
     );
 end;
 
+function TClass_biz_emsof_requests.CountyDictumIdOf(master_id: string): string;
+begin
+  CountyDictumIdOf := db_emsof_requests.CountyDictumIdOf(master_id);
+end;
+
 procedure TClass_biz_emsof_requests.Demote
   (
   e_item: system.object;
@@ -460,6 +480,11 @@ end;
 function TClass_biz_emsof_requests.IdOf(e_item: system.object): string;
 begin
   IdOf := db_emsof_requests.IdOf(e_item);
+end;
+
+function TClass_biz_emsof_requests.LeftoverOrShortageOf(e_item: system.object): decimal;
+begin
+  LeftoverOrShortageOf := db_emsof_requests.LeftoverOrShortageOf(e_item);
 end;
 
 procedure TClass_biz_emsof_requests.MarkDone
@@ -705,6 +730,11 @@ end;
 function TClass_biz_emsof_requests.TcciOfServiceName: cardinal;
 begin
   TcciOfServiceName := db_emsof_requests.TcciOfServiceName;
+end;
+
+function TClass_biz_emsof_requests.TcciOfLeftoverOrShortage: cardinal;
+begin
+  TcciOfLeftoverOrShortage := db_emsof_requests.TcciOfLeftoverOrShortage;
 end;
 
 function TClass_biz_emsof_requests.TcciOfStatusCode: cardinal;

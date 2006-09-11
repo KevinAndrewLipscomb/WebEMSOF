@@ -33,8 +33,6 @@ type
       e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_retransmit_to_state_Click(sender: System.Object; e: System.EventArgs);
-//    procedure LinkButton_generate_state_export_batch_Click(sender: System.Object;
-//      e: System.EventArgs);
   {$ENDREGION}
   //
   // Expected session objects:
@@ -71,7 +69,7 @@ type
 implementation
 
 const
-  TCCI_LINKBUTTON_SELECT = 13;
+  TCCI_LINKBUTTON_SELECT = 14;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -98,8 +96,6 @@ begin
     p := p_type(session['p']);
   end else begin
     //
-    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
-    //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
     Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session['status_of_interest'].tostring;
@@ -107,6 +103,7 @@ begin
     //
     // Initialize instance private data members.
     //
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.be_sort_order_ascending := TRUE;
     p.num_qualifying_requests := 0;
     p.sort_order := 'affiliate_num';
