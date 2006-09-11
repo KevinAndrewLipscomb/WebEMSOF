@@ -199,20 +199,26 @@ procedure TClass_biz_emsof_requests.Approve
   promoter: string
   );
 var
+  amount_to_return_to_county: decimal;
   approval_timestamp_column: Class_db_emsof_requests.approval_timestamp_column_type;
-  id: string;
   leftover_or_shortage: decimal;
   next_approver_role: string;
   next_status: status_type;
   reviewer_descriptor: string;
   status: status_type;
 begin
+  amount_to_return_to_county := 0;
   approval_timestamp_column := Class_db_emsof_requests.approval_timestamp_column_type(NONE);
+  leftover_or_shortage := 0;
   status := StatusOf(e_item);
   next_status := status; // Better initialize it to something.
   case status of
   NEEDS_COUNTY_APPROVAL:
     BEGIN
+    leftover_or_shortage := LeftoverOrShortageOf(e_item);
+    if leftover_or_shortage > 0 then begin
+      amount_to_return_to_county := leftover_or_shortage;
+    end;
     approval_timestamp_column := COUNTY;
     next_approver_role := 'emsof-planner';
     reviewer_descriptor := 'The ' + promoter + ' County EMSOF Coordinator';
@@ -241,12 +247,7 @@ begin
     END;
   end;
   if approval_timestamp_column <> Class_db_emsof_requests.approval_timestamp_column_type(NONE) then begin
-    id := IdOf(e_item);
-    db_emsof_requests.Approve(id,ord(next_status),biz_user.Kind,approval_timestamp_column);
-    leftover_or_shortage := LeftoverOrShortageOf(e_item);
-    if leftover_or_shortage > 0 then begin
-      biz_appropriations.ReduceBy(leftover_or_shortage,CountyDictumIdOf(id));
-    end;
+    db_emsof_requests.Approve(IdOf(e_item),ord(next_status),biz_user.Kind,approval_timestamp_column,amount_to_return_to_county);
     if next_status <> NEEDS_INVOICE_COLLECTION then begin
       biz_accounts.MakePromotionNotification
         (
