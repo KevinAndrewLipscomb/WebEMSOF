@@ -293,7 +293,7 @@ begin
       + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/regional_staffer_overview.aspx' + NEW_LINE
       + NEW_LINE
-      + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:'
+      + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
       + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
