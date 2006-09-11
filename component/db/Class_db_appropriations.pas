@@ -30,6 +30,11 @@ type
       );
     function NumActiveAmendments(regional_staffer_id: string): cardinal;
     function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
+    procedure ReduceBy
+      (
+      delta: decimal;
+      county_dictum_id: string
+      );
     function RegionCodeOfCountyDictum(county_dictum_id: string): string;
     function SumOfAppropriationsFromSpecificParent
       (
@@ -161,6 +166,24 @@ begin
   self.Close;
 end;
 
+procedure TClass_db_appropriations.ReduceBy
+  (
+  delta: decimal;
+  county_dictum_id: string
+  );
+begin
+  self.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update county_dictated_appropriation'
+    + ' set amount = amount - ' + delta.tostring
+    + ' where id = ' + county_dictum_id,
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
+end;
+
 function TClass_db_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
 begin
   self.Open;
@@ -283,7 +306,9 @@ function TClass_db_appropriations.SumOfSelfDictatedAppropriations
   : decimal;
 var
   cmdText: string;
+  sum_obj: system.object;
 begin
+  //
   if self_kind = 'regional_staffer' then begin
     cmdText := 'select sum(region_dictated_appropriation.amount)'
     + ' from region_dictated_appropriation'
@@ -302,9 +327,16 @@ begin
     + ' where county_code = ' + self_id
     +   ' and fiscal_year_id = ' + fy_id;
   end;
+  //
   self.Open;
-  SumOfSelfDictatedAppropriations := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
+  if sum_obj = dbnull.value then begin
+    SumOfSelfDictatedAppropriations := 0;
+  end else begin
+    SumOfSelfDictatedAppropriations := decimal(sum_obj);
+  end;
   self.Close;
+  //
 end;
 
 end.

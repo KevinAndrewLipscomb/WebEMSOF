@@ -93,6 +93,7 @@ type
       region_code: string
       );
     function CountyApprovalTimestampOf(master_id: string): datetime;
+    function CountyDictumIdOf(master_id: string): string;
     procedure Demote
       (
       master_id: string;
@@ -104,6 +105,7 @@ type
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
     function IdOf(e_item: system.object): string;
+    function LeftoverOrShortageOf(e_item: system.object): decimal;
     procedure MarkDone
       (
       master_id: string;
@@ -151,6 +153,7 @@ type
     function TcciOfEmsofAnte: cardinal;
     function TcciOfPasswordResetEmailAddress: cardinal;
     function TcciOfServiceName: cardinal;
+    function TcciOfLeftoverOrShortage: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
   end;
@@ -167,10 +170,11 @@ const
   TCCI_FISCAL_YEAR_DESIGNATOR = 6;
   TCCI_EMSOF_ANTE = 7;
   TCCI_APPROPRIATION = 8;
-  TCCI_HAS_WISH_LIST = 9;
-  TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 10;
-  TCCI_STATUS_CODE = 11;
-  TCCI_STATUS_DESCRIPTION = 12;
+  TCCI_LEFTOVER_OR_SHORTAGE = 9;
+  TCCI_HAS_WISH_LIST = 10;
+  TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 11;
+  TCCI_STATUS_CODE = 12;
+  TCCI_STATUS_DESCRIPTION = 13;
 
 procedure TClass_db_emsof_requests.BindOverview
   (
@@ -201,10 +205,11 @@ begin
   + ' , fiscal_year.designator as fiscal_year_designator'                      // column 6
   + ' , emsof_request_master.value as emsof_ante'                              // column 7
   + ' , county_dictated_appropriation.amount as appropriation'                 // column 8
-  + ' , if(has_wish_list,"YES","no") as has_wish_list'                         // column 9
-  + ' , password_reset_email_address'                                          // column 10
-  + ' , status_code'                                                           // column 11
-  + ' , request_status_code_description_map.description as status_description' // column 12
+  + ' , if((county_dictated_appropriation.amount > emsof_request_master.value),(county_dictated_appropriation.amount - emsof_request_master.value),(-emsof_request_master.shortage)) as leftover_or_shortage'                // column 9
+  + ' , if(has_wish_list,"YES","no") as has_wish_list'                         // column 10
+  + ' , password_reset_email_address'                                          // column 11
+  + ' , status_code'                                                           // column 12
+  + ' , request_status_code_description_map.description as status_description' // column 13
   + ' from emsof_request_master'
   +   ' join county_dictated_appropriation'
   +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
@@ -458,6 +463,20 @@ begin
   self.Close;
 end;
 
+function TClass_db_emsof_requests.CountyDictumIdOf(master_id: string): string;
+begin
+  self.Open;
+  CountyDictumIdOf := borland.data.provider.bdpcommand.Create
+    (
+    'select county_dictated_appropriation_id'
+    + ' from emsof_request_master'
+    + ' where id = ' + master_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
+end;
+
 procedure TClass_db_emsof_requests.Demote
   (
   master_id: string;
@@ -509,6 +528,11 @@ end;
 function TClass_db_emsof_requests.IdOf(e_item: system.object): string;
 begin
   IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
+end;
+
+function TClass_db_emsof_requests.LeftoverOrShortageOf(e_item: system.object): decimal;
+begin
+  LeftoverOrShortageOf := decimal.Parse(Safe(DataGridItem(e_item).cells[TCCI_LEFTOVER_OR_SHORTAGE].text,REAL_NUM_INCLUDING_NEGATIVE));
 end;
 
 procedure TClass_db_emsof_requests.MarkDone
@@ -773,6 +797,11 @@ end;
 function TClass_db_emsof_requests.TcciOfServiceName: cardinal;
 begin
   TcciOfServiceName := TCCI_SERVICE_NAME;
+end;
+
+function TClass_db_emsof_requests.TcciOfLeftoverOrShortage: cardinal;
+begin
+  TcciOfLeftoverOrShortage := TCCI_LEFTOVER_OR_SHORTAGE;
 end;
 
 function TClass_db_emsof_requests.TcciOfStatusCode: cardinal;

@@ -28,6 +28,11 @@ type
       : cardinal;
     function NumActiveAmendments(regional_staffer_id: string): cardinal;
     function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
+    procedure ReduceBy
+      (
+      delta: decimal;
+      county_dictum_id: string
+      );
     function RegionCodeOfCountyDictum(county_dictum_id: string): string;
     function SumOfAppropriationsFromSpecificParent
       (
@@ -88,6 +93,15 @@ end;
 function TClass_biz_appropriations.ParentAppropriationOfEmsofRequest(master_id: string): decimal;
 begin
   ParentAppropriationOfEmsofRequest := db_appropriations.ParentAppropriationOfEmsofRequest(master_id);
+end;
+
+procedure TClass_biz_appropriations.ReduceBy
+  (
+  delta: decimal;
+  county_dictum_id: string
+  );
+begin
+  db_appropriations.ReduceBy(delta,county_dictum_id);
 end;
 
 function TClass_biz_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;

@@ -22,6 +22,7 @@ type
     funding_level: decimal;
     match_level: decimal;
     saved_emsof_ante: decimal;
+    saved_additional_service_ante: decimal;
     END;
   TWebForm_request_item_detail = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -299,6 +300,7 @@ begin
       TextBox_quantity.text := bdr_user_details['quantity'].tostring;
       TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
       p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
+      p.saved_additional_service_ante := decimal.Parse(bdr_user_details['additional_service_ante'].tostring);
       Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
       //
       Recalculate;
@@ -377,6 +379,8 @@ begin
   session.Add('emsof_request_item_make_model',Safe(TextBox_make_model.text,MAKE_MODEL));
   session.Remove('emsof_request_item_emsof_ante');
   session.Add('emsof_request_item_emsof_ante',Safe(Label_emsof_ante.text,REAL_NUM));
+  session.Remove('emsof_request_item_additional_service_ante');
+  session.Add('emsof_request_item_additional_service_ante',p.saved_additional_service_ante.tostring);
   server.Transfer('withdraw_request_item.aspx');
 end;
 
@@ -409,6 +413,7 @@ begin
     + ';'
     + 'update emsof_request_master'
     + ' set value = value - ' + p.saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
+    +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring + ' + ' + p.additional_service_ante.tostring
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
@@ -443,8 +448,9 @@ begin
       +   ' and priority > ' + session['emsof_request_item_priority'].tostring
       + ';'
       + 'update emsof_request_master'
-      + ' set value = value - ' + p.saved_emsof_ante.tostring + ','
-      +   ' num_items = num_items - 1'
+      + ' set value = value - ' + p.saved_emsof_ante.tostring
+      +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring
+      +   ' , num_items = num_items - 1'
       + ' where id = ' + session['emsof_request_master_id'].tostring
       + ';'
       + 'COMMIT;',
@@ -613,6 +619,7 @@ begin
     + 'update emsof_request_master'
     + ' set status_code = 2,'
     +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
+    +   ' shortage = shortage + ' + p.additional_service_ante.tostring + ','
     +   ' num_items = num_items + 1'
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'

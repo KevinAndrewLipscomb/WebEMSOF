@@ -19,6 +19,7 @@ type
   p_type =
     RECORD
     saved_emsof_ante: decimal;
+    saved_shortage: decimal;
     END;
   TWebForm_withdraw_request_item = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
@@ -79,6 +80,7 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - withdraw_request_item';
     //
     p.saved_emsof_ante := decimal.Parse(session['emsof_request_item_emsof_ante'].tostring);
+    p.saved_shortage := decimal.Parse(session['emsof_request_item_additional_service_ante'].tostring);
     //
     Label_priority.text := session['emsof_request_item_priority'].tostring;
     Label_description.text := session['emsof_request_item_make_model'].tostring + ' '
@@ -140,6 +142,7 @@ begin
     + ';'
     + 'update emsof_request_master'
     + ' set value = value - ' + p.saved_emsof_ante.tostring
+    +   ' , shortage = shortage - ' + p.saved_shortage.tostring
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',

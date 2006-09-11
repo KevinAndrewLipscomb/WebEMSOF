@@ -96,8 +96,8 @@ type
 implementation
 
 const
-  TCCI_LINKBUTTON_EDIT = 13;
-  TCCI_LINKBUTTON_DELETE = 14;
+  TCCI_LINKBUTTON_EDIT = 14;
+  TCCI_LINKBUTTON_DELETE = 15;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -400,8 +400,13 @@ begin
   Bind_service_appropriations;
 end;
 
-procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemDataBound(sender: System.Object;
-  e: System.Web.UI.WebControls.DataGridItemEventArgs);
+procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemDataBound
+  (
+  sender: System.Object;
+  e: System.Web.UI.WebControls.DataGridItemEventArgs
+  );
+var
+  leftover_or_shortage: decimal;
 begin
   //
   // Manage column visibility
@@ -418,14 +423,35 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     p.num_appropriations := p.num_appropriations + 1;
+    //
+    // Manage the way some of the row values are rendered.
+    //
+    //   By default, do not display the Leftover / Shortage value.  But save it off just in case.
+    //
+    leftover_or_shortage := decimal.parse(Safe(e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text,REAL_NUM_INCLUDING_NEGATIVE));
+    e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text := system.string.EMPTY;
+    //
     if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) > 2 then begin
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := TRUE;
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).forecolor := color.BLUE;
       if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) >= 3 then begin
         if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) = 3 then begin
+          //
+          // Make the need for county approval abundantly conspicuous.
+          //
           LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).font.bold := TRUE;
           LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).text :=
             '>' + LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).text.ToUpper + '<';
+          //
+          // Manage the way the Leftover / Shortage is rendered, if at all.
+          //
+          if (leftover_or_shortage <> 0) then begin
+            e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text := leftover_or_shortage.tostring('C');
+            if (leftover_or_shortage < 0) then begin
+              e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].forecolor := color.red;
+            end;
+          end;
+          //
         end;
         LinkButton(e.item.cells[TCCI_LINKBUTTON_EDIT].controls.item[0]).visible := FALSE;
         LinkButton(e.item.cells[TCCI_LINKBUTTON_DELETE].controls.item[0]).visible := FALSE;
@@ -433,6 +459,7 @@ begin
     end else begin
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := FALSE;
     end;
+    //
   end;
 end;
 
