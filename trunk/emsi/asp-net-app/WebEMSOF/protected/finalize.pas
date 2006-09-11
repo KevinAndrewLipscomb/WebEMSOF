@@ -19,6 +19,17 @@ type
     procedure Button_finalize_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
+  //
+  // Expected session objects:
+  //
+  //    county_dictated_appropriation_id: string;
+  //    emsof_request_master_id: string;
+  //    fiscal_year_designator: string;
+  //    service_name: string;
+  //    service_user_id: string;
+  //    sum_of_emsof_antes: decimal;
+  //    unused_amount: decimal;
+  //
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected

@@ -446,7 +446,8 @@ begin
           // Manage the way the Leftover / Shortage is rendered, if at all.
           //
           if (leftover_or_shortage <> 0) then begin
-            e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text := leftover_or_shortage.tostring('C');
+            e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text := leftover_or_shortage.tostring('N2');
+              // Must use N format above to preserve unary minus sign on shortages, else approval code won't work.
             if (leftover_or_shortage < 0) then begin
               e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].forecolor := color.red;
             end;

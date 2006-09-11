@@ -38,7 +38,8 @@ type
       master_id: string;
       next_status: cardinal;
       user_kind: string;
-      approval_timestamp_column: approval_timestamp_column_type
+      approval_timestamp_column: approval_timestamp_column_type;
+      amount_to_return_to_county: decimal = 0
       );
     function BeValidRegionalExecDirApprovalTimestampOf
       (
@@ -251,25 +252,42 @@ procedure TClass_db_emsof_requests.Approve
   master_id: string;
   next_status: cardinal;
   user_kind: string;
-  approval_timestamp_column: approval_timestamp_column_type
+  approval_timestamp_column: approval_timestamp_column_type;
+  amount_to_return_to_county: decimal = 0
   );
 var
   cmdText: string;
 begin
   if approval_timestamp_column <> NONE then begin
-    cmdText :=
-    'update emsof_request_master'
+    cmdText := system.string.EMPTY;
+    if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') then begin
+      cmdText := 'START TRANSACTION; ';
+    end;
+    cmdText := cmdText
+    + ' update emsof_request_master'
     + ' join county_dictated_appropriation'
     +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
     + ' set emsof_request_master.status_code = ' + next_status.tostring
     +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()'
-    + ' where emsof_request_master.id = ' + master_id;
+    + ' where emsof_request_master.id = ' + master_id
+    + '; ';
+    if amount_to_return_to_county > 0 then begin
+      cmdText := cmdText
+      + ' update county_dictated_appropriation'
+      + ' set amount = amount - ' + amount_to_return_to_county.tostring
+      + ' where id = '
+      +   ' ('
+      +   ' select county_dictated_appropriation_id'
+      +   ' from emsof_request_master'
+      +   ' where emsof_request_master.id = ' + master_id
+      +   ' ); ';
+    end;
     if user_kind = 'state-staffer' then begin
-      cmdText :=
-      'START TRANSACTION; '
-      + cmdText + ';'
-      + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1;'
-      + ' COMMIT';
+      cmdText := cmdText
+      + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1; ';
+    end;
+    if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') then begin
+      cmdText := cmdText + ' COMMIT;';
     end;
     self.Open;
     borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
@@ -531,8 +549,15 @@ begin
 end;
 
 function TClass_db_emsof_requests.LeftoverOrShortageOf(e_item: system.object): decimal;
+var
+  safe_string: string;
 begin
-  LeftoverOrShortageOf := decimal.Parse(Safe(DataGridItem(e_item).cells[TCCI_LEFTOVER_OR_SHORTAGE].text,REAL_NUM_INCLUDING_NEGATIVE));
+  safe_string := Safe(DataGridItem(e_item).cells[TCCI_LEFTOVER_OR_SHORTAGE].text,REAL_NUM_INCLUDING_NEGATIVE);
+  if safe_string = system.string.EMPTY then begin
+    LeftoverOrShortageOf := 0;
+  end else begin
+    LeftoverOrShortageOf := decimal.Parse(safe_string);
+  end;
 end;
 
 procedure TClass_db_emsof_requests.MarkDone
