@@ -31,6 +31,7 @@ type
     Label_current_deadline: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
+    HyperLink_cancel: System.Web.UI.WebControls.HyperLink;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
