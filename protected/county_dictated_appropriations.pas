@@ -501,7 +501,7 @@ begin
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF allocation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
       + NEW_LINE
-      + 'You can work on this appropriation by visiting:' + NEW_LINE
+      + 'You can work on this allocation by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
       + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])

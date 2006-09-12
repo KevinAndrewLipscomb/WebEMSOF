@@ -14,7 +14,7 @@
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ 
 		  Change 
 		  <ASP:HyperLink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:HyperLink>&nbsp;| <ASP:HyperLink id="HyperLink_change_email_address" runat="server" navigateurl="change_password.aspx">email address</ASP:HyperLink>&nbsp;
-		       ]</small>
+		        ]</small>
 	  </p>
 	  <p>
         <ASP:Label id="Label_regional_staffer_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>
@@ -29,7 +29,7 @@
                     </tr>
                     <tr>
                       <td>
-<p>Which allocation do you want to work with?&nbsp; <ASP:RequiredFieldValidator id="RequiredFieldValidator_appropriation" runat="server" errormessage="Please choose an appropriation." font-bold="True" controltovalidate="RadioButtonList_appropriation">!ERR!</ASP:RequiredFieldValidator></p>
+<p>Which allocation do you want to work with?&nbsp; <ASP:RequiredFieldValidator id="RequiredFieldValidator_appropriation" runat="server" errormessage="Please choose an allocation." font-bold="True" controltovalidate="RadioButtonList_appropriation">!ERR!</ASP:RequiredFieldValidator></p>
 <p>
         <ASP:RadioButtonList id="RadioButtonList_appropriation" runat="server"></ASP:RadioButtonList></p>
 <p>

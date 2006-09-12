@@ -13,7 +13,7 @@
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
       <p><small>[ 
-          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_county_dictated_appropriations" runat="server" navigateurl="county_dictated_appropriations.aspx">county-dictated appropriations</ASP:HyperLink>&nbsp;form ]</small></p>
+          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_county_dictated_appropriations" runat="server" navigateurl="county_dictated_appropriations.aspx">county-dictated allocations</ASP:HyperLink>&nbsp;form ]</small></p>
 <p>
         <ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>&nbsp;<ASP:Label id="Label_literal_county" runat="server" font-bold="True"
                    font-size="Large">County</ASP:Label></p>
