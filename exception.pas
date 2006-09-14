@@ -61,6 +61,7 @@ end;
 
 procedure TWebForm_exception.Page_Load(sender: System.Object; e: System.EventArgs);
 var
+  lcv: cardinal;
   user_designator: string;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -77,6 +78,7 @@ begin
     end else begin
       user_designator := user.identity.name + ' (' + session[p.biz_user.Kind + '_name'].tostring + ')';
     end;
+    //
     p.notification_message := '[USER]' + NEW_LINE
     + user_designator + NEW_LINE
     + NEW_LINE
@@ -84,7 +86,13 @@ begin
     + p.exception.message + NEW_LINE
     + NEW_LINE
     + '[STACKTRACE]' + NEW_LINE
-    + p.exception.stacktrace + NEW_LINE;
+    + p.exception.stacktrace + NEW_LINE
+    + NEW_LINE
+    + '[SESSION]' + NEW_LINE;
+    for lcv := 0 to (session.count - 1) do begin
+      p.notification_message := p.notification_message + session.keys[lcv].tostring + ' = ' + session.item[lcv].tostring + NEW_LINE;
+    end;
+    //
     smtpmail.smtpserver := configurationsettings.appsettings['smtp_server'];
     smtpmail.Send
       (
