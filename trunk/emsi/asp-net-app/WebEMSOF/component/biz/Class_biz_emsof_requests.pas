@@ -259,7 +259,7 @@ begin
         FyDesignatorOf(e_item)
         );
 //    end else begin
-//      biz_accounts.MakeFinalApprovalNotification;
+//      biz_accounts.IssueNoticeToProceed;
     end;
   end;
   //

@@ -54,6 +54,7 @@ library WebEMSOF;
 {$R 'protected\image\logo_left.gif' 'protected\image\logo_left.gif'}
 {$R 'protected\image\logo_right.gif' 'protected\image\logo_right.gif'}
 {%AspFolderContainer 'dbscript'}
+{%AspMarkupContainer 'exception.aspx'}
 
 uses
   System.Reflection,
@@ -99,7 +100,8 @@ uses
   Class_db_regional_staffers in 'component\db\Class_db_regional_staffers.pas',
   state_required_report in 'protected\state_required_report.pas' {state_required_report.TWebForm_state_required_report: System.Web.UI.Page},
   login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
-  state_transmittal_complete in 'protected\state_transmittal_complete.pas' {state_transmittal_complete.TWebForm_state_transmittal_complete: System.Web.UI.Page};
+  state_transmittal_complete in 'protected\state_transmittal_complete.pas' {state_transmittal_complete.TWebForm_state_transmittal_complete: System.Web.UI.Page},
+  exception in 'exception.pas' {exception.TWebForm_exception: System.Web.UI.Page};
 
 const ID = '$Id$';
 

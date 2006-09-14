@@ -87,7 +87,7 @@ end;
 
 procedure TGlobal.Application_Error(sender: System.Object; e: EventArgs);
 begin
-
+  server.Transfer('~/exception.aspx');
 end;
 
 procedure TGlobal.Session_End(sender: System.Object; e: EventArgs);
