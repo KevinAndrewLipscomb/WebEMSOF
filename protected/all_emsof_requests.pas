@@ -78,7 +78,7 @@ end;
 procedure TWebForm_all_emsof_requests.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if IsPostback then begin
+  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
     //
