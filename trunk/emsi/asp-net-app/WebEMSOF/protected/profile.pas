@@ -29,12 +29,6 @@ type
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
-  //
-  // Expected session objects:
-  //
-  //   service_name: string;
-  //   service_user_id: string;
-  //
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -126,6 +120,12 @@ var
   name: string;
   zip_code: string;
 begin
+  if (session['p'] = nil)
+    or (session['service_name'] = nil)
+    or (session['service_user_id'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

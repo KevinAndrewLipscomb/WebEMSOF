@@ -77,6 +77,12 @@ end;
 
 procedure TWebForm_all_emsof_requests.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
+  if (session['p'] = nil)
+    or (session['regional_staffer_name'] = nil)
+    or (session['waypoint_stack'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

@@ -34,15 +34,6 @@ type
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_retransmit_to_state_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
-  //
-  // Expected session objects:
-  //
-  //   target_user_table: string
-  //   (target_user_table)_name: string
-  //   status_of_interest: Class_biz_emsof_requests.status_type
-  //   waypoint_stack: system.collections.stack;
-  //
-  //
   strict private
     p: p_type;
     procedure BindOverview;
@@ -91,6 +82,14 @@ end;
 
 procedure TWebForm_emsof_request_status_filter.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
+  if (session['p'] = nil)
+    or (session['regional_staffer_name'] = nil)
+    or (session['status_of_interest'] = nil)
+    or (session['target_user_table'] = nil) or (session[session['target_user_table'].tostring + '_name'] = nil)
+    or (session['waypoint_stack'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

@@ -65,6 +65,9 @@ procedure TWebForm_change_email_address.Page_Load(sender: System.Object; e: Syst
 var
   email_address: string;
 begin
+  if (session['target_user_table'] = nil) or (session[session['target_user_table'].tostring + '_name'] = nil) then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin

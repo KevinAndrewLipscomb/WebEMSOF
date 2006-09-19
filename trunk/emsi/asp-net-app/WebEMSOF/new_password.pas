@@ -54,6 +54,9 @@ var
   email_address: string;
   temporary_password: string[8];
 begin
+  if (session['target_user_table'] = nil) or (session[session['target_user_table'].tostring + '_name'] = nil) then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin

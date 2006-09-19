@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, AppCommon, system.configuration;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration;
 
 const ID = '$Id$';
 
@@ -53,7 +53,12 @@ end;
 
 procedure TWebForm_template_std.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  AppCommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  if (session[''] = nil)
+    or (session[''] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
+  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

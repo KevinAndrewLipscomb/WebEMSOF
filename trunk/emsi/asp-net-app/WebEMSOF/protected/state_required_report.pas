@@ -39,14 +39,6 @@ type
     procedure DropDownList_amendment_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
   {$ENDREGION}
-  //
-  // Expected session objects:
-  //
-  //   regional_stafer_user_id: string;
-  //   status_of_interest: Class_biz_emsof_requests.status_type
-  //   waypoint_stack: system.collections.stack;
-  //
-  //
   strict private
     p: p_type;
     procedure Bind;
@@ -104,6 +96,13 @@ var
   i: cardinal;
   num_active_amendments: cardinal;
 begin
+  if (session['p'] = nil)
+    or (session['regional_staffer_user_id'] = nil)
+    or (session['status_of_interest'] = nil)
+    or (session['waypoint_stack'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
