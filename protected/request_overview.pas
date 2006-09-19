@@ -104,6 +104,17 @@ var
   county_dictated_appropriation_amount: decimal;
   make_item_requests_deadline: system.datetime;
 begin
+  if (session['p'] = nil)
+    or (session['county_dictated_appropriation_amount'] = nil)
+    or (session['county_dictated_appropriation_id'] = nil)
+    or (session['emsof_request_master_id'] = nil)
+    or (session['emsof_request_master_status'] = nil)
+    or (session['fiscal_year_designator'] = nil)
+    or (session['service_name'] = nil)
+    or (session['sponsor_county'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

@@ -19,17 +19,6 @@ type
     procedure Button_finalize_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
-  //
-  // Expected session objects:
-  //
-  //    county_dictated_appropriation_id: string;
-  //    emsof_request_master_id: string;
-  //    fiscal_year_designator: string;
-  //    service_name: string;
-  //    service_user_id: string;
-  //    sum_of_emsof_antes: decimal;
-  //    unused_amount: decimal;
-  //
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
@@ -108,6 +97,16 @@ var
   grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
 begin
+  if (session['county_dictated_appropriation_id'] = nil)
+    or (session['emsof_request_master_id'] = nil)
+    or (session['fiscal_year_designator'] = nil)
+    or (session['service_name'] = nil)
+    or (session['service_user_id'] = nil)
+    or (session['sum_of_emsof_antes'] = nil)
+    or (session['unused_amount'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';

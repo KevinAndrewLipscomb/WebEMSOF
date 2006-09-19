@@ -64,6 +64,15 @@ var
   bdr: borland.data.provider.bdpdatareader;
   service_name: string;
 begin
+  if (session['amount_of_appropriation_selected_for_deletion'] = nil)
+    or (session['county_name'] = nil)
+    or (session['county_user_password_reset_email_address'] = nil)
+    or (session['email_address_of_service_of_appropriation_selected_for_deletion'] = nil)
+    or (session['id_of_appropriation_selected_for_deletion'] = nil)
+    or (session['service_name_of_appropriation_selected_for_deletion'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin

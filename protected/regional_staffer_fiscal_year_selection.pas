@@ -61,6 +61,11 @@ var
   regional_staffer_user_email_address: string;
   max_fiscal_year_id_string: string;
 begin
+  if (session['regional_staffer_name'] = nil)
+    or (session['regional_staffer_user_id'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     //

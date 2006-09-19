@@ -24,12 +24,6 @@ type
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_return_to_overview_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
-  //
-  // Expected session objects:
-  //
-  //   waypoint_stack: system.collections.stack;
-  //
-  //
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -70,6 +64,11 @@ end;
 
 procedure TWebForm_state_transmittal_complete.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
+  if (session['p'] = nil)
+    or (session['waypoint_stack'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

@@ -73,6 +73,21 @@ end;
 
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
+  if (session['p'] = nil)
+    or (session['emsof_request_item_additional_service_ante'] = nil)
+    or (session['emsof_request_item_emsof_ante'] = nil)
+    or (session['emsof_request_item_equipment_category'] = nil)
+    or (session['emsof_request_item_make_model'] = nil)
+    or (session['emsof_request_item_priority'] = nil)
+    or (session['emsof_request_master_id'] = nil)
+    or (session['emsof_request_master_status'] = nil)
+    or (session['fiscal_year_designator'] = nil)
+    or (session['service_name'] = nil)
+    or (session['service_user_id'] = nil)
+    or (session['sponsor_county'] = nil)
+  then begin
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
