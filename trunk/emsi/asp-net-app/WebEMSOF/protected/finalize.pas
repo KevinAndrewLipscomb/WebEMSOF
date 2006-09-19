@@ -105,7 +105,7 @@ begin
     or (session['sum_of_emsof_antes'] = nil)
     or (session['unused_amount'] = nil)
   then begin
-    session.Abandon;
+    session.Clear;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

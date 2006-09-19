@@ -71,7 +71,7 @@ begin
     or (session['id_of_appropriation_selected_for_deletion'] = nil)
     or (session['service_name_of_appropriation_selected_for_deletion'] = nil)
   then begin
-    session.Abandon;
+    session.Clear;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

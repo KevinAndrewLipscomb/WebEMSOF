@@ -113,7 +113,7 @@ begin
     or (session['service_name'] = nil)
     or (session['sponsor_county'] = nil)
   then begin
-    session.Abandon;
+    session.Clear;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
