@@ -149,6 +149,7 @@ begin
     or (session['fiscal_year_designator'] = nil)
     or (session['service_user_id'] = nil)
   then begin
+    session.Abandon;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

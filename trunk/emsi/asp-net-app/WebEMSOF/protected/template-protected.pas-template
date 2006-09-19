@@ -69,6 +69,7 @@ end;
 procedure TWebForm_template_protected.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if (session['waypoint_stack'] = nil) then begin
+    session.Abandon;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

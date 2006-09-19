@@ -64,6 +64,7 @@ begin
   if (session['county_name'] = nil)
     or (session['county_user_id'] = nil)
   then begin
+    session.Abandon;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

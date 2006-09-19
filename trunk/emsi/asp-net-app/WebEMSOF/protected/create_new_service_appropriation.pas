@@ -107,6 +107,7 @@ begin
     or (session['sum_of_service_appropriations'] = nil)
     or (session['unappropriated_amount'] = nil)
   then begin
+    session.Abandon;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

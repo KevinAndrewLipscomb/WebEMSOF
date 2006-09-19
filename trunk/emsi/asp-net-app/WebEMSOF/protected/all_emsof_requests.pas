@@ -81,6 +81,7 @@ begin
     or (session['regional_staffer_name'] = nil)
     or (session['waypoint_stack'] = nil)
   then begin
+    session.Abandon;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
