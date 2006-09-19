@@ -60,6 +60,7 @@ begin
     or (session['county_dictated_deadline'] = nil)
     or (session['region_dictated_appropriation_id'] = nil)
   then begin
+    session.Abandon;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

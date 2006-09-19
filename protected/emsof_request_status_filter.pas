@@ -88,6 +88,7 @@ begin
     or (session['target_user_table'] = nil) or (session[session['target_user_table'].tostring + '_name'] = nil)
     or (session['waypoint_stack'] = nil)
   then begin
+    session.Abandon;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
