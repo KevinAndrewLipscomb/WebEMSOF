@@ -66,7 +66,7 @@ var
   email_address: string;
 begin
   if (session['target_user_table'] = nil) or (session[session['target_user_table'].tostring + '_name'] = nil) then begin
-    session.Abandon;
+    session.Clear;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

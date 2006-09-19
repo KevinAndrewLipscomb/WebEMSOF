@@ -123,7 +123,7 @@ begin
     or (session['regional_staffer_user_password_reset_email_address'] = nil)
     or (session['state_dictated_appropriation_id'] = nil)
   then begin
-    session.Abandon;
+    session.Clear;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);

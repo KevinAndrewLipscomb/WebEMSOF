@@ -64,7 +64,7 @@ begin
   if (session['regional_staffer_name'] = nil)
     or (session['regional_staffer_user_id'] = nil)
   then begin
-    session.Abandon;
+    session.Clear;
     server.Transfer('~/login.aspx');
   end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
