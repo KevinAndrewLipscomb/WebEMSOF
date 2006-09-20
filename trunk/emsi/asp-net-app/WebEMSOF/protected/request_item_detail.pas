@@ -138,20 +138,6 @@ var
   biz_fiscal_years: TClass_biz_fiscal_years;
   cmdText: string;
 begin
-  if (session['p'] = nil)
-    or (session['be_before_service_to_county_submission_deadline'] = nil)
-    or (session['be_finalized'] = nil)
-    or (session['county_dictated_appropriation_id'] = nil)
-    or (session['emsof_request_item_code'] = nil)
-    or (session['emsof_request_item_equipment_category'] = nil)
-    or (session['emsof_request_item_priority'] = nil)
-    or (session['emsof_request_master_id'] = nil)
-    or (session['fiscal_year_designator'] = nil)
-    or (session['service_user_id'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

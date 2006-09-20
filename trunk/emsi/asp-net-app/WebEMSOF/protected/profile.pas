@@ -120,13 +120,6 @@ var
   name: string;
   zip_code: string;
 begin
-  if (session['p'] = nil)
-    or (session['service_name'] = nil)
-    or (session['service_user_id'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

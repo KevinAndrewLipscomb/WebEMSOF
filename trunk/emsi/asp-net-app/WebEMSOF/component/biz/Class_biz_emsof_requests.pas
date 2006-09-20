@@ -258,8 +258,16 @@ begin
         ServiceNameOf(e_item),
         FyDesignatorOf(e_item)
         );
-//    end else begin
-//      biz_accounts.IssueNoticeToProceed;
+    end else begin
+//      biz_accounts.IssueNoticeToProceed
+//        (
+//        next_approver_role,
+//        reviewer_descriptor,
+//        system.object(next_status).tostring,
+//        ServiceIdOf(e_item),
+//        ServiceNameOf(e_item),
+//        FyDesignatorOf(e_item)
+//        );
     end;
   end;
   //
@@ -518,7 +526,7 @@ begin
     BEGIN
     next_status := NEEDS_INVOICE_COLLECTION;
     db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
-    biz_accounts.SendNoticeToProceed(ServiceIdOf(e_item),ServiceNameOf(e_item),FyDesignatorOf(e_item));
+//    biz_accounts.IssueNoticeToProceed(ServiceIdOf(e_item),ServiceNameOf(e_item),FyDesignatorOf(e_item));
     END;
   NEEDS_REIMBURSEMENT_ISSUANCE:
     BEGIN

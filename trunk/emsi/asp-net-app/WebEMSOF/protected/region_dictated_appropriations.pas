@@ -117,15 +117,6 @@ procedure TWebForm_region_dictated_appropriations.Page_Load(sender: System.Objec
 var
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
 begin
-  if (session['p'] = nil)
-    or (session['region_name'] = nil)
-    or (session['regional_staffer_name'] = nil)
-    or (session['regional_staffer_user_password_reset_email_address'] = nil)
-    or (session['state_dictated_appropriation_id'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

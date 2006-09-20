@@ -122,14 +122,6 @@ var
   status: Class_biz_emsof_requests.status_type;
   timestamp: datetime;
 begin
-  if (session['p'] = nil)
-    or (session['account_descriptor'] = nil)
-    or (session['e_item'] = nil)
-    or (session['waypoint_stack'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

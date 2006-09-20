@@ -128,14 +128,6 @@ var
   county_dictated_deadline: system.datetime;
   make_appropriations_deadline: system.datetime;
 begin
-  if (session['p'] = nil)
-    or (session['county_name'] = nil)
-    or (session['county_user_password_reset_email_address'] = nil)
-    or (session['region_dictated_appropriation_id'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

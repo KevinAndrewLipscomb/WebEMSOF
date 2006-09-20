@@ -56,13 +56,6 @@ end;
 
 procedure TWebForm_county_dictated_deadline.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  if (session['county_name'] = nil)
-    or (session['county_dictated_deadline'] = nil)
-    or (session['region_dictated_appropriation_id'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_deadline';
