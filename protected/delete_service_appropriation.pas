@@ -19,6 +19,8 @@ type
     procedure Button_no_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_yes_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -35,7 +37,7 @@ type
     Label_application_name: System.Web.UI.WebControls.Label;
     Label_service_name_2: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
+    LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -53,6 +55,7 @@ implementation
 procedure TWebForm_delete_service_appropriation.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_county_dictated_appropriations.Click, Self.LinkButton_county_dictated_appropriations_Click);
   Include(Self.Button_yes.Click, Self.Button_yes_Click);
   Include(Self.Button_no.Click, Self.Button_no_Click);
   Include(Self.Load, Self.Page_Load);
@@ -64,6 +67,10 @@ var
   bdr: borland.data.provider.bdpdatareader;
   service_name: string;
 begin
+  if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+    session.Clear;
+    server.Transfer('~/login.aspx');
+  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
@@ -108,6 +115,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_delete_service_appropriation.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('county_dictated_appropriations.aspx');
 end;
 
 procedure TWebForm_delete_service_appropriation.LinkButton_logout_Click(sender: System.Object;

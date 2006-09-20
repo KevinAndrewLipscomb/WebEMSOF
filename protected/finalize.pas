@@ -18,6 +18,20 @@ type
     procedure InitializeComponent;
     procedure Button_finalize_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_00_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_0_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_1_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_2_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_3_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_4_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_5_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_6_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_7_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_8_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_9_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_10_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_bottom_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -39,7 +53,6 @@ type
     CheckBox_understand_unreimbursed_amount: System.Web.UI.WebControls.CheckBox;
     CheckBox_understand_deadlines: System.Web.UI.WebControls.CheckBox;
     CheckBox_agree_to_terms_and_conditions: System.Web.UI.WebControls.CheckBox;
-    HyperLink_terms_and_conditions: System.Web.UI.WebControls.HyperLink;
     Button_finalize: System.Web.UI.WebControls.Button;
     CheckBox_understand_read_only_2: System.Web.UI.WebControls.CheckBox;
     CheckBox_understand_wait_for_approval_to_order: System.Web.UI.WebControls.CheckBox;
@@ -48,21 +61,21 @@ type
     Label_deadline_canceled_check_submission: System.Web.UI.WebControls.Label;
     Label_unused_amount: System.Web.UI.WebControls.Label;
     CheckBox_understand_remainder_goes_to_region: System.Web.UI.WebControls.CheckBox;
-    HyperLink_request_overview_0: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_2: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_3: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_4: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_5: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_6: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_7: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_8: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_9: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_10: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_1: System.Web.UI.WebControls.HyperLink;
     Label_max_reimbursement_2: System.Web.UI.WebControls.Label;
-    HyperLink_request_overview_bottom: System.Web.UI.WebControls.HyperLink;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_request_overview_00: System.Web.UI.WebControls.HyperLink;
+    LinkButton_request_overview_00: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_0: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_1: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_2: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_3: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_4: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_5: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_6: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_7: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_8: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_9: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_10: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_bottom: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -85,7 +98,20 @@ uses
 procedure TWebForm_finalize.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_request_overview_00.Click, Self.LinkButton_request_overview_00_Click);
+  Include(Self.LinkButton_request_overview_0.Click, Self.LinkButton_request_overview_0_Click);
+  Include(Self.LinkButton_request_overview_1.Click, Self.LinkButton_request_overview_1_Click);
+  Include(Self.LinkButton_request_overview_2.Click, Self.LinkButton_request_overview_2_Click);
+  Include(Self.LinkButton_request_overview_3.Click, Self.LinkButton_request_overview_3_Click);
+  Include(Self.LinkButton_request_overview_4.Click, Self.LinkButton_request_overview_4_Click);
+  Include(Self.LinkButton_request_overview_5.Click, Self.LinkButton_request_overview_5_Click);
+  Include(Self.LinkButton_request_overview_6.Click, Self.LinkButton_request_overview_6_Click);
+  Include(Self.LinkButton_request_overview_7.Click, Self.LinkButton_request_overview_7_Click);
+  Include(Self.LinkButton_request_overview_8.Click, Self.LinkButton_request_overview_8_Click);
+  Include(Self.LinkButton_request_overview_9.Click, Self.LinkButton_request_overview_9_Click);
+  Include(Self.LinkButton_request_overview_10.Click, Self.LinkButton_request_overview_10_Click);
   Include(Self.Button_finalize.Click, Self.Button_finalize_Click);
+  Include(Self.LinkButton_request_overview_bottom.Click, Self.LinkButton_request_overview_bottom_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -99,6 +125,10 @@ var
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
     //
     Label_service_name.text := session['service_name'].tostring;
@@ -198,6 +228,84 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_bottom_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_10_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_9_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_8_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_7_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_6_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_5_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_4_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_3_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_2_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_1_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_0_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_finalize.LinkButton_request_overview_00_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
 end;
 
 procedure TWebForm_finalize.LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);

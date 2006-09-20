@@ -28,6 +28,7 @@ type
     procedure Button_submit_PreRender(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_service_overview_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -70,9 +71,9 @@ type
     RegularExpressionValidator_address_line_1: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_contact_person_name: System.Web.UI.WebControls.RegularExpressionValidator;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_service_overview: System.Web.UI.WebControls.HyperLink;
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
+    LinkButton_service_overview: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -93,6 +94,7 @@ uses
 procedure TWebForm_profile.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_service_overview.Click, Self.LinkButton_service_overview_Click);
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Button_submit.PreRender, Self.Button_submit_PreRender);
@@ -124,6 +126,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
     p.biz_services := TClass_biz_services.Create;
     //
@@ -186,6 +192,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_profile.LinkButton_service_overview_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+   server.Transfer('service_overview.aspx');
 end;
 
 procedure TWebForm_profile.LinkButton_change_email_address_Click(sender: System.Object;

@@ -13,9 +13,9 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                             [ Change your <asp:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</asp:hyperlink>&nbsp;
+			                                              [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
-			<asp:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</asp:hyperlink>&nbsp;]
+			<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
 		</small>
 	  </p>
 	  <p><asp:label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></asp:label></p>
@@ -146,11 +146,11 @@
 					  <td>
 						<ul>
 						  <li><p>
-								<ASP:HyperLink id="HyperLink_maintain_service_accounts" runat="server" enabled="False">Maintain service accounts</ASP:HyperLink></p></li>
+								<ASP:LinkButton id="LinkButton_maintain_service_accounts" runat="server" enabled="False">Maintain service accounts</ASP:LinkButton></p></li>
 						  <li><p>
-								<ASP:HyperLink id="HyperLink_maintain_county_accounts" runat="server" enabled="False">Maintain county coordinator accounts</ASP:HyperLink></p></li>
+								<ASP:LinkButton id="LinkButton_maintain_county_accounts" runat="server" enabled="False">Maintain county coordinator accounts</ASP:LinkButton></p></li>
 						  <li><p>
-								<ASP:HyperLink id="HyperLink_maintain_regional_staffer_accounts" runat="server" enabled="False">Maintain regional staffer accounts</ASP:HyperLink></p></li>
+								<ASP:LinkButton id="LinkButton_maintain_regional_staffer_accounts" runat="server" enabled="False">Maintain regional staffer accounts</ASP:LinkButton></p></li>
 						</ul>
 					  </td>
 					</tr>
@@ -185,11 +185,11 @@
 					<tr>
 					  <td>
 						<ul>
-						  <li><p><ASP:HyperLink id="HyperLink_init_new_fy" runat="server" enabled="False">Initialize new fiscal year</ASP:HyperLink></p></li>
-						  <li><p><ASP:HyperLink id="HyperLink_maintain_epels" runat="server" enabled="False">Maintain Eligible Provider Equipment Lists</ASP:HyperLink></p></li>
+						  <li><p><ASP:LinkButton id="LinkButton_init_new_fy" runat="server" enabled="False">Initialize new fiscal year</ASP:LinkButton></p></li>
+						  <li><p><ASP:LinkButton id="LinkButton_maintain_epels" runat="server" enabled="False">Maintain Eligible Provider Equipment Lists</ASP:LinkButton></p></li>
 						  <li><p>
                                       <ASP:LinkButton id="LinkButton_set_deadlines" runat="server" enabled="False">Set deadlines</ASP:LinkButton></p></li>
-						  <li><ASP:HyperLink id="HyperLink_maintain_region_dictated_appropriations" runat="server" enabled="False">Maintain county fund allocations</ASP:HyperLink></li>
+						  <li><ASP:LinkButton id="LinkButton_maintain_region_dictated_appropriations" runat="server" enabled="False">Maintain county fund allocations</ASP:LinkButton></li>
 						</ul></td>
 					</tr>
 				</table>

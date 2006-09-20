@@ -43,6 +43,10 @@ type
     procedure TWebForm_request_overview_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure CheckBox_has_wish_list_CheckedChanged(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_service_overview_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_add_item_to_request_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -56,23 +60,23 @@ type
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_make_requests_deadline: System.Web.UI.WebControls.Label;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
-    HyperLink_add_item_to_request: System.Web.UI.WebControls.HyperLink;
     DataGrid_items: System.Web.UI.WebControls.DataGrid;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_sum_of_emsof_antes: System.Web.UI.WebControls.Label;
     Label_unused_amount: System.Web.UI.WebControls.Label;
     TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
-    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
-    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
-    HyperLink_service_overview: System.Web.UI.WebControls.HyperLink;
     LinkButton_finalize: System.Web.UI.WebControls.LinkButton;
     Label_master_status: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     Table_parent_appropriation_outer: System.Web.UI.HtmlControls.HtmlTable;
     CheckBox_has_wish_list: System.Web.UI.WebControls.CheckBox;
+    LinkButton_service_overview: System.Web.UI.WebControls.LinkButton;
+    LinkButton_add_item_to_request: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -89,6 +93,10 @@ implementation
 procedure TWebForm_request_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_service_overview.Click, Self.LinkButton_service_overview_Click);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
+  Include(Self.LinkButton_add_item_to_request.Click, Self.LinkButton_add_item_to_request_Click);
   Include(Self.LinkButton_finalize.Click, Self.LinkButton_finalize_Click);
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
@@ -108,6 +116,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     //
     // Initialize implementation-global variables.
     //
@@ -160,7 +172,7 @@ begin
     if (not p.be_before_deadline) or p.be_finalized then begin
       Table_parent_appropriation_outer.visible := FALSE;
       Table_deadlines.visible := FALSE;
-      HyperLink_add_item_to_request.visible := FALSE;
+      LinkButton_add_item_to_request.visible := FALSE;
       LinkButton_finalize.visible := FALSE;
     end else begin
       Label_fiscal_year_designator.text := session['fiscal_year_designator'].tostring;
@@ -231,6 +243,30 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_overview.LinkButton_add_item_to_request_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_item_detail.aspx');
+end;
+
+procedure TWebForm_request_overview.LinkButton_service_overview_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('service_overview.aspx');
+end;
+
+procedure TWebForm_request_overview.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_request_overview.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_request_overview.CheckBox_has_wish_list_CheckedChanged(sender: System.Object;

@@ -19,6 +19,8 @@ type
     procedure InitializeComponent;
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_continue_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -28,8 +30,8 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_regional_staffer_name: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
-    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     RequiredFieldValidator_appropriation: System.Web.UI.WebControls.RequiredFieldValidator;
     RadioButtonList_appropriation: System.Web.UI.WebControls.RadioButtonList;
     Button_continue: System.Web.UI.WebControls.Button;
@@ -50,6 +52,8 @@ implementation
 procedure TWebForm_account_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Button_continue.Click, Self.Button_continue_Click);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -63,6 +67,10 @@ var
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - account_overview';
     //
@@ -143,6 +151,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_account_overview.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_account_overview.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_account_overview.Button_continue_Click(sender: System.Object;

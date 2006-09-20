@@ -18,6 +18,9 @@ type
     procedure InitializeComponent;
     procedure Calendar_SelectionChanged(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
+      e: System.EventArgs);
+    procedure LinkButton_cancel_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -30,8 +33,8 @@ type
     Calendar: System.Web.UI.WebControls.Calendar;
     Label_current_deadline: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
-    HyperLink_cancel: System.Web.UI.WebControls.HyperLink;
+    LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
+    LinkButton_cancel: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -49,6 +52,8 @@ implementation
 procedure TWebForm_county_dictated_deadline.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_county_dictated_appropriations.Click, Self.LinkButton_county_dictated_appropriations_Click);
+  Include(Self.LinkButton_cancel.Click, Self.LinkButton_cancel_Click);
   Include(Self.Calendar.SelectionChanged, Self.Calendar_SelectionChanged);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -58,6 +63,10 @@ procedure TWebForm_county_dictated_deadline.Page_Load(sender: System.Object; e: 
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_deadline';
     //
     Label_county_name.text := session['county_name'].tostring;
@@ -75,6 +84,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_deadline.LinkButton_cancel_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('county_dictated_appropriations.aspx');
+end;
+
+procedure TWebForm_county_dictated_deadline.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('county_dictated_appropriations.aspx');
 end;
 
 procedure TWebForm_county_dictated_deadline.LinkButton_logout_Click(sender: System.Object;

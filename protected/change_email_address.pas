@@ -68,6 +68,10 @@ begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then
     begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
     ki.common.DbOpen;
     //

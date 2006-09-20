@@ -14,9 +14,9 @@
       </asp:placeholder></p>
       <p><small>[ 
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Change your
-		<ASP:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:hyperlink>
+		<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>
 		|
-		<ASP:hyperlink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</ASP:hyperlink>&nbsp;]
+		<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
 	  </small></p>
 <p>
 		<ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>&nbsp;<ASP:Label id="Label_literal_county" runat="server" font-bold="True" font-size="Large">County</ASP:Label></p>

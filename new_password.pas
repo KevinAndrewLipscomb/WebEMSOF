@@ -55,8 +55,11 @@ var
   temporary_password: string[8];
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
     biz_accounts := TClass_biz_accounts.Create;
     Label_user_name.Text := session[session['target_user_table'].ToString + '_name'].ToString;
@@ -111,7 +114,7 @@ begin
     //
     Label_email_address.Text := email_address;
     //
-    end;
+  end;
 end;
 
 procedure TWebForm_new_password.OnInit(e: EventArgs);
