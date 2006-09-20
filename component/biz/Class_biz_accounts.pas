@@ -201,8 +201,8 @@ end;
 //    + NEW_LINE
 //    + 'You can review your EMSOF requests by visiting:' + NEW_LINE
 //    + NEW_LINE
-//    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-//    + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
+//    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+//    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
 //    + NEW_LINE
 //    + 'You can contact your Regional EMSOF Coordinator at:' + NEW_LINE
 //    + NEW_LINE
@@ -224,8 +224,8 @@ end;
 //    + NEW_LINE
 //    + 'You can review this EMSOF request by visiting:' + NEW_LINE
 //    + NEW_LINE
-//    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-//    + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
+//    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+//    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
 //    + NEW_LINE
 //    + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
 //    + NEW_LINE
@@ -290,8 +290,8 @@ begin
       + NEW_LINE
       + 'You can rework this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
@@ -332,8 +332,8 @@ begin
       + NEW_LINE
       + 'You can review your EMSOF requests by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
@@ -365,8 +365,7 @@ begin
       + 'You can review this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name']
-      + NEW_LINE
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
@@ -449,8 +448,8 @@ begin
       + NEW_LINE
       + 'You can review this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
