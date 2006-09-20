@@ -37,6 +37,8 @@ type
     procedure CustomValidator_amount_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
     procedure TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -58,7 +60,6 @@ type
     CheckBox_show_out_of_county_services: System.Web.UI.WebControls.CheckBox;
     RadioButtonList_match_level: System.Web.UI.WebControls.RadioButtonList;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_county_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
     Label_county_name: System.Web.UI.WebControls.Label;
     Label_literal_county: System.Web.UI.WebControls.Label;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
@@ -69,6 +70,7 @@ type
     TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     CustomValidator_amount: System.Web.UI.WebControls.CustomValidator;
+    LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -85,6 +87,7 @@ implementation
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_county_dictated_appropriations.Click, Self.LinkButton_county_dictated_appropriations_Click);
   Include(Self.CheckBox_show_out_of_county_services.CheckedChanged, Self.CheckBox_unfilter_CheckedChanged);
   Include(Self.CustomValidator_amount.ServerValidate, Self.CustomValidator_amount_ServerValidate);
   Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
@@ -101,6 +104,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_service_appropriation';
     Label_county_name.text := session['county_name'].tostring;
     //
@@ -132,6 +139,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_create_new_service_appropriation.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('county_dictated_appropriations.aspx');
 end;
 
 procedure TWebForm_create_new_service_appropriation.TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;

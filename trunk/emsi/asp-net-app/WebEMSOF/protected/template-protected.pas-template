@@ -37,8 +37,8 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
-    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
     LinkButton_drill_down: System.Web.UI.WebControls.LinkButton;
@@ -68,25 +68,29 @@ end;
 
 procedure TWebForm_template_protected.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  if (session['waypoint_stack'] = nil) then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
-    //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_protected';
-    Label_account_descriptor.text := session.item['_name'].tostring;
-    //
-    {$REGION 'Keep this block iff the user lands on this form immediately after login.'}
-    session.Remove('waypoint_stack');
-    waypoint_stack := system.collections.stack.Create;
-    waypoint_stack.Push('regional_staffer_overview.aspx');
-    session.Add('waypoint_stack',waypoint_stack);
-    {$ENDREGION}
-    //
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      //
+      // The request for this page could not have been the result of a server.Transfer call, and the session state is therefore unknown.  This is rarely allowed.
+      //
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end else begin
+      //
+      Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_protected';
+      Label_account_descriptor.text := session.item['_name'].tostring;
+      //
+      {$REGION 'Keep this block iff the user lands on this form immediately after login.'}
+      session.Remove('waypoint_stack');
+      waypoint_stack := system.collections.stack.Create;
+      waypoint_stack.Push('regional_staffer_overview.aspx');
+      session.Add('waypoint_stack',waypoint_stack);
+      {$ENDREGION}
+      //
+    end;
   end;
 end;
 
@@ -100,7 +104,7 @@ begin
 end;
 
 {$REGION 'Waypoint management code for drill-down server.Transfer calls.'}
-procedure TWebForm_regional_staffer_overview.LinkButton_drill_down_Click(sender: System.Object;
+procedure TWebForm_template_protected.LinkButton_drill_down_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   system.collections.stack(session['waypoint_stack']).Push('template_protected.aspx');
@@ -108,13 +112,25 @@ begin
 end;
 {$ENDREGION}
 
-procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click(sender: System.Object;
+procedure TWebForm_template_protected.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_template_protected.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
+end;
+
+procedure TWebForm_template_protected.LinkButton_back_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
-procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
+procedure TWebForm_template_protected.TWebForm_template_protected_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
   session.Remove('p');

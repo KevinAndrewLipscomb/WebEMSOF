@@ -23,7 +23,7 @@ type
     num_datagrid_rows: cardinal;
     sort_order: string;
     END;
-  TWebForm_template-protected-datagrid-sortable = class(System.Web.UI.Page)
+  TWebForm_template_protected_datagrid_sortable = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -32,7 +32,7 @@ type
     procedure DataGrid1_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure DataGrid1_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid1_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure TWebForm_template-protected-datagrid-sortable_PreRender(sender: System.Object;
+    procedure TWebForm_template_protected_datagrid_sortable_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -44,8 +44,8 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
-    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
     DataGrid1: System.Web.UI.WebControls.DataGrid;
@@ -64,7 +64,7 @@ implementation
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebForm_template-protected-datagrid-sortable.InitializeComponent;
+procedure TWebForm_template_protected_datagrid_sortable.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
@@ -72,48 +72,50 @@ begin
   Include(Self.DataGrid1.SortCommand, Self.DataGrid1_SortCommand);
   Include(Self.DataGrid1.ItemDataBound, Self.DataGrid1_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
-  Include(Self.PreRender, Self.TWebForm_template-protected-datagrid-sortable_PreRender);
+  Include(Self.PreRender, Self.TWebForm_template_protected_datagrid_sortable_PreRender);
 end;
 {$ENDREGION}
 
-procedure TWebForm_template-protected-datagrid-sortable.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_template_protected_datagrid_sortable.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  if (session['_name'] = nil)
-    or (session['waypoint_stack'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
-    //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template-protected-datagrid-sortable';
-    Label_account_descriptor.text := session['_name'].tostring;
-    //
-    // Initialize implementation-wide vars.
-    //
-    p.be_sort_order_ascending := TRUE;
-    p.tcci_id := 1;
-    p.tcci_field1 := 2;
-    p.tcci_field2 := 3;
-    p.num_datagrid_rows := 0;
-    p.sort_order := 'field1';
-    //
-    {$REGION 'Keep this block iff the user lands on this form immediately after login.'}
-    session.Remove('waypoint_stack');
-    waypoint_stack := system.collections.stack.Create;
-    waypoint_stack.Push('regional_staffer_overview.aspx');
-    session.Add('waypoint_stack',waypoint_stack);
-    {$ENDREGION}
-    //
-    Bind;
-    //
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      //
+      // The request for this page could not have been the result of a server.Transfer call, and the session state is therefore unknown.  This is rarely allowed.
+      //
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end else begin
+      //
+      Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_protected_datagrid_sortable';
+      Label_account_descriptor.text := session['_name'].tostring;
+      //
+      // Initialize implementation-wide vars.
+      //
+      p.be_sort_order_ascending := TRUE;
+      p.tcci_id := 1;
+      p.tcci_field1 := 2;
+      p.tcci_field2 := 3;
+      p.num_datagrid_rows := 0;
+      p.sort_order := 'field1';
+      //
+      {$REGION 'Keep this block iff the user lands on this form immediately after login.'}
+      session.Remove('waypoint_stack');
+      waypoint_stack := system.collections.stack.Create;
+      waypoint_stack.Push('regional_staffer_overview.aspx');
+      session.Add('waypoint_stack',waypoint_stack);
+      {$ENDREGION}
+      //
+      Bind;
+      //
+    end;
   end;
 end;
 
-procedure TWebForm_template-protected-datagrid-sortable.OnInit(e: EventArgs);
+procedure TWebForm_template_protected_datagrid_sortable.OnInit(e: EventArgs);
 begin
   //
   // Required for Designer support
@@ -122,14 +124,26 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
+procedure TWebForm_template_protected_datagrid_sortable.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_template_protected_datagrid_sortable.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
+end;
+
+procedure TWebForm_template_protected_datagrid_sortable.TWebForm_template_protected_datagrid_sortable_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
   session.Remove('p');
   session.Add('p',p);
 end;
 
-procedure TWebForm_template-protected-datagrid-sortable.DataGrid1_ItemCommand(source: System.Object;
+procedure TWebForm_template_protected_datagrid_sortable.DataGrid1_ItemCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   if (e.item.itemtype = listitemtype.alternatingitem)
@@ -148,7 +162,7 @@ begin
   end;
 end;
 
-procedure TWebForm_template-protected-datagrid-sortable.DataGrid1_ItemDataBound(sender: System.Object;
+procedure TWebForm_template_protected_datagrid_sortable.DataGrid1_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
   if (e.item.itemtype = listitemtype.alternatingitem)
@@ -163,7 +177,7 @@ begin
   end;
 end;
 
-procedure TWebForm_template-protected-datagrid-sortable.DataGrid1_SortCommand(source: System.Object;
+procedure TWebForm_template_protected_datagrid_sortable.DataGrid1_SortCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
   if e.SortExpression = p.sort_order then begin
@@ -176,13 +190,13 @@ begin
   Bind;
 end;
 
-procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click(sender: System.Object;
+procedure TWebForm_template_protected_datagrid_sortable.LinkButton_back_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
-procedure TWebForm_template-protected-datagrid-sortable.LinkButton_logout_Click(sender: System.Object;
+procedure TWebForm_template_protected_datagrid_sortable.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   formsauthentication.SignOut;
@@ -190,7 +204,7 @@ begin
   server.Transfer('../Default.aspx');
 end;
 
-procedure TWebForm_template-protected-datagrid-sortable.Bind;
+procedure TWebForm_template_protected_datagrid_sortable.Bind;
 var be_datagrid_empty: boolean;
 var cmdText: string;
 begin

@@ -33,6 +33,8 @@ type
       e: System.EventArgs);
     procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_retransmit_to_state_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -43,8 +45,8 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
-    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     DataGrid_requests: System.Web.UI.WebControls.DataGrid;
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
@@ -71,6 +73,8 @@ procedure TWebForm_emsof_request_status_filter.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_retransmit_to_state.Click, Self.LinkButton_retransmit_to_state_Click);
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
   Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
@@ -86,6 +90,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
     Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
@@ -111,6 +119,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_emsof_request_status_filter.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_emsof_request_status_filter.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_emsof_request_status_filter.LinkButton_retransmit_to_state_Click(sender: System.Object;

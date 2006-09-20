@@ -13,8 +13,7 @@
 	  <asp:placeholder id="PlaceHolder_precontent" runat="server">
 	  </asp:placeholder></p>
 	  <p><small>[ 
-          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to&nbsp;<ASP:HyperLink id="HyperLink_request_overview_1" runat="server"
-					   navigateurl="request_overview.aspx">request overview</ASP:HyperLink> form ]</small></p>
+          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to&nbsp;<ASP:LinkButton id="LinkButton_request_overview_1" runat="server">request overview</ASP:LinkButton> form ]</small></p>
 	  <p><small>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
 			  <tr>
@@ -132,7 +131,7 @@
 						</div></td>
 			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>
 								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp;
-													       &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
+													        &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
 
 			  </td>
 			  <td></td>
@@ -161,7 +160,7 @@
 			  <td>
                                   <div align="right">[ <ASP:LinkButton id="Button_withdraw" runat="server">Withdraw</ASP:LinkButton>&nbsp;]
                                   </div></td>
-			  <td>[&nbsp;Back&nbsp;to&nbsp;<ASP:HyperLink id="HyperLink_request_overview_2" runat="server" navigateurl="request_overview.aspx">request&nbsp;overview</ASP:HyperLink>&nbsp;form&nbsp;]</td>
+			  <td>[&nbsp;Back&nbsp;to&nbsp;<ASP:LinkButton id="LinkButton_request_overview_2" runat="server">request&nbsp;overview</ASP:LinkButton>&nbsp;form&nbsp;]</td>
 			  <td></td>
 			</tr>
 		  </table>

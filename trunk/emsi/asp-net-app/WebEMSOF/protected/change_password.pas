@@ -63,6 +63,10 @@ procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.Ev
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
     Label_account_descriptor.Text := session[session['target_user_table'].ToString + '_name'].ToString;
     if session['target_user_table'].tostring = 'county' then begin

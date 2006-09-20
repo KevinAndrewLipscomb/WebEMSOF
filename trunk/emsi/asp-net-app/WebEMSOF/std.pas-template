@@ -53,17 +53,19 @@ end;
 
 procedure TWebForm_template_std.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  if (session[''] = nil)
-    or (session[''] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_std';
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      //
+      // The request for this page could not have been the result of a server.Transfer call, and the session state is therefore unknown.  This is rarely allowed.
+      //
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end else begin
+      Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - template_std';
+    end;
   end;
 end;
 

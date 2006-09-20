@@ -30,8 +30,6 @@ type
     sum_of_county_appropriations: decimal;
     unappropriated_amount: decimal;
     END;
-
-type
   TWebForm_region_dictated_appropriations = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -56,6 +54,8 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure TWebForm_region_dictated_appropriations_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -69,8 +69,8 @@ type
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
-    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
-    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
     LinkButton_region_dictated_deadline: System.Web.UI.WebControls.LinkButton;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
@@ -99,6 +99,8 @@ implementation
 procedure TWebForm_region_dictated_appropriations.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_region_dictated_deadline.Click, Self.LinkButton_region_dictated_deadline_Click);
   Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.DataGrid_county_appropriations.ItemCommand, Self.DataGrid_county_appropriations_ItemCommand);
@@ -121,6 +123,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     //
     // Initialize implementation-global variables.
     //
@@ -184,6 +190,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_region_dictated_appropriations.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_region_dictated_appropriations.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_region_dictated_appropriations.TWebForm_region_dictated_appropriations_PreRender(sender: System.Object;

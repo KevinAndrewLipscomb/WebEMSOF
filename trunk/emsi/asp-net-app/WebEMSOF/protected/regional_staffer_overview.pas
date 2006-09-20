@@ -37,6 +37,8 @@ type
     procedure LinkButton_deployed_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_archived_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_all_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -45,8 +47,8 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_change_password: System.Web.UI.WebControls.HyperLink;
-    HyperLink_change_email_address: System.Web.UI.WebControls.HyperLink;
+    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
+    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     //
     Label_parent_appropriation: System.Web.UI.WebControls.Label;
@@ -71,20 +73,18 @@ type
     LinkButton_withdrawn: System.Web.UI.WebControls.LinkButton;
     LinkButton_rejected: System.Web.UI.WebControls.LinkButton;
     //
-    HyperLink_maintain_service_accounts: System.Web.UI.WebControls.HyperLink;
-    HyperLink_maintain_county_accounts: System.Web.UI.WebControls.HyperLink;
-    HyperLink_maintain_regional_staffer_accounts: System.Web.UI.WebControls.HyperLink;
-    //
-    HyperLink_maintain_epels: System.Web.UI.WebControls.HyperLink;
-    HyperLink_maintain_region_dictated_appropriations: System.Web.UI.WebControls.HyperLink;
-    //
     LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
     LinkButton_archived: System.Web.UI.WebControls.LinkButton;
-    HyperLink_init_new_fy: System.Web.UI.WebControls.HyperLink;
     LinkButton_set_deadlines: System.Web.UI.WebControls.LinkButton;
     LinkButton1: System.Web.UI.WebControls.LinkButton;
     LinkButton_all: System.Web.UI.WebControls.LinkButton;
     LinkButton_missed_deadlines: System.Web.UI.WebControls.LinkButton;
+    LinkButton_maintain_service_accounts: System.Web.UI.WebControls.LinkButton;
+    LinkButton_maintain_county_accounts: System.Web.UI.WebControls.LinkButton;
+    LinkButton_maintain_regional_staffer_accounts: System.Web.UI.WebControls.LinkButton;
+    LinkButton_init_new_fy: System.Web.UI.WebControls.LinkButton;
+    LinkButton_maintain_epels: System.Web.UI.WebControls.LinkButton;
+    LinkButton_maintain_region_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
     //
     procedure OnInit(e: EventArgs); override;
   private
@@ -109,6 +109,8 @@ uses
 procedure TWebForm_regional_staffer_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
+  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_all.Click, Self.LinkButton_all_Click);
   Include(Self.LinkButton_num_requests_needing_development.Click, Self.LinkButton_num_requests_needing_development_Click);
   Include(Self.LinkButton_num_requests_needing_finalization.Click, Self.LinkButton_num_requests_needing_finalization_Click);
@@ -144,6 +146,10 @@ var
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
+    if (session['regional_staffer_name'] = nil) or (session['regional_staffer_user_id'] = nil) then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
@@ -219,6 +225,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_change_email_address_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_email_address.aspx');
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_change_password_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_all_Click(sender: System.Object;

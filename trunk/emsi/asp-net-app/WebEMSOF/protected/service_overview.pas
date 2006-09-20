@@ -94,6 +94,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if (session['service_user_id'] = nil) or (session['service_name'] = nil) then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     //
     ki.common.DbOpen;
     //

@@ -14,9 +14,8 @@
       </asp:placeholder></p>
 	  <p>
 <small>[ 
-          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:HyperLink id="HyperLink_service_overview" runat="server"
-						 navigateurl="service_overview.aspx">service overview</ASP:HyperLink>&nbsp;form ]&nbsp; [ Change your 
-		<ASP:hyperlink id="HyperLink_change_password" runat="server" navigateurl="change_password.aspx">password</ASP:hyperlink>&nbsp;| <ASP:HyperLink id="HyperLink_change_email_address" runat="server" navigateurl="change_email_address.aspx">email address</ASP:HyperLink>&nbsp;]
+          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_service_overview" runat="server">service overview</ASP:LinkButton>&nbsp;form ]&nbsp; [ Change your
+		<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;| <asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
 	  </small></p>
 <h3>
 		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3></small>
@@ -87,7 +86,7 @@
 			<tr bgcolor="#f5f5f5">
 			  <td><strong>Items requested</strong></td>
 			  <td>
-			  <div align="center"><ASP:HyperLink id="HyperLink_add_item_to_request" runat="server" navigateurl="request_item_detail.aspx">New</ASP:HyperLink>
+			  <div align="center"><ASP:LinkButton id="LinkButton_add_item_to_request" runat="server">New</ASP:LinkButton>
 			  </div></td>
 			  <td>
 						<p align="center">

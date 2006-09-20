@@ -42,6 +42,8 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_request_item_detail_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure LinkButton_request_overview_1_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_request_overview_2_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -87,11 +89,11 @@ type
     Button_delete: System.Web.UI.WebControls.Button;
     TableRow_delete: System.Web.UI.HtmlControls.HtmlTableRow;
     Button_update: System.Web.UI.WebControls.Button;
-    HyperLink_request_overview_1: System.Web.UI.WebControls.HyperLink;
-    HyperLink_request_overview_2: System.Web.UI.WebControls.HyperLink;
     Button_withdraw: System.Web.UI.WebControls.LinkButton;
     TableRow_post_finalization_actions: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_1: System.Web.UI.WebControls.LinkButton;
+    LinkButton_request_overview_2: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -111,6 +113,7 @@ uses
 procedure TWebForm_request_item_detail.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_request_overview_1.Click, Self.LinkButton_request_overview_1_Click);
   Include(Self.DropDownList_equipment_category.SelectedIndexChanged, Self.DropDownList_equipment_category_SelectedIndexChanged);
   Include(Self.LinkButton_recalculate_1.Click, Self.LinkButton_recalculate_1_Click);
   Include(Self.LinkButton_recalculate_2.Click, Self.LinkButton_recalculate_2_Click);
@@ -121,6 +124,7 @@ begin
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.Button_delete.Click, Self.Button_delete_Click);
   Include(Self.Button_withdraw.Click, Self.Button_withdraw_Click);
+  Include(Self.LinkButton_request_overview_2.Click, Self.LinkButton_request_overview_2_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_request_item_detail_PreRender);
 end;
@@ -142,6 +146,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
     //
@@ -342,6 +350,18 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_item_detail.LinkButton_request_overview_2_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_overview.aspx');
+end;
+
+procedure TWebForm_request_item_detail.LinkButton_request_overview_1_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+   server.Transfer('request_overview.aspx');
 end;
 
 procedure TWebForm_request_item_detail.TWebForm_request_item_detail_PreRender(sender: System.Object;

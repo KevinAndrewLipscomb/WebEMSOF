@@ -30,6 +30,7 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_withdraw_request_item_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure LinkButton_request_item_detail_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -45,7 +46,7 @@ type
     Label_description: System.Web.UI.WebControls.Label;
     Label_emsof_ante: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    HyperLink_request_item_detail: System.Web.UI.WebControls.HyperLink;
+    LinkButton_request_item_detail: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -64,6 +65,7 @@ uses
 procedure TWebForm_withdraw_request_item.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
+  Include(Self.LinkButton_request_item_detail.Click, Self.LinkButton_request_item_detail_Click);
   Include(Self.Button_yes.Click, Self.Button_yes_Click);
   Include(Self.Button_no.Click, Self.Button_no_Click);
   Include(Self.Load, Self.Page_Load);
@@ -77,6 +79,10 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - withdraw_request_item';
     //
     p.saved_emsof_ante := decimal.Parse(session['emsof_request_item_emsof_ante'].tostring);
@@ -96,6 +102,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_withdraw_request_item.LinkButton_request_item_detail_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('request_item_detail.aspx');
 end;
 
 procedure TWebForm_withdraw_request_item.TWebForm_withdraw_request_item_PreRender(sender: System.Object;
