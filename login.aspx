@@ -66,7 +66,7 @@
 				  <td>
 					<asp:checkbox id="CheckBox_keep_me_logged_in"
 								  runat="server"
-								  text="Keep me logged in on this computer">
+								  text="Keep me logged in on this computer" enabled="False" visible="False">
 					</asp:checkbox>
 				  </td>
 				</tr>
