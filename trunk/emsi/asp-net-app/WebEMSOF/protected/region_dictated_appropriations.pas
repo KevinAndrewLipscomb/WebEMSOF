@@ -233,8 +233,7 @@ begin
       + 'You can work on this allocation by visiting:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
-      + '/protected/county_overview.aspx' + NEW_LINE
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact Regional Staffer ' + session['regional_staffer_name'].ToString + ' at:' + NEW_LINE
       + NEW_LINE
@@ -385,9 +384,8 @@ begin
       + NEW_LINE
       + 'For an overview of your EMSOF allocations, visit:' + NEW_LINE
       + NEW_LINE
-      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
-      + '/protected/county_overview.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact the ' + session['region_name'].ToString + ' Regional Council EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE

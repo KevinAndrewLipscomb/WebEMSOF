@@ -139,9 +139,8 @@ begin
     + NEW_LINE
     + 'You can view your allocations by visiting:' + NEW_LINE
     + NEW_LINE
-    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-    + server.UrlEncode(ConfigurationSettings.AppSettings['application_name'])
-    + '/protected/service_overview.aspx' + NEW_LINE
+    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
     + NEW_LINE
     + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
     + NEW_LINE

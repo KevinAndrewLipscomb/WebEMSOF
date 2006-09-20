@@ -256,8 +256,8 @@ begin
       + NEW_LINE
       + 'Please approve or return/reject this request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/county_overview.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
@@ -279,8 +279,8 @@ begin
       + NEW_LINE
       + 'You can use WebEMSOF by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + '/protected/regional_staffer_overview.aspx' + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
