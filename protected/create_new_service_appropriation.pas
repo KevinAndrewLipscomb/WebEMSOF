@@ -97,19 +97,6 @@ end;
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  if (session['p'] = nil)
-    or (session['county_name'] = nil)
-    or (session['county_user_id'] = nil)
-    or (session['fiscal_year_designator'] = nil)
-    or (session['parent_appropriation_amount'] = nil)
-    or (session['region_dictated_appropriation_id'] = nil)
-    or (session['region_name'] = nil)
-    or (session['sum_of_service_appropriations'] = nil)
-    or (session['unappropriated_amount'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);

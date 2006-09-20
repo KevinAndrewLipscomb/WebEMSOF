@@ -97,17 +97,6 @@ var
   grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
 begin
-  if (session['county_dictated_appropriation_id'] = nil)
-    or (session['emsof_request_master_id'] = nil)
-    or (session['fiscal_year_designator'] = nil)
-    or (session['service_name'] = nil)
-    or (session['service_user_id'] = nil)
-    or (session['sum_of_emsof_antes'] = nil)
-    or (session['unused_amount'] = nil)
-  then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';

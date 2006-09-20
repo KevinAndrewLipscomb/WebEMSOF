@@ -38,6 +38,15 @@ type
       encoded_password: string
       )
       : boolean;
+//    procedure IssueNoticeToProceed
+//      (
+//      next_reviewer_role: string;
+//      reviewer_descriptor: string;
+//      new_status_description: string;
+//      service_id: string;
+//      service_name: string;
+//      fy_designator: string
+//      );
     procedure MakeDemotionNotification
       (
       role: string;
@@ -65,12 +74,6 @@ type
       service_id: string;
       service_name: string;
       contact_person_name: string
-      );
-    procedure SendNoticeToProceed
-      (
-      service_id: string;
-      service_name: string;
-      fy_designator: string
       );
     procedure SetTemporaryPassword
       (
@@ -136,6 +139,101 @@ function TClass_biz_accounts.Exists
 begin
   Exists := db_accounts.Exists(user_kind,user_id,encoded_password);
 end;
+
+//procedure TClass_biz_accounts.IssueNoticeToProceed
+//  (
+//  service_id: string;
+//  service_name: string;
+//  fy_designator: string
+//  );
+//var
+//  emsof_coord_email_address: string;
+//begin
+//  //
+//  //   Get the next approver's email address.
+//  //
+//  emsof_coord_email_address := EmailTargetByRole('emsof-coordinator');
+//  //
+//  //   Send notification to service.
+//  //
+//  smtpmail.Send
+//    (
+//    ConfigurationSettings.AppSettings['sender_email_address'],
+//    EmailAddressByKindId('service',service_id),
+//    'NOTICE TO PROCEED with EMSOF project',
+//    'Recently, ' + service_name + ' submitted a request to conduct an EMSOF Category 4 Provider Equipment project.  '
+//    + 'This message documents the approval by all the necessary parties of that request as recorded in WebEMSOF.' + NEW_LINE
+//    + NEW_LINE
+//    + 'Congratulations!  YOU MAY NOW PROCEED WITH THE PROJECT SPECIFIED BELOW.  Please print this email and keep it for your '
+//    + 'records.' + NEW_LINE
+//    + NEW_LINE
+//    + 'To complete this project and receive proper reimbursement, please do the following:' + NEW_LINE
+//    + NEW_LINE
+//    + '1.	Purchase the items specified below.' + NEW_LINE
+//    + NEW_LINE
+//    + '2. FAX OR SEND COPIES OF YOUR INVOICES AND/OR RECEIPTS TO THE REGIONAL' + NEW_LINE
+//    + '   COUNCIL.' + NEW_LINE
+//    + NEW_LINE
+//    + '3. Take delivery of the specified equipment.' + NEW_LINE
+//    + NEW_LINE
+//    + '4. Send proof of payment to the regional council.  Documents acceptable'
+//    + '   for this purpose include:' + NEW_LINE
+//    + NEW_LINE
+//    + '   -  Copy of cancelled check' + NEW_LINE
+//    + '   -  Copy of bank draft' + NEW_LINE
+//    + '   -  Copy of bank statement' + NEW_LINE
+//    + '   -  Copy of wire transfer slip' + NEW_LINE
+//    + NEW_LINE
+//    + '5. Watch your mailbox for the reimbursement check!' + NEW_LINE
+//    + NEW_LINE
+//    + NEW_LINE
+//    + '=== PROJECT DETAILS ===' + NEW_LINE
+//    + 'This Notice To Proceed only applies to the following project:' + NEW_LINE
+//    + NEW_LINE
+//    + '--- Master data ---' + NEW_LINE
+//    + 'Fiscal year:  ' + fy_designator + NEW_LINE
+//    + 'Sponsor region:  ' + sponsor_region_name + NEW_LINE
+//    + 'Sponsor county:  ' + sponsor_county_name + NEW_LINE
+//    + NEW_LINE
+//    + '--- Detail data ---' + NEW_LINE
+//    + db_emsof_requests.MessageDetailText
+//    + NEW_LINE
+//    + NEW_LINE
+//    + 'You can review your EMSOF requests by visiting:' + NEW_LINE
+//    + NEW_LINE
+//    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+//    + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
+//    + NEW_LINE
+//    + 'You can contact your Regional EMSOF Coordinator at:' + NEW_LINE
+//    + NEW_LINE
+//    + '   ' + emsof_coord_email_address + '  (mailto:' + emsof_coord_email_address + ')' + NEW_LINE
+//    + NEW_LINE
+//    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+//    );
+//  //
+//  //   Send notification to region.
+//  //
+//  smtpmail.Send
+//    (
+//    ConfigurationSettings.AppSettings['sender_email_address'],
+//    emsof_coord_email_address,
+//    'WebEMSOF has issued a Notice To Proceed',
+//      reviewer_descriptor + ' has promoted ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
+//    + NEW_LINE
+//    + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
+//    + NEW_LINE
+//    + 'You can review this EMSOF request by visiting:' + NEW_LINE
+//    + NEW_LINE
+//    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
+//    + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
+//    + NEW_LINE
+//    + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
+//    + NEW_LINE
+//    + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
+//    + NEW_LINE
+//    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+//    );
+//end;
 
 procedure TClass_biz_accounts.MakeDemotionNotification
   (
@@ -397,44 +495,6 @@ begin
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
 
-end;
-
-procedure TClass_biz_accounts.SendNoticeToProceed
-  (
-  service_id: string;
-  service_name: string;
-  fy_designator: string
-  );
-begin
-//  //
-//  //   Send notification to service.
-//  //
-//  smtpmail.Send
-//    (
-//    ConfigurationSettings.AppSettings['sender_email_address'],
-//    EmailAddressByKindId('service',service_id),
-//    '** EMSOF Notice To Proceed **',
-//    'The Pennsylvania Department of Health EMS Office has approved ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
-//    );
-//  //
-//  //   Send notification to region.
-//  //
-//  smtpmail.Send
-//    (
-//    ConfigurationSettings.AppSettings['sender_email_address'],
-//    next_reviewer_email_target,
-//    'WebEMSOF has issued a Notice To Proceed',
-//    'WebEMSOF has issued a Notice To Proceed to ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
-//    + NEW_LINE
-//    + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
-//    + NEW_LINE
-//    + 'You can review this EMSOF request by visiting:' + NEW_LINE
-//    + NEW_LINE
-//    + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-//    + ConfigurationSettings.AppSettings['application_name'] + '/protected/regional_staffer_overview.aspx' + NEW_LINE
-//    + NEW_LINE
-//    + '-- ' + ConfigurationSettings.AppSettings['application_name']
-//    );
 end;
 
 procedure TClass_biz_accounts.SetTemporaryPassword
