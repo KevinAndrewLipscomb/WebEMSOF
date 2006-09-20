@@ -32,7 +32,8 @@ type
 implementation
 
 uses
-  Class_biz_user;
+  Class_biz_user,
+  system.web.security;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -64,7 +65,7 @@ end;
 
 procedure TGlobal.Session_Start(sender: System.Object; e: EventArgs);
 begin
-
+  formsauthentication.SignOut;  // to force existing "remember me on this computer cookies" to expire
 end;
 
 procedure TGlobal.Application_BeginRequest(sender: System.Object; e: EventArgs);
