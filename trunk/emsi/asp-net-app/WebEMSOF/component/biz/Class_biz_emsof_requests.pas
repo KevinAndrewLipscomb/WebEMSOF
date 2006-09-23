@@ -502,11 +502,12 @@ procedure TClass_biz_emsof_requests.MarkDone
   promoter: string
   );
 var
+  master_id: string;
   next_status: status_type;
   reviewer_descriptor: string;
 begin
-  reviewer_descriptor := db_emsof_requests.SponsorRegionNameOf(db_emsof_requests.IdOf(e_item));
-  next_status := StatusOf(e_item); // Better initialize it to something.
+  master_id := IdOf(e_item);
+  reviewer_descriptor := SponsorRegionNameOf(master_id);
   case StatusOf(e_item) of
   NEEDS_SENT_TO_PA_DOH_EMSO:
     BEGIN
@@ -525,16 +526,23 @@ begin
   NEEDS_PA_DOH_EMSO_APPROVAL:
     BEGIN
     next_status := NEEDS_INVOICE_COLLECTION;
-    db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
-//    biz_accounts.IssueNoticeToProceed(ServiceIdOf(e_item),ServiceNameOf(e_item),FyDesignatorOf(e_item));
+    db_emsof_requests.MarkDone(master_id,ord(next_status),biz_user.Kind);
+    biz_accounts.IssueNoticeToProceed
+      (
+      ServiceIdOf(e_item),
+      ServiceNameOf(e_item),
+      FyDesignatorOf(e_item),
+      reviewer_descriptor,
+      SponsorCountyNameOf(e_item),
+      master_id
+      );
     END;
   NEEDS_REIMBURSEMENT_ISSUANCE:
     BEGIN
     next_status := REIMBURSEMENT_ISSUED;
-    db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
+    db_emsof_requests.MarkDone(master_id,ord(next_status),biz_user.Kind);
     END;
   end;
-  db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
   //
 end;
 
@@ -668,13 +676,13 @@ begin
     body := body + 'a RE-TRANSMISSION of'
     END;
   end;
-  body := body + ' EMSOF request items that have been approved by ' + region_name + '''s Executive '
-    + 'Director.  Please process this report at your earliest convenience.' + NEW_LINE
-    + NEW_LINE
-    + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
-    + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   region_name := biz_regional_staffers.RegionNameOf(regional_staffer_user_id);
+  body := body + ' EMSOF request items that have been approved by the Executive Director of ' + region_name + '.  Please process '
+  + 'this report at your earliest convenience.' + NEW_LINE
+  + NEW_LINE
+  + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
+  + NEW_LINE
+  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   ki.common.SendControlAsAttachmentToEmailMessage
     (
     Table_report,

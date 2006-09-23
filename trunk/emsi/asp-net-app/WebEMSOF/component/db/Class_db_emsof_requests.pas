@@ -102,6 +102,7 @@ type
       user_kind: string;
       role: string
       );
+    function DetailText(master_id: string): string;
     procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
@@ -515,6 +516,46 @@ begin
     )
     .ExecuteNonQuery;
   self.Close;
+end;
+
+function TClass_db_emsof_requests.DetailText(master_id: string): string;
+var
+  bdr: borland.data.provider.bdpdatareader;
+  detail_text: string;
+begin
+  detail_text := system.string.EMPTY;
+  self.Open;
+  bdr := borland.data.provider.bdpcommand.Create
+    (
+    'select priority'
+    + ' , description'
+    + ' , make_model'
+    + ' , place_kept'
+    + ' , if(be_refurbished,"REFURB","NEW") as new_or_refurb'
+    + ' , quantity'
+    + ' , concat("$",format(unit_cost,2)) as formatted_unit_cost'
+    + ' , concat("$",format(emsof_ante,2)) as formatted_emsof_ante'
+    + ' from emsof_request_detail'
+    +   ' join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+    + ' where master_id = ' + master_id
+    + ' order by priority',
+    connection
+    )
+    .ExecuteReader;
+  while bdr.Read do begin
+    detail_text := detail_text
+    + 'Priority:          ' + bdr['priority'].tostring + NEW_LINE
+    + 'Description:       ' + bdr['description'].tostring + NEW_LINE
+    + 'Make/model:        ' + bdr['make_model'].tostring + NEW_LINE
+    + 'Place to be kept:  ' + bdr['place_kept'].tostring + NEW_LINE
+    + 'New/refurb:        ' + bdr['new_or_refurb'].tostring + NEW_LINE
+    + 'Quantity:          ' + bdr['quantity'].tostring + NEW_LINE
+    + 'Unit cost:         ' + bdr['formatted_unit_cost'].tostring + NEW_LINE
+    + 'Max EMSOF amount:  ' + bdr['formatted_emsof_ante'].tostring + NEW_LINE
+    + NEW_LINE;
+  end;
+  self.Close;
+  DetailText := detail_text;
 end;
 
 procedure TClass_db_emsof_requests.Finalize(master_id: string);

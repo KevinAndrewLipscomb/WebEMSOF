@@ -121,7 +121,7 @@ begin
     p.total_emsof_ante := 0;
     p.total_provider_match := 0;
     //
-    Label_total_num_requests.text := p.biz_emsof_requests.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL);
+    Label_total_num_requests.text := p.biz_emsof_requests.TallyOfStatus(NEEDS_SENT_TO_PA_DOH_EMSO);
     num_active_amendments := p.biz_appropriations.NumActiveAmendments(session['regional_staffer_user_id'].tostring);
     if num_active_amendments = 0 then begin
       TableRow_this_is_everything.visible := TRUE;
