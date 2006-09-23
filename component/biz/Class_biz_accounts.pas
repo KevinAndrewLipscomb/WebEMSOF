@@ -5,6 +5,7 @@ interface
 uses
   Class_biz_user,
   Class_db_accounts,
+  Class_db_emsof_requests,
   ki.common,
   borland.vcl.sysutils,
   system.configuration,
@@ -17,6 +18,7 @@ type
   private
     biz_user: TClass_biz_user;
     db_accounts: TClass_db_accounts;
+    db_emsof_requests: TClass_db_emsof_requests;
     function SelfEmailAddress: string;
   public
     constructor Create;
@@ -38,15 +40,15 @@ type
       encoded_password: string
       )
       : boolean;
-//    procedure IssueNoticeToProceed
-//      (
-//      next_reviewer_role: string;
-//      reviewer_descriptor: string;
-//      new_status_description: string;
-//      service_id: string;
-//      service_name: string;
-//      fy_designator: string
-//      );
+    procedure IssueNoticeToProceed
+      (
+      service_id: string;
+      service_name: string;
+      fy_designator: string;
+      sponsor_region_name: string;
+      sponsor_county_name: string;
+      master_id: string
+      );
     procedure MakeDemotionNotification
       (
       role: string;
@@ -91,6 +93,7 @@ begin
   // TODO: Add any constructor code here
   biz_user := TClass_biz_user.Create;
   db_accounts := TClass_db_accounts.Create;
+  db_emsof_requests := TClass_db_emsof_requests.Create;
   smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
 end;
 
@@ -140,100 +143,102 @@ begin
   Exists := db_accounts.Exists(user_kind,user_id,encoded_password);
 end;
 
-//procedure TClass_biz_accounts.IssueNoticeToProceed
-//  (
-//  service_id: string;
-//  service_name: string;
-//  fy_designator: string
-//  );
-//var
-//  emsof_coord_email_address: string;
-//begin
-//  //
-//  //   Get the next approver's email address.
-//  //
-//  emsof_coord_email_address := EmailTargetByRole('emsof-coordinator');
-//  //
-//  //   Send notification to service.
-//  //
-//  smtpmail.Send
-//    (
-//    ConfigurationSettings.AppSettings['sender_email_address'],
-//    EmailAddressByKindId('service',service_id),
-//    'NOTICE TO PROCEED with EMSOF project',
-//    'Recently, ' + service_name + ' submitted a request to conduct an EMSOF Category 4 Provider Equipment project.  '
-//    + 'This message documents the approval by all the necessary parties of that request as recorded in WebEMSOF.' + NEW_LINE
-//    + NEW_LINE
-//    + 'Congratulations!  YOU MAY NOW PROCEED WITH THE PROJECT SPECIFIED BELOW.  Please print this email and keep it for your '
-//    + 'records.' + NEW_LINE
-//    + NEW_LINE
-//    + 'To complete this project and receive proper reimbursement, please do the following:' + NEW_LINE
-//    + NEW_LINE
-//    + '1.	Purchase the items specified below.' + NEW_LINE
-//    + NEW_LINE
-//    + '2. FAX OR SEND COPIES OF YOUR INVOICES AND/OR RECEIPTS TO THE REGIONAL' + NEW_LINE
-//    + '   COUNCIL.' + NEW_LINE
-//    + NEW_LINE
-//    + '3. Take delivery of the specified equipment.' + NEW_LINE
-//    + NEW_LINE
-//    + '4. Send proof of payment to the regional council.  Documents acceptable'
-//    + '   for this purpose include:' + NEW_LINE
-//    + NEW_LINE
-//    + '   -  Copy of cancelled check' + NEW_LINE
-//    + '   -  Copy of bank draft' + NEW_LINE
-//    + '   -  Copy of bank statement' + NEW_LINE
-//    + '   -  Copy of wire transfer slip' + NEW_LINE
-//    + NEW_LINE
-//    + '5. Watch your mailbox for the reimbursement check!' + NEW_LINE
-//    + NEW_LINE
-//    + NEW_LINE
-//    + '=== PROJECT DETAILS ===' + NEW_LINE
-//    + 'This Notice To Proceed only applies to the following project:' + NEW_LINE
-//    + NEW_LINE
-//    + '--- Master data ---' + NEW_LINE
-//    + 'Fiscal year:  ' + fy_designator + NEW_LINE
-//    + 'Sponsor region:  ' + sponsor_region_name + NEW_LINE
-//    + 'Sponsor county:  ' + sponsor_county_name + NEW_LINE
-//    + NEW_LINE
-//    + '--- Detail data ---' + NEW_LINE
-//    + db_emsof_requests.MessageDetailText
-//    + NEW_LINE
-//    + NEW_LINE
-//    + 'You can review your EMSOF requests by visiting:' + NEW_LINE
-//    + NEW_LINE
-//    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-//    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
-//    + NEW_LINE
-//    + 'You can contact your Regional EMSOF Coordinator at:' + NEW_LINE
-//    + NEW_LINE
-//    + '   ' + emsof_coord_email_address + '  (mailto:' + emsof_coord_email_address + ')' + NEW_LINE
-//    + NEW_LINE
-//    + '-- ' + ConfigurationSettings.AppSettings['application_name']
-//    );
-//  //
-//  //   Send notification to region.
-//  //
-//  smtpmail.Send
-//    (
-//    ConfigurationSettings.AppSettings['sender_email_address'],
-//    emsof_coord_email_address,
-//    'WebEMSOF has issued a Notice To Proceed',
-//      reviewer_descriptor + ' has promoted ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
-//    + NEW_LINE
-//    + 'Your action is now required.  The status of this EMSOF request is "' + new_status_description + '".' + NEW_LINE
-//    + NEW_LINE
-//    + 'You can review this EMSOF request by visiting:' + NEW_LINE
-//    + NEW_LINE
-//    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-//    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
-//    + NEW_LINE
-//    + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
-//    + NEW_LINE
-//    + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
-//    + NEW_LINE
-//    + '-- ' + ConfigurationSettings.AppSettings['application_name']
-//    );
-//end;
+procedure TClass_biz_accounts.IssueNoticeToProceed
+  (
+  service_id: string;
+  service_name: string;
+  fy_designator: string;
+  sponsor_region_name: string;
+  sponsor_county_name: string;
+  master_id: string
+  );
+var
+  emsof_coord_email_address: string;
+  message_text: string;
+begin
+  //
+  // Get the next approver's email address.
+  //
+  emsof_coord_email_address := EmailTargetByRole('emsof-coordinator');
+  //
+  // Generate the base message.
+  //
+  message_text := 'Recently, ' + service_name + ' submitted a request to conduct an EMSOF Category 4 Provider Equipment project.  '
+  + 'This message documents the approval by all the necessary parties of that request as recorded in '
+  + ConfigurationSettings.AppSettings['application_name'] + '.' + NEW_LINE
+  + NEW_LINE
+  + 'Congratulations!  YOU MAY NOW PROCEED WITH THE PROJECT SPECIFIED BELOW.  Please print this message and keep it for your '
+  + 'records.' + NEW_LINE
+  + NEW_LINE
+  + 'To complete this project and receive proper reimbursement, please do the following:' + NEW_LINE
+  + NEW_LINE
+  + '1. Purchase the items specified below.' + NEW_LINE
+  + NEW_LINE
+  + '2. FAX OR SEND COPIES OF YOUR INVOICES AND/OR RECEIPTS TO THE REGIONAL' + NEW_LINE
+  + '   COUNCIL.' + NEW_LINE
+  + NEW_LINE
+  + '3. Take delivery of the specified equipment.' + NEW_LINE
+  + NEW_LINE
+  + '4. Send proof of payment to the regional council.  Documents acceptable' + NEW_LINE
+  + '   for this purpose include:' + NEW_LINE
+  + NEW_LINE
+  + '   -  Copy of cancelled check' + NEW_LINE
+  + '   -  Copy of bank draft' + NEW_LINE
+  + '   -  Copy of bank statement' + NEW_LINE
+  + '   -  Copy of wire transfer slip' + NEW_LINE
+  + NEW_LINE
+  + '5. Watch your mailbox for the reimbursement check!' + NEW_LINE
+  + NEW_LINE
+  + NEW_LINE
+  + '=== PROJECT DETAILS ===' + NEW_LINE
+  + 'This Notice To Proceed only applies to the following project:' + NEW_LINE
+  + NEW_LINE
+  + '--- Master data ---' + NEW_LINE
+  + 'Fiscal year:     ' + fy_designator + NEW_LINE
+  + 'Sponsor region:  ' + sponsor_region_name + NEW_LINE
+  + 'Sponsor county:  ' + sponsor_county_name + NEW_LINE
+  + NEW_LINE
+  + '--- Detail data ---' + NEW_LINE
+  + db_emsof_requests.DetailText(master_id)
+  + NEW_LINE
+  + 'You can review your EMSOF requests by visiting:' + NEW_LINE
+  + NEW_LINE
+  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + NEW_LINE
+  + 'You can contact your Regional EMSOF Coordinator at:' + NEW_LINE
+  + NEW_LINE
+  + '   ' + emsof_coord_email_address + '  (mailto:' + emsof_coord_email_address + ')' + NEW_LINE
+  + NEW_LINE
+  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  //
+  // Send notification to service.
+  //
+  smtpmail.Send
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    EmailAddressByKindId('service',service_id),
+    'NOTICE TO PROCEED with EMSOF project',
+    message_text
+    );
+  //
+  //   Send notification to region.
+  //
+  smtpmail.Send
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    emsof_coord_email_address,
+    ConfigurationSettings.AppSettings['application_name'] + ' has issued a Notice To Proceed',
+    ConfigurationSettings.AppSettings['application_name'] + ' has issued the following Notice To Proceed message to ' + service_name
+    + '.  You should expect this service to submit invoices and proof of payment.' + NEW_LINE
+    + NEW_LINE
+    + '... BEGIN COPY OF NOTICE TO PROCEED ...' + NEW_LINE
+    + NEW_LINE
+    + message_text + NEW_LINE
+    + NEW_LINE
+    + '... END COPY OF NOTICE TO PROCEED ...'
+    );
+end;
 
 procedure TClass_biz_accounts.MakeDemotionNotification
   (
@@ -410,13 +415,13 @@ begin
   messageText := messageText
   + NEW_LINE
   + NEW_LINE
-  + 'NOTE that this message is *not* a "Notice To Proceed", so you must *not* purchase any of the items in your EMSOF request '
+  + 'NOTE that this message is NOT a "Notice To Proceed", so you must NOT purchase any of the items in your EMSOF request '
   + 'yet.' + NEW_LINE
   + NEW_LINE
   + 'You can review your EMSOF requests by visiting:' + NEW_LINE
   + NEW_LINE
-  + '   https://' + ConfigurationSettings.AppSettings['ssl_base_path'] + '/'
-  + ConfigurationSettings.AppSettings['application_name'] + '/protected/service_overview.aspx' + NEW_LINE
+  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
   + NEW_LINE
   + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
   + NEW_LINE
