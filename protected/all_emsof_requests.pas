@@ -130,12 +130,24 @@ procedure TWebForm_all_emsof_requests.DataGrid_requests_ItemCommand(source: Syst
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   if e.commandname = 'Select' then begin
-    session.Remove('account_descriptor');
-    session.Add('account_descriptor',session['regional_staffer_name'].tostring);
-    session.Remove('e_item');
-    session.Add('e_item',e.item);
-    system.collections.stack(session['waypoint_stack']).Push('all_emsof_requests.aspx');
-    server.Transfer('full_request_review_approve.aspx');
+    case p.biz_emsof_requests.StatusOf(e.item) of
+    NEEDS_SENT_TO_PA_DOH_EMSO:
+      BEGIN
+      session.Remove('status_of_interest');
+      session.Add('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
+      system.collections.stack(session['waypoint_stack']).Push('all_emsof_requests.aspx');
+      server.Transfer('state_required_report.aspx');
+      END
+    else
+      BEGIN
+      session.Remove('account_descriptor');
+      session.Add('account_descriptor',session['regional_staffer_name'].tostring);
+      session.Remove('e_item');
+      session.Add('e_item',e.item);
+      system.collections.stack(session['waypoint_stack']).Push('all_emsof_requests.aspx');
+      server.Transfer('full_request_review_approve.aspx');
+      END;
+    end;
   end;
 end;
 
