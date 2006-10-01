@@ -67,13 +67,12 @@ var
   bdr: borland.data.provider.bdpdatareader;
   service_name: string;
 begin
-  if request.servervariables['URL'] = request.currentexecutionfilepath then begin
-    session.Clear;
-    server.Transfer('~/login.aspx');
-  end;
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then
-    begin
+  if not IsPostback then begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+      session.Clear;
+      server.Transfer('~/login.aspx');
+    end;
     ki.common.DbOpen;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - delete_service_appropriation';
     //
@@ -105,7 +104,7 @@ begin
     Label_amount.text := decimal.Parse(session['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
     //
     ki.common.DbClose;
-    end;
+  end;
 end;
 
 procedure TWebForm_delete_service_appropriation.OnInit(e: EventArgs);
