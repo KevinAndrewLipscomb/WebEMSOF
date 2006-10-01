@@ -1,4 +1,4 @@
--- $Id$
+﻿-- $Id$
 --
 -- phpMyAdmin SQL Dump
 -- version 2.6.4-pl4
@@ -651,13 +651,13 @@ ALTER TABLE `eligible_provider_equipment_list`
 -- Constraints for table `emsof_request_detail`
 -- 
 ALTER TABLE `emsof_request_detail`
-  ADD CONSTRAINT emsof_request_detail_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id),
+  ADD CONSTRAINT emsof_request_detail_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id) ON DELETE CASCADE,
   ADD CONSTRAINT emsof_request_detail_ibfk_2 FOREIGN KEY (equipment_code) REFERENCES eligible_provider_equipment_list (`code`),
   ADD CONSTRAINT emsof_request_detail_ibfk_3 FOREIGN KEY (status_code) REFERENCES item_status_code_description_map (`code`);
 
--- 
+--
 -- Constraints for table `emsof_request_master`
--- 
+--
 ALTER TABLE `emsof_request_master`
   ADD CONSTRAINT emsof_request_master_ibfk_1 FOREIGN KEY (county_dictated_appropriation_id) REFERENCES county_dictated_appropriation (id) ON DELETE CASCADE,
   ADD CONSTRAINT emsof_request_master_ibfk_2 FOREIGN KEY (status_code) REFERENCES request_status_code_description_map (`code`);
