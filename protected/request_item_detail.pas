@@ -553,11 +553,11 @@ begin
         // appropriation.  Consideration of their appropriation is not within the scope of this form, so we can indicate that the
         // request can be fully funded.
         //
-      or ((unit_cost <= p.allowable_cost) and (p.funding_level = p.allowable_cost))
+      or ((unit_cost <= p.allowable_cost) and (p.funding_level = p.allowable_cost) and (p.allowable_cost < decimal.maxvalue))
         //
         // This is the case where items in an "equipment category" are always fully funded (up to the limit of a service's
         // appropriation, which is not within the scope of this form).  This initially describes only Data Collection Software and
-        // the EMT-P Written Test.
+        // the EMT-P Written Test.  The "Other - with external documentation" category is specifically excluded from this case.
         //
     then begin
       //
