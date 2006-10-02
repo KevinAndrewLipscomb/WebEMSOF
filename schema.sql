@@ -138,9 +138,9 @@ CREATE TABLE eligible_provider_equipment_list (
   KEY description (description)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Dumping data for table `eligible_provider_equipment_list`
--- 
+--
 
 INSERT INTO eligible_provider_equipment_list (code, fiscal_year_id, description, life_expectancy_years, be_eligible_als_amb, be_eligible_als_squad, be_eligible_bls_amb, be_eligible_qrs, allowable_cost, funding_level_nonrural, funding_level_rural) VALUES
 (1, 1, 'EKG monitor/defibrillator w/pacer', 5, 1, 1, 0, 0, 12000.00, 6000.00, 7200.00),
@@ -160,8 +160,7 @@ INSERT INTO eligible_provider_equipment_list (code, fiscal_year_id, description,
 (15, 1, 'Stretcher/chair combination', 5, 1, 0, 1, 0, 700.00, 350.00, 420.00),
 (16, 1, 'Suction, portable, battery operated', 3, 1, 1, 1, 1, 900.00, 450.00, 540.00),
 (17, 1, 'Ventilator, automatic', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
-(18, 1, 'Ambulance', NULL, 1, 0, 1, 0, NULL, 15000.00, 20000.00),
-(19, 1, 'Squad/response vehicle', NULL, 0, 1, 0, 1, NULL, 7500.00, 9000.00),
+(19, 1, 'Squad/response vehicle', NULL, 0, 1, 0, 1, 15000.00, 7500.00, 9000.00),
 (20, 1, 'Data collection software', NULL, 1, 1, 1, 1, 1700.00, 1700.00, 1700.00),
 (21, 1, 'Data collection hardware', 3, 1, 1, 1, 1, 1500.00, 750.00, 900.00),
 (22, 1, 'Radio, mobile (up to 2/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
@@ -192,8 +191,7 @@ INSERT INTO eligible_provider_equipment_list (code, fiscal_year_id, description,
 (47, 2, 'Stretcher/chair combination', 5, 1, 0, 1, 0, 700.00, 350.00, 420.00),
 (48, 2, 'Suction, portable, battery operated', 3, 1, 1, 1, 1, 900.00, 450.00, 540.00),
 (49, 2, 'Ventilator, automatic', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
-(50, 2, 'Ambulance', NULL, 1, 0, 1, 0, NULL, 15000.00, 20000.00),
-(51, 2, 'Squad/response vehicle', NULL, 0, 1, 0, 1, NULL, 7500.00, 9000.00),
+(51, 2, 'Squad/response vehicle', NULL, 0, 1, 0, 1, 15000.00, 7500.00, 9000.00),
 (52, 2, 'Data collection software', NULL, 1, 1, 1, 1, 1700.00, 1700.00, 1700.00),
 (53, 2, 'Data collection hardware', 3, 1, 1, 1, 1, 1500.00, 750.00, 900.00),
 (54, 2, 'Radio, mobile (up to 2/vehicle)', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
@@ -208,7 +206,10 @@ INSERT INTO eligible_provider_equipment_list (code, fiscal_year_id, description,
 (63, 2, 'Large patient moving/carrying device', 10, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
 (64, 2, 'SCBA (up to 2/licensed vehicle)', 10, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
 (65, 2, 'EMT-P Written Test', NULL, 1, 1, 0, 0, 300.00, 300.00, 300.00),
-(66, 2, 'Other - with external documentation', NULL, 1, 1, 1, 1, NULL, NULL, NULL);
+(66, 2, 'Other - with external documentation', NULL, 1, 1, 1, 1, NULL, NULL, NULL),
+(67, 2, 'Ambulance FOR URBAN SERVICES ONLY', NULL, 1, 0, 1, 0, 30000.00, 15000.00, 0),
+(68, 2, 'Ambulance FOR RURAL SERVICES ONLY', NULL, 1, 0, 1, 0, 33333.33, 0, 20000.00);
+;
 
 -- --------------------------------------------------------
 
