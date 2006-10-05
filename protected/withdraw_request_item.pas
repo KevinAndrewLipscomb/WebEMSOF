@@ -167,8 +167,7 @@ begin
   //
   biz_accounts := TClass_biz_accounts.Create;
   service_email_address := biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring);
-  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-  smtpmail.Send
+  ki.common.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     biz_accounts.EmailTargetByRole('emsof-request-withdrawal-stakeholder'),

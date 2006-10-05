@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                                                 [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+		                                                                       [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -35,7 +35,7 @@
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
 			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
-				                that the pending action has been completed.</td>
+				                                      that the pending action has been completed.</td>
 			</tr>
 		</table>
 	  </p>
@@ -136,7 +136,7 @@
                 <td>
                   <asp:datagrid id="DataGrid_items" runat="server"
                   autogeneratecolumns="False" useaccessibleheader="True"
-                  cellpadding="10" gridlines="Horizontal" bordercolor="#DCDCDC" borderwidth="1px">
+                  cellpadding="10" gridlines="Horizontal" bordercolor="Gainsboro" borderwidth="1px">
                         <HeaderStyle backcolor="WhiteSmoke"></HeaderStyle>
                         <Columns>
                           <ASP:BoundColumn datafield="priority" sortexpression="priority" readonly="True" headertext="Priority">
@@ -148,53 +148,70 @@
                           <table cellpadding="2">
                             <tr>
                               <td>
-                                Make/model:
+								<small>Make/model:</small>
                               </td>
                               <td>
-                                <strong><%# DataBinder.Eval(Container.DataItem, "make_model") %></strong>&nbsp;
-                                <%# DataBinder.Eval(Container.DataItem, "be_refurbished") %>
+								<small><strong><%# DataBinder.Eval(Container.DataItem, "make_model") %></strong>&nbsp;
+								<%# DataBinder.Eval(Container.DataItem, "be_refurbished") %></small>
                               </td>
                             </tr>
                             <tr>
                               <td>
-                                Category:
-                              </td>
-							  <td><strong><%# DataBinder.Eval(Container.DataItem, "category") %></strong></td>
+								<small>Category:</small>
+							  </td>
+							  <td><small><strong><%# DataBinder.Eval(Container.DataItem, "category") %></strong></small></td>
 							</tr>
                             <tr>
-							  <td>Place kept:</td>
-							  <td><%# DataBinder.Eval(Container.DataItem, "place_kept") %></td>
-                            </tr>
-                            <tr>
-							  <td>Qty/unit cost/subtotal:</td>
-                              <td>
-								<strong><%# DataBinder.Eval(Container.DataItem, "quantity") %></strong>&nbsp;
-                                @
-								<%# DataBinder.Eval(Container.DataItem, "unit_cost", "{0:C}") %>&nbsp;
-                                ea. =
-                                <strong><%# DataBinder.Eval(Container.DataItem, "subtotal", "{0:C}") %></strong>
-                              </td>
-                            </tr>
-                            <tr>
-							  <td>Max unit cost allowed by EMSOF:</td>
-							  <td><%# DataBinder.Eval(Container.DataItem, "allowable_cost", "{0:C}") %></td>
+							  <td><small>Place kept:</small></td>
+							  <td><small><%# DataBinder.Eval(Container.DataItem, "place_kept") %></small></td>
 							</tr>
 							<tr>
-							  <td>EMSOF amount:</td>
+							  <td><small>Qty/unit cost/subtotal:</small></td>
 							  <td>
-								<strong><%# DataBinder.Eval(Container.DataItem, "emsof_ante", "{0:C}") %></strong>
+								<small><strong><%# DataBinder.Eval(Container.DataItem, "quantity") %></strong>&nbsp;
+								@
+								<%# DataBinder.Eval(Container.DataItem, "unit_cost", "{0:C}") %>&nbsp;
+								ea. =
+								<strong><%# DataBinder.Eval(Container.DataItem, "subtotal", "{0:C}") %></strong></small>
+							  </td>
+							</tr>
+							<tr>
+							  <td><small>Max unit cost allowed by EMSOF:</small></td>
+							  <td><small><%# DataBinder.Eval(Container.DataItem, "allowable_cost", "{0:C}") %></small></td>
+							</tr>
+							<tr>
+							  <td><small>EMSOF amount:</small></td>
+							  <td>
+								<small><strong><%# DataBinder.Eval(Container.DataItem, "emsof_ante", "{0:C}") %></strong></small>
 							  </td>
 							</tr>
 						  </table>
                             </ItemTemplate>
                           </ASP:TemplateColumn>
+                          <ASP:TemplateColumn headertext="Actuals">
+                            <ItemTemplate>
+<small>
+Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <%# DataBinder.Eval(Container.DataItem, "invoice_designator") %><br>
+Actual quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <%# DataBinder.Eval(Container.DataItem, "actual_quantity") %><br>
+Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %>
+</small>
+                            </ItemTemplate>
+                            <EditItemTemplate>
+<small>
+Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_invoice_designator" runat="server"></ASP:TextBox><br>
+Actual quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_quantity" runat="server"></ASP:TextBox><br>
+Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_subtotal_cost" runat="server"></ASP:TextBox>
+</small>
+                            </EditItemTemplate>
+                          </ASP:TemplateColumn>
+                          <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit"></ASP:EditCommandColumn>
                         </Columns>
-                  </asp:datagrid>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+				  </asp:datagrid>
+				</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
 	  </table>
 	  <p></p>
 	  <table cellspacing="0" cellpadding="0" border="1" id="Table_disposition" runat="server" bordercolor="#98fb98">
@@ -210,7 +227,7 @@
 				<td>
 				  <p>
 					If you are not ready to disposition this
-					                request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
+					                                      request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>

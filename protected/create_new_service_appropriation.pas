@@ -308,8 +308,7 @@ begin
   + NEW_LINE
   + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   //   Send the email message.
-  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-  smtpmail.Send
+  ki.common.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     bdp_get_service_email_address.ExecuteScalar.tostring,
