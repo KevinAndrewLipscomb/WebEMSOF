@@ -137,8 +137,7 @@ begin
   //
   // Send the notification message.
   //
-  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-  smtpmail.Send
+  ki.common.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     session['email_address_of_service_of_appropriation_selected_for_deletion'].tostring,

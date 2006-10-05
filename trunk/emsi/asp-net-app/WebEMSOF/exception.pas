@@ -97,15 +97,14 @@ begin
       p.notification_message := p.notification_message + session.keys[lcv].tostring + ' = ' + session.item[lcv].tostring + NEW_LINE;
     end;
     //
-    smtpmail.smtpserver := configurationsettings.appsettings['smtp_server'];
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       configurationsettings.appsettings['sender_email_address'],
       configurationsettings.appsettings['sender_email_address'],
       'EXCEPTION REPORT',
       p.notification_message
       );
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       configurationsettings.appsettings['sender_email_address'],
       configurationsettings.appsettings['sysadmin_sms_address'],
@@ -131,8 +130,7 @@ var
 begin
   comment := Safe(TextArea_user_comment.value,NARRATIVE);
   if comment <> system.string.EMPTY then begin
-    smtpmail.smtpserver := configurationsettings.appsettings['smtp_server'];
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       configurationsettings.appsettings['sender_email_address'],
       configurationsettings.appsettings['sender_email_address'],

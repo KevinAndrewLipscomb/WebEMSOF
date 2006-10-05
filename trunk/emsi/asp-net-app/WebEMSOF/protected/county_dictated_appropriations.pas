@@ -390,8 +390,7 @@ begin
     //
     // Send a notification message.
     //
-    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
@@ -511,8 +510,7 @@ begin
       )
       .ExecuteNonQuery;
     //
-    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),

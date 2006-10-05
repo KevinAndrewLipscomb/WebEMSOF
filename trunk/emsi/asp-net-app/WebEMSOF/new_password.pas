@@ -85,8 +85,7 @@ begin
     //
     email_address := biz_accounts.EmailAddressByKindId
       (session['target_user_table'].ToString,session[session['target_user_table'].ToString + '_user_id'].ToString);
-    smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       email_address,

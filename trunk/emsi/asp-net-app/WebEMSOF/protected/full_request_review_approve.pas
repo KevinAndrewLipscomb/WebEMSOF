@@ -17,8 +17,11 @@ type
     RECORD
     biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
     be_before_improvement_deadline: boolean;
+    display_actuals: boolean;
     num_items: cardinal;
     parent_appropriation_amount: decimal;
+    request_id: string;
+    status: Class_biz_emsof_requests.status_type;
     total_emsof_ante: decimal;
     END;
   TWebForm_full_request_review_approve = class(System.Web.UI.Page)
@@ -35,6 +38,9 @@ type
     procedure Button_mark_done_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure DataGrid_items_EditCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure DataGrid_items_CancelCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure DataGrid_items_UpdateCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -95,6 +101,10 @@ implementation
 uses
   Class_biz_appropriations;
 
+const
+  TCCI_ACTUALS = 2;
+  TCCI_LINKBUTTONS = 3;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -106,6 +116,9 @@ begin
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
+  Include(Self.DataGrid_items.CancelCommand, Self.DataGrid_items_CancelCommand);
+  Include(Self.DataGrid_items.EditCommand, Self.DataGrid_items_EditCommand);
+  Include(Self.DataGrid_items.UpdateCommand, Self.DataGrid_items_UpdateCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_Click);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
@@ -122,8 +135,6 @@ procedure TWebForm_full_request_review_approve.Page_Load
   e: System.EventArgs
   );
 var
-  request_id: string;
-  status: Class_biz_emsof_requests.status_type;
   timestamp: datetime;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -146,8 +157,9 @@ begin
     //
     // Initialize local vars.
     //
-    request_id := p.biz_emsof_requests.IdOf(session['e_item']);
-    status := p.biz_emsof_requests.StatusOf(session['e_item']);
+    p.request_id := p.biz_emsof_requests.IdOf(session['e_item']);
+    p.status := p.biz_emsof_requests.StatusOf(session['e_item']);
+    p.display_actuals := (p.status = status_type(NEEDS_INVOICE_COLLECTION));
     //
     Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
@@ -161,19 +173,19 @@ begin
     TableRow_regional_planner_approval_timestamp.visible := FALSE;
     TableRow_regional_exec_dir_approval_timestamp.visible := FALSE;
     //
-    if status > NEEDS_COUNTY_APPROVAL then begin
+    if p.status > NEEDS_COUNTY_APPROVAL then begin
       Table_prior_approvals.visible := TRUE;
       Label_sponsor_county_2.text := Label_sponsor_county.text;
       Label_county_approval_timestamp.text :=
-        p.biz_emsof_requests.CountyApprovalTimestampOf(request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
-      if status > NEEDS_REGIONAL_COMPLIANCE_CHECK then begin
-        if p.biz_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf(request_id,timestamp) then begin
+        p.biz_emsof_requests.CountyApprovalTimestampOf(p.request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
+      if p.status > NEEDS_REGIONAL_COMPLIANCE_CHECK then begin
+        if p.biz_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf(p.request_id,timestamp) then begin
           TableRow_regional_planner_approval_timestamp.visible := TRUE;
           Label_region_name_1.text := p.biz_emsof_requests.SponsorRegionNameOf(p.biz_emsof_requests.IdOf(session['e_item']));
           Label_regional_planner_approval_timestamp.text := timestamp.tostring('HH:mm:ss dddd, MMMM d, yyyy');
         end;
-        if status > NEEDS_REGIONAL_EXEC_DIR_APPROVAL then begin
-          if p.biz_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf(request_id,timestamp) then begin
+        if p.status > NEEDS_REGIONAL_EXEC_DIR_APPROVAL then begin
+          if p.biz_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf(p.request_id,timestamp) then begin
             TableRow_regional_exec_dir_approval_timestamp.visible := TRUE;
             Label_region_name_2.text := Label_region_name_1.text;
             Label_regional_exec_dir_approval_timestamp.text := timestamp.tostring('HH:mm:ss dddd, MMMM d, yyyy');
@@ -182,15 +194,15 @@ begin
       end;
     end;
     //
-    p.biz_emsof_requests.BindDetail(request_id,DataGrid_items);
+    p.biz_emsof_requests.BindDetail(p.request_id,DataGrid_items);
     //
     Label_sum_of_emsof_antes.text := p.total_emsof_ante.tostring('C');
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
-    if p.biz_emsof_requests.BeOkToApproveEmsofRequest(status) then begin
+    if p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.status) then begin
       Label_next_reviewer.text :=
-        p.biz_emsof_requests.NextReviewer(status);
+        p.biz_emsof_requests.NextReviewer(p.status);
       if datetime.Now <= p.biz_emsof_requests.ReworkDeadline(session['e_item']) then begin
         TableRow_reject.visible := FALSE;
         Button_disapprove.text := 'Return';
@@ -203,8 +215,8 @@ begin
       Table_disposition.visible := FALSE;
     end;
     //
-    if p.biz_emsof_requests.BeOkToMarkDone(status) then begin
-      Label_current_status.text := system.object(status).tostring;
+    if p.biz_emsof_requests.BeOkToMarkDone(p.status) then begin
+      Label_current_status.text := system.object(p.status).tostring;
     end else begin
       Table_action_pending.visible := FALSE;
       Table_mark_done.visible := FALSE;
@@ -220,6 +232,26 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.DataGrid_items_UpdateCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  
+end;
+
+procedure TWebForm_full_request_review_approve.DataGrid_items_CancelCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  DataGrid_items.EditItemIndex := -1;
+  p.biz_emsof_requests.BindDetail(p.request_id,DataGrid_items);
+end;
+
+procedure TWebForm_full_request_review_approve.DataGrid_items_EditCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  DataGrid_items.EditItemIndex := e.Item.ItemIndex;
+  p.biz_emsof_requests.BindDetail(p.request_id,DataGrid_items);
 end;
 
 procedure TWebForm_full_request_review_approve.LinkButton_change_email_address_Click(sender: System.Object;
@@ -289,6 +321,12 @@ end;
 procedure TWebForm_full_request_review_approve.DataGrid_items_ItemDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.DataGridItemEventArgs);
 begin
+  //
+  // Manage column visibility
+  //
+  e.item.cells[TCCI_ACTUALS].visible := p.display_actuals;
+  e.item.cells[TCCI_LINKBUTTONS].visible := p.display_actuals;
+  //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
     or (e.item.itemtype = listitemtype.item)

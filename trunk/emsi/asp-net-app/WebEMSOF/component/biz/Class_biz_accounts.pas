@@ -94,7 +94,6 @@ begin
   biz_user := TClass_biz_user.Create;
   db_accounts := TClass_db_accounts.Create;
   db_emsof_requests := TClass_db_emsof_requests.Create;
-  smtpmail.SmtpServer := ConfigurationSettings.AppSettings['smtp_server'];
 end;
 
 function TClass_biz_accounts.BeValidSysAdminCredentials(encoded_password: string): boolean;
@@ -214,7 +213,7 @@ begin
   //
   // Send notification to service.
   //
-  smtpmail.Send
+  ki.common.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
@@ -224,7 +223,7 @@ begin
   //
   //   Send notification to region.
   //
-  smtpmail.Send
+  ki.common.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     emsof_coord_email_address,
@@ -273,7 +272,7 @@ begin
     //
     //   Send notification to service.
     //
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       service_email_address,
@@ -316,7 +315,7 @@ begin
     //
     //   Send notifications to service and region.
     //
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       service_email_address,
@@ -346,7 +345,7 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       other_stakeholder_email_address,
@@ -431,7 +430,7 @@ begin
   //
   //   Send notification to service.
   //
-  smtpmail.Send
+  ki.common.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
@@ -442,7 +441,7 @@ begin
   //   Send notification to region.
   //
   if next_reviewer_email_target <> system.string.EMPTY then begin
-    smtpmail.Send
+    ki.common.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
         next_reviewer_email_target,
@@ -480,7 +479,7 @@ var
   poc_email_address: string;
 begin
   poc_email_address := EmailAddressByKindId('service',service_id);
-  smtpmail.Send
+  ki.common.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailTargetByRole('emsof-coordinator'),
