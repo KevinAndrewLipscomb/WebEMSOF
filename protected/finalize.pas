@@ -88,7 +88,8 @@ implementation
 uses
   Class_biz_accounts,
   Class_biz_appropriations,
-  Class_biz_emsof_requests;
+  Class_biz_emsof_requests,
+  Class_biz_fiscal_years;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -119,6 +120,7 @@ end;
 procedure TWebForm_finalize.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr: borland.data.provider.bdpdatareader;
+  biz_fiscal_years: TClass_biz_fiscal_years;
   grand_total_cost: decimal;
   grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
@@ -132,6 +134,8 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
     //
     Label_service_name.text := session['service_name'].tostring;
+    //
+    biz_fiscal_years := TClass_biz_fiscal_years.Create;
     //
     if decimal(session['unused_amount']) >= 0 then begin
       //
@@ -178,7 +182,8 @@ begin
         'select value as emsof_service_purchase_completion_deadline'
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
-        + ' where name = "emsof-service-purchase-completion-deadline"',
+        + ' where name = "emsof-service-purchase-completion-deadline"'
+        + '   and fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent,
         ki.common.db
         )
         .ExecuteReader;
@@ -191,7 +196,8 @@ begin
         'select value as emsof_service_invoice_submission_deadline'
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
-        + ' where name = "emsof-service-invoice-submission-deadline"',
+        + ' where name = "emsof-service-invoice-submission-deadline"'
+        + '   and fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent,
         ki.common.db
         )
         .ExecuteReader;
@@ -204,7 +210,8 @@ begin
         'select value as emsof_service_canceled_check_submission_deadline'
         + ' from fy_calendar'
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
-        + ' where name = "emsof-service-canceled-check-submission-deadline"',
+        + ' where name = "emsof-service-canceled-check-submission-deadline"'
+        + '   and fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent,
         ki.common.db
         )
         .ExecuteReader;
