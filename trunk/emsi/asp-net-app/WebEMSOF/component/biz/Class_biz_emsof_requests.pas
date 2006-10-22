@@ -8,6 +8,8 @@ uses
   Class_db_emsof_requests,
   Class_biz_accounts,
   Class_biz_appropriations,
+  Class_biz_equipment,
+  Class_biz_match_level,
   Class_biz_regional_staffers,
   Class_biz_user,
   system.security.principal,
@@ -41,7 +43,9 @@ type
     db_appropriations: TClass_db_appropriations;
     db_emsof_requests: TClass_db_emsof_requests;
     biz_accounts: TClass_biz_accounts;
+    biz_equipment: TClass_biz_equipment;
     biz_appropriations: TClass_biz_appropriations;
+    biz_match_level: TClass_biz_match_level;
     biz_regional_staffers: TClass_biz_regional_staffers;
     biz_user: TClass_biz_user;
   public
@@ -62,6 +66,12 @@ type
       )
       : boolean;
     function BeValidRegionalPlannerApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
+    function BeValidStateApprovalTimestampOf
       (
       master_id: string;
       out timestamp: datetime
@@ -116,6 +126,18 @@ type
       reason: string;
       emsof_ante: string
       );
+    function EmsofAnteOfItem
+      (
+      master_id: string;
+      priority: string
+      )
+      : decimal;
+    function EquipmentCodeOf
+      (
+      master_id: string;
+      priority: string
+      )
+      : string;
     procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function IdOf(e_item: system.object): string;
@@ -139,6 +161,14 @@ type
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
+    procedure SetActuals
+      (
+      master_id: string;
+      priority: string;
+      invoice_designator: string;
+      quantity: string;
+      subtotal_cost: string
+      );
     procedure SetHasWishList
       (
       master_id: string;
@@ -156,11 +186,14 @@ type
       regional_staffer_user_id: string;
       amendment_num_string: string
       );
+    function SumOfActualValues(fy_id: string = ''): decimal;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
     function TcciOfAppropriation: cardinal;
     function TcciOfId: cardinal;
     function TcciOfEmsofAnte: cardinal;
+    function TcciOfFullRequestActuals: cardinal;
+    function TcciOfFullRequestPriority: cardinal;
     function TcciOfPasswordResetEmailAddress: cardinal;
     function TcciOfServiceName: cardinal;
     function TcciOfLeftoverOrShortage: cardinal;
@@ -184,6 +217,8 @@ begin
   db_emsof_requests := TClass_db_emsof_requests.Create;
   biz_accounts := TClass_biz_accounts.Create;
   biz_appropriations := TClass_biz_appropriations.Create;
+  biz_equipment := TClass_biz_equipment.Create;
+  biz_match_level := TClass_biz_match_level.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
   biz_user := TClass_biz_user.Create;
 end;
@@ -202,6 +237,7 @@ var
   amount_to_return_to_county: decimal;
   approval_timestamp_column: Class_db_emsof_requests.approval_timestamp_column_type;
   leftover_or_shortage: decimal;
+  master_id: string;
   next_approver_role: string;
   next_status: status_type;
   reviewer_descriptor: string;
@@ -210,6 +246,7 @@ begin
   amount_to_return_to_county := 0;
   approval_timestamp_column := Class_db_emsof_requests.approval_timestamp_column_type(NONE);
   leftover_or_shortage := 0;
+  master_id := IdOf(e_item);
   status := StatusOf(e_item);
   next_status := status; // Better initialize it to something.
   case status of
@@ -242,7 +279,7 @@ begin
     BEGIN
     approval_timestamp_column := STATE;
     next_approver_role := system.string.EMPTY;
-    reviewer_descriptor := 'State staffer ' + promoter;
+    reviewer_descriptor := SponsorRegionNameOf(master_id);
     next_status := NEEDS_INVOICE_COLLECTION;
     END;
   end;
@@ -259,15 +296,15 @@ begin
         FyDesignatorOf(e_item)
         );
     end else begin
-//      biz_accounts.IssueNoticeToProceed
-//        (
-//        next_approver_role,
-//        reviewer_descriptor,
-//        system.object(next_status).tostring,
-//        ServiceIdOf(e_item),
-//        ServiceNameOf(e_item),
-//        FyDesignatorOf(e_item)
-//        );
+      biz_accounts.IssueNoticeToProceed
+        (
+        ServiceIdOf(e_item),
+        ServiceNameOf(e_item),
+        FyDesignatorOf(e_item),
+        reviewer_descriptor,
+        SponsorCountyNameOf(e_item),
+        master_id
+        );
     end;
   end;
   //
@@ -286,6 +323,9 @@ begin
   NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
     BeOkToApproveEmsofRequest :=
       httpcontext.current.user.IsInRole('director');
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    BeOkToApproveEmsofRequest := httpcontext.current.user.IsInRole('emsof-coordinator')
+      or httpcontext.current.user.IsInRole('director');
   end;
 end;
 
@@ -318,8 +358,9 @@ begin
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-clerk')
       or httpcontext.current.user.IsInRole('emsof-coordinator')
       or httpcontext.current.user.IsInRole('director');
-  NEEDS_PA_DOH_EMSO_APPROVAL:
+  NEEDS_INVOICE_COLLECTION:
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-coordinator')
+      or httpcontext.current.user.IsInRole('emsof-accountant')
       or httpcontext.current.user.IsInRole('director');
   NEEDS_REIMBURSEMENT_ISSUANCE:
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-accountant')
@@ -471,6 +512,26 @@ begin
   //
 end;
 
+function TClass_biz_emsof_requests.EmsofAnteOfItem
+  (
+  master_id: string;
+  priority: string
+  )
+  : decimal;
+begin
+  EmsofAnteOfItem := db_emsof_requests.EmsofAnteOfItem(master_id,priority);
+end;
+
+function TClass_biz_emsof_requests.EquipmentCodeOf
+  (
+  master_id: string;
+  priority: string
+  )
+  : string;
+begin
+  EquipmentCodeOf := db_emsof_requests.EquipmentCodeOf(master_id,priority);
+end;
+
 procedure TClass_biz_emsof_requests.Finalize(master_id: string);
 begin
   db_emsof_requests.Finalize(master_id);
@@ -523,18 +584,20 @@ begin
       FyDesignatorOf(e_item)
       );
     END;
-  NEEDS_PA_DOH_EMSO_APPROVAL:
+  NEEDS_INVOICE_COLLECTION:
     BEGIN
-    next_status := NEEDS_INVOICE_COLLECTION;
+    next_status := NEEDS_CANCELED_CHECK_COLLECTION;
+    db_emsof_requests.RollUpActualValue(master_id);
     db_emsof_requests.MarkDone(master_id,ord(next_status),biz_user.Kind);
-    biz_accounts.IssueNoticeToProceed
+    biz_accounts.MakePromotionNotification
       (
+      system.string.EMPTY,
+      reviewer_descriptor,
+      system.object(next_status).tostring,
       ServiceIdOf(e_item),
       ServiceNameOf(e_item),
       FyDesignatorOf(e_item),
-      reviewer_descriptor,
-      SponsorCountyNameOf(e_item),
-      master_id
+      FALSE
       );
     END;
   NEEDS_REIMBURSEMENT_ISSUANCE:
@@ -555,6 +618,8 @@ begin
     NextReviewer := 'Regional Council Executive Director';
   NEEDS_REGIONAL_EXEC_DIR_APPROVAL:
     NextReviewer := 'Regional Council EMSOF Coordinator (for transmittal to PA DOH EMSO)';
+  NEEDS_PA_DOH_EMSO_APPROVAL:
+    NextReviewer := 'Regional Council EMSOF Coordinator (for invoice collection)';
   end;
 end;
 
@@ -604,6 +669,16 @@ begin
   BeValidRegionalPlannerApprovalTimestampOf := db_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf(master_id,timestamp);
 end;
 
+function TClass_biz_emsof_requests.BeValidStateApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
+begin
+  BeValidStateApprovalTimestampOf := db_emsof_requests.BeValidStateApprovalTimestampOf(master_id,timestamp);
+end;
+
 function TClass_biz_emsof_requests.ReworkDeadline(e_item: system.object): datetime;
 begin
   ReworkDeadline := db_emsof_requests.ReworkDeadline(e_item);
@@ -617,6 +692,40 @@ end;
 function TClass_biz_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
   ServiceNameOf := db_emsof_requests.ServiceNameOf(e_item);
+end;
+
+procedure TClass_biz_emsof_requests.SetActuals
+  (
+  master_id: string;
+  priority: string;
+  invoice_designator: string;
+  quantity: string;
+  subtotal_cost: string
+  );
+var
+  county_dictum_id: string;
+  val2: decimal;
+begin
+  county_dictum_id := CountyDictumIdOf(master_id);
+  if biz_equipment.BeMatchExempt
+    (
+    EquipmentCodeOf(master_id,priority),
+    biz_match_level.EnumOfId(biz_appropriations.MatchLevelIdOf(county_dictum_id))
+    )
+  then begin
+    val2 := decimal.Parse(subtotal_cost);
+  end else begin
+    val2 := decimal.Parse(subtotal_cost)*biz_appropriations.MatchFactorOf(county_dictum_id);
+  end;
+  db_emsof_requests.SetActuals
+    (
+    master_id,
+    priority,
+    invoice_designator,
+    quantity,
+    subtotal_cost,
+    math.Min(EmsofAnteOfItem(master_id,priority),val2)
+    );
 end;
 
 procedure TClass_biz_emsof_requests.SetHasWishList
@@ -706,11 +815,18 @@ begin
   end;
 end;
 
-function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;
-var
-  biz_user: TClass_biz_user;
+function TClass_biz_emsof_requests.SumOfActualValues(fy_id: string = ''): decimal;
 begin
-  biz_user := TClass_biz_user.Create;
+  if fy_id = system.string.EMPTY then begin
+    SumOfActualValues := db_emsof_requests.SumOfActualValues
+      (biz_user.Kind,biz_user.IdNum,TClass_biz_fiscal_years.Create.IdOfCurrent);
+  end else begin
+    SumOfActualValues := db_emsof_requests.SumOfActualValues(biz_user.Kind,biz_user.IdNum,fy_id);
+  end;
+end;
+
+function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;
+begin
   if fy_id = system.string.EMPTY then begin
     SumOfRequestValues := db_emsof_requests.SumOfRequestValues
       (biz_user.Kind,biz_user.IdNum,TClass_biz_fiscal_years.Create.IdOfCurrent);
@@ -737,6 +853,16 @@ end;
 function TClass_biz_emsof_requests.TcciOfEmsofAnte: cardinal;
 begin
   TcciOfEmsofAnte := db_emsof_requests.TcciOfEmsofAnte;
+end;
+
+function TClass_biz_emsof_requests.TcciOfFullRequestActuals: cardinal;
+begin
+  TcciOfFullRequestActuals := db_emsof_requests.TcciOfFullRequestActuals;
+end;
+
+function TClass_biz_emsof_requests.TcciOfFullRequestPriority: cardinal;
+begin
+  TcciOfFullRequestPriority := db_emsof_requests.TcciOfFullRequestPriority;
 end;
 
 function TClass_biz_emsof_requests.TcciOfPasswordResetEmailAddress: cardinal;

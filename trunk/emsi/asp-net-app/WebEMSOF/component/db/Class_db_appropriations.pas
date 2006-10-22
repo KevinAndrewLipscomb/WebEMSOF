@@ -6,6 +6,7 @@ uses
   borland.data.provider,
   Class_db,
   Class_biz_fiscal_years,
+  Class_biz_match_level,
   Class_biz_regional_staffers;
 
 
@@ -28,6 +29,8 @@ type
       regional_staffer_id: string;
       amendment_num_string: string
       );
+    function MatchFactorOf(county_dictum_id: string): decimal;
+    function MatchLevelIdOf(county_dictum_id: string): cardinal;
     function NumActiveAmendments(regional_staffer_id: string): cardinal;
     function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
     procedure ReduceBy
@@ -130,6 +133,41 @@ begin
     connection
     )
     .ExecuteNonQuery;
+  self.Close;
+end;
+
+function TClass_db_appropriations.MatchFactorOf(county_dictum_id: string): decimal;
+begin
+  self.Open;
+  MatchFactorOf := decimal
+    (
+    borland.data.provider.BdpCommand.Create
+      (
+      'select factor'
+      + ' from county_dictated_appropriation'
+      +   ' join match_level on (match_level.id=county_dictated_appropriation.match_level_id)'
+      + ' where county_dictated_appropriation.id = ' + county_dictum_id,
+      connection
+      )
+      .ExecuteScalar
+    );
+  self.Close
+end;
+
+function TClass_db_appropriations.MatchLevelIdOf(county_dictum_id: string): cardinal;
+begin
+  self.Open;
+  MatchLevelIdOf := int32.Parse
+    (
+    borland.data.provider.BdpCommand.Create
+      (
+      'select match_level_id'
+      + ' from county_dictated_appropriation'
+      + ' where county_dictated_appropriation.id = ' + county_dictum_id,
+      connection
+      )
+    .ExecuteScalar.tostring
+    );
   self.Close;
 end;
 

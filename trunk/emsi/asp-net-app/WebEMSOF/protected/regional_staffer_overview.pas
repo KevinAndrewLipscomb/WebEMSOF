@@ -137,6 +137,7 @@ procedure TWebForm_regional_staffer_overview.Page_Load
   e: System.EventArgs
   );
 var
+  amount_actually_spent: decimal;
   biz_appropriations: TClass_biz_appropriations;
   biz_emsof_requests: TClass_biz_emsof_requests;
   parent_appropriation: decimal;
@@ -168,8 +169,9 @@ begin
       )
       .tostring('C');
     Label_requested_by_services.text := biz_emsof_requests.SumOfRequestValues.tostring('C');
-//    Label_actually_spent.text :=
-//    Label_remaining.text := (parent_appropriation - amount_actually_spent).tostring('C');
+    amount_actually_spent := biz_emsof_requests.SumOfActualValues;
+    Label_actually_spent.text := amount_actually_spent.tostring('C');
+    Label_remaining.text := (parent_appropriation - amount_actually_spent).tostring('C');
     //
     LinkButton_num_requests_needing_development.text :=
       biz_emsof_requests.TallyOfStatus(ALLOCATED) + LinkButton_num_requests_needing_development.text;

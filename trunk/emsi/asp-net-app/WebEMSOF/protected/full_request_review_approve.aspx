@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                                                                       [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+		                                                                                   [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -35,7 +35,7 @@
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
 			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
-				                                      that the pending action has been completed.</td>
+				                                                  that the pending action has been completed.</td>
 			</tr>
 		</table>
 	  </p>
@@ -120,6 +120,10 @@
                         <ASP:Label id="Label_region_name_2" runat="server"></ASP:Label>&nbsp;Executive Director:</td>
 		<td><ASP:Label id="Label_regional_exec_dir_approval_timestamp" runat="server"></ASP:Label></td>
 	  </tr>
+	  <tr id="TableRow_state_approval_timestamp" runat="server">
+		<td>PA DOH EMSO:</td>
+		<td><ASP:Label id="Label_state_approval_timestamp" runat="server"></ASP:Label></td>
+	  </tr>
 				</table></td>
 			</tr>
         </table>
@@ -190,17 +194,24 @@
                           </ASP:TemplateColumn>
                           <ASP:TemplateColumn headertext="Actuals">
                             <ItemTemplate>
-<small>
-Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <%# DataBinder.Eval(Container.DataItem, "invoice_designator") %><br>
-Actual quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <%# DataBinder.Eval(Container.DataItem, "actual_quantity") %><br>
-Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %>
+
+                              <html>
+                                <head></head>
+                                <body>
+<small>Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "invoice_designator") %></b><br>
+Quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_quantity") %></b><br>
+Subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %></b><br>
+EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_emsof_ante", "{0:C}") %></b>
 </small>
+                                </body>
+                              </html>
                             </ItemTemplate>
                             <EditItemTemplate>
 <small>
-Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_invoice_designator" runat="server"></ASP:TextBox><br>
-Actual quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_quantity" runat="server"></ASP:TextBox><br>
-Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_subtotal_cost" runat="server"></ASP:TextBox>
+Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_invoice_designator" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "invoice_designator") %>'></ASP:TextBox><br>
+Actual quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_quantity" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "actual_quantity") %>'></ASP:TextBox><br>
+Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_subtotal_cost" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %>'></ASP:TextBox><br>
+EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 </small>
                             </EditItemTemplate>
                           </ASP:TemplateColumn>
@@ -227,7 +238,7 @@ Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actua
 				<td>
 				  <p>
 					If you are not ready to disposition this
-					                                      request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
+					                                                  request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>

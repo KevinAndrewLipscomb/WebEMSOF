@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                              [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
+			                                               [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
 			<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
 		</small>
@@ -56,7 +56,7 @@
 													<tr>
 													  <td align="right">
 														<ASP:Label id="Label_actually_spent" runat="server"></ASP:Label></td>
-                                                      <td>actually_spent</td>
+                                                      <td>actually spent</td>
                                                     </tr>
                                                     <tr>
 													  <td align="right">
