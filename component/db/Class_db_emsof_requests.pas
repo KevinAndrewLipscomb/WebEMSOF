@@ -53,6 +53,12 @@ type
       out timestamp: datetime
       )
       : boolean;
+    function BeValidStateApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
     procedure BindDetail
       (
       master_id: string;
@@ -103,6 +109,18 @@ type
       role: string
       );
     function DetailText(master_id: string): string;
+    function EmsofAnteOfItem
+      (
+      master_id: string;
+      priority: string
+      )
+      : decimal;
+    function EquipmentCodeOf
+      (
+      master_id: string;
+      priority: string
+      )
+      : string;
     procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
@@ -131,8 +149,18 @@ type
     function PropertyNameOfAppropriation: string;
     function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
+    procedure RollUpActualValue(master_id: string);
     function ServiceIdOf(e_item: system.object): string;
     function ServiceNameOf(e_item: system.object): string;
+    procedure SetActuals
+      (
+      master_id: string;
+      priority: string;
+      invoice_designator: string;
+      quantity: string;
+      subtotal_cost: string;
+      emsof_ante: decimal
+      );
     procedure SetHasWishList
       (
       master_id: string;
@@ -142,6 +170,13 @@ type
     function SponsorCountyNameOf(e_item: system.object): string;
     function SponsorRegionNameOf(master_id: string): string;
     function StatusCodeOf(e_item: system.object): cardinal;
+    function SumOfActualValues
+      (
+      user_kind: string;
+      user_id: string;
+      fy_id: string
+      )
+      : decimal;
     function SumOfRequestValues
       (
       user_kind: string;
@@ -153,6 +188,8 @@ type
     function TcciOfAppropriation: cardinal;
     function TcciOfId: cardinal;
     function TcciOfEmsofAnte: cardinal;
+    function TcciOfFullRequestActuals: cardinal;
+    function TcciOfFullRequestPriority: cardinal;
     function TcciOfPasswordResetEmailAddress: cardinal;
     function TcciOfServiceName: cardinal;
     function TcciOfLeftoverOrShortage: cardinal;
@@ -177,6 +214,9 @@ const
   TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 11;
   TCCI_STATUS_CODE = 12;
   TCCI_STATUS_DESCRIPTION = 13;
+  //
+  TCCI_FULL_REQUEST_PRIORITY = 0;
+  TCCI_FULL_REQUEST_ACTUALS = 2;
 
 procedure TClass_db_emsof_requests.BindOverview
   (
@@ -266,11 +306,9 @@ begin
     end;
     cmdText := cmdText
     + ' update emsof_request_master'
-    + ' join county_dictated_appropriation'
-    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-    + ' set emsof_request_master.status_code = ' + next_status.tostring
+    + ' set status_code = ' + next_status.tostring
     +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()'
-    + ' where emsof_request_master.id = ' + master_id
+    + ' where id = ' + master_id
     + '; ';
     if amount_to_return_to_county > 0 then begin
       cmdText := cmdText
@@ -282,10 +320,6 @@ begin
       +   ' from emsof_request_master'
       +   ' where emsof_request_master.id = ' + master_id
       +   ' ); ';
-    end;
-    if user_kind = 'state-staffer' then begin
-      cmdText := cmdText
-      + ' update emsof_request_detail set status_code = 2 where master_id = ' + master_id + ' and status_code = 1; ';
     end;
     if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') then begin
       cmdText := cmdText + ' COMMIT;';
@@ -342,6 +376,29 @@ begin
   self.Close;
 end;
 
+function TClass_db_emsof_requests.BeValidStateApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
+var
+  bdr: borland.data.provider.bdpdatareader;
+begin
+  self.Open;
+  bdr := borland.data.provider.bdpcommand.Create
+    ('select state_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
+    .ExecuteReader;
+  bdr.Read;
+  if bdr.IsDbNull(0) then begin
+    BeValidStateApprovalTimestampOf := FALSE;
+  end else begin
+    BeValidStateApprovalTimestampOf := TRUE;
+    timestamp := datetime(bdr['state_approval_timestamp']);
+  end;
+  self.Close;
+end;
+
 procedure TClass_db_emsof_requests.BindDetail
   (
   master_id: string;
@@ -364,6 +421,7 @@ begin
     + ' ,invoice_designator'
     + ' ,actual_quantity'
     + ' ,actual_subtotal_cost'
+    + ' ,actual_emsof_ante'
     + ' from emsof_request_detail'
     +   ' join eligible_provider_equipment_list'
     +     ' on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
@@ -561,6 +619,49 @@ begin
   DetailText := detail_text;
 end;
 
+function TClass_db_emsof_requests.EmsofAnteOfItem
+  (
+  master_id: string;
+  priority: string
+  )
+  : decimal;
+begin
+  self.Open;
+  EmsofAnteOfItem := decimal
+    (
+    borland.data.provider.bdpcommand.Create
+      (
+      'select emsof_ante'
+      + ' from emsof_request_detail'
+      + ' where master_id = ' + master_id
+      +   ' and priority = ' + priority,
+      connection
+      )
+      .ExecuteScalar
+    );
+  self.Close;
+end;
+
+function TClass_db_emsof_requests.EquipmentCodeOf
+  (
+  master_id: string;
+  priority: string
+  )
+  : string;
+begin
+  self.Open;
+  EquipmentCodeOf := borland.data.provider.bdpcommand.Create
+    (
+    'select equipment_code'
+    + ' from emsof_request_detail'
+    + ' where master_id = ' + master_id
+    +   ' and priority = ' + priority,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
+end;
+
 procedure TClass_db_emsof_requests.Finalize(master_id: string);
 begin
   self.Open;
@@ -614,7 +715,7 @@ var
   cmdText: string;
 begin
   cmdText := 'update emsof_request_master set status_code = ' + next_status.tostring + ' where id = ' + master_id;
-  if user_kind = 'state-staffer' then begin
+  if (user_kind = 'state-staffer') then begin
     cmdText :=
     'START TRANSACTION; '
     + cmdText + ';'
@@ -713,6 +814,20 @@ begin
   self.Close;
 end;
 
+procedure TClass_db_emsof_requests.RollUpActualValue(master_id: string);
+begin
+  self.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update emsof_request_master'
+    + ' set actual_value = (select sum(actual_emsof_ante) from emsof_request_detail where master_id = ' + master_id + ')'
+    + ' where id = ' + master_id,
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
+end;
+
 function TClass_db_emsof_requests.ServiceIdOf(e_item: system.object): string;
 begin
   ServiceIdOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_ID].text,NUM);
@@ -721,6 +836,32 @@ end;
 function TClass_db_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
   ServiceNameOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_NAME].text,ORG_NAME);
+end;
+
+procedure TClass_db_emsof_requests.SetActuals
+  (
+  master_id: string;
+  priority: string;
+  invoice_designator: string;
+  quantity: string;
+  subtotal_cost: string;
+  emsof_ante: decimal
+  );
+begin
+  self.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update emsof_request_detail'
+    + ' set invoice_designator = "' + invoice_designator + '"'
+    + ' , actual_quantity = ' + quantity
+    + ' , actual_subtotal_cost = ' + subtotal_cost
+    + ' , actual_emsof_ante = ' + emsof_ante.tostring
+    + ' where master_id = ' + master_id
+    +   ' and priority = ' + priority,
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
 end;
 
 procedure TClass_db_emsof_requests.SetHasWishList
@@ -775,6 +916,51 @@ end;
 function TClass_db_emsof_requests.StatusCodeOf(e_item: system.object): cardinal;
 begin
   StatusCodeOf := convert.ToInt16(Safe(DataGridItem(e_item).cells[TCCI_STATUS_CODE].text,NUM));
+end;
+
+function TClass_db_emsof_requests.SumOfActualValues
+  (
+  user_kind: string;
+  user_id: string;
+  fy_id: string
+  )
+  : decimal;
+var
+  cmdText: string;
+  sum_obj: system.object;
+begin
+  if user_kind = 'regional_staffer' then begin
+    cmdText := 'select sum(actual_value)'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    +   ' join regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
+    + ' where regional_staffer.id = ' + user_id
+    +   ' and fiscal_year_id = ' + fy_id;
+  end else if user_kind = 'county' then begin
+    cmdText := 'select sum(actual_value)'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' where county_code = ' + user_id
+    +   ' and fiscal_year_id = ' + fy_id;
+  end;
+  self.Open;
+  sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
+  self.Close;
+  if sum_obj <> dbnull.value then begin
+    SumOfActualValues := decimal(sum_obj);
+  end else begin
+    SumOfActualValues := 0;
+  end;
 end;
 
 function TClass_db_emsof_requests.SumOfRequestValues
@@ -856,6 +1042,16 @@ end;
 function TClass_db_emsof_requests.TcciOfEmsofAnte: cardinal;
 begin
   TcciOfEmsofAnte := TCCI_EMSOF_ANTE;
+end;
+
+function TClass_db_emsof_requests.TcciOfFullRequestActuals: cardinal;
+begin
+  TcciOfFullRequestActuals := TCCI_FULL_REQUEST_ACTUALS;
+end;
+
+function TClass_db_emsof_requests.TcciOfFullRequestPriority: cardinal;
+begin
+  TcciOfFullRequestPriority := TCCI_FULL_REQUEST_PRIORITY;
 end;
 
 function TClass_db_emsof_requests.TcciOfPasswordResetEmailAddress: cardinal;

@@ -89,6 +89,8 @@ type
     TableRow_regional_exec_dir_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
     Label_region_name_1: System.Web.UI.WebControls.Label;
     Label_region_name_2: System.Web.UI.WebControls.Label;
+    Label_state_approval_timestamp: System.Web.UI.WebControls.Label;
+    TableRow_state_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -172,6 +174,7 @@ begin
     Table_prior_approvals.visible := FALSE;
     TableRow_regional_planner_approval_timestamp.visible := FALSE;
     TableRow_regional_exec_dir_approval_timestamp.visible := FALSE;
+    TableRow_state_approval_timestamp.visible := FALSE;
     //
     if p.status > NEEDS_COUNTY_APPROVAL then begin
       Table_prior_approvals.visible := TRUE;
@@ -189,6 +192,12 @@ begin
             TableRow_regional_exec_dir_approval_timestamp.visible := TRUE;
             Label_region_name_2.text := Label_region_name_1.text;
             Label_regional_exec_dir_approval_timestamp.text := timestamp.tostring('HH:mm:ss dddd, MMMM d, yyyy');
+          end;
+          if p.status > NEEDS_PA_DOH_EMSO_APPROVAL then begin
+            if p.biz_emsof_requests.BeValidStateApprovalTimestampOf(p.request_id,timestamp) then begin
+              TableRow_state_approval_timestamp.visible := TRUE;
+              Label_state_approval_timestamp.text := timestamp.tostring('HH:mm:ss dddd, MMMM d, yyyy');
+            end;
           end;
         end;
       end;
@@ -234,10 +243,33 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_full_request_review_approve.DataGrid_items_UpdateCommand(source: System.Object;
-  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+procedure TWebForm_full_request_review_approve.DataGrid_items_UpdateCommand
+  (
+  source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs
+  );
+var
+  actual_quantity: string;
+  actual_subtotal_cost: string;
+  invoice_designator: string;
+  priority: string;
 begin
-  
+  //
+  priority := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestPriority].Text.Trim,NARRATIVE);
+  invoice_designator := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestActuals].FindControl('TextBox_invoice_designator')).Text.Trim,NARRATIVE);
+  actual_quantity := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestActuals].FindControl('TextBox_actual_quantity')).Text.Trim,NUM);
+  actual_subtotal_cost := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestActuals].FindControl('TextBox_actual_subtotal_cost')).Text.Trim,REAL_NUM);
+  //
+  if (invoice_designator <> system.string.EMPTY)
+    and (actual_quantity <> system.string.EMPTY)
+    and (actual_subtotal_cost <> system.string.EMPTY)
+  then begin
+    p.biz_emsof_requests.SetActuals(p.request_id,priority,invoice_designator,actual_quantity,actual_subtotal_cost);
+  end;
+  //
+  DataGrid_items.EditItemIndex := -1;
+  p.biz_emsof_requests.BindDetail(p.request_id,DataGrid_items);
+  //
 end;
 
 procedure TWebForm_full_request_review_approve.DataGrid_items_CancelCommand(source: System.Object;

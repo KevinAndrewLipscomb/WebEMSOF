@@ -101,7 +101,10 @@ uses
   state_required_report in 'protected\state_required_report.pas' {state_required_report.TWebForm_state_required_report: System.Web.UI.Page},
   login in 'login.pas' {login.TWebForm_login: System.Web.UI.Page},
   state_transmittal_complete in 'protected\state_transmittal_complete.pas' {state_transmittal_complete.TWebForm_state_transmittal_complete: System.Web.UI.Page},
-  exception in 'exception.pas' {exception.TWebForm_exception: System.Web.UI.Page};
+  exception in 'exception.pas' {exception.TWebForm_exception: System.Web.UI.Page},
+  Class_biz_equipment in 'component\biz\Class_biz_equipment.pas',
+  Class_db_equipment in 'component\db\Class_db_equipment.pas',
+  Class_biz_match_level in 'component\biz\Class_biz_match_level.pas';
 
 const ID = '$Id$';
 

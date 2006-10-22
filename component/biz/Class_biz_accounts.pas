@@ -69,7 +69,8 @@ type
       new_status_description: string;
       service_id: string;
       service_name: string;
-      fy_designator: string
+      fy_designator: string;
+      be_warning_required: boolean = TRUE
       );
     procedure NotifyRegionOfServicePocAffirmation
       (
@@ -387,7 +388,8 @@ procedure TClass_biz_accounts.MakePromotionNotification
   new_status_description: string;
   service_id: string;
   service_name: string;
-  fy_designator: string
+  fy_designator: string;
+  be_warning_required: boolean = TRUE
   );
 var
   messageText: string;
@@ -411,11 +413,15 @@ begin
   if next_reviewer_email_target <> system.string.EMPTY then begin
     messageText := messageText + 'The next reviewer''s email address is <' + next_reviewer_email_target + '>.';
   end;
+  if be_warning_required then begin
+    messageText := messageText
+    + NEW_LINE
+    + NEW_LINE
+    + 'NOTE that this message is NOT a "Notice To Proceed", so you must NOT purchase any of the items in your EMSOF request '
+    + 'yet.';
+  end;
   messageText := messageText
   + NEW_LINE
-  + NEW_LINE
-  + 'NOTE that this message is NOT a "Notice To Proceed", so you must NOT purchase any of the items in your EMSOF request '
-  + 'yet.' + NEW_LINE
   + NEW_LINE
   + 'You can review your EMSOF requests by visiting:' + NEW_LINE
   + NEW_LINE

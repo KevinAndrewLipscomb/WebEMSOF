@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  system.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   ki.common,
   borland.data.provider,
   Class_biz_appropriations,

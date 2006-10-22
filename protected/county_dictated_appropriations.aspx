@@ -165,7 +165,7 @@
                           <ASP:BoundColumn datafield="appropriation" sortexpression="appropriation" headertext="Amount" dataformatstring="{0:C}">
                             <ItemStyle font-bold="True"></ItemStyle>
                           </ASP:BoundColumn>
-                          <ASP:BoundColumn datafield="leftover_or_shortage" sortexpression="leftover_or_shortage" readonly="True" headertext="Leftover / (Shortage)">
+                          <ASP:BoundColumn datafield="leftover_or_shortage" sortexpression="leftover_or_shortage" readonly="True" headertext="+Leftover / -Shortage">
                             <HeaderStyle horizontalalign="Center"></HeaderStyle>
                             <ItemStyle horizontalalign="Center"></ItemStyle>
                           </ASP:BoundColumn>
