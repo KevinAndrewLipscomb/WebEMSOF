@@ -123,7 +123,7 @@
 			<Directories Name="UnitOutputDir" Type="String"></Directories>
 			<Directories Name="PackageDLLOutputDir" Type="String"></Directories>
 			<Directories Name="PackageDCPOutputDir" Type="String"></Directories>
-			<Directories Name="SearchPath" Type="String">c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\program files\common files\borland shared\bds\shared assemblies\4.0;c:\documents and settings\administrator\my documents\borland studio projects\package\ki;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\documents and settings\administrator\my documents\sandbox\kveo-it-project\foundation\dotnet\ki</Directories>
+			<Directories Name="SearchPath" Type="String">c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\program files\common files\borland shared\bds\shared assemblies\4.0;c:\documents and settings\administrator\my documents\borland studio projects\package\ki;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\documents and settings\administrator\my documents\sandbox\kveo-it-project\foundation\dotnet\ki;c:\inetpub\wwwroot\webemsof\bin</Directories>
 			<Directories Name="Packages" Type="String">c:\windows\microsoft.net\framework\v1.1.4322\mscorlib.dll;c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Common.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Design.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll;c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Provider.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.XML.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Web.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Drawing.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Data.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.dll</Directories>
 			<Directories Name="Conditionals" Type="String"></Directories>
 			<Directories Name="DebugSourceDirs" Type="String"></Directories>
@@ -187,7 +187,10 @@
 			<Language Name="ActiveLang"></Language>
 			<Language Name="ProjectLang">$00000000</Language>
 			<Language Name="RootDir"></Language>
-		</Language>  <FileList>
+		</Language>  
+    
+    
+    <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0" LinkUnits="False"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System.Data" AssemblyName="System.Data" Version="1.0.5000.0" LinkUnits="False"/>

@@ -1,3 +1,4 @@
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
 <%@ Page language="c#" Debug="true" Codebehind="Default.pas" AutoEventWireup="false" Inherits="Default.TWebForm_Default" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
@@ -17,6 +18,6 @@
                        id="HyperLink_login" runat="server" font-bold="True" navigateurl="login.aspx">log in</ASP:HyperLink>.</p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder>
-     </form>
+     <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

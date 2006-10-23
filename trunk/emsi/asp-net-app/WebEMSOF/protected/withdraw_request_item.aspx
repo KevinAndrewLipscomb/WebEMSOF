@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="withdraw_request_item.pas" AutoEventWireup="false" Inherits="withdraw_request_item.TWebForm_withdraw_request_item" %>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="withdraw_request_item.pas" AutoEventWireup="false" Inherits="withdraw_request_item.TWebForm_withdraw_request_item" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -54,6 +54,6 @@
 		</table></p>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
 	</asp:placeholder>
-	 </form>
+	 <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

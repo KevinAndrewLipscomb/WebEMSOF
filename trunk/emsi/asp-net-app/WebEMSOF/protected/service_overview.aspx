@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="service_overview.pas" AutoEventWireup="false" Inherits="service_overview.TWebForm_service_overview"%>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="service_overview.pas" AutoEventWireup="false" Inherits="service_overview.TWebForm_service_overview"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -81,6 +81,6 @@
             </tr>
         </table></h3>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
-    </form>
+    <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>
