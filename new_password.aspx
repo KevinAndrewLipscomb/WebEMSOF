@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="new_password.pas" AutoEventWireup="false" Inherits="new_password.TWebForm_new_password" %>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="new_password.pas" AutoEventWireup="false" Inherits="new_password.TWebForm_new_password" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -32,6 +32,6 @@
       <p>
     <asp:placeholder id="PlaceHolder_postcontent" runat="server">
     </asp:placeholder></p>
-     </form>
+     <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

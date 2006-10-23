@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="regional_staffer_fiscal_year_selection.pas" AutoEventWireup="false" Inherits="regional_staffer_fiscal_year_selection.TWebForm_account_overview"%>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="regional_staffer_fiscal_year_selection.pas" AutoEventWireup="false" Inherits="regional_staffer_fiscal_year_selection.TWebForm_account_overview"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -42,6 +42,6 @@
       <p>
       </p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
-    </form>
+    <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

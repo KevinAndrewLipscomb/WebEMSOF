@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="emsof_request_status_filter.pas" AutoEventWireup="false" Inherits="emsof_request_status_filter.TWebForm_emsof_request_status_filter" %>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="emsof_request_status_filter.pas" AutoEventWireup="false" Inherits="emsof_request_status_filter.TWebForm_emsof_request_status_filter" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -73,6 +73,6 @@
         </table></p>
 	  <p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder></p>
-     </form>
+     <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

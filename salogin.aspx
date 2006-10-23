@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="salogin.pas" AutoEventWireup="false" Inherits="salogin.TWebForm_salogin" %>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="salogin.pas" AutoEventWireup="false" Inherits="salogin.TWebForm_salogin" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <html>
@@ -95,6 +95,6 @@
 			  </tr>
 		  </table>
   <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
-</form>
+<sstchur:SmartScroller runat="server" /></form>
 </body>
 </html>
