@@ -59,6 +59,7 @@ type
     function BeOkToApproveEmsofRequest(status: status_type): boolean;
     function BeOkToDrillDown(status: status_type): boolean;
     function BeOkToMarkDone(status: status_type): boolean;
+    function BeOkToTrackInvoices(status: status_type): boolean;
     function BeValidRegionalExecDirApprovalTimestampOf
       (
       master_id: string;
@@ -366,6 +367,16 @@ begin
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-accountant')
       or httpcontext.current.user.IsInRole('director');
   end;
+end;
+
+function TClass_biz_emsof_requests.BeOkToTrackInvoices(status: status_type): boolean;
+begin
+  BeOkToTrackInvoices := (status = NEEDS_INVOICE_COLLECTION)
+    and
+      (
+      httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator')
+      );
 end;
 
 procedure TClass_biz_emsof_requests.BindDetail
