@@ -15,7 +15,7 @@ const ID = '$Id$';
 type
   p_type =
     RECORD
-    biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
+    biz_emsof_requests: TClass_biz_emsof_requests;
     be_before_improvement_deadline: boolean;
     display_actuals: boolean;
     num_items: cardinal;
@@ -161,7 +161,7 @@ begin
     //
     p.request_id := p.biz_emsof_requests.IdOf(session['e_item']);
     p.status := p.biz_emsof_requests.StatusOf(session['e_item']);
-    p.display_actuals := (p.status = status_type(NEEDS_INVOICE_COLLECTION));
+    p.display_actuals := p.biz_emsof_requests.BeOkToTrackInvoices(p.status);
     //
     Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
