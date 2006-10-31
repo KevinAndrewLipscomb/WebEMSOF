@@ -8,6 +8,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration,
   Class_biz_user,
+  system.text.regularexpressions,
   system.web.mail;
 
 
@@ -37,6 +38,8 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Button_submit: System.Web.UI.WebControls.Button;
     TextArea_user_comment: System.Web.UI.HtmlControls.HtmlTextArea;
+    Table_oops: System.Web.UI.HtmlControls.HtmlTable;
+    Table_db_down: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -77,41 +80,49 @@ begin
     //
     p.exception := server.GetLastError.GetBaseException;
     //
-    if user.identity.name = system.string.EMPTY then begin
-      user_designator := 'unknown';
+    if regex.IsMatch(p.exception.message,'Connection.*to MySQL server',regexoptions.IGNORECASE) then begin
+      Table_oops.visible := FALSE;
     end else begin
-      user_designator := user.identity.name + ' (' + session[p.biz_user.Kind + '_name'].tostring + ')';
+      Table_db_down.visible := FALSE;
+      //
+      if user.identity.name = system.string.EMPTY then begin
+        user_designator := 'unknown';
+      end else begin
+        user_designator := user.identity.name + ' (' + session[p.biz_user.Kind + '_name'].tostring + ')';
+      end;
+      //
+      p.notification_message := '[USER]' + NEW_LINE
+      + user_designator + NEW_LINE
+      + NEW_LINE
+      + '[MESSAGE]' + NEW_LINE
+      + p.exception.message + NEW_LINE
+      + NEW_LINE
+      + '[STACKTRACE]' + NEW_LINE
+      + p.exception.stacktrace + NEW_LINE
+      + NEW_LINE
+      + '[SESSION]' + NEW_LINE;
+      for lcv := 0 to (session.count - 1) do begin
+        p.notification_message := p.notification_message + session.keys[lcv].tostring + ' = ' + session.item[lcv].tostring + NEW_LINE;
+      end;
+      //
+      ki.common.SmtpMailSend
+        (
+        configurationsettings.appsettings['sender_email_address'],
+        configurationsettings.appsettings['sender_email_address'],
+        'EXCEPTION REPORT',
+        p.notification_message
+        );
+      ki.common.SmtpMailSend
+        (
+        configurationsettings.appsettings['sender_email_address'],
+        configurationsettings.appsettings['sysadmin_sms_address'],
+        'CRASH',
+        user_designator
+        );
     end;
     //
-    p.notification_message := '[USER]' + NEW_LINE
-    + user_designator + NEW_LINE
-    + NEW_LINE
-    + '[MESSAGE]' + NEW_LINE
-    + p.exception.message + NEW_LINE
-    + NEW_LINE
-    + '[STACKTRACE]' + NEW_LINE
-    + p.exception.stacktrace + NEW_LINE
-    + NEW_LINE
-    + '[SESSION]' + NEW_LINE;
-    for lcv := 0 to (session.count - 1) do begin
-      p.notification_message := p.notification_message + session.keys[lcv].tostring + ' = ' + session.item[lcv].tostring + NEW_LINE;
-    end;
-    //
-    ki.common.SmtpMailSend
-      (
-      configurationsettings.appsettings['sender_email_address'],
-      configurationsettings.appsettings['sender_email_address'],
-      'EXCEPTION REPORT',
-      p.notification_message
-      );
-    ki.common.SmtpMailSend
-      (
-      configurationsettings.appsettings['sender_email_address'],
-      configurationsettings.appsettings['sysadmin_sms_address'],
-      'CRASH',
-      user_designator
-      );
     server.ClearError;
+    //
   end;
 end;
 
