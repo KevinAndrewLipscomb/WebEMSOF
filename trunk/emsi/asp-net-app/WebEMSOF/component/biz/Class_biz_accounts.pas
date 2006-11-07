@@ -304,6 +304,49 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
+    //
+    if role <> 'county' then begin
+      //
+      //   Send notification to county.
+      //
+      ki.common.SmtpMailSend
+        (
+        ConfigurationSettings.AppSettings['sender_email_address'],
+        EmailAddressByKindId('county',county_code),
+        'Return of EMSOF request to ' + service_name,
+        reviewer_descriptor + ' did NOT approve ' + service_name + '''s ' + fy_designator + ' EMSOF request.  Instead, the request '
+        + 'has been returned to the service for rework.' + NEW_LINE
+        + NEW_LINE
+        + reviewer_descriptor + ' gave this reason for this action:' + NEW_LINE
+        + NEW_LINE
+        + '   '
+        + WrapText
+          (
+          reason,
+          (NEW_LINE + '   '),
+          BreakChars,
+          int16.Parse(configurationsettings.AppSettings['email_blockquote_maxcol'])
+          )
+        + NEW_LINE
+        + NEW_LINE
+        + 'You can review this EMSOF request by visiting:' + NEW_LINE
+        + NEW_LINE
+        + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+        + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+        + NEW_LINE
+        + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
+        + NEW_LINE
+        + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
+        + NEW_LINE
+        + 'You can contact ' + service_name + ' at:' + NEW_LINE
+        + NEW_LINE
+        + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
+        + NEW_LINE
+        + '-- ' + ConfigurationSettings.AppSettings['application_name']
+        );
+      //
+    end;
+    //
   end else begin
     //
     //   Get other stakeholder's email address.
