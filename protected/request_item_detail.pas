@@ -242,6 +242,7 @@ begin
       while bdr_services.Read do begin
         DropDownList_equipment_category.Items.Add(listitem.Create(bdr_services['description'].tostring,bdr_services['code'].ToString));
       end;
+      bdr_services.Close;
     end else begin
       DropDownList_equipment_category.Items.Add
         (
@@ -297,6 +298,7 @@ begin
       p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
       p.saved_additional_service_ante := decimal.Parse(bdr_user_details['additional_service_ante'].tostring);
       Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
+      bdr_user_details.Close;
       //
       Recalculate;
       //
@@ -677,6 +679,7 @@ begin
     end;
     //
   end;
+  bdr_state_details.Close;
   ki.common.DbClose;
   //
   Recalculate;

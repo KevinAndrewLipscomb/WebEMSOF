@@ -120,6 +120,7 @@ begin
       while bdr.Read do begin
         RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
       end;
+      bdr.Close;
       ki.common.DbClose;
       if RadioButtonList_appropriation.items.Count = 0 then begin
         server.Transfer('no_appropriation.aspx');
@@ -137,6 +138,7 @@ begin
         end;
       end;
     end else begin
+      bdr.Close;
       ki.common.DbClose;
       server.Transfer('change_password.aspx');
     end;

@@ -103,6 +103,7 @@ begin
     Label_fiscal_year.text := bdr['designator'].tostring;
     Label_amount.text := decimal.Parse(session['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
     //
+    bdr.Close;
     ki.common.DbClose;
   end;
 end;

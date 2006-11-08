@@ -103,6 +103,7 @@ begin
   while bdr.Read do begin
     DropDownList(target).Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
   end;
+  bdr.Close;
   self.Close;
 end;
 
@@ -167,6 +168,7 @@ begin
   contact_person_name := bdr['contact_person_name'].tostring;
   contact_person_phone_num := bdr['contact_person_phone_num'].tostring;
   be_valid_profile := (bdr['be_valid_profile'].tostring = '1');
+  bdr.Close;
   self.Close;
 end;
 
