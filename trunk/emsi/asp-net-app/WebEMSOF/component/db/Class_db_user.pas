@@ -61,6 +61,7 @@ begin
     SetLength(roles_of,roles_of_len);
     roles_of[roles_of_len - 1] := bdr['group_name'].tostring;
   end;
+  bdr.Close;
   self.Close;
   RolesOf := roles_of;
 end;

@@ -304,6 +304,7 @@ begin
     )
     .ExecuteReader;
   DataGrid.DataBind;
+  bdpdatareader(datagrid.datasource).Close;
   be_datagrid_empty := (p.num_dg_items = 0);
   //
   // Manage control visibilities.

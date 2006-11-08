@@ -413,6 +413,7 @@ begin
   DataGrid_items.DataSource :=
     borland.data.provider.bdpcommand.Create(cmdText,ki.common.db).ExecuteReader;
   DataGrid_items.DataBind;
+  bdpdatareader(DataGrid_items.datasource).Close;
   //
   // Clear aggregation vars for next bind, if any.
   //

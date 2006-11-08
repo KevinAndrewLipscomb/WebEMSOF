@@ -67,6 +67,7 @@ begin
   while bdr.Read do begin
     DropDownList(target).Items.Add(listitem.Create(bdr['name'].tostring,'county_' + bdr['id'].ToString));
   end;
+  bdr.Close;
   self.Close;
 end;
 
@@ -90,6 +91,7 @@ begin
     DropDownList(target).Items.Add
       (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,'regional_staffer_' + bdr['id'].ToString));
   end;
+  bdr.Close;
   self.Close;
 end;
 
@@ -109,6 +111,7 @@ begin
   while bdr.Read do begin
     DropDownList(target).Items.Add(listitem.Create(bdr['name'].tostring,'service_' + bdr['id'].ToString));
   end;
+  bdr.Close;
   self.Close;
 end;
 
@@ -153,6 +156,7 @@ begin
   while bdr.Read do begin
     email_target := email_target + bdr['password_reset_email_address'].tostring + ',';
   end;
+  bdr.Close;
   self.Close;
   EmailTargetByRole := email_target.Substring(0,email_target.Length - 1);
 end;

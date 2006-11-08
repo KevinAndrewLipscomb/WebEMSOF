@@ -274,6 +274,7 @@ begin
   self.Open;
   DataGrid(target).datasource := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteReader;
   DataGrid(target).DataBind;
+  bdpdatareader(DataGrid(target).datasource).Close;
   self.Close;
 end;
 
@@ -350,6 +351,7 @@ begin
     BeValidRegionalExecDirApprovalTimestampOf := TRUE;
     timestamp := datetime(bdr['regional_director_approval_timestamp']);
   end;
+  bdr.Close;
   self.Close;
 end;
 
@@ -373,6 +375,7 @@ begin
     BeValidRegionalPlannerApprovalTimestampOf := TRUE;
     timestamp := datetime(bdr['regional_planner_approval_timestamp']);
   end;
+  bdr.Close;
   self.Close;
 end;
 
@@ -396,6 +399,7 @@ begin
     BeValidStateApprovalTimestampOf := TRUE;
     timestamp := datetime(bdr['state_approval_timestamp']);
   end;
+  bdr.Close;
   self.Close;
 end;
 
@@ -615,6 +619,7 @@ begin
     + 'Max EMSOF amount:  ' + bdr['formatted_emsof_ante'].tostring + NEW_LINE
     + NEW_LINE;
   end;
+  bdr.Close;
   self.Close;
   DetailText := detail_text;
 end;

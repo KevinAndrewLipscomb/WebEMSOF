@@ -469,6 +469,7 @@ begin
   DataGrid_county_appropriations.DataSource :=
     borland.data.provider.bdpcommand.Create(cmdText,ki.common.db).ExecuteReader;
   DataGrid_county_appropriations.DataBind;
+  bdpdatareader(DataGrid_county_appropriations.datasource).Close;
   be_datagrid_empty := (p.num_appropriations = 0);
   //
   // Manage control visibilities.
