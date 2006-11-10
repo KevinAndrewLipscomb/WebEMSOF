@@ -7,11 +7,16 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
-  system.web.mail, system.web.security;
+  system.web.mail, system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    db: TClass_db;
+    END;
   TWebForm_delete_service_appropriation = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -21,8 +26,11 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
       e: System.EventArgs);
+    procedure TWebForm_delete_service_appropriation_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -59,6 +67,7 @@ begin
   Include(Self.Button_yes.Click, Self.Button_yes_Click);
   Include(Self.Button_no.Click, Self.Button_no_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_delete_service_appropriation_PreRender);
 end;
 {$ENDREGION}
 
@@ -68,13 +77,16 @@ var
   service_name: string;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
+    p := p_type(session['p']);
+  end else begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    ki.common.DbOpen;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - delete_service_appropriation';
+    //
+    p.db := TClass_db.Create;
     //
     // Set Label_service_name_*.
     //
@@ -85,6 +97,7 @@ begin
     //
     // Set appropriation attribute labels.
     //
+    p.db.Open;
     bdr := borland.data.provider.bdpcommand.Create
       (
       'select designator,county_dictated_appropriation.amount'
@@ -96,7 +109,7 @@ begin
       +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
       + ' where county_dictated_appropriation.id = '
       +     session['id_of_appropriation_selected_for_deletion'].tostring,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteReader;
     bdr.Read;
@@ -104,7 +117,7 @@ begin
     Label_amount.text := decimal.Parse(session['amount_of_appropriation_selected_for_deletion'].tostring).tostring('C');
     //
     bdr.Close;
-    ki.common.DbClose;
+    p.db.Close;
   end;
 end;
 
@@ -115,6 +128,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_delete_service_appropriation.TWebForm_delete_service_appropriation_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_delete_service_appropriation.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
@@ -134,7 +154,7 @@ end;
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   //
   // Send the notification message.
   //
@@ -165,11 +185,11 @@ begin
     (
     'delete from county_dictated_appropriation where id = '
     + session['id_of_appropriation_selected_for_deletion'].tostring,
-    ki.common.db
+    p.db.connection
     )
     .ExecuteNonQuery;
   //
-  ki.common.DbClose;
+  p.db.Close;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 

@@ -9,6 +9,7 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   borland.data.provider,
   Class_biz_services,
+  Class_db,
   ki.common,
   system.configuration,
   system.web.mail,
@@ -21,6 +22,7 @@ type
     RECORD
     amount: decimal;
     biz_services: TClass_biz_services;
+    db: TClass_db;
     unappropriated_amount: decimal;
     END;
   TWebForm_create_new_service_appropriation = class(System.Web.UI.Page)
@@ -114,6 +116,7 @@ begin
     // Initialize implementation-scoped variables.
     //
     p.amount := 0;
+    p.db := TClass_db.Create;
     //
     Label_parent_appropriation_amount.text := decimal.Parse(session['parent_appropriation_amount'].tostring).tostring('C');
     Label_region_name.text := session['region_name'].tostring;
@@ -229,7 +232,7 @@ var
   service_id_string: string;
 begin
   service_id_string := Safe(DropDownList_services.SelectedValue,NUM);
-  ki.common.DbOpen;
+  p.db.Open;
   //
   // Record the new appropriation.
   //
@@ -240,7 +243,7 @@ begin
     +   ' service_id = ' + service_id_string + ','
     +   ' amount = ' + p.amount.tostring + ','
     +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM),
-    ki.common.db
+    p.db.connection
     )
     .ExecuteNonQuery;
   //
@@ -253,7 +256,7 @@ begin
   max_county_dictated_appropriation_id_string := borland.data.provider.bdpcommand.Create
     (
     'select max(id) from county_dictated_appropriation',
-    ki.common.db
+    p.db.connection
     )
     .ExecuteScalar.tostring;
   //
@@ -262,7 +265,7 @@ begin
   borland.data.provider.bdpcommand.Create
     (
     'insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string,
-    ki.common.db
+    p.db.connection
     )
     .ExecuteNonQuery;
   //
@@ -273,7 +276,7 @@ begin
     (
     'select password_reset_email_address from service_user '
     + 'where id = ' + service_id_string,
-    ki.common.db
+    p.db.connection
     );
   //   Set up the command to get the appropriate fiscal year designator.
   bdp_get_fy_designator := borland.data.provider.bdpcommand.Create
@@ -284,13 +287,13 @@ begin
     +   ' join region_dictated_appropriation'
     +     ' on (region_dictated_appropriation.state_dictated_appropriation_id=state_dictated_appropriation.id)'
     + ' where region_dictated_appropriation.id = ' + session['region_dictated_appropriation_id'].tostring,
-    ki.common.db
+    p.db.connection
     );
   //   Set up the command to get the County Coorindator's email address.
   cc_email_address := borland.data.provider.bdpcommand.Create
     (
     'select password_reset_email_address from county_user where id = ' + session['county_user_id'].tostring,
-    ki.common.db
+    p.db.connection
     )
     .ExecuteScalar.tostring;
   //   Set up the messageText.
@@ -316,7 +319,7 @@ begin
     messageText
     );
   //
-  ki.common.DbClose;
+  p.db.Close;
 end;
 
 end.

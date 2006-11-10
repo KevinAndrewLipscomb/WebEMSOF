@@ -9,6 +9,7 @@ uses
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   ki.common,
   borland.data.provider,
+  Class_db,
   system.configuration,
   system.web.mail,
   system.web.security;
@@ -18,6 +19,7 @@ const ID = '$Id$';
 type
   p_type =
     RECORD
+    db: TClass_db;
     saved_emsof_ante: decimal;
     saved_shortage: decimal;
     END;
@@ -85,6 +87,7 @@ begin
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - withdraw_request_item';
     //
+    p.db := TClass_db.Create;
     p.saved_emsof_ante := decimal.Parse(session['emsof_request_item_emsof_ante'].tostring);
     p.saved_shortage := decimal.Parse(session['emsof_request_item_additional_service_ante'].tostring);
     //
@@ -140,7 +143,7 @@ var
   biz_accounts: TClass_biz_accounts;
   service_email_address: string;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   borland.data.provider.bdpcommand.Create
     (
     'START TRANSACTION;'
@@ -158,10 +161,10 @@ begin
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
-    ki.common.db
+    p.db.connection
     )
     .ExecuteNonQuery;
-  ki.common.DbClose;
+  p.db.Close;
   //
   // Send the notification message.
   //

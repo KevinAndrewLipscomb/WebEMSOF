@@ -7,11 +7,16 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
-  system.web.security;
+  system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    db: TClass_db;
+    END;
   TWebForm_county_dictated_deadline = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -21,8 +26,11 @@ type
     procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
       e: System.EventArgs);
     procedure LinkButton_cancel_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_county_dictated_deadline_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -56,18 +64,23 @@ begin
   Include(Self.LinkButton_cancel.Click, Self.LinkButton_cancel_Click);
   Include(Self.Calendar.SelectionChanged, Self.Calendar_SelectionChanged);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_county_dictated_deadline_PreRender);
 end;
 {$ENDREGION}
 
 procedure TWebForm_county_dictated_deadline.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
+    p := p_type(session['p']);
+  end else begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_deadline';
+    //
+    p.db := TClass_db.Create;
     //
     Label_county_name.text := session['county_name'].tostring;
     Label_current_deadline.text := session['county_dictated_deadline'].tostring;
@@ -84,6 +97,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_county_dictated_deadline.TWebForm_county_dictated_deadline_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_county_dictated_deadline.LinkButton_cancel_Click(sender: System.Object;
@@ -109,16 +129,16 @@ end;
 procedure TWebForm_county_dictated_deadline.Calendar_SelectionChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   borland.data.provider.bdpcommand.Create
     (
     'update region_dictated_appropriation'
     + ' set service_to_county_submission_deadline = "' + Calendar.selecteddate.tostring('yyyyMMdd') + '235959"'
     + ' where id = ' + session['region_dictated_appropriation_id'].tostring,
-    ki.common.db
+    p.db.connection
     )
     .ExecuteNonQuery;
-  ki.common.DbClose;
+  p.db.Close;
   server.Transfer('county_dictated_appropriations.aspx');
 end;
 

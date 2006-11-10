@@ -7,11 +7,16 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, borland.data.provider, system.configuration,
-  system.web.security;
+  system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    db: TClass_db;
+    END;
   TWebForm_change_password = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -19,8 +24,11 @@ type
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_overview_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_change_password_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -56,18 +64,24 @@ begin
   Include(Self.LinkButton_back_to_overview.Click, Self.LinkButton_overview_Click);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_change_password_PreRender);
 end;
 {$ENDREGION}
 
 procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
+    p := p_type(session['p']);
+  end else begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
+    //
+    p.db := TClass_db.Create;
+    //
     Label_account_descriptor.Text := session[session['target_user_table'].ToString + '_name'].ToString;
     if session['target_user_table'].tostring = 'county' then begin
       Label_account_descriptor.Text := Label_account_descriptor.Text + ' County';
@@ -83,6 +97,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_change_password.TWebForm_change_password_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_change_password.LinkButton_logout_Click(sender: System.Object;
@@ -105,16 +126,16 @@ begin
   //
   // Commit the data to the database.
   //
-  ki.common.DbOpen;
+  p.db.Open;
   borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session['target_user_table'].ToString + '_user'
     + ' SET encoded_password = "' + ki.common.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
     +   ' be_stale_password = FALSE'
     + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
-    ki.common.db
+    p.db.connection
     ).ExecuteNonQuery;
-  ki.common.DbClose;
+  p.db.Close;
   server.Transfer(session['target_user_table'].ToString + '_overview.aspx');
 end;
 
