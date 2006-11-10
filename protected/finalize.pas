@@ -7,11 +7,16 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
-  system.web.mail, system.web.security;
+  system.web.mail, system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
 type
+  p_type =
+    RECORD
+    db: TClass_db;
+    END;
   TWebForm_finalize = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -32,8 +37,11 @@ type
     procedure LinkButton_request_overview_10_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_request_overview_bottom_Click(sender: System.Object; 
       e: System.EventArgs);
+    procedure TWebForm_finalize_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -114,6 +122,7 @@ begin
   Include(Self.Button_finalize.Click, Self.Button_finalize_Click);
   Include(Self.LinkButton_request_overview_bottom.Click, Self.LinkButton_request_overview_bottom_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_finalize_PreRender);
 end;
 {$ENDREGION}
 
@@ -126,7 +135,9 @@ var
   max_reimbursement: decimal;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
+  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
+    p := p_type(session['p']);
+  end else begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
       server.Transfer('~/login.aspx');
@@ -136,6 +147,7 @@ begin
     Label_service_name.text := session['service_name'].tostring;
     //
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
+    p.db := TClass_db.Create;
     //
     if decimal(session['unused_amount']) >= 0 then begin
       //
@@ -147,7 +159,7 @@ begin
         Label_unused_amount.text := decimal(session['unused_amount']).tostring('C');
       end;
       //
-      ki.common.DbOpen;
+      p.db.Open;
       //
       // Set Label_grand_total_cost.
       //
@@ -155,7 +167,7 @@ begin
         (
         'select sum(unit_cost*quantity) from emsof_request_detail'
         + ' where master_id = ' + session['emsof_request_master_id'].tostring,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteScalar;
       if grand_total_cost_obj = dbnull.value then begin
@@ -184,7 +196,7 @@ begin
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-purchase-completion-deadline"'
         + '   and fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteReader;
       bdr.Read;
@@ -198,7 +210,7 @@ begin
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-invoice-submission-deadline"'
         + '   and fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteReader;
       bdr.Read;
@@ -212,7 +224,7 @@ begin
         +   ' join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)'
         + ' where name = "emsof-service-canceled-check-submission-deadline"'
         + '   and fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteReader;
       bdr.Read;
@@ -220,7 +232,7 @@ begin
         datetime.Parse(bdr['emsof_service_canceled_check_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
       bdr.Close;
       //
-      ki.common.DbClose;
+      p.db.Close;
       //
     end else begin
       Table_summary.visible := FALSE;
@@ -235,6 +247,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_finalize.TWebForm_finalize_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_bottom_Click(sender: System.Object;

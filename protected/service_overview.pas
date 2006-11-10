@@ -8,7 +8,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common,
   System.Data.Common, Borland.Data.Provider, System.Globalization,
-  Borland.Data.Common, system.configuration, system.web.security;
+  Borland.Data.Common, system.configuration, system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
@@ -16,6 +17,7 @@ type
   p_type =
     RECORD
     be_before_deadline: boolean;
+    db: TClass_db;
     tcci_id: cardinal;
     tcci_fy_designator: cardinal;
     tcci_county_name: cardinal;
@@ -99,16 +101,17 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
-    ki.common.DbOpen;
+    p.db := TClass_db.Create;
+    p.db.Open;
     //
     be_stale_password := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password FROM service_user where id=' + session['service_user_id'].tostring,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteScalar.tostring;
     if be_stale_password = '1' then begin
-      ki.common.DbClose;
+      p.db.Close;
       server.Transfer('change_password.aspx');
     end;
     //
@@ -137,13 +140,13 @@ begin
     biz_get_profile_status := borland.data.provider.bdpCommand.Create
       (
       'select be_valid_profile from service where id = "' + session['service_user_id'].ToString + '"'
-      ,ki.common.db
+      ,p.db.connection
       );
     if biz_get_profile_status.ExecuteScalar.ToString = '0' then begin
       Label_profile_status.Text := 'Not saved.';
       LinkButton_profile_action.Text := '[Create profile]';
       Table_item_requests_section.visible := FALSE;
-      ki.common.DbClose;
+      p.db.Close;
     end else begin
       Label_profile_status.Text := 'Saved.';
       LinkButton_profile_action.Text := '[Edit profile]';
@@ -153,7 +156,7 @@ begin
       p.max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
-        ki.common.db
+        p.db.connection
         )
         .ExecuteScalar.tostring;
 //    //
@@ -169,14 +172,14 @@ begin
 //        +   ' join milestone_code_name_map on (code = milestone_code)'
 //        + ' where id = ' + max_fiscal_year_id_string
 //        +   ' and name = "emsof-service-item-requests-deadline"',
-//        ki.common.db
+//        p.db.connection
 //        )
 //        .ExecuteScalar
 //      );
 //    //
 //    be_before_deadline := (datetime.Now <= make_item_requests_deadline);
       //
-      ki.common.DbClose;
+      p.db.Close;
       //
       BindDataGrid;
     end;
@@ -273,7 +276,7 @@ procedure TWebForm_service_overview.BindDataGrid;
 var
   be_datagrid_empty: boolean;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
@@ -300,7 +303,7 @@ begin
     + ' WHERE service_id = ' + session['service_user_id'].tostring
     +   ' and fiscal_year.id >= (' + p.max_fiscal_year_id_string + ' - 1)'
     + ' order by fy_designator,county_name',
-    ki.common.db
+    p.db.connection
     )
     .ExecuteReader;
   DataGrid.DataBind;
@@ -315,7 +318,7 @@ begin
   // Clear aggregation vars for next bind, if any.
   //
   p.num_dg_items := 0;
-  ki.common.DbClose;
+  p.db.Close;
 end;
 
 end.

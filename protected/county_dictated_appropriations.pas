@@ -11,6 +11,7 @@ uses
   borland.data.provider,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
+  Class_db,
   system.configuration,
   system.web.mail,
   system.web.security;
@@ -25,6 +26,7 @@ type
     be_before_deadline: boolean;
     be_filtered: boolean;
     be_sort_order_ascending: boolean;
+    db: TClass_db;
     num_appropriations: cardinal;
     region_dictated_appropriation_amount: decimal;
     saved_amount: decimal;
@@ -148,6 +150,7 @@ begin
     p.be_before_deadline := TRUE;
     p.be_filtered := FALSE;
     p.be_sort_order_ascending := TRUE;
+    p.db := TClass_db.Create;
     p.num_appropriations := 0;
     p.sort_order := 'service_name';
     p.sum_of_service_appropriations := 0;
@@ -157,7 +160,7 @@ begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
     Label_county_name.Text := session['county_name'].ToString;
     //
-    ki.common.DbOpen;
+    p.db.Open;
     //
     // Set parent appropriation labels.
     //
@@ -169,7 +172,7 @@ begin
       +   'join fiscal_year on (fiscal_year.id = fiscal_year_id) '
       +   'join region_code_name_map on (region_code_name_map.code = region_code) '
       + 'where region_dictated_appropriation.id = ' + session['region_dictated_appropriation_id'].ToString,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteReader;
     bdr_appropriation_attribs.Read;
@@ -192,7 +195,7 @@ begin
         +   ' join milestone_code_name_map on (code = milestone_code)'
         + ' where designator = "' + Safe(Label_fiscal_year_designator.Text,ALPHANUM) + '"'
         +   ' and name = "emsof-county-dictated-appropriation-deadline"',
-        ki.common.db
+        p.db.connection
         )
         .ExecuteScalar
       );
@@ -202,7 +205,7 @@ begin
         (
         'select service_to_county_submission_deadline from region_dictated_appropriation'
         + ' where id = ' + session['region_dictated_appropriation_id'].tostring,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteScalar
       );
@@ -220,7 +223,7 @@ begin
       LinkButton_county_dictated_deadline.text := county_dictated_deadline.tostring('HH:mm:ss dddd, MMMM d, yyyy');
     end;
     //
-    ki.common.DbClose;
+    p.db.Close;
     //
     Table_warning_forced_amount.visible := FALSE;
     Bind_service_appropriations;  // also affected by be_before_deadline
@@ -336,7 +339,7 @@ var
   bc: borland.data.provider.bdpcommand;
   id_string: string;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   id_string := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfId].Text,NUM);
   bc := borland.data.provider.bdpcommand.Create
     (
@@ -344,10 +347,10 @@ begin
     + ' from emsof_request_detail'
     +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
     + ' where county_dictated_appropriation_id = ' + id_string,
-    ki.common.db
+    p.db.connection
     );
   if bc.ExecuteScalar.tostring <> '0' then begin
-    ki.common.DbClose;
+    p.db.Close;
     //
     // A service has already entered equipment requests against this appropriation.  Add relevant data to the session and send the
     // county coordinator to a confirmation page.
@@ -384,7 +387,7 @@ begin
     borland.data.provider.bdpcommand.Create
       (
       'delete from county_dictated_appropriation where id = ' + id_string,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteNonQuery;
     //
@@ -410,7 +413,7 @@ begin
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
-    ki.common.DbClose;
+    p.db.Close;
   end;
   //
   Table_warning_forced_amount.visible := FALSE;
@@ -489,7 +492,7 @@ var
   amount_string: string;
   appropriation_id_string: string;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   //
   appropriation_id_string := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfId].Text,NUM);
   amount_string := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfAppropriation].controls[0]).Text.Trim,REAL_NUM);
@@ -506,7 +509,7 @@ begin
     borland.data.provider.bdpcommand.Create
       (
       'update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteNonQuery;
     //
@@ -529,7 +532,7 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    ki.common.DbClose;
+    p.db.Close;
     //
     DataGrid_service_appropriations.EditItemIndex := -1;
     Bind_service_appropriations;

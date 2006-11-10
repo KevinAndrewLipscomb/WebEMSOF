@@ -15,8 +15,12 @@ type
   private
     { Private Declarations }
   protected
-    connection: borland.data.provider.bdpconnection;
   public
+    connection: borland.data.provider.bdpconnection;
+      //
+      // The connection member should be protected rather than public once all db operations in WebEMSOF are performed via
+      // descendants of this class.
+      //
     constructor Create;
     procedure Close;
     procedure Open;

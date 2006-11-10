@@ -7,7 +7,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
-  system.web.mail, system.web.security;
+  system.web.mail, system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
@@ -19,6 +20,7 @@ type
     bdri_equipment_category_allowable_cost: cardinal;
     bdri_equipment_category_funding_level: cardinal;
     cmdText_get_equipment_category_monetary_details: string;
+    db: TClass_db;
     funding_level: decimal;
     match_level: decimal;
     saved_emsof_ante: decimal;
@@ -152,8 +154,9 @@ begin
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
+    p.db := TClass_db.Create;
     //
-    ki.common.DbOpen;
+    p.db.Open;
     //
     // Set default match_level.
     //
@@ -164,7 +167,7 @@ begin
         'select factor'
         + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
         + ' where county_dictated_appropriation.id = ' + session['county_dictated_appropriation_id'].tostring,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteScalar.tostring
       );
@@ -216,7 +219,7 @@ begin
         + ' (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs'
         + ' FROM service'
         + ' WHERE id = ' + session['service_user_id'].tostring,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteReader;
       bdr_factors.Read;
@@ -238,7 +241,7 @@ begin
       cmdText := cmdText + ') ORDER BY description';
       bdr_factors.Close;
       //
-      bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,ki.common.db).ExecuteReader;
+      bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,p.db.connection).ExecuteReader;
       while bdr_services.Read do begin
         DropDownList_equipment_category.Items.Add(listitem.Create(bdr_services['description'].tostring,bdr_services['code'].ToString));
       end;
@@ -271,9 +274,9 @@ begin
     //
     if not be_new then begin
       //
-      ki.common.DbClose;
+      p.db.Close;
       ShowDependentData;
-      ki.common.DbOpen;
+      p.db.Open;
       //
       bdr_user_details := borland.data.provider.bdpcommand.Create
         (
@@ -281,7 +284,7 @@ begin
         + ' from emsof_request_detail'
         + ' where master_id = ' + session['emsof_request_master_id'].tostring
         +   ' and priority = ' + session['emsof_request_item_priority'].tostring,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteReader;
       bdr_user_details.Read;
@@ -340,7 +343,7 @@ begin
       TableRow_post_finalization_actions.visible := FALSE;
     end;
     //
-    ki.common.DbClose;
+    p.db.Close;
     //
   end;
 end;
@@ -399,7 +402,7 @@ begin
   //
   Recalculate;  // Forces setting of additional_service_ante
   //
-  ki.common.DbOpen;
+  p.db.Open;
   //
   // Update the detail record.
   // Update the master record.
@@ -426,11 +429,11 @@ begin
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
-    ki.common.db
+    p.db.connection
     )
     .ExecuteNonQuery;
   //
-  ki.common.DbClose;
+  p.db.Close;
   server.Transfer('request_overview.aspx');
 end;
 
@@ -438,7 +441,7 @@ procedure TWebForm_request_item_detail.Button_delete_Click(sender: System.Object
   e: System.EventArgs);
 begin
   if CheckBox_delete.checked then begin
-    ki.common.DbOpen;
+    p.db.Open;
     //
     // Delete the detail record.
     // Eliminate the resulting gap in the priority sequence.
@@ -463,10 +466,10 @@ begin
       + ' where id = ' + session['emsof_request_master_id'].tostring
       + ';'
       + 'COMMIT;',
-      ki.common.db
+      p.db.connection
       )
       .ExecuteNonQuery;
-    ki.common.DbClose;
+    p.db.Close;
     server.Transfer('request_overview.aspx');
   end;
 end;
@@ -593,7 +596,7 @@ begin
   //
   Recalculate;  // Forces setting of additional_service_ante
   //
-  ki.common.DbOpen;
+  p.db.Open;
   //
   //
   // Get the number of items entered against this request previously, and initialize this item to have a priority just lower than
@@ -602,7 +605,7 @@ begin
   priority_string := borland.data.provider.bdpcommand.Create
     (
     'select (num_items + 1) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
-    ki.common.db
+    p.db.connection
     )
     .ExecuteScalar.tostring;
   //
@@ -633,11 +636,11 @@ begin
     + ' where id = ' + session['emsof_request_master_id'].tostring
     + ';'
     + 'COMMIT;',
-    ki.common.db
+    p.db.connection
     )
     .ExecuteNonQuery;
   //
-  ki.common.DbClose;
+  p.db.Close;
 end;
 
 procedure TWebForm_request_item_detail.ShowDependentData;
@@ -645,11 +648,11 @@ var
   bdr_state_details: borland.data.provider.bdpdatareader;
   life_expectancy_string: string;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   bdr_state_details := borland.data.provider.bdpcommand.Create
     (
     p.cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
-    ki.common.db
+    p.db.connection
     )
     .ExecuteReader;
   if bdr_state_details.Read then begin
@@ -680,7 +683,7 @@ begin
     //
   end;
   bdr_state_details.Close;
-  ki.common.DbClose;
+  p.db.Close;
   //
   Recalculate;
 end;

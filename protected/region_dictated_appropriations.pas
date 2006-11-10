@@ -7,7 +7,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, ki.common,
-  system.web.mail, system.web.security;
+  system.web.mail, system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
@@ -17,6 +18,7 @@ type
     be_before_deadline: boolean;
     be_sort_order_ascending: boolean;
     county_appropriations_sort_order: string;
+    db: TClass_db;
     tcci_id: cardinal;
     tcci_password_reset_email_address: cardinal;
     tcci_county_code: cardinal;
@@ -134,6 +136,7 @@ begin
     p.be_sort_order_ascending := TRUE;
     p.num_appropriations := 0;
     p.county_appropriations_sort_order := 'name';
+    p.db := TClass_db.Create;
     p.sum_of_county_appropriations := 0;
     p.unappropriated_amount := 0;
     //   Set up symbolic DataGrid Indices for use in other event handlers.
@@ -146,9 +149,10 @@ begin
     p.tcci_linkbutton_delete            := 6;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - region_dictated_appropriations';
+    //
     Label_account_descriptor.Text := session['regional_staffer_name'].ToString;
     //
-    ki.common.DbOpen;
+    p.db.Open;
     //
     // Disable Table_appropriations for now.
     //
@@ -162,7 +166,7 @@ begin
       + 'from state_dictated_appropriation '
       +   'join fiscal_year on (fiscal_year.id = fiscal_year_id) '
       + 'where state_dictated_appropriation.id = ' + session['state_dictated_appropriation_id'].ToString,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteReader;
     bdr_appropriation_attribs.Read;
@@ -177,7 +181,7 @@ begin
     Label_application_name.text := configurationsettings.appsettings['application_name'];
     Table_warning_forced_amount.visible := FALSE;
     //
-    ki.common.DbClose;
+    p.db.Close;
     //
     Bind_county_appropriations;  // also affected by p.be_before_deadline
   end;
@@ -218,7 +222,7 @@ var
   amount_string: string;
   appropriation_id_string: string;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   //
   appropriation_id_string := Safe(e.Item.Cells[p.tcci_id].Text,NUM);
   amount_string := Safe(TextBox(e.Item.Cells[p.tcci_amount].controls[0]).Text.Trim,REAL_NUM);
@@ -235,7 +239,7 @@ begin
     borland.data.provider.bdpcommand.Create
       (
       'update region_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteNonQuery;
     //
@@ -258,7 +262,7 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    ki.common.DbClose;
+    p.db.Close;
     //
     DataGrid_county_appropriations.EditItemIndex := -1;
     Bind_county_appropriations;
@@ -342,7 +346,7 @@ var
   bc: borland.data.provider.bdpcommand;
   id_string: string;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   id_string := Safe(e.Item.Cells[p.tcci_id].Text,NUM);
   bc := borland.data.provider.bdpcommand.Create
     (
@@ -352,10 +356,10 @@ begin
     +   ' join county_dictated_appropriation'
     +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
     + ' where region_dictated_appropriation_id = ' + id_string,
-    ki.common.db
+    p.db.connection
     );
   if bc.ExecuteScalar.tostring <> '0' then begin
-    ki.common.DbClose;
+    p.db.Close;
     //
     // A service has already entered equipment requests against this appropriation.  Add relevant data to the session and send the
     // county coordinator to a confirmation page.
@@ -384,7 +388,7 @@ begin
     borland.data.provider.bdpcommand.Create
       (
       'delete from region_dictated_appropriation where id = ' + id_string,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteNonQuery;
     //
@@ -410,7 +414,7 @@ begin
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
     //
-    ki.common.DbClose;
+    p.db.Close;
   end;
   //
   Table_warning_forced_amount.visible := FALSE;
@@ -446,7 +450,7 @@ var
   be_datagrid_empty: boolean;
   cmdText: string;
 begin
-  ki.common.DbOpen;
+  p.db.Open;
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
@@ -467,7 +471,7 @@ begin
   end;
   //
   DataGrid_county_appropriations.DataSource :=
-    borland.data.provider.bdpcommand.Create(cmdText,ki.common.db).ExecuteReader;
+    borland.data.provider.bdpcommand.Create(cmdText,p.db.connection).ExecuteReader;
   DataGrid_county_appropriations.DataBind;
   bdpdatareader(DataGrid_county_appropriations.datasource).Close;
   be_datagrid_empty := (p.num_appropriations = 0);
@@ -491,7 +495,7 @@ begin
   //
   p.num_appropriations := 0;
   p.sum_of_county_appropriations := 0;
-  ki.common.DbClose;
+  p.db.Close;
 end;
 
 procedure TWebForm_region_dictated_appropriations.SortCommand_county_appropriations(source: System.Object;

@@ -7,12 +7,17 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
-  system.web.security;
+  system.web.security,
+  Class_db;
 
 const ID = '$Id$';
 
 type
-  TWebForm_county_appropriation = class(System.Web.UI.Page)
+  p_type =
+    RECORD
+    db: TClass_db;
+    END;
+  TWebForm_county_overview = class(System.Web.UI.Page)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -20,8 +25,11 @@ type
     procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure TWebForm_county_overview_PreRender(sender: System.Object;
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
+    p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
@@ -49,38 +57,42 @@ implementation
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebForm_county_appropriation.InitializeComponent;
+procedure TWebForm_county_overview.InitializeComponent;
 begin
   Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Button_continue.Click, Self.Button_continue_Click);
   Include(Self.Load, Self.Page_Load);
+  Include(Self.PreRender, Self.TWebForm_county_overview_PreRender);
 end;
 {$ENDREGION}
 
-procedure TWebForm_county_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebForm_county_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr: borland.data.provider.BdpDataReader;
   county_user_email_address: string;
   max_fiscal_year_id_string: string;
 begin
   ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
-  if not IsPostback then begin
-    if (session['county_name'] = nil) or (session['county_user_id'] = nil) then begin
+  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
+    p := p_type(session['p']);
+  end else begin
+    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_overview';
+    p.db := TClass_db.Create;
     //
     Label_county_name.Text := session['county_name'].ToString;
     //
-    ki.common.DbOpen;
+    p.db.Open;
     bdr := Borland.Data.Provider.BdpCommand.Create
       (
       'SELECT be_stale_password, password_reset_email_address FROM county_user'
       + ' where id = ' + session['county_user_id'].tostring,
-      ki.common.db
+      p.db.connection
       )
       .ExecuteReader;
     bdr.Read;
@@ -99,7 +111,7 @@ begin
       max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
-        ki.common.db
+        p.db.connection
         )
         .ExecuteScalar.tostring;
       //
@@ -114,14 +126,14 @@ begin
         +   ' JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)'
         + ' WHERE county_code = ' + session['county_user_id'].ToString
         +   ' and fiscal_year_id = ' + max_fiscal_year_id_string,
-        ki.common.db
+        p.db.connection
         )
         .ExecuteReader;
       while bdr.Read do begin
         RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
       end;
       bdr.Close;
-      ki.common.DbClose;
+      p.db.Close;
       if RadioButtonList_appropriation.items.Count = 0 then begin
         server.Transfer('no_appropriation.aspx');
       end else begin
@@ -139,13 +151,13 @@ begin
       end;
     end else begin
       bdr.Close;
-      ki.common.DbClose;
+      p.db.Close;
       server.Transfer('change_password.aspx');
     end;
   end;
 end;
 
-procedure TWebForm_county_appropriation.OnInit(e: EventArgs);
+procedure TWebForm_county_overview.OnInit(e: EventArgs);
 begin
   //
   // Required for Designer support
@@ -154,19 +166,26 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_county_appropriation.LinkButton_change_email_address_Click(sender: System.Object;
+procedure TWebForm_county_overview.TWebForm_county_overview_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('p');
+  session.Add('p',p);
+end;
+
+procedure TWebForm_county_overview.LinkButton_change_email_address_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   server.Transfer('change_email_address.aspx');
 end;
 
-procedure TWebForm_county_appropriation.LinkButton_change_password_Click(sender: System.Object;
+procedure TWebForm_county_overview.LinkButton_change_password_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   server.Transfer('change_password.aspx');
 end;
 
-procedure TWebForm_county_appropriation.LinkButton_logout_Click(sender: System.Object;
+procedure TWebForm_county_overview.LinkButton_logout_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   formsauthentication.SignOut;
@@ -174,7 +193,7 @@ begin
   server.Transfer('../Default.aspx');
 end;
 
-procedure TWebForm_county_appropriation.Button_continue_Click(sender: System.Object;
+procedure TWebForm_county_overview.Button_continue_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   session.Remove('region_dictated_appropriation_id');
