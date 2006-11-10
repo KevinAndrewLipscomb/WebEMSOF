@@ -78,7 +78,7 @@ begin
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
-    if request.servervariables['URL'] = request.currentexecutionfilepath then begin
+    if (session['county_user_id'] = nil) or (session['county_name'] = nil) then begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
