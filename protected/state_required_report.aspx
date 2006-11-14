@@ -55,12 +55,6 @@
                         Regional EMS council name: <strong>EMERGENCY MEDICAL SERVICE INSTITUTE</strong>
                       </td>
                     </tr>
-                    <tr>
-                      <td>
-                        Total amount available: 
-                        <asp:label id="Label_amount_available" runat="server"></asp:label>
-                      </td>
-                    </tr>
                     <tr id="TableRow_none" runat="server">
                       <td>
                         <em>-- NONE --</em>

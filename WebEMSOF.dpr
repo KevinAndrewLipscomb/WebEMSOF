@@ -56,6 +56,7 @@ library WebEMSOF;
 {%AspFolderContainer 'dbscript'}
 {%AspMarkupContainer 'exception.aspx'}
 {%AspMarkupContainer 'timeout.aspx'}
+{%DelphiDotNetAssemblyCompiler 'lib\ki\ki.dll'}
 
 uses
   System.Reflection,
@@ -81,24 +82,24 @@ uses
   all_emsof_requests in 'protected\all_emsof_requests.pas' {all_emsof_requests.TWebForm_all_emsof_requests: System.Web.UI.Page},
   change_email_address in 'protected\change_email_address.pas' {change_email_address.TWebForm_change_email_address: System.Web.UI.Page},
   change_password in 'protected\change_password.pas' {change_password.TWebForm_change_password: System.Web.UI.Page},
-  county_dictated_appropriations in 'protected\county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: System.Web.UI.Page},
+  county_dictated_appropriations in 'protected\county_dictated_appropriations.pas' {county_dictated_appropriations.TWebForm_county_dictated_appropriations: ki_web_ui.page_class},
   county_dictated_deadline in 'protected\county_dictated_deadline.pas' {county_dictated_deadline.TWebForm_county_dictated_deadline: System.Web.UI.Page},
   county_overview in 'protected\county_overview.pas' {county_overview.TWebForm_county_overview: ki_web_ui.page_class},
   create_new_service_appropriation in 'protected\create_new_service_appropriation.pas' {create_new_service_appropriation.TWebForm_create_new_service_appropriation: ki_web_ui.page_class},
   delete_service_appropriation in 'protected\delete_service_appropriation.pas' {delete_service_appropriation.TWebForm_delete_service_appropriation: System.Web.UI.Page},
   emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
   finalize in 'protected\finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},
-  full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: System.Web.UI.Page},
+  full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: ki_web_ui.page_class},
   profile in 'protected\profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas' {regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection: System.Web.UI.Page},
   regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: System.Web.UI.Page},
-  request_item_detail in 'protected\request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: System.Web.UI.Page},
+  request_item_detail in 'protected\request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: ki_web_ui.page_class},
   request_overview in 'protected\request_overview.pas' {request_overview.TWebForm_request_overview: ki_web_ui.page_class},
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: System.Web.UI.Page},
   Class_biz_regional_staffers in 'component\biz\Class_biz_regional_staffers.pas',
   Class_db_regional_staffers in 'component\db\Class_db_regional_staffers.pas',
-  state_required_report in 'protected\state_required_report.pas' {state_required_report.TWebForm_state_required_report: System.Web.UI.Page},
+  state_required_report in 'protected\state_required_report.pas' {state_required_report.TWebForm_state_required_report: ki_web_ui.page_class},
   login in 'login.pas' {login.TWebForm_login: ki_web_ui.page_class},
   state_transmittal_complete in 'protected\state_transmittal_complete.pas' {state_transmittal_complete.TWebForm_state_transmittal_complete: System.Web.UI.Page},
   exception in 'exception.pas' {exception.TWebForm_exception: ki_web_ui.page_class},
