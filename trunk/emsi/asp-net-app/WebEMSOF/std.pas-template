@@ -6,7 +6,9 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration,
+  ki,
+  ki_web_ui;
 
 const ID = '$Id$';
 
@@ -14,9 +16,7 @@ type
   p_type =
     RECORD
     END;
-
-type
-  TWebForm_template_std = class(System.Web.UI.Page)
+  TWebForm_template_std = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
