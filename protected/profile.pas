@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki,
   Borland.Data.Common, System.Globalization,
   System.Data.Common, system.configuration, system.web.security,
   Class_biz_services;
@@ -19,7 +19,7 @@ type
     be_profile_initially_valid: boolean;
     biz_services: Class_biz_services.TClass_biz_services;
     END;
-  TWebForm_profile = class(System.Web.UI.Page)
+  TWebForm_profile = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -122,7 +122,7 @@ var
   name: string;
   zip_code: string;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

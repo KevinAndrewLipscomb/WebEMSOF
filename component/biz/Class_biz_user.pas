@@ -3,7 +3,7 @@ unit Class_biz_user;
 interface
 
 uses
-  ki.common,
+  ki,
   system.web;
 
 const
@@ -17,7 +17,7 @@ type
     constructor Create;
     function Kind: string;
     function IdNum: string;
-    function Roles: ki.common.string_array;
+    function Roles: ki.string_array;
   end;
 
 implementation
@@ -50,7 +50,7 @@ begin
   IdNum := name.Substring(name.LastIndexOf('_') + 1);
 end;
 
-function TClass_biz_user.Roles: ki.common.string_array;
+function TClass_biz_user.Roles: ki.string_array;
 var
   name: string;
 begin

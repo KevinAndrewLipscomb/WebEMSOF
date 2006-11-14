@@ -6,15 +6,15 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki.common,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  ki,
   system.configuration,
   system.security.principal;
 
 const ID = '$Id$';
 
 type
-  TWebForm_Default = class(System.Web.UI.Page)
+  TWebForm_Default = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -47,7 +47,7 @@ end;
 
 procedure TWebForm_Default.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - Default';
     Label_application_name.text := ConfigurationSettings.AppSettings['application_name'];

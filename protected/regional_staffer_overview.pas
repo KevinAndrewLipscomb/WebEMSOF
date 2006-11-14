@@ -6,13 +6,13 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, system.web.security,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
   system.text;
 
 const ID = '$Id$';
 
 type
-  TWebForm_regional_staffer_overview = class(System.Web.UI.Page)
+  TWebForm_regional_staffer_overview = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -145,7 +145,7 @@ var
   tally: string;
   waypoint_stack: stack;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     if (session['regional_staffer_name'] = nil) or (session['regional_staffer_user_id'] = nil) then begin
       session.Clear;

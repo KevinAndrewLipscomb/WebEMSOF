@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, system.web.security,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
   borland.data.provider,
   Class_biz_emsof_requests;
 
@@ -24,7 +24,7 @@ type
     status: Class_biz_emsof_requests.status_type;
     total_emsof_ante: decimal;
     END;
-  TWebForm_full_request_review_approve = class(System.Web.UI.Page)
+  TWebForm_full_request_review_approve = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -139,7 +139,7 @@ procedure TWebForm_full_request_review_approve.Page_Load
 var
   timestamp: datetime;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

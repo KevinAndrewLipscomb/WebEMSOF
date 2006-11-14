@@ -6,8 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki.common,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  ki,
   borland.data.provider,
   Class_db,
   system.configuration,
@@ -23,7 +23,7 @@ type
     saved_emsof_ante: decimal;
     saved_shortage: decimal;
     END;
-  TWebForm_withdraw_request_item = class(System.Web.UI.Page)
+  TWebForm_withdraw_request_item = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -77,7 +77,7 @@ end;
 
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -170,7 +170,7 @@ begin
   //
   biz_accounts := TClass_biz_accounts.Create;
   service_email_address := biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring);
-  ki.common.SmtpMailSend
+  ki.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     biz_accounts.EmailTargetByRole('emsof-request-withdrawal-stakeholder'),

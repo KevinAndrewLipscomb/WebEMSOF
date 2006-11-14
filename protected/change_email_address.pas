@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, borland.data.provider, system.configuration,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, borland.data.provider, system.configuration,
   system.net, system.web.security,
   Class_db;
 
@@ -17,7 +17,7 @@ type
     RECORD
     db: TClass_db;
     END;
-  TWebForm_change_email_address = class(System.Web.UI.Page)
+  TWebForm_change_email_address = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -74,7 +74,7 @@ procedure TWebForm_change_email_address.Page_Load(sender: System.Object; e: Syst
 var
   email_address: string;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

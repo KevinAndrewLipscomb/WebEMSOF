@@ -6,8 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki.common,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  ki,
   borland.data.provider,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
@@ -34,7 +34,7 @@ type
     sum_of_service_appropriations: decimal;
     unappropriated_amount: decimal;
     END;
-  TWebForm_county_dictated_appropriations = class(System.Web.UI.Page)
+  TWebForm_county_dictated_appropriations = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -134,7 +134,7 @@ var
   county_dictated_deadline: system.datetime;
   make_appropriations_deadline: system.datetime;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -393,7 +393,7 @@ begin
     //
     // Send a notification message.
     //
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
@@ -513,7 +513,7 @@ begin
       )
       .ExecuteNonQuery;
     //
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),

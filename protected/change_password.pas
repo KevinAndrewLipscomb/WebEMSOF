@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, borland.data.provider, system.configuration,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, borland.data.provider, system.configuration,
   system.web.security,
   Class_db;
 
@@ -17,7 +17,7 @@ type
     RECORD
     db: TClass_db;
     END;
-  TWebForm_change_password = class(System.Web.UI.Page)
+  TWebForm_change_password = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -70,7 +70,7 @@ end;
 
 procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -130,7 +130,7 @@ begin
   borland.data.provider.bdpcommand.Create
     (
     'UPDATE ' + session['target_user_table'].ToString + '_user'
-    + ' SET encoded_password = "' + ki.common.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
+    + ' SET encoded_password = "' + ki.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
     +   ' be_stale_password = FALSE'
     + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
     p.db.connection

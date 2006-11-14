@@ -6,13 +6,13 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki,
   system.web.mail, system.configuration;
 
 const ID = '$Id$';
 
 type
-  TWebForm_new_password = class(System.Web.UI.Page)
+  TWebForm_new_password = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -54,7 +54,7 @@ var
   email_address: string;
   temporary_password: string[8];
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
@@ -78,14 +78,14 @@ begin
       (
       session['target_user_table'].ToString,
       session[session['target_user_table'].ToString + '_user_id'].ToString,
-      ki.common.Digest(temporary_password)
+      ki.Digest(temporary_password)
       );
     //
     // Send the new password to the service's email address of record.
     //
     email_address := biz_accounts.EmailAddressByKindId
       (session['target_user_table'].ToString,session[session['target_user_table'].ToString + '_user_id'].ToString);
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       email_address,

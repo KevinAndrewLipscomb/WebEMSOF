@@ -6,10 +6,11 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
   system.web.security,
   Class_biz_emsof_requests,
-  Class_db;
+  Class_db,
+  ki_web_ui;
 
 const ID = '$Id$';
 
@@ -34,7 +35,7 @@ type
     sum_of_emsof_antes: decimal;
     unused_amount: decimal;
     END;
-  TWebForm_request_overview = class(System.Web.UI.Page)
+  TWebForm_request_overview = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -114,7 +115,7 @@ var
   county_dictated_appropriation_amount: decimal;
   make_item_requests_deadline: system.datetime;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

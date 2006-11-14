@@ -6,11 +6,11 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, system.web.security,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, system.web.security,
   borland.data.provider,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
-  ki.common;
+  ki;
 
 const ID = '$Id$';
 
@@ -26,7 +26,7 @@ type
     total_emsof_ante: decimal;
     total_provider_match: decimal;
     END;
-  TWebForm_state_required_report = class(System.Web.UI.Page)
+  TWebForm_state_required_report = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -100,7 +100,7 @@ var
   i: cardinal;
   num_active_amendments: cardinal;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

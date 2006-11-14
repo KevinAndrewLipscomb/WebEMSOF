@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration,
   Class_biz_user,
   system.text.regularexpressions,
   system.web.mail;
@@ -21,7 +21,7 @@ type
     exception: system.exception;
     notification_message: string;
     END;
-  TWebForm_exception = class(System.Web.UI.Page)
+  TWebForm_exception = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -67,7 +67,7 @@ var
   lcv: cardinal;
   user_designator: string;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -105,14 +105,14 @@ begin
         p.notification_message := p.notification_message + session.keys[lcv].tostring + ' = ' + session.item[lcv].tostring + NEW_LINE;
       end;
       //
-      ki.common.SmtpMailSend
+      ki.SmtpMailSend
         (
         configurationsettings.appsettings['sender_email_address'],
         configurationsettings.appsettings['sender_email_address'],
         'EXCEPTION REPORT',
         p.notification_message
         );
-      ki.common.SmtpMailSend
+      ki.SmtpMailSend
         (
         configurationsettings.appsettings['sender_email_address'],
         configurationsettings.appsettings['sysadmin_sms_address'],
@@ -141,7 +141,7 @@ var
 begin
   comment := Safe(TextArea_user_comment.value,NARRATIVE);
   if comment <> system.string.EMPTY then begin
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       configurationsettings.appsettings['sender_email_address'],
       configurationsettings.appsettings['sender_email_address'],

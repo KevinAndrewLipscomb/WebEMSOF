@@ -6,7 +6,7 @@ uses
   Class_biz_user,
   Class_db_accounts,
   Class_db_emsof_requests,
-  ki.common,
+  ki,
   borland.vcl.sysutils,
   system.configuration,
   system.web.mail;
@@ -214,7 +214,7 @@ begin
   //
   // Send notification to service.
   //
-  ki.common.SmtpMailSend
+  ki.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
@@ -224,7 +224,7 @@ begin
   //
   //   Send notification to region.
   //
-  ki.common.SmtpMailSend
+  ki.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     emsof_coord_email_address,
@@ -265,15 +265,15 @@ begin
   service_email_address := EmailAddressByKindId('service',service_id);
   self_email_address := SelfEmailAddress;
   //
-  BreakChars[1] := ki.common.SPACE;
-  BreakChars[2] := ki.common.TAB;
+  BreakChars[1] := ki.SPACE;
+  BreakChars[2] := ki.TAB;
   BreakChars[3] := '-';
   //
   if be_ok_to_rework then begin
     //
     //   Send notification to service.
     //
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       service_email_address,
@@ -309,7 +309,7 @@ begin
       //
       //   Send notification to county.
       //
-      ki.common.SmtpMailSend
+      ki.SmtpMailSend
         (
         ConfigurationSettings.AppSettings['sender_email_address'],
         EmailAddressByKindId('county',county_code),
@@ -359,7 +359,7 @@ begin
     //
     //   Send notifications to service and region.
     //
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       service_email_address,
@@ -389,7 +389,7 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       other_stakeholder_email_address,
@@ -479,7 +479,7 @@ begin
   //
   //   Send notification to service.
   //
-  ki.common.SmtpMailSend
+  ki.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
@@ -490,7 +490,7 @@ begin
   //   Send notification to region.
   //
   if next_reviewer_email_target <> system.string.EMPTY then begin
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
         next_reviewer_email_target,
@@ -528,7 +528,7 @@ var
   poc_email_address: string;
 begin
   poc_email_address := EmailAddressByKindId('service',service_id);
-  ki.common.SmtpMailSend
+  ki.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailTargetByRole('emsof-coordinator'),

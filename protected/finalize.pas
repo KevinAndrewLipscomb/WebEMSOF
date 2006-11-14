@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki.common, system.configuration, borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
   system.web.mail, system.web.security,
   Class_db;
 
@@ -17,7 +17,7 @@ type
     RECORD
     db: TClass_db;
     END;
-  TWebForm_finalize = class(System.Web.UI.Page)
+  TWebForm_finalize = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -134,7 +134,7 @@ var
   grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -378,7 +378,7 @@ begin
     cc_email_address := biz_accounts.EmailAddressByKindId
       ('county',TClass_biz_appropriations.Create.CountyCodeOfCountyDictum(session['county_dictated_appropriation_id'].tostring));
     //
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       cc_email_address,
@@ -398,7 +398,7 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       biz_accounts.EmailTargetByRole('emsof-coordinator'),
