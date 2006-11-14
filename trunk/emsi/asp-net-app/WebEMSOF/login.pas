@@ -6,11 +6,14 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki.common, System.Globalization,
+  System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  System.Globalization,
   System.Data.SqlClient, System.Data.Common, system.configuration,
   system.text.regularexpressions, system.web.security, system.io,
-  Class_biz_accounts;
+  Class_biz_accounts,
+  ki,
+  ki_web_ui,
+  system.Web.ui;
 
 const ID = '$Id$';
 
@@ -19,7 +22,7 @@ type
     RECORD
     biz_accounts: TClass_biz_accounts;
     END;
-  TWebForm_login = class(System.Web.UI.Page)
+  TWebForm_login = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -79,7 +82,7 @@ end;
 
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -111,7 +114,7 @@ begin
     (
     Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD),
     Safe(DropDownList_user.selectedvalue,NUM),
-    ki.common.Digest(Safe(TextBox_password.Text.trim,ALPHANUM))
+    ki.Digest(Safe(TextBox_password.Text.trim,ALPHANUM))
     );
 end;
 

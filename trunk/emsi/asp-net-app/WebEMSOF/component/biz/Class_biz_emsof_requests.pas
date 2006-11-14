@@ -206,7 +206,7 @@ implementation
 
 uses
   Class_biz_fiscal_years,
-  ki.common,
+  ki,
   system.configuration,
   system.io;
 
@@ -803,7 +803,7 @@ begin
   + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
   + NEW_LINE
   + '-- ' + ConfigurationSettings.AppSettings['application_name'];
-  ki.common.SendControlAsAttachmentToEmailMessage
+  ki.SendControlAsAttachmentToEmailMessage
     (
     Table_report,
     path.GetDirectoryName(request_physical_path) + '/' + configurationsettings.appsettings['scratch_folder'] + '/'

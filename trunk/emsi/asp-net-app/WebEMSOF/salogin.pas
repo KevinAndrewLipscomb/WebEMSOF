@@ -6,8 +6,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki.common, System.Globalization,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  ki, System.Globalization,
   System.Data.SqlClient, System.Data.Common, system.configuration,
   system.text.regularexpressions, system.web.security, system.io,
   Class_biz_accounts;
@@ -19,7 +19,7 @@ type
     RECORD
     biz_accounts: TClass_biz_accounts;
     END;
-  TWebForm_salogin = class(System.Web.UI.Page)
+  TWebForm_salogin = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -79,7 +79,7 @@ end;
 
 procedure TWebForm_salogin.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -109,7 +109,7 @@ procedure TWebForm_salogin.CustomValidator_account_exists_ServerValidate(source:
 begin
   args.isvalid := p.biz_accounts.BeValidSysAdminCredentials
     (
-    ki.common.Digest(Safe(TextBox_password.Text.trim,ALPHANUM))
+    ki.Digest(Safe(TextBox_password.Text.trim,ALPHANUM))
     );
 end;
 

@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, ki.common,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, ki,
   system.web.mail, system.web.security,
   Class_db;
 
@@ -32,7 +32,7 @@ type
     sum_of_county_appropriations: decimal;
     unappropriated_amount: decimal;
     END;
-  TWebForm_region_dictated_appropriations = class(System.Web.UI.Page)
+  TWebForm_region_dictated_appropriations = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -121,7 +121,7 @@ procedure TWebForm_region_dictated_appropriations.Page_Load(sender: System.Objec
 var
   bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -243,7 +243,7 @@ begin
       )
       .ExecuteNonQuery;
     //
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),
@@ -394,7 +394,7 @@ begin
     //
     // Send a notification message.
     //
-    ki.common.SmtpMailSend
+    ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),

@@ -6,11 +6,11 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   borland.data.provider,
   Class_biz_services,
   Class_db,
-  ki.common,
+  ki,
   system.configuration,
   system.web.mail,
   system.web.security;
@@ -25,7 +25,7 @@ type
     db: TClass_db;
     unappropriated_amount: decimal;
     END;
-  TWebForm_create_new_service_appropriation = class(System.Web.UI.Page)
+  TWebForm_create_new_service_appropriation = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -102,7 +102,7 @@ end;
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.common.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -311,7 +311,7 @@ begin
   + NEW_LINE
   + '-- ' + ConfigurationSettings.AppSettings['application_name'];
   //   Send the email message.
-  ki.common.SmtpMailSend
+  ki.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     bdp_get_service_email_address.ExecuteScalar.tostring,
