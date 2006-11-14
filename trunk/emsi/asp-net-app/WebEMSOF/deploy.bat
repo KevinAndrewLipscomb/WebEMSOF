@@ -14,4 +14,5 @@
 @xcopy C:\Inetpub\wwwroot\WebEMSOF\resource ready-to-deploy\resource /m /i /k /y /z
 @xcopy "C:\Program Files\Common Files\Borland Shared\BDS\Shared Assemblies\4.0\Borland.Data.Provider.dll" ready-to-deploy\bin /m /i /k /y /z
 @xcopy "C:\Program Files\Common Files\Borland Shared\BDS\Shared Assemblies\4.0\Borland.Data.Common.dll" ready-to-deploy\bin /m /i /k /y /z
+@xcopy "C:\Program Files\Common Files\Borland Shared\BDS\Shared Assemblies\4.0\Borland.Delphi.dll" ready-to-deploy\bin /m /i /k /y /z
 @xcopy "C:\Program Files\CoreLab\Bdp\MySql\BDS4\CoreLab.Bdp.MySql.dll" ready-to-deploy\bin /m /i /k /y /z
