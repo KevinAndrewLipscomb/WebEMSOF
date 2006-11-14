@@ -105,7 +105,8 @@ uses
   exception in 'exception.pas' {exception.TWebForm_exception: ki_web_ui.page_class},
   timeout in 'timeout.pas' {timeout.TWebForm_timeout: system.web.ui.page},
   Class_db_equipment in 'component\db\Class_db_equipment.pas',
-  Class_biz_match_level in 'component\biz\Class_biz_match_level.pas';
+  Class_biz_match_level in 'component\biz\Class_biz_match_level.pas',
+  Class_biz_equipment in 'component\biz\Class_biz_equipment.pas';
 
 const ID = '$Id$';
 
