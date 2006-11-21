@@ -39,6 +39,11 @@ type
       county_dictum_id: string
       );
     function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    procedure SetServiceToCountySubmissionDeadline
+      (
+      id: string;
+      deadline: string
+      );
     function SumOfAppropriationsFromSpecificParent
       (
       parent_id: string;
@@ -237,6 +242,24 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
+  self.Close;
+end;
+
+procedure TClass_db_appropriations.SetServiceToCountySubmissionDeadline
+  (
+  id: string;
+  deadline: string
+  );
+begin
+  self.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update region_dictated_appropriation'
+    + ' set service_to_county_submission_deadline = "' + deadline + '"'
+    + ' where id = ' + id,
+    connection
+    )
+    .ExecuteNonQuery;
   self.Close;
 end;
 

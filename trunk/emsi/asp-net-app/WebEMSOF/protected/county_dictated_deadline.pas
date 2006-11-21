@@ -8,13 +8,17 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
   system.web.security,
-  Class_db;
+  Class_db,
+  Class_biz_appropriations,
+  Class_biz_emsof_requests;
 
 const ID = '$Id$';
 
 type
   p_type =
     RECORD
+    biz_appropriations: TClass_biz_appropriations;
+    biz_emsof_requests: TClass_biz_emsof_requests;
     db: TClass_db;
     END;
   TWebForm_county_dictated_deadline = class(ki_web_ui.page_class)
@@ -80,6 +84,8 @@ begin
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_deadline';
     //
+    p.biz_appropriations := TClass_biz_appropriations.Create;
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.db := TClass_db.Create;
     //
     Label_county_name.text := session['county_name'].tostring;
@@ -129,18 +135,17 @@ end;
 procedure TWebForm_county_dictated_deadline.Calendar_SelectionChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  p.db.Open;
-  borland.data.provider.bdpcommand.Create
-    (
-    'update region_dictated_appropriation'
-    + ' set service_to_county_submission_deadline = "' + Calendar.selecteddate.tostring('yyyyMMdd') + '235959"'
-    + ' where id = ' + session['region_dictated_appropriation_id'].tostring,
-    p.db.connection
-    )
-    .ExecuteNonQuery;
-  p.db.Close;
-  server.Transfer('county_dictated_appropriations.aspx');
+  p.biz_appropriations.SetServiceToCountySubmissionDeadline
+    (session['region_dictated_appropriation_id'].tostring,Calendar.selecteddate);
+  if (datetime.Parse(session['county_dictated_deadline'].tostring) < datetime.Now)
+    and ((Calendar.selecteddate + timespan.Parse('23:59:59')) > datetime.Now)
+    and p.biz_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
+      (session['region_dictated_appropriation_id'].tostring)
+  then begin
+    server.Transfer('county_unrejection.aspx');
+  end else begin
+    server.Transfer('county_dictated_appropriations.aspx');
+  end;
 end;
 
 end.
-

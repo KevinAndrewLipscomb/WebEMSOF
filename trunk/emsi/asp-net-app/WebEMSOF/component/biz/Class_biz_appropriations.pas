@@ -36,6 +36,11 @@ type
       county_dictum_id: string
       );
     function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    procedure SetServiceToCountySubmissionDeadline
+      (
+      id: string;
+      deadline: datetime
+      );
     function SumOfAppropriationsFromSpecificParent
       (
       parent_id: string;
@@ -119,6 +124,15 @@ function TClass_biz_appropriations.RegionCodeOfCountyDictum(county_dictum_id: st
 begin
   RegionCodeOfCountyDictum :=
     db_appropriations.RegionCodeOfCountyDictum(county_dictum_id);
+end;
+
+procedure TClass_biz_appropriations.SetServiceToCountySubmissionDeadline
+  (
+  id: string;
+  deadline: datetime
+  );
+begin
+  db_appropriations.SetServiceToCountySubmissionDeadline(id,deadline.tostring('yyyyMMdd') + '235959');
 end;
 
 function TClass_biz_appropriations.SumOfAppropriationsFromSpecificParent

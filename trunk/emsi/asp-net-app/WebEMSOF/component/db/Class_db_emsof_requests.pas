@@ -41,6 +41,11 @@ type
       approval_timestamp_column: approval_timestamp_column_type;
       amount_to_return_to_county: decimal = 0
       );
+    function BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
+      (
+      region_dictated_appropriation_id: string
+      )
+      : boolean;
     function BeValidRegionalExecDirApprovalTimestampOf
       (
       master_id: string;
@@ -104,9 +109,7 @@ type
     procedure Demote
       (
       master_id: string;
-      next_status: cardinal;
-      user_kind: string;
-      role: string
+      next_status: cardinal
       );
     function DetailText(master_id: string): string;
     function EmsofAnteOfItem
@@ -195,6 +198,7 @@ type
     function TcciOfLeftoverOrShortage: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
+    procedure Unreject(master_id: string);
   end;
 
 implementation
@@ -329,6 +333,26 @@ begin
     borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
     self.Close;
   end;
+end;
+
+function TClass_db_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
+  (
+  region_dictated_appropriation_id: string
+  )
+  : boolean;
+begin
+  self.Open;
+  BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation := '0' < borland.data.provider.BdpCommand.Create
+    (
+    'select count(*) from emsof_request_master'
+    + ' join county_dictated_appropriation'
+    +   ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    + ' where status_code = 11'
+    +   ' and region_dictated_appropriation_id = ' + region_dictated_appropriation_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf
@@ -564,9 +588,7 @@ end;
 procedure TClass_db_emsof_requests.Demote
   (
   master_id: string;
-  next_status: cardinal;
-  user_kind: string;
-  role: string
+  next_status: cardinal
   );
 begin
   self.Open;
@@ -1082,6 +1104,22 @@ end;
 function TClass_db_emsof_requests.TcciOfStatusDescription: cardinal;
 begin
   TcciOfStatusDescription := TCCI_STATUS_DESCRIPTION;
+end;
+
+procedure TClass_db_emsof_requests.Unreject(master_id: string);
+begin
+  self.Open;
+  borland.data.provider.bdpcommand.Create
+    (
+    'update emsof_request_master'
+    + ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    + ' set emsof_request_master.status_code = 2'
+    + ' where emsof_request_master.id = ' + master_id,
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
 end;
 
 end.

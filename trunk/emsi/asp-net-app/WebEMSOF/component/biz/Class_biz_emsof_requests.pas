@@ -60,6 +60,11 @@ type
     function BeOkToDrillDown(status: status_type): boolean;
     function BeOkToMarkDone(status: status_type): boolean;
     function BeOkToTrackInvoices(status: status_type): boolean;
+    function BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
+      (
+      region_dictated_appropriation_id: string
+      )
+      : boolean;
     function BeValidRegionalExecDirApprovalTimestampOf
       (
       master_id: string;
@@ -200,6 +205,12 @@ type
     function TcciOfLeftoverOrShortage: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
+    procedure Unreject
+      (
+      e_item: system.object;
+      role: string;
+      reviewer_descriptor: string
+      );
   end;
 
 implementation
@@ -506,7 +517,7 @@ begin
     next_status := REJECTED;
   end;
   //
-  db_emsof_requests.Demote(IdOf(e_item),ord(next_status),TClass_biz_user.Create.Kind,role);
+  db_emsof_requests.Demote(IdOf(e_item),ord(next_status));
   biz_accounts.MakeDemotionNotification
     (
     role,
@@ -658,6 +669,16 @@ end;
 function TClass_biz_emsof_requests.PropertyNameOfEmsofAnte: string;
 begin
   PropertyNameOfEmsofAnte := db_emsof_requests.PropertyNameOfEmsofAnte;
+end;
+
+function TClass_biz_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
+  (
+  region_dictated_appropriation_id: string
+  )
+  : boolean;
+begin
+  BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation :=
+    db_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation(region_dictated_appropriation_id);
 end;
 
 function TClass_biz_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf
@@ -899,6 +920,25 @@ end;
 function TClass_biz_emsof_requests.TcciOfStatusDescription: cardinal;
 begin
   TcciOfStatusDescription := db_emsof_requests.TcciOfStatusDescription;
+end;
+
+procedure TClass_biz_emsof_requests.Unreject
+  (
+  e_item: system.object;
+  role: string;
+  reviewer_descriptor: string
+  );
+begin
+  db_emsof_requests.Unreject(IdOf(e_item));
+  biz_accounts.MakeUnrejectionNotification
+    (
+    role,
+    reviewer_descriptor,
+    ServiceIdOf(e_item),
+    ServiceNameOf(e_item),
+    FyDesignatorOf(e_item),
+    SponsorCountyCodeOf(e_item)
+    );
 end;
 
 end.

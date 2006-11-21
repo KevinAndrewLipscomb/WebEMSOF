@@ -72,6 +72,15 @@ type
       fy_designator: string;
       be_warning_required: boolean = TRUE
       );
+    procedure MakeUnrejectionNotification
+      (
+      role: string;
+      reviewer_descriptor: string;
+      service_id: string;
+      service_name: string;
+      fy_designator: string;
+      county_code: string
+      );
     procedure NotifyRegionOfServicePocAffirmation
       (
       service_id: string;
@@ -510,6 +519,78 @@ begin
       + NEW_LINE
       + '-- ' + ConfigurationSettings.AppSettings['application_name']
       );
+  end;
+end;
+
+procedure TClass_biz_accounts.MakeUnrejectionNotification
+  (
+  role: string;
+  reviewer_descriptor: string;
+  service_id: string;
+  service_name: string;
+  fy_designator: string;
+  county_code: string
+  );
+var
+  self_email_address: string;
+  service_email_address: string;
+begin
+  //
+  // Get service's email address of record.
+  //
+  service_email_address := EmailAddressByKindId('service',service_id);
+  self_email_address := SelfEmailAddress;
+  //
+  //   Send notification to service.
+  //
+  ki.SmtpMailSend
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    service_email_address,
+    'UN-Rejection of EMSOF request',
+    reviewer_descriptor + ' has UN-rejected ' + service_name + '''s ' + fy_designator + ' EMSOF request.  The request '
+    + 'has been returned to you for rework.' + NEW_LINE
+    + NEW_LINE
+    + 'You can rework this EMSOF request by visiting:' + NEW_LINE
+    + NEW_LINE
+    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+    + NEW_LINE
+    + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
+    + NEW_LINE
+    + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
+  //
+  if role <> 'county' then begin
+    //
+    //   Send notification to county.
+    //
+    ki.SmtpMailSend
+      (
+      ConfigurationSettings.AppSettings['sender_email_address'],
+      EmailAddressByKindId('county',county_code),
+      'UN-rejection of ' + service_name + '''s EMSOF request',
+      reviewer_descriptor + ' has UN-rejected ' + service_name + '''s ' + fy_designator + ' EMSOF request.  The request '
+      + 'has been returned to the service for rework.' + NEW_LINE
+      + NEW_LINE
+      + 'You can review this EMSOF request by visiting:' + NEW_LINE
+      + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + NEW_LINE
+      + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
+      + NEW_LINE
+      + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
+      + NEW_LINE
+      + 'You can contact ' + service_name + ' at:' + NEW_LINE
+      + NEW_LINE
+      + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
+      + NEW_LINE
+      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      );
+    //
   end;
 end;
 
