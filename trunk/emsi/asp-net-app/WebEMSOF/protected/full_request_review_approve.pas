@@ -18,6 +18,7 @@ type
     biz_emsof_requests: TClass_biz_emsof_requests;
     be_before_improvement_deadline: boolean;
     display_actuals: boolean;
+    modify_actuals: boolean;
     num_items: cardinal;
     parent_appropriation_amount: decimal;
     request_id: string;
@@ -161,7 +162,8 @@ begin
     //
     p.request_id := p.biz_emsof_requests.IdOf(session['e_item']);
     p.status := p.biz_emsof_requests.StatusOf(session['e_item']);
-    p.display_actuals := p.biz_emsof_requests.BeOkToTrackInvoices(p.status);
+    p.display_actuals := p.biz_emsof_requests.BeOkToViewInvoices(p.status);
+    p.modify_actuals := p.biz_emsof_requests.BeOkToTrackInvoices(p.status);
     //
     Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
@@ -357,7 +359,7 @@ begin
   // Manage column visibility
   //
   e.item.cells[TCCI_ACTUALS].visible := p.display_actuals;
-  e.item.cells[TCCI_LINKBUTTONS].visible := p.display_actuals;
+  e.item.cells[TCCI_LINKBUTTONS].visible := p.modify_actuals;
   //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)

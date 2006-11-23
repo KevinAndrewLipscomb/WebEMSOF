@@ -18,24 +18,32 @@ uses
 const
   ID = '$Id$';
 
-type status_type =
-  (
-  ALLOCATED = 1,
-  NEEDS_SERVICE_FINALIZATION = 2,
-  NEEDS_COUNTY_APPROVAL = 3,
-  NEEDS_REGIONAL_COMPLIANCE_CHECK = 4,
-  NEEDS_REGIONAL_EXEC_DIR_APPROVAL = 5,
-  NEEDS_SENT_TO_PA_DOH_EMSO = 6,
-  NEEDS_PA_DOH_EMSO_APPROVAL = 7,
-  NEEDS_INVOICE_COLLECTION = 8,
-  NEEDS_CANCELED_CHECK_COLLECTION = 9,
-  NEEDS_REIMBURSEMENT_ISSUANCE = 10,
-  REJECTED = 11,
-  WITHDRAWN = 12,
-  REIMBURSEMENT_ISSUED = 13,
-  DEPLOYED = 14,
-  ARCHIVED = 15
-  );
+type
+  status_type =
+    (
+    ALLOCATED = 1,
+    NEEDS_SERVICE_FINALIZATION = 2,
+    NEEDS_COUNTY_APPROVAL = 3,
+    NEEDS_REGIONAL_COMPLIANCE_CHECK = 4,
+    NEEDS_REGIONAL_EXEC_DIR_APPROVAL = 5,
+    NEEDS_SENT_TO_PA_DOH_EMSO = 6,
+    NEEDS_PA_DOH_EMSO_APPROVAL = 7,
+    NEEDS_INVOICE_COLLECTION = 8,
+    NEEDS_CANCELED_CHECK_COLLECTION = 9,
+    NEEDS_REIMBURSEMENT_ISSUANCE = 10,
+    REJECTED = 11,
+    WITHDRAWN = 12,
+    REIMBURSEMENT_ISSUED = 13,
+    DEPLOYED = 14,
+    ARCHIVED = 15
+    );
+  item_status_type =
+    (
+    MASTER_NOT_YET_APPROVED = 1,
+    REGION_NEEDS_INVOICE = 2,
+    REGION_NEEDS_PROOF_OF_PAYMENT = 4,
+    ITEM_WITHDRAWN = 6
+    );
 
 type
   TClass_biz_emsof_requests = class
@@ -390,6 +398,19 @@ begin
       );
 end;
 
+function TClass_biz_emsof_requests.BeOkToViewInvoices(status: status_type): boolean;
+begin
+  BeOkToViewInvoices := status in
+    [
+    NEEDS_INVOICE_COLLECTION,
+    NEEDS_CANCELED_CHECK_COLLECTION,
+    NEEDS_REIMBURSEMENT_ISSUANCE,
+    REIMBURSEMENT_ISSUED,
+    DEPLOYED,
+    ARCHIVED
+    ];
+end;
+
 procedure TClass_biz_emsof_requests.BindDetail
   (
   master_id: string;
@@ -736,6 +757,7 @@ procedure TClass_biz_emsof_requests.SetActuals
   );
 var
   county_dictum_id: string;
+  item_status_code: cardinal;
   val2: decimal;
 begin
   county_dictum_id := CountyDictumIdOf(master_id);
@@ -749,6 +771,11 @@ begin
   end else begin
     val2 := decimal.Parse(subtotal_cost)*biz_appropriations.MatchFactorOf(county_dictum_id);
   end;
+  if (decimal.Parse(quantity) > 0) and (decimal.Parse(subtotal_cost) > 0) then begin
+    item_status_code := ord(REGION_NEEDS_PROOF_OF_PAYMENT);
+  end else begin
+    item_status_code := ord(REGION_NEEDS_INVOICE);
+  end;
   db_emsof_requests.SetActuals
     (
     master_id,
@@ -756,7 +783,8 @@ begin
     invoice_designator,
     quantity,
     subtotal_cost,
-    math.Min(EmsofAnteOfItem(master_id,priority),val2)
+    math.Min(EmsofAnteOfItem(master_id,priority),val2),
+    item_status_code
     );
 end;
 
