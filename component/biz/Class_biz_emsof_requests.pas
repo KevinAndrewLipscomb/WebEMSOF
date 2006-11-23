@@ -68,6 +68,7 @@ type
     function BeOkToDrillDown(status: status_type): boolean;
     function BeOkToMarkDone(status: status_type): boolean;
     function BeOkToTrackInvoices(status: status_type): boolean;
+    function BeOkToViewInvoices(status: status_type): boolean;
     function BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
       (
       region_dictated_appropriation_id: string
