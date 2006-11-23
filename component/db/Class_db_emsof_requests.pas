@@ -162,7 +162,8 @@ type
       invoice_designator: string;
       quantity: string;
       subtotal_cost: string;
-      emsof_ante: decimal
+      emsof_ante: decimal;
+      item_status_code: cardinal
       );
     procedure SetHasWishList
       (
@@ -315,6 +316,13 @@ begin
     +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()'
     + ' where id = ' + master_id
     + '; ';
+    if next_status = 8 then begin
+      cmdText := cmdText
+      + 'update emsof_request_detail'
+      + ' set status_code = 2'
+      + ' where master_id = ' + master_id
+      + '; ';
+    end;
     if amount_to_return_to_county > 0 then begin
       cmdText := cmdText
       + ' update county_dictated_appropriation'
@@ -326,7 +334,7 @@ begin
       +   ' where emsof_request_master.id = ' + master_id
       +   ' ); ';
     end;
-    if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') then begin
+    if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') or (next_status = 8) then begin
       cmdText := cmdText + ' COMMIT;';
     end;
     self.Open;
@@ -872,7 +880,8 @@ procedure TClass_db_emsof_requests.SetActuals
   invoice_designator: string;
   quantity: string;
   subtotal_cost: string;
-  emsof_ante: decimal
+  emsof_ante: decimal;
+  item_status_code: cardinal
   );
 begin
   self.Open;
@@ -883,6 +892,7 @@ begin
     + ' , actual_quantity = ' + quantity
     + ' , actual_subtotal_cost = ' + subtotal_cost
     + ' , actual_emsof_ante = ' + emsof_ante.tostring
+    + ' , status_code = ' + item_status_code.tostring
     + ' where master_id = ' + master_id
     +   ' and priority = ' + priority,
     connection
