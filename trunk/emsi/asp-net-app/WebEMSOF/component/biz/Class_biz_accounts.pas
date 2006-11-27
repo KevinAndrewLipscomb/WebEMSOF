@@ -419,7 +419,10 @@ begin
       + NEW_LINE
       + 'This action effectively returns ' + emsof_ante + ' of EMSOF funds for use by others.' + NEW_LINE
       + NEW_LINE
-      + 'You can review this EMSOF request by visiting:' + NEW_LINE
+      + 'If the regional request submission deadline has not already passed, you can UN-reject this request by moving your county '
+      + 'deadline from the past to the future.' + NEW_LINE
+      + NEW_LINE
+      + 'To review this EMSOF request or to adjust your county submission deadline, visit:' + NEW_LINE
       + NEW_LINE
       + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
       + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
