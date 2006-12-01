@@ -13,7 +13,7 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                               [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
+			                                                [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
 			<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
 		</small>
@@ -125,7 +125,7 @@
 							  <td>
 								<ul>
 								  <li><p><ASP:LinkButton id="LinkButton_completed" runat="server"> request(s) COMPLETED</ASP:LinkButton></p></li>
-								  <li><p><ASP:LinkButton id="LinkButton_missed_deadlines" runat="server" enabled="False"> request(s) FAILED DEADLINE</ASP:LinkButton></p></li>
+								  <li><p><ASP:LinkButton id="LinkButton_missed_deadlines" runat="server"> request(s) FAILED DEADLINE</ASP:LinkButton></p></li>
 								  <li><p><ASP:LinkButton id="LinkButton_withdrawn" runat="server"> request(s) WITHDRAWN</ASP:LinkButton></p></li>
 								  <li><p><ASP:LinkButton id="LinkButton_rejected" runat="server"> request(s) REJECTED</ASP:LinkButton></p></li>
 								</ul>
