@@ -39,6 +39,7 @@ type
     procedure LinkButton_all_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_missed_deadlines_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -123,6 +124,7 @@ begin
   Include(Self.LinkButton_canceled_check_collection.Click, Self.LinkButton_canceled_check_collection_Click);
   Include(Self.LinkButton_reimbursement.Click, Self.LinkButton_reimbursement_Click);
   Include(Self.LinkButton_completed.Click, Self.LinkButton_completed_Click);
+  Include(Self.LinkButton_missed_deadlines.Click, Self.LinkButton_missed_deadlines_Click);
   Include(Self.LinkButton_withdrawn.Click, Self.LinkButton_withdrawn_Click);
   Include(Self.LinkButton_rejected.Click, Self.LinkButton_rejected_Click);
   Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
@@ -206,6 +208,7 @@ begin
       biz_emsof_requests.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE) + LinkButton_reimbursement.text;
     //
     LinkButton_completed.text := biz_emsof_requests.TallyOfStatus(REIMBURSEMENT_ISSUED) + LinkButton_completed.text;
+    LinkButton_missed_deadlines.text := biz_emsof_requests.TallyOfStatus(FAILED_DEADLINE) + LinkButton_missed_deadlines.text;
     LinkButton_withdrawn.text := biz_emsof_requests.TallyOfStatus(WITHDRAWN) + LinkButton_withdrawn.text;
     LinkButton_rejected.text := biz_emsof_requests.TallyOfStatus(REJECTED) + LinkButton_rejected.text;
     //
@@ -227,6 +230,14 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_missed_deadlines_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  session.Remove('status_of_interest');
+  session.Add('status_of_interest',FAILED_DEADLINE);
+  server.Transfer('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_change_email_address_Click(sender: System.Object;

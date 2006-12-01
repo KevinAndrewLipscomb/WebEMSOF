@@ -35,7 +35,8 @@ type
     WITHDRAWN = 12,
     REIMBURSEMENT_ISSUED = 13,
     DEPLOYED = 14,
-    ARCHIVED = 15
+    ARCHIVED = 15,
+    FAILED_DEADLINE = 16
     );
   item_status_type =
     (

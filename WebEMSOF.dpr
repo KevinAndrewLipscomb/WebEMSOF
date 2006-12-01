@@ -94,7 +94,7 @@ uses
   profile in 'protected\profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas' {regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection: System.Web.UI.Page},
-  regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: System.Web.UI.Page},
+  regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: ki_web_ui.page_class},
   request_item_detail in 'protected\request_item_detail.pas' {request_item_detail.TWebForm_request_item_detail: ki_web_ui.page_class},
   request_overview in 'protected\request_overview.pas' {request_overview.TWebForm_request_overview: ki_web_ui.page_class},
   service_overview in 'protected\service_overview.pas' {service_overview.TWebForm_service_overview: ki_web_ui.page_class},

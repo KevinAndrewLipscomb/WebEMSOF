@@ -1022,7 +1022,8 @@ begin
     +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
     +   ' join regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
     + ' where regional_staffer.id = ' + user_id
-    +   ' and fiscal_year_id = ' + fy_id;
+    +   ' and fiscal_year_id = ' + fy_id
+    +   ' and ((status_code between 2 and 10) or (status_code = 13))';
   end else if user_kind = 'county' then begin
     cmdText := 'select sum(value)'
     + ' from emsof_request_master'
@@ -1033,7 +1034,8 @@ begin
     +   ' join state_dictated_appropriation'
     +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
     + ' where county_code = ' + user_id
-    +   ' and fiscal_year_id = ' + fy_id;
+    +   ' and fiscal_year_id = ' + fy_id
+    +   ' and ((status_code between 2 and 10) or (status_code = 13))';
   end;
   self.Open;
   sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
