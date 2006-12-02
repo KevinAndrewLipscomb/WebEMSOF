@@ -75,6 +75,12 @@ type
       region_dictated_appropriation_id: string
       )
       : boolean;
+    function BeValidCountyApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
     function BeValidRegionalExecDirApprovalTimestampOf
       (
       master_id: string;
@@ -702,6 +708,16 @@ function TClass_biz_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDicta
 begin
   BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation :=
     db_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation(region_dictated_appropriation_id);
+end;
+
+function TClass_biz_emsof_requests.BeValidCountyApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
+begin
+  BeValidCountyApprovalTimestampOf := db_emsof_requests.BeValidCountyApprovalTimestampOf(master_id,timestamp);
 end;
 
 function TClass_biz_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf

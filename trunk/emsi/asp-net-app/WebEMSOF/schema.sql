@@ -511,22 +511,23 @@ CREATE TABLE regional_staffer_user (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `request_status_code_description_map`
--- 
+--
 
 DROP TABLE IF EXISTS request_status_code_description_map;
 CREATE TABLE request_status_code_description_map (
   `code` tinyint(4) NOT NULL auto_increment,
   description varchar(63) NOT NULL,
-  PRIMARY KEY  (`code`)
+  PRIMARY KEY  (`code`),
+  UNIQUE KEY description (description)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Dumping data for table `request_status_code_description_map`
--- 
+--
 
-INSERT INTO request_status_code_description_map (code, description) VALUES 
+INSERT INTO request_status_code_description_map (code, description) VALUES
 (1, 'Allocated'),
 (2, 'Started by service, not finalized'),
 (3, 'Needs county approval'),
@@ -541,13 +542,14 @@ INSERT INTO request_status_code_description_map (code, description) VALUES
 (12, 'Withdrawn by service'),
 (13, 'Reimbursement issued'),
 (14, 'Deployed'),
-(15, 'Archived');
+(15, 'Archived'),
+(16, 'Failed deadline');
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `service`
--- 
+--
 
 DROP TABLE IF EXISTS service;
 CREATE TABLE service (
@@ -577,9 +579,9 @@ CREATE TABLE service (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `service_user`
--- 
+--
 
 DROP TABLE IF EXISTS service_user;
 CREATE TABLE service_user (

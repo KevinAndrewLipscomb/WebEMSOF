@@ -179,10 +179,11 @@ begin
     TableRow_state_approval_timestamp.visible := FALSE;
     //
     if p.status > NEEDS_COUNTY_APPROVAL then begin
-      Table_prior_approvals.visible := TRUE;
-      Label_sponsor_county_2.text := Label_sponsor_county.text;
-      Label_county_approval_timestamp.text :=
-        p.biz_emsof_requests.CountyApprovalTimestampOf(p.request_id).tostring('HH:mm:ss dddd, MMMM d, yyyy');
+      if p.biz_emsof_requests.BeValidCountyApprovalTimestampOf(p.request_id,timestamp) then begin
+        Table_prior_approvals.visible := TRUE;
+        Label_sponsor_county_2.text := Label_sponsor_county.text;
+        Label_county_approval_timestamp.text := timestamp.tostring('HH:mm:ss dddd, MMMM d, yyyy');
+      end;
       if p.status > NEEDS_REGIONAL_COMPLIANCE_CHECK then begin
         if p.biz_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf(p.request_id,timestamp) then begin
           TableRow_regional_planner_approval_timestamp.visible := TRUE;
