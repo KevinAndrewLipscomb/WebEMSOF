@@ -46,6 +46,12 @@ type
       region_dictated_appropriation_id: string
       )
       : boolean;
+    function BeValidCountyApprovalTimestampOf
+      (
+      master_id: string;
+      out timestamp: datetime
+      )
+      : boolean;
     function BeValidRegionalExecDirApprovalTimestampOf
       (
       master_id: string;
@@ -360,6 +366,30 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
+  self.Close;
+end;
+
+function TClass_db_emsof_requests.BeValidCountyApprovalTimestampOf
+  (
+  master_id: string;
+  out timestamp: datetime
+  )
+  : boolean;
+var
+  bdr: borland.data.provider.bdpdatareader;
+begin
+  self.Open;
+  bdr := borland.data.provider.bdpcommand.Create
+    ('select county_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
+    .ExecuteReader;
+  bdr.Read;
+  if bdr.IsDbNull(0) then begin
+    BeValidCountyApprovalTimestampOf := FALSE;
+  end else begin
+    BeValidCountyApprovalTimestampOf := TRUE;
+    timestamp := datetime(bdr['county_approval_timestamp']);
+  end;
+  bdr.Close;
   self.Close;
 end;
 
