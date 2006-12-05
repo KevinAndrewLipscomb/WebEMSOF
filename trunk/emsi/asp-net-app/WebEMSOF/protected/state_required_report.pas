@@ -40,6 +40,7 @@ type
       e: System.EventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_export_scratch_copy_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -67,6 +68,7 @@ type
     Label_num_filtered_requests: System.Web.UI.WebControls.Label;
     DropDownList_amendment: System.Web.UI.WebControls.DropDownList;
     Label_total_num_requests: System.Web.UI.WebControls.Label;
+    LinkButton_export_scratch_copy: System.Web.UI.WebControls.LinkButton;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -87,9 +89,10 @@ begin
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
-  Include(Self.LinkButton_transmit_to_state.Click, Self.LinkButton_transmit_to_state_Click);
   Include(Self.DropDownList_amendment.SelectedIndexChanged, Self.DropDownList_amendment_SelectedIndexChanged);
   Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
+  Include(Self.LinkButton_export_scratch_copy.Click, Self.LinkButton_export_scratch_copy_Click);
+  Include(Self.LinkButton_transmit_to_state.Click, Self.LinkButton_transmit_to_state_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_state_required_report_PreRender);
 end;
@@ -153,6 +156,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_state_required_report.LinkButton_export_scratch_copy_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  ki.ExportToExcel
+    (page,'WebEmsof-UNOFFICIAL-' + datetime.Now.tostring('yyyyMMddHHmmssf'),ki.StringOfControl(Table_report));
 end;
 
 procedure TWebForm_state_required_report.LinkButton_change_email_address_Click(sender: System.Object;
@@ -262,6 +272,7 @@ begin
   TableRow_none.visible := p.be_datagrid_empty;
   DataGrid_state_export_batch.visible := not p.be_datagrid_empty;
   LinkButton_transmit_to_state.enabled := not p.be_datagrid_empty;
+  LinkButton_export_scratch_copy.enabled := not p.be_datagrid_empty;
   //
   // Clear aggregation vars for next bind, if any.
   //
