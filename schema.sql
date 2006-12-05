@@ -1,4 +1,4 @@
-﻿-- $Id$
+-- $Id$
 --
 -- phpMyAdmin SQL Dump
 -- version 2.6.4-pl4
@@ -209,13 +209,32 @@ INSERT INTO eligible_provider_equipment_list (code, fiscal_year_id, description,
 (66, 2, 'Other - with external documentation', NULL, 1, 1, 1, 1, NULL, NULL, NULL),
 (67, 2, 'Ambulance FOR URBAN SERVICES ONLY', NULL, 1, 0, 1, 0, 30000.00, 15000.00, 0),
 (68, 2, 'Ambulance FOR RURAL SERVICES ONLY', NULL, 1, 0, 1, 0, 33333.33, 0, 20000.00);
-;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `emsof_purchase_payment`
+--
+
+DROP TABLE IF EXISTS emsof_purchase_payment;
+create table emsof_purchase_payment
+  (
+  id bigint(20) unsigned not null auto_increment,
+  master_id bigint(20) unsigned not null,
+  method tinyint(3) unsigned not null,
+  amount decimal(10,2) unsigned not null,
+  note varchar(255) not null,
+  primary key (id),
+  key (master_id)
+  )
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `emsof_request_detail`
--- 
+--
 
 DROP TABLE IF EXISTS emsof_request_detail;
 CREATE TABLE emsof_request_detail (
@@ -230,6 +249,10 @@ CREATE TABLE emsof_request_detail (
   emsof_ante decimal(10,2) unsigned NOT NULL,
   status_code tinyint(3) unsigned NOT NULL default '1',
   priority smallint(5) unsigned NOT NULL,
+  invoice_designator varchar(255) not null default "",
+  actual_quantity smallint(5) unsigned not null default 0,
+  actual_subtotal_cost decimal(10,2) unsigned not null default 0,
+  actual_emsof_ante decimal(10,2) unsigned not null default 0,
   PRIMARY KEY  (master_id,priority),
   KEY equipment_code (equipment_code),
   KEY status_code (status_code)
@@ -254,6 +277,7 @@ CREATE TABLE emsof_request_master (
   regional_planner_approval_timestamp datetime default NULL,
   regional_director_approval_timestamp datetime default NULL,
   state_approval_timestamp datetime default NULL,
+  actual_value decimal(10,2) unsigned not null default 0,
   PRIMARY KEY  (id),
   KEY status_code (status_code),
   KEY county_dictated_appropriation_id (county_dictated_appropriation_id)
@@ -650,9 +674,15 @@ ALTER TABLE `county_user`
 ALTER TABLE `eligible_provider_equipment_list`
   ADD CONSTRAINT eligible_provider_equipment_list_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id);
 
--- 
+--
+-- Constraints for table `emsof_purchase_payment`
+--
+ALTER TABLE emsof_purchase_payment
+  ADD CONSTRAINT FOREIGN KEY (master_id) REFERENCES emsof_request_master (id);
+
+--
 -- Constraints for table `emsof_request_detail`
--- 
+--
 ALTER TABLE `emsof_request_detail`
   ADD CONSTRAINT emsof_request_detail_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id) ON DELETE CASCADE,
   ADD CONSTRAINT emsof_request_detail_ibfk_2 FOREIGN KEY (equipment_code) REFERENCES eligible_provider_equipment_list (`code`),

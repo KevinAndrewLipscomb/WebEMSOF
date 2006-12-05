@@ -10,8 +10,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                                                [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                                                [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
+			                                                                 [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                                 [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
 			<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
 		</small>
@@ -27,21 +27,24 @@
                     <tr>
                       <td>
                         <strong>State-required report</strong>
-                      </td>
-                      <td>
-                              <div align="center">
-						<asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False">Transmit to State</asp:linkbutton>
-                              </div>
-                      </td>
+					  </td>
+					  <td>
+                              <p align="center"><ASP:LinkButton id="LinkButton_export_scratch_copy" runat="server" enabled="False">Export scratch copy</ASP:LinkButton>
+					  </p></td>
+					  <td>
+							  <div align="center">
+						<asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False" font-bold="True">TRANSMIT TO STATE</asp:linkbutton>
+							  </div>
+					  </td>
 					</tr>
 					<tr>
-					  <td colspan="2"><small>A total of <ASP:Label id="Label_total_num_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests are ready to be transmitted to the state.</small></td>
+					  <td colspan="3"><small>A total of <ASP:Label id="Label_total_num_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests are ready to be transmitted to the state.</small></td>
 					</tr>
 					<tr id="TableRow_this_is_everything" runat="server" visible="False">
-					  <td colspan="2"><small>This report includes request items from all&nbsp;<ASP:Label id="Label_total_num_requests_2" runat="server" font-bold="True"></ASP:Label> requests.</small></td>
+					  <td colspan="3"><small>This report includes request items from all&nbsp;<ASP:Label id="Label_total_num_requests_2" runat="server" font-bold="True"></ASP:Label> requests.</small></td>
 					</tr>
 					<tr id="TableRow_this_is_just_some" runat="server" visible="False">
-					  <td colspan="2"><small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against
+					  <td colspan="3"><small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against
 					   <ASP:DropDownList id="DropDownList_amendment" runat="server" autopostback="True"></ASP:DropDownList>.</small></td>
 					</tr>
 				  </table>
