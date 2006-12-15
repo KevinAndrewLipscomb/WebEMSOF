@@ -37,6 +37,7 @@ type
       out contact_person_phone_num: string;
       out be_valid_profile: boolean
       );
+    function NameOf(service_id: string): string;
     procedure SetProfile
       (
       affiliate_num: string;
@@ -120,6 +121,11 @@ begin
     contact_person_phone_num,
     be_valid_profile
     );
+end;
+
+function TClass_biz_services.NameOf(service_id: string): string;
+begin
+  NameOf := db_services.NameOf(service_id);
 end;
 
 procedure TClass_biz_services.SetProfile

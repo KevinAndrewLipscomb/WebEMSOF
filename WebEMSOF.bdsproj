@@ -126,7 +126,7 @@
 			<Directories Name="SearchPath" Type="String">c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\program files\common files\borland shared\bds\shared assemblies\4.0;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki</Directories>
 			<Directories Name="Packages" Type="String">ki;c:\windows\microsoft.net\framework\v1.1.4322\mscorlib.dll;c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Common.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Design.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll;c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Provider.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.XML.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Web.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Drawing.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.Data.dll;c:\windows\microsoft.net\framework\v1.1.4322\System.dll</Directories>
 			<Directories Name="Conditionals" Type="String"></Directories>
-			<Directories Name="DebugSourceDirs" Type="String"></Directories>
+			<Directories Name="DebugSourceDirs" Type="String">C:\Inetpub\wwwroot\WebEMSOF\component\biz\</Directories>
 			<Directories Name="UsePackages" Type="Boolean">True</Directories>
 		</Directories>
 		<Parameters>
@@ -189,6 +189,15 @@
 			<Language Name="RootDir"></Language>
 		</Language>  
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0" LinkUnits="False"/>
@@ -248,6 +257,8 @@
       <File FileName="timeout.aspx" ContainerId="AspMarkupContainer" ModuleName="timeout"/>
       <File FileName="lib\ki\ki.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="ki" AssemblyName="ki" Version="1.0.2509.21529" LinkUnits="False"/>
       <File FileName="protected\county_unrejection.aspx" ContainerId="AspMarkupContainer" ModuleName="county_unrejection"/>
+      <File FileName="noninteractive\.crontab" ContainerId="File"/>
+      <File FileName="noninteractive\milestone_sweep.aspx" ContainerId="AspMarkupContainer" ModuleName="milestone_sweep"/>
       <File FileName="" ContainerId="" ModuleName="System.Reflection"/>
       <File FileName="" ContainerId="" ModuleName="System.Runtime.CompilerServices"/>
       <File FileName="component\biz\Class_biz_user.pas" ContainerId="" ModuleName="Class_biz_user"/>
@@ -297,6 +308,11 @@
       <File FileName="component\biz\Class_biz_match_level.pas" ContainerId="" ModuleName="Class_biz_match_level"/>
       <File FileName="component\biz\Class_biz_equipment.pas" ContainerId="" ModuleName="Class_biz_equipment"/>
       <File FileName="protected\county_unrejection.pas" ContainerId="" ModuleName="county_unrejection" Parent="protected\county_unrejection.aspx"/>
+      <File FileName="noninteractive\milestone_sweep.pas" ContainerId="" ModuleName="milestone_sweep" Parent="noninteractive\milestone_sweep.aspx"/>
+      <File FileName="component\biz\Class_biz_milestones.pas" ContainerId="" ModuleName="Class_biz_milestones"/>
+      <File FileName="component\db\Class_db_milestones.pas" ContainerId="" ModuleName="Class_db_milestones"/>
+      <File FileName="component\biz\Class_biz_counties.pas" ContainerId="" ModuleName="Class_biz_counties"/>
+      <File FileName="component\db\Class_db_counties.pas" ContainerId="" ModuleName="Class_db_counties"/>
     </FileList>
   </DelphiDotNet.Personality>
 	<ModelSupport>True</ModelSupport>

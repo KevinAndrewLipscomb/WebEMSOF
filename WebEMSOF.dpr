@@ -58,6 +58,8 @@ library WebEMSOF;
 {%AspMarkupContainer 'timeout.aspx'}
 {%DelphiDotNetAssemblyCompiler 'lib\ki\ki.dll'}
 {%AspMarkupContainer 'protected\county_unrejection.aspx'}
+{%File 'noninteractive\.crontab'}
+{%AspMarkupContainer 'noninteractive\milestone_sweep.aspx'}
 
 uses
   System.Reflection,
@@ -91,7 +93,7 @@ uses
   emsof_request_status_filter in 'protected\emsof_request_status_filter.pas' {emsof_request_status_filter.TWebForm_emsof_request_status_filter: System.Web.UI.Page},
   finalize in 'protected\finalize.pas' {finalize.TWebForm_finalize: System.Web.UI.Page},
   full_request_review_approve in 'protected\full_request_review_approve.pas' {full_request_review_approve.TWebForm_full_request_review_approve: ki_web_ui.page_class},
-  profile in 'protected\profile.pas' {profile.TWebForm_profile: System.Web.UI.Page},
+  profile in 'protected\profile.pas' {profile.TWebForm_profile: ki_web_ui.page_class},
   region_dictated_appropriations in 'protected\region_dictated_appropriations.pas' {region_dictated_appropriations.TWebForm_region_dictated_appropriations: System.Web.UI.Page},
   regional_staffer_fiscal_year_selection in 'protected\regional_staffer_fiscal_year_selection.pas' {regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection: System.Web.UI.Page},
   regional_staffer_overview in 'protected\regional_staffer_overview.pas' {regional_staffer_overview.TWebForm_regional_staffer_overview: ki_web_ui.page_class},
@@ -108,7 +110,12 @@ uses
   Class_db_equipment in 'component\db\Class_db_equipment.pas',
   Class_biz_match_level in 'component\biz\Class_biz_match_level.pas',
   Class_biz_equipment in 'component\biz\Class_biz_equipment.pas',
-  county_unrejection in 'protected\county_unrejection.pas' {county_unrejection.TWebForm_county_unrejection: ki_web_ui.page_class};
+  county_unrejection in 'protected\county_unrejection.pas' {county_unrejection.TWebForm_county_unrejection: ki_web_ui.page_class},
+  milestone_sweep in 'noninteractive\milestone_sweep.pas' {milestone_sweep.TWebForm_milestone_sweep: system.web.ui.page},
+  Class_biz_milestones in 'component\biz\Class_biz_milestones.pas',
+  Class_db_milestones in 'component\db\Class_db_milestones.pas',
+  Class_biz_counties in 'component\biz\Class_biz_counties.pas',
+  Class_db_counties in 'component\db\Class_db_counties.pas';
 
 const ID = '$Id$';
 

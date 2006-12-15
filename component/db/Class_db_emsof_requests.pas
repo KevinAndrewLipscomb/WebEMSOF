@@ -5,7 +5,9 @@ interface
 uses
   ki,
   borland.data.provider,
+  Class_biz_milestones,
   Class_db,
+  system.collections,
   System.Web.UI.WebControls;
 
 const
@@ -110,7 +112,10 @@ type
       amendment_num_string: string;
       region_code: string
       );
+    function CloseInvoiceSubmissionWindow: queue;
+    function CloseProofOfPaymentSubmissionWindow: queue;
     function CountyApprovalTimestampOf(master_id: string): datetime;
+    function CountyCodeOfMasterId(master_id: string): string;
     function CountyDictumIdOf(master_id: string): string;
     procedure Demote
       (
@@ -130,6 +135,7 @@ type
       priority: string
       )
       : string;
+    function FailUnfinalized: queue;
     procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
@@ -160,6 +166,7 @@ type
     function ReworkDeadline(e_item: system.object): datetime;
     procedure RollUpActualValue(master_id: string);
     function ServiceIdOf(e_item: system.object): string;
+    function ServiceIdOfMasterId(master_id: string): string;
     function ServiceNameOf(e_item: system.object): string;
     procedure SetActuals
       (
@@ -180,6 +187,7 @@ type
     function SponsorCountyNameOf(e_item: system.object): string;
     function SponsorRegionNameOf(master_id: string): string;
     function StatusCodeOf(e_item: system.object): cardinal;
+    function SusceptibleTo(milestone: milestone_type): queue;
     function SumOfActualValues
       (
       user_kind: string;
@@ -597,6 +605,102 @@ begin
   self.Close;
 end;
 
+function TClass_db_emsof_requests.CloseInvoiceSubmissionWindow: queue;
+var
+  bdr: bdpdatareader;
+  id_q: queue;
+  transaction: bdptransaction;
+begin
+  id_q := queue.Create;
+  self.Open;
+  transaction := connection.BeginTransaction;
+  try
+    bdr := bdpcommand.Create('select id from emsof_request_master where status_code < 9',connection,transaction).ExecuteReader;
+    while bdr.Read do begin
+      id_q.Enqueue(bdr['id']);
+    end;
+    bdr.Close;
+    //
+    // Promote master records associated with at least one recieved invoice.
+    //
+    bdpcommand.Create
+      (
+      'update emsof_request_master'
+      + ' join emsof_request_detail on (emsof_request_detail.master_id=emsof_request_master.id)'
+      + ' set emsof_request_master.status_code = 9'
+      + ' where emsof_request_master.status_code < 9'
+      +   ' and actual_emsof_ante > 0',
+      connection,
+      transaction
+      )
+      .ExecuteNonQuery;
+    //
+    // Fail any master records that are still in the invoice collection status.
+    //
+    bdpcommand.Create
+      (
+      'update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 9',
+      connection,
+      transaction
+      )
+      .ExecuteNonQuery;
+    transaction.Commit;
+  except
+    transaction.Rollback;
+    raise;
+  end;
+  self.Close;
+  CloseInvoiceSubmissionWindow := id_q;
+end;
+
+function TClass_db_emsof_requests.CloseProofOfPaymentSubmissionWindow: queue;
+var
+  bdr: bdpdatareader;
+  id_q: queue;
+  transaction: bdptransaction;
+begin
+  id_q := queue.Create;
+  self.Open;
+  transaction := connection.BeginTransaction;
+  try
+    bdr := bdpcommand.Create('select id from emsof_request_master where status_code < 10',connection,transaction).ExecuteReader;
+    while bdr.Read do begin
+      id_q.Enqueue(bdr['id']);
+    end;
+    bdr.Close;
+    //
+    // Promote master records associated with at least one recieved proof-of-payment.
+    //
+    bdpcommand.Create
+      (
+      'update emsof_request_master'
+      + ' left join emsof_purchase_payment on (emsof_purchase_payment.master_id=emsof_request_master.id)'
+      + ' set emsof_request_master.status_code = 10'
+      + ' where emsof_request_master.status_code < 10'
+      +   ' and amount > 0',
+      connection,
+      transaction
+      )
+      .ExecuteNonQuery;
+    //
+    // Fail any master records that are still in the proof-of-payment collection status.
+    //
+    bdpcommand.Create
+      (
+      'update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 10',
+      connection,
+      transaction
+      )
+      .ExecuteNonQuery;
+    transaction.Commit;
+  except
+    transaction.Rollback;
+    raise;
+  end;
+  self.Close;
+  CloseProofOfPaymentSubmissionWindow := id_q;
+end;
+
 function TClass_db_emsof_requests.CountyApprovalTimestampOf(master_id: string): datetime;
 begin
   self.Open;
@@ -606,6 +710,24 @@ begin
       ('select county_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
       .ExecuteScalar
     );
+  self.Close;
+end;
+
+function TClass_db_emsof_requests.CountyCodeOfMasterId(master_id: string): string;
+begin
+  self.Open;
+  CountyCodeOfMasterId := bdpcommand.Create
+    (
+    'select county_code'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    + ' where emsof_request_master.id = ' + master_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
   self.Close;
 end;
 
@@ -725,6 +847,37 @@ begin
     )
     .ExecuteScalar.tostring;
   self.Close;
+end;
+
+function TClass_db_emsof_requests.FailUnfinalized: queue;
+var
+  bdr: bdpdatareader;
+  id_q: queue;
+  transaction: bdptransaction;
+begin
+  id_q := queue.Create;
+  self.Open;
+  transaction := connection.BeginTransaction;
+  try
+    bdr := bdpcommand.Create('select id from emsof_request_master where status_code < 3',connection,transaction).ExecuteReader;
+    while bdr.Read do begin
+      id_q.Enqueue(bdr['id']);
+    end;
+    bdr.Close;
+    bdpcommand.Create
+      (
+      'update emsof_request_master set status_code = 16 where status_code < 3',
+      connection,
+      transaction
+      )
+      .ExecuteNonQuery;
+    transaction.Commit;
+  except
+    transaction.Rollback;
+    raise;
+  end;
+  self.Close;
+  FailUnfinalized := id_q;
 end;
 
 procedure TClass_db_emsof_requests.Finalize(master_id: string);
@@ -898,6 +1051,22 @@ begin
   ServiceIdOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_ID].text,NUM);
 end;
 
+function TClass_db_emsof_requests.ServiceIdOfMasterId(master_id: string): string;
+begin
+  self.Open;
+  ServiceIdOfMasterId := bdpcommand.Create
+    (
+    'select service_id'
+    + ' from emsof_request_master'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    + ' where emsof_request_master.id = ' + master_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
+end;
+
 function TClass_db_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
   ServiceNameOf := Safe(DataGridItem(e_item).cells[TCCI_SERVICE_NAME].text,ORG_NAME);
@@ -983,6 +1152,32 @@ end;
 function TClass_db_emsof_requests.StatusCodeOf(e_item: system.object): cardinal;
 begin
   StatusCodeOf := convert.ToInt16(Safe(DataGridItem(e_item).cells[TCCI_STATUS_CODE].text,NUM));
+end;
+
+function TClass_db_emsof_requests.SusceptibleTo(milestone: milestone_type): queue;
+var
+  bdr: bdpdatareader;
+  id_q: queue;
+  status_code: string;
+begin
+  id_q := queue.Create;
+  case milestone of
+  COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
+    status_code := '3';
+  SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
+    status_code := '9';
+  SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
+    status_code := '9';
+  SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
+    status_code := '10';
+  end;
+  self.Open;
+  bdr := bdpcommand.Create('select id from emsof_request_master where status_code < ' + status_code,connection).ExecuteReader;
+  while bdr.Read do begin
+    id_q.Enqueue(bdr['id']);
+  end;
+  self.Close;
+  SusceptibleTo := id_q;
 end;
 
 function TClass_db_emsof_requests.SumOfActualValues
