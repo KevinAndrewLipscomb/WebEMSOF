@@ -7,6 +7,8 @@
 @xcopy C:\Inetpub\wwwroot\WebEMSOF\*.config ready-to-deploy /m /i /k /y /z
 @xcopy C:\Inetpub\wwwroot\WebEMSOF\*.pdf ready-to-deploy /m /i /k /y /z
 @xcopy C:\Inetpub\wwwroot\WebEMSOF\bin\*.* ready-to-deploy\bin /m /i /k /y /z
+@xcopy C:\Inetpub\wwwroot\WebEMSOF\noninteractive\*.crontab ready-to-deploy\noninteractive /m /i /k /y /z
+@xcopy C:\Inetpub\wwwroot\WebEMSOF\noninteractive\*.aspx ready-to-deploy\noninteractive /m /i /k /y /z
 @xcopy C:\Inetpub\wwwroot\WebEMSOF\protected\*.asax ready-to-deploy\protected /m /i /k /y /z
 @xcopy C:\Inetpub\wwwroot\WebEMSOF\protected\*.aspx ready-to-deploy\protected /m /i /k /y /z
 @xcopy C:\Inetpub\wwwroot\WebEMSOF\protected\*.config ready-to-deploy\protected /m /i /k /y /z
