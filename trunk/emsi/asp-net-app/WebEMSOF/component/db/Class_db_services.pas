@@ -39,6 +39,7 @@ type
       out contact_person_phone_num: string;
       out be_valid_profile: boolean
       );
+    function NameOf(service_id: string): string;
     procedure SetProfile
       (
       affiliate_num: string;
@@ -169,6 +170,13 @@ begin
   contact_person_phone_num := bdr['contact_person_phone_num'].tostring;
   be_valid_profile := (bdr['be_valid_profile'].tostring = '1');
   bdr.Close;
+  self.Close;
+end;
+
+function TClass_db_services.NameOf(service_id: string): string;
+begin
+  self.Open;
+  NameOf := bdpcommand.Create('select name from service where id = ' + service_id,connection).ExecuteScalar.tostring;
   self.Close;
 end;
 

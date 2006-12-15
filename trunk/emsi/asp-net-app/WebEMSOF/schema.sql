@@ -316,6 +316,7 @@ CREATE TABLE fy_calendar (
   fiscal_year_id smallint(5) unsigned NOT NULL,
   milestone_code smallint(5) unsigned NOT NULL,
   `value` datetime NOT NULL,
+  be_processed BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY  (id),
   UNIQUE KEY fiscal_year_id (fiscal_year_id,milestone_code),
   KEY milestone_code (milestone_code)

@@ -10,8 +10,10 @@ uses
   Class_biz_appropriations,
   Class_biz_equipment,
   Class_biz_match_level,
+  Class_biz_milestones,
   Class_biz_regional_staffers,
   Class_biz_user,
+  system.collections,
   system.security.principal,
   system.web;
 
@@ -139,7 +141,10 @@ type
       amendment_num_string: string;
       regional_staffer_user_id: string
       );
+    function CloseInvoiceSubmissionWindow: queue;
+    function CloseProofOfPaymentSubmissionWindow: queue;
     function CountyApprovalTimestampOf(master_id: string): datetime;
+    function CountyCodeOfMasterId(master_id: string): string;
     function CountyDictumIdOf(master_id: string): string;
     procedure Demote
       (
@@ -160,10 +165,11 @@ type
       priority: string
       )
       : string;
+    function FailUnfinalized: queue;
     procedure Finalize(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
-    function IdOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
+    function IdOf(e_item: system.object): string;
     function LeftoverOrShortageOf(e_item: system.object): decimal;
     procedure MarkDone
       (
@@ -182,6 +188,7 @@ type
     function PropertyNameOfEmsofAnte: string;
     function ReworkDeadline(e_item: system.object): datetime;
     function ServiceIdOf(e_item: system.object): string;
+    function ServiceIdOfMasterId(master_id: string): string;
     function ServiceNameOf(e_item: system.object): string;
     procedure SetActuals
       (
@@ -208,6 +215,7 @@ type
       regional_staffer_user_id: string;
       amendment_num_string: string
       );
+    function SusceptibleTo(milestone: milestone_type): queue;
     function SumOfActualValues(fy_id: string = ''): decimal;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
@@ -474,6 +482,16 @@ begin
   db_emsof_requests.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
 end;
 
+function TClass_biz_emsof_requests.CloseInvoiceSubmissionWindow: queue;
+begin
+  CloseInvoiceSubmissionWindow := db_emsof_requests.CloseInvoiceSubmissionWindow;
+end;
+
+function TClass_biz_emsof_requests.CloseProofOfPaymentSubmissionWindow: queue;
+begin
+  CloseProofOfPaymentSubmissionWindow := db_emsof_requests.CloseProofOfPaymentSubmissionWindow;
+end;
+
 function TClass_biz_emsof_requests.CountyApprovalTimestampOf(master_id: string): system.datetime;
 begin
   CountyApprovalTimestampOf := db_emsof_requests.CountyApprovalTimestampOf(master_id);
@@ -494,6 +512,11 @@ begin
     amendment_num_string,
     biz_regional_staffers.RegionCodeOf(regional_staffer_user_id)
     );
+end;
+
+function TClass_biz_emsof_requests.CountyCodeOfMasterId(master_id: string): string;
+begin
+  CountyCodeOfMasterId := db_emsof_requests.CountyCodeOfMasterId(master_id);
 end;
 
 function TClass_biz_emsof_requests.CountyDictumIdOf(master_id: string): string;
@@ -581,6 +604,11 @@ function TClass_biz_emsof_requests.EquipmentCodeOf
   : string;
 begin
   EquipmentCodeOf := db_emsof_requests.EquipmentCodeOf(master_id,priority);
+end;
+
+function TClass_biz_emsof_requests.FailUnfinalized: queue;
+begin
+  FailUnfinalized := db_emsof_requests.FailUnfinalized;
 end;
 
 procedure TClass_biz_emsof_requests.Finalize(master_id: string);
@@ -760,6 +788,11 @@ begin
   ServiceIdOf := db_emsof_requests.ServiceIdOf(e_item);
 end;
 
+function TClass_biz_emsof_requests.ServiceIdOfMasterId(master_id: string): string;
+begin
+  ServiceIdOfMasterId := db_emsof_requests.ServiceIdOfMasterId(master_id);
+end;
+
 function TClass_biz_emsof_requests.ServiceNameOf(e_item: system.object): string;
 begin
   ServiceNameOf := db_emsof_requests.ServiceNameOf(e_item);
@@ -891,6 +924,11 @@ begin
       );
     db_appropriations.IncFundingRoundsGenerated(regional_staffer_user_id,amendment_num_string);
   end;
+end;
+
+function TClass_biz_emsof_requests.SusceptibleTo(milestone: milestone_type): queue;
+begin
+  SusceptibleTo := db_emsof_requests.SusceptibleTo(milestone);
 end;
 
 function TClass_biz_emsof_requests.SumOfActualValues(fy_id: string = ''): decimal;

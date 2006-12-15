@@ -3,6 +3,9 @@ unit Class_biz_accounts;
 interface
 
 uses
+  Class_biz_counties,
+  Class_biz_milestones,
+  Class_biz_services,
   Class_biz_user,
   Class_db_accounts,
   Class_db_emsof_requests,
@@ -16,6 +19,8 @@ const ID = '$Id$';
 type
   TClass_biz_accounts = class
   private
+    biz_counties: TClass_biz_counties;
+    biz_services: TClass_biz_services;
     biz_user: TClass_biz_user;
     db_accounts: TClass_db_accounts;
     db_emsof_requests: TClass_db_emsof_requests;
@@ -48,6 +53,12 @@ type
       sponsor_region_name: string;
       sponsor_county_name: string;
       master_id: string
+      );
+    procedure MakeDeadlineFailureNotification
+      (
+      milestone: milestone_type;
+      service_id: string;
+      county_code: string
       );
     procedure MakeDemotionNotification
       (
@@ -87,6 +98,13 @@ type
       service_name: string;
       contact_person_name: string
       );
+    procedure Remind
+      (
+      milestone: milestone_type;
+      num_days_left: cardinal;
+      deadline_date: datetime;
+      service_id: string
+      );
     procedure SetTemporaryPassword
       (
       user_kind: string;
@@ -101,6 +119,8 @@ constructor TClass_biz_accounts.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  biz_counties := TClass_biz_counties.Create;
+  biz_services := TClass_biz_services.Create;
   biz_user := TClass_biz_user.Create;
   db_accounts := TClass_db_accounts.Create;
   db_emsof_requests := TClass_db_emsof_requests.Create;
@@ -246,6 +266,89 @@ begin
     + message_text + NEW_LINE
     + NEW_LINE
     + '... END COPY OF NOTICE TO PROCEED ...'
+    );
+end;
+
+procedure TClass_biz_accounts.MakeDeadlineFailureNotification
+  (
+  milestone: milestone_type;
+  service_id: string;
+  county_code: string
+  );
+var
+  be_advice_valuable: boolean;
+  county_coord_email_address: string;
+  county_name: string;
+  deadline_description: string;
+  message_text: string;
+  service_email_address: string;
+  service_name: string;
+begin
+  be_advice_valuable := FALSE;
+  county_coord_email_address := EmailAddressByKindId('county',county_code);
+  county_name := biz_counties.NameOf(county_code);
+  service_email_address := EmailAddressByKindId('service',service_id);
+  service_name := biz_services.NameOf(service_id);
+  //
+  case milestone of
+  COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
+    BEGIN
+    deadline_description := 'finalize its EMSOF request';
+    be_advice_valuable := TRUE;
+    END;
+  SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
+    deadline_description := 'purchase EMSOF one or more requested items';
+  SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
+    deadline_description := 'submit invoices for one or more requested items';
+  SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
+    deadline_description := 'submit proof of payment for one or more requested items';
+  end;
+  //
+  message_text := 'Sorry, but ' + service_name + ' has missed the regional deadline to ' + deadline_description + ' '
+  + 'associated with an allocation from ' + county_name + ' County.' + NEW_LINE
+  + NEW_LINE;
+  if be_advice_valuable then begin
+    message_text := message_text + 'Please DO NOT PROCEED with any activity related to that request.' + NEW_LINE
+    + NEW_LINE;
+  end;
+  message_text := message_text + 'You can review your EMSOF requests by visiting:' + NEW_LINE
+  + NEW_LINE
+  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + NEW_LINE
+  + 'You can contact your County EMSOF Coordinator at:' + NEW_LINE
+  + NEW_LINE
+  + '   ' + county_coord_email_address + '  (mailto:' + county_coord_email_address + ')' + NEW_LINE
+  + NEW_LINE
+  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  //
+  ki.SmtpMailSend(ConfigurationSettings.AppSettings['sender_email_address'],service_email_address,'Missed deadline',message_text);
+  //
+  message_text := service_name + ' has missed the regional deadline to ' + deadline_description + ' '
+  + 'associated with an allocation from ' + county_name + ' County.' + NEW_LINE
+  + NEW_LINE;
+  if be_advice_valuable then begin
+    message_text := message_text + 'WebEMSOF has advised the service not to proceed with any activity related to that request.'
+    + NEW_LINE
+    + NEW_LINE;
+  end;
+  message_text := message_text + 'You can use WebEMSOF by visiting:' + NEW_LINE
+  + NEW_LINE
+  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + NEW_LINE
+  + 'You can contact the affected service at:' + NEW_LINE
+  + NEW_LINE
+  + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
+  + NEW_LINE
+  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  //
+  ki.SmtpMailSend
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    county_coord_email_address + ',' + EmailTargetByRole('emsof-coordinator'),
+    'Service missed deadline',
+    message_text
     );
 end;
 
@@ -631,6 +734,51 @@ begin
     + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
 
+end;
+
+procedure TClass_biz_accounts.Remind
+  (
+  milestone: milestone_type;
+  num_days_left: cardinal;
+  deadline_date: datetime;
+  service_id: string
+  );
+var
+  service_email_address: string;
+  service_name: string;
+  task_description: string;
+begin
+  service_email_address := EmailAddressByKindId('service',service_id);
+  service_name := biz_services.NameOf(service_id);
+  //
+  case milestone of
+  COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
+    task_description := 'finalize your EMSOF request and submit it to your county EMSOF coordinator';
+  SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
+    task_description := 'purchase all the items in your EMSOF request(s)';
+  SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
+    task_description := 'finish submitting invoices for items in your EMSOF request(s) to the regional EMS council';
+  SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
+    task_description := 'finish submitting proof of payment for items in your EMSOF request(s) to the regional EMS council';
+  end;
+  //
+  ki.SmtpMailSend
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    service_email_address,
+    'Reminder of approaching deadline',
+    'This is an automated reminder from WebEMSOF.' + NEW_LINE
+    + NEW_LINE
+    + 'You have ' + num_days_left.tostring + ' days to ' + task_description + '.  The deadline is '
+    + deadline_date.tostring('HH:mm:ss dddd, MMMM d, yyyy') + '.' + NEW_LINE
+    + NEW_LINE
+    + 'You can review your EMSOF requests by visiting:' + NEW_LINE
+    + NEW_LINE
+    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
 end;
 
 procedure TClass_biz_accounts.SetTemporaryPassword
