@@ -99,6 +99,9 @@ type
 
 implementation
 
+uses
+  appcommon;
+
 const
   TCCI_LINKBUTTON_EDIT = 14;
   TCCI_LINKBUTTON_DELETE = 15;
@@ -134,7 +137,7 @@ var
   county_dictated_deadline: system.datetime;
   make_appropriations_deadline: system.datetime;
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

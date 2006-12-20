@@ -84,6 +84,7 @@ type
 implementation
 
 uses
+  appcommon,
   Class_biz_accounts;
 
 {$REGION 'Designer Managed Code'}
@@ -122,7 +123,7 @@ var
   name: string;
   zip_code: string;
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

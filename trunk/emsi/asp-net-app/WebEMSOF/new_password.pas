@@ -35,6 +35,7 @@ type
 implementation
 
 uses
+  appcommon,
   Class_biz_accounts;
 
 {$REGION 'Designer Managed Code'}
@@ -54,7 +55,7 @@ var
   email_address: string;
   temporary_password: string[8];
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;

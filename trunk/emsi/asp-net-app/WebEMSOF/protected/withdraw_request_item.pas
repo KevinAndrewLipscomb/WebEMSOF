@@ -57,6 +57,7 @@ type
 implementation
 
 uses
+  appcommon,
   Class_biz_accounts;
 
 {$REGION 'Designer Managed Code'}
@@ -77,7 +78,7 @@ end;
 
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

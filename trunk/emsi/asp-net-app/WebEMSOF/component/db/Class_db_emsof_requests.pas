@@ -580,7 +580,7 @@ begin
     + ' , unit_cost'
     + ' , quantity*unit_cost as total_cost'
     + ' , emsof_ante'
-    + ' , (quantity*unit_cost - emsof_ante + additional_service_ante) as provider_match'
+    + ' , (quantity*unit_cost - emsof_ante) as provider_match'
     + ' , "YES" as recommendation'
     + ' from emsof_request_detail'
     +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'

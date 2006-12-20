@@ -105,6 +105,7 @@ type
 implementation
 
 uses
+  appcommon,
   Class_biz_fiscal_years;
 
 {$REGION 'Designer Managed Code'}
@@ -144,7 +145,7 @@ var
   biz_fiscal_years: TClass_biz_fiscal_years;
   cmdText: string;
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
