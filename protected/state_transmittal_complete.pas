@@ -49,6 +49,9 @@ type
 
 implementation
 
+uses
+  appcommon;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -68,7 +71,7 @@ end;
 
 procedure TWebForm_state_transmittal_complete.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

@@ -92,8 +92,9 @@ type
   end;
 
 implementation
-
+ 
 uses
+  appcommon,
   Class_biz_accounts,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
@@ -134,7 +135,7 @@ var
   grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

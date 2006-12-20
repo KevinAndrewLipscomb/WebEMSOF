@@ -34,6 +34,9 @@ type
 
 implementation
 
+uses
+  appcommon;
+
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -47,7 +50,7 @@ end;
 
 procedure TWebForm_Default.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - Default';
     Label_application_name.text := ConfigurationSettings.AppSettings['application_name'];

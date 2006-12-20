@@ -61,6 +61,9 @@ type
 
 implementation
 
+uses
+  appcommon;
+
 const
   TCCI_LINKBUTTON_SELECT = 14;
 
@@ -86,7 +89,7 @@ end;
 
 procedure TWebForm_emsof_request_status_filter.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin

@@ -97,6 +97,7 @@ type
 implementation
 
 uses
+  appcommon,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
   Class_biz_fiscal_years,
@@ -147,7 +148,7 @@ var
   tally: string;
   waypoint_stack: stack;
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     if (session['regional_staffer_name'] = nil) or (session['regional_staffer_user_id'] = nil) then begin
       session.Clear;

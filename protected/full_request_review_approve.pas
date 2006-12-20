@@ -102,6 +102,7 @@ type
 implementation
 
 uses
+  appcommon,
   Class_biz_appropriations;
 
 const
@@ -140,7 +141,7 @@ procedure TWebForm_full_request_review_approve.Page_Load
 var
   timestamp: datetime;
 begin
-  ki.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
+  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
