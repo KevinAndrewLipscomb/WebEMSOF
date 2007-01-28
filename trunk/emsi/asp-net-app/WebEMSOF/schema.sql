@@ -1,4 +1,4 @@
--- $Id$
+﻿-- $Id$
 --
 -- phpMyAdmin SQL Dump
 -- version 2.6.4-pl4
@@ -249,7 +249,7 @@ CREATE TABLE emsof_request_detail (
   emsof_ante decimal(10,2) unsigned NOT NULL,
   status_code tinyint(3) unsigned NOT NULL default '1',
   priority smallint(5) unsigned NOT NULL,
-  invoice_designator varchar(255) not null default "",
+  invoice_designator varchar(255) not null default '',
   actual_quantity smallint(5) unsigned not null default 0,
   actual_subtotal_cost decimal(10,2) unsigned not null default 0,
   actual_emsof_ante decimal(10,2) unsigned not null default 0,
