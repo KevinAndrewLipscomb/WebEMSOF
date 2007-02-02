@@ -10,6 +10,7 @@ uses
   borland.data.provider,
   Class_biz_services,
   Class_db,
+  Class_db_trail,
   ki,
   system.configuration,
   system.web.mail,
@@ -23,6 +24,7 @@ type
     amount: decimal;
     biz_services: TClass_biz_services;
     db: TClass_db;
+    db_trail: TClass_db_trail;
     unappropriated_amount: decimal;
     END;
   TWebForm_create_new_service_appropriation = class(ki_web_ui.page_class)
@@ -120,6 +122,7 @@ begin
     //
     p.amount := 0;
     p.db := TClass_db.Create;
+    p.db_trail := TClass_db_trail.Create;
     //
     Label_parent_appropriation_amount.text := decimal.Parse(session['parent_appropriation_amount'].tostring).tostring('C');
     Label_region_name.text := session['region_name'].tostring;
@@ -241,11 +244,14 @@ begin
   //
   borland.data.provider.bdpcommand.Create
     (
-    'insert into county_dictated_appropriation'
-    + ' set region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].tostring + ','
-    +   ' service_id = ' + service_id_string + ','
-    +   ' amount = ' + p.amount.tostring + ','
-    +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM),
+    p.db_trail.Saved
+      (
+      'insert into county_dictated_appropriation'
+      + ' set region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].tostring + ','
+      +   ' service_id = ' + service_id_string + ','
+      +   ' amount = ' + p.amount.tostring + ','
+      +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM)
+      ),
     p.db.connection
     )
     .ExecuteNonQuery;
@@ -267,7 +273,8 @@ begin
   //
   borland.data.provider.bdpcommand.Create
     (
-    'insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string,
+    p.db_trail.Saved
+      ('insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string),
     p.db.connection
     )
     .ExecuteNonQuery;

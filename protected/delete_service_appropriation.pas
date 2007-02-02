@@ -8,7 +8,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
   system.web.mail, system.web.security,
-  Class_db;
+  Class_db,
+  Class_db_trail;
 
 const ID = '$Id$';
 
@@ -16,6 +17,7 @@ type
   p_type =
     RECORD
     db: TClass_db;
+    db_trail: TClass_db_trail;
     END;
   TWebForm_delete_service_appropriation = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
@@ -90,6 +92,7 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - delete_service_appropriation';
     //
     p.db := TClass_db.Create;
+    p.db_trail := TClass_db_trail.Create;
     //
     // Set Label_service_name_*.
     //
@@ -186,8 +189,11 @@ begin
   //
   borland.data.provider.bdpcommand.Create
     (
-    'delete from county_dictated_appropriation where id = '
-    + session['id_of_appropriation_selected_for_deletion'].tostring,
+    p.db_trail.Saved
+      (
+      'delete from county_dictated_appropriation where id = '
+      + session['id_of_appropriation_selected_for_deletion'].tostring
+      ),
     p.db.connection
     )
     .ExecuteNonQuery;

@@ -7,6 +7,7 @@ uses
   borland.data.provider,
   Class_biz_milestones,
   Class_db,
+  Class_db_trail,
   system.collections,
   System.Web.UI.WebControls;
 
@@ -24,6 +25,7 @@ type
     );
   TClass_db_emsof_requests = class(Class_db.TClass_db)
   private
+    db_trail: TClass_db_trail;
     procedure BindOverview
       (
       order_by_field_name: string;
@@ -301,6 +303,7 @@ constructor TClass_db_emsof_requests.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  db_trail := TClass_db_trail.Create;
 end;
 
 function TClass_db_emsof_requests.AffiliateNumOf(e_item: system.object): string;
@@ -352,7 +355,7 @@ begin
       cmdText := cmdText + ' COMMIT;';
     end;
     self.Open;
-    borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
+    borland.data.provider.bdpcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
     self.Close;
   end;
 end;
@@ -625,11 +628,14 @@ begin
     //
     bdpcommand.Create
       (
-      'update emsof_request_master'
-      + ' join emsof_request_detail on (emsof_request_detail.master_id=emsof_request_master.id)'
-      + ' set emsof_request_master.status_code = 9'
-      + ' where emsof_request_master.status_code < 9'
-      +   ' and actual_emsof_ante > 0',
+      db_trail.Saved
+        (
+        'update emsof_request_master'
+        + ' join emsof_request_detail on (emsof_request_detail.master_id=emsof_request_master.id)'
+        + ' set emsof_request_master.status_code = 9'
+        + ' where emsof_request_master.status_code < 9'
+        +   ' and actual_emsof_ante > 0'
+        ),
       connection,
       transaction
       )
@@ -639,7 +645,7 @@ begin
     //
     bdpcommand.Create
       (
-      'update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 9',
+      db_trail.Saved('update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 9'),
       connection,
       transaction
       )
@@ -673,11 +679,14 @@ begin
     //
     bdpcommand.Create
       (
-      'update emsof_request_master'
-      + ' left join emsof_purchase_payment on (emsof_purchase_payment.master_id=emsof_request_master.id)'
-      + ' set emsof_request_master.status_code = 10'
-      + ' where emsof_request_master.status_code < 10'
-      +   ' and amount > 0',
+      db_trail.Saved
+        (
+        'update emsof_request_master'
+        + ' left join emsof_purchase_payment on (emsof_purchase_payment.master_id=emsof_request_master.id)'
+        + ' set emsof_request_master.status_code = 10'
+        + ' where emsof_request_master.status_code < 10'
+        +   ' and amount > 0'
+        ),
       connection,
       transaction
       )
@@ -687,7 +696,7 @@ begin
     //
     bdpcommand.Create
       (
-      'update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 10',
+      db_trail.Saved('update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 10'),
       connection,
       transaction
       )
@@ -754,11 +763,14 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update emsof_request_master'
-    + ' join county_dictated_appropriation'
-    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-    + ' set emsof_request_master.status_code = ' + next_status.tostring
-    + ' where emsof_request_master.id = ' + master_id,
+    db_trail.Saved
+      (
+      'update emsof_request_master'
+      + ' join county_dictated_appropriation'
+      +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+      + ' set emsof_request_master.status_code = ' + next_status.tostring
+      + ' where emsof_request_master.id = ' + master_id
+      ),
     connection
     )
     .ExecuteNonQuery;
@@ -866,7 +878,7 @@ begin
     bdr.Close;
     bdpcommand.Create
       (
-      'update emsof_request_master set status_code = 16 where status_code < 3',
+      db_trail.Saved('update emsof_request_master set status_code = 16 where status_code < 3'),
       connection,
       transaction
       )
@@ -884,7 +896,7 @@ procedure TClass_db_emsof_requests.Finalize(master_id: string);
 begin
   self.Open;
   borland.data.provider.bdpcommand.Create
-    ('update emsof_request_master set status_code = 3 where id = ' + master_id,connection)
+    (db_trail.Saved('update emsof_request_master set status_code = 3 where id = ' + master_id),connection)
     .ExecuteNonQuery;
   self.Close;
 end;
@@ -941,7 +953,7 @@ begin
     + ' COMMIT';
   end;
   self.Open;
-  borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteNonQuery;
+  borland.data.provider.bdpcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
   self.Close;
 end;
 
@@ -956,17 +968,20 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update emsof_request_master'
-    + ' join county_dictated_appropriation'
-    +   ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-    + ' join region_dictated_appropriation'
-    +   ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-    + ' join state_dictated_appropriation'
-    +   ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
-    + ' set status_code = ' + next_status.tostring
-    + ' where region_code = ' + region_code
-    +   ' and amendment_num = ' + amendment_num_string
-    +   ' and status_code = ' + current_status.tostring,
+    db_trail.Saved
+      (
+      'update emsof_request_master'
+      + ' join county_dictated_appropriation'
+      +   ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+      + ' join region_dictated_appropriation'
+      +   ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+      + ' join state_dictated_appropriation'
+      +   ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+      + ' set status_code = ' + next_status.tostring
+      + ' where region_code = ' + region_code
+      +   ' and amendment_num = ' + amendment_num_string
+      +   ' and status_code = ' + current_status.tostring
+      ),
     connection
     )
     .ExecuteNonQuery;
@@ -1037,9 +1052,12 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update emsof_request_master'
-    + ' set actual_value = (select sum(actual_emsof_ante) from emsof_request_detail where master_id = ' + master_id + ')'
-    + ' where id = ' + master_id,
+    db_trail.Saved
+      (
+      'update emsof_request_master'
+      + ' set actual_value = (select sum(actual_emsof_ante) from emsof_request_detail where master_id = ' + master_id + ')'
+      + ' where id = ' + master_id
+      ),
     connection
     )
     .ExecuteNonQuery;
@@ -1086,14 +1104,17 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update emsof_request_detail'
-    + ' set invoice_designator = "' + invoice_designator + '"'
-    + ' , actual_quantity = ' + quantity
-    + ' , actual_subtotal_cost = ' + subtotal_cost
-    + ' , actual_emsof_ante = ' + emsof_ante.tostring
-    + ' , status_code = ' + item_status_code.tostring
-    + ' where master_id = ' + master_id
-    +   ' and priority = ' + priority,
+    db_trail.Saved
+      (
+      'update emsof_request_detail'
+      + ' set invoice_designator = "' + invoice_designator + '"'
+      + ' , actual_quantity = ' + quantity
+      + ' , actual_subtotal_cost = ' + subtotal_cost
+      + ' , actual_emsof_ante = ' + emsof_ante.tostring
+      + ' , status_code = ' + item_status_code.tostring
+      + ' where master_id = ' + master_id
+      +   ' and priority = ' + priority
+      ),
     connection
     )
     .ExecuteNonQuery;
@@ -1109,9 +1130,12 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update emsof_request_master'
-    + ' set has_wish_list = ' + value.tostring
-    + ' where id = ' + master_id,
+    db_trail.Saved
+      (
+      'update emsof_request_master'
+      + ' set has_wish_list = ' + value.tostring
+      + ' where id = ' + master_id
+      ),
     connection
     )
     .ExecuteNonQuery;
@@ -1348,11 +1372,14 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update emsof_request_master'
-    + ' join county_dictated_appropriation'
-    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-    + ' set emsof_request_master.status_code = 2'
-    + ' where emsof_request_master.id = ' + master_id,
+    db_trail.Saved
+      (
+      'update emsof_request_master'
+      + ' join county_dictated_appropriation'
+      +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+      + ' set emsof_request_master.status_code = 2'
+      + ' where emsof_request_master.id = ' + master_id
+      ),
     connection
     )
     .ExecuteNonQuery;

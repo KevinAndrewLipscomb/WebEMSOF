@@ -8,7 +8,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, borland.data.provider, system.configuration,
   system.net, system.web.security,
-  Class_db;
+  Class_db,
+  Class_db_trail;
 
 const ID = '$Id$';
 
@@ -16,6 +17,7 @@ type
   p_type =
     RECORD
     db: TClass_db;
+    db_trail: TClass_db_trail;
     END;
   TWebForm_change_email_address = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
@@ -87,6 +89,7 @@ begin
     end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
     //
+    p.db_trail := TClass_db_trail.Create;
     p.db := TClass_db.Create;
     p.db.Open;
     //
@@ -166,9 +169,12 @@ begin
     //
     borland.data.provider.bdpcommand.Create
       (
-      'UPDATE ' + session['target_user_table'].ToString + '_user '
-      + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
-      + 'WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
+      p.db_trail.Saved
+        (
+        'UPDATE ' + session['target_user_table'].ToString + '_user '
+        + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
+        + 'WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"'
+        ),
       p.db.connection
       )
       .ExecuteNonQuery;

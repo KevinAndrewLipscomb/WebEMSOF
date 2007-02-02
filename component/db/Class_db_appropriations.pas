@@ -5,6 +5,7 @@ interface
 uses
   borland.data.provider,
   Class_db,
+  Class_db_trail,
   Class_biz_fiscal_years,
   Class_biz_match_level,
   Class_biz_regional_staffers;
@@ -15,6 +16,7 @@ type
   private
     biz_fiscal_years: TClass_biz_fiscal_years;
     biz_regional_staffers: TClass_biz_regional_staffers;
+    db_trail: TClass_db_trail;
   public
     constructor Create;
     function CountyCodeOfCountyDictum(county_dictum_id: string): string;
@@ -82,6 +84,7 @@ begin
   // TODO: Add any constructor code here
   biz_fiscal_years := TClass_biz_fiscal_years.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
+  db_trail := TClass_db_trail.Create;
 end;
 
 function TClass_db_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
@@ -130,11 +133,14 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update state_dictated_appropriation'
-    + ' set funding_rounds_generated = funding_rounds_generated + 1'
-    + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent
-    +   ' and region_code = ' + biz_regional_staffers.RegionCodeOf(regional_staffer_id)
-    +   ' and amendment_num = ' + amendment_num_string,
+    db_trail.Saved
+      (
+      'update state_dictated_appropriation'
+      + ' set funding_rounds_generated = funding_rounds_generated + 1'
+      + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent
+      +   ' and region_code = ' + biz_regional_staffers.RegionCodeOf(regional_staffer_id)
+      +   ' and amendment_num = ' + amendment_num_string
+      ),
     connection
     )
     .ExecuteNonQuery;
@@ -218,9 +224,12 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update county_dictated_appropriation'
-    + ' set amount = amount - ' + delta.tostring
-    + ' where id = ' + county_dictum_id,
+    db_trail.Saved
+      (
+      'update county_dictated_appropriation'
+      + ' set amount = amount - ' + delta.tostring
+      + ' where id = ' + county_dictum_id
+      ),
     connection
     )
     .ExecuteNonQuery;
@@ -254,9 +263,12 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'update region_dictated_appropriation'
-    + ' set service_to_county_submission_deadline = "' + deadline + '"'
-    + ' where id = ' + id,
+    db_trail.Saved
+      (
+      'update region_dictated_appropriation'
+      + ' set service_to_county_submission_deadline = "' + deadline + '"'
+      + ' where id = ' + id
+      ),
     connection
     )
     .ExecuteNonQuery;

@@ -8,7 +8,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, borland.data.provider, ki,
   system.web.mail, system.web.security,
-  Class_db;
+  Class_db,
+  Class_db_trail;
 
 const ID = '$Id$';
 
@@ -19,6 +20,7 @@ type
     be_sort_order_ascending: boolean;
     county_appropriations_sort_order: string;
     db: TClass_db;
+    db_trail: TClass_db_trail;
     tcci_id: cardinal;
     tcci_password_reset_email_address: cardinal;
     tcci_county_code: cardinal;
@@ -140,6 +142,7 @@ begin
     p.num_appropriations := 0;
     p.county_appropriations_sort_order := 'name';
     p.db := TClass_db.Create;
+    p.db_trail := TClass_db_trail.Create;
     p.sum_of_county_appropriations := 0;
     p.unappropriated_amount := 0;
     //   Set up symbolic DataGrid Indices for use in other event handlers.
@@ -241,7 +244,8 @@ begin
     end;
     borland.data.provider.bdpcommand.Create
       (
-      'update region_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
+      p.db_trail.Saved
+        ('update region_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string),
       p.db.connection
       )
       .ExecuteNonQuery;
@@ -390,7 +394,7 @@ begin
     //
     borland.data.provider.bdpcommand.Create
       (
-      'delete from region_dictated_appropriation where id = ' + id_string,
+      p.db_trail.Saved('delete from region_dictated_appropriation where id = ' + id_string),
       p.db.connection
       )
       .ExecuteNonQuery;

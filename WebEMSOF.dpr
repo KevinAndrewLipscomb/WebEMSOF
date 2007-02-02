@@ -115,7 +115,8 @@ uses
   Class_biz_milestones in 'component\biz\Class_biz_milestones.pas',
   Class_db_milestones in 'component\db\Class_db_milestones.pas',
   Class_biz_counties in 'component\biz\Class_biz_counties.pas',
-  Class_db_counties in 'component\db\Class_db_counties.pas';
+  Class_db_counties in 'component\db\Class_db_counties.pas',
+  Class_db_trail in 'component\db\Class_db_trail.pas';
 
 const ID = '$Id$';
 
