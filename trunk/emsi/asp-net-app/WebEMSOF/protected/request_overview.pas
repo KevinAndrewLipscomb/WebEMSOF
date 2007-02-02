@@ -10,6 +10,7 @@ uses
   system.web.security,
   Class_biz_emsof_requests,
   Class_db,
+  Class_db_trail,
   ki_web_ui;
 
 const ID = '$Id$';
@@ -22,6 +23,7 @@ type
     be_finalized: boolean;
     biz_emsof_requests: TClass_biz_emsof_requests;
     db: TClass_db;
+    db_trail: TClass_db_trail;
     tcci_master_id: cardinal;
     tcci_priority: cardinal;
     tcci_code: cardinal;
@@ -134,6 +136,7 @@ begin
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     county_dictated_appropriation_amount := decimal.Parse(session['county_dictated_appropriation_amount'].tostring);
     p.db := TClass_db.Create;
+    p.db_trail := TClass_db_trail.Create;
     p.tcci_master_id := 0;
     p.tcci_priority := 1;
     p.tcci_code := 2;
@@ -314,19 +317,22 @@ begin
     p.db.Open;
     borland.data.provider.bdpcommand.Create
       (
-      'START TRANSACTION;'
-      + 'update emsof_request_detail set priority = 0'
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
-      + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' - 1'
-      + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' - 1'
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = 0;'
-      + 'COMMIT;',
+      p.db_trail.Saved
+        (
+        'START TRANSACTION;'
+        + 'update emsof_request_detail set priority = 0'
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
+        + ';'
+        + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' - 1'
+        + ';'
+        + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' - 1'
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = 0;'
+        + 'COMMIT;'
+        ),
       p.db.connection
       )
       .ExecuteNonQuery;
@@ -335,19 +341,22 @@ begin
     p.db.Open;
     borland.data.provider.bdpcommand.Create
       (
-      'START TRANSACTION;'
-      + 'update emsof_request_detail set priority = 0'
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
-      + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' + 1'
-      + ';'
-      + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' + 1'
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = 0;'
-      + 'COMMIT;',
+      p.db_trail.Saved
+        (
+        'START TRANSACTION;'
+        + 'update emsof_request_detail set priority = 0'
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
+        + ';'
+        + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM)
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' + 1'
+        + ';'
+        + 'update emsof_request_detail set priority = ' + Safe(e.item.cells[p.tcci_priority].text,NUM) + ' + 1'
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = 0;'
+        + 'COMMIT;'
+        ),
       p.db.connection
       )
       .ExecuteNonQuery;

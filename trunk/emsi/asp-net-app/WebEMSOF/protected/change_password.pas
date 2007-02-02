@@ -8,7 +8,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, borland.data.provider, system.configuration,
   system.web.security,
-  Class_db;
+  Class_db,
+  Class_db_trail;
 
 const ID = '$Id$';
 
@@ -16,6 +17,7 @@ type
   p_type =
     RECORD
     db: TClass_db;
+    db_trail: TClass_db_trail;
     END;
   TWebForm_change_password = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
@@ -84,6 +86,7 @@ begin
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
     //
     p.db := TClass_db.Create;
+    p.db_trail := TClass_db_trail.Create;
     //
     Label_account_descriptor.Text := session[session['target_user_table'].ToString + '_name'].ToString;
     if session['target_user_table'].tostring = 'county' then begin
@@ -132,10 +135,13 @@ begin
   p.db.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'UPDATE ' + session['target_user_table'].ToString + '_user'
-    + ' SET encoded_password = "' + ki.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
-    +   ' be_stale_password = FALSE'
-    + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"',
+    p.db_trail.Saved
+      (
+      'UPDATE ' + session['target_user_table'].ToString + '_user'
+      + ' SET encoded_password = "' + ki.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
+      +   ' be_stale_password = FALSE'
+      + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"'
+      ),
     p.db.connection
     ).ExecuteNonQuery;
   p.db.Close;

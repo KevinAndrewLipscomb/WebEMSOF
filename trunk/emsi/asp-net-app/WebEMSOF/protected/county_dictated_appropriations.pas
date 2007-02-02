@@ -12,6 +12,7 @@ uses
   Class_biz_appropriations,
   Class_biz_emsof_requests,
   Class_db,
+  Class_db_trail,
   system.configuration,
   system.web.mail,
   system.web.security;
@@ -27,6 +28,7 @@ type
     be_filtered: boolean;
     be_sort_order_ascending: boolean;
     db: TClass_db;
+    db_trail: TClass_db_trail;
     num_appropriations: cardinal;
     region_dictated_appropriation_amount: decimal;
     saved_amount: decimal;
@@ -154,6 +156,7 @@ begin
     p.be_filtered := FALSE;
     p.be_sort_order_ascending := TRUE;
     p.db := TClass_db.Create;
+    p.db_trail := TClass_db_trail.Create;
     p.num_appropriations := 0;
     p.sort_order := 'service_name';
     p.sum_of_service_appropriations := 0;
@@ -389,7 +392,7 @@ begin
     //
     borland.data.provider.bdpcommand.Create
       (
-      'delete from county_dictated_appropriation where id = ' + id_string,
+      p.db_trail.Saved('delete from county_dictated_appropriation where id = ' + id_string),
       p.db.connection
       )
       .ExecuteNonQuery;
@@ -511,7 +514,8 @@ begin
     end;
     borland.data.provider.bdpcommand.Create
       (
-      'update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string,
+      p.db_trail.Saved
+        ('update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string),
       p.db.connection
       )
       .ExecuteNonQuery;

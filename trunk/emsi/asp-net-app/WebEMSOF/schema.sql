@@ -359,6 +359,21 @@ INSERT INTO item_status_code_description_map (code, description) VALUES
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `journal`
+--
+
+DROP TABLE IF EXISTS journal;
+CREATE TABLE IF NOT EXISTS journal (
+  `timestamp` TIMESTAMP NOT NULL,
+  actor VARCHAR(31) NOT NULL,
+  action VARCHAR(2047) NOT NULL,
+  PRIMARY KEY(`timestamp`),
+  INDEX actor (actor)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
 -- 
 -- Table structure for table `match_level`
 -- 

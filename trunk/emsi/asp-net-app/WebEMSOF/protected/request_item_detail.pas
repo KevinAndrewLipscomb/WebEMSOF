@@ -8,7 +8,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
   system.web.mail, system.web.security,
-  Class_db;
+  Class_db,
+  Class_db_trail;
 
 const ID = '$Id$';
 
@@ -21,6 +22,7 @@ type
     bdri_equipment_category_funding_level: cardinal;
     cmdText_get_equipment_category_monetary_details: string;
     db: TClass_db;
+    db_trail: TClass_db_trail;
     funding_level: decimal;
     match_level: decimal;
     saved_emsof_ante: decimal;
@@ -156,6 +158,7 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
     p.db := TClass_db.Create;
+    p.db_trail := TClass_db_trail.Create;
     //
     p.db.Open;
     //
@@ -410,26 +413,29 @@ begin
   //
   borland.data.provider.bdpcommand.Create
     (
-    'START TRANSACTION'
-    + ';'
-    + 'update emsof_request_detail'
-    + ' set equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
-    +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
-    +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
-    +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
-    +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
-    +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
-    +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
-    +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
-    + ' where master_id = ' + session['emsof_request_master_id'].tostring
-    +   ' and priority = ' + session['emsof_request_item_priority'].tostring
-    + ';'
-    + 'update emsof_request_master'
-    + ' set value = value - ' + p.saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
-    +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring + ' + ' + p.additional_service_ante.tostring
-    + ' where id = ' + session['emsof_request_master_id'].tostring
-    + ';'
-    + 'COMMIT;',
+    p.db_trail.Saved
+      (
+      'START TRANSACTION'
+      + ';'
+      + 'update emsof_request_detail'
+      + ' set equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
+      +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
+      +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
+      +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
+      +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
+      +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
+      +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
+      +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
+      + ' where master_id = ' + session['emsof_request_master_id'].tostring
+      +   ' and priority = ' + session['emsof_request_item_priority'].tostring
+      + ';'
+      + 'update emsof_request_master'
+      + ' set value = value - ' + p.saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
+      +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring + ' + ' + p.additional_service_ante.tostring
+      + ' where id = ' + session['emsof_request_master_id'].tostring
+      + ';'
+      + 'COMMIT;'
+      ),
     p.db.connection
     )
     .ExecuteNonQuery;
@@ -450,23 +456,26 @@ begin
     //
     borland.data.provider.bdpcommand.Create
       (
-      'START TRANSACTION'
-      + ';'
-      + 'delete from emsof_request_detail'
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + session['emsof_request_item_priority'].tostring
-      + ';'
-      + 'update emsof_request_detail set priority = priority - 1'
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority > ' + session['emsof_request_item_priority'].tostring
-      + ';'
-      + 'update emsof_request_master'
-      + ' set value = value - ' + p.saved_emsof_ante.tostring
-      +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring
-      +   ' , num_items = num_items - 1'
-      + ' where id = ' + session['emsof_request_master_id'].tostring
-      + ';'
-      + 'COMMIT;',
+      p.db_trail.Saved
+        (
+        'START TRANSACTION'
+        + ';'
+        + 'delete from emsof_request_detail'
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + session['emsof_request_item_priority'].tostring
+        + ';'
+        + 'update emsof_request_detail set priority = priority - 1'
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority > ' + session['emsof_request_item_priority'].tostring
+        + ';'
+        + 'update emsof_request_master'
+        + ' set value = value - ' + p.saved_emsof_ante.tostring
+        +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring
+        +   ' , num_items = num_items - 1'
+        + ' where id = ' + session['emsof_request_master_id'].tostring
+        + ';'
+        + 'COMMIT;'
+        ),
       p.db.connection
       )
       .ExecuteNonQuery;
@@ -615,28 +624,31 @@ begin
   //
   borland.data.provider.bdpcommand.Create
     (
-    'START TRANSACTION'
-    + ';'
-    + 'insert into emsof_request_detail'
-    + ' set master_id = ' + session['emsof_request_master_id'].tostring + ','
-    +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
-    +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
-    +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
-    +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
-    +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
-    +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
-    +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
-    +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
-    +   ' priority = ' + priority_string
-    + ';'
-    + 'update emsof_request_master'
-    + ' set status_code = 2,'
-    +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
-    +   ' shortage = shortage + ' + p.additional_service_ante.tostring + ','
-    +   ' num_items = num_items + 1'
-    + ' where id = ' + session['emsof_request_master_id'].tostring
-    + ';'
-    + 'COMMIT;',
+    p.db_trail.Saved
+      (
+      'START TRANSACTION'
+      + ';'
+      + 'insert into emsof_request_detail'
+      + ' set master_id = ' + session['emsof_request_master_id'].tostring + ','
+      +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
+      +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
+      +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
+      +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
+      +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
+      +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
+      +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
+      +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
+      +   ' priority = ' + priority_string
+      + ';'
+      + 'update emsof_request_master'
+      + ' set status_code = 2,'
+      +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
+      +   ' shortage = shortage + ' + p.additional_service_ante.tostring + ','
+      +   ' num_items = num_items + 1'
+      + ' where id = ' + session['emsof_request_master_id'].tostring
+      + ';'
+      + 'COMMIT;'
+      ),
     p.db.connection
     )
     .ExecuteNonQuery;

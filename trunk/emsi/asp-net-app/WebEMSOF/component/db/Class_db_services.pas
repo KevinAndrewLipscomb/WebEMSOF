@@ -5,12 +5,13 @@ interface
 uses
   borland.data.provider,
   Class_db,
+  Class_db_trail,
   system.web.ui.webcontrols;
 
 type
   TClass_db_services = class(TClass_db)
   private
-    { Private Declarations }
+    db_trail: TClass_db_trail;
   public
     constructor Create;
     function AffiliateNumOfId(id: string): string;
@@ -66,6 +67,7 @@ constructor TClass_db_services.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  db_trail := TClass_db_trail.Create;
 end;
 
 function TClass_db_services.AffiliateNumOfId(id: string): string;
@@ -202,23 +204,26 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (
-    'UPDATE service '
-    + 'SET name = "' + name + '",'
-    +   'be_qrs = ' + be_qrs + ','
-    +   'be_bls_amb = ' + be_bls_amb + ','
-    +   'be_als_amb = ' + be_als_amb + ','
-    +   'be_als_squad = ' + be_als_squad + ','
-    +   'be_air_amb = ' + be_air_amb + ','
-    +   'be_rescue = ' + be_rescue + ','
-    +   'address_line_1 = "' + address_line_1 + '",'
-    +   'address_line_2 = "' + address_line_2 + '",'
-    +   'city = "' + city + '",'
-    +   'zip_code = "' + zip_code + '",'
-    +   'federal_tax_id_num = "' + federal_tax_id_num + '",'
-    +   'contact_person_name = "' + contact_person_name + '",'
-    +   'contact_person_phone_num = "' + contact_person_phone_num + '",'
-    +   'be_valid_profile = TRUE '
-    + 'WHERE affiliate_num = "' + affiliate_num + '"',
+    db_trail.Saved
+      (
+      'UPDATE service '
+      + 'SET name = "' + name + '",'
+      +   'be_qrs = ' + be_qrs + ','
+      +   'be_bls_amb = ' + be_bls_amb + ','
+      +   'be_als_amb = ' + be_als_amb + ','
+      +   'be_als_squad = ' + be_als_squad + ','
+      +   'be_air_amb = ' + be_air_amb + ','
+      +   'be_rescue = ' + be_rescue + ','
+      +   'address_line_1 = "' + address_line_1 + '",'
+      +   'address_line_2 = "' + address_line_2 + '",'
+      +   'city = "' + city + '",'
+      +   'zip_code = "' + zip_code + '",'
+      +   'federal_tax_id_num = "' + federal_tax_id_num + '",'
+      +   'contact_person_name = "' + contact_person_name + '",'
+      +   'contact_person_phone_num = "' + contact_person_phone_num + '",'
+      +   'be_valid_profile = TRUE '
+      + 'WHERE affiliate_num = "' + affiliate_num + '"'
+      ),
     connection
     )
     .ExecuteNonQuery;
