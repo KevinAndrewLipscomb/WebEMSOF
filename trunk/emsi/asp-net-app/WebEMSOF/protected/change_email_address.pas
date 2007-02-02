@@ -171,9 +171,9 @@ begin
       (
       p.db_trail.Saved
         (
-        'UPDATE ' + session['target_user_table'].ToString + '_user '
-        + 'SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
-        + 'WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"'
+        'UPDATE ' + session['target_user_table'].ToString + '_user'
+        + ' SET password_reset_email_address = "' + Safe(TextBox_nominal_email_address.Text.Trim,EMAIL_ADDRESS) + '"'
+        + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"'
         ),
       p.db.connection
       )
