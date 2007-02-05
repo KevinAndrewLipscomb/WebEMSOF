@@ -1,4 +1,4 @@
-﻿-- $Id$
+-- $Id$
 --
 -- phpMyAdmin SQL Dump
 -- version 2.6.4-pl4
@@ -365,10 +365,11 @@ INSERT INTO item_status_code_description_map (code, description) VALUES
 
 DROP TABLE IF EXISTS journal;
 CREATE TABLE IF NOT EXISTS journal (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT
   `timestamp` TIMESTAMP NOT NULL,
   actor VARCHAR(31) NOT NULL,
   action VARCHAR(2047) NOT NULL,
-  PRIMARY KEY(`timestamp`),
+  PRIMARY KEY(`id`),
   INDEX actor (actor)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
