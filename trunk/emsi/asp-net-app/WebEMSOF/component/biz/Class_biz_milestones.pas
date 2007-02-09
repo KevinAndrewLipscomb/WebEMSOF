@@ -90,7 +90,7 @@ begin
           master_id_q := biz_emsof_requests.FailUnfinalized;
         SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
           BEGIN
-          // Not application-enforceable
+          master_id_q := queue.Create;
           END;
         SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
           master_id_q := biz_emsof_requests.CloseInvoiceSubmissionWindow;
