@@ -61,6 +61,7 @@ type
     biz_user: TClass_biz_user;
   public
     constructor Create;
+    function ActualValueOf(master_id: string): decimal;
     procedure AddProofOfPayment
       (
       request_id: string;
@@ -232,8 +233,8 @@ type
       amendment_num_string: string
       );
     function SusceptibleTo(milestone: milestone_type): queue;
+    function SumOfActualCostsOfRequestItems(request_id: string): decimal;
     function SumOfActualValues(fy_id: string = ''): decimal;
-    function SumOfActualValuesOfRequest(request_id: string): decimal;
     function SumOfProvenPaymentsOfRequest(request_id: string): decimal;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
@@ -275,6 +276,11 @@ begin
   biz_match_level := TClass_biz_match_level.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
   biz_user := TClass_biz_user.Create;
+end;
+
+function TClass_biz_emsof_requests.ActualValueOf(master_id: string): decimal;
+begin
+  ActualValueOf := db_emsof_requests.ActualValueOf(master_id);
 end;
 
 procedure TClass_biz_emsof_requests.AddProofOfPayment
@@ -1016,9 +1022,9 @@ begin
   end;
 end;
 
-function TClass_biz_emsof_requests.SumOfActualValuesOfRequest(request_id: string): decimal;
+function TClass_biz_emsof_requests.SumOfActualCostsOfRequestItems(request_id: string): decimal;
 begin
-  SumOfActualValuesOfRequest := db_emsof_requests.SumOfActualValuesOfRequest(request_id);
+  SumOfActualCostsOfRequestItems := db_emsof_requests.SumOfActualCostsOfRequestItems(request_id);
 end;
 
 function TClass_biz_emsof_requests.SumOfProvenPaymentsOfRequest(request_id: string): decimal;

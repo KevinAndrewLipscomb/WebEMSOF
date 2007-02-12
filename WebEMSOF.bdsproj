@@ -188,25 +188,6 @@
 			<Language Name="ProjectLang">$00000000</Language>
 			<Language Name="RootDir"></Language>
 		</Language>  
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0" LinkUnits="False"/>
@@ -259,8 +240,6 @@
       <File FileName="protected\state_transmittal_complete.aspx" ContainerId="AspMarkupContainer" ModuleName="state_transmittal_complete"/>
       <File FileName="protected\scratch" ContainerId="AspFolderContainer" ModuleName="scratch"/>
       <File FileName="protected\image" ContainerId="AspFolderContainer" ModuleName="image"/>
-      <File FileName="protected\image\logo_left.gif" ContainerId="Gif" ModuleName="logo_left"/>
-      <File FileName="protected\image\logo_right.gif" ContainerId="Gif" ModuleName="logo_right"/>
       <File FileName="dbscript" ContainerId="AspFolderContainer" ModuleName="dbscript"/>
       <File FileName="exception.aspx" ContainerId="AspMarkupContainer" ModuleName="exception"/>
       <File FileName="timeout.aspx" ContainerId="AspMarkupContainer" ModuleName="timeout"/>
