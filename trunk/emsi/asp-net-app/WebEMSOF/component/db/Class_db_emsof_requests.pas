@@ -36,6 +36,7 @@ type
       );
   public
     constructor Create;
+    function ActualValueOf(master_id: string): decimal;
     procedure AddProofOfPayment
       (
       request_id: string;
@@ -204,7 +205,7 @@ type
     function SponsorCountyNameOf(e_item: system.object): string;
     function SponsorRegionNameOf(master_id: string): string;
     function StatusCodeOf(e_item: system.object): cardinal;
-    function SusceptibleTo(milestone: milestone_type): queue;
+    function SumOfActualCostsOfRequestItems(request_id: string): decimal;
     function SumOfActualValues
       (
       user_kind: string;
@@ -212,7 +213,6 @@ type
       fy_id: string
       )
       : decimal;
-    function SumOfActualValuesOfRequest(request_id: string): decimal;
     function SumOfProvenPaymentsOfRequest(request_id: string): decimal;
     function SumOfRequestValues
       (
@@ -221,6 +221,7 @@ type
       fy_id: string
       )
       : decimal;
+    function SusceptibleTo(milestone: milestone_type): queue;
     function TallyByStatus(status: cardinal): cardinal;
     function TcciOfAppropriation: cardinal;
     function TcciOfId: cardinal;
@@ -323,6 +324,14 @@ begin
   inherited Create;
   // TODO: Add any constructor code here
   db_trail := TClass_db_trail.Create;
+end;
+
+function TClass_db_emsof_requests.ActualValueOf(master_id: string): decimal;
+begin
+  self.Open;
+  ActualValueOf := decimal
+    (bdpcommand.Create('select actual_value from emsof_request_master where id = ' + master_id,connection).ExecuteScalar);
+  self.Close;
 end;
 
 procedure TClass_db_emsof_requests.AddProofOfPayment
@@ -1263,30 +1272,23 @@ begin
   StatusCodeOf := convert.ToInt16(Safe(DataGridItem(e_item).cells[TCCI_STATUS_CODE].text,NUM));
 end;
 
-function TClass_db_emsof_requests.SusceptibleTo(milestone: milestone_type): queue;
+function TClass_db_emsof_requests.SumOfActualCostsOfRequestItems(request_id: string): decimal;
 var
-  bdr: bdpdatareader;
-  id_q: queue;
-  status_code: string;
+  sum_of_actual_costs_of_request_items_obj: system.object;
 begin
-  id_q := queue.Create;
-  case milestone of
-  COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
-    status_code := '3';
-  SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
-    status_code := '9';
-  SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
-    status_code := '9';
-  SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
-    status_code := '10';
-  end;
   self.Open;
-  bdr := bdpcommand.Create('select id from emsof_request_master where status_code < ' + status_code,connection).ExecuteReader;
-  while bdr.Read do begin
-    id_q.Enqueue(bdr['id']);
-  end;
+  sum_of_actual_costs_of_request_items_obj := bdpcommand.Create
+    (
+    'select sum(actual_subtotal_cost) from emsof_request_detail where master_id = ' + request_id,
+    connection
+    )
+    .ExecuteScalar;
   self.Close;
-  SusceptibleTo := id_q;
+  if sum_of_actual_costs_of_request_items_obj <> dbnull.value then begin
+    SumOfActualCostsOfRequestItems := decimal(sum_of_actual_costs_of_request_items_obj);
+  end else begin
+    SumOfActualCostsOfRequestItems := 0;
+  end;
 end;
 
 function TClass_db_emsof_requests.SumOfActualValues
@@ -1331,25 +1333,6 @@ begin
     SumOfActualValues := decimal(sum_obj);
   end else begin
     SumOfActualValues := 0;
-  end;
-end;
-
-function TClass_db_emsof_requests.SumOfActualValuesOfRequest(request_id: string): decimal;
-var
-  sum_of_actual_values_of_request_obj: system.object;
-begin
-  self.Open;
-  sum_of_actual_values_of_request_obj := bdpcommand.Create
-    (
-    'select sum(actual_value) from emsof_request_master where id = ' + request_id,
-    connection
-    )
-    .ExecuteScalar;
-  self.Close;
-  if sum_of_actual_values_of_request_obj <> dbnull.value then begin
-    SumOfActualValuesOfRequest := decimal(sum_of_actual_values_of_request_obj);
-  end else begin
-    SumOfActualValuesOfRequest := 0;
   end;
 end;
 
@@ -1417,6 +1400,32 @@ begin
   end else begin
     SumOfRequestValues := 0;
   end;
+end;
+
+function TClass_db_emsof_requests.SusceptibleTo(milestone: milestone_type): queue;
+var
+  bdr: bdpdatareader;
+  id_q: queue;
+  status_code: string;
+begin
+  id_q := queue.Create;
+  case milestone of
+  COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
+    status_code := '3';
+  SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
+    status_code := '9';
+  SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
+    status_code := '9';
+  SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
+    status_code := '10';
+  end;
+  self.Open;
+  bdr := bdpcommand.Create('select id from emsof_request_master where status_code < ' + status_code,connection).ExecuteReader;
+  while bdr.Read do begin
+    id_q.Enqueue(bdr['id']);
+  end;
+  self.Close;
+  SusceptibleTo := id_q;
 end;
 
 function TClass_db_emsof_requests.TallyByStatus(status: cardinal): cardinal;

@@ -51,8 +51,6 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\state_transmittal_complete.aspx'}
 {%AspFolderContainer 'protected\scratch'}
 {%AspFolderContainer 'protected\image'}
-{$R 'protected\image\logo_left.gif' 'protected\image\logo_left.gif'}
-{$R 'protected\image\logo_right.gif' 'protected\image\logo_right.gif'}
 {%AspFolderContainer 'dbscript'}
 {%AspMarkupContainer 'exception.aspx'}
 {%AspMarkupContainer 'timeout.aspx'}

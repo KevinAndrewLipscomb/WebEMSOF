@@ -108,6 +108,8 @@ type
     Label_total_of_actual_costs: System.Web.UI.WebControls.Label;
     Label_total_of_proven_payments: System.Web.UI.WebControls.Label;
     Table_total_of_proven_payments: System.Web.UI.HtmlControls.HtmlTable;
+    Label_total_of_emsof_amounts: System.Web.UI.WebControls.Label;
+    Table_total_of_emsof_amounts: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -235,16 +237,14 @@ begin
     //
     Table_total_of_actual_costs.visible :=
       (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
+    Table_proofs_of_payment.Visible := Table_total_of_actual_costs.visible;
+    Table_total_of_emsof_amounts.visible := Table_total_of_actual_costs.visible;
     if Table_total_of_actual_costs.visible then begin
-      Label_total_of_actual_costs.text := p.biz_emsof_requests.SumOfActualValuesOfRequest(p.request_id).tostring('C');
-    end;
-    //
-    Table_proofs_of_payment.Visible :=
-      (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
-    if Table_proofs_of_payment.Visible then begin
+      Label_total_of_actual_costs.text := p.biz_emsof_requests.SumOfActualCostsOfRequestItems(p.request_id).tostring('C');
       p.modify_proofs_of_payment := p.biz_emsof_requests.BeOkToTrackPayments(p.status);
       LinkButton_new_proof_of_payment.visible := p.modify_proofs_of_payment;
       BindProofsOfPayment;
+      Label_total_of_emsof_amounts.text := p.biz_emsof_requests.ActualValueOf(p.request_id).tostring('C');
     end;
     //
     if p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.status) then begin
