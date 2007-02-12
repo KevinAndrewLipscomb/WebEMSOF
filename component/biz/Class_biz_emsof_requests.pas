@@ -61,6 +61,14 @@ type
     biz_user: TClass_biz_user;
   public
     constructor Create;
+    procedure AddProofOfPayment
+      (
+      request_id: string;
+      date_of_payment: datetime;
+      method_code: string;
+      amount: decimal;
+      note: string
+      );
     function AffiliateNumOf(e_item: system.object): string;
     procedure Approve
       (
@@ -71,6 +79,7 @@ type
     function BeOkToDrillDown(status: status_type): boolean;
     function BeOkToMarkDone(status: status_type): boolean;
     function BeOkToTrackInvoices(status: status_type): boolean;
+    function BeOkToTrackPayments(status: status_type): boolean;
     function BeOkToViewInvoices(status: status_type): boolean;
     function BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
       (
@@ -134,6 +143,11 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    procedure BindProofsOfPayment
+      (
+      request_id: string;
+      target: system.object
+      );
     procedure BindStateExportBatch
       (
       target: system.object;
@@ -146,6 +160,7 @@ type
     function CountyApprovalTimestampOf(master_id: string): datetime;
     function CountyCodeOfMasterId(master_id: string): string;
     function CountyDictumIdOf(master_id: string): string;
+    procedure DeleteProofOfPayment(id: string);
     procedure Demote
       (
       e_item: system.object;
@@ -170,6 +185,7 @@ type
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
     function IdOf(e_item: system.object): string;
+    function IdOfProofOfPayment(e_item: system.object): string;
     function LeftoverOrShortageOf(e_item: system.object): decimal;
     procedure MarkDone
       (
@@ -217,6 +233,8 @@ type
       );
     function SusceptibleTo(milestone: milestone_type): queue;
     function SumOfActualValues(fy_id: string = ''): decimal;
+    function SumOfActualValuesOfRequest(request_id: string): decimal;
+    function SumOfProvenPaymentsOfRequest(request_id: string): decimal;
     function SumOfRequestValues(fy_id: string = ''): decimal;
     function TallyOfStatus(status: status_type): string;
     function TcciOfAppropriation: cardinal;
@@ -257,6 +275,18 @@ begin
   biz_match_level := TClass_biz_match_level.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
   biz_user := TClass_biz_user.Create;
+end;
+
+procedure TClass_biz_emsof_requests.AddProofOfPayment
+  (
+  request_id: string;
+  date_of_payment: datetime;
+  method_code: string;
+  amount: decimal;
+  note: string
+  );
+begin
+  db_emsof_requests.AddProofOfPayment(request_id,date_of_payment,method_code,amount,note);
 end;
 
 function TClass_biz_emsof_requests.AffiliateNumOf(e_item: system.object): string;
@@ -394,7 +424,8 @@ begin
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-clerk')
       or httpcontext.current.user.IsInRole('emsof-coordinator')
       or httpcontext.current.user.IsInRole('director');
-  NEEDS_INVOICE_COLLECTION:
+  NEEDS_INVOICE_COLLECTION,
+  NEEDS_CANCELED_CHECK_COLLECTION:
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-coordinator')
       or httpcontext.current.user.IsInRole('emsof-accountant')
       or httpcontext.current.user.IsInRole('director');
@@ -407,6 +438,16 @@ end;
 function TClass_biz_emsof_requests.BeOkToTrackInvoices(status: status_type): boolean;
 begin
   BeOkToTrackInvoices := (status = NEEDS_INVOICE_COLLECTION)
+    and
+      (
+      httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator')
+      );
+end;
+
+function TClass_biz_emsof_requests.BeOkToTrackPayments(status: status_type): boolean;
+begin
+  BeOkToTrackPayments := (status = NEEDS_CANCELED_CHECK_COLLECTION)
     and
       (
       httpcontext.current.User.IsInRole('director')
@@ -497,6 +538,15 @@ begin
   CountyApprovalTimestampOf := db_emsof_requests.CountyApprovalTimestampOf(master_id);
 end;
 
+procedure TClass_biz_emsof_requests.BindProofsOfPayment
+  (
+  request_id: string;
+  target: system.object
+  );
+begin
+  db_emsof_requests.BindProofsOfPayment(request_id,target);
+end;
+
 procedure TClass_biz_emsof_requests.BindStateExportBatch
   (
   target: system.object;
@@ -522,6 +572,11 @@ end;
 function TClass_biz_emsof_requests.CountyDictumIdOf(master_id: string): string;
 begin
   CountyDictumIdOf := db_emsof_requests.CountyDictumIdOf(master_id);
+end;
+
+procedure TClass_biz_emsof_requests.DeleteProofOfPayment(id: string);
+begin
+  db_emsof_requests.DeleteProofOfPayment(id);
 end;
 
 procedure TClass_biz_emsof_requests.Demote
@@ -631,6 +686,11 @@ begin
   IdOf := db_emsof_requests.IdOf(e_item);
 end;
 
+function TClass_biz_emsof_requests.IdOfProofOfPayment(e_item: system.object): string;
+begin
+  IdOfProofOfPayment := db_emsof_requests.IdOfProofOfPayment(e_item);
+end;
+
 function TClass_biz_emsof_requests.LeftoverOrShortageOf(e_item: system.object): decimal;
 begin
   LeftoverOrShortageOf := db_emsof_requests.LeftoverOrShortageOf(e_item);
@@ -671,6 +731,21 @@ begin
     biz_accounts.MakePromotionNotification
       (
       system.string.EMPTY,
+      reviewer_descriptor,
+      system.object(next_status).tostring,
+      ServiceIdOf(e_item),
+      ServiceNameOf(e_item),
+      FyDesignatorOf(e_item),
+      FALSE
+      );
+    END;
+  NEEDS_CANCELED_CHECK_COLLECTION:
+    BEGIN
+    next_status := NEEDS_REIMBURSEMENT_ISSUANCE;
+    db_emsof_requests.MarkDone(master_id,ord(next_status),biz_user.Kind);
+    biz_accounts.MakePromotionNotification
+      (
+      'emsof-accountant',
       reviewer_descriptor,
       system.object(next_status).tostring,
       ServiceIdOf(e_item),
@@ -939,6 +1014,16 @@ begin
   end else begin
     SumOfActualValues := db_emsof_requests.SumOfActualValues(biz_user.Kind,biz_user.IdNum,fy_id);
   end;
+end;
+
+function TClass_biz_emsof_requests.SumOfActualValuesOfRequest(request_id: string): decimal;
+begin
+  SumOfActualValuesOfRequest := db_emsof_requests.SumOfActualValuesOfRequest(request_id);
+end;
+
+function TClass_biz_emsof_requests.SumOfProvenPaymentsOfRequest(request_id: string): decimal;
+begin
+  SumOfProvenPaymentsOfRequest := db_emsof_requests.SumOfProvenPaymentsOfRequest(request_id);
 end;
 
 function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;

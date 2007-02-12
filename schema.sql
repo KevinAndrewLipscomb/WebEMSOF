@@ -218,17 +218,18 @@ INSERT INTO eligible_provider_equipment_list (code, fiscal_year_id, description,
 --
 
 DROP TABLE IF EXISTS emsof_purchase_payment;
-create table emsof_purchase_payment
-  (
-  id bigint(20) unsigned not null auto_increment,
-  master_id bigint(20) unsigned not null,
-  method tinyint(3) unsigned not null,
-  amount decimal(10,2) unsigned not null,
-  note varchar(255) not null,
-  primary key (id),
-  key (master_id)
-  )
-  ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS emsof_purchase_payment (
+  id bigint(20) unsigned NOT NULL auto_increment,
+  master_id bigint(20) unsigned NOT NULL,
+  date_of date NOT NULL,
+  method_code tinyint(3) unsigned NOT NULL,
+  amount decimal(10,2) unsigned NOT NULL,
+  note varchar(255) NOT NULL,
+  PRIMARY KEY  (id),
+  KEY master_id (master_id),
+  KEY method_code (method_code),
+  KEY date_of (date_of)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -420,6 +421,30 @@ INSERT INTO milestone_code_name_map (code, name) VALUES
 (2, 'emsof-service-purchase-completion-deadline'),
 (3, 'emsof-service-invoice-submission-deadline'),
 (4, 'emsof-service-canceled-check-submission-deadline');
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `payment_proof_method_code_description_map`
+-- 
+
+DROP TABLE IF EXISTS payment_proof_method_code_description_map;
+CREATE TABLE IF NOT EXISTS payment_proof_method_code_description_map (
+  `code` tinyint(3) unsigned NOT NULL auto_increment,
+  description varchar(31) NOT NULL,
+  PRIMARY KEY  (`code`),
+  UNIQUE KEY description (description)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 
+-- Dumping data for table `payment_proof_method_code_description_map`
+-- 
+
+INSERT INTO payment_proof_method_code_description_map (code, description) VALUES
+(1, 'Cancelled check'),
+(2, 'Bank draft'),
+(3, 'Bank statement'),
+(4, 'Wire transfer');
 
 -- --------------------------------------------------------
 
@@ -695,7 +720,8 @@ ALTER TABLE `eligible_provider_equipment_list`
 -- Constraints for table `emsof_purchase_payment`
 --
 ALTER TABLE emsof_purchase_payment
-  ADD CONSTRAINT FOREIGN KEY (master_id) REFERENCES emsof_request_master (id);
+  ADD CONSTRAINT emsof_purchase_payment_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id),
+  ADD CONSTRAINT emsof_purchase_payment_ibfk_2 FOREIGN KEY (method_code) REFERENCES payment_proof_method_code_description_map (`code`);
 
 --
 -- Constraints for table `emsof_request_detail`
