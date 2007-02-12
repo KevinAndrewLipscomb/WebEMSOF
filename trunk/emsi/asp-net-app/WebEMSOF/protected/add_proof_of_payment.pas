@@ -154,7 +154,8 @@ var
   timestamp: datetime;
 begin
   if p.biz_emsof_requests.BeValidStateApprovalTimestampOf(p.biz_emsof_requests.IdOf(session['e_item']),timestamp)
-    and (Calendar_date_of_payment.selecteddate >= timestamp)
+    and (Calendar_date_of_payment.selecteddate >= timestamp.Date)
+    and (Calendar_date_of_payment.selecteddate < datetime.Now)
   then begin
     p.biz_emsof_requests.AddProofOfPayment
       (

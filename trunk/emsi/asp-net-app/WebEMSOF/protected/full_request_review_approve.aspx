@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                                                                                                                     [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+		                                                                                                                      [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -35,7 +35,7 @@
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
 			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
-				                                                                                    that the pending action has been completed.</td>
+				                                                                                     that the pending action has been completed.</td>
 			</tr>
 		</table>
 	  </p>
@@ -221,10 +221,6 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				</td>
 			  </tr>
 			</table>
-		  </td>
-		</tr>
-	  </table>
-	  <p></p>
 	  <table cellspacing="0" cellpadding="10" border="1" id="Table_total_of_actual_costs" runat="server" bordercolor="black">
 		<tr>
 				<td bgcolor="black">
@@ -235,11 +231,15 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				</td>
 		</tr>
 	  </table>
+		  </td>
+		</tr>
+	  </table>
+	  <p></p>
 	  <p></p>
 	  <table cellspacing="0" cellpadding="0" border="1" id="Table_proofs_of_payment" runat="server" bordercolor="#dcdcdc">
 		<tr>
 		  <td>
-			<table cellspacing="0" cellpadding="10" border="0">
+			<table cellspacing="0" cellpadding="10" border="0" width="100%">
 			  <tr>
 				<td bgcolor="#f5f5f5">
 				  <strong>
@@ -277,10 +277,6 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				</td>
 			  </tr>
 			</table>
-		  </td>
-		</tr>
-	  </table>
-	  <p></p>
 	  <table cellspacing="0" cellpadding="10" border="1" id="Table_total_of_proven_payments" runat="server" bordercolor="black">
 		<tr>
 				<td bgcolor="black">
@@ -291,6 +287,10 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				</td>
 		</tr>
 	  </table>
+		  </td>
+		</tr>
+	  </table>
+	  <p></p>
 	  <p></p>
 	  <table cellspacing="0" cellpadding="0" border="1" id="Table_disposition" runat="server" bordercolor="#98fb98">
 		<tr>
@@ -305,7 +305,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				<td>
 				  <p>
 					If you are not ready to disposition this
-																			                            request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
+																			                             request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>

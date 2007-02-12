@@ -205,8 +205,13 @@ begin
       biz_emsof_requests.TallyOfStatus(NEEDS_INVOICE_COLLECTION) + LinkButton_invoice_collection.text;
     LinkButton_canceled_check_collection.text :=
       biz_emsof_requests.TallyOfStatus(NEEDS_CANCELED_CHECK_COLLECTION) + LinkButton_canceled_check_collection.text;
-    LinkButton_reimbursement.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE) + LinkButton_reimbursement.text;
+    //
+    tally := biz_emsof_requests.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE);
+    LinkButton_reimbursement.text := tally + LinkButton_reimbursement.text;
+    if (tally <> '0') then begin
+      LinkButton_reimbursement.font.bold := TRUE;
+      LinkButton_reimbursement.text := LinkButton_reimbursement.text.ToUpper;
+    end;
     //
     LinkButton_completed.text := biz_emsof_requests.TallyOfStatus(REIMBURSEMENT_ISSUED) + LinkButton_completed.text;
     LinkButton_missed_deadlines.text := biz_emsof_requests.TallyOfStatus(FAILED_DEADLINE) + LinkButton_missed_deadlines.text;

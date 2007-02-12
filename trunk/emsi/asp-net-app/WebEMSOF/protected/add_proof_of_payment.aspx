@@ -13,8 +13,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                 [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                 [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server" causesvalidation="False">password</asp:LinkButton>&nbsp;
+			                  [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                  [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server" causesvalidation="False">password</asp:LinkButton>&nbsp;
 			|
 			<asp:LinkButton id="LinkButton_change_email_address" runat="server" causesvalidation="False">email address</asp:LinkButton>&nbsp;]
 		</small>
@@ -48,7 +48,7 @@
                                   <TitleStyle font-bold="True" bordercolor="Black" backcolor="#999999"></TitleStyle>
                                   <WeekendDayStyle backcolor="#FFFFCC"></WeekendDayStyle>
                                   <OtherMonthDayStyle forecolor="#808080"></OtherMonthDayStyle></ASP:Calendar></td>
-							  <td valign="top"><small><em>Cannot be prior to date of state approval.</em></small></td>
+							  <td valign="top"><small><p><em>Cannot be prior to date of state approval.&nbsp; Cannot be after today.</em></p></small></td>
 							</tr>
 							<tr>
 							  <td>Method:</td>
