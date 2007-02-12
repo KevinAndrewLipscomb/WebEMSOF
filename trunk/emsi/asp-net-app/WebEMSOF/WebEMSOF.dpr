@@ -60,6 +60,7 @@ library WebEMSOF;
 {%AspMarkupContainer 'protected\county_unrejection.aspx'}
 {%File 'noninteractive\.crontab'}
 {%AspMarkupContainer 'noninteractive\milestone_sweep.aspx'}
+{%AspMarkupContainer 'protected\add_proof_of_payment.aspx'}
 
 uses
   System.Reflection,
@@ -116,7 +117,10 @@ uses
   Class_db_milestones in 'component\db\Class_db_milestones.pas',
   Class_biz_counties in 'component\biz\Class_biz_counties.pas',
   Class_db_counties in 'component\db\Class_db_counties.pas',
-  Class_db_trail in 'component\db\Class_db_trail.pas';
+  Class_db_trail in 'component\db\Class_db_trail.pas',
+  add_proof_of_payment in 'protected\add_proof_of_payment.pas' {add_proof_of_payment.TWebForm_add_proof_of_payment: ki_web_ui.page_class},
+  Class_biz_payment_proof_methods in 'component\biz\Class_biz_payment_proof_methods.pas',
+  Class_db_payment_proof_methods in 'component\db\Class_db_payment_proof_methods.pas';
 
 const ID = '$Id$';
 

@@ -19,7 +19,9 @@ type
     be_before_improvement_deadline: boolean;
     display_actuals: boolean;
     modify_actuals: boolean;
+    modify_proofs_of_payment: boolean;
     num_items: cardinal;
+    num_proofs_of_payment: cardinal;
     parent_appropriation_amount: decimal;
     request_id: string;
     status: Class_biz_emsof_requests.status_type;
@@ -42,56 +44,70 @@ type
     procedure DataGrid_items_EditCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_items_CancelCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_items_UpdateCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure DataGrid_proofs_of_payment_ItemDataBound(sender: System.Object; 
+      e: System.Web.UI.WebControls.DataGridItemEventArgs);
+    procedure LinkButton_new_proof_of_payment_Click(sender: System.Object; e: System.EventArgs);
+    procedure DataGrid_proofs_of_payment_DeleteCommand(source: System.Object; 
+      e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
+    procedure BindProofsOfPayment;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
-    PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+    LinkButton_back: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
-    Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
-    Label_sponsor_county: System.Web.UI.WebControls.Label;
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
-    Label_sum_of_emsof_antes: System.Web.UI.WebControls.Label;
-    Label_unused_amount: System.Web.UI.WebControls.Label;
-    DataGrid_items: System.Web.UI.WebControls.DataGrid;
     Label_service_name: System.Web.UI.WebControls.Label;
     Label_affiliate_num: System.Web.UI.WebControls.Label;
-    TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
+    Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
+    Label_sponsor_county: System.Web.UI.WebControls.Label;
+    Label_sum_of_emsof_antes: System.Web.UI.WebControls.Label;
+    Label_unused_amount: System.Web.UI.WebControls.Label;
+    Label_sponsor_county_2: System.Web.UI.WebControls.Label;
+    Label_county_approval_timestamp: System.Web.UI.WebControls.Label;
+    Label_region_name_1: System.Web.UI.WebControls.Label;
+    Label_regional_planner_approval_timestamp: System.Web.UI.WebControls.Label;
+    Label_region_name_2: System.Web.UI.WebControls.Label;
+    Label_regional_exec_dir_approval_timestamp: System.Web.UI.WebControls.Label;
+    Label_state_approval_timestamp: System.Web.UI.WebControls.Label;
     Label_num_items: System.Web.UI.WebControls.Label;
+    DataGrid_items: System.Web.UI.WebControls.DataGrid;
+    LinkButton_new_proof_of_payment: System.Web.UI.WebControls.LinkButton;
+    DataGrid_proofs_of_payment: System.Web.UI.WebControls.DataGrid;
+    LinkButton_back_2: System.Web.UI.WebControls.LinkButton;
+    Label_next_reviewer: System.Web.UI.WebControls.Label;
     CheckBox_approve: System.Web.UI.WebControls.CheckBox;
     Button_approve: System.Web.UI.WebControls.Button;
     Button_disapprove: System.Web.UI.WebControls.Button;
-    Table_disposition: System.Web.UI.HtmlControls.HtmlTable;
-    TableRow_return: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
-    Table_action_required: System.Web.UI.HtmlControls.HtmlTable;
-    TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
-    Label_next_reviewer: System.Web.UI.WebControls.Label;
-    LinkButton_back: System.Web.UI.WebControls.LinkButton;
-    LinkButton_back_2: System.Web.UI.WebControls.LinkButton;
+    Label_current_status: System.Web.UI.WebControls.Label;
     CheckBox_mark_done: System.Web.UI.WebControls.CheckBox;
     Button_mark_done: System.Web.UI.WebControls.Button;
+    PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
+    Table_action_required: System.Web.UI.HtmlControls.HtmlTable;
     Table_action_pending: System.Web.UI.HtmlControls.HtmlTable;
-    Table_mark_done: System.Web.UI.HtmlControls.HtmlTable;
-    Label_current_status: System.Web.UI.WebControls.Label;
-    Label_sponsor_county_2: System.Web.UI.WebControls.Label;
-    Label_county_approval_timestamp: System.Web.UI.WebControls.Label;
-    Label_regional_planner_approval_timestamp: System.Web.UI.WebControls.Label;
-    Label_regional_exec_dir_approval_timestamp: System.Web.UI.WebControls.Label;
+    TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     Table_prior_approvals: System.Web.UI.HtmlControls.HtmlTable;
     TableRow_regional_planner_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_regional_exec_dir_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
-    Label_region_name_1: System.Web.UI.WebControls.Label;
-    Label_region_name_2: System.Web.UI.WebControls.Label;
-    Label_state_approval_timestamp: System.Web.UI.WebControls.Label;
     TableRow_state_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
+    Table_proofs_of_payment: System.Web.UI.HtmlControls.HtmlTable;
+    TableRow_proofs_of_payment_none: System.Web.UI.HtmlControls.HtmlTableRow;
+    Table_disposition: System.Web.UI.HtmlControls.HtmlTable;
+    TableRow_return: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
+    TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
+    Table_mark_done: System.Web.UI.HtmlControls.HtmlTable;
+    Table_total_of_actual_costs: System.Web.UI.HtmlControls.HtmlTable;
+    Label_total_of_actual_costs: System.Web.UI.WebControls.Label;
+    Label_total_of_proven_payments: System.Web.UI.WebControls.Label;
+    Table_total_of_proven_payments: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -108,6 +124,7 @@ uses
 const
   TCCI_ACTUALS = 2;
   TCCI_LINKBUTTONS = 3;
+  TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 5;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -124,6 +141,9 @@ begin
   Include(Self.DataGrid_items.EditCommand, Self.DataGrid_items_EditCommand);
   Include(Self.DataGrid_items.UpdateCommand, Self.DataGrid_items_UpdateCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
+  Include(Self.LinkButton_new_proof_of_payment.Click, Self.LinkButton_new_proof_of_payment_Click);
+  Include(Self.DataGrid_proofs_of_payment.DeleteCommand, Self.DataGrid_proofs_of_payment_DeleteCommand);
+  Include(Self.DataGrid_proofs_of_payment.ItemDataBound, Self.DataGrid_proofs_of_payment_ItemDataBound);
   Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_Click);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
@@ -213,6 +233,26 @@ begin
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
+    Table_total_of_actual_costs.visible :=
+      (p.status in [NEEDS_INVOICE_COLLECTION,NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
+    if Table_total_of_actual_costs.visible then begin
+      Label_total_of_actual_costs.text := p.biz_emsof_requests.SumOfActualValuesOfRequest(p.request_id).tostring('C');
+    end;
+    //
+    Table_proofs_of_payment.Visible :=
+      (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
+    if Table_proofs_of_payment.Visible then begin
+      p.modify_proofs_of_payment := p.biz_emsof_requests.BeOkToTrackPayments(p.status);
+      LinkButton_new_proof_of_payment.visible := p.modify_proofs_of_payment;
+      BindProofsOfPayment;
+    end;
+    //
+    Table_total_of_proven_payments.visible :=
+      (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
+    if Table_total_of_proven_payments.visible then begin
+      Label_total_of_proven_payments.text := p.biz_emsof_requests.SumOfProvenPaymentsOfRequest(p.request_id).tostring('C');
+    end;
+    //
     if p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.status) then begin
       Label_next_reviewer.text :=
         p.biz_emsof_requests.NextReviewer(p.status);
@@ -245,6 +285,21 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.DataGrid_proofs_of_payment_DeleteCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+begin
+  p.biz_emsof_requests.DeleteProofOfPayment(p.biz_emsof_requests.IdOfProofOfPayment(e.item));
+  DataGrid_proofs_of_payment.edititemindex := -1;
+  BindProofsOfPayment;
+end;
+
+procedure TWebForm_full_request_review_approve.LinkButton_new_proof_of_payment_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  stack(session['waypoint_stack']).Push('full_request_review_approve.aspx');
+  server.Transfer('add_proof_of_payment.aspx');
 end;
 
 procedure TWebForm_full_request_review_approve.DataGrid_items_UpdateCommand
@@ -383,6 +438,49 @@ begin
   formsauthentication.SignOut;
   session.Clear;
   server.Transfer('../Default.aspx');
+end;
+
+procedure TWebForm_full_request_review_approve.DataGrid_proofs_of_payment_ItemDataBound
+  (
+  sender: System.Object;
+  e: System.Web.UI.WebControls.DataGridItemEventArgs
+  );
+begin
+  //
+  // Manage column visibility
+  //
+  e.item.cells[TCCI_PROOF_OF_PAYMENT_LINKBUTTON].visible := p.modify_proofs_of_payment;
+  //
+  if (e.item.itemtype = listitemtype.alternatingitem)
+    or (e.item.itemtype = listitemtype.edititem)
+    or (e.item.itemtype = listitemtype.item)
+    or (e.item.itemtype = listitemtype.selecteditem)
+  then begin
+    //
+    // We are dealing with a data row, not a header or footer row.
+    //
+    p.num_proofs_of_payment := p.num_proofs_of_payment + 1;
+    //
+  end;
+end;
+
+procedure TWebForm_full_request_review_approve.BindProofsOfPayment;
+var
+  be_datagrid_empty: boolean;
+begin
+  //
+  p.biz_emsof_requests.BindProofsOfPayment(p.request_id,DataGrid_proofs_of_payment);
+  //
+  // Manage control visibilities.
+  //
+  be_datagrid_empty := (p.num_proofs_of_payment = 0);
+  TableRow_proofs_of_payment_none.visible := be_datagrid_empty;
+  Datagrid_proofs_of_payment.visible := not be_datagrid_empty;
+  //
+  // Clear aggregation vars for next bind, if any.
+  //
+  p.num_proofs_of_payment := 0;
+  //
 end;
 
 end.

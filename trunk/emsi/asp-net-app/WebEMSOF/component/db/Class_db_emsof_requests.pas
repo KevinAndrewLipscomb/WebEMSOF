@@ -36,6 +36,14 @@ type
       );
   public
     constructor Create;
+    procedure AddProofOfPayment
+      (
+      request_id: string;
+      date_of_payment: datetime;
+      method_code: string;
+      amount: decimal;
+      note: string
+      );
     function AffiliateNumOf(e_item: system.object): string;
     procedure Approve
       (
@@ -107,6 +115,11 @@ type
       be_order_ascending: boolean;
       target: system.object
       );
+    procedure BindProofsOfPayment
+      (
+      request_id: string;
+      target: system.object
+      );
     procedure BindStateExportBatch
       (
       target: system.object;
@@ -119,6 +132,7 @@ type
     function CountyApprovalTimestampOf(master_id: string): datetime;
     function CountyCodeOfMasterId(master_id: string): string;
     function CountyDictumIdOf(master_id: string): string;
+    procedure DeleteProofOfPayment(id: string);
     procedure Demote
       (
       master_id: string;
@@ -142,6 +156,7 @@ type
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
     function IdOf(e_item: system.object): string;
+    function IdOfProofOfPayment(e_item: system.object): string;
     function LeftoverOrShortageOf(e_item: system.object): decimal;
     procedure MarkDone
       (
@@ -197,6 +212,8 @@ type
       fy_id: string
       )
       : decimal;
+    function SumOfActualValuesOfRequest(request_id: string): decimal;
+    function SumOfProvenPaymentsOfRequest(request_id: string): decimal;
     function SumOfRequestValues
       (
       user_kind: string;
@@ -238,6 +255,8 @@ const
   //
   TCCI_FULL_REQUEST_PRIORITY = 0;
   TCCI_FULL_REQUEST_ACTUALS = 2;
+  //
+  TCCI_PROOF_OF_PAYMENT_ID = 0;
 
 procedure TClass_db_emsof_requests.BindOverview
   (
@@ -304,6 +323,33 @@ begin
   inherited Create;
   // TODO: Add any constructor code here
   db_trail := TClass_db_trail.Create;
+end;
+
+procedure TClass_db_emsof_requests.AddProofOfPayment
+  (
+  request_id: string;
+  date_of_payment: datetime;
+  method_code: string;
+  amount: decimal;
+  note: string
+  );
+begin
+  self.Open;
+  bdpcommand.Create
+    (
+    db_trail.Saved
+      (
+      'insert into emsof_purchase_payment'
+      + ' set master_id = ' + request_id
+      +   ' , date_of = "' + date_of_payment.tostring('yyyy-MM-dd') + '"'
+      +   ' , method_code = ' + method_code
+      +   ' , amount = ' + amount.tostring
+      +   ' , note = "' + note + '"'
+      ),
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.AffiliateNumOf(e_item: system.object): string;
@@ -564,6 +610,33 @@ begin
   BindOverview(order_by_field_name,be_order_ascending,target,'status_code = ' + status.tostring);
 end;
 
+procedure TClass_db_emsof_requests.BindProofsOfPayment
+  (
+  request_id: string;
+  target: system.object
+  );
+begin
+  self.Open;
+  DataGrid(target).datasource := bdpcommand.Create
+    (
+    'select id'                                       // column 0
+    + ' , DATE_FORMAT(date_of,"%Y-%m-%d") as date_of' // column 1
+    + ' , description as method'                      // column 2
+    + ' , amount'                                     // column 3
+    + ' , note'                                       // column 4
+    + ' from emsof_purchase_payment'
+    +   ' join payment_proof_method_code_description_map'
+    +     ' on (payment_proof_method_code_description_map.code=emsof_purchase_payment.method_code)'
+    + ' where master_id = ' + request_id
+    + ' order by date_of asc',
+    connection
+    )
+    .ExecuteReader;
+  DataGrid(target).DataBind;
+  bdpdatareader(DataGrid(target).datasource).Close;
+  self.Close;
+end;
+
 procedure TClass_db_emsof_requests.BindStateExportBatch
   (
   target: system.object;
@@ -754,6 +827,13 @@ begin
   self.Close;
 end;
 
+procedure TClass_db_emsof_requests.DeleteProofOfPayment(id: string);
+begin
+  self.Open;
+  bdpcommand.Create(db_trail.Saved('delete from emsof_purchase_payment where id = ' + id),connection).ExecuteNonQuery;
+  self.Close;
+end;
+
 procedure TClass_db_emsof_requests.Demote
   (
   master_id: string;
@@ -921,6 +1001,11 @@ end;
 function TClass_db_emsof_requests.IdOf(e_item: system.object): string;
 begin
   IdOf := Safe(DataGridItem(e_item).cells[TCCI_ID].text,NUM);
+end;
+
+function TClass_db_emsof_requests.IdOfProofOfPayment(e_item: system.object): string;
+begin
+  IdOfProofOfPayment := Safe(DataGridItem(e_item).cells[TCCI_PROOF_OF_PAYMENT_ID].text,NUM);
 end;
 
 function TClass_db_emsof_requests.LeftoverOrShortageOf(e_item: system.object): decimal;
@@ -1247,6 +1332,36 @@ begin
   end else begin
     SumOfActualValues := 0;
   end;
+end;
+
+function TClass_db_emsof_requests.SumOfActualValuesOfRequest(request_id: string): decimal;
+begin
+  self.Open;
+  SumOfActualValuesOfRequest := decimal
+    (
+    bdpcommand.Create
+      (
+      'select sum(actual_value) from emsof_request_master where id = ' + request_id,
+      connection
+      )
+      .ExecuteScalar
+    );
+  self.Close;
+end;
+
+function TClass_db_emsof_requests.SumOfProvenPaymentsOfRequest(request_id: string): decimal;
+begin
+  self.Open;
+  SumOfProvenPaymentsOfRequest := decimal
+    (
+    bdpcommand.Create
+      (
+      'select sum(amount) from emsof_purchase_payment where master_id = ' + request_id,
+      connection
+      )
+      .ExecuteScalar
+    );
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.SumOfRequestValues

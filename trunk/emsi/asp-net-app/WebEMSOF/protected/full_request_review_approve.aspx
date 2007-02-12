@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                                                                                          [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+		                                                                                                                     [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -35,7 +35,7 @@
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
 			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
-				                                                         that the pending action has been completed.</td>
+				                                                                                    that the pending action has been completed.</td>
 			</tr>
 		</table>
 	  </p>
@@ -205,23 +205,90 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataI
 </small>
                                 </body>
                               </html>
-                            </ItemTemplate>
-                            <EditItemTemplate>
+							</ItemTemplate>
+							<EditItemTemplate>
 <small>
 Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_invoice_designator" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "invoice_designator") %>'></ASP:TextBox><br>
 Actual quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_quantity" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "actual_quantity") %>'></ASP:TextBox><br>
 Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_subtotal_cost" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %>'></ASP:TextBox><br>
 EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 </small>
-                            </EditItemTemplate>
-                          </ASP:TemplateColumn>
-                          <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit"></ASP:EditCommandColumn>
-                        </Columns>
+							</EditItemTemplate>
+						  </ASP:TemplateColumn>
+						  <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit"></ASP:EditCommandColumn>
+						</Columns>
 				  </asp:datagrid>
 				</td>
 			  </tr>
 			</table>
 		  </td>
+		</tr>
+	  </table>
+	  <p></p>
+	  <table cellspacing="0" cellpadding="10" border="1" id="Table_total_of_actual_costs" runat="server" bordercolor="black">
+		<tr>
+				<td bgcolor="black">
+				  <strong><font color="white">TOTAL OF ACTUAL COSTS:</font></strong>
+				</td>
+				<td>
+				  <p><ASP:Label id="Label_total_of_actual_costs" runat="server" font-bold="True"></ASP:Label></p>
+				</td>
+		</tr>
+	  </table>
+	  <p></p>
+	  <table cellspacing="0" cellpadding="0" border="1" id="Table_proofs_of_payment" runat="server" bordercolor="#dcdcdc">
+		<tr>
+		  <td>
+			<table cellspacing="0" cellpadding="10" border="0">
+			  <tr>
+				<td bgcolor="#f5f5f5">
+				  <strong>
+						<table cellspacing="0" cellpadding="5" width="100%" border="0">
+							<tr>
+							  <td><strong>Proofs of payment by service</strong></td>
+							  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							  <td>
+								<p align="right"><ASP:LinkButton id="LinkButton_new_proof_of_payment" runat="server" font-bold="True" causesvalidation="False">New</ASP:LinkButton></p></td>
+							</tr>
+						</table></strong>
+				</td>
+			  </tr>
+			  <tr id="TableRow_proofs_of_payment_none" runat="server">
+				<td>
+				  <p><em>--&nbsp;NONE&nbsp;--</em></p>
+				</td>
+			  </tr>
+			  <tr>
+				<td>
+						<ASP:DataGrid id="DataGrid_proofs_of_payment" runat="server" autogeneratecolumns="False" useaccessibleheader="True" cellpadding="10" gridlines="Horizontal" bordercolor="Gainsboro" borderwidth="1px">
+						<HeaderStyle backcolor="WhiteSmoke"></HeaderStyle>
+						<Columns>
+						  <ASP:BoundColumn visible="False" datafield="id" readonly="True"></ASP:BoundColumn>
+						  <ASP:BoundColumn datafield="date_of" readonly="True" headertext="Date"></ASP:BoundColumn>
+						  <ASP:BoundColumn datafield="method" readonly="True" headertext="Method">
+							<ItemStyle horizontalalign="Center"></ItemStyle>
+						  </ASP:BoundColumn>
+						  <ASP:BoundColumn datafield="amount" headertext="Amount" dataformatstring="{0:C}">
+							<ItemStyle horizontalalign="Right"></ItemStyle>
+						  </ASP:BoundColumn>
+						  <ASP:BoundColumn datafield="note" headertext="Note"></ASP:BoundColumn>
+						  <ASP:ButtonColumn text="Delete" commandname="Delete"></ASP:ButtonColumn>
+						</Columns></ASP:DataGrid>
+				</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
+	  </table>
+	  <p></p>
+	  <table cellspacing="0" cellpadding="10" border="1" id="Table_total_of_proven_payments" runat="server" bordercolor="black">
+		<tr>
+				<td bgcolor="black">
+				  <strong><font color="white">TOTAL OF PROVEN PAYMENTS:</font></strong>
+				</td>
+				<td>
+				  <p><ASP:Label id="Label_total_of_proven_payments" runat="server" font-bold="True"></ASP:Label></p>
+				</td>
 		</tr>
 	  </table>
 	  <p></p>
@@ -238,7 +305,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				<td>
 				  <p>
 					If you are not ready to disposition this
-					                                                         request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
+																			                            request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>
@@ -298,8 +365,8 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 			  </tr>
 			  <tr>
 				<td>
-				  <p>The current status of this request in WebEMSOF is 
-                        <ASP:Label id="Label_current_status" runat="server" font-bold="True"></ASP:Label>.</p>
+				  <p>The current status of this request in WebEMSOF is
+						<ASP:Label id="Label_current_status" runat="server" font-bold="True"></ASP:Label>.</p>
 				</td>
 			  </tr>
 			  <tr>
