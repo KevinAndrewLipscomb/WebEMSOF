@@ -1335,33 +1335,41 @@ begin
 end;
 
 function TClass_db_emsof_requests.SumOfActualValuesOfRequest(request_id: string): decimal;
+var
+  sum_of_actual_values_of_request_obj: system.object;
 begin
   self.Open;
-  SumOfActualValuesOfRequest := decimal
+  sum_of_actual_values_of_request_obj := bdpcommand.Create
     (
-    bdpcommand.Create
-      (
-      'select sum(actual_value) from emsof_request_master where id = ' + request_id,
-      connection
-      )
-      .ExecuteScalar
-    );
+    'select sum(actual_value) from emsof_request_master where id = ' + request_id,
+    connection
+    )
+    .ExecuteScalar;
   self.Close;
+  if sum_of_actual_values_of_request_obj <> dbnull.value then begin
+    SumOfActualValuesOfRequest := decimal(sum_of_actual_values_of_request_obj);
+  end else begin
+    SumOfActualValuesOfRequest := 0;
+  end;
 end;
 
 function TClass_db_emsof_requests.SumOfProvenPaymentsOfRequest(request_id: string): decimal;
+var
+  sum_of_proven_payments_of_request_obj: system.object;
 begin
   self.Open;
-  SumOfProvenPaymentsOfRequest := decimal
+  sum_of_proven_payments_of_request_obj := bdpcommand.Create
     (
-    bdpcommand.Create
-      (
-      'select sum(amount) from emsof_purchase_payment where master_id = ' + request_id,
-      connection
-      )
-      .ExecuteScalar
-    );
+    'select sum(amount) from emsof_purchase_payment where master_id = ' + request_id,
+    connection
+    )
+    .ExecuteScalar;
   self.Close;
+  if sum_of_proven_payments_of_request_obj <> dbnull.value then begin
+    SumOfProvenPaymentsOfRequest := decimal(sum_of_proven_payments_of_request_obj);
+  end else begin
+    SumOfProvenPaymentsOfRequest := 0;
+  end;
 end;
 
 function TClass_db_emsof_requests.SumOfRequestValues

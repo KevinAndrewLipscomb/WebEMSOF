@@ -234,7 +234,7 @@ begin
     Label_num_items.text := p.num_items.tostring;
     //
     Table_total_of_actual_costs.visible :=
-      (p.status in [NEEDS_INVOICE_COLLECTION,NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
+      (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
     if Table_total_of_actual_costs.visible then begin
       Label_total_of_actual_costs.text := p.biz_emsof_requests.SumOfActualValuesOfRequest(p.request_id).tostring('C');
     end;
@@ -245,12 +245,6 @@ begin
       p.modify_proofs_of_payment := p.biz_emsof_requests.BeOkToTrackPayments(p.status);
       LinkButton_new_proof_of_payment.visible := p.modify_proofs_of_payment;
       BindProofsOfPayment;
-    end;
-    //
-    Table_total_of_proven_payments.visible :=
-      (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
-    if Table_total_of_proven_payments.visible then begin
-      Label_total_of_proven_payments.text := p.biz_emsof_requests.SumOfProvenPaymentsOfRequest(p.request_id).tostring('C');
     end;
     //
     if p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.status) then begin
@@ -476,6 +470,10 @@ begin
   be_datagrid_empty := (p.num_proofs_of_payment = 0);
   TableRow_proofs_of_payment_none.visible := be_datagrid_empty;
   Datagrid_proofs_of_payment.visible := not be_datagrid_empty;
+  //
+  // Manage related controls.
+  //
+  Label_total_of_proven_payments.text := p.biz_emsof_requests.SumOfProvenPaymentsOfRequest(p.request_id).tostring('C');
   //
   // Clear aggregation vars for next bind, if any.
   //
