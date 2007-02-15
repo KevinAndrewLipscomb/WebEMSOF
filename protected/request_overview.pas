@@ -117,6 +117,7 @@ end;
 procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
   bdr: borland.data.provider.bdpdatareader;
+  be_deadline_exempt: boolean;
   county_dictated_appropriation_amount: decimal;
   make_item_requests_deadline: system.datetime;
 begin
@@ -149,6 +150,8 @@ begin
     p.num_items := 0;
     p.sum_of_emsof_antes := 0;
     //
+    be_deadline_exempt := p.biz_emsof_requests.BeDeadlineExempt(session['emsof_request_master_id'].tostring);
+    //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
     p.db.Open;
     //
@@ -170,7 +173,7 @@ begin
         .ExecuteScalar
       );
     //
-    p.be_before_deadline := (datetime.Now <= make_item_requests_deadline);
+    p.be_before_deadline := (datetime.Now <= make_item_requests_deadline) or be_deadline_exempt;
     //
     p.be_finalized := '1' = borland.data.provider.bdpcommand.Create
       (

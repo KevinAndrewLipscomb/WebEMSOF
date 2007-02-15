@@ -76,9 +76,12 @@ type
       e_item: system.object;
       promoter: string
       );
+    function BeDeadlineExempt(master_id: string): boolean;
     function BeOkToApproveEmsofRequest(status: status_type): boolean;
     function BeOkToDrillDown(status: status_type): boolean;
+    function BeOkToForceOpen(e_item: system.object): boolean;
     function BeOkToMarkDone(status: status_type): boolean;
+    function BeOkToRevokeDeadlineExemption(e_item: system.object): boolean;
     function BeOkToTrackInvoices(status: status_type): boolean;
     function BeOkToTrackPayments(status: status_type): boolean;
     function BeOkToViewInvoices(status: status_type): boolean;
@@ -183,6 +186,8 @@ type
       : string;
     function FailUnfinalized: queue;
     procedure Finalize(master_id: string);
+    procedure ForceClosed(master_id: string);
+    procedure ForceOpen(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
     function IdOf(e_item: system.object): string;
@@ -330,7 +335,7 @@ begin
     end;
     approval_timestamp_column := COUNTY;
     next_approver_role := 'emsof-planner';
-    reviewer_descriptor := 'The ' + promoter + ' County EMSOF Coordinator';
+    reviewer_descriptor := 'The ' + promoter + ' EMSOF Coordinator';
     next_status := NEEDS_REGIONAL_COMPLIANCE_CHECK;
     END;
   NEEDS_REGIONAL_COMPLIANCE_CHECK:
@@ -382,6 +387,11 @@ begin
   //
 end;
 
+function TClass_biz_emsof_requests.BeDeadlineExempt(master_id: string): boolean;
+begin
+  BeDeadlineExempt := db_emsof_requests.BeDeadlineExempt(master_id);
+end;
+
 function TClass_biz_emsof_requests.BeOkToApproveEmsofRequest(status: status_type): boolean;
 begin
   BeOkToApproveEmsofRequest := FALSE;
@@ -422,6 +432,33 @@ begin
   end;
 end;
 
+function TClass_biz_emsof_requests.BeOkToForceOpen(e_item: system.object): boolean;
+begin
+  BeOkToForceOpen :=
+    (
+      (not db_emsof_requests.BeDeadlineExempt(db_emsof_requests.IdOf(e_item)))
+    and
+      (
+      StatusOf(e_item) in
+        [
+        NEEDS_COUNTY_APPROVAL,
+        NEEDS_SENT_TO_PA_DOH_EMSO,
+        NEEDS_PA_DOH_EMSO_APPROVAL,
+        NEEDS_INVOICE_COLLECTION,
+        NEEDS_CANCELED_CHECK_COLLECTION,
+        NEEDS_REIMBURSEMENT_ISSUANCE,
+        REJECTED,
+        FAILED_DEADLINE
+        ]
+      )
+    and
+      (
+      httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator')
+      )
+    );
+end;
+
 function TClass_biz_emsof_requests.BeOkToMarkDone(status: status_type): boolean;
 begin
   BeOkToMarkDone := FALSE;
@@ -439,6 +476,19 @@ begin
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-accountant')
       or httpcontext.current.user.IsInRole('director');
   end;
+end;
+
+function TClass_biz_emsof_requests.BeOkToRevokeDeadlineExemption(e_item: system.object): boolean;
+begin
+  BeOkToRevokeDeadlineExemption :=
+    (
+      (db_emsof_requests.BeDeadlineExempt(db_emsof_requests.IdOf(e_item)))
+    and
+      (
+      httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator')
+      )
+    );
 end;
 
 function TClass_biz_emsof_requests.BeOkToTrackInvoices(status: status_type): boolean;
@@ -675,6 +725,16 @@ end;
 procedure TClass_biz_emsof_requests.Finalize(master_id: string);
 begin
   db_emsof_requests.Finalize(master_id);
+end;
+
+procedure TClass_biz_emsof_requests.ForceClosed(master_id: string);
+begin
+  db_emsof_requests.ForceClosed(master_id);
+end;
+
+procedure TClass_biz_emsof_requests.ForceOpen(master_id: string);
+begin
+  db_emsof_requests.ForceOpen(master_id);
 end;
 
 function TClass_biz_emsof_requests.FyDesignatorOf(e_item: system.object): string;

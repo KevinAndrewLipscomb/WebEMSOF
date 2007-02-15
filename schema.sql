@@ -279,6 +279,7 @@ CREATE TABLE emsof_request_master (
   regional_director_approval_timestamp datetime default NULL,
   state_approval_timestamp datetime default NULL,
   actual_value decimal(10,2) unsigned not null default 0,
+  be_deadline_exempt boolean NOT NULL DEFAULT '0',
   PRIMARY KEY  (id),
   KEY status_code (status_code),
   KEY county_dictated_appropriation_id (county_dictated_appropriation_id)

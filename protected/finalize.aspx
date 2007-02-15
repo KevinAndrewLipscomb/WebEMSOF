@@ -82,7 +82,7 @@
                             <br>
                             <ASP:CheckBox id="CheckBox_understand_wait_for_approval_to_order" runat="server" text="Yes"></ASP:CheckBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <ASP:LinkButton id="LinkButton_request_overview_7" runat="server">No, take me back</ASP:LinkButton></p></li>
 						<li>
-					  <p>After you receive the Notice To Proceed message, these deadlines will apply:<br>
+					  <p>After you receive the Notice To Proceed message, these deadlines will apply (unless explicitly waived by the Regional Council):<br>
                             <br>
                             <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
                                 <tr>
