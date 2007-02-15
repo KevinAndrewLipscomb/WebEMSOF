@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                                                                                                                           [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+		                                                                                                                                         [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -35,76 +35,76 @@
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
 			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
-				                                                                                          that the pending action has been completed.</td>
+																												        that the pending action has been completed.</td>
 			</tr>
 		</table>
 	  </p>
 	  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
-        <tr>
-          <td>
-            <table cellspacing="0" cellpadding="5" border="0">
-              <tr>
-                <td bgcolor="#f5f5f5">
-                  <p align="right">
-                    <strong>Allocation:</strong>
-                  </p>
-                </td>
-                <td align="right">
-                  <p align="right">
-                    
-                  </p>
-                  <asp:label id="Label_parent_appropriation_amount" runat="server"></asp:label>
-                </td>
-                <td>
-                  from
-                  <asp:label id="Label_sponsor_county" runat="server">
-                  </asp:label>&nbsp;County
-                </td>
-              </tr>
-              <tr id="TableRow_sum_of_emsof_antes" runat="server">
-                <td>
-                  <p align="right">
-                    -
-                  </p>
-                </td>
-                <td align="right">
-                  <p align="right">
-                    
-                  </p>
-                  <asp:label id="Label_sum_of_emsof_antes" runat="server"
-                  font-underline="True"></asp:label>
-                </td>
-                <td>
-                  requested from EMSOF (below)
-                </td>
-              </tr>
-              <tr id="TableRow_unrequested_amount" runat="server">
-                <td>
-                  <p align="right">
-                    =
-                  </p>
-                </td>
-                <td align="right">
-                  <p align="right">
-                    
-                  </p>
-                  <asp:label id="Label_unused_amount" runat="server">
-                  </asp:label>
-                </td>
-                <td>
-                  unused
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+		<tr>
+		  <td>
+			<table cellspacing="0" cellpadding="5" border="0">
+			  <tr>
+				<td bgcolor="#f5f5f5">
+				  <p align="right">
+					<strong>Allocation:</strong>
+				  </p>
+				</td>
+				<td align="right">
+				  <p align="right">
+
+				  </p>
+				  <asp:label id="Label_parent_appropriation_amount" runat="server"></asp:label>
+				</td>
+				<td>
+				  from
+				  <asp:label id="Label_sponsor_county" runat="server">
+				  </asp:label>&nbsp;County
+				</td>
+			  </tr>
+			  <tr id="TableRow_sum_of_emsof_antes" runat="server">
+				<td>
+				  <p align="right">
+					-
+				  </p>
+				</td>
+				<td align="right">
+				  <p align="right">
+
+				  </p>
+				  <asp:label id="Label_sum_of_emsof_antes" runat="server"
+				  font-underline="True"></asp:label>
+				</td>
+				<td>
+				  requested from EMSOF (below)
+				</td>
+			  </tr>
+			  <tr id="TableRow_unrequested_amount" runat="server">
+				<td>
+				  <p align="right">
+					=
+				  </p>
+				</td>
+				<td align="right">
+				  <p align="right">
+
+				  </p>
+				  <asp:label id="Label_unused_amount" runat="server">
+				  </asp:label>
+				</td>
+				<td>
+				  unused
+				</td>
+			  </tr>
+			</table>
+		  </td>
+		</tr>
 	  </table>
-      <p>
+	  <p>
 		<table id="Table_prior_approvals" bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" runat="server">
-            <tr><td>
-                <table cellspacing="0" cellpadding="5" border="0">
-      <tr>
-                      <td bgcolor="#f5f5f5" colspan="2"><strong>Prior approvals</strong></td>
+			<tr><td>
+				<table cellspacing="0" cellpadding="5" border="0">
+	  <tr>
+					  <td bgcolor="#f5f5f5" colspan="2"><strong>Prior approvals</strong></td>
 			  </tr>
 	  <tr>
 		<td><ASP:Label id="Label_sponsor_county_2" runat="server"></ASP:Label>&nbsp;County:</td>
@@ -315,7 +315,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				<td>
 				  <p>
 					If you are not ready to disposition this
-																			                                  request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
+																			                                                request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>
@@ -385,8 +385,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 					<tr>
 					  <td bgcolor="#f5f5f5"><strong>To mark the pending action as DONE...</td>
 					</tr>
-					<tr>
-					  <td>
+					<tr><td>
 						Check&nbsp;
 						<asp:checkbox id="CheckBox_mark_done" runat="server">
 						</asp:checkbox>&nbsp;and click
@@ -400,6 +399,33 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 		  </td>
 		</tr>
 	  </table>
+      <p>
+		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_extraordinary_actions" runat="server">
+            <tr>
+              <td>
+                <table cellspacing="0" cellpadding="10" border="0">
+                    <tr>
+                      <td bgcolor="#f5f5f5"><strong>Extraordinary actions</strong></td>
+                    </tr>
+                    <tr>
+                      <td><p>
+                          <table cellspacing="0" cellpadding="10" border="0">
+                              <tr id="TableRow_force_open" runat="server">
+                                <td><small>Force this request back to NEEDS_SERVICE_FINALIZATION status and make it exempt from normal deadlines.&nbsp; This action will cause 
+                                    <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;to forget about the invoices and proofs of payment that are currently associated with this request.&nbsp; The request must then advance through the entire approval and evidence collection process again.</small></td>
+								<td valign="top"><ASP:Button id="Button_force_open" runat="server" text="Do"></ASP:Button></td>
+                              </tr>
+							  <tr id="TableRow_force_closed" runat="server">
+								<td><small>Revoke this request's deadline exemption.&nbsp; This action will prevent the service from making any further modifications to this request.&nbsp; After taking this action, you will still be able to accept or reject the request as usual.</small></td>
+								<td valign="top"><ASP:Button id="Button_force_close" runat="server" text="Do"></ASP:Button></td>
+							  </tr>
+						  </table>
+                        </p></td>
+                    </tr>
+                </table></td>
+            </tr>
+        </table>
+      </p>
 	  <p></p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder><sstchur:SmartScroller runat="server" />
 	</form>

@@ -49,6 +49,8 @@ type
     procedure LinkButton_new_proof_of_payment_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_proofs_of_payment_DeleteCommand(source: System.Object; 
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure Button_force_open_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_force_close_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -110,6 +112,12 @@ type
     Table_total_of_proven_payments: System.Web.UI.HtmlControls.HtmlTable;
     Label_total_of_emsof_amounts: System.Web.UI.WebControls.Label;
     Table_total_of_emsof_amounts: System.Web.UI.HtmlControls.HtmlTable;
+    Button_force_open: System.Web.UI.WebControls.Button;
+    Table_extraordinary_actions: System.Web.UI.HtmlControls.HtmlTable;
+    TableRow_force_open: System.Web.UI.HtmlControls.HtmlTableRow;
+    Label_application_name: System.Web.UI.WebControls.Label;
+    Button_force_close: System.Web.UI.WebControls.Button;
+    TableRow_force_closed: System.Web.UI.HtmlControls.HtmlTableRow;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -150,6 +158,8 @@ begin
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
+  Include(Self.Button_force_open.Click, Self.Button_force_open_Click);
+  Include(Self.Button_force_close.Click, Self.Button_force_close_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_full_request_review_approve_PreRender);
 end;
@@ -195,6 +205,13 @@ begin
       TClass_biz_appropriations.Create.ParentAppropriationOfEmsofRequest(p.biz_emsof_requests.IdOf(session['e_item']));
     Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
     Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
+    //
+    TableRow_force_open.visible := p.biz_emsof_requests.BeOkToForceOpen(session['e_item']);
+    TableRow_force_closed.visible := p.biz_emsof_requests.BeOkToRevokeDeadlineExemption(session['e_item']);
+    Table_extraordinary_actions.visible := TableRow_force_open.visible or TableRow_force_closed.visible;
+    if Table_extraordinary_actions.visible then begin
+      Label_application_name.text := configurationsettings.appsettings['application_name'];
+    end;
     //
     Table_prior_approvals.visible := FALSE;
     TableRow_regional_planner_approval_timestamp.visible := FALSE;
@@ -279,6 +296,20 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.Button_force_close_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  p.biz_emsof_requests.ForceClosed(p.request_id);
+  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+end;
+
+procedure TWebForm_full_request_review_approve.Button_force_open_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  p.biz_emsof_requests.ForceOpen(p.request_id);
+  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
 procedure TWebForm_full_request_review_approve.DataGrid_proofs_of_payment_DeleteCommand(source: System.Object;

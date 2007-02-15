@@ -54,6 +54,7 @@ type
       approval_timestamp_column: approval_timestamp_column_type;
       amount_to_return_to_county: decimal = 0
       );
+    function BeDeadlineExempt(master_id: string): boolean;
     function BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
       (
       region_dictated_appropriation_id: string
@@ -154,6 +155,8 @@ type
       : string;
     function FailUnfinalized: queue;
     procedure Finalize(master_id: string);
+    procedure ForceClosed(master_id: string);
+    procedure ForceOpen(master_id: string);
     function FyDesignatorOf(e_item: system.object): string;
     function HasWishList(master_id: string): boolean;
     function IdOf(e_item: system.object): string;
@@ -413,6 +416,18 @@ begin
     borland.data.provider.bdpcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
     self.Close;
   end;
+end;
+
+function TClass_db_emsof_requests.BeDeadlineExempt(master_id: string): boolean;
+begin
+  self.Open;
+  BeDeadlineExempt := '1' = bdpcommand.Create
+    (
+    'select be_deadline_exempt from emsof_request_master where id = ' + master_id,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
@@ -986,6 +1001,48 @@ begin
   self.Open;
   borland.data.provider.bdpcommand.Create
     (db_trail.Saved('update emsof_request_master set status_code = 3 where id = ' + master_id),connection)
+    .ExecuteNonQuery;
+  self.Close;
+end;
+
+procedure TClass_db_emsof_requests.ForceClosed(master_id: string);
+begin
+  self.Open;
+  bdpcommand.Create
+    (
+    db_trail.Saved('update emsof_request_master set be_deadline_exempt = FALSE where id = ' + master_id),connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
+end;
+
+procedure TClass_db_emsof_requests.ForceOpen(master_id: string);
+begin
+  self.Open;
+  bdpcommand.Create
+    (
+    db_trail.Saved
+      (
+      'START TRANSACTION;'
+      + ' update emsof_request_master'
+      +   ' set status_code = 2'
+      +     ' , be_deadline_exempt = TRUE'
+      +   ' where id = ' + master_id
+      + ';'
+      + ' update emsof_request_detail'
+      +   ' set status_code = 1'
+      +     ' , invoice_designator = ""'
+      +     ' , actual_quantity = 0'
+      +     ' , actual_subtotal_cost = 0'
+      +     ' , actual_emsof_ante = 0'
+      +   ' where master_id = ' + master_id
+      + ';'
+      + ' delete from emsof_purchase_payment where master_id = ' + master_id
+      + ';'
+      + ' COMMIT'
+      ),
+    connection
+    )
     .ExecuteNonQuery;
   self.Close;
 end;
