@@ -45,6 +45,12 @@ type
       encoded_password: string
       )
       : boolean;
+    procedure IssueForcedOpenNotice
+      (
+      service_id: string;
+      sponsor_region_name: string;
+      county_code: string
+      );
     procedure IssueNoticeToProceed
       (
       service_id: string;
@@ -170,6 +176,41 @@ function TClass_biz_accounts.Exists
   : boolean;
 begin
   Exists := db_accounts.Exists(user_kind,user_id,encoded_password);
+end;
+
+procedure TClass_biz_accounts.IssueForcedOpenNotice
+  (
+  service_id: string;
+  sponsor_region_name: string;
+  county_code: string
+  );
+var
+  service_name: string;
+begin
+  service_name := biz_services.NameOf(service_id);
+  //
+  ki.SmtpMailSend
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    EmailAddressByKindId('service',service_id)
+    + ',' + EmailAddressByKindId('county',county_code)
+    + ',' + EmailTargetByRole('emsof-coordinator'),
+    'Special re-opening of EMSOF request',
+    sponsor_region_name + ' has re-opened an EMSOF request from ' + service_name + ' for additional rework.  '
+    + 'The re-opened request is temporarily exempt from normal submission deadlines but ' + sponsor_region_name + ' reserves the '
+    + 'right to rescind this exemption without notice.' + NEW_LINE
+    + NEW_LINE
+    + service_name + ' can rework this EMSOF request by visiting:' + NEW_LINE
+    + NEW_LINE
+    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+    + NEW_LINE
+    + sponsor_region_name + ' can be contacted as follows:' + NEW_LINE
+    + NEW_LINE
+    + '   ' + EmailTargetByRole('emsof-coordinator') + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    );
 end;
 
 procedure TClass_biz_accounts.IssueNoticeToProceed

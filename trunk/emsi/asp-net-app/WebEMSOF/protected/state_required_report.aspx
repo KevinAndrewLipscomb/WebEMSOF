@@ -10,8 +10,8 @@
 	  <p>
 		<small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                                                 [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                                                 [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
+			                                                                       [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
+			                                                                       [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
 			<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
 		</small>
@@ -67,51 +67,55 @@
                       <td>
                         <asp:datagrid id="DataGrid_state_export_batch" runat="server" autogeneratecolumns="False" visible="False"
                         font-size="X-Small" showfooter="True" bordercolor="Gainsboro">
-                          <footerstyle font-bold="True" backcolor="LightGray"></footerstyle>
-                          <alternatingitemstyle backcolor="WhiteSmoke"></alternatingitemstyle>
-                          <headerstyle backcolor="LightGray"></headerstyle>
-                          <columns>
-                            <asp:boundcolumn datafield="service_name" readonly="true" headertext="Organization Name">
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="life_support_level" readonly="true" headertext="Type of Organization">
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="equipment_description" readonly="true" headertext="Equipment/Program">
-                              <footerstyle horizontalalign="Right"></footerstyle>
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="quantity" readonly="true" headertext="# Units">
-                              <itemstyle horizontalalign="Right"></itemstyle>
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="unit_cost" readonly="true" headertext="Unit Cost" dataformatstring="{0:C}">
-                              <itemstyle horizontalalign="Right"></itemstyle>
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="total_cost" readonly="true" headertext="Total Cost Amount"
-                            dataformatstring="{0:C}">
-                              <headerstyle horizontalalign="Center"></headerstyle>
-                              <itemstyle horizontalalign="Right"></itemstyle>
-                              <footerstyle horizontalalign="Right"></footerstyle>
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="emsof_ante" readonly="true" headertext="EMSOF Amount" dataformatstring="{0:C}">
-                              <headerstyle horizontalalign="Center"></headerstyle>
-                              <itemstyle horizontalalign="Right"></itemstyle>
-                              <footerstyle horizontalalign="Right"></footerstyle>
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="provider_match" readonly="true" headertext="Provider Match"
-                            dataformatstring="{0:C}">
-                              <headerstyle horizontalalign="Center"></headerstyle>
-                              <itemstyle horizontalalign="Right"></itemstyle>
-                              <footerstyle horizontalalign="Right"></footerstyle>
-                            </asp:boundcolumn>
-                            <asp:boundcolumn datafield="recommendation" readonly="true" headertext="Recomm">
-                              <headerstyle horizontalalign="Center"></headerstyle>
-                              <itemstyle horizontalalign="Center"></itemstyle>
-                            </asp:boundcolumn>
-                            <asp:boundcolumn readonly="true" headertext="EMSOF Approved"></asp:boundcolumn>
-                            <asp:boundcolumn readonly="true" headertext="Actual Total Cost" dataformatstring="{0:C}">
-                              <headerstyle horizontalalign="Center"></headerstyle>
-                              <itemstyle horizontalalign="Right"></itemstyle>
-                              <footerstyle horizontalalign="Right"></footerstyle>
-                            </asp:boundcolumn>
-                          </columns>
+                                <FooterStyle font-bold="True" backcolor="LightGray"></FooterStyle>
+                                <AlternatingItemStyle backcolor="WhiteSmoke"></AlternatingItemStyle>
+                                <HeaderStyle backcolor="LightGray"></HeaderStyle>
+                                <Columns>
+                                  <ASP:BoundColumn datafield="w_num" readonly="True" headertext="W#">
+                                    <HeaderStyle font-italic="True"></HeaderStyle>
+                                    <ItemStyle font-italic="True"></ItemStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="be_reopened_after_going_to_state" readonly="True" headertext="*">
+                                    <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                                    <ItemStyle font-bold="True" horizontalalign="Center"></ItemStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="service_name" readonly="True" headertext="Organization Name"></ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="life_support_level" readonly="True" headertext="Type of Organization"></ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="equipment_description" readonly="True" headertext="Equipment/Program">
+                                    <FooterStyle horizontalalign="Right"></FooterStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="quantity" readonly="True" headertext="# Units">
+                                    <ItemStyle horizontalalign="Right"></ItemStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="unit_cost" readonly="True" headertext="Unit Cost" dataformatstring="{0:C}">
+                                    <ItemStyle horizontalalign="Right"></ItemStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="total_cost" readonly="True" headertext="Total Cost Amount" dataformatstring="{0:C}">
+                                    <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                                    <ItemStyle horizontalalign="Right"></ItemStyle>
+                                    <FooterStyle horizontalalign="Right"></FooterStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF Amount" dataformatstring="{0:C}">
+                                    <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                                    <ItemStyle horizontalalign="Right"></ItemStyle>
+                                    <FooterStyle horizontalalign="Right"></FooterStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="provider_match" readonly="True" headertext="Provider Match" dataformatstring="{0:C}">
+                                    <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                                    <ItemStyle horizontalalign="Right"></ItemStyle>
+                                    <FooterStyle horizontalalign="Right"></FooterStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn datafield="recommendation" readonly="True" headertext="Recomm">
+                                    <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                                    <ItemStyle horizontalalign="Center"></ItemStyle>
+                                  </ASP:BoundColumn>
+                                  <ASP:BoundColumn readonly="True" headertext="EMSOF Approved"></ASP:BoundColumn>
+                                  <ASP:BoundColumn readonly="True" headertext="Actual Total Cost" dataformatstring="{0:C}">
+                                    <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                                    <ItemStyle horizontalalign="Right"></ItemStyle>
+                                    <FooterStyle horizontalalign="Right"></FooterStyle>
+                                  </ASP:BoundColumn>
+                                </Columns>
                         </asp:datagrid>
                       </td>
                     </tr>
@@ -191,6 +195,13 @@
                             </td>
                           </tr>
                         </table>
+                              <p>
+                                <table cellspacing="0" cellpadding="5" border="0" id="Table_replacement_note" runat="server">
+                                    <tr>
+                                      <td valign="top">*</td><td>Rows marked with a star in this column are <u>replacements</u> for rows that were reported in a previous funding round in this fiscal year.&nbsp; PA DOH EMSO should <u>delete</u> the associated batch of rows from its previous records and use the items in this batch instead.&nbsp; Starting with FY0607 Funding Round 2, the "W#" can be used to positively determine associated batches.</td>
+                                    </tr>
+                                </table>
+                              </p>
                       </td>
                     </tr>
                   </table>

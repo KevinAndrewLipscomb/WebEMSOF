@@ -251,6 +251,7 @@ type
     function TcciOfPasswordResetEmailAddress: cardinal;
     function TcciOfServiceName: cardinal;
     function TcciOfLeftoverOrShortage: cardinal;
+    function TcciOfSrrReplacementRowIndicator: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
     procedure Unreject
@@ -735,6 +736,7 @@ end;
 procedure TClass_biz_emsof_requests.ForceOpen(master_id: string);
 begin
   db_emsof_requests.ForceOpen(master_id);
+  biz_accounts.IssueForcedOpenNotice(ServiceIdOfMasterId(master_id),SponsorRegionNameOf(master_id),CountyCodeOfMasterId(master_id));
 end;
 
 function TClass_biz_emsof_requests.FyDesignatorOf(e_item: system.object): string;
@@ -1145,6 +1147,11 @@ end;
 function TClass_biz_emsof_requests.TcciOfLeftoverOrShortage: cardinal;
 begin
   TcciOfLeftoverOrShortage := db_emsof_requests.TcciOfLeftoverOrShortage;
+end;
+
+function TClass_biz_emsof_requests.TcciOfSrrReplacementRowIndicator: cardinal;
+begin
+  TcciOfSrrReplacementRowIndicator := db_emsof_requests.TcciOfSrrReplacementRowIndicator;
 end;
 
 function TClass_biz_emsof_requests.TcciOfStatusCode: cardinal;

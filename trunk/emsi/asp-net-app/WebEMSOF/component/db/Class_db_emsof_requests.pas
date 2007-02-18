@@ -234,6 +234,7 @@ type
     function TcciOfPasswordResetEmailAddress: cardinal;
     function TcciOfServiceName: cardinal;
     function TcciOfLeftoverOrShortage: cardinal;
+    function TcciOfSrrReplacementRowIndicator: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
     procedure Unreject(master_id: string);
@@ -242,6 +243,35 @@ type
 implementation
 
 const
+  FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION = 'select emsof_request_master.id' // column 0
+  + ' , service.id as service_id'                                                       // column 1
+  + ' , service.affiliate_num'                                                          // column 2
+  + ' , service.name as service_name'                                                   // column 3
+  + ' , county_code_name_map.code as county_code'                                       // column 4
+  + ' , county_code_name_map.name as sponsor_county'                                    // column 5
+  + ' , fiscal_year.designator as fiscal_year_designator'                               // column 6
+  + ' , emsof_request_master.value as emsof_ante'                                       // column 7
+  + ' , county_dictated_appropriation.amount as appropriation'                          // column 8
+  + ' , if((county_dictated_appropriation.amount > emsof_request_master.value),(county_dictated_appropriation.amount - emsof_request_master.value),(-emsof_request_master.shortage)) as leftover_or_shortage'
+                                                                                        // column 9
+  + ' , if(has_wish_list,"YES","no") as has_wish_list'                                  // column 10
+  + ' , password_reset_email_address'                                                   // column 11
+  + ' , status_code'                                                                    // column 12
+  + ' , request_status_code_description_map.description as status_description'          // column 13
+  + ' from emsof_request_master'
+  +   ' join county_dictated_appropriation'
+  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+  +   ' join region_dictated_appropriation'
+  +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+  +   ' join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)'
+  +   ' join service on (service.id=county_dictated_appropriation.service_id)'
+  +   ' join service_user on (service_user.id=service.id)'
+  +   ' join state_dictated_appropriation'
+  +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+  +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
+  +   ' join request_status_code_description_map on (request_status_code_description_map.code=status_code)';
+  MAX_FULL_REQUEST_REVIEW_APPROVE_DGI_INDEX = 13;
+  //
   TCCI_ID = 0;
   TCCI_SERVICE_ID = 1;
   TCCI_AFFILIATE_NUM = 2;
@@ -261,6 +291,8 @@ const
   TCCI_FULL_REQUEST_ACTUALS = 2;
   //
   TCCI_PROOF_OF_PAYMENT_ID = 0;
+  //
+  TCCI_SRR_REPLACEMENT_ROW_INDICATOR = 1;
 
 procedure TClass_db_emsof_requests.BindOverview
   (
@@ -282,34 +314,7 @@ begin
       where_clause := where_clause + ' and ' + and_parm;
     end;
   end;
-  cmdText := 'select emsof_request_master.id'                                  // column 0
-  + ' , service.id as service_id'                                              // column 1
-  + ' , service.affiliate_num'                                                 // column 2
-  + ' , service.name as service_name'                                          // column 3
-  + ' , county_code_name_map.code as county_code'                              // column 4
-  + ' , county_code_name_map.name as sponsor_county'                           // column 5
-  + ' , fiscal_year.designator as fiscal_year_designator'                      // column 6
-  + ' , emsof_request_master.value as emsof_ante'                              // column 7
-  + ' , county_dictated_appropriation.amount as appropriation'                 // column 8
-  + ' , if((county_dictated_appropriation.amount > emsof_request_master.value),(county_dictated_appropriation.amount - emsof_request_master.value),(-emsof_request_master.shortage)) as leftover_or_shortage'                // column 9
-  + ' , if(has_wish_list,"YES","no") as has_wish_list'                         // column 10
-  + ' , password_reset_email_address'                                          // column 11
-  + ' , status_code'                                                           // column 12
-  + ' , request_status_code_description_map.description as status_description' // column 13
-  + ' from emsof_request_master'
-  +   ' join county_dictated_appropriation'
-  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-  +   ' join region_dictated_appropriation'
-  +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-  +   ' join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)'
-  +   ' join service on (service.id=county_dictated_appropriation.service_id)'
-  +   ' join service_user on (service_user.id=service.id)'
-  +   ' join state_dictated_appropriation'
-  +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
-  +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
-  +   ' join request_status_code_description_map on (request_status_code_description_map.code=status_code)'
-  + where_clause
-  + ' order by ' + order_by_field_name;
+  cmdText := FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION + where_clause + ' order by ' + order_by_field_name;
   if be_order_ascending then begin
     cmdText := cmdText + ' asc';
   end else begin
@@ -382,13 +387,18 @@ var
 begin
   if approval_timestamp_column <> NONE then begin
     cmdText := system.string.EMPTY;
-    if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') then begin
+    if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') or (next_status = 8) then begin
       cmdText := 'START TRANSACTION; ';
     end;
     cmdText := cmdText
     + ' update emsof_request_master'
     + ' set status_code = ' + next_status.tostring
-    +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()'
+    +   ' , ' + system.object(approval_timestamp_column).tostring + '_approval_timestamp = now()';
+    if next_status = 8 then begin
+      cmdText := cmdText
+      + ' , be_reopened_after_going_to_state = FALSE';
+    end;
+    cmdText := cmdText
     + ' where id = ' + master_id
     + '; ';
     if next_status = 8 then begin
@@ -672,16 +682,18 @@ begin
   self.Open;
   DataGrid(target).datasource := borland.data.provider.bdpcommand.Create
     (
-    'select service.name as service_name'
+    'select concat("W",master_id) as w_num'                                                // column 0
+    + ' , if(be_reopened_after_going_to_state,"*","") as be_reopened_after_going_to_state' // column 1
+    + ' , service.name as service_name'                                                    // column 2
     + ' , if((be_als_amb or be_als_squad or be_air_amb),"ALS",if(be_bls_amb,"BLS",if(be_rescue,"RESCUE","QRS")))'
-    +     ' as life_support_level'
-    + ' , description as equipment_description'
-    + ' , quantity'
-    + ' , unit_cost'
-    + ' , quantity*unit_cost as total_cost'
-    + ' , emsof_ante'
-    + ' , (quantity*unit_cost - emsof_ante) as provider_match'
-    + ' , "YES" as recommendation'
+    +     ' as life_support_level'                                                         // column 3
+    + ' , description as equipment_description'                                            // column 4
+    + ' , quantity'                                                                        // column 5
+    + ' , unit_cost'                                                                       // column 6
+    + ' , quantity*unit_cost as total_cost'                                                // column 7
+    + ' , emsof_ante'                                                                      // column 8
+    + ' , (quantity*unit_cost - emsof_ante) as provider_match'                             // column 9
+    + ' , "YES" as recommendation'                                                         // column 10
     + ' from emsof_request_detail'
     +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
     +   ' join county_dictated_appropriation'
@@ -1027,6 +1039,7 @@ begin
       + ' update emsof_request_master'
       +   ' set status_code = 2'
       +     ' , be_deadline_exempt = TRUE'
+      +     ' , be_reopened_after_going_to_state = TRUE'
       +   ' where id = ' + master_id
       + ';'
       + ' update emsof_request_detail'
@@ -1544,6 +1557,11 @@ end;
 function TClass_db_emsof_requests.TcciOfLeftoverOrShortage: cardinal;
 begin
   TcciOfLeftoverOrShortage := TCCI_LEFTOVER_OR_SHORTAGE;
+end;
+
+function TClass_db_emsof_requests.TcciOfSrrReplacementRowIndicator: cardinal;
+begin
+  TcciOfSrrReplacementRowIndicator := TCCI_SRR_REPLACEMENT_ROW_INDICATOR;
 end;
 
 function TClass_db_emsof_requests.TcciOfStatusCode: cardinal;
