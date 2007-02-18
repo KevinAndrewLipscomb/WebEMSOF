@@ -19,6 +19,7 @@ type
     RECORD
     amendment_num_string: string;
     be_datagrid_empty: boolean;
+    be_replacement_rows_present: boolean;
     biz_appropriations: TClass_biz_appropriations;
     biz_emsof_requests: TClass_biz_emsof_requests;
     grand_total_cost: decimal;
@@ -69,6 +70,7 @@ type
     DropDownList_amendment: System.Web.UI.WebControls.DropDownList;
     Label_total_num_requests: System.Web.UI.WebControls.Label;
     LinkButton_export_scratch_copy: System.Web.UI.WebControls.LinkButton;
+    Table_replacement_note: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -92,10 +94,10 @@ begin
   Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
   Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
   Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
-  Include(Self.DropDownList_amendment.SelectedIndexChanged, Self.DropDownList_amendment_SelectedIndexChanged);
-  Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
   Include(Self.LinkButton_export_scratch_copy.Click, Self.LinkButton_export_scratch_copy_Click);
   Include(Self.LinkButton_transmit_to_state.Click, Self.LinkButton_transmit_to_state_Click);
+  Include(Self.DropDownList_amendment.SelectedIndexChanged, Self.DropDownList_amendment_SelectedIndexChanged);
+  Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_state_required_report_PreRender);
 end;
@@ -116,10 +118,12 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_required_report';
+    Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize implementation-wide vars.
     //
     p.amendment_num_string := '0';
+    p.be_replacement_rows_present := FALSE;
     p.biz_appropriations := TClass_biz_appropriations.Create;
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.grand_total_cost := 0;
@@ -240,6 +244,8 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     p.num_datagrid_rows := p.num_datagrid_rows + 1;
+    p.be_replacement_rows_present := p.be_replacement_rows_present
+      or (e.item.cells[p.biz_emsof_requests.TcciOfSrrReplacementRowIndicator].text <> '&nbsp;');
     p.grand_total_cost := p.grand_total_cost + convert.ToDecimal(databinder.Eval(e.item.dataitem, 'total_cost'));
     p.total_emsof_ante := p.total_emsof_ante + convert.ToDecimal(databinder.Eval(e.item.dataitem, 'emsof_ante'));
     p.total_provider_match := p.total_provider_match + convert.ToDecimal(databinder.Eval(e.item.dataitem, 'provider_match'));
@@ -276,6 +282,7 @@ begin
   DataGrid_state_export_batch.visible := not p.be_datagrid_empty;
   LinkButton_transmit_to_state.enabled := not p.be_datagrid_empty;
   LinkButton_export_scratch_copy.enabled := not p.be_datagrid_empty;
+  Table_replacement_note.visible := p.be_replacement_rows_present;
   //
   // Clear aggregation vars for next bind, if any.
   //
