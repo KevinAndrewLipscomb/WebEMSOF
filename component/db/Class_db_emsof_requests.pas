@@ -129,8 +129,6 @@ type
       amendment_num_string: string;
       region_code: string
       );
-    function CloseInvoiceSubmissionWindow: queue;
-    function CloseProofOfPaymentSubmissionWindow: queue;
     function CountyApprovalTimestampOf(master_id: string): datetime;
     function CountyCodeOfMasterId(master_id: string): string;
     function CountyDictumIdOf(master_id: string): string;
@@ -715,108 +713,6 @@ begin
     .ExecuteReader;
   DataGrid(target).DataBind;
   self.Close;
-end;
-
-function TClass_db_emsof_requests.CloseInvoiceSubmissionWindow: queue;
-var
-  bdr: bdpdatareader;
-  id_q: queue;
-  transaction: bdptransaction;
-begin
-  id_q := queue.Create;
-  self.Open;
-  transaction := connection.BeginTransaction;
-  try
-    bdr := bdpcommand.Create('select id from emsof_request_master where status_code < 9',connection,transaction).ExecuteReader;
-    while bdr.Read do begin
-      id_q.Enqueue(bdr['id']);
-    end;
-    bdr.Close;
-    //
-    // Promote master records associated with at least one recieved invoice.
-    //
-    bdpcommand.Create
-      (
-      db_trail.Saved
-        (
-        'update emsof_request_master'
-        + ' join emsof_request_detail on (emsof_request_detail.master_id=emsof_request_master.id)'
-        + ' set emsof_request_master.status_code = 9'
-        + ' where emsof_request_master.status_code < 9'
-        +   ' and actual_emsof_ante > 0'
-        ),
-      connection,
-      transaction
-      )
-      .ExecuteNonQuery;
-    //
-    // Fail any master records that are still in the invoice collection status.
-    //
-    bdpcommand.Create
-      (
-      db_trail.Saved('update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 9'),
-      connection,
-      transaction
-      )
-      .ExecuteNonQuery;
-    transaction.Commit;
-  except
-    transaction.Rollback;
-    raise;
-  end;
-  self.Close;
-  CloseInvoiceSubmissionWindow := id_q;
-end;
-
-function TClass_db_emsof_requests.CloseProofOfPaymentSubmissionWindow: queue;
-var
-  bdr: bdpdatareader;
-  id_q: queue;
-  transaction: bdptransaction;
-begin
-  id_q := queue.Create;
-  self.Open;
-  transaction := connection.BeginTransaction;
-  try
-    bdr := bdpcommand.Create('select id from emsof_request_master where status_code < 10',connection,transaction).ExecuteReader;
-    while bdr.Read do begin
-      id_q.Enqueue(bdr['id']);
-    end;
-    bdr.Close;
-    //
-    // Promote master records associated with at least one recieved proof-of-payment.
-    //
-    bdpcommand.Create
-      (
-      db_trail.Saved
-        (
-        'update emsof_request_master'
-        + ' left join emsof_purchase_payment on (emsof_purchase_payment.master_id=emsof_request_master.id)'
-        + ' set emsof_request_master.status_code = 10'
-        + ' where emsof_request_master.status_code < 10'
-        +   ' and amount > 0'
-        ),
-      connection,
-      transaction
-      )
-      .ExecuteNonQuery;
-    //
-    // Fail any master records that are still in the proof-of-payment collection status.
-    //
-    bdpcommand.Create
-      (
-      db_trail.Saved('update emsof_request_master set emsof_request_master.status_code = 16 where status_code < 10'),
-      connection,
-      transaction
-      )
-      .ExecuteNonQuery;
-    transaction.Commit;
-  except
-    transaction.Rollback;
-    raise;
-  end;
-  self.Close;
-  CloseProofOfPaymentSubmissionWindow := id_q;
 end;
 
 function TClass_db_emsof_requests.CountyApprovalTimestampOf(master_id: string): datetime;
