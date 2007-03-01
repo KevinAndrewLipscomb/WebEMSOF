@@ -159,8 +159,6 @@ type
       amendment_num_string: string;
       regional_staffer_user_id: string
       );
-    function CloseInvoiceSubmissionWindow: queue;
-    function CloseProofOfPaymentSubmissionWindow: queue;
     function CountyApprovalTimestampOf(master_id: string): datetime;
     function CountyCodeOfMasterId(master_id: string): string;
     function CountyDictumIdOf(master_id: string): string;
@@ -578,16 +576,6 @@ procedure TClass_biz_emsof_requests.BindOverviewByStatus
   );
 begin
   db_emsof_requests.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
-end;
-
-function TClass_biz_emsof_requests.CloseInvoiceSubmissionWindow: queue;
-begin
-  CloseInvoiceSubmissionWindow := db_emsof_requests.CloseInvoiceSubmissionWindow;
-end;
-
-function TClass_biz_emsof_requests.CloseProofOfPaymentSubmissionWindow: queue;
-begin
-  CloseProofOfPaymentSubmissionWindow := db_emsof_requests.CloseProofOfPaymentSubmissionWindow;
 end;
 
 function TClass_biz_emsof_requests.CountyApprovalTimestampOf(master_id: string): system.datetime;

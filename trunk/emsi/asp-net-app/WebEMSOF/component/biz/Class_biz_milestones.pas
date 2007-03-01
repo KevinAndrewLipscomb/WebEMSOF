@@ -89,13 +89,11 @@ begin
         COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
           master_id_q := biz_emsof_requests.FailUnfinalized;
         SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
-          BEGIN
           master_id_q := queue.Create;
-          END;
         SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
-          master_id_q := biz_emsof_requests.CloseInvoiceSubmissionWindow;
+          master_id_q := queue.Create;
         SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
-          master_id_q := biz_emsof_requests.CloseProofOfPaymentSubmissionWindow;
+          master_id_q := queue.Create;
         end;
         for i := 1 to master_id_q.Count do begin
           master_id := master_id_q.Dequeue.tostring;
