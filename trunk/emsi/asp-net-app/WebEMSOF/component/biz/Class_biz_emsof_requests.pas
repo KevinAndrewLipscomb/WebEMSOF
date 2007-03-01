@@ -17,9 +17,6 @@ uses
   system.security.principal,
   system.web;
 
-const
-  ID = '$Id$';
-
 type
   status_type =
     (
@@ -57,6 +54,7 @@ type
     biz_equipment: TClass_biz_equipment;
     biz_appropriations: TClass_biz_appropriations;
     biz_match_level: TClass_biz_match_level;
+    biz_milestones: TClass_biz_milestones;
     biz_regional_staffers: TClass_biz_regional_staffers;
     biz_user: TClass_biz_user;
   public
@@ -81,6 +79,7 @@ type
     function BeOkToDrillDown(status: status_type): boolean;
     function BeOkToForceOpen(e_item: system.object): boolean;
     function BeOkToMarkDone(status: status_type): boolean;
+    function BeOkToMarkFailed(status: status_type): boolean;
     function BeOkToRevokeDeadlineExemption(e_item: system.object): boolean;
     function BeOkToTrackInvoices(status: status_type): boolean;
     function BeOkToTrackPayments(status: status_type): boolean;
@@ -196,6 +195,11 @@ type
       e_item: system.object;
       promoter: string
       );
+    procedure MarkFailed
+      (
+      e_item: system.object;
+      failer: string
+      );
     function NextReviewer(status: status_type): string;
     function NumRequestsInStateExportBatch
       (
@@ -278,6 +282,7 @@ begin
   biz_appropriations := TClass_biz_appropriations.Create;
   biz_equipment := TClass_biz_equipment.Create;
   biz_match_level := TClass_biz_match_level.Create;
+  biz_milestones := TClass_biz_milestones.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
   biz_user := TClass_biz_user.Create;
 end;
@@ -474,6 +479,19 @@ begin
   NEEDS_REIMBURSEMENT_ISSUANCE:
     BeOkToMarkDone := httpcontext.current.user.IsInRole('emsof-accountant')
       or httpcontext.current.user.IsInRole('director');
+  end;
+end;
+
+function TClass_biz_emsof_requests.BeOkToMarkFailed(status: status_type): boolean;
+begin
+  BeOkToMarkFailed := FALSE;
+  case status of
+  NEEDS_INVOICE_COLLECTION:
+    BeOkToMarkFailed := biz_milestones.BeProcessed(SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE)
+      and (httpcontext.current.user.IsInRole('emsof-coordinator') or httpcontext.current.user.IsInRole('director'));
+  NEEDS_CANCELED_CHECK_COLLECTION:
+    BeOkToMarkFailed := biz_milestones.BeProcessed(SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE)
+      and (httpcontext.current.user.IsInRole('emsof-coordinator') or httpcontext.current.user.IsInRole('director'));
   end;
 end;
 
@@ -814,6 +832,42 @@ begin
     BEGIN
     next_status := REIMBURSEMENT_ISSUED;
     db_emsof_requests.MarkDone(master_id,ord(next_status),biz_user.Kind);
+    END;
+  end;
+  //
+end;
+
+procedure TClass_biz_emsof_requests.MarkFailed
+  (
+  e_item: system.object;
+  failer: string
+  );
+var
+  master_id: string;
+begin
+  master_id := IdOf(e_item);
+  //
+  db_emsof_requests.MarkFailed(master_id);
+  //
+  case StatusOf(e_item) of
+  NEEDS_INVOICE_COLLECTION:
+    BEGIN
+    db_emsof_requests.RollUpActualValue(master_id);
+    biz_accounts.MakeDeadlineFailureNotification
+      (
+      SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE,
+      ServiceIdOf(e_item),
+      CountyCodeOfMasterId(master_id)
+      );
+    END;
+  NEEDS_CANCELED_CHECK_COLLECTION:
+    BEGIN
+    biz_accounts.MakeDeadlineFailureNotification
+      (
+      SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE,
+      ServiceIdOf(e_item),
+      CountyCodeOfMasterId(master_id)
+      );
     END;
   end;
   //

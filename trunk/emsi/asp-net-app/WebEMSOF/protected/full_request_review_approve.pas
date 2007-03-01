@@ -10,8 +10,6 @@ uses
   borland.data.provider,
   Class_biz_emsof_requests;
 
-const ID = '$Id$';
-
 type
   p_type =
     RECORD
@@ -51,6 +49,7 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure Button_force_open_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_force_close_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_failed_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -118,6 +117,9 @@ type
     Label_application_name: System.Web.UI.WebControls.Label;
     Button_force_close: System.Web.UI.WebControls.Button;
     TableRow_force_closed: System.Web.UI.HtmlControls.HtmlTableRow;
+    CheckBox_mark_failed: System.Web.UI.WebControls.CheckBox;
+    Button_failed: System.Web.UI.WebControls.Button;
+    Table_mark_failed: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -158,6 +160,7 @@ begin
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
+  Include(Self.Button_failed.Click, Self.Button_failed_Click);
   Include(Self.Button_force_open.Click, Self.Button_force_open_Click);
   Include(Self.Button_force_close.Click, Self.Button_force_close_Click);
   Include(Self.Load, Self.Page_Load);
@@ -281,9 +284,11 @@ begin
     //
     if p.biz_emsof_requests.BeOkToMarkDone(p.status) then begin
       Label_current_status.text := system.object(p.status).tostring;
+      Table_mark_failed.visible := p.biz_emsof_requests.BeOkToMarkFailed(p.status);
     end else begin
       Table_action_pending.visible := FALSE;
       Table_mark_done.visible := FALSE;
+      Table_mark_failed.visible := FALSE;
     end;
     //
   end;
@@ -296,6 +301,15 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.Button_failed_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  if CheckBox_mark_failed.checked then begin
+    p.biz_emsof_requests.MarkFailed(session['e_item'],session['account_descriptor'].tostring);
+    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+  end;
 end;
 
 procedure TWebForm_full_request_review_approve.Button_force_close_Click(sender: System.Object;

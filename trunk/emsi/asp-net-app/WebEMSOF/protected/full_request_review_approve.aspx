@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-		                                                                                                                                         [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+			      [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -35,7 +35,7 @@
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
 			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
-																												        that the pending action has been completed.</td>
+																												               that the pending action has been completed.</td>
 			</tr>
 		</table>
 	  </p>
@@ -315,7 +315,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				<td>
 				  <p>
 					If you are not ready to disposition this
-																			                                                request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
+																			                                                       request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>.
 				</p></td>
 			  </tr>
 			  <tr>
@@ -381,9 +381,9 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 			  </tr>
 			  <tr>
 				<td>
-				  <table cellspacing="0" cellpadding="10" border="0">
+				  <table cellspacing="0" cellpadding="10" border="0" width="100%">
 					<tr>
-					  <td bgcolor="#f5f5f5"><strong>To mark the pending action as DONE...</td>
+					  <td bgcolor="#f5f5f5"><strong>To mark the pending action as DONE...</strong></td>
 					</tr>
 					<tr><td>
 						Check&nbsp;
@@ -392,6 +392,14 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 						<asp:button id="Button_mark_done" runat="server" text="DONE"></asp:button>.
 					  </td>
 					</tr>
+				  </table>
+				  <table cellspacing="0" cellpadding="10" width="100%" border="0" id="Table_mark_failed" runat="server">
+					  <tr>
+						<td bgcolor="#f5f5f5"><strong>To mark this request as FAILED DEADLINE...</strong></td>
+					  </tr>
+					  <tr>
+						<td>Check <ASP:CheckBox id="CheckBox_mark_failed" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_failed" runat="server" text="FAILED"></ASP:Button>.</td>
+					  </tr>
 				  </table>
 				</td>
 			  </tr>

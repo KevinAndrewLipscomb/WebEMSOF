@@ -2,17 +2,8 @@ unit Class_biz_milestones;
 
 interface
 
-const
-  ID = '$Id$';
-
-type
-  TClass_biz_milestones = class
-  private
-    { Private Declarations }
-  public
-    constructor Create;
-    procedure Sweep;
-  end;
+uses
+  Class_db_milestones;
 
 type
   milestone_type =
@@ -22,10 +13,18 @@ type
     SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE = 3,
     SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE = 4
     );
+  TClass_biz_milestones = class
+  private
+    db_milestones: TClass_db_milestones;
+  public
+    function BeProcessed(milestone: milestone_type): boolean;
+    constructor Create;
+    procedure Sweep;
+  end;
+
 implementation
 
 uses
-  Class_db_milestones,
   Class_biz_accounts,
   Class_biz_emsof_requests,
   system.collections;
@@ -53,10 +52,16 @@ const
     (num_reminders:6; relative_day_num_array:(1,3,7,14,30,90))  // SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE
     );
 
+function TClass_biz_milestones.BeProcessed(milestone: milestone_type): boolean;
+begin
+  BeProcessed := db_milestones.BeProcessed(ord(milestone));
+end;
+
 constructor TClass_biz_milestones.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  db_milestones := TClass_db_milestones.Create;
 end;
 
 procedure TClass_biz_milestones.Sweep;
@@ -66,7 +71,6 @@ var
   biz_accounts: TClass_biz_accounts;
   biz_emsof_requests: TClass_biz_emsof_requests;
   deadline: datetime;
-  db_milestones: TClass_db_milestones;
   i: cardinal;
   j: cardinal;
   master_id: string;
@@ -77,7 +81,6 @@ var
 begin
   biz_accounts := TClass_biz_accounts.Create;
   biz_emsof_requests := TClass_biz_emsof_requests.Create;
-  db_milestones := TClass_db_milestones.Create;
   master_id_q := nil;
   today := datetime.Today;
   //
