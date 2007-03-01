@@ -14,13 +14,14 @@ type
     biz_fiscal_years: TClass_biz_fiscal_years;
     db_trail: TClass_db_trail;
   public
-    constructor Create;
+    function BeProcessed(code: cardinal): boolean;
     procedure Check
       (
       code: cardinal;
       var be_processed: boolean;
       var value: datetime
       );
+    constructor Create;
     procedure MarkProcessed(code: cardinal);
   end;
 
@@ -28,6 +29,20 @@ implementation
 
 uses
   borland.data.provider;
+
+function TClass_db_milestones.BeProcessed(code: cardinal): boolean;
+begin
+  self.Open;
+  BeProcessed := '1' = bdpcommand.Create
+    (
+    'select be_processed from fy_calendar'
+    + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfCurrent
+    +   ' and milestone_code = ' + code.tostring,
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
+end;
 
 constructor TClass_db_milestones.Create;
 begin

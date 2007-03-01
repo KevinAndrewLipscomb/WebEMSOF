@@ -166,6 +166,7 @@ type
       next_status: cardinal;
       user_kind: string
       );
+    procedure MarkFailed(master_id: string);
     procedure MarkSubmittedToState
       (
       region_code: string;
@@ -1014,6 +1015,13 @@ begin
   end;
   self.Open;
   borland.data.provider.bdpcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
+  self.Close;
+end;
+
+procedure TClass_db_emsof_requests.MarkFailed(master_id: string);
+begin
+  self.Open;
+  borland.data.provider.bdpcommand.Create(db_trail.Saved('update emsof_request_master set status_code = 16 where id = ' + master_id),connection).ExecuteNonQuery;
   self.Close;
 end;
 

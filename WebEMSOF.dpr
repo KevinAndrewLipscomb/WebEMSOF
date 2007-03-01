@@ -120,8 +120,6 @@ uses
   Class_biz_payment_proof_methods in 'component\biz\Class_biz_payment_proof_methods.pas',
   Class_db_payment_proof_methods in 'component\db\Class_db_payment_proof_methods.pas';
 
-const ID = '$Id$';
-
 //
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
