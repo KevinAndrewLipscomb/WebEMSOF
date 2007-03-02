@@ -1,4 +1,3 @@
-
 unit full_request_review_approve;
 
 interface
@@ -13,11 +12,11 @@ uses
 type
   p_type =
     RECORD
-    biz_emsof_requests: TClass_biz_emsof_requests;
     be_before_improvement_deadline: boolean;
+    be_ok_to_track_payments: boolean;
+    biz_emsof_requests: TClass_biz_emsof_requests;
     display_actuals: boolean;
     modify_actuals: boolean;
-    modify_proofs_of_payment: boolean;
     num_items: cardinal;
     num_proofs_of_payment: cardinal;
     parent_appropriation_amount: decimal;
@@ -105,12 +104,9 @@ type
     TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
     Table_mark_done: System.Web.UI.HtmlControls.HtmlTable;
-    Table_total_of_actual_costs: System.Web.UI.HtmlControls.HtmlTable;
     Label_total_of_actual_costs: System.Web.UI.WebControls.Label;
     Label_total_of_proven_payments: System.Web.UI.WebControls.Label;
-    Table_total_of_proven_payments: System.Web.UI.HtmlControls.HtmlTable;
     Label_total_of_emsof_amounts: System.Web.UI.WebControls.Label;
-    Table_total_of_emsof_amounts: System.Web.UI.HtmlControls.HtmlTable;
     Button_force_open: System.Web.UI.WebControls.Button;
     Table_extraordinary_actions: System.Web.UI.HtmlControls.HtmlTable;
     TableRow_force_open: System.Web.UI.HtmlControls.HtmlTableRow;
@@ -120,6 +116,7 @@ type
     CheckBox_mark_failed: System.Web.UI.WebControls.CheckBox;
     Button_failed: System.Web.UI.WebControls.Button;
     Table_mark_failed: System.Web.UI.HtmlControls.HtmlTable;
+    Table_emphasized_totals: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -174,6 +171,7 @@ procedure TWebForm_full_request_review_approve.Page_Load
   e: System.EventArgs
   );
 var
+  be_beyond_invoice_collection: boolean;
   timestamp: datetime;
 begin
   appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
@@ -255,14 +253,14 @@ begin
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
     //
-    Table_total_of_actual_costs.visible :=
+    be_beyond_invoice_collection :=
       (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
-    Table_proofs_of_payment.Visible := Table_total_of_actual_costs.visible;
-    Table_total_of_emsof_amounts.visible := Table_total_of_actual_costs.visible;
-    if Table_total_of_actual_costs.visible then begin
+    Table_proofs_of_payment.visible := be_beyond_invoice_collection;
+    Table_emphasized_totals.visible := be_beyond_invoice_collection;
+    if be_beyond_invoice_collection then begin
       Label_total_of_actual_costs.text := p.biz_emsof_requests.SumOfActualCostsOfRequestItems(p.request_id).tostring('C');
-      p.modify_proofs_of_payment := p.biz_emsof_requests.BeOkToTrackPayments(p.status);
-      LinkButton_new_proof_of_payment.visible := p.modify_proofs_of_payment;
+      p.be_ok_to_track_payments := p.biz_emsof_requests.BeOkToTrackPayments(p.status);
+      LinkButton_new_proof_of_payment.visible := p.be_ok_to_track_payments;
       BindProofsOfPayment;
       Label_total_of_emsof_amounts.text := p.biz_emsof_requests.ActualValueOf(p.request_id).tostring('C');
     end;
@@ -488,7 +486,7 @@ begin
   //
   // Manage column visibility
   //
-  e.item.cells[TCCI_PROOF_OF_PAYMENT_LINKBUTTON].visible := p.modify_proofs_of_payment;
+  e.item.cells[TCCI_PROOF_OF_PAYMENT_LINKBUTTON].visible := p.be_ok_to_track_payments;
   //
   if (e.item.itemtype = listitemtype.alternatingitem)
     or (e.item.itemtype = listitemtype.edititem)
