@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-			                               [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+			                                [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -403,10 +403,10 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
                                   <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td>
 									  <p><em><small>Note that this request would not normally be ready for reimbursement because not all declared costs have been covered by proven payments. The rules for releasing EMSOF funds in this situation may not be
-							             well-defined.</small>
+							              well-defined.</small>
                                         </em>
                                       </p>
-                                      <p><ASP:CheckBox id="CheckBox_special_promotion" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_special_promotion" runat="server" text="SPECIAL PROMOTION"></ASP:Button>.</p></td>
+                                      <p>Check <ASP:CheckBox id="CheckBox_special_promotion" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_special_promotion" runat="server" text="SPECIAL PROMOTION"></ASP:Button>.</p></td>
                                   </tr>
                               </table></td>
 					  </tr>
