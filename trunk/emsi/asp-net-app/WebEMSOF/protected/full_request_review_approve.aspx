@@ -12,7 +12,7 @@
       <p>
 		<small>
 		  [ <asp:linkbutton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</asp:linkbutton>&nbsp;]
-			             [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
+			                               [ Back to <asp:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</asp:LinkButton>&nbsp;form ]&nbsp;
 		  [ Change your
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
@@ -25,17 +25,16 @@
 		<asp:label id="Label_service_name" runat="server"></asp:label>&nbsp;(#
 	    <asp:label id="Label_affiliate_num" runat="server"></asp:label>)</h3>
 	  <p>
-		<table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_action_required" runat="server">
+		<table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_disposition_sentinel" runat="server">
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION REQUIRED:</strong></td>
 			  <td>Please review the following information, then indicate your disposition at the bottom of this form.</td>
 			</tr>
 		</table>
-		<table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_action_pending" runat="server">
+		<table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_action_pending_sentinel" runat="server">
 			<tr>
 			  <td bgcolor="#98fb98"><strong>ACTION PENDING:</strong></td>
-			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate
-																												                      that the pending action has been completed.</td>
+			  <td>See the bottom of this form for a description of the action pending on this request, and for a way to indicate that the pending action has been completed.</td>
 			</tr>
 		</table>
 	  </p>
@@ -235,7 +234,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 				  <strong>
 						<table cellspacing="0" cellpadding="5" width="100%" border="0">
 							<tr>
-							  <td><strong>Proofs of payment by service</strong></td>
+							  <td><strong>Proofs of payment</strong></td>
 							  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							  <td>
 								<p align="right"><ASP:LinkButton id="LinkButton_new_proof_of_payment" runat="server" font-bold="True" causesvalidation="False">New</ASP:LinkButton></p></td>
@@ -284,7 +283,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 		</tr>
 	  </table>
 	  <p></p>
-	  <table cellspacing="0" cellpadding="0" border="1" id="Table_disposition" runat="server" bordercolor="#98fb98">
+	  <table cellspacing="0" cellpadding="0" border="1" id="Table_disposition_nominal" runat="server" bordercolor="#98fb98">
 		<tr>
 		  <td>
 			<table cellspacing="0" cellpadding="10" border="0">
@@ -308,11 +307,16 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 					</tr>
 					<tr>
 					  <td>
-						Check&nbsp;
+						
+                              <table cellspacing="0" cellpadding="5" border="0">
+                                  <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td>Check&nbsp;
 						<asp:checkbox id="CheckBox_approve" runat="server">
 						</asp:checkbox>&nbsp;and click
 						<asp:button id="Button_approve" runat="server" text="APPROVE"></asp:button>.
 					  </td>
+                                  </tr>
+                              </table></td>
 					</tr>
 					<tr id="TableRow_return" runat="server">
 					  <td bgcolor="#f5f5f5"><strong>To return to service for rework...</strong></td>
@@ -324,8 +328,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 					  <td>
 						<table cellspacing="0" cellpadding="5" border="0">
 						  <tr>
-							<td valign="top">
-							  Enter reason:
+							<td valign="top" nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enter reason:
 							</td>
 							<td valign="top">
 							  <textarea rows="3" cols="30" id="TextArea_disapproval_reason" name="TextArea_disapproval_comment" runat="Server"></textarea>
@@ -345,7 +348,7 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 		  </td>
 		</tr>
 	  </table>
-	  <table cellspacing="0" cellpadding="0" border="1" id="Table_mark_done" runat="server" bordercolor="#98fb98">
+	  <table cellspacing="0" cellpadding="0" border="1" id="Table_action_pending_nominal" runat="server" bordercolor="#98fb98">
 		<tr>
 		  <td>
 			<table cellspacing="0" cellpadding="10" border="0">
@@ -362,16 +365,21 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 			  </tr>
 			  <tr>
 				<td>
-				  <table cellspacing="0" cellpadding="10" border="0" width="100%">
+				  <table cellspacing="0" cellpadding="10" border="0" width="100%" id="Table_mark_done" runat="Server">
 					<tr>
 					  <td bgcolor="#f5f5f5"><strong>To mark the pending action as DONE...</strong></td>
 					</tr>
 					<tr><td>
-						Check&nbsp;
+						
+                              <table cellspacing="0" cellpadding="5" border="0">
+                                  <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td>Check&nbsp;
 						<asp:checkbox id="CheckBox_mark_done" runat="server">
 						</asp:checkbox>&nbsp;and click
 						<asp:button id="Button_mark_done" runat="server" text="DONE"></asp:button>.
 					  </td>
+                                  </tr>
+                              </table></td>
 					</tr>
 				  </table>
 				  <table cellspacing="0" cellpadding="10" width="100%" border="0" id="Table_mark_failed" runat="server">
@@ -379,7 +387,28 @@ EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)</i>
 						<td bgcolor="#f5f5f5"><strong>To mark this request as FAILED DEADLINE...</strong></td>
 					  </tr>
 					  <tr>
-						<td>Check <ASP:CheckBox id="CheckBox_mark_failed" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_failed" runat="server" text="FAILED"></ASP:Button>.</td>
+						<td>
+                              <table cellspacing="0" cellpadding="5" border="0">
+                                  <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td>Check <ASP:CheckBox id="CheckBox_mark_failed" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_failed" runat="server" text="FAILED"></ASP:Button>.</td>
+                                  </tr></table></td></tr>
+				  </table>
+				  <table cellspacing="0" cellpadding="10" width="100%" border="0" id="Table_special_promotion" runat="server">
+					  <tr>
+						<td bgcolor="#f5f5f5"><strong>To give this request a SPECIAL PROMOTION...</strong></td>
+					  </tr>
+					  <tr>
+					    <td>
+                              <table cellspacing="0" cellpadding="5" border="0">
+                                  <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td>
+									  <p><em><small>Note that this request would not normally be ready for reimbursement because not all declared costs have been covered by proven payments. The rules for releasing EMSOF funds in this situation may not be
+							             well-defined.</small>
+                                        </em>
+                                      </p>
+                                      <p><ASP:CheckBox id="CheckBox_special_promotion" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_special_promotion" runat="server" text="SPECIAL PROMOTION"></ASP:Button>.</p></td>
+                                  </tr>
+                              </table></td>
 					  </tr>
 				  </table>
 				</td>
