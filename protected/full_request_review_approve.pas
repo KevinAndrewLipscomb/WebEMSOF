@@ -12,6 +12,7 @@ uses
 type
   p_type =
     RECORD
+    be_all_costs_proven: boolean;
     be_before_improvement_deadline: boolean;
     be_ok_to_track_payments: boolean;
     biz_emsof_requests: TClass_biz_emsof_requests;
@@ -22,6 +23,8 @@ type
     parent_appropriation_amount: decimal;
     request_id: string;
     status: Class_biz_emsof_requests.status_type;
+    sum_of_actual_costs: decimal;
+    sum_of_proven_payments: decimal;
     total_emsof_ante: decimal;
     END;
   TWebForm_full_request_review_approve = class(ki_web_ui.page_class)
@@ -89,8 +92,7 @@ type
     CheckBox_mark_done: System.Web.UI.WebControls.CheckBox;
     Button_mark_done: System.Web.UI.WebControls.Button;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Table_action_required: System.Web.UI.HtmlControls.HtmlTable;
-    Table_action_pending: System.Web.UI.HtmlControls.HtmlTable;
+    Table_disposition_sentinel: System.Web.UI.HtmlControls.HtmlTable;
     TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     Table_prior_approvals: System.Web.UI.HtmlControls.HtmlTable;
@@ -99,11 +101,7 @@ type
     TableRow_state_approval_timestamp: System.Web.UI.HtmlControls.HtmlTableRow;
     Table_proofs_of_payment: System.Web.UI.HtmlControls.HtmlTable;
     TableRow_proofs_of_payment_none: System.Web.UI.HtmlControls.HtmlTableRow;
-    Table_disposition: System.Web.UI.HtmlControls.HtmlTable;
-    TableRow_return: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
-    TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
-    Table_mark_done: System.Web.UI.HtmlControls.HtmlTable;
+    Table_disposition_nominal: System.Web.UI.HtmlControls.HtmlTable;
     Label_total_of_actual_costs: System.Web.UI.WebControls.Label;
     Label_total_of_proven_payments: System.Web.UI.WebControls.Label;
     Label_total_of_emsof_amounts: System.Web.UI.WebControls.Label;
@@ -117,6 +115,15 @@ type
     Button_failed: System.Web.UI.WebControls.Button;
     Table_mark_failed: System.Web.UI.HtmlControls.HtmlTable;
     Table_emphasized_totals: System.Web.UI.HtmlControls.HtmlTable;
+    CheckBox_special_promotion: System.Web.UI.WebControls.CheckBox;
+    Button_special_promotion: System.Web.UI.WebControls.Button;
+    Table_special_promotion: System.Web.UI.HtmlControls.HtmlTable;
+    Table_mark_done: System.Web.UI.HtmlControls.HtmlTable;
+    Table_action_pending_sentinel: System.Web.UI.HtmlControls.HtmlTable;
+    Table_action_pending_nominal: System.Web.UI.HtmlControls.HtmlTable;
+    TableRow_return: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
+    TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -153,7 +160,6 @@ begin
   Include(Self.LinkButton_new_proof_of_payment.Click, Self.LinkButton_new_proof_of_payment_Click);
   Include(Self.DataGrid_proofs_of_payment.DeleteCommand, Self.DataGrid_proofs_of_payment_DeleteCommand);
   Include(Self.DataGrid_proofs_of_payment.ItemDataBound, Self.DataGrid_proofs_of_payment_ItemDataBound);
-  Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_Click);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
@@ -186,33 +192,27 @@ begin
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - full_request_review_approve';
     Label_account_descriptor.text := session['account_descriptor'].tostring;
     //
-    // Initialize class private data members.
+    // Initialize class private class members.
     //
     p.biz_emsof_requests := Class_biz_emsof_requests.TClass_biz_emsof_requests.Create;
-    p.num_items := 0;
-    p.total_emsof_ante := 0;
     //
-    // Initialize local vars.
+    // Initialize class private data members.
     //
-    p.request_id := p.biz_emsof_requests.IdOf(session['e_item']);
-    p.status := p.biz_emsof_requests.StatusOf(session['e_item']);
+    p.status := p.biz_emsof_requests.StatusOf(session['e_item']);  // Must be set before next two statements.
+    //
     p.display_actuals := p.biz_emsof_requests.BeOkToViewInvoices(p.status);
     p.modify_actuals := p.biz_emsof_requests.BeOkToTrackInvoices(p.status);
+    p.num_items := 0;
+    p.request_id := p.biz_emsof_requests.IdOf(session['e_item']);
+    p.total_emsof_ante := 0;
+    //
+    // Manage subheading.
     //
     Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
     Label_affiliate_num.text := p.biz_emsof_requests.AffiliateNumOf(session['e_item']);
-    p.parent_appropriation_amount :=
-      TClass_biz_appropriations.Create.ParentAppropriationOfEmsofRequest(p.biz_emsof_requests.IdOf(session['e_item']));
-    Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
-    Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
     //
-    TableRow_force_open.visible := p.biz_emsof_requests.BeOkToForceOpen(session['e_item']);
-    TableRow_force_closed.visible := p.biz_emsof_requests.BeOkToRevokeDeadlineExemption(session['e_item']);
-    Table_extraordinary_actions.visible := TableRow_force_open.visible or TableRow_force_closed.visible;
-    if Table_extraordinary_actions.visible then begin
-      Label_application_name.text := configurationsettings.appsettings['application_name'];
-    end;
+    // Manage Prior approvals block.
     //
     Table_prior_approvals.visible := FALSE;
     TableRow_regional_planner_approval_timestamp.visible := FALSE;
@@ -247,23 +247,38 @@ begin
       end;
     end;
     //
+    // Manage Items block (always visible).
+    //
     p.biz_emsof_requests.BindDetail(p.request_id,DataGrid_items);
     //
+    // Manage Allocation block (always visible), must be managed after Items block is bound.
+    //
+    p.parent_appropriation_amount :=
+      TClass_biz_appropriations.Create.ParentAppropriationOfEmsofRequest(p.biz_emsof_requests.IdOf(session['e_item']));
+    Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
+    Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
     Label_sum_of_emsof_antes.text := p.total_emsof_ante.tostring('C');
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
+    //
+    // Manage Proof of payment and Emphasized totals blocks.
     //
     be_beyond_invoice_collection :=
       (p.status in [NEEDS_CANCELED_CHECK_COLLECTION,NEEDS_REIMBURSEMENT_ISSUANCE,REIMBURSEMENT_ISSUED]);
     Table_proofs_of_payment.visible := be_beyond_invoice_collection;
     Table_emphasized_totals.visible := be_beyond_invoice_collection;
     if be_beyond_invoice_collection then begin
-      Label_total_of_actual_costs.text := p.biz_emsof_requests.SumOfActualCostsOfRequestItems(p.request_id).tostring('C');
+      p.sum_of_actual_costs := p.biz_emsof_requests.SumOfActualCostsOfRequestItems(p.request_id);
+      Label_total_of_actual_costs.text := p.sum_of_actual_costs.tostring('C');
       p.be_ok_to_track_payments := p.biz_emsof_requests.BeOkToTrackPayments(p.status);
       LinkButton_new_proof_of_payment.visible := p.be_ok_to_track_payments;
+      //
       BindProofsOfPayment;
+      //
       Label_total_of_emsof_amounts.text := p.biz_emsof_requests.ActualValueOf(p.request_id).tostring('C');
     end;
+    //
+    // Manage Disposition (ie, current approval action) block.
     //
     if p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.status) then begin
       Label_next_reviewer.text :=
@@ -276,17 +291,35 @@ begin
         Button_disapprove.text := 'REJECT';
       end;
     end else begin
-      Table_action_required.visible := FALSE;
-      Table_disposition.visible := FALSE;
+      Table_disposition_sentinel.visible := FALSE;
+      Table_disposition_nominal.visible := FALSE;
     end;
+    //
+    // Manage Action pending block.
     //
     if p.biz_emsof_requests.BeOkToMarkDone(p.status) then begin
       Label_current_status.text := system.object(p.status).tostring;
+      case p.status of
+      NEEDS_SENT_TO_PA_DOH_EMSO,
+      NEEDS_INVOICE_COLLECTION,
+      NEEDS_REIMBURSEMENT_ISSUANCE:
+        Table_special_promotion.visible := FALSE;
+      NEEDS_CANCELED_CHECK_COLLECTION:
+        Table_special_promotion.visible := not p.be_all_costs_proven;
+      end;
       Table_mark_failed.visible := p.biz_emsof_requests.BeOkToMarkFailed(p.status);
     end else begin
-      Table_action_pending.visible := FALSE;
-      Table_mark_done.visible := FALSE;
-      Table_mark_failed.visible := FALSE;
+      Table_action_pending_sentinel.visible := FALSE;
+      Table_action_pending_nominal.visible := FALSE;
+    end;
+    //
+    // Manage Extraordinary actions block.
+    //
+    TableRow_force_open.visible := p.biz_emsof_requests.BeOkToForceOpen(session['e_item']);
+    TableRow_force_closed.visible := p.biz_emsof_requests.BeOkToRevokeDeadlineExemption(session['e_item']);
+    Table_extraordinary_actions.visible := TableRow_force_open.visible or TableRow_force_closed.visible;
+    if Table_extraordinary_actions.visible then begin
+      Label_application_name.text := configurationsettings.appsettings['application_name'];
     end;
     //
   end;
@@ -516,7 +549,11 @@ begin
   //
   // Manage related controls.
   //
-  Label_total_of_proven_payments.text := p.biz_emsof_requests.SumOfProvenPaymentsOfRequest(p.request_id).tostring('C');
+  p.sum_of_proven_payments := p.biz_emsof_requests.SumOfProvenPaymentsOfRequest(p.request_id);
+  Label_total_of_proven_payments.text := p.sum_of_proven_payments.tostring('C');
+  p.be_all_costs_proven := (p.sum_of_proven_payments >= p.sum_of_actual_costs);
+  Table_mark_done.disabled := not p.be_all_costs_proven;
+  Table_special_promotion.visible := not p.be_all_costs_proven;
   //
   // Clear aggregation vars for next bind, if any.
   //
