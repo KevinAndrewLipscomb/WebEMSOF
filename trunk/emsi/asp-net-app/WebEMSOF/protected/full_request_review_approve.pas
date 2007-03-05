@@ -52,6 +52,7 @@ type
     procedure Button_force_open_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_force_close_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_failed_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_special_promotion_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -164,6 +165,7 @@ begin
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
   Include(Self.Button_failed.Click, Self.Button_failed_Click);
+  Include(Self.Button_special_promotion.Click, Self.Button_special_promotion_Click);
   Include(Self.Button_force_open.Click, Self.Button_force_open_Click);
   Include(Self.Button_force_close.Click, Self.Button_force_close_Click);
   Include(Self.Load, Self.Page_Load);
@@ -332,6 +334,15 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.Button_special_promotion_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  if CheckBox_special_promotion.checked then begin
+    p.biz_emsof_requests.MarkDone(session['e_item'],session['account_descriptor'].tostring);
+    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+  end;
 end;
 
 procedure TWebForm_full_request_review_approve.Button_failed_Click(sender: System.Object;
@@ -552,7 +563,7 @@ begin
   p.sum_of_proven_payments := p.biz_emsof_requests.SumOfProvenPaymentsOfRequest(p.request_id);
   Label_total_of_proven_payments.text := p.sum_of_proven_payments.tostring('C');
   p.be_all_costs_proven := (p.sum_of_proven_payments >= p.sum_of_actual_costs);
-  Table_mark_done.disabled := not p.be_all_costs_proven;
+  Table_mark_done.disabled := (not p.be_all_costs_proven) and (p.status <> NEEDS_REIMBURSEMENT_ISSUANCE);
   Table_special_promotion.visible := not p.be_all_costs_proven;
   //
   // Clear aggregation vars for next bind, if any.
