@@ -230,6 +230,8 @@ procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;
 begin
   session.Remove('emsof_request_master_id');
   session.Add('emsof_request_master_id',Safe(e.item.cells[p.tcci_id].text,NUM));
+  session.Remove('status_code');
+  session.Add('status_code',Safe(e.item.cells[p.tcci_status_code].text,NUM));
   session.Remove('emsof_request_master_status');
   session.Add('emsof_request_master_status',Safe(e.item.cells[p.tcci_status].text,NARRATIVE));
   session.Remove('fiscal_year_designator');
@@ -265,7 +267,8 @@ begin
         LinkButton(e.item.cells[p.tcci_linkbutton].controls.item[0]).text := 'Continue making item requests';
       end;
     end;
-    e.item.Cells[p.tcci_linkbutton].controls.item[0].visible := p.be_before_deadline;
+    e.item.Cells[p.tcci_linkbutton].controls.item[0].visible :=
+      p.be_before_deadline and (e.item.cells[p.tcci_status_code].text <> '12');
   end;
 end;
 

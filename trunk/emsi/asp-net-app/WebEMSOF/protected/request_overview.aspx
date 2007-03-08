@@ -162,6 +162,22 @@
             </tr>
         </table>
 	  </p>
+<p><table id="Table_withdrawal" bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" runat="Server">
+    <tr>
+      <td>
+        <table cellspacing="0" cellpadding="10" border="0">
+            <tr>
+              <td bgcolor="#f5f5f5"><strong>Withdrawal</strong></td>
+            </tr>
+            <tr>
+              <td>
+<p>If you are sure you want to withdraw&nbsp;your&nbsp;<strong>entire&nbsp;</strong>request, and surrender all of the above allocated EMSOF funds for use by others...</p>
+                        <p>Check <ASP:CheckBox id="CheckBox_withdraw" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_withdraw" runat="server" text="WITHDRAW"></ASP:Button>.</p></td>
+            </tr>
+        </table></td>
+    </tr>
+</table>
+	  </p>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
 	 <sstchur:SmartScroller runat="server" /></form>
   </body>

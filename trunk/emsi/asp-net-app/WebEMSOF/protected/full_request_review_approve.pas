@@ -73,7 +73,6 @@ type
     Label_sponsor_county: System.Web.UI.WebControls.Label;
     Label_sum_of_emsof_antes: System.Web.UI.WebControls.Label;
     Label_unused_amount: System.Web.UI.WebControls.Label;
-    Label_sponsor_county_2: System.Web.UI.WebControls.Label;
     Label_county_approval_timestamp: System.Web.UI.WebControls.Label;
     Label_region_name_1: System.Web.UI.WebControls.Label;
     Label_regional_planner_approval_timestamp: System.Web.UI.WebControls.Label;
@@ -125,6 +124,7 @@ type
     TableRow_return: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
+    Label_sponsor_county_2: System.Web.UI.WebControls.Label;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -220,6 +220,7 @@ begin
     TableRow_regional_planner_approval_timestamp.visible := FALSE;
     TableRow_regional_exec_dir_approval_timestamp.visible := FALSE;
     TableRow_state_approval_timestamp.visible := FALSE;
+    Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
     //
     if p.status > NEEDS_COUNTY_APPROVAL then begin
       if p.biz_emsof_requests.BeValidCountyApprovalTimestampOf(p.request_id,timestamp) then begin
@@ -258,7 +259,6 @@ begin
     p.parent_appropriation_amount :=
       TClass_biz_appropriations.Create.ParentAppropriationOfEmsofRequest(p.biz_emsof_requests.IdOf(session['e_item']));
     Label_parent_appropriation_amount.text := p.parent_appropriation_amount.tostring('C');
-    Label_sponsor_county.text := p.biz_emsof_requests.SponsorCountyNameOf(session['e_item']);
     Label_sum_of_emsof_antes.text := p.total_emsof_ante.tostring('C');
     Label_unused_amount.text := (p.parent_appropriation_amount - p.total_emsof_ante).tostring('C');
     Label_num_items.text := p.num_items.tostring;
