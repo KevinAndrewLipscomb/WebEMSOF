@@ -60,6 +60,12 @@ type
       sponsor_county_name: string;
       master_id: string
       );
+    procedure IssueWithdrawalNotice
+      (
+      master_id: string;
+      service_id: string;
+      county_code: string
+      );
     procedure MakeDeadlineFailureNotification
       (
       milestone: milestone_type;
@@ -307,6 +313,43 @@ begin
     + message_text + NEW_LINE
     + NEW_LINE
     + '... END COPY OF NOTICE TO PROCEED ...'
+    );
+end;
+
+procedure TClass_biz_accounts.IssueWithdrawalNotice
+  (
+  master_id: string;
+  service_id: string;
+  county_code: string
+  );
+var
+  service_email_address: string;
+  service_name: string;
+begin
+  service_email_address := EmailAddressByKindId('service',service_id);
+  service_name := biz_services.NameOf(service_id);
+  ki.SmtpMailSend
+    (
+    ConfigurationSettings.AppSettings['sender_email_address'],
+    EmailTargetByRole('emsof-request-withdrawal-stakeholder')
+    + ',' + EmailAddressByKindId('county',county_code),
+    'Service is WITHDRAWING an entire EMSOF request',
+    service_name + ' is withdrawing EMSOF request W#' + master_id + ' in its totality.  The associated sponsor county is '
+    + biz_counties.NameOf(county_code) + '.' + NEW_LINE
+    + NEW_LINE
+    + service_name + ' is aware that this action effectively surrenders ' + db_emsof_requests.EmsofAnteOf(master_id).tostring('C')
+    + ' of EMSOF matching funds for use by others.' + NEW_LINE
+    + NEW_LINE
+    + 'You can see the effect of this action by visiting:' + NEW_LINE
+    + NEW_LINE
+      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
+      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+    + NEW_LINE
+    + 'You can contact the ' + service_name + ' EMSOF Coordinator at:' + NEW_LINE
+    + NEW_LINE
+    + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
+    + NEW_LINE
+    + '-- ' + ConfigurationSettings.AppSettings['application_name']
     );
 end;
 

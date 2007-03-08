@@ -13,8 +13,6 @@ uses
   Class_db_trail,
   ki_web_ui;
 
-const ID = '$Id$';
-
 type
   p_type =
     RECORD
@@ -52,6 +50,7 @@ type
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_service_overview_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_add_item_to_request_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_withdraw_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -82,6 +81,9 @@ type
     CheckBox_has_wish_list: System.Web.UI.WebControls.CheckBox;
     LinkButton_service_overview: System.Web.UI.WebControls.LinkButton;
     LinkButton_add_item_to_request: System.Web.UI.WebControls.LinkButton;
+    Table_withdrawal: System.Web.UI.HtmlControls.HtmlTable;
+    CheckBox_withdraw: System.Web.UI.WebControls.CheckBox;
+    Button_withdraw: System.Web.UI.WebControls.Button;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -109,6 +111,7 @@ begin
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
   Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.CheckBox_has_wish_list.CheckedChanged, Self.CheckBox_has_wish_list_CheckedChanged);
+  Include(Self.Button_withdraw.Click, Self.Button_withdraw_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_request_overview_PreRender);
 end;
@@ -246,6 +249,8 @@ begin
     //
     CheckBox_has_wish_list.checked := p.biz_emsof_requests.HasWishList(session['emsof_request_master_id'].tostring);
     //
+    Table_withdrawal.visible := p.biz_emsof_requests.BeWithdrawable(uint32.Parse(session['status_code'].tostring));
+    //
   end;
 end;
 
@@ -256,6 +261,13 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_request_overview.Button_withdraw_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  p.biz_emsof_requests.Withdraw(session['emsof_request_master_id'].tostring);
+  server.Transfer('service_overview.aspx');
 end;
 
 procedure TWebForm_request_overview.LinkButton_add_item_to_request_Click(sender: System.Object;

@@ -139,6 +139,7 @@ type
       next_status: cardinal
       );
     function DetailText(master_id: string): string;
+    function EmsofAnteOf(master_id: string): decimal;
     function EmsofAnteOfItem
       (
       master_id: string;
@@ -237,6 +238,7 @@ type
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
     procedure Unreject(master_id: string);
+    procedure Withdraw(master_id: string);
   end;
 
 implementation
@@ -829,6 +831,18 @@ begin
   bdr.Close;
   self.Close;
   DetailText := detail_text;
+end;
+
+function TClass_db_emsof_requests.EmsofAnteOf(master_id: string): decimal;
+begin
+  self.Open;
+  EmsofAnteOf := decimal
+    (
+    borland.data.provider.bdpcommand.Create
+      ('select value from emsof_request_master where id = ' + master_id,connection)
+      .ExecuteScalar
+    );
+  self.Close;
 end;
 
 function TClass_db_emsof_requests.EmsofAnteOfItem
@@ -1490,6 +1504,35 @@ begin
       +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
       + ' set emsof_request_master.status_code = 2'
       + ' where emsof_request_master.id = ' + master_id
+      ),
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
+end;
+
+procedure TClass_db_emsof_requests.Withdraw(master_id: string);
+begin
+  self.Open;
+  bdpcommand.Create
+    (
+    db_trail.Saved
+      (
+      'START TRANSACTION;'
+      + 'delete from emsof_request_detail where master_id = ' + master_id
+      + ';'
+      + 'update emsof_request_master'
+      + ' set status_code = 12'
+      +   ' , value = 0'
+      +   ' , num_items = 0'
+      +   ' , shortage = 0'
+      +   ' , has_wish_list = FALSE'
+      +   ' , actual_value = 0'
+      +   ' , be_deadline_exempt = FALSE'
+      +   ' , be_reopened_after_going_to_state = FALSE'
+      + ' where id = ' + master_id
+      + ';'
+      + 'COMMIT;'
       ),
     connection
     )

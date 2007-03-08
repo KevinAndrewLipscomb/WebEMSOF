@@ -113,6 +113,7 @@ type
       out timestamp: datetime
       )
       : boolean;
+    function BeWithdrawable(status_code: cardinal): boolean;
     procedure BindDetail
       (
       master_id: string;
@@ -262,6 +263,7 @@ type
       role: string;
       reviewer_descriptor: string
       );
+    procedure Withdraw(master_id: string);
   end;
 
 implementation
@@ -539,6 +541,11 @@ begin
     DEPLOYED,
     ARCHIVED
     ];
+end;
+
+function TClass_biz_emsof_requests.BeWithdrawable(status_code: cardinal): boolean;
+begin
+  BeWithdrawable := (status_type(status_code) in [NEEDS_COUNTY_APPROVAL..NEEDS_REIMBURSEMENT_ISSUANCE]);
 end;
 
 procedure TClass_biz_emsof_requests.BindDetail
@@ -1223,6 +1230,12 @@ begin
     FyDesignatorOf(e_item),
     SponsorCountyCodeOf(e_item)
     );
+end;
+
+procedure TClass_biz_emsof_requests.Withdraw(master_id: string);
+begin
+  biz_accounts.IssueWithdrawalNotice(master_id,ServiceIdOfMasterId(master_id),CountyCodeOfMasterId(master_id));
+  db_emsof_requests.Withdraw(master_id);
 end;
 
 end.
