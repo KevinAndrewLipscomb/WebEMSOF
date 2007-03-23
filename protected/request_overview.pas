@@ -1,4 +1,3 @@
-
 unit request_overview;
 
 interface
@@ -11,7 +10,8 @@ uses
   Class_biz_emsof_requests,
   Class_db,
   Class_db_trail,
-  ki_web_ui;
+  ki_web_ui,
+  UserControl_print_div;
 
 type
   p_type =
@@ -84,6 +84,7 @@ type
     Table_withdrawal: System.Web.UI.HtmlControls.HtmlTable;
     CheckBox_withdraw: System.Web.UI.WebControls.CheckBox;
     Button_withdraw: System.Web.UI.WebControls.Button;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -156,6 +157,7 @@ begin
     be_deadline_exempt := p.biz_emsof_requests.BeDeadlineExempt(session['emsof_request_master_id'].tostring);
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     p.db.Open;
     //
     Label_service_name.text := session['service_name'].ToString;

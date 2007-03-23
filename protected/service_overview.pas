@@ -1,4 +1,3 @@
-
 unit service_overview;
 
 interface
@@ -9,9 +8,8 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki,
   System.Data.Common, Borland.Data.Provider, System.Globalization,
   Borland.Data.Common, system.configuration, system.web.security,
-  Class_db;
-
-const ID = '$Id$';
+  Class_db,
+  UserControl_print_div;
 
 type
   p_type =
@@ -60,6 +58,7 @@ type
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     Table_item_requests_section: System.Web.UI.HtmlControls.HtmlTable;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -119,6 +118,7 @@ begin
     end;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - service_overview';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     //
     // Initialize implementation-scoped vars.
     //

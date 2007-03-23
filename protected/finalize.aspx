@@ -1,4 +1,5 @@
 <%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="finalize.pas" AutoEventWireup="false" Inherits="finalize.TWebForm_finalize" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -12,9 +13,20 @@
       <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
-      <p><small>[ 
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_request_overview_00" runat="server">request overview</ASP:LinkButton>&nbsp;form ]</small></p>
-<p>
+	  <p>
+		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
+			  <tr>
+				<td>
+	  <small>[
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_request_overview_00" runat="server">request overview</ASP:LinkButton>&nbsp;form ]</small>
+				</td>
+				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
+				</td>
+			  </tr>
+		  </table>
+		  </p>
+<div id="Div_print_area">
+		  <p>
         <ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></p>
 <p><strong>Request phase finalization</strong></p>
 		<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_sorry" runat="server">
@@ -133,6 +145,7 @@
 			  </table></td>
 			</tr>
 		</table>
+</div>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
 	</asp:placeholder>
 	 <sstchur:SmartScroller runat="server" /></form>

@@ -1,4 +1,6 @@
-<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="request_item_detail.pas" AutoEventWireup="false" Inherits="request_item_detail.TWebForm_request_item_detail" %>
+<%@ Page language="c#" Debug="true" Codebehind="request_item_detail.pas" AutoEventWireup="false" Inherits="request_item_detail.TWebForm_request_item_detail" %>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -12,8 +14,19 @@
 	  <p>
 	  <asp:placeholder id="PlaceHolder_precontent" runat="server">
 	  </asp:placeholder></p>
-	  <p><small>[ 
-          <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to&nbsp;<ASP:LinkButton id="LinkButton_request_overview_1" runat="server" causesvalidation="False">request overview</ASP:LinkButton> form ]</small></p>
+	  <p>
+		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
+			  <tr>
+				<td>
+	  <small>[
+		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to&nbsp;<ASP:LinkButton id="LinkButton_request_overview_1" runat="server" causesvalidation="False">request overview</ASP:LinkButton> form ]</small>
+				</td>
+				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
+				</td>
+			  </tr>
+		  </table>
+		  </p>
+<div id="Div_print_area">
 	  <p><small>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
 			  <tr>
@@ -131,7 +144,7 @@
 						</div></td>
 			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>
 								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp;
-													         &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
+													             &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
 
 			  </td>
 			  <td></td>
@@ -169,6 +182,7 @@
 				  </table></td>
 			  </tr>
 		  </table></small></p>
+</div>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
 	</asp:placeholder>
 	 <sstchur:SmartScroller runat="server" /></form>

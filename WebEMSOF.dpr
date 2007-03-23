@@ -59,6 +59,7 @@ library WebEMSOF;
 {%File 'noninteractive\.crontab'}
 {%AspMarkupContainer 'noninteractive\milestone_sweep.aspx'}
 {%AspMarkupContainer 'protected\add_proof_of_payment.aspx'}
+{%AspMarkupContainer 'usercontrol\ki\UserControl_print_div.ascx'}
 
 uses
   System.Reflection,
@@ -118,7 +119,8 @@ uses
   Class_db_trail in 'component\db\Class_db_trail.pas',
   add_proof_of_payment in 'protected\add_proof_of_payment.pas' {add_proof_of_payment.TWebForm_add_proof_of_payment: ki_web_ui.page_class},
   Class_biz_payment_proof_methods in 'component\biz\Class_biz_payment_proof_methods.pas',
-  Class_db_payment_proof_methods in 'component\db\Class_db_payment_proof_methods.pas';
+  Class_db_payment_proof_methods in 'component\db\Class_db_payment_proof_methods.pas',
+  UserControl_print_div in 'usercontrol\ki\UserControl_print_div.pas';
 
 //
 // General Information about an assembly is controlled through the following

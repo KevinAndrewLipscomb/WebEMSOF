@@ -1,4 +1,3 @@
-
 unit county_dictated_appropriations;
 
 interface
@@ -15,9 +14,8 @@ uses
   Class_db_trail,
   system.configuration,
   system.web.mail,
-  system.web.security;
-
-const ID = '$Id$';
+  system.web.security,
+  UserControl_print_div;
 
 type
   p_type =
@@ -94,6 +92,7 @@ type
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
     CheckBox_hide_nonapproval_requests: System.Web.UI.WebControls.CheckBox;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   public
     { Public Declarations }
@@ -164,6 +163,7 @@ begin
     //   Set up symbolic DataGrid Indices for use in other event handlers.
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     Label_county_name.Text := session['county_name'].ToString;
     //
     p.db.Open;

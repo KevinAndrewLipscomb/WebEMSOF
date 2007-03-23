@@ -1,4 +1,3 @@
-
 unit finalize;
 
 interface
@@ -8,9 +7,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
   system.web.mail, system.web.security,
-  Class_db;
-
-const ID = '$Id$';
+  Class_db,
+  UserControl_print_div;
 
 type
   p_type =
@@ -84,6 +82,8 @@ type
     LinkButton_request_overview_9: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_10: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_bottom: System.Web.UI.WebControls.LinkButton;
+    HyperLink_terms_and_conditions: System.Web.UI.WebControls.HyperLink;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -144,6 +144,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     //
     Label_service_name.text := session['service_name'].tostring;
     //
