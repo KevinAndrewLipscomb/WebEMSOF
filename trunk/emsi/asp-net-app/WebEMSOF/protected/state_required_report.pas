@@ -1,4 +1,3 @@
-
 unit state_required_report;
 
 interface
@@ -10,9 +9,8 @@ uses
   borland.data.provider,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
-  ki;
-
-const ID = '$Id$';
+  ki,
+  UserControl_print_div;
 
 type
   p_type =
@@ -71,6 +69,7 @@ type
     Label_total_num_requests: System.Web.UI.WebControls.Label;
     LinkButton_export_scratch_copy: System.Web.UI.WebControls.LinkButton;
     Table_replacement_note: System.Web.UI.HtmlControls.HtmlTable;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -118,6 +117,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_required_report';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize implementation-wide vars.
@@ -251,10 +251,10 @@ begin
     p.total_provider_match := p.total_provider_match + convert.ToDecimal(databinder.Eval(e.item.dataitem, 'provider_match'));
     //
   end else if (e.item.itemtype = listitemtype.footer) then begin
-    e.item.cells[2].text := 'TOTALS:';
-    e.item.cells[5].text := p.grand_total_cost.tostring('C');
-    e.item.cells[6].text := p.total_emsof_ante.tostring('C');
-    e.item.cells[7].text := p.total_provider_match.tostring('C');
+    e.item.cells[4].text := 'TOTALS:';
+    e.item.cells[7].text := p.grand_total_cost.tostring('C');
+    e.item.cells[8].text := p.total_emsof_ante.tostring('C');
+    e.item.cells[9].text := p.total_provider_match.tostring('C');
   end;
 end;
 

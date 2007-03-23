@@ -1,4 +1,3 @@
-
 unit profile;
 
 interface
@@ -9,9 +8,8 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki,
   Borland.Data.Common, System.Globalization,
   System.Data.Common, system.configuration, system.web.security,
-  Class_biz_services;
-
-const ID = '$Id$';
+  Class_biz_services,
+  UserControl_print_div;
 
 type
   p_type =
@@ -74,6 +72,7 @@ type
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     LinkButton_service_overview: System.Web.UI.WebControls.LinkButton;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -132,6 +131,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     p.biz_services := TClass_biz_services.Create;
     //
     // Set Label_service_name

@@ -1,4 +1,6 @@
-<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="service_overview.pas" AutoEventWireup="false" Inherits="service_overview.TWebForm_service_overview"%>
+<%@ Page language="c#" Debug="true" Codebehind="service_overview.pas" AutoEventWireup="false" Inherits="service_overview.TWebForm_service_overview"%>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -9,11 +11,22 @@
   <body>
 	<form runat="server">
 	  <p><asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder></p>
-	  <p><small>[ 
+	  <p>
+		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
+			  <tr>
+				<td>
+	  <small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ 
 		  Change your WebEMSOF
 		<ASP:LinkButton id="LinkButton_change_password" runat="server">password</ASP:LinkButton>&nbsp;| <ASP:LinkButton id="LinkButton_change_email_address" runat="server">email address</ASP:LinkButton>&nbsp;]
-	  </small></p>
+	  </small>
+				</td>
+				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
+				</td>
+			  </tr>
+		  </table>
+	  </p>
+<div id="Div_print_area">
 	  <h1><ASP:Label id="Label_service_name" runat="server" font-bold="True"></ASP:Label></h1>
 	  <h3>Account overview</h3>
 	  <h3>
@@ -80,6 +93,7 @@
                 </table></td>
             </tr>
         </table></h3>
+</div>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
     <sstchur:SmartScroller runat="server" /></form>
   </body>

@@ -1,4 +1,5 @@
 <%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriations.pas" AutoEventWireup="false" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -10,12 +11,23 @@
 	  <p>
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
-	  <p><small>[
+	  <p>
+		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
+			  <tr>
+				<td>
+	  <small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Change your WebEMSOF
 			<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
 			|
 			<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
-</small></p>
+</small>
+				</td>
+				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
+				</td>
+			  </tr>
+		  </table>
+</p>
+<div id="Div_print_area">
 	  <p>
 	  <asp:label id="Label_county_name" runat="server" font-bold="True"
 	  font-size="Large"></asp:label>
@@ -192,6 +204,7 @@
 		  </td>
 		</tr>
 	  </table>
+</div>
 	  <p>
 	  <asp:placeholder id="PlaceHolder_postcontent" runat="server">
 	  </asp:placeholder></p>

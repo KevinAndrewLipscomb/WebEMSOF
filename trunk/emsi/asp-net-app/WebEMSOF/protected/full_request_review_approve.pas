@@ -7,7 +7,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
   borland.data.provider,
-  Class_biz_emsof_requests;
+  Class_biz_emsof_requests,
+  UserControl_print_div;
 
 type
   p_type =
@@ -125,6 +126,7 @@ type
     TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
     Label_sponsor_county_2: System.Web.UI.WebControls.Label;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -192,6 +194,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - full_request_review_approve';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     Label_account_descriptor.text := session['account_descriptor'].tostring;
     //
     // Initialize class private class members.

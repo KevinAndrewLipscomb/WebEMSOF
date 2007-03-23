@@ -1,4 +1,6 @@
-<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="request_overview.pas" AutoEventWireup="false" Inherits="request_overview.TWebForm_request_overview" %>
+<%@ Page language="c#" Debug="true" Codebehind="request_overview.pas" AutoEventWireup="false" Inherits="request_overview.TWebForm_request_overview" %>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -13,11 +15,21 @@
       <asp:placeholder id="PlaceHolder_precontent" runat="server">
       </asp:placeholder></p>
 	  <p>
-<small>[ 
+		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
+			  <tr>
+				<td>
+	  <small>[
           <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_service_overview" runat="server">service overview</ASP:LinkButton>&nbsp;form ]&nbsp; [ Change your
 		<asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;| <asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
-	  </small></p>
-<h3>
+	  </small>
+				</td>
+				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
+				</td>
+			  </tr>
+		  </table>
+	  </p>
+<div id="Div_print_area">
+	  <h3>
 		<ASP:Label id="Label_service_name" runat="server" font-bold="True" font-size="Large"></ASP:Label></h3></small>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" id="Table_parent_appropriation_outer" runat="server">
               <tr>
@@ -178,6 +190,7 @@
     </tr>
 </table>
 	  </p>
+</div>
 	<asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
 	 <sstchur:SmartScroller runat="server" /></form>
   </body>

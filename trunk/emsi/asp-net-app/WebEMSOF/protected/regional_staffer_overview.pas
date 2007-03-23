@@ -1,4 +1,3 @@
-
 unit regional_staffer_overview;
 
 interface
@@ -7,9 +6,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
-  system.text;
-
-const ID = '$Id$';
+  system.text,
+  UserControl_print_div;
 
 type
   TWebForm_regional_staffer_overview = class(ki_web_ui.page_class)
@@ -86,6 +84,7 @@ type
     LinkButton_init_new_fy: System.Web.UI.WebControls.LinkButton;
     LinkButton_maintain_epels: System.Web.UI.WebControls.LinkButton;
     LinkButton_maintain_region_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
+    UserControl_print_div: TWebUserControl_print_div;
     //
     procedure OnInit(e: EventArgs); override;
   private
@@ -156,6 +155,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     biz_appropriations := TClass_biz_appropriations.Create;

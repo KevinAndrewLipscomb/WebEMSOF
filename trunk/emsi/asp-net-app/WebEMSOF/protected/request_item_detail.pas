@@ -1,4 +1,3 @@
-
 unit request_item_detail;
 
 interface
@@ -9,9 +8,8 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
   system.web.mail, system.web.security,
   Class_db,
-  Class_db_trail;
-
-const ID = '$Id$';
+  Class_db_trail,
+  UserControl_print_div;
 
 type
   p_type =
@@ -98,6 +96,7 @@ type
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_1: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_2: System.Web.UI.WebControls.LinkButton;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -156,6 +155,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
     p.db := TClass_db.Create;
     p.db_trail := TClass_db_trail.Create;

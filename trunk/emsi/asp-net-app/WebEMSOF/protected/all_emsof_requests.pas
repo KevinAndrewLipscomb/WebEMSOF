@@ -1,4 +1,3 @@
-
 unit all_emsof_requests;
 
 interface
@@ -8,9 +7,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
   borland.data.provider,
-  Class_biz_emsof_requests;
-
-const ID = '$Id$';
+  Class_biz_emsof_requests,
+  UserControl_print_div;
 
 type
   p_type =
@@ -51,6 +49,7 @@ type
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
     DataGrid_requests: System.Web.UI.WebControls.DataGrid;
     Label_num_datagrid_rows: System.Web.UI.WebControls.Label;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -94,6 +93,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - all_emsof_requests';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize private class instance vars.

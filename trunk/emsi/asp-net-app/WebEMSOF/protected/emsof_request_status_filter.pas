@@ -1,4 +1,3 @@
-
 unit emsof_request_status_filter;
 
 interface
@@ -9,9 +8,8 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
   borland.data.provider,
   system.io,
-  Class_biz_emsof_requests;
-
-const ID = '$Id$';
+  Class_biz_emsof_requests,
+  UserControl_print_div;
 
 type
   p_type =
@@ -54,6 +52,7 @@ type
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
     TableRow_spreadsheet: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_retransmit_to_state: System.Web.UI.WebControls.LinkButton;
+    UserControl_print_div: TWebUserControl_print_div;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -99,6 +98,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
+    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
     Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session['status_of_interest'].tostring;
     LinkButton_retransmit_to_state.visible := (status_type(session['status_of_interest']) = NEEDS_PA_DOH_EMSO_APPROVAL);
