@@ -155,7 +155,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
     p.db := TClass_db.Create;
     p.db_trail := TClass_db_trail.Create;

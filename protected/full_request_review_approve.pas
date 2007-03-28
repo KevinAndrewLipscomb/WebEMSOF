@@ -194,7 +194,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - full_request_review_approve';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     Label_account_descriptor.text := session['account_descriptor'].tostring;
     //
     // Initialize class private class members.

@@ -163,7 +163,7 @@ begin
     //   Set up symbolic DataGrid Indices for use in other event handlers.
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     Label_county_name.Text := session['county_name'].ToString;
     //
     p.db.Open;
