@@ -131,7 +131,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     p.biz_services := TClass_biz_services.Create;
     //
     // Set Label_service_name

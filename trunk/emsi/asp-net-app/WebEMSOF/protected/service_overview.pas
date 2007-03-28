@@ -118,7 +118,7 @@ begin
     end;
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - service_overview';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     //
     // Initialize implementation-scoped vars.
     //

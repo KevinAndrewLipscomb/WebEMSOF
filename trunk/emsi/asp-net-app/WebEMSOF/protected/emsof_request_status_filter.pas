@@ -98,7 +98,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session['status_of_interest'].tostring;
     LinkButton_retransmit_to_state.visible := (status_type(session['status_of_interest']) = NEEDS_PA_DOH_EMSO_APPROVAL);

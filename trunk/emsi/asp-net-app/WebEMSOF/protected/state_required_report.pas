@@ -117,7 +117,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_required_report';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize implementation-wide vars.

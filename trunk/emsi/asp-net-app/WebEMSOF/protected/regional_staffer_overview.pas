@@ -155,7 +155,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     biz_appropriations := TClass_biz_appropriations.Create;

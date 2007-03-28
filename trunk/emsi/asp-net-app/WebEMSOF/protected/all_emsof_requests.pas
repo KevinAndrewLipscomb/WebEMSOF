@@ -93,7 +93,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - all_emsof_requests';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize private class instance vars.

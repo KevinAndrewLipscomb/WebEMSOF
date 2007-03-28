@@ -144,7 +144,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     //
     Label_service_name.text := session['service_name'].tostring;
     //

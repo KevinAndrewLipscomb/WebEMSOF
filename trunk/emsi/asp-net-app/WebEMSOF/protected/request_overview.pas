@@ -157,7 +157,7 @@ begin
     be_deadline_exempt := p.biz_emsof_requests.BeDeadlineExempt(session['emsof_request_master_id'].tostring);
     //
     Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
-    HtmlInputButton(UserControl_print_div.controls[0]).value := 'Print form body';
+    
     p.db.Open;
     //
     Label_service_name.text := session['service_name'].ToString;
