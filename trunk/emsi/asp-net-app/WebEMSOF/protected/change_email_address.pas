@@ -180,6 +180,8 @@ begin
       .ExecuteNonQuery;
     p.db.Close;
     server.Transfer(session['target_user_table'].ToString + '_overview.aspx');
+  end else begin
+    ValidationAlert;
   end;
 end;
 
