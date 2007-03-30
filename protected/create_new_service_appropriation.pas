@@ -198,6 +198,8 @@ begin
   if page.isvalid then begin
     AddAppropriation;
     server.Transfer('county_dictated_appropriations.aspx');
+  end else begin
+    ValidationAlert;
   end;
 end;
 
