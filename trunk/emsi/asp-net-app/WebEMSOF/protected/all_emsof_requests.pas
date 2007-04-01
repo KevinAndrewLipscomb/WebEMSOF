@@ -8,6 +8,7 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
   borland.data.provider,
   Class_biz_emsof_requests,
+  Class_biz_user,
   UserControl_print_div;
 
 type
@@ -16,6 +17,8 @@ type
     biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
     be_datagrid_empty: boolean;
     be_sort_order_ascending: boolean;
+    biz_user: TClass_biz_user;
+    distribution_list: string;
     num_datagrid_rows: cardinal;
     sort_order: string;
     END;
@@ -32,6 +35,7 @@ type
     procedure DataGrid_requests_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_send_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -50,6 +54,13 @@ type
     DataGrid_requests: System.Web.UI.WebControls.DataGrid;
     Label_num_datagrid_rows: System.Web.UI.WebControls.Label;
     UserControl_print_div: TWebUserControl_print_div;
+    TableRow_data: System.Web.UI.HtmlControls.HtmlTableRow;
+    TextBox_quick_message_subject: System.Web.UI.WebControls.TextBox;
+    TextBox_quick_message_body: System.Web.UI.WebControls.TextBox;
+    RequiredFieldValidator_quick_message_body: System.Web.UI.WebControls.RequiredFieldValidator;
+    Button_send: System.Web.UI.WebControls.Button;
+    Label_distribution_list: System.Web.UI.WebControls.Label;
+    Table_quick_message: System.Web.UI.HtmlControls.HtmlTable;
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -76,6 +87,7 @@ begin
   Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
   Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
   Include(Self.DataGrid_requests.ItemDataBound, Self.DataGrid_requests_ItemDataBound);
+  Include(Self.Button_send.Click, Self.Button_send_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_all_emsof_requests_PreRender);
 end;
@@ -99,10 +111,12 @@ begin
     // Initialize private class instance vars.
     //
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
+    p.biz_user := TClass_biz_user.Create;
     p.be_sort_order_ascending := TRUE;
     p.num_datagrid_rows := 0;
     p.sort_order := 'service_name';
     //
+    UserControl_print_div.text := '[print]';
     Bind;
     //
   end;
@@ -115,6 +129,28 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_all_emsof_requests.Button_send_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  ki.SmtpMailSend
+    (
+    // from
+    configurationsettings.appsettings['sender_email_address'],
+    // to
+    Label_distribution_list.text,
+    // subject
+    TextBox_quick_message_subject.text,
+    // body
+    '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationsettings.appsettings['application_name']
+    + ')' + NEW_LINE
+    + NEW_LINE
+    + TextBox_quick_message_body.text
+    );
+  TextBox_quick_message_subject.text := system.string.EMPTY;
+  TextBox_quick_message_body.text := system.string.EMPTY;
+  Alert('Button_send_Click_alert','Message sent');
 end;
 
 procedure TWebForm_all_emsof_requests.LinkButton_change_email_address_Click(sender: System.Object;
@@ -193,6 +229,11 @@ begin
     end else begin
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := FALSE;
     end;
+    //
+    if e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text <> '&nbsp;' then begin
+       p.distribution_list := p.distribution_list + e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text + ', ';
+    end;
+    //
   end;
 end;
 
@@ -230,7 +271,9 @@ begin
   //
   p.be_datagrid_empty := (p.num_datagrid_rows = 0);
   TableRow_none.visible := p.be_datagrid_empty;
-  DataGrid_requests.visible := not p.be_datagrid_empty;
+  TableRow_data.visible := not p.be_datagrid_empty;
+  Table_quick_message.visible := not p.be_datagrid_empty;
+  Label_distribution_list.text := (p.distribution_list + SPACE).TrimEnd([',',' ']);
   //
   // Clear aggregation vars for next bind, if any.
   //
