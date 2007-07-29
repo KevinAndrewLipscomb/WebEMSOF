@@ -189,12 +189,6 @@
 			<Language Name="RootDir"></Language>
 		</Language>  
     
-    
-    
-    
-    
-    
-    
     <FileList>
       <File FileName="Web.config" ContainerId="AspWebConfigContainer" ModuleName="Web"/>
       <File FileName="$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="System" AssemblyName="System" Version="1.0.5000.0" LinkUnits="False"/>
@@ -250,7 +244,7 @@
       <File FileName="dbscript" ContainerId="AspFolderContainer" ModuleName="dbscript"/>
       <File FileName="exception.aspx" ContainerId="AspMarkupContainer" ModuleName="exception"/>
       <File FileName="timeout.aspx" ContainerId="AspMarkupContainer" ModuleName="timeout"/>
-      <File FileName="lib\ki\ki.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="ki" AssemblyName="ki" CopyLocal="True" Version="1.0.2637.29018" LinkUnits="False"/>
+      <File FileName="lib\ki\ki.dll" ContainerId="DelphiDotNetAssemblyCompiler" ModuleName="ki" AssemblyName="ki" CopyLocal="True" Version="1.0.2766.15861" LinkUnits="False"/>
       <File FileName="protected\county_unrejection.aspx" ContainerId="AspMarkupContainer" ModuleName="county_unrejection"/>
       <File FileName="noninteractive\.crontab" ContainerId="File"/>
       <File FileName="noninteractive\milestone_sweep.aspx" ContainerId="AspMarkupContainer" ModuleName="milestone_sweep"/>
