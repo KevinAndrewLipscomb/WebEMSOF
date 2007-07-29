@@ -170,6 +170,7 @@ type
       reason: string;
       emsof_ante: string
       );
+    function DeployCompleted: queue;
     function EmsofAnteOfItem
       (
       master_id: string;
@@ -711,6 +712,11 @@ begin
   //
 end;
 
+function TClass_biz_emsof_requests.DeployCompleted: queue;
+begin
+  DeployCompleted := db_emsof_requests.DeployCompleted;
+end;
+
 function TClass_biz_emsof_requests.EmsofAnteOfItem
   (
   master_id: string;
@@ -837,7 +843,11 @@ begin
     END;
   NEEDS_REIMBURSEMENT_ISSUANCE:
     BEGIN
-    next_status := REIMBURSEMENT_ISSUED;
+    if biz_milestones.BeProcessed(END_OF_CYCLE_MILESTONE) then begin
+      next_status := DEPLOYED;
+    end else begin
+      next_status := REIMBURSEMENT_ISSUED;
+    end;
     db_emsof_requests.MarkDone(master_id,ord(next_status),biz_user.Kind);
     END;
   end;

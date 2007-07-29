@@ -11,7 +11,8 @@ type
     COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE = 1,
     SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE = 2,
     SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE = 3,
-    SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE = 4
+    SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE = 4,
+    END_OF_CYCLE_MILESTONE = 5
     );
   TClass_biz_milestones = class
   private
@@ -49,7 +50,8 @@ const
     (num_reminders:6; relative_day_num_array:(1,3,7,14,30,90)), // COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE
     (num_reminders:6; relative_day_num_array:(1,3,7,14,30,90)), // SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE
     (num_reminders:6; relative_day_num_array:(1,3,7,14,30,90)), // SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE
-    (num_reminders:6; relative_day_num_array:(1,3,7,14,30,90))  // SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE
+    (num_reminders:6; relative_day_num_array:(1,3,7,14,30,90)), // SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE
+    (num_reminders:0)                                           // END_OF_CYCLE_MILESTONE
     );
 
 function TClass_biz_milestones.BeProcessed(milestone: milestone_type): boolean;
@@ -97,6 +99,8 @@ begin
           master_id_q := queue.Create;
         SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
           master_id_q := queue.Create;
+        END_OF_CYCLE_MILESTONE:
+          master_id_q := biz_emsof_requests.DeployCompleted;
         end;
         for i := 1 to master_id_q.Count do begin
           master_id := master_id_q.Dequeue.tostring;
