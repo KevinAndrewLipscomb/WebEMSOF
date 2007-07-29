@@ -139,6 +139,7 @@ type
       next_status: cardinal
       );
     function DetailText(master_id: string): string;
+    function DeployCompleted: queue;
     function EmsofAnteOf(master_id: string): decimal;
     function EmsofAnteOfItem
       (
@@ -831,6 +832,22 @@ begin
   bdr.Close;
   self.Close;
   DetailText := detail_text;
+end;
+
+function TClass_db_emsof_requests.DeployCompleted: queue;
+var
+  id_q: queue;
+begin
+  id_q := queue.Create;
+  self.Open;
+  bdpcommand.Create
+    (
+    db_trail.Saved('update emsof_request_master set status_code = 14 where status_code = 13'),
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
+  DeployCompleted := id_q;
 end;
 
 function TClass_db_emsof_requests.EmsofAnteOf(master_id: string): decimal;

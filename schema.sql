@@ -333,7 +333,8 @@ INSERT INTO fy_calendar (id, fiscal_year_id, milestone_code, value) VALUES
 (1, 1, 1, '2005-11-30 23:59:59'),
 (2, 1, 2, '2006-01-31 23:59:59'),
 (3, 1, 3, '2006-02-28 23:59:59'),
-(4, 1, 4, '2006-05-31 23:59:59');
+(4, 1, 4, '2006-05-31 23:59:59'),
+(5, 1, 5, '2006-06-30 23:59:59');
 
 -- --------------------------------------------------------
 
@@ -422,7 +423,8 @@ INSERT INTO milestone_code_name_map (code, name) VALUES
 (1, 'emsof-county-dictated-appropriation-deadline'),
 (2, 'emsof-service-purchase-completion-deadline'),
 (3, 'emsof-service-invoice-submission-deadline'),
-(4, 'emsof-service-canceled-check-submission-deadline');
+(4, 'emsof-service-canceled-check-submission-deadline'),
+(5, 'emsof-end-of-cycle');
 
 -- --------------------------------------------------------
 

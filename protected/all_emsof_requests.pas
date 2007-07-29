@@ -150,7 +150,7 @@ begin
     );
   TextBox_quick_message_subject.text := system.string.EMPTY;
   TextBox_quick_message_body.text := system.string.EMPTY;
-  Alert('Button_send_Click_alert','Message sent');
+  Alert(LOGIC,NORMAL,'messagsnt','Message sent');
 end;
 
 procedure TWebForm_all_emsof_requests.LinkButton_change_email_address_Click(sender: System.Object;
