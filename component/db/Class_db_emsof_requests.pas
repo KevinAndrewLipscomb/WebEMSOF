@@ -1434,23 +1434,27 @@ begin
 end;
 
 function TClass_db_emsof_requests.TallyByStatus(status: cardinal): cardinal;
+var
+  sql: string;
 begin
+  sql := 'select count(*) as count'
+  + ' from emsof_request_master'
+  +   ' join county_dictated_appropriation'
+  +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+  +   ' join region_dictated_appropriation'
+  +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+  +   ' join state_dictated_appropriation'
+  +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+  +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
+  + ' where status_code = ' + status.tostring;
+  if not (status in [14,15]) then begin
+    //
+    // Unless tallying DEPLOYED or ARCHIVED statuses, limit tally to requests belonging to the current cycle.
+    //
+    sql := sql + ' and fiscal_year.id = (select max(id) from fiscal_year)';
+  end;
   self.Open;
-  TallyByStatus := borland.data.provider.bdpcommand.Create
-      (
-      'select count(*) as count'
-      + ' from emsof_request_master'
-      +   ' join county_dictated_appropriation'
-      +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
-      +   ' join region_dictated_appropriation'
-      +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
-      +   ' join state_dictated_appropriation'
-      +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
-      +   ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
-      + ' where status_code = ' + status.tostring,
-      connection
-      )
-      .ExecuteScalar.GetHashCode;
+  TallyByStatus := borland.data.provider.bdpcommand.Create(sql,connection).ExecuteScalar.GetHashCode;
   self.Close;
 end;
 
