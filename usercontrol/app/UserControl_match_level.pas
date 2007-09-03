@@ -41,6 +41,11 @@ type
     Label_application_name: System.Web.UI.WebControls.Label;
     Button_submit: System.Web.UI.WebControls.Button;
     Button_delete: System.Web.UI.WebControls.Button;
+    LinkButton_search: System.Web.UI.WebControls.LinkButton;
+    LinkButton_reset: System.Web.UI.WebControls.LinkButton;
+    TextBox_name: TextBox;
+    DropDownList_name: DropDownList;
+    TextBox_factor: TextBox;
     procedure OnInit(e: System.EventArgs); override;
   private
     { Private Declarations }
@@ -67,14 +72,7 @@ begin
   //
   Button_delete.enabled := FALSE;
   //
-
-{ TWebUserControl_match_level }
-
-
-
-procedure TWebUserControl_match_level.InitializeComponent;
-begin
-end;end;
+end;
 
 procedure TWebUserControl_match_level.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
