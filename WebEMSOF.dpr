@@ -60,6 +60,8 @@ library WebEMSOF;
 {%AspMarkupContainer 'noninteractive\milestone_sweep.aspx'}
 {%AspMarkupContainer 'protected\add_proof_of_payment.aspx'}
 {%AspMarkupContainer 'usercontrol\ki\UserControl_print_div.ascx'}
+{%AspMarkupContainer 'usercontrol\ki\UserControl_drop_down_date.ascx'}
+{%AspMarkupContainer 'usercontrol\app\UserControl_match_level.ascx'}
 
 uses
   System.Reflection,
@@ -120,7 +122,9 @@ uses
   add_proof_of_payment in 'protected\add_proof_of_payment.pas' {add_proof_of_payment.TWebForm_add_proof_of_payment: ki_web_ui.page_class},
   Class_biz_payment_proof_methods in 'component\biz\Class_biz_payment_proof_methods.pas',
   Class_db_payment_proof_methods in 'component\db\Class_db_payment_proof_methods.pas',
-  UserControl_print_div in 'usercontrol\ki\UserControl_print_div.pas' {UserControl_print_div.TWebUserControl_print_div: ki_web_ui.usercontrol_class};
+  UserControl_print_div in 'usercontrol\ki\UserControl_print_div.pas' {UserControl_print_div.TWebUserControl_print_div: ki_web_ui.usercontrol_class},
+  UserControl_drop_down_date in 'usercontrol\ki\UserControl_drop_down_date.pas',
+  UserControl_match_level in 'usercontrol\app\UserControl_match_level.pas' {UserControl_match_level.TWebUserControl_match_level: ki_web_ui.usercontrol_class};
 
 //
 // General Information about an assembly is controlled through the following
