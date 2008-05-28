@@ -148,8 +148,8 @@ begin
     + NEW_LINE
     + TextBox_quick_message_body.text
     );
-  TextBox_quick_message_subject.text := system.string.EMPTY;
-  TextBox_quick_message_body.text := system.string.EMPTY;
+  TextBox_quick_message_subject.text := EMPTY;
+  TextBox_quick_message_body.text := EMPTY;
   Alert(LOGIC,NORMAL,'messagsnt','Message sent');
 end;
 
@@ -231,7 +231,7 @@ begin
     end;
     //
     if e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text <> '&nbsp;' then begin
-       p.distribution_list := p.distribution_list + e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text + ', ';
+       p.distribution_list := p.distribution_list + e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text + COMMA_SPACE;
     end;
     //
   end;

@@ -362,7 +362,7 @@ begin
   NEEDS_PA_DOH_EMSO_APPROVAL:
     BEGIN
     approval_timestamp_column := STATE;
-    next_approver_role := system.string.EMPTY;
+    next_approver_role := EMPTY;
     reviewer_descriptor := SponsorRegionNameOf(master_id);
     next_status := NEEDS_INVOICE_COLLECTION;
     END;
@@ -802,7 +802,7 @@ begin
     db_emsof_requests.MarkDone(IdOf(e_item),ord(next_status),biz_user.Kind);
     biz_accounts.MakePromotionNotification
       (
-      system.string.EMPTY,
+      EMPTY,
       reviewer_descriptor,
       system.object(next_status).tostring,
       ServiceIdOf(e_item),
@@ -817,7 +817,7 @@ begin
     db_emsof_requests.MarkDone(master_id,ord(next_status),biz_user.Kind);
     biz_accounts.MakePromotionNotification
       (
-      system.string.EMPTY,
+      EMPTY,
       reviewer_descriptor,
       system.object(next_status).tostring,
       ServiceIdOf(e_item),
@@ -1109,7 +1109,7 @@ begin
     (
     Table_report,
     path.GetDirectoryName(request_physical_path) + '/' + configurationsettings.appsettings['scratch_folder'] + '/'
-    + 'WebEmsofDohExport-' + qualifier + '-' + datetime.Now.tostring('yyyyMMddHHmmssf') + '.xls',
+    + 'WebEmsofDohExport-' + qualifier + HYPHEN + datetime.Now.tostring('yyyyMMddHHmmssf') + '.xls',
     biz_accounts.EmailTargetByRole('emsof-coordinator'),
     configurationsettings.AppSettings['state_report_to_target'],
     configurationsettings.AppSettings['state_report_cc_target'],
@@ -1135,7 +1135,7 @@ end;
 
 function TClass_biz_emsof_requests.SumOfActualValues(fy_id: string = ''): decimal;
 begin
-  if fy_id = system.string.EMPTY then begin
+  if fy_id = EMPTY then begin
     SumOfActualValues := db_emsof_requests.SumOfActualValues
       (biz_user.Kind,biz_user.IdNum,TClass_biz_fiscal_years.Create.IdOfCurrent);
   end else begin
@@ -1155,7 +1155,7 @@ end;
 
 function TClass_biz_emsof_requests.SumOfRequestValues(fy_id: string = ''): decimal;
 begin
-  if fy_id = system.string.EMPTY then begin
+  if fy_id = EMPTY then begin
     SumOfRequestValues := db_emsof_requests.SumOfRequestValues
       (biz_user.Kind,biz_user.IdNum,TClass_biz_fiscal_years.Create.IdOfCurrent);
   end else begin

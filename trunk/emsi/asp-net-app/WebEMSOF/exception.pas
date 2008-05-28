@@ -90,7 +90,7 @@ begin
     end else begin
       Table_db_down.visible := FALSE;
       //
-      if user.identity.name = system.string.EMPTY then begin
+      if user.identity.name = EMPTY then begin
         user_designator := 'unknown';
       end else begin
         user_designator := user.identity.name + ' (' + session[p.biz_user.Kind + '_name'].tostring + ')';
@@ -144,8 +144,8 @@ procedure TWebForm_exception.Button_submit_Click(sender: System.Object; e: Syste
 var
   comment: string;
 begin
-  comment := Safe(TextArea_user_comment.value,NARRATIVE);
-  if comment <> system.string.EMPTY then begin
+  comment := Safe(TextArea_user_comment.value,PUNCTUATED);
+  if comment <> EMPTY then begin
     ki.SmtpMailSend
       (
       configurationsettings.appsettings['sender_email_address'],

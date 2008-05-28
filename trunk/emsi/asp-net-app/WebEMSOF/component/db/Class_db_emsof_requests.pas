@@ -244,6 +244,9 @@ type
 
 implementation
 
+uses
+  kix;
+
 const
   FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION = 'select emsof_request_master.id' // column 0
   + ' , service.id as service_id'                                                       // column 1
@@ -308,11 +311,11 @@ var
   cmdText: string;
   where_clause: string;
 begin
-  if where_parm = system.string.EMPTY then begin
-    where_clause := system.string.EMPTY;
+  if where_parm = EMPTY then begin
+    where_clause := EMPTY;
   end else begin
     where_clause := 'where ' + where_parm;
-    if and_parm <> system.string.EMPTY then begin
+    if and_parm <> EMPTY then begin
       where_clause := where_clause + ' and ' + and_parm;
     end;
   end;
@@ -388,7 +391,7 @@ var
   cmdText: string;
 begin
   if approval_timestamp_column <> NONE then begin
-    cmdText := system.string.EMPTY;
+    cmdText := EMPTY;
     if (amount_to_return_to_county > 0) or (user_kind = 'state-staffer') or (next_status = 8) then begin
       cmdText := 'START TRANSACTION; ';
     end;
@@ -798,7 +801,7 @@ var
   bdr: borland.data.provider.bdpdatareader;
   detail_text: string;
 begin
-  detail_text := system.string.EMPTY;
+  detail_text := EMPTY;
   self.Open;
   bdr := borland.data.provider.bdpcommand.Create
     (
@@ -1020,7 +1023,7 @@ var
   safe_string: string;
 begin
   safe_string := Safe(DataGridItem(e_item).cells[TCCI_LEFTOVER_OR_SHORTAGE].text,REAL_NUM_INCLUDING_NEGATIVE);
-  if safe_string = system.string.EMPTY then begin
+  if safe_string = EMPTY then begin
     LeftoverOrShortageOf := 0;
   end else begin
     LeftoverOrShortageOf := decimal.Parse(safe_string);

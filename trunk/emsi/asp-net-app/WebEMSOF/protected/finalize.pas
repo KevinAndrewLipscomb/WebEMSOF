@@ -387,7 +387,7 @@ begin
       session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
       + ' request',
       session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
-      + ' request for ' + session['fiscal_year_designator'].tostring + '.' + NEW_LINE
+      + ' request for ' + session['fiscal_year_designator'].tostring + PERIOD + NEW_LINE
       + NEW_LINE
       + 'Please approve or return/reject this request by visiting:' + NEW_LINE
       + NEW_LINE
@@ -407,7 +407,7 @@ begin
       session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
       + ' request',
       session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
-      + ' request for ' + session['fiscal_year_designator'].tostring + '.' + NEW_LINE
+      + ' request for ' + session['fiscal_year_designator'].tostring + PERIOD + NEW_LINE
       + NEW_LINE
       + 'WebEMSOF has forwarded the finalized request to <' + cc_email_address + '> for county approval.  No action is required '
       + 'from you at this time.' + NEW_LINE

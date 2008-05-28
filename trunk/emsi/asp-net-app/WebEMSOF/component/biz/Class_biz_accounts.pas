@@ -199,8 +199,8 @@ begin
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id)
-    + ',' + EmailAddressByKindId('county',county_code)
-    + ',' + EmailTargetByRole('emsof-coordinator'),
+    + COMMA + EmailAddressByKindId('county',county_code)
+    + COMMA + EmailTargetByRole('emsof-coordinator'),
     'Special re-opening of EMSOF request',
     sponsor_region_name + ' has re-opened an EMSOF request from ' + service_name + ' for additional rework.  '
     + 'The re-opened request is temporarily exempt from normal submission deadlines but ' + sponsor_region_name + ' reserves the '
@@ -241,7 +241,7 @@ begin
   //
   message_text := 'Recently, ' + service_name + ' submitted a request to conduct an EMSOF Category 4 Provider Equipment project.  '
   + 'This message documents the approval by all the necessary parties of that request as recorded in '
-  + ConfigurationSettings.AppSettings['application_name'] + '.' + NEW_LINE
+  + ConfigurationSettings.AppSettings['application_name'] + PERIOD + NEW_LINE
   + NEW_LINE
   + 'Congratulations!  YOU MAY NOW PROCEED WITH THE PROJECT SPECIFIED BELOW.  Please print this message and keep it for your '
   + 'records.' + NEW_LINE
@@ -332,10 +332,10 @@ begin
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
     EmailTargetByRole('emsof-request-withdrawal-stakeholder')
-    + ',' + EmailAddressByKindId('county',county_code),
+    + COMMA + EmailAddressByKindId('county',county_code),
     'Service is WITHDRAWING an entire EMSOF request',
     service_name + ' is withdrawing EMSOF request W#' + master_id + ' in its totality.  The associated sponsor county is '
-    + biz_counties.NameOf(county_code) + '.' + NEW_LINE
+    + biz_counties.NameOf(county_code) + PERIOD + NEW_LINE
     + NEW_LINE
     + service_name + ' is aware that this action effectively surrenders ' + db_emsof_requests.EmsofAnteOf(master_id).tostring('C')
     + ' of EMSOF matching funds for use by others.' + NEW_LINE
@@ -388,7 +388,7 @@ begin
     deadline_description := 'submit proof of payment for one or more requested items';
   end;
   //
-  message_text := 'Sorry, but ' + service_name + ' has missed the regional deadline to ' + deadline_description + ' '
+  message_text := 'Sorry, but ' + service_name + ' has missed the regional deadline to ' + deadline_description + SPACE
   + 'associated with an allocation from ' + county_name + ' County.' + NEW_LINE
   + NEW_LINE;
   if be_advice_valuable then begin
@@ -408,7 +408,7 @@ begin
   //
   ki.SmtpMailSend(ConfigurationSettings.AppSettings['sender_email_address'],service_email_address,'Missed deadline',message_text);
   //
-  message_text := service_name + ' has missed the regional deadline to ' + deadline_description + ' '
+  message_text := service_name + ' has missed the regional deadline to ' + deadline_description + SPACE
   + 'associated with an allocation from ' + county_name + ' County.' + NEW_LINE
   + NEW_LINE;
   if be_advice_valuable then begin
@@ -430,7 +430,7 @@ begin
   ki.SmtpMailSend
     (
     ConfigurationSettings.AppSettings['sender_email_address'],
-    county_coord_email_address + ',' + EmailTargetByRole('emsof-coordinator'),
+    county_coord_email_address + COMMA + EmailTargetByRole('emsof-coordinator'),
     'Service missed deadline',
     message_text
     );
@@ -463,7 +463,7 @@ begin
   //
   BreakChars[1] := ki.SPACE;
   BreakChars[2] := ki.TAB;
-  BreakChars[3] := '-';
+  BreakChars[3] := HYPHEN;
   //
   if be_ok_to_rework then begin
     //
@@ -641,10 +641,10 @@ begin
   //
   //   Get the next approver's email address.
   //
-  if next_reviewer_role <> system.string.EMPTY then begin
+  if next_reviewer_role <> EMPTY then begin
     next_reviewer_email_target := EmailTargetByRole(next_reviewer_role);
   end else begin
-    next_reviewer_email_target := system.string.EMPTY
+    next_reviewer_email_target := EMPTY
   end;
   //
   self_email_address := SelfEmailAddress;
@@ -652,7 +652,7 @@ begin
   messageText := reviewer_descriptor + ' has promoted ' + service_name + '''s '+ fy_designator + ' EMSOF request.' + NEW_LINE
   + NEW_LINE
   + 'The status of this EMSOF request is now "' + new_status_description + '".  ';
-  if next_reviewer_email_target <> system.string.EMPTY then begin
+  if next_reviewer_email_target <> EMPTY then begin
     messageText := messageText + 'The next reviewer''s email address is <' + next_reviewer_email_target + '>.';
   end;
   if be_warning_required then begin
@@ -688,7 +688,7 @@ begin
   //
   //   Send notification to region.
   //
-  if next_reviewer_email_target <> system.string.EMPTY then begin
+  if next_reviewer_email_target <> EMPTY then begin
     ki.SmtpMailSend
       (
       ConfigurationSettings.AppSettings['sender_email_address'],
@@ -854,7 +854,7 @@ begin
     'This is an automated reminder from WebEMSOF.' + NEW_LINE
     + NEW_LINE
     + 'You have ' + num_days_left.tostring + ' days to ' + task_description + '.  The deadline is '
-    + deadline_date.tostring('HH:mm:ss dddd, MMMM d, yyyy') + '.' + NEW_LINE
+    + deadline_date.tostring('HH:mm:ss dddd, MMMM d, yyyy') + PERIOD + NEW_LINE
     + NEW_LINE
     + 'You can review your EMSOF requests by visiting:' + NEW_LINE
     + NEW_LINE

@@ -198,7 +198,7 @@ begin
       Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
       Label_make_requests_deadline.text := make_item_requests_deadline.tostring('HH:mm:ss dddd, MMMM dd, yyyy');
       session.Remove('emsof_request_item_priority');
-      session.Add('emsof_request_item_priority',system.string.EMPTY);
+      session.Add('emsof_request_item_priority',EMPTY);
     end;
     //
     session.Remove('be_before_service_to_county_submission_deadline');
@@ -384,7 +384,7 @@ begin
     session.Remove('emsof_request_item_code');
     session.Add('emsof_request_item_code',Safe(e.item.cells[p.tcci_code].text,NUM));
     session.Remove('emsof_request_item_equipment_category');
-    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[p.tcci_item_description].text,NARRATIVE));
+    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[p.tcci_item_description].text,PUNCTUATED));
     server.Transfer('request_item_detail.aspx');
   end;
   Bind_items;
