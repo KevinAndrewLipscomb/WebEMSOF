@@ -1,16 +1,16 @@
 library WebEMSOF;
 
 {%AspWebConfigContainer 'Web.config'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Data.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Drawing.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Web.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.XML.dll'}
-{%DelphiDotNetAssemblyCompiler 'c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Provider.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Windows.Forms.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\System.Design.dll'}
-{%DelphiDotNetAssemblyCompiler 'c:\program files\common files\borland shared\bds\shared assemblies\4.0\Borland.Data.Common.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\microsoft.net\framework\v1.1.4322\mscorlib.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Data.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Web.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.XML.dll'}
+{%DelphiDotNetAssemblyCompiler 'C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0\Borland.Data.Provider.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Design.dll'}
+{%DelphiDotNetAssemblyCompiler 'C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0\Borland.Data.Common.dll'}
+{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll'}
 {%File 'schema.sql'}
 {%ConfigurationCompiler 'unpublished.config'}
 {%File 'resource\terms-and-conditions.pdf'}

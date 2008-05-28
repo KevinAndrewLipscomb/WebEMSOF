@@ -233,7 +233,7 @@ begin
   session.Remove('status_code');
   session.Add('status_code',Safe(e.item.cells[p.tcci_status_code].text,NUM));
   session.Remove('emsof_request_master_status');
-  session.Add('emsof_request_master_status',Safe(e.item.cells[p.tcci_status].text,NARRATIVE));
+  session.Add('emsof_request_master_status',Safe(e.item.cells[p.tcci_status].text,PUNCTUATED));
   session.Remove('fiscal_year_designator');
   session.Add('fiscal_year_designator',Safe(e.item.cells[p.tcci_fy_designator].text,ALPHANUM));
   session.Remove('sponsor_county');

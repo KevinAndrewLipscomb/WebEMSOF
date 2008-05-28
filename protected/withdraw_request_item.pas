@@ -96,7 +96,7 @@ begin
     p.saved_shortage := decimal.Parse(session['emsof_request_item_additional_service_ante'].tostring);
     //
     Label_priority.text := session['emsof_request_item_priority'].tostring;
-    Label_description.text := session['emsof_request_item_make_model'].tostring + ' '
+    Label_description.text := session['emsof_request_item_make_model'].tostring + SPACE
     + session['emsof_request_item_equipment_category'].tostring;
     Label_emsof_ante.text := p.saved_emsof_ante.tostring('C');
   end;

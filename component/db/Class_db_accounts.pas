@@ -41,6 +41,7 @@ type
 implementation
 
 uses
+  kix,
   system.web.ui.webcontrols;
 
 constructor TClass_db_accounts.Create;
@@ -91,7 +92,7 @@ begin
     .ExecuteReader;
   while bdr.Read do begin
     DropDownList(target).Items.Add
-      (listitem.Create(bdr['last_name'].tostring + ', ' + bdr['first_name'].tostring,'regional_staffer_' + bdr['id'].ToString));
+      (listitem.Create(bdr['last_name'].tostring + COMMA_SPACE + bdr['first_name'].tostring,'regional_staffer_' + bdr['id'].ToString));
   end;
   bdr.Close;
   self.Close;
@@ -143,7 +144,7 @@ var
   bdr: borland.data.provider.bdpdatareader;
   email_target: string;
 begin
-  email_target := system.string.EMPTY;
+  email_target := EMPTY;
   self.Open;
   bdr := borland.data.provider.bdpcommand.Create
     (
@@ -156,7 +157,7 @@ begin
     )
     .ExecuteReader;
   while bdr.Read do begin
-    email_target := email_target + bdr['password_reset_email_address'].tostring + ',';
+    email_target := email_target + bdr['password_reset_email_address'].tostring + COMMA;
   end;
   bdr.Close;
   self.Close;

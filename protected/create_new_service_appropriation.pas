@@ -169,7 +169,7 @@ var
   amount_string: string;
 begin
   amount_string := Safe(args.value,REAL_NUM);
-  if amount_string = system.string.EMPTY then begin
+  if amount_string = EMPTY then begin
     args.isvalid := FALSE;
   end else begin
     p.amount := decimal.Parse(amount_string);
@@ -214,7 +214,7 @@ procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and
 begin
   if page.isvalid then begin
     AddAppropriation;
-    TextBox_new_amount.Text := system.string.EMPTY;
+    TextBox_new_amount.Text := EMPTY;
     DropDownList_services.SelectedIndex := -1;
     //
     // Update labels in the Parent appropriation section.
@@ -249,9 +249,9 @@ begin
     p.db_trail.Saved
       (
       'insert into county_dictated_appropriation'
-      + ' set region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].tostring + ','
-      +   ' service_id = ' + service_id_string + ','
-      +   ' amount = ' + p.amount.tostring + ','
+      + ' set region_dictated_appropriation_id = ' + session['region_dictated_appropriation_id'].tostring + COMMA
+      +   ' service_id = ' + service_id_string + COMMA
+      +   ' amount = ' + p.amount.tostring + COMMA
       +   ' match_level_id = ' + Safe(RadioButtonList_match_level.selectedvalue,NUM)
       ),
     p.db.connection
@@ -310,7 +310,7 @@ begin
     .ExecuteScalar.tostring;
   //   Set up the messageText.
   messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF allocation '
-  + 'of ' + p.amount.tostring('C') + ' to your service for ' + bdp_get_fy_designator.ExecuteScalar.tostring + '.' + NEW_LINE
+  + 'of ' + p.amount.tostring('C') + ' to your service for ' + bdp_get_fy_designator.ExecuteScalar.tostring + PERIOD + NEW_LINE
   + NEW_LINE
   + 'You can work on this allocation by visiting:' + NEW_LINE
   + NEW_LINE

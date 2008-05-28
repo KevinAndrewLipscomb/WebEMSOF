@@ -170,7 +170,7 @@ begin
     session['email_address_of_service_of_appropriation_selected_for_deletion'].tostring,
     'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
     'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF allocation from your '
-    + 'service for ' + Safe(Label_fiscal_year.text,ALPHANUM) + '.' + NEW_LINE
+    + 'service for ' + Safe(Label_fiscal_year.text,ALPHANUM) + PERIOD + NEW_LINE
     + NEW_LINE
     + 'NOTE that the equipment request(s) that you had already entered against this allocation were also deleted.  WebEMSOF had '
     + 'made the County Coordinator aware that this would happen.' + NEW_LINE

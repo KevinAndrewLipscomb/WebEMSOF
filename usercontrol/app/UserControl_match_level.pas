@@ -66,9 +66,9 @@ uses
 procedure TWebUserControl_match_level.Clear;
 begin
   //
-  TextBox_name.text := system.string.EMPTY;
+  TextBox_name.text := EMPTY;
   DropDownList_name.visible := FALSE;
-  TextBox_factor.text := system.string.EMPTY;
+  TextBox_factor.text := EMPTY;
   //
   Button_delete.enabled := FALSE;
   //
@@ -174,13 +174,13 @@ begin
   if page.IsValid then begin
     //
     factor := 0;
-    if TextBox_factor.text <> system.string.EMPTY then begin
+    if TextBox_factor.text <> EMPTY then begin
       factor := decimal.Parse(Safe(TextBox_factor.text,REAL_NUM_INCLUDING_NEGATIVE));
     end;
     //
     p.biz_match_level.&Set
       (
-      Safe(TextBox_name.text,NARRATIVE),
+      Safe(TextBox_name.text,PUNCTUATED),
       factor
       );
     Alert(USER,SUCCESS,'recsaved','Record saved.');
@@ -227,7 +227,7 @@ begin
       if num_matches = 1 then begin
         PresentRecord(DropDownList_name.selectedvalue);
       end else begin
-        DropDownList_name.items.Insert(0,listitem.Create('-- Select --',system.string.EMPTY));
+        DropDownList_name.items.Insert(0,listitem.Create('-- Select --',EMPTY));
       end;
     end;
   end;

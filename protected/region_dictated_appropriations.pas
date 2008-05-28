@@ -233,7 +233,7 @@ begin
   appropriation_id_string := Safe(e.Item.Cells[p.tcci_id].Text,NUM);
   amount_string := Safe(TextBox(e.Item.Cells[p.tcci_amount].controls[0]).Text.Trim,REAL_NUM);
   //
-  if amount_string <> system.string.EMPTY then begin
+  if amount_string <> EMPTY then begin
     amount := decimal.Parse(amount_string);
     //
     if (amount - p.saved_amount) > p.unappropriated_amount then begin
@@ -256,7 +256,7 @@ begin
       Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your county',
       'Regional staffer ' + session['regional_staffer_name'].ToString + ' has modified an EMSOF allocation for '
-      + 'your county for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+      + 'your county for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + PERIOD + NEW_LINE
       + NEW_LINE
       + 'You can work on this allocation by visiting:' + NEW_LINE
       + NEW_LINE
@@ -407,7 +407,7 @@ begin
       Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS),
       'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your county',
       'The ' + session['region_name'].ToString + ' Regional Council EMSOF Coordinator has deleted an EMSOF allocation from '
-      + 'your county for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+      + 'your county for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + PERIOD + NEW_LINE
       + NEW_LINE
       + 'For an overview of your EMSOF allocations, visit:' + NEW_LINE
       + NEW_LINE

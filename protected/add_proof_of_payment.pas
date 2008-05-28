@@ -140,7 +140,7 @@ var
   amount_string: string;
 begin
   amount_string := Safe(args.value,REAL_NUM);
-  if amount_string = system.string.EMPTY then begin
+  if amount_string = EMPTY then begin
     args.isvalid := FALSE;
   end else begin
     p.amount := decimal.Parse(amount_string);
@@ -163,7 +163,7 @@ begin
       Calendar_date_of_payment.selecteddate,
       Safe(DropDownList_methods.selectedvalue,NUM),
       p.amount,
-      Safe(TextBox_note.text,NARRATIVE)
+      Safe(TextBox_note.text,PUNCTUATED)
       );
   end;
   server.Transfer(stack(session['waypoint_stack']).Pop.tostring);

@@ -405,7 +405,7 @@ begin
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
       'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF allocation from your '
-      + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+      + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + PERIOD + NEW_LINE
       + NEW_LINE
       + 'For an overview of your EMSOF allocations, visit:' + NEW_LINE
       + NEW_LINE
@@ -456,7 +456,7 @@ begin
     //   By default, do not display the Leftover / Shortage value.  But save it off just in case.
     //
     leftover_or_shortage := decimal.parse(Safe(e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text,REAL_NUM_INCLUDING_NEGATIVE));
-    e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text := system.string.EMPTY;
+    e.item.cells[p.biz_emsof_requests.TcciOfLeftoverOrShortage].text := EMPTY;
     //
     if convert.ToInt16(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text) > 2 then begin
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := TRUE;
@@ -503,7 +503,7 @@ begin
   appropriation_id_string := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfId].Text,NUM);
   amount_string := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfAppropriation].controls[0]).Text.Trim,REAL_NUM);
   //
-  if amount_string <> system.string.EMPTY then begin
+  if amount_string <> EMPTY then begin
     amount := decimal.Parse(amount_string);
     //
     if (amount - p.saved_amount) > p.unappropriated_amount then begin
@@ -526,7 +526,7 @@ begin
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
       'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF allocation for your '
-      + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + '.' + NEW_LINE
+      + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + PERIOD + NEW_LINE
       + NEW_LINE
       + 'You can work on this allocation by visiting:' + NEW_LINE
       + NEW_LINE

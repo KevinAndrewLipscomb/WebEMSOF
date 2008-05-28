@@ -398,14 +398,14 @@ var
   priority: string;
 begin
   //
-  priority := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestPriority].Text.Trim,NARRATIVE);
-  invoice_designator := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestActuals].FindControl('TextBox_invoice_designator')).Text.Trim,NARRATIVE);
+  priority := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestPriority].Text.Trim,PUNCTUATED);
+  invoice_designator := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestActuals].FindControl('TextBox_invoice_designator')).Text.Trim,PUNCTUATED);
   actual_quantity := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestActuals].FindControl('TextBox_actual_quantity')).Text.Trim,NUM);
   actual_subtotal_cost := Safe(TextBox(e.Item.Cells[p.biz_emsof_requests.TcciOfFullRequestActuals].FindControl('TextBox_actual_subtotal_cost')).Text.Trim,REAL_NUM);
   //
-  if (invoice_designator <> system.string.EMPTY)
-    and (actual_quantity <> system.string.EMPTY)
-    and (actual_subtotal_cost <> system.string.EMPTY)
+  if (invoice_designator <> EMPTY)
+    and (actual_quantity <> EMPTY)
+    and (actual_subtotal_cost <> EMPTY)
   then begin
     p.biz_emsof_requests.SetActuals(p.request_id,priority,invoice_designator,actual_quantity,actual_subtotal_cost);
   end;
@@ -469,12 +469,12 @@ procedure TWebForm_full_request_review_approve.Button_disapprove_Click
   e: System.EventArgs
   );
 begin
-  if TextArea_disapproval_reason.Value <> system.string.EMPTY then begin
+  if TextArea_disapproval_reason.Value <> EMPTY then begin
     p.biz_emsof_requests.Demote
       (
       session['e_item'],
       session['account_descriptor'].tostring,
-      Safe(TextArea_disapproval_reason.value,NARRATIVE),
+      Safe(TextArea_disapproval_reason.value,PUNCTUATED),
       Safe(Label_sum_of_emsof_antes.text,CURRENCY_USA)
       );
     server.Transfer(stack(session['waypoint_stack']).Pop.tostring);

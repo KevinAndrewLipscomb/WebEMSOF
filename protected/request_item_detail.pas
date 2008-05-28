@@ -201,7 +201,7 @@ begin
     be_before_deadline := session['be_before_service_to_county_submission_deadline'].tostring = 'True'; // Case matters.
     be_finalized := session['be_finalized'].tostring = 'True'; // Case matters.
     be_locked := (not be_before_deadline) or be_finalized;
-    be_new := session['emsof_request_item_priority'].tostring = system.string.EMPTY;
+    be_new := session['emsof_request_item_priority'].tostring = EMPTY;
     //
     // Manage whether or not the instruction ("-- Select --") appears at the top of DropDownList_equipment_category.
     //
@@ -418,13 +418,13 @@ begin
       'START TRANSACTION'
       + ';'
       + 'update emsof_request_detail'
-      + ' set equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
+      + ' set equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + COMMA
       +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
-      +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
-      +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
-      +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
-      +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
-      +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
+      +   ' place_kept = "' + Safe(TextBox_place_kept.text,PUNCTUATED) + '",'
+      +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + COMMA
+      +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + COMMA
+      +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + COMMA
+      +   ' additional_service_ante = ' + p.additional_service_ante.tostring + COMMA
       +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
       + ' where master_id = ' + session['emsof_request_master_id'].tostring
       +   ' and priority = ' + session['emsof_request_item_priority'].tostring
@@ -547,12 +547,12 @@ var
   total_cost: decimal;
   unit_cost: decimal;
 begin
-  if (Safe(TextBox_unit_cost.text,REAL_NUM) <> system.string.EMPTY) and (Safe(TextBox_quantity.text,NUM) <> system.string.EMPTY)
+  if (Safe(TextBox_unit_cost.text,REAL_NUM) <> EMPTY) and (Safe(TextBox_quantity.text,NUM) <> EMPTY)
   then begin
     //
     unit_cost := decimal.Parse(Safe(TextBox_unit_cost.text,REAL_NUM));
     quantity := decimal.Parse(Safe(TextBox_quantity.text,NUM));
-    if TextBox_additional_service_ante.text <> system.string.EMPTY then begin
+    if TextBox_additional_service_ante.text <> EMPTY then begin
       p.additional_service_ante := decimal.Parse(Safe(TextBox_additional_service_ante.text,REAL_NUM));
     end else begin
       p.additional_service_ante := 0;
@@ -629,21 +629,21 @@ begin
       'START TRANSACTION'
       + ';'
       + 'insert into emsof_request_detail'
-      + ' set master_id = ' + session['emsof_request_master_id'].tostring + ','
-      +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + ','
+      + ' set master_id = ' + session['emsof_request_master_id'].tostring + COMMA
+      +   ' equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + COMMA
       +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
-      +   ' place_kept = "' + Safe(TextBox_place_kept.text,NARRATIVE) + '",'
-      +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + ','
-      +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + ','
-      +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + ','
-      +   ' additional_service_ante = ' + p.additional_service_ante.tostring + ','
-      +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
+      +   ' place_kept = "' + Safe(TextBox_place_kept.text,PUNCTUATED) + '",'
+      +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + COMMA
+      +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + COMMA
+      +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + COMMA
+      +   ' additional_service_ante = ' + p.additional_service_ante.tostring + COMMA
+      +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM) + COMMA
       +   ' priority = ' + priority_string
       + ';'
       + 'update emsof_request_master'
       + ' set status_code = 2,'
-      +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + ','
-      +   ' shortage = shortage + ' + p.additional_service_ante.tostring + ','
+      +   ' value = value + ' + Safe(Label_emsof_ante.text,REAL_NUM) + COMMA
+      +   ' shortage = shortage + ' + p.additional_service_ante.tostring + COMMA
       +   ' num_items = num_items + 1'
       + ' where id = ' + session['emsof_request_master_id'].tostring
       + ';'
@@ -672,7 +672,7 @@ begin
     //
     life_expectancy_string := bdr_state_details['life_expectancy_years'].tostring;
     //
-    if life_expectancy_string <> system.string.EMPTY then begin
+    if life_expectancy_string <> EMPTY then begin
       Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
       Label_life_expectancy.font.bold := TRUE;
     end else begin

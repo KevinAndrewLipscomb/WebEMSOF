@@ -98,7 +98,7 @@ begin
   //
   cmdText := 'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ';
   if not be_unfiltered then begin
-    cmdText := cmdText + 'and county_code = ' + county_user_id + ' ';
+    cmdText := cmdText + 'and county_code = ' + county_user_id + SPACE;
   end;
   cmdText := cmdText + 'ORDER BY name';
   //
@@ -208,12 +208,12 @@ begin
       (
       'UPDATE service '
       + 'SET name = "' + name + '",'
-      +   'be_qrs = ' + be_qrs + ','
-      +   'be_bls_amb = ' + be_bls_amb + ','
-      +   'be_als_amb = ' + be_als_amb + ','
-      +   'be_als_squad = ' + be_als_squad + ','
-      +   'be_air_amb = ' + be_air_amb + ','
-      +   'be_rescue = ' + be_rescue + ','
+      +   'be_qrs = ' + be_qrs + COMMA
+      +   'be_bls_amb = ' + be_bls_amb + COMMA
+      +   'be_als_amb = ' + be_als_amb + COMMA
+      +   'be_als_squad = ' + be_als_squad + COMMA
+      +   'be_air_amb = ' + be_air_amb + COMMA
+      +   'be_rescue = ' + be_rescue + COMMA
       +   'address_line_1 = "' + address_line_1 + '",'
       +   'address_line_2 = "' + address_line_2 + '",'
       +   'city = "' + city + '",'

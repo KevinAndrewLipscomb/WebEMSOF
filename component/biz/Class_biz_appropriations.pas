@@ -147,13 +147,13 @@ var
   biz_user: TClass_biz_user;
 begin
   biz_user := TClass_biz_user.Create;
-  if recipient_kind = system.string.EMPTY then begin
+  if recipient_kind = EMPTY then begin
     recipient_kind := biz_user.Kind;
   end;
-  if recipient_id = system.string.EMPTY then begin
+  if recipient_id = EMPTY then begin
     recipient_id := biz_user.IdNum;
   end;
-  if fy_id = system.string.EMPTY then begin
+  if fy_id = EMPTY then begin
     fy_id := biz_fiscal_years.IdOfCurrent;
   end;
   SumOfAppropriationsFromSpecificParent :=
@@ -171,13 +171,13 @@ var
   biz_user: TClass_biz_user;
 begin
   biz_user := TClass_biz_user.Create;
-  if recipient_kind = system.string.EMPTY then begin
+  if recipient_kind = EMPTY then begin
     recipient_kind := biz_user.Kind;
   end;
-  if recipient_id = system.string.EMPTY then begin
+  if recipient_id = EMPTY then begin
     recipient_id := biz_user.IdNum;
   end;
-  if fy_id = system.string.EMPTY then begin
+  if fy_id = EMPTY then begin
     fy_id := biz_fiscal_years.IdOfCurrent;
   end;
   SumOfAppropriationsFromOnlyParent :=
@@ -199,7 +199,7 @@ var
   biz_user: TClass_biz_user;
 begin
   biz_user := TClass_biz_user.Create;
-  if fy_id = system.string.EMPTY then begin
+  if fy_id = EMPTY then begin
     SumOfSelfDictatedAppropriations := db_appropriations.SumOfSelfDictatedAppropriations
       (biz_user.Kind,biz_user.IdNum,biz_fiscal_years.IdOfCurrent);
   end else begin
