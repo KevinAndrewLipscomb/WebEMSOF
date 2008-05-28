@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, borland.data.provider, system.configuration,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, mysql.data.mysqlclient, system.configuration,
   system.web.security,
   Class_db,
   Class_db_trail;
@@ -46,6 +46,7 @@ type
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
     LinkButton_back_to_overview: System.Web.UI.WebControls.LinkButton;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -54,9 +55,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -75,7 +73,6 @@ end;
 
 procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -83,7 +80,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_password';
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - change_password';
     //
     p.db := TClass_db.Create;
     p.db_trail := TClass_db_trail.Create;
@@ -133,12 +130,12 @@ begin
   // Commit the data to the database.
   //
   p.db.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     p.db_trail.Saved
       (
       'UPDATE ' + session['target_user_table'].ToString + '_user'
-      + ' SET encoded_password = "' + ki.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
+      + ' SET encoded_password = "' + kix.Digest(Safe(TextBox_nominal_password.Text.trim,ALPHANUM)) + '",'
       +   ' be_stale_password = FALSE'
       + ' WHERE id = "' + session[session['target_user_table'].ToString + '_user_id'].ToString + '"'
       ),

@@ -8,7 +8,7 @@
   <body>
     <form runat="server">
       <p>
-        <asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder>
+        <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
       </p>
 	  <p><small>[
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ 
@@ -41,7 +41,7 @@
       </p>
       <p>
       </p>
-	  <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
+	  <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
     <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

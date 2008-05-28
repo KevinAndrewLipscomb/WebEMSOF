@@ -3,7 +3,7 @@ unit Class_db_counties;
 interface
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_db;
 
 type
@@ -26,7 +26,7 @@ end;
 function TClass_db_counties.NameOf(code: string): string;
 begin
   self.Open;
-  NameOf := bdpcommand.Create('select name from county_code_name_map where code = ' + code,connection).ExecuteScalar.tostring;
+  NameOf := mysqlcommand.Create('select name from county_code_name_map where code = ' + code,connection).ExecuteScalar.tostring;
   self.Close;
 end;
 

@@ -46,6 +46,7 @@ type
     TextBox_name: TextBox;
     DropDownList_name: DropDownList;
     TextBox_factor: TextBox;
+  protected
     procedure OnInit(e: System.EventArgs); override;
   private
     { Private Declarations }
@@ -58,8 +59,7 @@ type
 implementation
 
 uses
-  appcommon,
-  ki,
+  kix,
   System.Collections,
   system.configuration;
 

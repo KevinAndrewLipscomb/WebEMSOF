@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.security,
   Class_db;
 
@@ -43,6 +43,7 @@ type
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -51,9 +52,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -73,11 +71,10 @@ end;
 
 procedure TWebForm_county_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdr: borland.data.provider.BdpDataReader;
+  dr: mysqldatareader;
   county_user_email_address: string;
   max_fiscal_year_id_string: string;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -85,40 +82,40 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_overview';
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - county_overview';
     p.db := TClass_db.Create;
     //
     Label_county_name.Text := session['county_name'].ToString;
     //
     p.db.Open;
-    bdr := Borland.Data.Provider.BdpCommand.Create
+    dr := mysqlcommand.Create
       (
       'SELECT be_stale_password, password_reset_email_address FROM county_user'
       + ' where id = ' + session['county_user_id'].tostring,
       p.db.connection
       )
       .ExecuteReader;
-    bdr.Read;
-    if bdr['be_stale_password'].ToString = '0' then begin
+    dr.Read;
+    if dr['be_stale_password'].ToString = '0' then begin
       //
       // Get anything else needed from this reader, then close it.  We have another reader to open, and only one can be open at a
       // time.
       //
-      county_user_email_address := bdr['password_reset_email_address'].tostring;
-      bdr.Close;
+      county_user_email_address := dr['password_reset_email_address'].tostring;
+      dr.Close;
       //
       // Where we go next depends on how many appropriations have been made to this county.
       //
       // Determine current fiscal year
       //
-      max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
+      max_fiscal_year_id_string := mysqlcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
         p.db.connection
         )
         .ExecuteScalar.tostring;
       //
-      bdr := borland.data.provider.bdpcommand.Create
+      dr := mysqlcommand.Create
         (
         'SELECT region_dictated_appropriation.id,'
         + ' concat("$",format(region_dictated_appropriation.amount,2)," from the ",name," ",designator," contract (amendment ",amendment_num,")")'
@@ -132,10 +129,10 @@ begin
         p.db.connection
         )
         .ExecuteReader;
-      while bdr.Read do begin
-        RadioButtonList_appropriation.Items.Add(listitem.Create(bdr['appropriation_description'].tostring,bdr['id'].ToString));
+      while dr.Read do begin
+        RadioButtonList_appropriation.Items.Add(listitem.Create(dr['appropriation_description'].tostring,dr['id'].ToString));
       end;
-      bdr.Close;
+      dr.Close;
       p.db.Close;
       if RadioButtonList_appropriation.items.Count = 0 then begin
         server.Transfer('no_appropriation.aspx');
@@ -153,7 +150,7 @@ begin
         end;
       end;
     end else begin
-      bdr.Close;
+      dr.Close;
       p.db.Close;
       server.Transfer('change_password.aspx');
     end;

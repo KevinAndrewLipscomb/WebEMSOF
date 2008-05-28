@@ -19,7 +19,7 @@ type
 implementation
 
 uses
-  borland.data.provider;
+  mysql.data.mysqlclient;
 
 constructor TClass_db_equipment.Create;
 begin
@@ -32,7 +32,7 @@ var
   allowable_cost_obj: system.object;
 begin
   self.Open;
-  allowable_cost_obj := borland.data.provider.bdpcommand.Create
+  allowable_cost_obj := mysqlcommand.Create
     (
     'select allowable_cost'
     + ' from eligible_provider_equipment_list'
@@ -53,7 +53,7 @@ var
   funding_level_obj: system.object;
 begin
   self.Open;
-  funding_level_obj := borland.data.provider.bdpcommand.Create
+  funding_level_obj := mysqlcommand.Create
     (
     'select funding_level_nonrural'
     + ' from eligible_provider_equipment_list'
@@ -75,7 +75,7 @@ var
   funding_level_obj: system.object;
 begin
   self.Open;
-  funding_level_obj := borland.data.provider.bdpcommand.Create
+  funding_level_obj := mysqlcommand.Create
     (
     'select funding_level_rural'
     + ' from eligible_provider_equipment_list'

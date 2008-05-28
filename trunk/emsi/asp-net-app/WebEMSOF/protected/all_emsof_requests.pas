@@ -5,8 +5,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
-  borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security,
+  mysql.data.mysqlclient,
   Class_biz_emsof_requests,
   Class_biz_user,
   UserControl_print_div;
@@ -61,6 +61,7 @@ type
     Button_send: System.Web.UI.WebControls.Button;
     Label_distribution_list: System.Web.UI.WebControls.Label;
     Table_quick_message: System.Web.UI.HtmlControls.HtmlTable;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -69,9 +70,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -95,7 +93,6 @@ end;
 
 procedure TWebForm_all_emsof_requests.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -104,7 +101,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - all_emsof_requests';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - all_emsof_requests';
     
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
@@ -116,7 +113,6 @@ begin
     p.num_datagrid_rows := 0;
     p.sort_order := 'service_name';
     //
-    UserControl_print_div.text := '[print]';
     Bind;
     //
   end;
@@ -134,16 +130,16 @@ end;
 procedure TWebForm_all_emsof_requests.Button_send_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
     // from
-    configurationsettings.appsettings['sender_email_address'],
+    configurationmanager.appsettings['sender_email_address'],
     // to
     Label_distribution_list.text,
     // subject
     TextBox_quick_message_subject.text,
     // body
-    '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationsettings.appsettings['application_name']
+    '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationmanager.appsettings['application_name']
     + ')' + NEW_LINE
     + NEW_LINE
     + TextBox_quick_message_body.text

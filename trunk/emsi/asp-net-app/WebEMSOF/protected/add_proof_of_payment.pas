@@ -7,7 +7,6 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, system.web.security,
-  appcommon,
   Class_biz_emsof_requests,
   Class_biz_payment_proof_methods,
   ki_web_ui;
@@ -66,6 +65,7 @@ type
     Calendar_date_of_payment: System.Web.UI.WebControls.Calendar;
     DropDownList_methods: System.Web.UI.WebControls.DropDownList;
     CustomValidator_amount: System.Web.UI.WebControls.CustomValidator;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -76,7 +76,7 @@ type
 implementation
 
 uses
-  ki;
+  kix;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -99,7 +99,6 @@ end;
 
 procedure TWebForm_add_proof_of_payment.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -111,7 +110,7 @@ begin
       server.Transfer('~/login.aspx');
     end else begin
       //
-      Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - add_proof_of_payment';
+      Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - add_proof_of_payment';
       Label_account_descriptor.text := session.item['account_descriptor'].tostring;
       //
       p.biz_emsof_requests := TClass_biz_emsof_requests.Create;

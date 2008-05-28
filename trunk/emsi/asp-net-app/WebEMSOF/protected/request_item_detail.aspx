@@ -1,4 +1,6 @@
 <%@ Page language="c#" Debug="true" Codebehind="request_item_detail.pas" AutoEventWireup="false" Inherits="request_item_detail.TWebForm_request_item_detail" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -12,8 +14,7 @@
   <body>
 	 <form runat="server">
 	  <p>
-	  <asp:placeholder id="PlaceHolder_precontent" runat="server">
-	  </asp:placeholder></p>
+	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent></p>
 	  <p>
 		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
 			  <tr>
@@ -183,8 +184,7 @@
 			  </tr>
 		  </table></small></p>
 </div>
-	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
-	</asp:placeholder>
+	<uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
 	 <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

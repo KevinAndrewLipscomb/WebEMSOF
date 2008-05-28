@@ -5,9 +5,9 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki,
-  System.Data.Common, Borland.Data.Provider, System.Globalization,
-  Borland.Data.Common, system.configuration, system.web.security,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
+  System.Data.Common, mysql.data.mysqlclient, System.Globalization,
+   system.configuration, system.web.security,
   Class_db,
   UserControl_print_div;
 
@@ -59,6 +59,7 @@ type
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     Table_item_requests_section: System.Web.UI.HtmlControls.HtmlTable;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -66,9 +67,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -90,11 +88,10 @@ end;
 
 procedure TWebForm_service_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  biz_get_profile_status: borland.data.provider.BdpCommand;
+  biz_get_profile_status: mysqlcommand;
   be_stale_password: string;
 //  make_item_requests_deadline: system.datetime;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -106,7 +103,7 @@ begin
     p.db := TClass_db.Create;
     p.db.Open;
     //
-    be_stale_password := Borland.Data.Provider.BdpCommand.Create
+    be_stale_password := mysqlcommand.Create
       (
       'SELECT be_stale_password FROM service_user where id=' + session['service_user_id'].tostring,
       p.db.connection
@@ -117,7 +114,7 @@ begin
       server.Transfer('change_password.aspx');
     end;
     //
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - service_overview';
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - service_overview';
     
     //
     // Initialize implementation-scoped vars.
@@ -140,7 +137,7 @@ begin
     //
     // Set Label_profile_status
     //
-    biz_get_profile_status := borland.data.provider.bdpCommand.Create
+    biz_get_profile_status := mysqlcommand.Create
       (
       'select be_valid_profile from service where id = "' + session['service_user_id'].ToString + '"'
       ,p.db.connection
@@ -156,7 +153,7 @@ begin
       //
       // Determine current fiscal year
       //
-      p.max_fiscal_year_id_string := borland.data.provider.bdpcommand.Create
+      p.max_fiscal_year_id_string := mysqlcommand.Create
         (
         'SELECT max(id) as max_id FROM fiscal_year',
         p.db.connection
@@ -167,7 +164,7 @@ begin
 //    //
 //    make_item_requests_deadline := system.datetime
 //      (
-//      borland.data.provider.bdpcommand.Create
+//      mysqlcommand.Create
 //        (
 //        'select value'
 //        + ' from fy_calendar'
@@ -269,6 +266,16 @@ begin
     end;
     e.item.Cells[p.tcci_linkbutton].controls.item[0].visible :=
       p.be_before_deadline and (e.item.cells[p.tcci_status_code].text <> '12');
+    //
+    // Deemphasize requests from former cycles.
+    //
+    if p.num_dg_items > 1 then begin
+      e.item.cells[p.tcci_fy_designator].enabled := FALSE;
+      e.item.cells[p.tcci_county_name].enabled := FALSE;
+      e.item.cells[p.tcci_county_dictated_appropriation_amount].enabled := FALSE;
+      e.item.cells[p.tcci_status].enabled := FALSE;
+      e.item.cells[p.tcci_value].enabled := FALSE;
+    end;
   end;
 end;
 
@@ -286,7 +293,7 @@ begin
   //
   // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
   //
-  DataGrid.DataSource := borland.data.provider.bdpcommand.Create
+  DataGrid.DataSource := mysqlcommand.Create
     (
     'SELECT emsof_request_master.id,'                                                  // column 0
     + ' designator as fy_designator,'                                                  // column 1
@@ -308,12 +315,12 @@ begin
     +   ' JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)'
     + ' WHERE service_id = ' + session['service_user_id'].tostring
     +   ' and fiscal_year.id >= (' + p.max_fiscal_year_id_string + ' - 1)'
-    + ' order by fy_designator,county_name',
+    + ' order by fy_designator desc,county_name',
     p.db.connection
     )
     .ExecuteReader;
   DataGrid.DataBind;
-  bdpdatareader(datagrid.datasource).Close;
+  mysqldatareader(datagrid.datasource).Close;
   be_datagrid_empty := (p.num_dg_items = 0);
   //
   // Manage control visibilities.

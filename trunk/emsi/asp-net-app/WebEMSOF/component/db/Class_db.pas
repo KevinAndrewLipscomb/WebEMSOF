@@ -3,7 +3,7 @@ unit Class_db;
 interface
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   system.configuration,
   system.data;
 
@@ -16,7 +16,7 @@ type
     { Private Declarations }
   protected
   public
-    connection: borland.data.provider.bdpconnection;
+    connection: mysqlconnection;
       //
       // The connection member should be protected rather than public once all db operations in WebEMSOF are performed via
       // descendants of this class.
@@ -32,9 +32,8 @@ constructor TClass_db.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
-  connection := borland.data.provider.bdpconnection.Create;
-  connection.ConnectionOptions := 'transaction isolation=ReadCommitted';
-  connection.ConnectionString := ConfigurationSettings.AppSettings['bdp_connection_string'];
+  connection := mysqlconnection.Create;
+  connection.ConnectionString := configurationmanager.AppSettings['db_connection_string'];
 end;
 
 procedure TClass_db.Close;

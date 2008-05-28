@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration,
+  system.web.ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration,
   Class_biz_user,
   system.web.mail;
 
@@ -31,6 +31,7 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     HyperLink_login: System.Web.UI.WebControls.HyperLink;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -42,9 +43,6 @@ type
 
 implementation
       
-uses
-  appcommon;
-
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -59,7 +57,6 @@ end;
 
 procedure TWebForm_timeout.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -67,7 +64,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - timeout';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - timeout';
   end;
 end;
 

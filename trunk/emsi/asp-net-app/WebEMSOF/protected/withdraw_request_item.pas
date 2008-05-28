@@ -7,8 +7,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki,
-  borland.data.provider,
+  kix,
+  mysql.data.mysqlclient,
   Class_db,
   Class_db_trail,
   system.configuration,
@@ -51,6 +51,7 @@ type
     Label_emsof_ante: System.Web.UI.WebControls.Label;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_item_detail: System.Web.UI.WebControls.LinkButton;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -59,7 +60,6 @@ type
 implementation
 
 uses
-  appcommon,
   Class_biz_accounts;
 
 {$REGION 'Designer Managed Code'}
@@ -80,7 +80,6 @@ end;
 
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -88,7 +87,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - withdraw_request_item';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - withdraw_request_item';
     //
     p.db := TClass_db.Create;
     p.db_trail := TClass_db_trail.Create;
@@ -148,7 +147,7 @@ var
   service_email_address: string;
 begin
   p.db.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     p.db_trail.Saved
       (
@@ -177,9 +176,9 @@ begin
   //
   biz_accounts := TClass_biz_accounts.Create;
   service_email_address := biz_accounts.EmailAddressByKindId('service',session['service_user_id'].tostring);
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     biz_accounts.EmailTargetByRole('emsof-request-withdrawal-stakeholder'),
     'Withdrawal of EMSOF request item',
     session['service_name'].ToString + ' has withdrawn a(n) "' + Label_description.text + '" item from their '
@@ -192,14 +191,14 @@ begin
     + NEW_LINE
     + 'You can see the effect of this action by visiting:' + NEW_LINE
     + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
     + NEW_LINE
     + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
     + NEW_LINE
     + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name']
     );
   //
   server.Transfer('request_overview.aspx');

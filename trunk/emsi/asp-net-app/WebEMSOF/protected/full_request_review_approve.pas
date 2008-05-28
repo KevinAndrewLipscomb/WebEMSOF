@@ -5,8 +5,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
-  borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security,
+  mysql.data.mysqlclient,
   Class_biz_emsof_requests,
   UserControl_print_div;
 
@@ -127,6 +127,7 @@ type
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
     Label_sponsor_county_2: System.Web.UI.WebControls.Label;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -137,7 +138,6 @@ type
 implementation
 
 uses
-  appcommon,
   Class_biz_appropriations;
 
 const
@@ -184,7 +184,6 @@ var
   be_beyond_invoice_collection: boolean;
   timestamp: datetime;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -193,7 +192,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - full_request_review_approve';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - full_request_review_approve';
     
     Label_account_descriptor.text := session['account_descriptor'].tostring;
     //
@@ -324,7 +323,7 @@ begin
     TableRow_force_closed.visible := p.biz_emsof_requests.BeOkToRevokeDeadlineExemption(session['e_item']);
     Table_extraordinary_actions.visible := TableRow_force_open.visible or TableRow_force_closed.visible;
     if Table_extraordinary_actions.visible then begin
-      Label_application_name.text := configurationsettings.appsettings['application_name'];
+      Label_application_name.text := configurationmanager.appsettings['application_name'];
     end;
     //
   end;

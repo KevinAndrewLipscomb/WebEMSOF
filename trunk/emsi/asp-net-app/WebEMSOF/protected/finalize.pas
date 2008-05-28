@@ -5,7 +5,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.mail, system.web.security,
   Class_db,
   UserControl_print_div;
@@ -84,6 +84,7 @@ type
     LinkButton_request_overview_bottom: System.Web.UI.WebControls.LinkButton;
     HyperLink_terms_and_conditions: System.Web.UI.WebControls.HyperLink;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -94,7 +95,6 @@ type
 implementation
  
 uses
-  appcommon,
   Class_biz_accounts,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
@@ -129,13 +129,12 @@ end;
 
 procedure TWebForm_finalize.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
   biz_fiscal_years: TClass_biz_fiscal_years;
   grand_total_cost: decimal;
   grand_total_cost_obj: system.object;
   max_reimbursement: decimal;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -143,7 +142,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - finalize';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - finalize';
     
     //
     Label_service_name.text := session['service_name'].tostring;
@@ -165,7 +164,7 @@ begin
       //
       // Set Label_grand_total_cost.
       //
-      grand_total_cost_obj := borland.data.provider.bdpcommand.Create
+      grand_total_cost_obj := mysqlcommand.Create
         (
         'select sum(unit_cost*quantity) from emsof_request_detail'
         + ' where master_id = ' + session['emsof_request_master_id'].tostring,
@@ -191,7 +190,7 @@ begin
       //
       // Set Label_deadline_*
       //
-      bdr := borland.data.provider.bdpcommand.Create
+      dr := mysqlcommand.Create
         (
         'select value as emsof_service_purchase_completion_deadline'
         + ' from fy_calendar'
@@ -201,11 +200,11 @@ begin
         p.db.connection
         )
         .ExecuteReader;
-      bdr.Read;
+      dr.Read;
       Label_deadline_purchase_completion.text :=
-        datetime.Parse(bdr['emsof_service_purchase_completion_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
-      bdr.Close;
-      bdr := borland.data.provider.bdpcommand.Create
+        datetime.Parse(dr['emsof_service_purchase_completion_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+      dr.Close;
+      dr := mysqlcommand.Create
         (
         'select value as emsof_service_invoice_submission_deadline'
         + ' from fy_calendar'
@@ -215,11 +214,11 @@ begin
         p.db.connection
         )
         .ExecuteReader;
-      bdr.Read;
+      dr.Read;
       Label_deadline_invoice_submission.text :=
-        datetime.Parse(bdr['emsof_service_invoice_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
-      bdr.Close;
-      bdr := borland.data.provider.bdpcommand.Create
+        datetime.Parse(dr['emsof_service_invoice_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+      dr.Close;
+      dr := mysqlcommand.Create
         (
         'select value as emsof_service_canceled_check_submission_deadline'
         + ' from fy_calendar'
@@ -229,10 +228,10 @@ begin
         p.db.connection
         )
         .ExecuteReader;
-      bdr.Read;
+      dr.Read;
       Label_deadline_canceled_check_submission.text :=
-        datetime.Parse(bdr['emsof_service_canceled_check_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
-      bdr.Close;
+        datetime.Parse(dr['emsof_service_canceled_check_submission_deadline'].tostring).tostring('HH:mm:ss dddd, MMMM dd, yyyy');
+      dr.Close;
       //
       p.db.Close;
       //
@@ -380,33 +379,33 @@ begin
     cc_email_address := biz_accounts.EmailAddressByKindId
       ('county',TClass_biz_appropriations.Create.CountyCodeOfCountyDictum(session['county_dictated_appropriation_id'].tostring));
     //
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       cc_email_address,
-      session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
+      session['service_name'].tostring + ' has finalized its ' + configurationmanager.AppSettings['application_name']
       + ' request',
-      session['service_name'].tostring + ' has finalized its ' + ConfigurationSettings.AppSettings['application_name']
+      session['service_name'].tostring + ' has finalized its ' + configurationmanager.AppSettings['application_name']
       + ' request for ' + session['fiscal_year_designator'].tostring + PERIOD + NEW_LINE
       + NEW_LINE
       + 'Please approve or return/reject this request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
       + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       biz_accounts.EmailTargetByRole('emsof-coordinator'),
-      session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
+      session['service_name'].tostring + ' has finalized a ' + configurationmanager.AppSettings['application_name']
       + ' request',
-      session['service_name'].tostring + ' has finalized a ' + ConfigurationSettings.AppSettings['application_name']
+      session['service_name'].tostring + ' has finalized a ' + configurationmanager.AppSettings['application_name']
       + ' request for ' + session['fiscal_year_designator'].tostring + PERIOD + NEW_LINE
       + NEW_LINE
       + 'WebEMSOF has forwarded the finalized request to <' + cc_email_address + '> for county approval.  No action is required '
@@ -414,14 +413,14 @@ begin
       + NEW_LINE
       + 'You can use WebEMSOF by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact the ' + session['service_name'].ToString + ' EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
       + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
     //
     server.Transfer('request_overview.aspx');

@@ -3,7 +3,7 @@ unit Class_db_regional_staffers;
 interface
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_db;
 
 type
@@ -27,7 +27,7 @@ end;
 function TClass_db_regional_staffers.RegionCodeOf(id: string): string;
 begin
   self.Open;
-  RegionCodeOf := borland.data.provider.BdpCommand.Create
+  RegionCodeOf := mysqlcommand.Create
     (
     'SELECT region_code FROM regional_staffer WHERE id = ' + id,
     connection
@@ -39,7 +39,7 @@ end;
 function TClass_db_regional_staffers.RegionNameOf(id: string): string;
 begin
   self.Open;
-  RegionNameOf := borland.data.provider.BdpCommand.Create
+  RegionNameOf := mysqlcommand.Create
     (
     'SELECT name'
     + ' FROM regional_staffer join region_code_name_map on (region_code_name_map.code=regional_staffer.region_code)'

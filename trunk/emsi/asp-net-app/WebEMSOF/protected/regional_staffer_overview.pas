@@ -5,7 +5,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security,
   system.text,
   UserControl_print_div;
 
@@ -86,6 +86,7 @@ type
     LinkButton_maintain_region_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
     UserControl_print_div: TWebUserControl_print_div;
     //
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -96,7 +97,6 @@ type
 implementation
 
 uses
-  appcommon,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
   Class_biz_fiscal_years,
@@ -147,14 +147,13 @@ var
   tally: string;
   waypoint_stack: stack;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     if (session['regional_staffer_name'] = nil) or (session['regional_staffer_user_id'] = nil) then begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - regional_staffer_overview';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - regional_staffer_overview';
     
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //

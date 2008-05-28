@@ -3,8 +3,8 @@ unit Class_db_user;
 interface
 
 uses
-  ki,
-  borland.data.provider,
+  kix,
+  mysql.data.mysqlclient,
   Class_db,
   system.collections;
 
@@ -22,7 +22,7 @@ type
       target_user_table: string;
       id: string
       )
-      : ki.string_array;
+      : kix.string_array;
   end;
 
 implementation
@@ -38,14 +38,14 @@ function TClass_db_user.RolesOf
   target_user_table: string;
   id: string
   )
-  : ki.string_array;
+  : kix.string_array;
 var
-  bdr: borland.data.provider.bdpdatareader;
-  roles_of: ki.string_array;
+  dr: mysqldatareader;
+  roles_of: kix.string_array;
   roles_of_len: cardinal;
 begin
   self.Open;
-  bdr := borland.data.provider.bdpcommand.Create
+  dr := mysqlcommand.Create
     (
     'select ' + target_user_table + 'group.name as group_name'
     + ' from ' + target_user_table + 'role'
@@ -56,12 +56,12 @@ begin
     )
     .ExecuteReader;
   roles_of_len := 0;
-  while bdr.Read do begin
+  while dr.Read do begin
     roles_of_len := roles_of_len + 1;
     SetLength(roles_of,roles_of_len);
-    roles_of[roles_of_len - 1] := bdr['group_name'].tostring;
+    roles_of[roles_of_len - 1] := dr['group_name'].tostring;
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
   RolesOf := roles_of;
 end;

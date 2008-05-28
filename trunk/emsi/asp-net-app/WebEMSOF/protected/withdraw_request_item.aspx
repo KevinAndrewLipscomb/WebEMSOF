@@ -1,4 +1,7 @@
-<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %><%@ Page language="c#" Debug="true" Codebehind="withdraw_request_item.pas" AutoEventWireup="false" Inherits="withdraw_request_item.TWebForm_withdraw_request_item" %>
+<%@ Page language="c#" Debug="true" Codebehind="withdraw_request_item.pas" AutoEventWireup="false" Inherits="withdraw_request_item.TWebForm_withdraw_request_item" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
+<%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
@@ -10,8 +13,7 @@
   <body>
      <form runat="server">
       <p>
-      <asp:placeholder id="PlaceHolder_precontent" runat="server">
-      </asp:placeholder></p>
+      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent></p>
       <p><small>[ 
 		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_request_item_detail" runat="server">request item detail</ASP:LinkButton>&nbsp;form ]</small></p>
 <p>
@@ -52,8 +54,7 @@
 				</table></td>
 			</tr>
 		</table></p>
-	<asp:placeholder id="PlaceHolder_postcontent" runat="server">
-	</asp:placeholder>
+	<uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
 	 <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

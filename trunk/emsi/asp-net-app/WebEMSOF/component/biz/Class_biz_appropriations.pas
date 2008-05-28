@@ -67,6 +67,9 @@ type
 
 implementation
 
+uses
+  kix;
+
 constructor TClass_biz_appropriations.Create;
 begin
   inherited Create;

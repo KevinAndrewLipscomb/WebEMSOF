@@ -1,4 +1,3 @@
-
 unit Default;
 
 interface
@@ -7,7 +6,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki,
+  kix,
   system.configuration,
   system.security.principal;
 
@@ -27,15 +26,13 @@ type
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_application_name: System.Web.UI.WebControls.Label;
     HyperLink_login: System.Web.UI.WebControls.HyperLink;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -50,10 +47,9 @@ end;
 
 procedure TWebForm_Default.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - Default';
-    Label_application_name.text := ConfigurationSettings.AppSettings['application_name'];
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - Default';
+    Label_application_name.text := configurationmanager.AppSettings['application_name'];
     //
     if session['target_user_table'] <> nil then begin
       response.Redirect('protected/' + session['target_user_table'].tostring + '_overview.aspx');

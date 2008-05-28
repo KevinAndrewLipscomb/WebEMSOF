@@ -3,7 +3,7 @@ unit Class_db_services;
 interface
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_db,
   Class_db_trail,
   system.web.ui.webcontrols;
@@ -63,6 +63,9 @@ type
 
 implementation
 
+uses
+  kix;
+
 constructor TClass_db_services.Create;
 begin
   inherited Create;
@@ -73,7 +76,7 @@ end;
 function TClass_db_services.AffiliateNumOfId(id: string): string;
 begin
   self.Open;
-  AffiliateNumOfId := borland.data.provider.BdpCommand.Create
+  AffiliateNumOfId := mysqlcommand.Create
     (
     'SELECT affiliate_num FROM service WHERE id = ' + id,
     connection
@@ -89,7 +92,7 @@ procedure TClass_db_services.BindDropDownList
   be_unfiltered: boolean = FALSE
   );
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
   cmdText: string;
 begin
   self.Open;
@@ -102,11 +105,11 @@ begin
   end;
   cmdText := cmdText + 'ORDER BY name';
   //
-  bdr := Borland.Data.Provider.BdpCommand.Create(cmdText,connection).ExecuteReader;
-  while bdr.Read do begin
-    DropDownList(target).Items.Add(listitem.Create(bdr['name'].tostring,bdr['id'].ToString));
+  dr := mysqlcommand.Create(cmdText,connection).ExecuteReader;
+  while dr.Read do begin
+    DropDownList(target).Items.Add(listitem.Create(dr['name'].tostring,dr['id'].ToString));
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
 end;
 
@@ -130,10 +133,10 @@ procedure TClass_db_services.GetProfile
   out be_valid_profile: boolean
   );
 var
-  bdr: borland.data.provider.BdpDataReader;
+  dr: mysqldatareader;
 begin
   self.Open;
-  bdr := borland.data.provider.BdpCommand.Create
+  dr := mysqlcommand.Create
     (
     'SELECT name,'
     + 'be_qrs,'
@@ -155,30 +158,30 @@ begin
     connection
     )
     .ExecuteReader;
-  bdr.Read;
-  name := bdr['name'].tostring;
-  be_qrs := (bdr['be_qrs'].tostring = '1');
-  be_bls_amb := (bdr['be_bls_amb'].tostring = '1');
-  be_als_amb := (bdr['be_als_amb'].tostring = '1');
-  be_als_squad := (bdr['be_als_squad'].tostring = '1');
-  be_air_amb := (bdr['be_air_amb'].tostring = '1');
-  be_rescue := (bdr['be_rescue'].tostring = '1');
-  address_line_1 := bdr['address_line_1'].tostring;
-  address_line_2 := bdr['address_line_2'].tostring;
-  city := bdr['city'].tostring;
-  zip_code := bdr['zip_code'].tostring;
-  federal_tax_id_num := bdr['federal_tax_id_num'].tostring;
-  contact_person_name := bdr['contact_person_name'].tostring;
-  contact_person_phone_num := bdr['contact_person_phone_num'].tostring;
-  be_valid_profile := (bdr['be_valid_profile'].tostring = '1');
-  bdr.Close;
+  dr.Read;
+  name := dr['name'].tostring;
+  be_qrs := (dr['be_qrs'].tostring = '1');
+  be_bls_amb := (dr['be_bls_amb'].tostring = '1');
+  be_als_amb := (dr['be_als_amb'].tostring = '1');
+  be_als_squad := (dr['be_als_squad'].tostring = '1');
+  be_air_amb := (dr['be_air_amb'].tostring = '1');
+  be_rescue := (dr['be_rescue'].tostring = '1');
+  address_line_1 := dr['address_line_1'].tostring;
+  address_line_2 := dr['address_line_2'].tostring;
+  city := dr['city'].tostring;
+  zip_code := dr['zip_code'].tostring;
+  federal_tax_id_num := dr['federal_tax_id_num'].tostring;
+  contact_person_name := dr['contact_person_name'].tostring;
+  contact_person_phone_num := dr['contact_person_phone_num'].tostring;
+  be_valid_profile := (dr['be_valid_profile'].tostring = '1');
+  dr.Close;
   self.Close;
 end;
 
 function TClass_db_services.NameOf(service_id: string): string;
 begin
   self.Open;
-  NameOf := bdpcommand.Create('select name from service where id = ' + service_id,connection).ExecuteScalar.tostring;
+  NameOf := mysqlcommand.Create('select name from service where id = ' + service_id,connection).ExecuteScalar.tostring;
   self.Close;
 end;
 
@@ -202,7 +205,7 @@ procedure TClass_db_services.SetProfile
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (

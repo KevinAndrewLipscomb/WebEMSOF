@@ -7,9 +7,9 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, system.web.security,
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_biz_emsof_requests,
-  ki,
+  kix,
   ki_web_ui;
 
 const ID = '$Id$';
@@ -56,6 +56,7 @@ type
     LinkButton_unreject_all: System.Web.UI.WebControls.LinkButton;
     DataGrid_unrejectable_requests: System.Web.UI.WebControls.DataGrid;
     LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -65,9 +66,6 @@ type
 
 implementation
      
-uses
-  appcommon;
-
 {$REGION 'Designer Managed Code'}
 /// <summary>
 /// Required method for Designer support -- do not modify
@@ -91,7 +89,6 @@ end;
 
 procedure TWebForm_county_unrejection.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -103,7 +100,7 @@ begin
       server.Transfer('~/login.aspx');
     end else begin
       //
-      Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_unrejection';
+      Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - county_unrejection';
       Label_account_descriptor.text := session['county_name'].tostring + ' County';
       //
       // Initialize implementation-wide vars.
