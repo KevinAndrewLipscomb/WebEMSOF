@@ -5,7 +5,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.mail, system.web.security,
   Class_db,
   Class_db_trail,
@@ -16,8 +16,8 @@ type
     RECORD
     additional_service_ante: decimal;
     allowable_cost: decimal;
-    bdri_equipment_category_allowable_cost: cardinal;
-    bdri_equipment_category_funding_level: cardinal;
+    dri_equipment_category_allowable_cost: cardinal;
+    dri_equipment_category_funding_level: cardinal;
     cmdText_get_equipment_category_monetary_details: string;
     db: TClass_db;
     db_trail: TClass_db_trail;
@@ -97,6 +97,7 @@ type
     LinkButton_request_overview_1: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_2: System.Web.UI.WebControls.LinkButton;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -106,7 +107,6 @@ type
 implementation
 
 uses
-  appcommon,
   Class_biz_fiscal_years;
 
 {$REGION 'Designer Managed Code'}
@@ -136,9 +136,9 @@ end;
 
 procedure TWebForm_request_item_detail.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdr_factors: borland.data.provider.BdpDataReader;
-  bdr_services: borland.data.provider.BdpDataReader;
-  bdr_user_details: borland.data.provider.BdpDataReader;
+  dr_factors: mysqldatareader;
+  dr_services: mysqldatareader;
+  dr_user_details: mysqldatareader;
   be_before_deadline: boolean;
   be_finalized: boolean;
   be_locked: boolean;
@@ -146,7 +146,6 @@ var
   biz_fiscal_years: TClass_biz_fiscal_years;
   cmdText: string;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -154,7 +153,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - request_item_detail';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - request_item_detail';
     
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
     p.db := TClass_db.Create;
@@ -166,7 +165,7 @@ begin
     //
     p.match_level := decimal.Parse
       (
-      borland.data.provider.bdpcommand.Create
+      mysqlcommand.Create
         (
         'select factor'
         + ' from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)'
@@ -195,8 +194,8 @@ begin
     + ' where fiscal_year_id = ' + biz_fiscal_years.IdOfDesignator(session['fiscal_year_designator'].tostring)
     +   ' and code = ';
     //    Mind these indices if the query changes.
-    p.bdri_equipment_category_allowable_cost := 1;
-    p.bdri_equipment_category_funding_level := 2;
+    p.dri_equipment_category_allowable_cost := 1;
+    p.dri_equipment_category_funding_level := 2;
     //
     be_before_deadline := session['be_before_service_to_county_submission_deadline'].tostring = 'True'; // Case matters.
     be_finalized := session['be_finalized'].tostring = 'True'; // Case matters.
@@ -215,7 +214,7 @@ begin
       //
       // Determine this service's eligibility factors.
       //
-      bdr_factors := borland.data.provider.bdpcommand.Create
+      dr_factors := mysqlcommand.Create
         (
         'select (be_als_amb or be_air_amb) as be_als_amb,'
         + ' (be_als_amb or be_als_squad) as be_als_squad,'
@@ -226,30 +225,30 @@ begin
         p.db.connection
         )
         .ExecuteReader;
-      bdr_factors.Read;
+      dr_factors.Read;
       cmdText := 'SELECT code,description FROM eligible_provider_equipment_list'
       + ' WHERE fiscal_year_id = ' + biz_fiscal_years.IdOfDesignator(session['fiscal_year_designator'].tostring)
       +   ' and (FALSE '; // Default to empty set
-      if bdr_factors['be_als_amb'].tostring = '1' then begin
+      if dr_factors['be_als_amb'].tostring = '1' then begin
         cmdText := cmdText + 'or be_eligible_als_amb = 1 ';
       end;
-      if bdr_factors['be_als_squad'].tostring = '1' then begin
+      if dr_factors['be_als_squad'].tostring = '1' then begin
         cmdText := cmdText + 'or be_eligible_als_squad = 1 ';
       end;
-      if bdr_factors['be_bls_amb'].tostring = '1' then begin
+      if dr_factors['be_bls_amb'].tostring = '1' then begin
         cmdText := cmdText + 'or be_eligible_bls_amb = 1 ';
       end;
-      if bdr_factors['be_qrs'].tostring = '1' then begin
+      if dr_factors['be_qrs'].tostring = '1' then begin
         cmdText := cmdText + 'or be_eligible_qrs = 1 ';
       end;
       cmdText := cmdText + ') ORDER BY description';
-      bdr_factors.Close;
+      dr_factors.Close;
       //
-      bdr_services := Borland.Data.Provider.BdpCommand.Create(cmdText,p.db.connection).ExecuteReader;
-      while bdr_services.Read do begin
-        DropDownList_equipment_category.Items.Add(listitem.Create(bdr_services['description'].tostring,bdr_services['code'].ToString));
+      dr_services := mysqlcommand.Create(cmdText,p.db.connection).ExecuteReader;
+      while dr_services.Read do begin
+        DropDownList_equipment_category.Items.Add(listitem.Create(dr_services['description'].tostring,dr_services['code'].ToString));
       end;
-      bdr_services.Close;
+      dr_services.Close;
     end else begin
       DropDownList_equipment_category.Items.Add
         (
@@ -282,7 +281,7 @@ begin
       ShowDependentData;
       p.db.Open;
       //
-      bdr_user_details := borland.data.provider.bdpcommand.Create
+      dr_user_details := mysqlcommand.Create
         (
         'select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante'
         + ' from emsof_request_detail'
@@ -291,21 +290,21 @@ begin
         p.db.connection
         )
         .ExecuteReader;
-      bdr_user_details.Read;
-      TextBox_make_model.text := bdr_user_details['make_model'].tostring;
-      TextBox_place_kept.text := bdr_user_details['place_kept'].tostring;
-      if bdr_user_details['be_refurbished'].tostring = '0' then begin
+      dr_user_details.Read;
+      TextBox_make_model.text := dr_user_details['make_model'].tostring;
+      TextBox_place_kept.text := dr_user_details['place_kept'].tostring;
+      if dr_user_details['be_refurbished'].tostring = '0' then begin
          RadioButtonList_condition.selectedindex := 0;
       end else begin
          RadioButtonList_condition.selectedindex := 1;
       end;
-      TextBox_unit_cost.text := decimal.Parse(bdr_user_details['unit_cost'].tostring).tostring('N2');
-      TextBox_quantity.text := bdr_user_details['quantity'].tostring;
-      TextBox_additional_service_ante.text := decimal.Parse(bdr_user_details['additional_service_ante'].tostring).tostring('N2');
-      p.saved_emsof_ante := decimal.Parse(bdr_user_details['emsof_ante'].tostring);
-      p.saved_additional_service_ante := decimal.Parse(bdr_user_details['additional_service_ante'].tostring);
+      TextBox_unit_cost.text := decimal.Parse(dr_user_details['unit_cost'].tostring).tostring('N2');
+      TextBox_quantity.text := dr_user_details['quantity'].tostring;
+      TextBox_additional_service_ante.text := decimal.Parse(dr_user_details['additional_service_ante'].tostring).tostring('N2');
+      p.saved_emsof_ante := decimal.Parse(dr_user_details['emsof_ante'].tostring);
+      p.saved_additional_service_ante := decimal.Parse(dr_user_details['additional_service_ante'].tostring);
       Label_emsof_ante.text := p.saved_emsof_ante.tostring('N2');
-      bdr_user_details.Close;
+      dr_user_details.Close;
       //
       Recalculate;
       //
@@ -411,7 +410,7 @@ begin
   // Update the detail record.
   // Update the master record.
   //
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     p.db_trail.Saved
       (
@@ -454,7 +453,7 @@ begin
     // Eliminate the resulting gap in the priority sequence.
     // Update the master record.
     //
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       p.db_trail.Saved
         (
@@ -612,7 +611,7 @@ begin
   // Get the number of items entered against this request previously, and initialize this item to have a priority just lower than
   // all previous items.
   //
-  priority_string := borland.data.provider.bdpcommand.Create
+  priority_string := mysqlcommand.Create
     (
     'select (num_items + 1) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
     p.db.connection
@@ -622,7 +621,7 @@ begin
   // Record the new request item.
   // Update the master record.
   //
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     p.db_trail.Saved
       (
@@ -658,19 +657,19 @@ end;
 
 procedure TWebForm_request_item_detail.ShowDependentData;
 var
-  bdr_state_details: borland.data.provider.bdpdatareader;
+  dr_state_details: mysqldatareader;
   life_expectancy_string: string;
 begin
   p.db.Open;
-  bdr_state_details := borland.data.provider.bdpcommand.Create
+  dr_state_details := mysqlcommand.Create
     (
     p.cmdText_get_equipment_category_monetary_details + Safe(DropDownList_equipment_category.SelectedValue,NUM),
     p.db.connection
     )
     .ExecuteReader;
-  if bdr_state_details.Read then begin
+  if dr_state_details.Read then begin
     //
-    life_expectancy_string := bdr_state_details['life_expectancy_years'].tostring;
+    life_expectancy_string := dr_state_details['life_expectancy_years'].tostring;
     //
     if life_expectancy_string <> EMPTY then begin
       Label_life_expectancy.text := 'PA DOH EMSO expects this equipment to last ' + life_expectancy_string + ' years.';
@@ -680,22 +679,22 @@ begin
       Label_life_expectancy.font.bold := FALSE;
     end;
     //
-    if not bdr_state_details.IsDbNull(p.bdri_equipment_category_allowable_cost) then begin
-      Label_allowable_cost.text := decimal.Parse(bdr_state_details['allowable_cost'].tostring).tostring('N2');
+    if not dr_state_details.IsDbNull(p.dri_equipment_category_allowable_cost) then begin
+      Label_allowable_cost.text := decimal.Parse(dr_state_details['allowable_cost'].tostring).tostring('N2');
       p.allowable_cost := decimal.Parse(Label_allowable_cost.text);
     end else begin
       Label_allowable_cost.text := '(none specified)';
       p.allowable_cost := decimal.maxvalue;
     end;
     //
-    if not bdr_state_details.IsDbNull(p.bdri_equipment_category_funding_level) then begin
-      p.funding_level := decimal.Parse(bdr_state_details['funding_level'].tostring);
+    if not dr_state_details.IsDbNull(p.dri_equipment_category_funding_level) then begin
+      p.funding_level := decimal.Parse(dr_state_details['funding_level'].tostring);
     end else begin
       p.funding_level := decimal.maxvalue;
     end;
     //
   end;
-  bdr_state_details.Close;
+  dr_state_details.Close;
   p.db.Close;
   //
   Recalculate;

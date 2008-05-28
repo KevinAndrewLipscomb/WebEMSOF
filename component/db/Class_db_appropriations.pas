@@ -3,7 +3,7 @@ unit Class_db_appropriations;
 interface
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_db,
   Class_db_trail,
   Class_biz_fiscal_years,
@@ -90,7 +90,7 @@ end;
 function TClass_db_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
 begin
   self.Open;
-  CountyCodeOfCountyDictum := borland.data.provider.bdpcommand.Create
+  CountyCodeOfCountyDictum := mysqlcommand.Create
     (
     'select county_code'
     + ' from county_dictated_appropriation'
@@ -111,7 +111,7 @@ function TClass_db_appropriations.FundingRoundsGenerated
   : cardinal;
 begin
   self.Open;
-  FundingRoundsGenerated := borland.data.provider.bdpcommand.Create
+  FundingRoundsGenerated := mysqlcommand.Create
     (
     'select funding_rounds_generated'
     + ' from state_dictated_appropriation'
@@ -131,7 +131,7 @@ procedure TClass_db_appropriations.IncFundingRoundsGenerated
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -152,7 +152,7 @@ begin
   self.Open;
   MatchFactorOf := decimal
     (
-    borland.data.provider.BdpCommand.Create
+    mysqlcommand.Create
       (
       'select factor'
       + ' from county_dictated_appropriation'
@@ -170,7 +170,7 @@ begin
   self.Open;
   MatchLevelIdOf := int32.Parse
     (
-    borland.data.provider.BdpCommand.Create
+    mysqlcommand.Create
       (
       'select match_level_id'
       + ' from county_dictated_appropriation'
@@ -185,7 +185,7 @@ end;
 function TClass_db_appropriations.NumActiveAmendments(regional_staffer_id: string): cardinal;
 begin
   self.Open;
-  NumActiveAmendments := -1 + borland.data.provider.bdpcommand.Create
+  NumActiveAmendments := -1 + mysqlcommand.Create
     (
     'select count(id)'
     + ' from state_dictated_appropriation'
@@ -202,7 +202,7 @@ begin
   self.Open;
   ParentAppropriationOfEmsofRequest := decimal
     (
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       'select county_dictated_appropriation.amount'
       + ' from county_dictated_appropriation'
@@ -222,7 +222,7 @@ procedure TClass_db_appropriations.ReduceBy
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -239,7 +239,7 @@ end;
 function TClass_db_appropriations.RegionCodeOfCountyDictum(county_dictum_id: string): string;
 begin
   self.Open;
-  RegionCodeOfCountyDictum := borland.data.provider.bdpcommand.Create
+  RegionCodeOfCountyDictum := mysqlcommand.Create
     (
     'select region_code'
     + ' from county_dictated_appropriation'
@@ -261,7 +261,7 @@ procedure TClass_db_appropriations.SetServiceToCountySubmissionDeadline
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -306,7 +306,7 @@ begin
       +   ' and fiscal_year_id = ' + fy_id;
   end;
   self.Open;
-  SumOfAppropriationsFromSpecificParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  SumOfAppropriationsFromSpecificParent := decimal(mysqlcommand.Create(cmdText,connection).ExecuteScalar);
   self.Close;
 end;
 
@@ -335,7 +335,7 @@ begin
       +   ' and fiscal_year_id = ' + fy_id;
   end;
   self.Open;
-  SumOfAppropriationsFromOnlyParent := decimal(borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar);
+  SumOfAppropriationsFromOnlyParent := decimal(mysqlcommand.Create(cmdText,connection).ExecuteScalar);
   self.Close;
 end;
 
@@ -349,7 +349,7 @@ var
   sum_obj: system.object;
 begin
   self.Open;
-  sum_obj := borland.data.provider.bdpcommand.Create
+  sum_obj := mysqlcommand.Create
     (
     'select sum(county_dictated_appropriation.amount)'
     + ' from county_dictated_appropriation'
@@ -402,7 +402,7 @@ begin
   end;
   //
   self.Open;
-  sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
+  sum_obj := mysqlcommand.Create(cmdText,connection).ExecuteScalar;
   if sum_obj = dbnull.value then begin
     SumOfSelfDictatedAppropriations := 0;
   end else begin

@@ -3,7 +3,7 @@ unit Class_biz_emsof_requests;
 interface
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_db_appropriations,
   Class_db_emsof_requests,
   Class_biz_accounts,
@@ -74,6 +74,7 @@ type
       e_item: system.object;
       promoter: string
       );
+    function ArchiveMatured: queue;
     function BeDeadlineExempt(master_id: string): boolean;
     function BeOkToApproveEmsofRequest(status: status_type): boolean;
     function BeOkToDrillDown(status: status_type): boolean;
@@ -183,6 +184,7 @@ type
       priority: string
       )
       : string;
+    function FailUncompleted: queue;
     function FailUnfinalized: queue;
     procedure Finalize(master_id: string);
     procedure ForceClosed(master_id: string);
@@ -271,7 +273,7 @@ implementation
 
 uses
   Class_biz_fiscal_years,
-  ki,
+  kix,
   system.configuration,
   system.io;
 
@@ -392,6 +394,11 @@ begin
     end;
   end;
   //
+end;
+
+function TClass_biz_emsof_requests.ArchiveMatured: queue;
+begin
+  ArchiveMatured := db_emsof_requests.ArchiveMatured;
 end;
 
 function TClass_biz_emsof_requests.BeDeadlineExempt(master_id: string): boolean;
@@ -601,7 +608,7 @@ procedure TClass_biz_emsof_requests.BindOverviewByStatus
   target: system.object
   );
 begin
-  db_emsof_requests.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target);
+  db_emsof_requests.BindOverviewByStatus(ord(status),order_by_field_name,be_order_ascending,target,(status in [DEPLOYED,ARCHIVED]));
 end;
 
 function TClass_biz_emsof_requests.CountyApprovalTimestampOf(master_id: string): system.datetime;
@@ -735,6 +742,11 @@ function TClass_biz_emsof_requests.EquipmentCodeOf
   : string;
 begin
   EquipmentCodeOf := db_emsof_requests.EquipmentCodeOf(master_id,priority);
+end;
+
+function TClass_biz_emsof_requests.FailUncompleted: queue;
+begin
+  FailUncompleted := db_emsof_requests.FailUncompleted;
 end;
 
 function TClass_biz_emsof_requests.FailUnfinalized: queue;
@@ -1104,15 +1116,15 @@ begin
   + NEW_LINE
   + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
   + NEW_LINE
-  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
-  ki.SendControlAsAttachmentToEmailMessage
+  + '-- ' + configurationmanager.AppSettings['application_name'];
+  kix.SendControlAsAttachmentToEmailMessage
     (
     Table_report,
-    path.GetDirectoryName(request_physical_path) + '/' + configurationsettings.appsettings['scratch_folder'] + '/'
+    path.GetDirectoryName(request_physical_path) + '/' + configurationmanager.appsettings['scratch_folder'] + '/'
     + 'WebEmsofDohExport-' + qualifier + HYPHEN + datetime.Now.tostring('yyyyMMddHHmmssf') + '.xls',
     biz_accounts.EmailTargetByRole('emsof-coordinator'),
-    configurationsettings.AppSettings['state_report_to_target'],
-    configurationsettings.AppSettings['state_report_cc_target'],
+    configurationmanager.AppSettings['state_report_to_target'],
+    configurationmanager.AppSettings['state_report_cc_target'],
     'EMSOF requests from ' + region_name + ' region',
     body
     );

@@ -7,11 +7,11 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_biz_services,
   Class_db,
   Class_db_trail,
-  ki,
+  kix,
   system.configuration,
   system.web.mail,
   system.web.security;
@@ -75,6 +75,7 @@ type
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     CustomValidator_amount: System.Web.UI.WebControls.CustomValidator;
     LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
   public
@@ -82,9 +83,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -107,7 +105,6 @@ end;
 
 procedure TWebForm_create_new_service_appropriation.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -115,7 +112,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - create_new_service_appropriation';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - create_new_service_appropriation';
     Label_county_name.text := session['county_name'].tostring;
     //
     // Initialize implementation-scoped variables.
@@ -232,8 +229,8 @@ end;
 
 procedure TWebForm_create_new_service_appropriation.AddAppropriation;
 var
-  bdp_get_fy_designator: borland.data.provider.bdpcommand;
-  bdp_get_service_email_address: borland.data.provider.bdpcommand;
+  mysql_get_fy_designator: mysqlcommand;
+  mysql_get_service_email_address: mysqlcommand;
   cc_email_address: string;
   max_county_dictated_appropriation_id_string: string;
   messageText: string;
@@ -244,7 +241,7 @@ begin
   //
   // Record the new appropriation.
   //
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     p.db_trail.Saved
       (
@@ -264,7 +261,7 @@ begin
   //   Get max(county_dictated_appropriation.id), which must be the id of the county_dictated_appropriation record that we just
   //   inserted.
   //
-  max_county_dictated_appropriation_id_string := borland.data.provider.bdpcommand.Create
+  max_county_dictated_appropriation_id_string := mysqlcommand.Create
     (
     'select max(id) from county_dictated_appropriation',
     p.db.connection
@@ -273,7 +270,7 @@ begin
   //
   //    Insert and link back to the above max id.
   //
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     p.db_trail.Saved
       ('insert into emsof_request_master set county_dictated_appropriation_id = ' + max_county_dictated_appropriation_id_string),
@@ -284,14 +281,14 @@ begin
   // Send notice of the appropriation to the service's email address of record.
   //
   //   Set up the command to get service's email address of record.
-  bdp_get_service_email_address := borland.data.provider.bdpcommand.Create
+  mysql_get_service_email_address := mysqlcommand.Create
     (
     'select password_reset_email_address from service_user '
     + 'where id = ' + service_id_string,
     p.db.connection
     );
   //   Set up the command to get the appropriate fiscal year designator.
-  bdp_get_fy_designator := borland.data.provider.bdpcommand.Create
+  mysql_get_fy_designator := mysqlcommand.Create
     (
     'select designator'
     + ' from fiscal_year'
@@ -302,7 +299,7 @@ begin
     p.db.connection
     );
   //   Set up the command to get the County Coorindator's email address.
-  cc_email_address := borland.data.provider.bdpcommand.Create
+  cc_email_address := mysqlcommand.Create
     (
     'select password_reset_email_address from county_user where id = ' + session['county_user_id'].tostring,
     p.db.connection
@@ -310,24 +307,24 @@ begin
     .ExecuteScalar.tostring;
   //   Set up the messageText.
   messageText := 'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has made a new EMSOF allocation '
-  + 'of ' + p.amount.tostring('C') + ' to your service for ' + bdp_get_fy_designator.ExecuteScalar.tostring + PERIOD + NEW_LINE
+  + 'of ' + p.amount.tostring('C') + ' to your service for ' + mysql_get_fy_designator.ExecuteScalar.tostring + PERIOD + NEW_LINE
   + NEW_LINE
   + 'You can work on this allocation by visiting:' + NEW_LINE
   + NEW_LINE
-  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+  + configurationmanager.AppSettings['application_name'] + NEW_LINE
   + NEW_LINE
   + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
   + NEW_LINE
   + '   ' + cc_email_address + '  (mailto:' + cc_email_address + ')' + NEW_LINE
   + NEW_LINE
-  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  + '-- ' + configurationmanager.AppSettings['application_name'];
   //   Send the email message.
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
-    bdp_get_service_email_address.ExecuteScalar.tostring,
-    'New ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
+    configurationmanager.AppSettings['sender_email_address'],
+    mysql_get_service_email_address.ExecuteScalar.tostring,
+    'New ' + configurationmanager.AppSettings['application_name'] + ' allocation for your service',
     messageText
     );
   //

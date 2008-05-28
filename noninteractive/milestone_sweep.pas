@@ -1,4 +1,3 @@
-
 unit milestone_sweep;
 
 interface
@@ -16,7 +15,7 @@ type
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
-  strict protected
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }

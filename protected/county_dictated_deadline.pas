@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.security,
   Class_db,
   Class_biz_appropriations,
@@ -47,6 +47,7 @@ type
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
     LinkButton_cancel: System.Web.UI.WebControls.LinkButton;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -55,9 +56,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -77,7 +75,6 @@ end;
 
 procedure TWebForm_county_dictated_deadline.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -85,7 +82,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - county_dictated_deadline';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - county_dictated_deadline';
     //
     p.biz_appropriations := TClass_biz_appropriations.Create;
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;

@@ -11,7 +11,7 @@ uses
   System.Data.SqlClient, System.Data.Common, system.configuration,
   system.text.regularexpressions, system.web.security, system.io,
   Class_biz_accounts,
-  ki,
+  kix,
   ki_web_ui,
   system.Web.ui;
 
@@ -54,15 +54,13 @@ type
     TextBox_noop_ie_behavior_workaround: System.Web.UI.WebControls.TextBox;
     CustomValidator_account_exists: System.Web.UI.WebControls.CustomValidator;
     RegularExpressionValidator_user: System.Web.UI.WebControls.RegularExpressionValidator;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -83,12 +81,11 @@ end;
 
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - login';
-    Label_application_name.text := configurationsettings.appsettings['application_name'];
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - login';
+    Label_application_name.text := configurationmanager.appsettings['application_name'];
     p.biz_accounts := TClass_biz_accounts.Create;
   end;
 end;
@@ -115,7 +112,7 @@ begin
     (
     Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD),
     Safe(DropDownList_user.selectedvalue,NUM),
-    ki.Digest(Safe(TextBox_password.Text.trim,ALPHANUM))
+    kix.Digest(Safe(TextBox_password.Text.trim,ALPHANUM))
     );
 end;
 

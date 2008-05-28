@@ -1,4 +1,6 @@
 <%@ Page language="c#" Debug="true" Codebehind="state_required_report.pas" AutoEventWireup="false" Inherits="state_required_report.TWebForm_state_required_report" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
+<%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -8,18 +10,17 @@
   </head>
   <body>
     <form runat="server">
-      <asp:placeholder id="PlaceHolder_precontent" runat="server"></asp:placeholder>
+      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
 	  <p>
 		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
 			  <tr>
 				<td>
-		<small>[
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;]
-			                                                                           [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous</ASP:LinkButton>&nbsp;form ]&nbsp;
-			                                                                           [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password</asp:LinkButton>&nbsp;
-			|
-			<asp:LinkButton id="LinkButton_change_email_address" runat="server">email address</asp:LinkButton>&nbsp;]
-		</small>
+		<small>[ <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout
+</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous
+</ASP:LinkButton>&nbsp;form ]&nbsp; [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password
+</asp:LinkButton>&nbsp;| <asp:LinkButton id="LinkButton_change_email_address" runat="server">email address
+</asp:LinkButton>&nbsp;] 
+</small>
 				</td>
 				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
 				</td>
@@ -37,26 +38,31 @@
                   <table cellspacing="0" cellpadding="5" width="75%" border="0">
                     <tr>
                       <td>
-                        <strong>State-required report</strong>
+                        <strong>State-required report
+</strong>
 					  </td>
 					  <td>
-                              <p align="center"><ASP:LinkButton id="LinkButton_export_scratch_copy" runat="server" enabled="False">Export scratch copy</ASP:LinkButton>
+                              <p align="center"><ASP:LinkButton id="LinkButton_export_scratch_copy" runat="server" enabled="False">Export scratch copy
+</ASP:LinkButton>
 					  </p></td>
 					  <td>
 							  <div align="center">
-						<asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False" font-bold="True">TRANSMIT TO STATE</asp:linkbutton>
+						<asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False" font-bold="True">TRANSMIT TO STATE
+</asp:linkbutton>
 							  </div>
 					  </td>
 					</tr>
 					<tr>
-					  <td colspan="3"><small>A total of <ASP:Label id="Label_total_num_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests are ready to be transmitted to the state.</small></td>
+					  <td colspan="3"><small>A total of <ASP:Label id="Label_total_num_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests are ready to be transmitted to the state.
+</small></td>
 					</tr>
 					<tr id="TableRow_this_is_everything" runat="server" visible="False">
-					  <td colspan="3"><small>This report includes request items from all&nbsp;<ASP:Label id="Label_total_num_requests_2" runat="server" font-bold="True"></ASP:Label> requests.</small></td>
+					  <td colspan="3"><small>This report includes request items from all&nbsp;<ASP:Label id="Label_total_num_requests_2" runat="server" font-bold="True"></ASP:Label> requests.
+</small></td>
 					</tr>
 					<tr id="TableRow_this_is_just_some" runat="server" visible="False">
-					  <td colspan="3"><small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against
-					   <ASP:DropDownList id="DropDownList_amendment" runat="server" autopostback="True"></ASP:DropDownList>.</small></td>
+					  <td colspan="3"><small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against <ASP:DropDownList id="DropDownList_amendment" runat="server" autopostback="True"></ASP:DropDownList>.
+</small></td>
 					</tr>
 				  </table>
 				</td>
@@ -65,13 +71,15 @@
                 <td>
                   <table cellspacing="0" cellpadding="5" border="0" id="Table_report" runat="server">
                     <tr>
-                      <td>
-                        Regional EMS council name: <strong>EMERGENCY MEDICAL SERVICE INSTITUTE</strong>
-                      </td>
+                      <td>Regional EMS council name: <strong>EMERGENCY MEDICAL SERVICE INSTITUTE
+</strong>
+                      
+</td>
                     </tr>
                     <tr id="TableRow_none" runat="server">
                       <td>
-                        <em>-- NONE --</em>
+                        <em>-- NONE --
+</em>
                       </td>
                     </tr>
                     <tr>
@@ -134,82 +142,75 @@
                       <td>
                         <table cellspacing="0" cellpadding="5" border="0">
                           <tr>
-                            <td align="right" valign="top">
-                              Reviewed and Recommended by Regional EMS Council (name):
-                            </td>
+                            <td align="right" valign="top">Reviewed and Recommended by Regional EMS Council (name): 
+</td>
                             <td></td>
                             <td valign="top">
-                              <strong>William E. Groft</strong><br>
-                              President
-                            </td>
+                              <strong>William E. Groft
+</strong><br>President 
+</td>
                           </tr>
                           <tr>
                             <td></td>
                             <td></td>
                             <td valign="top">
-                              <strong>Thomas J. McElree</strong><br>Regional EMS Council Director 
-
-                            </td>
+                              <strong>Thomas J. McElree
+</strong><br>Regional EMS Council Director 
+</td>
                           </tr>
                           <tr>
-                            <td align="right">
-                              Funding Round:
-                            </td>
+                            <td align="right">Funding Round: 
+</td>
                             <td></td>
                             <td>
                               <asp:label id="Label_funding_round" runat="server"></asp:label>
                             </td>
                           </tr>
                           <tr>
-                            <td align="right">
-                              Submission Date:
-                            </td>
+                            <td align="right">Submission Date: 
+</td>
                             <td></td>
                             <td>
                               <asp:label id="Label_submission_date" runat="server"></asp:label>
                             </td>
                           </tr>
                           <tr>
-                            <td align="right">
-                              Review Date:
-                            </td>
+                            <td align="right">Review Date: 
+</td>
                             <td></td>
-                            <td>
-                              __________________________________
-                            </td>
+                            <td>__________________________________ 
+</td>
                           </tr>
                           <tr>
-                            <td align="right">
-                              Approval Date:
-                            </td>
+                            <td align="right">Approval Date: 
+</td>
                             <td></td>
-                            <td>
-                              __________________________________
-                            </td>
+                            <td>__________________________________ 
+</td>
                           </tr>
                           <tr>
-                            <td align="right">
-                              DOH Approval:
-                            </td>
+                            <td align="right">DOH Approval: 
+</td>
                             <td></td>
-                            <td>
-                              __________________________________
-                            </td>
+                            <td>__________________________________ 
+</td>
                           </tr>
                           <tr>
-                            <td align="right">
-                              Date:
-                            </td>
+                            <td align="right">Date: 
+</td>
                             <td></td>
-                            <td>
-                              __________________________________
-                            </td>
+                            <td>__________________________________ 
+</td>
                           </tr>
                         </table>
                               <p>
                                 <table cellspacing="0" cellpadding="5" border="0" id="Table_replacement_note" runat="server">
                                     <tr>
-                                      <td valign="top">*</td><td>Rows marked with a star in this column are <u>replacements</u> for rows that were reported in a previous funding round in this fiscal year.&nbsp; PA DOH EMSO should <u>delete</u> the associated batch of rows from its previous records and use the items in this batch instead.&nbsp; Starting with FY0607 Funding Round 2, the "W#" can be used to positively determine associated batches.</td>
+                                      <td valign="top">*
+</td><td>Rows marked with a star in this column are <u>replacements
+</u> for rows that were reported in a previous funding round in this fiscal year.&nbsp; PA DOH EMSO should <u>delete
+</u> the associated batch of rows from its previous records and use the items in this batch instead.&nbsp; The "W#" can be used to positively determine associated batches.
+</td>
                                     </tr>
                                 </table>
                               </p>
@@ -223,7 +224,7 @@
         </tr>
 	  </table>
 </div>
-      <asp:placeholder id="PlaceHolder_postcontent" runat="server"></asp:placeholder>
+      <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
     <sstchur:SmartScroller runat="server" /></form>
   </body>
 </html>

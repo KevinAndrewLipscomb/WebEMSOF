@@ -1,4 +1,3 @@
-
 unit change_email_address;
 
 interface
@@ -6,7 +5,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, borland.data.provider, system.configuration,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, mysql.data.mysqlclient, system.configuration,
   system.net, system.web.security,
   Class_db,
   Class_db_trail;
@@ -48,6 +47,7 @@ type
     CustomValidator_nominal_email_address: System.Web.UI.WebControls.CustomValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     LinkButton_logout: System.Web.UI.WebControls.LinkButton;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -55,9 +55,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -79,7 +76,6 @@ procedure TWebForm_change_email_address.Page_Load(sender: System.Object; e: Syst
 var
   email_address: string;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -87,7 +83,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - change_email_address';
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - change_email_address';
     //
     p.db_trail := TClass_db_trail.Create;
     p.db := TClass_db.Create;
@@ -103,7 +99,7 @@ begin
     //
     // Preload email address fields
     //
-    email_address := borland.data.provider.BdpCommand.Create
+    email_address := mysqlcommand.Create
       (
       'SELECT password_reset_email_address '
       + 'FROM ' + session['target_user_table'].ToString + '_user '
@@ -153,7 +149,7 @@ procedure TWebForm_change_email_address.CustomValidator_nominal_email_address_Se
 begin
   args.isvalid := TRUE;
   try
-    dns.GetHostByName(args.value.Substring(args.value.LastIndexOf('@') + 1));
+    dns.GetHostEntry(args.value.Substring(args.value.LastIndexOf('@') + 1));
   except
     args.isvalid := FALSE;
   end;
@@ -167,7 +163,7 @@ begin
     //
     // Commit the data to the database.
     //
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       p.db_trail.Saved
         (

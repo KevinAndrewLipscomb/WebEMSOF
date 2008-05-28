@@ -5,8 +5,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki,
-  Borland.Data.Common, System.Globalization,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
+  System.Globalization,
   System.Data.Common, system.configuration, system.web.security,
   Class_biz_services,
   UserControl_print_div;
@@ -73,6 +73,7 @@ type
     LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     LinkButton_service_overview: System.Web.UI.WebControls.LinkButton;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -83,7 +84,6 @@ type
 implementation
 
 uses
-  appcommon,
   Class_biz_accounts;
 
 {$REGION 'Designer Managed Code'}
@@ -122,7 +122,6 @@ var
   name: string;
   zip_code: string;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -130,8 +129,8 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - profile';
-    
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - profile';
+
     p.biz_services := TClass_biz_services.Create;
     //
     // Set Label_service_name
@@ -140,7 +139,7 @@ begin
     //
     // Set Label_application_name
     //
-    Label_application_name.Text := ConfigurationSettings.AppSettings['application_name'];
+    Label_application_name.Text := configurationmanager.AppSettings['application_name'];
     //
     // Get affiliate_num and set Label_affiliate_num
     //

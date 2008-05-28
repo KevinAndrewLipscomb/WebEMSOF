@@ -17,7 +17,7 @@ type
 implementation
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   system.web.ui.webcontrols;
 
 constructor TClass_db_payment_proof_methods.Create;
@@ -28,18 +28,18 @@ end;
 
 procedure TClass_db_payment_proof_methods.BindDropDownList(target: system.object);
 var
-  bdr: bdpdatareader;
+  dr: mysqldatareader;
 begin
   self.Open;
   DropDownList(target).Items.Clear;
   DropDownList(target).Items.Add(listitem.Create('-- Select --',''));
   //
-  bdr := Borland.Data.Provider.BdpCommand.Create
+  dr := mysqlcommand.Create
     ('SELECT code,description FROM payment_proof_method_code_description_map ORDER BY description',connection).ExecuteReader;
-  while bdr.Read do begin
-    DropDownList(target).Items.Add(listitem.Create(bdr['description'].tostring,bdr['code'].tostring));
+  while dr.Read do begin
+    DropDownList(target).Items.Add(listitem.Create(dr['description'].tostring,dr['code'].tostring));
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
 end;
 

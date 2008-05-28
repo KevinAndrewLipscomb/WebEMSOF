@@ -1,68 +1,5 @@
 library WebEMSOF;
 
-{%AspWebConfigContainer 'Web.config'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Data.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Web.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.XML.dll'}
-{%DelphiDotNetAssemblyCompiler 'C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0\Borland.Data.Provider.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Design.dll'}
-{%DelphiDotNetAssemblyCompiler 'C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0\Borland.Data.Common.dll'}
-{%DelphiDotNetAssemblyCompiler '$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll'}
-{%File 'schema.sql'}
-{%ConfigurationCompiler 'unpublished.config'}
-{%File 'resource\terms-and-conditions.pdf'}
-{%File 'testdata.sql'}
-{%AspFolderContainer 'protected'}
-{%TogetherDiagram 'ModelSupport_WebEMSOF\default.txaPackage'}
-{%AspFolderContainer 'component'}
-{%AspFolderContainer 'component\biz'}
-{%AspFolderContainer 'component\db'}
-{%AspMarkupContainer 'Default.aspx'}
-{%AspMarkupContainer 'Global.asax'}
-{%AspMarkupContainer 'new_password.aspx'}
-{%AspMarkupContainer 'protected\withdraw_request_item.aspx'}
-{%AspMarkupContainer 'protected\all_emsof_requests.aspx'}
-{%AspMarkupContainer 'protected\change_email_address.aspx'}
-{%AspMarkupContainer 'protected\change_password.aspx'}
-{%AspMarkupContainer 'protected\county_dictated_appropriations.aspx'}
-{%AspMarkupContainer 'protected\county_dictated_deadline.aspx'}
-{%AspMarkupContainer 'protected\county_overview.aspx'}
-{%AspMarkupContainer 'protected\create_new_service_appropriation.aspx'}
-{%AspMarkupContainer 'protected\delete_service_appropriation.aspx'}
-{%AspMarkupContainer 'protected\emsof_request_status_filter.aspx'}
-{%AspMarkupContainer 'protected\finalize.aspx'}
-{%AspMarkupContainer 'protected\full_request_review_approve.aspx'}
-{%AspMarkupContainer 'protected\profile.aspx'}
-{%AspMarkupContainer 'protected\region_dictated_appropriations.aspx'}
-{%AspMarkupContainer 'protected\regional_staffer_fiscal_year_selection.aspx'}
-{%AspMarkupContainer 'protected\regional_staffer_overview.aspx'}
-{%AspMarkupContainer 'protected\request_item_detail.aspx'}
-{%AspMarkupContainer 'protected\request_overview.aspx'}
-{%AspMarkupContainer 'protected\service_overview.aspx'}
-{%AspWebConfigContainer 'protected\Web.config'}
-{%File 'resource\funding-priorities-epel-fy0607.pdf'}
-{%File 'resource\emsi-emsof-allocations-memo-fy0607.pdf'}
-{%AspMarkupContainer 'protected\state_required_report.aspx'}
-{%AspMarkupContainer 'salogin.aspx'}
-{%AspMarkupContainer 'login.aspx'}
-{%AspMarkupContainer 'protected\state_transmittal_complete.aspx'}
-{%AspFolderContainer 'protected\scratch'}
-{%AspFolderContainer 'protected\image'}
-{%AspFolderContainer 'dbscript'}
-{%AspMarkupContainer 'exception.aspx'}
-{%AspMarkupContainer 'timeout.aspx'}
-{%DelphiDotNetAssemblyCompiler 'lib\ki\ki.dll'}
-{%AspMarkupContainer 'protected\county_unrejection.aspx'}
-{%File 'noninteractive\.crontab'}
-{%AspMarkupContainer 'noninteractive\milestone_sweep.aspx'}
-{%AspMarkupContainer 'protected\add_proof_of_payment.aspx'}
-{%AspMarkupContainer 'usercontrol\ki\UserControl_print_div.ascx'}
-{%AspMarkupContainer 'usercontrol\ki\UserControl_drop_down_date.ascx'}
-{%AspMarkupContainer 'usercontrol\app\UserControl_match_level.ascx'}
-
 uses
   System.Reflection,
   System.Runtime.CompilerServices,
@@ -124,7 +61,11 @@ uses
   Class_db_payment_proof_methods in 'component\db\Class_db_payment_proof_methods.pas',
   UserControl_print_div in 'usercontrol\ki\UserControl_print_div.pas' {UserControl_print_div.TWebUserControl_print_div: ki_web_ui.usercontrol_class},
   UserControl_drop_down_date in 'usercontrol\ki\UserControl_drop_down_date.pas',
-  UserControl_match_level in 'usercontrol\app\UserControl_match_level.pas' {UserControl_match_level.TWebUserControl_match_level: ki_web_ui.usercontrol_class};
+  UserControl_match_level in 'usercontrol\app\UserControl_match_level.pas' {UserControl_match_level.TWebUserControl_match_level: ki_web_ui.usercontrol_class},
+  UserControl_bread_crumb_trail in 'usercontrol\ki\UserControl_bread_crumb_trail.pas',
+  UserControl_precontent in 'usercontrol\app\UserControl_precontent.pas',
+  UserControl_common_header_bar in 'usercontrol\app\UserControl_common_header_bar.pas',
+  UserControl_postcontent in 'usercontrol\app\UserControl_postcontent.pas';
 
 //
 // General Information about an assembly is controlled through the following

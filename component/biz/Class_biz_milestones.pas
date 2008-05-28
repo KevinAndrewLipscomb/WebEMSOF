@@ -100,7 +100,11 @@ begin
         SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
           master_id_q := queue.Create;
         END_OF_CYCLE_MILESTONE:
-          master_id_q := biz_emsof_requests.DeployCompleted;
+          BEGIN
+          biz_emsof_requests.DeployCompleted;
+          master_id_q := biz_emsof_requests.FailUncompleted;
+          biz_emsof_requests.ArchiveMatured;
+          END;
         end;
         for i := 1 to master_id_q.Count do begin
           master_id := master_id_q.Dequeue.tostring;

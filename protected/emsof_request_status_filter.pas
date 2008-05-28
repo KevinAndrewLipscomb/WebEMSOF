@@ -5,8 +5,8 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security,
-  borland.data.provider,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security,
+  mysql.data.mysqlclient,
   system.io,
   Class_biz_emsof_requests,
   Class_biz_user,
@@ -64,15 +64,13 @@ type
     Button_send: System.Web.UI.WebControls.Button;
     Label_distribution_list: System.Web.UI.WebControls.Label;
     Table_quick_message: System.Web.UI.HtmlControls.HtmlTable;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
   end;
 
 implementation
-
-uses
-  appcommon;
 
 const
   TCCI_LINKBUTTON_SELECT = 14;
@@ -100,7 +98,6 @@ end;
 
 procedure TWebForm_emsof_request_status_filter.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -109,7 +106,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - emsof_request_status_filter';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - emsof_request_status_filter';
     
     Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
     Label_status.text := session['status_of_interest'].tostring;
@@ -123,7 +120,6 @@ begin
     p.num_qualifying_requests := 0;
     p.sort_order := 'affiliate_num';
     //
-    UserControl_print_div.text := '[print]';
     BindOverview;
     //
   end;
@@ -141,16 +137,16 @@ end;
 procedure TWebForm_emsof_request_status_filter.Button_send_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
     // from
-    configurationsettings.appsettings['sender_email_address'],
+    configurationmanager.appsettings['sender_email_address'],
     // to
     Label_distribution_list.text,
     // subject
     TextBox_quick_message_subject.text,
     // body
-    '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationsettings.appsettings['application_name']
+    '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationmanager.appsettings['application_name']
     + ')' + NEW_LINE
     + NEW_LINE
     + TextBox_quick_message_body.text

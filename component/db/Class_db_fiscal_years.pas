@@ -3,7 +3,7 @@ unit Class_db_fiscal_years;
 interface
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_db;
 
 type
@@ -27,14 +27,14 @@ end;
 function TClass_db_fiscal_years.IdOfCurrent: string;
 begin
   self.Open;
-  IdOfCurrent := borland.data.provider.bdpcommand.Create('select max(id) from fiscal_year',connection).ExecuteScalar.tostring;
+  IdOfCurrent := mysqlcommand.Create('select max(id) from fiscal_year',connection).ExecuteScalar.tostring;
   self.Close;
 end;
 
 function TClass_db_fiscal_years.IdOfDesignator(designator: string): string;
 begin
   self.Open;
-  IdOfDesignator := borland.data.provider.bdpcommand.Create
+  IdOfDesignator := mysqlcommand.Create
     ('select id from fiscal_year where designator = "' + designator + '"',connection).ExecuteScalar.tostring;
   self.Close;
 end;

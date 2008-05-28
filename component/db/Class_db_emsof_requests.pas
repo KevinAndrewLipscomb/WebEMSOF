@@ -3,10 +3,11 @@ unit Class_db_emsof_requests;
 interface
 
 uses
-  ki,
-  borland.data.provider,
+  kix,
+  mysql.data.mysqlclient,
   Class_biz_milestones,
   Class_db,
+  Class_db_fiscal_years,
   Class_db_trail,
   system.collections,
   System.Web.UI.WebControls;
@@ -25,6 +26,7 @@ type
     );
   TClass_db_emsof_requests = class(Class_db.TClass_db)
   private
+    db_fiscal_years: TClass_db_fiscal_years;
     db_trail: TClass_db_trail;
     procedure BindOverview
       (
@@ -54,6 +56,7 @@ type
       approval_timestamp_column: approval_timestamp_column_type;
       amount_to_return_to_county: decimal = 0
       );
+    function ArchiveMatured: queue;
     function BeDeadlineExempt(master_id: string): boolean;
     function BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
       (
@@ -115,7 +118,8 @@ type
       status: cardinal;
       order_by_field_name: string;
       be_order_ascending: boolean;
-      target: system.object
+      target: system.object;
+      show_all_cycles: boolean = FALSE
       );
     procedure BindProofsOfPayment
       (
@@ -153,6 +157,7 @@ type
       priority: string
       )
       : string;
+    function FailUncompleted: queue;
     function FailUnfinalized: queue;
     procedure Finalize(master_id: string);
     procedure ForceClosed(master_id: string);
@@ -244,9 +249,6 @@ type
 
 implementation
 
-uses
-  kix;
-
 const
   FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION = 'select emsof_request_master.id' // column 0
   + ' , service.id as service_id'                                                       // column 1
@@ -326,9 +328,9 @@ begin
     cmdText := cmdText + ' desc';
   end;
   self.Open;
-  DataGrid(target).datasource := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteReader;
+  DataGrid(target).datasource := mysqlcommand.Create(cmdText,connection).ExecuteReader;
   DataGrid(target).DataBind;
-  bdpdatareader(DataGrid(target).datasource).Close;
+  mysqldatareader(DataGrid(target).datasource).Close;
   self.Close;
 end;
 
@@ -337,13 +339,14 @@ begin
   inherited Create;
   // TODO: Add any constructor code here
   db_trail := TClass_db_trail.Create;
+  db_fiscal_years := TClass_db_fiscal_years.Create;
 end;
 
 function TClass_db_emsof_requests.ActualValueOf(master_id: string): decimal;
 begin
   self.Open;
   ActualValueOf := decimal
-    (bdpcommand.Create('select actual_value from emsof_request_master where id = ' + master_id,connection).ExecuteScalar);
+    (mysqlcommand.Create('select actual_value from emsof_request_master where id = ' + master_id,connection).ExecuteScalar);
   self.Close;
 end;
 
@@ -357,7 +360,7 @@ procedure TClass_db_emsof_requests.AddProofOfPayment
   );
 begin
   self.Open;
-  bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -428,15 +431,52 @@ begin
       cmdText := cmdText + ' COMMIT;';
     end;
     self.Open;
-    borland.data.provider.bdpcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
+    mysqlcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
     self.Close;
   end;
+end;
+
+function TClass_db_emsof_requests.ArchiveMatured: queue;
+var
+  id_q: queue;
+  join_clause: string;
+  where_deployed_clause: string;
+begin
+  id_q := queue.Create;
+  join_clause := ' emsof_request_master'
+  + ' join emsof_request_detail on'
+    + ' (emsof_request_detail.master_id=emsof_request_master.id)'
+  + ' join eligible_provider_equipment_list on'
+    + ' (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)';
+  where_deployed_clause := ' where emsof_request_master.status_code = 14';
+  self.Open;
+  mysqlcommand.Create
+    (
+    db_trail.Saved
+      (
+      'update' + join_clause
+      + ' set emsof_request_master.status_code = 15'
+      + where_deployed_clause
+        + ' and emsof_request_master.id not in'
+          + ' ('
+          + ' select distinct emsof_request_master.id'
+          + ' from ' + join_clause
+            + where_deployed_clause
+            + ' and ISNULL(life_expectancy_years)'
+          + ' )'
+        + ' and state_approval_timestamp + INTERVAL life_expectancy_years YEAR < CURDATE()'
+      ),
+    connection
+    )
+    .ExecuteNonQuery;
+  self.Close;
+  ArchiveMatured := id_q;
 end;
 
 function TClass_db_emsof_requests.BeDeadlineExempt(master_id: string): boolean;
 begin
   self.Open;
-  BeDeadlineExempt := '1' = bdpcommand.Create
+  BeDeadlineExempt := '1' = mysqlcommand.Create
     (
     'select be_deadline_exempt from emsof_request_master where id = ' + master_id,
     connection
@@ -452,7 +492,7 @@ function TClass_db_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictat
   : boolean;
 begin
   self.Open;
-  BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation := '0' < borland.data.provider.BdpCommand.Create
+  BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation := '0' < mysqlcommand.Create
     (
     'select count(*) from emsof_request_master'
     + ' join county_dictated_appropriation'
@@ -472,20 +512,20 @@ function TClass_db_emsof_requests.BeValidCountyApprovalTimestampOf
   )
   : boolean;
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
 begin
   self.Open;
-  bdr := borland.data.provider.bdpcommand.Create
+  dr := mysqlcommand.Create
     ('select county_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
     .ExecuteReader;
-  bdr.Read;
-  if bdr.IsDbNull(0) then begin
+  dr.Read;
+  if dr.IsDbNull(0) then begin
     BeValidCountyApprovalTimestampOf := FALSE;
   end else begin
     BeValidCountyApprovalTimestampOf := TRUE;
-    timestamp := datetime(bdr['county_approval_timestamp']);
+    timestamp := datetime(dr['county_approval_timestamp']);
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
 end;
 
@@ -496,20 +536,20 @@ function TClass_db_emsof_requests.BeValidRegionalExecDirApprovalTimestampOf
   )
   : boolean;
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
 begin
   self.Open;
-  bdr := borland.data.provider.bdpcommand.Create
+  dr := mysqlcommand.Create
     ('select regional_director_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
     .ExecuteReader;
-  bdr.Read;
-  if bdr.IsDbNull(0) then begin
+  dr.Read;
+  if dr.IsDbNull(0) then begin
     BeValidRegionalExecDirApprovalTimestampOf := FALSE;
   end else begin
     BeValidRegionalExecDirApprovalTimestampOf := TRUE;
-    timestamp := datetime(bdr['regional_director_approval_timestamp']);
+    timestamp := datetime(dr['regional_director_approval_timestamp']);
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
 end;
 
@@ -520,20 +560,20 @@ function TClass_db_emsof_requests.BeValidRegionalPlannerApprovalTimestampOf
   )
   : boolean;
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
 begin
   self.Open;
-  bdr := borland.data.provider.bdpcommand.Create
+  dr := mysqlcommand.Create
     ('select regional_planner_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
     .ExecuteReader;
-  bdr.Read;
-  if bdr.IsDbNull(0) then begin
+  dr.Read;
+  if dr.IsDbNull(0) then begin
     BeValidRegionalPlannerApprovalTimestampOf := FALSE;
   end else begin
     BeValidRegionalPlannerApprovalTimestampOf := TRUE;
-    timestamp := datetime(bdr['regional_planner_approval_timestamp']);
+    timestamp := datetime(dr['regional_planner_approval_timestamp']);
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
 end;
 
@@ -544,20 +584,20 @@ function TClass_db_emsof_requests.BeValidStateApprovalTimestampOf
   )
   : boolean;
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
 begin
   self.Open;
-  bdr := borland.data.provider.bdpcommand.Create
+  dr := mysqlcommand.Create
     ('select state_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
     .ExecuteReader;
-  bdr.Read;
-  if bdr.IsDbNull(0) then begin
+  dr.Read;
+  if dr.IsDbNull(0) then begin
     BeValidStateApprovalTimestampOf := FALSE;
   end else begin
     BeValidStateApprovalTimestampOf := TRUE;
-    timestamp := datetime(bdr['state_approval_timestamp']);
+    timestamp := datetime(dr['state_approval_timestamp']);
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
 end;
 
@@ -568,7 +608,7 @@ procedure TClass_db_emsof_requests.BindDetail
   );
 begin
   self.Open;
-  DataGrid(target).datasource := borland.data.provider.bdpcommand.Create
+  DataGrid(target).datasource := mysqlcommand.Create
     (
     'select priority'
     + ' ,make_model'
@@ -604,7 +644,7 @@ procedure TClass_db_emsof_requests.BindOverviewAll
   target: system.object
   );
 begin
-  BindOverview(order_by_field_name,be_order_ascending,target);
+  BindOverview(order_by_field_name,be_order_ascending,target,'fiscal_year.id = "' + db_fiscal_years.IdOfCurrent + '"');
 end;
 
 procedure TClass_db_emsof_requests.BindOverviewByRegionDictatedAppropriation
@@ -643,10 +683,18 @@ procedure TClass_db_emsof_requests.BindOverviewByStatus
   status: cardinal;
   order_by_field_name: string;
   be_order_ascending: boolean;
-  target: system.object
+  target: system.object;
+  show_all_cycles: boolean = FALSE
   );
+var
+  and_parm: string;
 begin
-  BindOverview(order_by_field_name,be_order_ascending,target,'status_code = ' + status.tostring);
+  if show_all_cycles then begin
+    and_parm := EMPTY;
+  end else begin
+    and_parm := 'fiscal_year.id = "' + db_fiscal_years.IdOfCurrent + '"';
+  end;
+  BindOverview(order_by_field_name,be_order_ascending,target,'status_code = ' + status.tostring,and_parm);
 end;
 
 procedure TClass_db_emsof_requests.BindProofsOfPayment
@@ -656,7 +704,7 @@ procedure TClass_db_emsof_requests.BindProofsOfPayment
   );
 begin
   self.Open;
-  DataGrid(target).datasource := bdpcommand.Create
+  DataGrid(target).datasource := mysqlcommand.Create
     (
     'select id'                                       // column 0
     + ' , DATE_FORMAT(date_of,"%Y-%m-%d") as date_of' // column 1
@@ -672,7 +720,7 @@ begin
     )
     .ExecuteReader;
   DataGrid(target).DataBind;
-  bdpdatareader(DataGrid(target).datasource).Close;
+  mysqldatareader(DataGrid(target).datasource).Close;
   self.Close;
 end;
 
@@ -685,7 +733,7 @@ procedure TClass_db_emsof_requests.BindStateExportBatch
   );
 begin
   self.Open;
-  DataGrid(target).datasource := borland.data.provider.bdpcommand.Create
+  DataGrid(target).datasource := mysqlcommand.Create
     (
     'select concat("W",master_id) as w_num'                                                // column 0
     + ' , if(be_reopened_after_going_to_state,"*","") as be_reopened_after_going_to_state' // column 1
@@ -727,7 +775,7 @@ begin
   self.Open;
   CountyApprovalTimestampOf := datetime
     (
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       ('select county_approval_timestamp from emsof_request_master where id = ' + master_id,connection)
       .ExecuteScalar
     );
@@ -737,7 +785,7 @@ end;
 function TClass_db_emsof_requests.CountyCodeOfMasterId(master_id: string): string;
 begin
   self.Open;
-  CountyCodeOfMasterId := bdpcommand.Create
+  CountyCodeOfMasterId := mysqlcommand.Create
     (
     'select county_code'
     + ' from emsof_request_master'
@@ -755,7 +803,7 @@ end;
 function TClass_db_emsof_requests.CountyDictumIdOf(master_id: string): string;
 begin
   self.Open;
-  CountyDictumIdOf := borland.data.provider.bdpcommand.Create
+  CountyDictumIdOf := mysqlcommand.Create
     (
     'select county_dictated_appropriation_id'
     + ' from emsof_request_master'
@@ -769,7 +817,7 @@ end;
 procedure TClass_db_emsof_requests.DeleteProofOfPayment(id: string);
 begin
   self.Open;
-  bdpcommand.Create(db_trail.Saved('delete from emsof_purchase_payment where id = ' + id),connection).ExecuteNonQuery;
+  mysqlcommand.Create(db_trail.Saved('delete from emsof_purchase_payment where id = ' + id),connection).ExecuteNonQuery;
   self.Close;
 end;
 
@@ -780,7 +828,7 @@ procedure TClass_db_emsof_requests.Demote
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -798,12 +846,12 @@ end;
 
 function TClass_db_emsof_requests.DetailText(master_id: string): string;
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
   detail_text: string;
 begin
   detail_text := EMPTY;
   self.Open;
-  bdr := borland.data.provider.bdpcommand.Create
+  dr := mysqlcommand.Create
     (
     'select priority'
     + ' , description'
@@ -820,19 +868,19 @@ begin
     connection
     )
     .ExecuteReader;
-  while bdr.Read do begin
+  while dr.Read do begin
     detail_text := detail_text
-    + 'Priority:          ' + bdr['priority'].tostring + NEW_LINE
-    + 'Description:       ' + bdr['description'].tostring + NEW_LINE
-    + 'Make/model:        ' + bdr['make_model'].tostring + NEW_LINE
-    + 'Place to be kept:  ' + bdr['place_kept'].tostring + NEW_LINE
-    + 'New/refurb:        ' + bdr['new_or_refurb'].tostring + NEW_LINE
-    + 'Quantity:          ' + bdr['quantity'].tostring + NEW_LINE
-    + 'Unit cost:         ' + bdr['formatted_unit_cost'].tostring + NEW_LINE
-    + 'Max EMSOF amount:  ' + bdr['formatted_emsof_ante'].tostring + NEW_LINE
+    + 'Priority:          ' + dr['priority'].tostring + NEW_LINE
+    + 'Description:       ' + dr['description'].tostring + NEW_LINE
+    + 'Make/model:        ' + dr['make_model'].tostring + NEW_LINE
+    + 'Place to be kept:  ' + dr['place_kept'].tostring + NEW_LINE
+    + 'New/refurb:        ' + dr['new_or_refurb'].tostring + NEW_LINE
+    + 'Quantity:          ' + dr['quantity'].tostring + NEW_LINE
+    + 'Unit cost:         ' + dr['formatted_unit_cost'].tostring + NEW_LINE
+    + 'Max EMSOF amount:  ' + dr['formatted_emsof_ante'].tostring + NEW_LINE
     + NEW_LINE;
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
   DetailText := detail_text;
 end;
@@ -843,7 +891,7 @@ var
 begin
   id_q := queue.Create;
   self.Open;
-  bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved('update emsof_request_master set status_code = 14 where status_code = 13'),
     connection
@@ -858,7 +906,7 @@ begin
   self.Open;
   EmsofAnteOf := decimal
     (
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       ('select value from emsof_request_master where id = ' + master_id,connection)
       .ExecuteScalar
     );
@@ -875,7 +923,7 @@ begin
   self.Open;
   EmsofAnteOfItem := decimal
     (
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       'select emsof_ante'
       + ' from emsof_request_detail'
@@ -896,7 +944,7 @@ function TClass_db_emsof_requests.EquipmentCodeOf
   : string;
 begin
   self.Open;
-  EquipmentCodeOf := borland.data.provider.bdpcommand.Create
+  EquipmentCodeOf := mysqlcommand.Create
     (
     'select equipment_code'
     + ' from emsof_request_detail'
@@ -908,22 +956,53 @@ begin
   self.Close;
 end;
 
-function TClass_db_emsof_requests.FailUnfinalized: queue;
+function TClass_db_emsof_requests.FailUncompleted: queue;
 var
-  bdr: bdpdatareader;
+  dr: mysqldatareader;
   id_q: queue;
-  transaction: bdptransaction;
+  transaction: mysqltransaction;
 begin
   id_q := queue.Create;
   self.Open;
   transaction := connection.BeginTransaction;
   try
-    bdr := bdpcommand.Create('select id from emsof_request_master where status_code < 3',connection,transaction).ExecuteReader;
-    while bdr.Read do begin
-      id_q.Enqueue(bdr['id']);
+    dr := mysqlcommand.Create('select id from emsof_request_master where status_code < 10',connection,transaction).ExecuteReader;
+    while dr.Read do begin
+      id_q.Enqueue(dr['id']);
     end;
-    bdr.Close;
-    bdpcommand.Create
+    dr.Close;
+    mysqlcommand.Create
+      (
+      db_trail.Saved('update emsof_request_master set status_code = 16 where status_code < 10'),
+      connection,
+      transaction
+      )
+      .ExecuteNonQuery;
+    transaction.Commit;
+  except
+    transaction.Rollback;
+    raise;
+  end;
+  self.Close;
+  FailUncompleted := id_q;
+end;
+
+function TClass_db_emsof_requests.FailUnfinalized: queue;
+var
+  dr: mysqldatareader;
+  id_q: queue;
+  transaction: mysqltransaction;
+begin
+  id_q := queue.Create;
+  self.Open;
+  transaction := connection.BeginTransaction;
+  try
+    dr := mysqlcommand.Create('select id from emsof_request_master where status_code < 3',connection,transaction).ExecuteReader;
+    while dr.Read do begin
+      id_q.Enqueue(dr['id']);
+    end;
+    dr.Close;
+    mysqlcommand.Create
       (
       db_trail.Saved('update emsof_request_master set status_code = 16 where status_code < 3'),
       connection,
@@ -942,7 +1021,7 @@ end;
 procedure TClass_db_emsof_requests.Finalize(master_id: string);
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (db_trail.Saved('update emsof_request_master set status_code = 3 where id = ' + master_id),connection)
     .ExecuteNonQuery;
   self.Close;
@@ -951,7 +1030,7 @@ end;
 procedure TClass_db_emsof_requests.ForceClosed(master_id: string);
 begin
   self.Open;
-  bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved('update emsof_request_master set be_deadline_exempt = FALSE where id = ' + master_id),connection
     )
@@ -962,7 +1041,7 @@ end;
 procedure TClass_db_emsof_requests.ForceOpen(master_id: string);
 begin
   self.Open;
-  bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -999,7 +1078,7 @@ end;
 function TClass_db_emsof_requests.HasWishList(master_id: string): boolean;
 begin
   self.Open;
-  HasWishList := '1' = borland.data.provider.bdpcommand.Create
+  HasWishList := '1' = mysqlcommand.Create
     (
     'select has_wish_list from emsof_request_master where id = ' + master_id,
     connection
@@ -1048,14 +1127,14 @@ begin
     + ' COMMIT';
   end;
   self.Open;
-  borland.data.provider.bdpcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
+  mysqlcommand.Create(db_trail.Saved(cmdText),connection).ExecuteNonQuery;
   self.Close;
 end;
 
 procedure TClass_db_emsof_requests.MarkFailed(master_id: string);
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create(db_trail.Saved('update emsof_request_master set status_code = 16 where id = ' + master_id),connection).ExecuteNonQuery;
+  mysqlcommand.Create(db_trail.Saved('update emsof_request_master set status_code = 16 where id = ' + master_id),connection).ExecuteNonQuery;
   self.Close;
 end;
 
@@ -1068,7 +1147,7 @@ procedure TClass_db_emsof_requests.MarkSubmittedToState
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -1099,7 +1178,7 @@ function TClass_db_emsof_requests.NumRequestsInStateExportBatch
   : cardinal;
 begin
   self.Open;
-  NumRequestsInStateExportBatch := borland.data.provider.bdpcommand.Create
+  NumRequestsInStateExportBatch := mysqlcommand.Create
     (
     'select count(*)'
     + ' from emsof_request_master'
@@ -1134,7 +1213,7 @@ begin
   self.Open;
   ReworkDeadline := datetime
     (
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       'select service_to_county_submission_deadline'
       + ' from region_dictated_appropriation'
@@ -1152,7 +1231,7 @@ end;
 procedure TClass_db_emsof_requests.RollUpActualValue(master_id: string);
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -1174,7 +1253,7 @@ end;
 function TClass_db_emsof_requests.ServiceIdOfMasterId(master_id: string): string;
 begin
   self.Open;
-  ServiceIdOfMasterId := bdpcommand.Create
+  ServiceIdOfMasterId := mysqlcommand.Create
     (
     'select service_id'
     + ' from emsof_request_master'
@@ -1204,7 +1283,7 @@ procedure TClass_db_emsof_requests.SetActuals
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -1230,7 +1309,7 @@ procedure TClass_db_emsof_requests.SetHasWishList
   );
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -1257,7 +1336,7 @@ end;
 function TClass_db_emsof_requests.SponsorRegionNameOf(master_id: string): string;
 begin
   self.Open;
-  SponsorRegionNameOf := borland.data.provider.bdpcommand.Create
+  SponsorRegionNameOf := mysqlcommand.Create
     (
     'select name'
     + ' from emsof_request_master'
@@ -1285,7 +1364,7 @@ var
   sum_of_actual_costs_of_request_items_obj: system.object;
 begin
   self.Open;
-  sum_of_actual_costs_of_request_items_obj := bdpcommand.Create
+  sum_of_actual_costs_of_request_items_obj := mysqlcommand.Create
     (
     'select sum(actual_subtotal_cost) from emsof_request_detail where master_id = ' + request_id,
     connection
@@ -1335,7 +1414,7 @@ begin
     +   ' and fiscal_year_id = ' + fy_id;
   end;
   self.Open;
-  sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
+  sum_obj := mysqlcommand.Create(cmdText,connection).ExecuteScalar;
   self.Close;
   if sum_obj <> dbnull.value then begin
     SumOfActualValues := decimal(sum_obj);
@@ -1349,7 +1428,7 @@ var
   sum_of_proven_payments_of_request_obj: system.object;
 begin
   self.Open;
-  sum_of_proven_payments_of_request_obj := bdpcommand.Create
+  sum_of_proven_payments_of_request_obj := mysqlcommand.Create
     (
     'select sum(amount) from emsof_purchase_payment where master_id = ' + request_id,
     connection
@@ -1401,7 +1480,7 @@ begin
     +   ' and ((status_code between 2 and 10) or (status_code = 13))';
   end;
   self.Open;
-  sum_obj := borland.data.provider.bdpcommand.Create(cmdText,connection).ExecuteScalar;
+  sum_obj := mysqlcommand.Create(cmdText,connection).ExecuteScalar;
   self.Close;
   if sum_obj <> dbnull.value then begin
     SumOfRequestValues := decimal(sum_obj);
@@ -1412,7 +1491,7 @@ end;
 
 function TClass_db_emsof_requests.SusceptibleTo(milestone: milestone_type): queue;
 var
-  bdr: bdpdatareader;
+  dr: mysqldatareader;
   id_q: queue;
   status_code: string;
 begin
@@ -1428,9 +1507,9 @@ begin
     status_code := '10';
   end;
   self.Open;
-  bdr := bdpcommand.Create('select id from emsof_request_master where status_code < ' + status_code,connection).ExecuteReader;
-  while bdr.Read do begin
-    id_q.Enqueue(bdr['id']);
+  dr := mysqlcommand.Create('select id from emsof_request_master where status_code < ' + status_code,connection).ExecuteReader;
+  while dr.Read do begin
+    id_q.Enqueue(dr['id']);
   end;
   self.Close;
   SusceptibleTo := id_q;
@@ -1457,7 +1536,7 @@ begin
     sql := sql + ' and fiscal_year.id = (select max(id) from fiscal_year)';
   end;
   self.Open;
-  TallyByStatus := borland.data.provider.bdpcommand.Create(sql,connection).ExecuteScalar.GetHashCode;
+  TallyByStatus := mysqlcommand.Create(sql,connection).ExecuteScalar.GetHashCode;
   self.Close;
 end;
 
@@ -1519,7 +1598,7 @@ end;
 procedure TClass_db_emsof_requests.Unreject(master_id: string);
 begin
   self.Open;
-  borland.data.provider.bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (
@@ -1538,7 +1617,7 @@ end;
 procedure TClass_db_emsof_requests.Withdraw(master_id: string);
 begin
   self.Open;
-  bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (

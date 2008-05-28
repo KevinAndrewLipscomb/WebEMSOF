@@ -6,10 +6,10 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, system.configuration, system.web.security,
-  borland.data.provider,
+  mysql.data.mysqlclient,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
-  ki,
+  kix,
   UserControl_print_div;
 
 type
@@ -70,6 +70,7 @@ type
     LinkButton_export_scratch_copy: System.Web.UI.WebControls.LinkButton;
     Table_replacement_note: System.Web.UI.HtmlControls.HtmlTable;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -78,9 +79,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -97,8 +95,8 @@ begin
   Include(Self.LinkButton_transmit_to_state.Click, Self.LinkButton_transmit_to_state_Click);
   Include(Self.DropDownList_amendment.SelectedIndexChanged, Self.DropDownList_amendment_SelectedIndexChanged);
   Include(Self.DataGrid_state_export_batch.ItemDataBound, Self.DataGrid_state_export_batch_ItemDataBound);
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_state_required_report_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -107,7 +105,6 @@ var
   i: cardinal;
   num_active_amendments: cardinal;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -116,7 +113,7 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_required_report';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - state_required_report';
     
     Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
@@ -168,8 +165,8 @@ end;
 procedure TWebForm_state_required_report.LinkButton_export_scratch_copy_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  ki.ExportToExcel
-    (page,'WebEmsof-UNOFFICIAL-' + datetime.Now.tostring('yyyyMMddHHmmssf'),ki.StringOfControl(Table_report));
+  kix.ExportToExcel
+    (page,'WebEmsof-UNOFFICIAL-' + datetime.Now.tostring('yyyyMMddHHmmssf'),kix.StringOfControl(Table_report));
 end;
 
 procedure TWebForm_state_required_report.LinkButton_change_email_address_Click(sender: System.Object;

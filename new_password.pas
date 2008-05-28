@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki,
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
   system.web.mail, system.configuration;
 
 const ID = '$Id$';
@@ -27,6 +27,7 @@ type
     Label_user_name: System.Web.UI.WebControls.Label;
     Label_application_name: System.Web.UI.WebControls.Label;
     HyperLink_login: System.Web.UI.WebControls.HyperLink;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -35,7 +36,6 @@ type
 implementation
 
 uses
-  appcommon,
   Class_biz_accounts;
 
 {$REGION 'Designer Managed Code'}
@@ -55,19 +55,18 @@ var
   email_address: string;
   temporary_password: string[8];
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if not IsPostback then begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - new_password';
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - new_password';
     biz_accounts := TClass_biz_accounts.Create;
     Label_user_name.Text := session[session['target_user_table'].ToString + '_name'].ToString;
     if session['target_user_table'].tostring = 'county' then begin
       Label_user_name.Text := Label_user_name.Text + ' County';
     end;
-    Label_application_name.text := configurationsettings.appsettings['application_name'];
+    Label_application_name.text := configurationmanager.appsettings['application_name'];
     //
     // Build a suitably-random password string.
     //
@@ -79,22 +78,22 @@ begin
       (
       session['target_user_table'].ToString,
       session[session['target_user_table'].ToString + '_user_id'].ToString,
-      ki.Digest(temporary_password)
+      kix.Digest(temporary_password)
       );
     //
     // Send the new password to the service's email address of record.
     //
     email_address := biz_accounts.EmailAddressByKindId
       (session['target_user_table'].ToString,session[session['target_user_table'].ToString + '_user_id'].ToString);
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       email_address,
-      ConfigurationSettings.AppSettings['application_name'] + ' temp password',
+      configurationmanager.AppSettings['application_name'] + ' temp password',
       'Someone at the host known as ' + Safe(request.UserHostName,HOSTNAME) + ' (possibly you) requested a new password for the "'
       + session[session['target_user_table'].ToString + '_name'].ToString + '" '
-      + session['target_user_table'].ToString + ' account on the ' + ConfigurationSettings.AppSettings['application_name']
-      + ' system.  Please log into ' + ConfigurationSettings.AppSettings['application_name'] + ' using the following credentials.  '
+      + session['target_user_table'].ToString + ' account on the ' + configurationmanager.AppSettings['application_name']
+      + ' system.  Please log into ' + configurationmanager.AppSettings['application_name'] + ' using the following credentials.  '
       + 'You will receive further instructions at that time.' + NEW_LINE
       + NEW_LINE
       + '   ' + session['target_user_table'].ToString + ':' + NEW_LINE
@@ -104,10 +103,10 @@ begin
       + NEW_LINE
       + 'You can complete this process by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + server.UrlEncode(ConfigurationSettings.AppSettings['application_name']) + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + server.UrlEncode(configurationmanager.AppSettings['application_name']) + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
     //
     // Set Label_email_address.

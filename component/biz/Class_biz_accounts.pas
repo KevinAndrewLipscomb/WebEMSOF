@@ -9,7 +9,7 @@ uses
   Class_biz_user,
   Class_db_accounts,
   Class_db_emsof_requests,
-  ki,
+  kix,
   borland.vcl.sysutils,
   system.configuration,
   system.web.mail;
@@ -140,7 +140,7 @@ end;
 
 function TClass_biz_accounts.BeValidSysAdminCredentials(encoded_password: string): boolean;
 begin
-  BeValidSysAdminCredentials := (encoded_password = configurationsettings.appsettings['sysadmin_encoded_password']);
+  BeValidSysAdminCredentials := (encoded_password = configurationmanager.appsettings['sysadmin_encoded_password']);
 end;
 
 procedure TClass_biz_accounts.BindCounties(target: system.object);
@@ -195,9 +195,9 @@ var
 begin
   service_name := biz_services.NameOf(service_id);
   //
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id)
     + COMMA + EmailAddressByKindId('county',county_code)
     + COMMA + EmailTargetByRole('emsof-coordinator'),
@@ -208,14 +208,14 @@ begin
     + NEW_LINE
     + service_name + ' can rework this EMSOF request by visiting:' + NEW_LINE
     + NEW_LINE
-    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+    + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+    + configurationmanager.AppSettings['application_name'] + NEW_LINE
     + NEW_LINE
     + sponsor_region_name + ' can be contacted as follows:' + NEW_LINE
     + NEW_LINE
     + '   ' + EmailTargetByRole('emsof-coordinator') + NEW_LINE
     + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name']
     );
 end;
 
@@ -241,7 +241,7 @@ begin
   //
   message_text := 'Recently, ' + service_name + ' submitted a request to conduct an EMSOF Category 4 Provider Equipment project.  '
   + 'This message documents the approval by all the necessary parties of that request as recorded in '
-  + ConfigurationSettings.AppSettings['application_name'] + PERIOD + NEW_LINE
+  + configurationmanager.AppSettings['application_name'] + PERIOD + NEW_LINE
   + NEW_LINE
   + 'Congratulations!  YOU MAY NOW PROCEED WITH THE PROJECT SPECIFIED BELOW.  Please print this message and keep it for your '
   + 'records.' + NEW_LINE
@@ -279,20 +279,20 @@ begin
   + NEW_LINE
   + 'You can review your EMSOF requests by visiting:' + NEW_LINE
   + NEW_LINE
-  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+  + configurationmanager.AppSettings['application_name'] + NEW_LINE
   + NEW_LINE
   + 'You can contact your Regional EMSOF Coordinator at:' + NEW_LINE
   + NEW_LINE
   + '   ' + emsof_coord_email_address + '  (mailto:' + emsof_coord_email_address + ')' + NEW_LINE
   + NEW_LINE
-  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  + '-- ' + configurationmanager.AppSettings['application_name'];
   //
   // Send notification to service.
   //
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
     'NOTICE TO PROCEED with EMSOF project',
     message_text
@@ -300,12 +300,12 @@ begin
   //
   //   Send notification to region.
   //
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     emsof_coord_email_address,
-    ConfigurationSettings.AppSettings['application_name'] + ' has issued a Notice To Proceed',
-    ConfigurationSettings.AppSettings['application_name'] + ' has issued the following Notice To Proceed message to ' + service_name
+    configurationmanager.AppSettings['application_name'] + ' has issued a Notice To Proceed',
+    configurationmanager.AppSettings['application_name'] + ' has issued the following Notice To Proceed message to ' + service_name
     + '.  You should expect this service to submit invoices and proof of payment.' + NEW_LINE
     + NEW_LINE
     + '... BEGIN COPY OF NOTICE TO PROCEED ...' + NEW_LINE
@@ -328,9 +328,9 @@ var
 begin
   service_email_address := EmailAddressByKindId('service',service_id);
   service_name := biz_services.NameOf(service_id);
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     EmailTargetByRole('emsof-request-withdrawal-stakeholder')
     + COMMA + EmailAddressByKindId('county',county_code),
     'Service is WITHDRAWING an entire EMSOF request',
@@ -342,14 +342,14 @@ begin
     + NEW_LINE
     + 'You can see the effect of this action by visiting:' + NEW_LINE
     + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
     + NEW_LINE
     + 'You can contact the ' + service_name + ' EMSOF Coordinator at:' + NEW_LINE
     + NEW_LINE
     + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name']
     );
 end;
 
@@ -386,6 +386,8 @@ begin
     deadline_description := 'submit invoices for one or more requested items';
   SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
     deadline_description := 'submit proof of payment for one or more requested items';
+  END_OF_CYCLE_MILESTONE:
+    deadline_description := 'complete the EMSOF cycle';
   end;
   //
   message_text := 'Sorry, but ' + service_name + ' has missed the regional deadline to ' + deadline_description + SPACE
@@ -397,16 +399,16 @@ begin
   end;
   message_text := message_text + 'You can review your EMSOF requests by visiting:' + NEW_LINE
   + NEW_LINE
-  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+  + configurationmanager.AppSettings['application_name'] + NEW_LINE
   + NEW_LINE
   + 'You can contact your County EMSOF Coordinator at:' + NEW_LINE
   + NEW_LINE
   + '   ' + county_coord_email_address + '  (mailto:' + county_coord_email_address + ')' + NEW_LINE
   + NEW_LINE
-  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  + '-- ' + configurationmanager.AppSettings['application_name'];
   //
-  ki.SmtpMailSend(ConfigurationSettings.AppSettings['sender_email_address'],service_email_address,'Missed deadline',message_text);
+  kix.SmtpMailSend(configurationmanager.AppSettings['sender_email_address'],service_email_address,'Missed deadline',message_text);
   //
   message_text := service_name + ' has missed the regional deadline to ' + deadline_description + SPACE
   + 'associated with an allocation from ' + county_name + ' County.' + NEW_LINE
@@ -418,18 +420,18 @@ begin
   end;
   message_text := message_text + 'You can use WebEMSOF by visiting:' + NEW_LINE
   + NEW_LINE
-  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+  + configurationmanager.AppSettings['application_name'] + NEW_LINE
   + NEW_LINE
   + 'You can contact the affected service at:' + NEW_LINE
   + NEW_LINE
   + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
   + NEW_LINE
-  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  + '-- ' + configurationmanager.AppSettings['application_name'];
   //
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     county_coord_email_address + COMMA + EmailTargetByRole('emsof-coordinator'),
     'Service missed deadline',
     message_text
@@ -461,17 +463,17 @@ begin
   service_email_address := EmailAddressByKindId('service',service_id);
   self_email_address := SelfEmailAddress;
   //
-  BreakChars[1] := ki.SPACE;
-  BreakChars[2] := ki.TAB;
+  BreakChars[1] := kix.SPACE;
+  BreakChars[2] := kix.TAB;
   BreakChars[3] := HYPHEN;
   //
   if be_ok_to_rework then begin
     //
     //   Send notification to service.
     //
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       service_email_address,
       'Return of EMSOF request for rework',
       reviewer_descriptor + ' did NOT approve ' + service_name + '''s ' + fy_designator + ' EMSOF request.  Instead, the request '
@@ -485,29 +487,29 @@ begin
         reason,
         (NEW_LINE + '   '),
         BreakChars,
-        int16.Parse(configurationsettings.AppSettings['email_blockquote_maxcol'])
+        int16.Parse(configurationmanager.AppSettings['email_blockquote_maxcol'])
         )
       + NEW_LINE
       + NEW_LINE
       + 'You can rework this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
     //
     if role <> 'county' then begin
       //
       //   Send notification to county.
       //
-      ki.SmtpMailSend
+      kix.SmtpMailSend
         (
-        ConfigurationSettings.AppSettings['sender_email_address'],
+        configurationmanager.AppSettings['sender_email_address'],
         EmailAddressByKindId('county',county_code),
         'Return of EMSOF request to ' + service_name,
         reviewer_descriptor + ' did NOT approve ' + service_name + '''s ' + fy_designator + ' EMSOF request.  Instead, the request '
@@ -521,14 +523,14 @@ begin
           reason,
           (NEW_LINE + '   '),
           BreakChars,
-          int16.Parse(configurationsettings.AppSettings['email_blockquote_maxcol'])
+          int16.Parse(configurationmanager.AppSettings['email_blockquote_maxcol'])
           )
         + NEW_LINE
         + NEW_LINE
         + 'You can review this EMSOF request by visiting:' + NEW_LINE
         + NEW_LINE
-        + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-        + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+        + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+        + configurationmanager.AppSettings['application_name'] + NEW_LINE
         + NEW_LINE
         + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
         + NEW_LINE
@@ -538,7 +540,7 @@ begin
         + NEW_LINE
         + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
         + NEW_LINE
-        + '-- ' + ConfigurationSettings.AppSettings['application_name']
+        + '-- ' + configurationmanager.AppSettings['application_name']
         );
       //
     end;
@@ -555,9 +557,9 @@ begin
     //
     //   Send notifications to service and region.
     //
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       service_email_address,
       'REJECTION of EMSOF request',
       reviewer_descriptor + ' has REJECTED ' + service_name + '''s ' + fy_designator + ' EMSOF request.  ' + NEW_LINE
@@ -570,24 +572,24 @@ begin
         reason,
         (NEW_LINE + '   '),
         BreakChars,
-        int16.Parse(configurationsettings.AppSettings['email_blockquote_maxcol'])
+        int16.Parse(configurationmanager.AppSettings['email_blockquote_maxcol'])
         )
       + NEW_LINE
       + NEW_LINE
       + 'You can review your EMSOF requests by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       other_stakeholder_email_address,
       'REJECTION of EMSOF request',
       reviewer_descriptor + ' has REJECTED ' + service_name + '''s '+ fy_designator + ' EMSOF request.  ' + NEW_LINE
@@ -600,7 +602,7 @@ begin
         reason,
         (NEW_LINE + '   '),
         BreakChars,
-        int16.Parse(configurationsettings.AppSettings['email_blockquote_maxcol'])
+        int16.Parse(configurationmanager.AppSettings['email_blockquote_maxcol'])
         )
       + NEW_LINE
       + NEW_LINE
@@ -611,14 +613,14 @@ begin
       + NEW_LINE
       + 'To review this EMSOF request or to adjust your county submission deadline, visit:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
   end;
 end;
@@ -667,20 +669,20 @@ begin
   + NEW_LINE
   + 'You can review your EMSOF requests by visiting:' + NEW_LINE
   + NEW_LINE
-  + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-  + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+  + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+  + configurationmanager.AppSettings['application_name'] + NEW_LINE
   + NEW_LINE
   + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
   + NEW_LINE
   + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
   + NEW_LINE
-  + '-- ' + ConfigurationSettings.AppSettings['application_name'];
+  + '-- ' + configurationmanager.AppSettings['application_name'];
   //
   //   Send notification to service.
   //
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
     'Promotion of EMSOF request',
     messageText
@@ -689,9 +691,9 @@ begin
   //   Send notification to region.
   //
   if next_reviewer_email_target <> EMPTY then begin
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
         next_reviewer_email_target,
       'Promotion of EMSOF request',
         reviewer_descriptor + ' has promoted ' + service_name + '''s ' + fy_designator + ' EMSOF request.' + NEW_LINE
@@ -700,14 +702,14 @@ begin
       + NEW_LINE
       + 'You can review this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
   end;
 end;
@@ -733,9 +735,9 @@ begin
   //
   //   Send notification to service.
   //
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     service_email_address,
     'UN-Rejection of EMSOF request',
     reviewer_descriptor + ' has UN-rejected ' + service_name + '''s ' + fy_designator + ' EMSOF request.  The request '
@@ -743,23 +745,23 @@ begin
     + NEW_LINE
     + 'You can rework this EMSOF request by visiting:' + NEW_LINE
     + NEW_LINE
-    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+    + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+    + configurationmanager.AppSettings['application_name'] + NEW_LINE
     + NEW_LINE
     + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
     + NEW_LINE
     + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name']
     );
   //
   if role <> 'county' then begin
     //
     //   Send notification to county.
     //
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       EmailAddressByKindId('county',county_code),
       'UN-rejection of ' + service_name + '''s EMSOF request',
       reviewer_descriptor + ' has UN-rejected ' + service_name + '''s ' + fy_designator + ' EMSOF request.  The request '
@@ -767,8 +769,8 @@ begin
       + NEW_LINE
       + 'You can review this EMSOF request by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact ' + reviewer_descriptor + ' at:' + NEW_LINE
       + NEW_LINE
@@ -778,7 +780,7 @@ begin
       + NEW_LINE
       + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
     //
   end;
@@ -799,9 +801,9 @@ var
   poc_email_address: string;
 begin
   poc_email_address := EmailAddressByKindId('service',service_id);
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     EmailTargetByRole('emsof-coordinator'),
     'POC has assumed EMSOF resposibility for Service',
     'Dear Regional Council EMSOF Coordinator,' + NEW_LINE
@@ -815,7 +817,7 @@ begin
     + NEW_LINE
     + '   ' + poc_email_address + '  (mailto:' + poc_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name']
     );
 
 end;
@@ -846,9 +848,9 @@ begin
     task_description := 'finish submitting proof of payment for items in your EMSOF request(s) to the regional EMS council';
   end;
   //
-  ki.SmtpMailSend
+  kix.SmtpMailSend
     (
-    ConfigurationSettings.AppSettings['sender_email_address'],
+    configurationmanager.AppSettings['sender_email_address'],
     service_email_address,
     'Reminder of approaching deadline',
     'This is an automated reminder from WebEMSOF.' + NEW_LINE
@@ -858,10 +860,10 @@ begin
     + NEW_LINE
     + 'You can review your EMSOF requests by visiting:' + NEW_LINE
     + NEW_LINE
-    + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-    + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+    + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+    + configurationmanager.AppSettings['application_name'] + NEW_LINE
     + NEW_LINE
-    + '-- ' + ConfigurationSettings.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name']
     );
 end;
 

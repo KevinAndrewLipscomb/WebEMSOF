@@ -5,7 +5,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, borland.data.provider,
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.security,
   Class_biz_emsof_requests,
   Class_db,
@@ -85,6 +85,7 @@ type
     CheckBox_withdraw: System.Web.UI.WebControls.CheckBox;
     Button_withdraw: System.Web.UI.WebControls.Button;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -92,9 +93,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -120,12 +118,11 @@ end;
 
 procedure TWebForm_request_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdr: borland.data.provider.bdpdatareader;
+  dr: mysqldatareader;
   be_deadline_exempt: boolean;
   county_dictated_appropriation_amount: decimal;
   make_item_requests_deadline: system.datetime;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -156,7 +153,7 @@ begin
     //
     be_deadline_exempt := p.biz_emsof_requests.BeDeadlineExempt(session['emsof_request_master_id'].tostring);
     //
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - request_overview';
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - request_overview';
     
     p.db.Open;
     //
@@ -167,7 +164,7 @@ begin
     //
     make_item_requests_deadline := system.datetime
       (
-      borland.data.provider.bdpcommand.Create
+      mysqlcommand.Create
         (
         'select service_to_county_submission_deadline'
         + ' from county_dictated_appropriation join region_dictated_appropriation'
@@ -180,7 +177,7 @@ begin
     //
     p.be_before_deadline := (datetime.Now <= make_item_requests_deadline) or be_deadline_exempt;
     //
-    p.be_finalized := '1' = borland.data.provider.bdpcommand.Create
+    p.be_finalized := '1' = mysqlcommand.Create
       (
       'select (status_code > 2) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
       p.db.connection
@@ -209,16 +206,16 @@ begin
     // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
     // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
     //
-    bdr := borland.data.provider.bdpcommand.Create
+    dr := mysqlcommand.Create
       (
       'select num_items,value from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
       p.db.connection
       )
       .ExecuteReader;
-    bdr.Read;
-    p.num_items := bdr['num_items'].GetHashCode;
+    dr.Read;
+    p.num_items := dr['num_items'].GetHashCode;
     if p.be_before_deadline and (not p.be_finalized) then begin
-      p.sum_of_emsof_antes := decimal.Parse(bdr['value'].tostring);
+      p.sum_of_emsof_antes := decimal.Parse(dr['value'].tostring);
       p.unused_amount := county_dictated_appropriation_amount - p.sum_of_emsof_antes;
       //
       Label_sum_of_emsof_antes.text := p.sum_of_emsof_antes.tostring('C');
@@ -228,7 +225,7 @@ begin
         Label_unused_amount.forecolor := color.red;
       end;
     end;
-    bdr.Close;
+    dr.Close;
     //
     if p.num_items = 0 then begin
       Label_no_appropriations.Visible := TRUE;
@@ -237,7 +234,7 @@ begin
     end;
     //
     if p.be_finalized then begin
-      p.be_completely_approved := '1' = borland.data.provider.bdpcommand.Create
+      p.be_completely_approved := '1' = mysqlcommand.Create
         (
         'select (status_code between 8 and 10) from emsof_request_master where id = ' + session['emsof_request_master_id'].tostring,
         p.db.connection
@@ -332,7 +329,7 @@ procedure TWebForm_request_overview.DataGrid_items_ItemCommand(source: System.Ob
 begin
   if e.commandname = 'IncreasePriority' then begin
     p.db.Open;
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       p.db_trail.Saved
         (
@@ -356,7 +353,7 @@ begin
     p.db.Close;
   end else if e.commandname = 'DecreasePriority' then begin
     p.db.Open;
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       p.db_trail.Saved
         (
@@ -444,9 +441,9 @@ begin
   + ' order by priority';
   //
   DataGrid_items.DataSource :=
-    borland.data.provider.bdpcommand.Create(cmdText,p.db.connection).ExecuteReader;
+    mysqlcommand.Create(cmdText,p.db.connection).ExecuteReader;
   DataGrid_items.DataBind;
-  bdpdatareader(DataGrid_items.datasource).Close;
+  mysqldatareader(DataGrid_items.datasource).Close;
   //
   // Clear aggregation vars for next bind, if any.
   //

@@ -6,8 +6,8 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
-  ki,
-  borland.data.provider,
+  kix,
+  mysql.data.mysqlclient,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
   Class_db,
@@ -93,15 +93,13 @@ type
     Label_application_name: System.Web.UI.WebControls.Label;
     CheckBox_hide_nonapproval_requests: System.Web.UI.WebControls.CheckBox;
     UserControl_print_div: TWebUserControl_print_div;
+  protected
     procedure OnInit(e: EventArgs); override;
   public
     { Public Declarations }
   end;
 
 implementation
-
-uses
-  appcommon;
 
 const
   TCCI_LINKBUTTON_EDIT = 14;
@@ -134,11 +132,10 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  bdr_appropriation_attribs: borland.data.provider.BdpDataReader;
+  dr_appropriation_attribs: mysqldatareader;
   county_dictated_deadline: system.datetime;
   make_appropriations_deadline: system.datetime;
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -162,7 +159,7 @@ begin
     p.unappropriated_amount := 0;
     //   Set up symbolic DataGrid Indices for use in other event handlers.
     //
-    Title.InnerText := ConfigurationSettings.AppSettings['application_name'] + ' - county_dictated_appropriations';
+    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - county_dictated_appropriations';
     
     Label_county_name.Text := session['county_name'].ToString;
     //
@@ -170,7 +167,7 @@ begin
     //
     // Set parent appropriation labels.
     //
-    bdr_appropriation_attribs := borland.data.provider.bdpcommand.Create
+    dr_appropriation_attribs := mysqlcommand.Create
       (
       'select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name '
       + 'from region_dictated_appropriation '
@@ -181,19 +178,19 @@ begin
       p.db.connection
       )
       .ExecuteReader;
-    bdr_appropriation_attribs.Read;
-    Label_fiscal_year_designator.Text := bdr_appropriation_attribs['designator'].tostring;
-    p.region_dictated_appropriation_amount := decimal(bdr_appropriation_attribs['amount']);
+    dr_appropriation_attribs.Read;
+    Label_fiscal_year_designator.Text := dr_appropriation_attribs['designator'].tostring;
+    p.region_dictated_appropriation_amount := decimal(dr_appropriation_attribs['amount']);
     Label_parent_appropriation_amount.Text := p.region_dictated_appropriation_amount.ToString('C');
-    Label_region_name.Text := bdr_appropriation_attribs['name'].tostring;
-    Label_application_name.text := configurationsettings.appsettings['application_name'];
-    bdr_appropriation_attribs.Close;
+    Label_region_name.Text := dr_appropriation_attribs['name'].tostring;
+    Label_application_name.text := configurationmanager.appsettings['application_name'];
+    dr_appropriation_attribs.Close;
     //
     // All further rendering is deadline-dependent.
     //
     make_appropriations_deadline := system.datetime
       (
-      borland.data.provider.bdpcommand.Create
+      mysqlcommand.Create
         (
         'select value'
         + ' from fy_calendar'
@@ -207,7 +204,7 @@ begin
       );
     county_dictated_deadline := datetime
       (
-      borland.data.provider.bdpcommand.Create
+      mysqlcommand.Create
         (
         'select service_to_county_submission_deadline from region_dictated_appropriation'
         + ' where id = ' + session['region_dictated_appropriation_id'].tostring,
@@ -342,12 +339,12 @@ end;
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 var
-  bc: borland.data.provider.bdpcommand;
+  bc: mysqlcommand;
   id_string: string;
 begin
   p.db.Open;
   id_string := Safe(e.Item.Cells[p.biz_emsof_requests.TcciOfId].Text,NUM);
-  bc := borland.data.provider.bdpcommand.Create
+  bc := mysqlcommand.Create
     (
     'select count(master_id)'  // Leaving the star out prevents inclusion of nulls in count
     + ' from emsof_request_detail'
@@ -390,7 +387,7 @@ begin
     //
     // Nothing is linked to this appropriation, so go ahead and delete it.
     //
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       p.db_trail.Saved('delete from county_dictated_appropriation where id = ' + id_string),
       p.db.connection
@@ -399,24 +396,24 @@ begin
     //
     // Send a notification message.
     //
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
-      'Deletion of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
+      'Deletion of ' + configurationmanager.AppSettings['application_name'] + ' allocation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has deleted an EMSOF allocation from your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + PERIOD + NEW_LINE
       + NEW_LINE
       + 'For an overview of your EMSOF allocations, visit:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
       + '   ' + session['county_user_password_reset_email_address'].tostring + '  (mailto:' + session['county_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
     //
     p.db.Close;
@@ -512,7 +509,7 @@ begin
     end else begin
       Table_warning_forced_amount.visible := FALSE;
     end;
-    borland.data.provider.bdpcommand.Create
+    mysqlcommand.Create
       (
       p.db_trail.Saved
         ('update county_dictated_appropriation set amount = ' + amount.tostring + ' where id = ' + appropriation_id_string),
@@ -520,24 +517,24 @@ begin
       )
       .ExecuteNonQuery;
     //
-    ki.SmtpMailSend
+    kix.SmtpMailSend
       (
-      ConfigurationSettings.AppSettings['sender_email_address'],
+      configurationmanager.AppSettings['sender_email_address'],
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text,EMAIL_ADDRESS),
-      'Modification of ' + ConfigurationSettings.AppSettings['application_name'] + ' allocation for your service',
+      'Modification of ' + configurationmanager.AppSettings['application_name'] + ' allocation for your service',
       'The ' + session['county_name'].ToString + ' County EMSOF Coordinator has modified an EMSOF allocation for your '
       + 'service for ' + Safe(Label_fiscal_year_designator.text,ALPHANUM) + PERIOD + NEW_LINE
       + NEW_LINE
       + 'You can work on this allocation by visiting:' + NEW_LINE
       + NEW_LINE
-      + '   http://' + ConfigurationSettings.AppSettings['host_domain_name'] + '/'
-      + ConfigurationSettings.AppSettings['application_name'] + NEW_LINE
+      + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+      + configurationmanager.AppSettings['application_name'] + NEW_LINE
       + NEW_LINE
       + 'You can contact the ' + session['county_name'].ToString + ' County EMSOF Coordinator at:' + NEW_LINE
       + NEW_LINE
       + '   ' + session['county_user_password_reset_email_address'].tostring + '  (mailto:' + session['county_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + ConfigurationSettings.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name']
       );
     p.db.Close;
     //

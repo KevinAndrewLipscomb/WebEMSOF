@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  borland.data.provider,
+  mysql.data.mysqlclient,
   system.web.ui.webcontrols;
 
 constructor TClass_db_match_level.Create;
@@ -52,22 +52,22 @@ function TClass_db_match_level.Bind
   )
   : boolean;
 var
-  bdr: bdpdatareader;
+  dr: mysqldatareader;
 begin
   self.Open;
   DropDownList(target).items.Clear;
   //
-  bdr := bdpcommand.Create
+  dr := mysqlcommand.Create
     (
     'SELECT name FROM match_level WHERE name like "' + partial_name + '%" order by name',
     connection
     )
     .ExecuteReader;
-  while bdr.Read do begin
+  while dr.Read do begin
     DropDownList(target).Items.Add
-      (listitem.Create(bdr['name'].tostring,bdr['name'].tostring));
+      (listitem.Create(dr['name'].tostring,dr['name'].tostring));
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
   Bind := DropDownList(target).items.count > 0;
 end;
@@ -75,7 +75,7 @@ end;
 procedure TClass_db_match_level.Delete(name: string);
 begin
   self.Open;
-  bdpcommand.Create(db_trail.Saved('delete from match_level where name = ' + name),connection).ExecuteNonquery;
+  mysqlcommand.Create(db_trail.Saved('delete from match_level where name = ' + name),connection).ExecuteNonquery;
   self.Close;
 end;
 
@@ -86,20 +86,20 @@ function TClass_db_match_level.Get
   )
   : boolean;
 var
-  bdr: bdpdatareader;
+  dr: mysqldatareader;
 begin
   Get := FALSE;
   self.Open;
-  bdr := bdpcommand.Create('select * from match_level where name = "' + name + '"',connection).ExecuteReader;
-  if bdr.Read then begin
+  dr := mysqlcommand.Create('select * from match_level where name = "' + name + '"',connection).ExecuteReader;
+  if dr.Read then begin
     //
-    name := bdr['name'].tostring;
-    factor := decimal.Parse(bdr['factor'].tostring);
+    name := dr['name'].tostring;
+    factor := decimal.Parse(dr['factor'].tostring);
     //
     Get := TRUE;
     //
   end;
-  bdr.Close;
+  dr.Close;
   self.Close;
 end;
 
@@ -110,7 +110,7 @@ procedure TClass_db_match_level.&Set
   );
 begin
   self.Open;
-  bdpcommand.Create
+  mysqlcommand.Create
     (
     db_trail.Saved
       (

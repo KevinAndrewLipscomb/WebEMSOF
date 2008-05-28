@@ -6,7 +6,7 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, ki, system.configuration, system.web.security;
+  system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security;
 
 const ID = '$Id$';
 
@@ -40,6 +40,7 @@ type
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
     Label_application_name: System.Web.UI.WebControls.Label;
     Button_return_to_overview: System.Web.UI.WebControls.Button;
+  protected
     procedure OnInit(e: EventArgs); override;
   private
     { Private Declarations }
@@ -48,9 +49,6 @@ type
   end;
 
 implementation
-
-uses
-  appcommon;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -71,7 +69,6 @@ end;
 
 procedure TWebForm_state_transmittal_complete.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  appcommon.PopulatePlaceHolders(PlaceHolder_precontent,PlaceHolder_postcontent);
   if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
     p := p_type(session['p']);
   end else begin
@@ -80,9 +77,9 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
-    Title.InnerText := server.HtmlEncode(ConfigurationSettings.AppSettings['application_name']) + ' - state_transmittal_complete';
+    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - state_transmittal_complete';
     Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
-    Label_application_name.text := configurationsettings.appsettings['application_name'];
+    Label_application_name.text := configurationmanager.appsettings['application_name'];
     //
   end;
 end;
