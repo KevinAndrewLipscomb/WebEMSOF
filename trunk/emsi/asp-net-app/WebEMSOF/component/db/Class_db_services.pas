@@ -15,7 +15,7 @@ type
   public
     constructor Create;
     function AffiliateNumOfId(id: string): string;
-    procedure BindDropDownList
+    procedure BindListControl
       (
       county_user_id: string;
       target: system.object;
@@ -85,7 +85,7 @@ begin
   self.Close;
 end;
 
-procedure TClass_db_services.BindDropDownList
+procedure TClass_db_services.BindListControl
   (
   county_user_id: string;
   target: system.object;
@@ -96,8 +96,8 @@ var
   cmdText: string;
 begin
   self.Open;
-  DropDownList(target).Items.Clear;
-  DropDownList(target).Items.Add(listitem.Create('-- Select --','0'));
+  ListControl(target).Items.Clear;
+  ListControl(target).Items.Add(listitem.Create('-- Select --','0'));
   //
   cmdText := 'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ';
   if not be_unfiltered then begin
@@ -107,7 +107,7 @@ begin
   //
   dr := mysqlcommand.Create(cmdText,connection).ExecuteReader;
   while dr.Read do begin
-    DropDownList(target).Items.Add(listitem.Create(dr['name'].tostring,dr['id'].ToString));
+    ListControl(target).Items.Add(listitem.Create(dr['name'].tostring,dr['id'].ToString));
   end;
   dr.Close;
   self.Close;

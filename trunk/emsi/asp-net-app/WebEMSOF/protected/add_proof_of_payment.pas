@@ -118,7 +118,7 @@ begin
       //
       Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
       Calendar_date_of_payment.selecteddate := datetime.today;
-      p.biz_payment_proof_methods.BindDropDownList(DropDownList_methods);
+      p.biz_payment_proof_methods.BindListControl(DropDownList_methods);
       //
     end;
   end;

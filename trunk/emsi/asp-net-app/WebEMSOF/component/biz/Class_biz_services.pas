@@ -12,7 +12,7 @@ type
   public
     constructor Create;
     function AffiliateNumOfId(id: string): string;
-    procedure BindDropDownList
+    procedure BindListControl
       (
       county_user_id: string;
       target: system.object;
@@ -72,14 +72,14 @@ begin
   AffiliateNumOfId := db_services.AffiliateNumOfId(id);
 end;
 
-procedure TClass_biz_services.BindDropDownList
+procedure TClass_biz_services.BindListControl
   (
   county_user_id: string;
   target: system.object;
   be_unfiltered: boolean = FALSE
   );
 begin
-  db_services.BindDropDownList(county_user_id,target,be_unfiltered);
+  db_services.BindListControl(county_user_id,target,be_unfiltered);
 end;
 
 procedure TClass_biz_services.GetProfile

@@ -12,9 +12,6 @@ uses
   system.collections,
   System.Web.UI.WebControls;
 
-const
-  ID = '$Id$';
-
 type
   approval_timestamp_column_type =
     (
@@ -90,6 +87,11 @@ type
     procedure BindDetail
       (
       master_id: string;
+      target: system.object
+      );
+    procedure BindEquipmentProcurementOverview
+      (
+      fy_id: string;
       target: system.object
       );
     procedure BindOverviewAll
@@ -634,6 +636,35 @@ begin
     )
     .ExecuteReader;
   DataGrid(target).DataBind;
+  self.Close;
+end;
+
+procedure TClass_db_emsof_requests.BindEquipmentProcurementOverview
+  (
+  fy_id: string;
+  target: system.object
+  );
+begin
+  self.Open;
+  GridView(target).datasource := mysqlcommand.Create
+    (
+    'select description'
+    + ' , sum(actual_quantity) as quantity'
+    + ' , sum(actual_emsof_ante) as emsof_part'
+    + ' , sum(actual_subtotal_cost) as overall_cost'
+    + ' , (sum(actual_subtotal_cost)/sum(actual_quantity)) as avg_unit_cost'
+    + ' from emsof_request_detail'
+      + ' join eligible_provider_equipment_list on'
+        + ' (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+      + ' join fiscal_year on'
+        + ' (fiscal_year.id=eligible_provider_equipment_list.fiscal_year_id)'
+    + ' where fiscal_year_id = "' + fy_id + '"'
+    + ' group by eligible_provider_equipment_list.code'
+    + ' order by emsof_part desc',
+    connection
+    )
+    .ExecuteReader;
+  GridView(target).DataBind;
   self.Close;
 end;
 
