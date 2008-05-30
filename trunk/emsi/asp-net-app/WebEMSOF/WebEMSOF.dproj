@@ -1,0 +1,424 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{9e2bfa05-69b8-4f2c-9bb6-7b24f4b9b7c9}</ProjectGuid>
+    <MainSource>WebEMSOF.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_EnabledPackages>true</DCC_EnabledPackages>
+    <DCC_UsePackage>ki;"C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll";C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
+    <DCC_DCCCompiler>DCCIL</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>bin\WebEMSOF.dll</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_OpenStringParams>False</DCC_OpenStringParams>
+    <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
+    <DCC_RangeChecking>True</DCC_RangeChecking>
+    <DCC_TypedAtParameter>True</DCC_TypedAtParameter>
+    <DCC_StrictVarStrings>False</DCC_StrictVarStrings>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_DebugInfoInExe>True</DCC_DebugInfoInExe>
+    <DCC_DebugVN>True</DCC_DebugVN>
+    <DCC_ExeOutput>.\bin</DCC_ExeOutput>
+    <DCC_UnitSearchPath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki</DCC_UnitSearchPath>
+    <DCC_ResourcePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki</DCC_ResourcePath>
+    <DCC_IncludePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki</DCC_IncludePath>
+    <DCC_Define>RELEASE</DCC_Define>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_OpenStringParams>False</DCC_OpenStringParams>
+    <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
+    <DCC_RangeChecking>True</DCC_RangeChecking>
+    <DCC_TypedAtParameter>True</DCC_TypedAtParameter>
+    <DCC_StrictVarStrings>False</DCC_StrictVarStrings>
+    <DCC_DebugInfoInExe>True</DCC_DebugInfoInExe>
+    <DCC_DebugVN>True</DCC_DebugVN>
+    <DCC_ExeOutput>.\bin</DCC_ExeOutput>
+    <DCC_UnitSearchPath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_UnitSearchPath>
+    <DCC_ResourcePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_ResourcePath>
+    <DCC_IncludePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_IncludePath>
+    <DCC_Define>DEBUG</DCC_Define>
+    <DCC_Platform>x86</DCC_Platform>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>DelphiDotNet.Personality</Borland.Personality>
+    <Borland.ProjectType>AspProject</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><DelphiDotNet.Personality><Parameters><Parameters Name="HostApplication">http://localhost/WebEMSOF/login.aspx</Parameters><Parameters Name="DebugSourceDirs">C:\Inetpub\wwwroot\WebEMSOF\component\biz\</Parameters><Parameters Name="Launcher">"C:\Program Files\Internet Explorer\iexplore.exe"</Parameters><Parameters Name="UseLauncher">True</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">False</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1033</VersionInfo><VersionInfo Name="CodePage">1252</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Options><Options Name="AspNetUseHostServer">True</Options><Options Name="AspNetLaunchBrowser">True</Options><Options Name="AspNetStartPage">login.aspx</Options><Options Name="AspNetHostServer">IIS</Options><Options Name="AspNetCassiniPortIndex">0</Options><Options Name="AspNetCassiniStartup">ProjectRun</Options><Options Name="AspNetIISVirtualDirectory">WebEMSOF</Options><Options Name="AspNetHTTPAddress"></Options><Options Name="AspNetCassiniHTTPAddress"></Options></Options><Source><Source Name="MainSource">WebEMSOF.dpr</Source></Source></DelphiDotNet.Personality></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <ItemGroup>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll">
+      <AssemblyName>mscorlib</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Data.dll">
+      <AssemblyName>System.Data</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Data.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Data.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Design.dll">
+      <AssemblyName>System.Design</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Design.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Design.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.dll">
+      <AssemblyName>System</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll">
+      <AssemblyName>System.Drawing</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Web.dll">
+      <AssemblyName>System.Web</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Web.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Web.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll">
+      <AssemblyName>System.Windows.Forms</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.XML.dll">
+      <AssemblyName>System.XML</AssemblyName>
+      <Version>2.0.0.0</Version>
+      <HintPath>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.XML.dll</HintPath>
+      <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.XML.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="bin\Microsoft.Web.UI.WebControls.dll">
+      <AssemblyName>Microsoft.Web.UI.WebControls</AssemblyName>
+      <Version>1.0.2.226</Version>
+      <HintPath>bin\Microsoft.Web.UI.WebControls.dll</HintPath>
+      <AssemblyTag>bin\Microsoft.Web.UI.WebControls.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll">
+      <AssemblyName>MySql.Data</AssemblyName>
+      <Version>5.0.8.1</Version>
+      <HintPath>C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll</HintPath>
+      <AssemblyTag>C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="lib\ki\ki.dll">
+      <AssemblyName>ki</AssemblyName>
+      <Version>1.0.3070.30057</Version>
+      <HintPath>lib\ki\ki.dll</HintPath>
+      <AssemblyTag>lib\ki\ki.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <DelphiCompile Include="WebEMSOF.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <DCCReference Include="component\biz\Class_biz_accounts.pas" />
+    <DCCReference Include="component\biz\Class_biz_appropriations.pas" />
+    <DCCReference Include="component\biz\Class_biz_counties.pas" />
+    <DCCReference Include="component\biz\Class_biz_emsof_requests.pas" />
+    <DCCReference Include="component\biz\Class_biz_equipment.pas" />
+    <DCCReference Include="component\biz\Class_biz_fiscal_years.pas" />
+    <DCCReference Include="component\biz\Class_biz_match_level.pas" />
+    <DCCReference Include="component\biz\Class_biz_milestones.pas" />
+    <DCCReference Include="component\biz\Class_biz_payment_proof_methods.pas" />
+    <DCCReference Include="component\biz\Class_biz_regional_staffers.pas" />
+    <DCCReference Include="component\biz\Class_biz_services.pas" />
+    <DCCReference Include="component\biz\Class_biz_user.pas" />
+    <DCCReference Include="component\db\Class_db.pas" />
+    <DCCReference Include="component\db\Class_db_accounts.pas" />
+    <DCCReference Include="component\db\Class_db_appropriations.pas" />
+    <DCCReference Include="component\db\Class_db_counties.pas" />
+    <DCCReference Include="component\db\Class_db_emsof_requests.pas" />
+    <DCCReference Include="component\db\Class_db_equipment.pas" />
+    <DCCReference Include="component\db\Class_db_fiscal_years.pas" />
+    <DCCReference Include="component\db\Class_db_milestones.pas" />
+    <DCCReference Include="component\db\Class_db_payment_proof_methods.pas" />
+    <DCCReference Include="component\db\Class_db_regional_staffers.pas" />
+    <DCCReference Include="component\db\Class_db_services.pas" />
+    <DCCReference Include="component\db\Class_db_trail.pas" />
+    <DCCReference Include="component\db\Class_db_user.pas" />
+    <DCCReference Include="Default.pas">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <Form>Default.TWebForm_Default</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="exception.pas">
+      <DependentUpon>exception.aspx</DependentUpon>
+      <Form>exception.TWebForm_exception</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="Global.pas">
+      <DependentUpon>Global.asax</DependentUpon>
+      <Form>Global.TGlobal</Form>
+      <DesignClass>System.Web.HttpApplication</DesignClass>
+    </DCCReference>
+    <DCCReference Include="login.pas">
+      <DependentUpon>login.aspx</DependentUpon>
+      <Form>login.TWebForm_login</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="new_password.pas">
+      <DependentUpon>new_password.aspx</DependentUpon>
+      <Form>new_password.TWebForm_new_password</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="noninteractive\milestone_sweep.pas">
+      <DependentUpon>noninteractive\milestone_sweep.aspx</DependentUpon>
+      <Form>milestone_sweep.TWebForm_milestone_sweep</Form>
+      <DesignClass>system.web.ui.page</DesignClass>
+    </DCCReference>
+    <DCCReference Include="noninteractive\report_equipment_procurement_overview.pas">
+      <DependentUpon>noninteractive\report_equipment_procurement_overview.aspx</DependentUpon>
+      <Form>report_equipment_procurement_overview.TWebForm_report_equipment_procurement_overview</Form>
+      <DesignClass>system.web.ui.page</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\add_proof_of_payment.pas">
+      <DependentUpon>protected\add_proof_of_payment.aspx</DependentUpon>
+      <Form>add_proof_of_payment.TWebForm_add_proof_of_payment</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\all_emsof_requests.pas">
+      <DependentUpon>protected\all_emsof_requests.aspx</DependentUpon>
+      <Form>all_emsof_requests.TWebForm_all_emsof_requests</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\analyses.pas">
+      <DependentUpon>protected\analyses.aspx</DependentUpon>
+      <Form>analyses.TWebForm_analyses</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\change_email_address.pas">
+      <DependentUpon>protected\change_email_address.aspx</DependentUpon>
+      <Form>change_email_address.TWebForm_change_email_address</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\change_password.pas">
+      <DependentUpon>protected\change_password.aspx</DependentUpon>
+      <Form>change_password.TWebForm_change_password</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\county_dictated_appropriations.pas">
+      <DependentUpon>protected\county_dictated_appropriations.aspx</DependentUpon>
+      <Form>county_dictated_appropriations.TWebForm_county_dictated_appropriations</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\county_dictated_deadline.pas">
+      <DependentUpon>protected\county_dictated_deadline.aspx</DependentUpon>
+      <Form>county_dictated_deadline.TWebForm_county_dictated_deadline</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\county_overview.pas">
+      <DependentUpon>protected\county_overview.aspx</DependentUpon>
+      <Form>county_overview.TWebForm_county_overview</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\county_unrejection.pas">
+      <DependentUpon>protected\county_unrejection.aspx</DependentUpon>
+      <Form>county_unrejection.TWebForm_county_unrejection</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\create_new_service_appropriation.pas">
+      <DependentUpon>protected\create_new_service_appropriation.aspx</DependentUpon>
+      <Form>create_new_service_appropriation.TWebForm_create_new_service_appropriation</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\delete_service_appropriation.pas">
+      <DependentUpon>protected\delete_service_appropriation.aspx</DependentUpon>
+      <Form>delete_service_appropriation.TWebForm_delete_service_appropriation</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\emsof_request_status_filter.pas">
+      <DependentUpon>protected\emsof_request_status_filter.aspx</DependentUpon>
+      <Form>emsof_request_status_filter.TWebForm_emsof_request_status_filter</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\finalize.pas">
+      <DependentUpon>protected\finalize.aspx</DependentUpon>
+      <Form>finalize.TWebForm_finalize</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\full_request_review_approve.pas">
+      <DependentUpon>protected\full_request_review_approve.aspx</DependentUpon>
+      <Form>full_request_review_approve.TWebForm_full_request_review_approve</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\profile.pas">
+      <DependentUpon>protected\profile.aspx</DependentUpon>
+      <Form>profile.TWebForm_profile</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\regional_staffer_fiscal_year_selection.pas">
+      <DependentUpon>protected\regional_staffer_fiscal_year_selection.aspx</DependentUpon>
+      <Form>regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\regional_staffer_overview.pas">
+      <DependentUpon>protected\regional_staffer_overview.aspx</DependentUpon>
+      <Form>regional_staffer_overview.TWebForm_regional_staffer_overview</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\region_dictated_appropriations.pas">
+      <DependentUpon>protected\region_dictated_appropriations.aspx</DependentUpon>
+      <Form>region_dictated_appropriations.TWebForm_region_dictated_appropriations</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\request_item_detail.pas">
+      <DependentUpon>protected\request_item_detail.aspx</DependentUpon>
+      <Form>request_item_detail.TWebForm_request_item_detail</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\request_overview.pas">
+      <DependentUpon>protected\request_overview.aspx</DependentUpon>
+      <Form>request_overview.TWebForm_request_overview</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\service_overview.pas">
+      <DependentUpon>protected\service_overview.aspx</DependentUpon>
+      <Form>service_overview.TWebForm_service_overview</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\state_required_report.pas">
+      <DependentUpon>protected\state_required_report.aspx</DependentUpon>
+      <Form>state_required_report.TWebForm_state_required_report</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\state_transmittal_complete.pas">
+      <DependentUpon>protected\state_transmittal_complete.aspx</DependentUpon>
+      <Form>state_transmittal_complete.TWebForm_state_transmittal_complete</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\withdraw_request_item.pas">
+      <DependentUpon>protected\withdraw_request_item.aspx</DependentUpon>
+      <Form>withdraw_request_item.TWebForm_withdraw_request_item</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="salogin.pas">
+      <DependentUpon>salogin.aspx</DependentUpon>
+      <Form>salogin.TWebForm_salogin</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="timeout.pas">
+      <DependentUpon>timeout.aspx</DependentUpon>
+      <Form>timeout.TWebForm_timeout</Form>
+      <DesignClass>system.web.ui.page</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_analyses_binder.pas">
+      <DependentUpon>usercontrol\app\UserControl_analyses_binder.ascx</DependentUpon>
+      <Form>UserControl_analyses_binder.TWebUserControl_analyses_binder</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_common_header_bar.pas">
+      <DependentUpon>usercontrol\app\UserControl_common_header_bar.ascx</DependentUpon>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_equipment_procurement_overview.pas">
+      <DependentUpon>usercontrol\app\UserControl_equipment_procurement_overview.ascx</DependentUpon>
+      <Form>UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_match_level.pas">
+      <DependentUpon>usercontrol\app\UserControl_match_level.ascx</DependentUpon>
+      <Form>UserControl_match_level.TWebUserControl_match_level</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_postcontent.pas">
+      <DependentUpon>usercontrol\app\UserControl_postcontent.ascx</DependentUpon>
+      <Form>UserControl_postcontent.TWebUserControl_postcontent</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_precontent.pas">
+      <DependentUpon>usercontrol\app\UserControl_precontent.ascx</DependentUpon>
+      <Form>UserControl_precontent.TWebUserControl_precontent</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\ki\UserControl_bread_crumb_trail.pas">
+      <DependentUpon>usercontrol\ki\UserControl_bread_crumb_trail.ascx</DependentUpon>
+    </DCCReference>
+    <DCCReference Include="usercontrol\ki\UserControl_drop_down_date.pas">
+      <DependentUpon>usercontrol\ki\UserControl_drop_down_date.ascx</DependentUpon>
+    </DCCReference>
+    <DCCReference Include="usercontrol\ki\UserControl_print_div.pas">
+      <DependentUpon>usercontrol\ki\UserControl_print_div.ascx</DependentUpon>
+      <Form>UserControl_print_div.TWebUserControl_print_div</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <None Include="component" />
+    <None Include="component\biz" />
+    <None Include="component\db" />
+    <None Include="dbscript" />
+    <None Include="Default.aspx" />
+    <None Include="exception.aspx" />
+    <None Include="Global.asax" />
+    <None Include="login.aspx" />
+    <None Include="new_password.aspx" />
+    <None Include="noninteractive\.crontab" />
+    <None Include="noninteractive\milestone_sweep.aspx" />
+    <None Include="noninteractive\report_equipment_procurement_overview.aspx" />
+    <None Include="protected" />
+    <None Include="protected\add_proof_of_payment.aspx" />
+    <None Include="protected\all_emsof_requests.aspx" />
+    <None Include="protected\analyses.aspx" />
+    <None Include="protected\change_email_address.aspx" />
+    <None Include="protected\change_password.aspx" />
+    <None Include="protected\county_dictated_appropriations.aspx" />
+    <None Include="protected\county_dictated_deadline.aspx" />
+    <None Include="protected\county_overview.aspx" />
+    <None Include="protected\county_unrejection.aspx" />
+    <None Include="protected\create_new_service_appropriation.aspx" />
+    <None Include="protected\delete_service_appropriation.aspx" />
+    <None Include="protected\emsof_request_status_filter.aspx" />
+    <None Include="protected\finalize.aspx" />
+    <None Include="protected\full_request_review_approve.aspx" />
+    <None Include="protected\image" />
+    <None Include="protected\profile.aspx" />
+    <None Include="protected\regional_staffer_fiscal_year_selection.aspx" />
+    <None Include="protected\regional_staffer_overview.aspx" />
+    <None Include="protected\region_dictated_appropriations.aspx" />
+    <None Include="protected\request_item_detail.aspx" />
+    <None Include="protected\request_overview.aspx" />
+    <None Include="protected\scratch" />
+    <None Include="protected\service_overview.aspx" />
+    <None Include="protected\state_required_report.aspx" />
+    <None Include="protected\state_transmittal_complete.aspx" />
+    <None Include="protected\Web.config" />
+    <None Include="protected\withdraw_request_item.aspx" />
+    <None Include="resource\emsi-emsof-allocations-memo-fy0607.pdf" />
+    <None Include="resource\funding-priorities-epel-fy0607.pdf" />
+    <None Include="resource\terms-and-conditions.pdf" />
+    <None Include="salogin.aspx" />
+    <None Include="schema.sql" />
+    <None Include="testdata.sql" />
+    <None Include="timeout.aspx" />
+    <None Include="unpublished.config" />
+    <None Include="usercontrol\app\UserControl_analyses_binder.ascx" />
+    <None Include="usercontrol\app\UserControl_common_header_bar.ascx" />
+    <None Include="usercontrol\app\UserControl_equipment_procurement_overview.ascx" />
+    <None Include="usercontrol\app\UserControl_match_level.ascx" />
+    <None Include="usercontrol\app\UserControl_postcontent.ascx" />
+    <None Include="usercontrol\app\UserControl_precontent.ascx" />
+    <None Include="usercontrol\ki\UserControl_bread_crumb_trail.ascx" />
+    <None Include="usercontrol\ki\UserControl_drop_down_date.ascx" />
+    <None Include="usercontrol\ki\UserControl_print_div.ascx" />
+    <None Include="Web.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+</Project>

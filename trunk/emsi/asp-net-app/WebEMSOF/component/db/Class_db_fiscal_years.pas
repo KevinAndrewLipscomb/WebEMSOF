@@ -30,16 +30,13 @@ begin
 end;
 
 procedure TClass_db_fiscal_years.BindListControl(target: system.object);
-var
-  dr: mysqldatareader;
 begin
   self.Open;
-  ListControl(target).items.Clear;
-  dr := mysqlcommand.Create('select id,designator from fiscal_year order by id desc',connection).ExecuteReader;
-  while dr.Read do begin
-    ListControl(target).Items.Add(listitem.Create(dr['designator'].tostring,dr['id'].ToString));
-  end;
-  dr.Close;
+  ListControl(target).datasource :=
+    mysqlcommand.Create('select id,designator from fiscal_year order by id desc',connection).ExecuteReader;
+  ListControl(target).datavaluefield := 'id';
+  ListControl(target).datatextfield := 'designator';
+  ListControl(target).DataBind;
   self.Close;
 end;
 

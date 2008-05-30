@@ -92,6 +92,8 @@ type
     procedure BindEquipmentProcurementOverview
       (
       fy_id: string;
+      sort_order: string;
+      be_order_ascending: boolean;
       target: system.object
       );
     procedure BindOverviewAll
@@ -642,10 +644,17 @@ end;
 procedure TClass_db_emsof_requests.BindEquipmentProcurementOverview
   (
   fy_id: string;
+  sort_order: string;
+  be_order_ascending: boolean;
   target: system.object
   );
 begin
   self.Open;
+  if be_order_ascending then begin
+    sort_order := sort_order.Replace('%',' asc');
+  end else begin
+    sort_order := sort_order.Replace('%',' desc');
+  end;
   GridView(target).datasource := mysqlcommand.Create
     (
     'select description'
@@ -660,7 +669,7 @@ begin
         + ' (fiscal_year.id=eligible_provider_equipment_list.fiscal_year_id)'
     + ' where fiscal_year_id = "' + fy_id + '"'
     + ' group by eligible_provider_equipment_list.code'
-    + ' order by emsof_part desc',
+    + ' order by ' + sort_order,
     connection
     )
     .ExecuteReader;

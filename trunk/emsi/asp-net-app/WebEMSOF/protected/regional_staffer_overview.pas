@@ -38,6 +38,7 @@ type
     procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_missed_deadlines_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_analyses_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -72,10 +73,7 @@ type
     LinkButton_withdrawn: System.Web.UI.WebControls.LinkButton;
     LinkButton_rejected: System.Web.UI.WebControls.LinkButton;
     //
-    LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
-    LinkButton_archived: System.Web.UI.WebControls.LinkButton;
     LinkButton_set_deadlines: System.Web.UI.WebControls.LinkButton;
-    LinkButton1: System.Web.UI.WebControls.LinkButton;
     LinkButton_all: System.Web.UI.WebControls.LinkButton;
     LinkButton_missed_deadlines: System.Web.UI.WebControls.LinkButton;
     LinkButton_maintain_service_accounts: System.Web.UI.WebControls.LinkButton;
@@ -85,6 +83,9 @@ type
     LinkButton_maintain_epels: System.Web.UI.WebControls.LinkButton;
     LinkButton_maintain_region_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
     UserControl_print_div: TWebUserControl_print_div;
+    LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
+    LinkButton_archived: System.Web.UI.WebControls.LinkButton;
+    LinkButton_analyses: System.Web.UI.WebControls.LinkButton;
     //
   protected
     procedure OnInit(e: EventArgs); override;
@@ -127,6 +128,7 @@ begin
   Include(Self.LinkButton_missed_deadlines.Click, Self.LinkButton_missed_deadlines_Click);
   Include(Self.LinkButton_withdrawn.Click, Self.LinkButton_withdrawn_Click);
   Include(Self.LinkButton_rejected.Click, Self.LinkButton_rejected_Click);
+  Include(Self.LinkButton_analyses.Click, Self.LinkButton_analyses_Click);
   Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
   Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
   Include(Self.Load, Self.Page_Load);
@@ -235,6 +237,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_analyses_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  server.Transfer('analyses.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_missed_deadlines_Click(sender: System.Object;
