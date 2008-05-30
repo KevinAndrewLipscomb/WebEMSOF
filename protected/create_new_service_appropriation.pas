@@ -133,7 +133,7 @@ begin
     end;
     //
     p.biz_services := TClass_biz_services.Create;
-    p.biz_services.BindDropDownList
+    p.biz_services.BindListControl
       (session['county_user_id'].tostring,DropDownList_services,CheckBox_show_out_of_county_services.checked);
   end;
 end;
@@ -185,7 +185,7 @@ end;
 procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object; 
   e: System.EventArgs);
 begin
-  p.biz_services.BindDropDownList
+  p.biz_services.BindListControl
     (session['county_user_id'].tostring,DropDownList_services,CheckBox_show_out_of_county_services.checked);
 end;
 

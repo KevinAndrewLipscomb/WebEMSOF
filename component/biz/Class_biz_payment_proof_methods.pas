@@ -11,7 +11,7 @@ type
     db_payment_proof_methods: TClass_db_payment_proof_methods;
   public
     constructor Create;
-    procedure BindDropDownList(target: system.object);
+    procedure BindListControl(target: system.object);
   end;
 
 implementation
@@ -23,9 +23,9 @@ begin
   db_payment_proof_methods := TClass_db_payment_proof_methods.Create;
 end;
 
-procedure TClass_biz_payment_proof_methods.BindDropDownList(target: system.object);
+procedure TClass_biz_payment_proof_methods.BindListControl(target: system.object);
 begin
-  db_payment_proof_methods.BindDropDownList(target);
+  db_payment_proof_methods.BindListControl(target);
 end;
 
 end.

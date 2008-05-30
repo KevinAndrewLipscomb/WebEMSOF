@@ -56,8 +56,8 @@ var
   dr: mysqldatareader;
 begin
   self.Open;
-  DropDownList(target).items.Clear;
-  DropDownList(target).items.Add(listitem.Create('-- Select --','0'));
+  ListControl(target).items.Clear;
+  ListControl(target).items.Add(listitem.Create('-- Select --','0'));
   dr := mysqlcommand.Create
     (
     'SELECT id,name '
@@ -68,7 +68,7 @@ begin
     )
     .ExecuteReader;
   while dr.Read do begin
-    DropDownList(target).Items.Add(listitem.Create(dr['name'].tostring,'county_' + dr['id'].ToString));
+    ListControl(target).Items.Add(listitem.Create(dr['name'].tostring,'county_' + dr['id'].ToString));
   end;
   dr.Close;
   self.Close;
@@ -79,8 +79,8 @@ var
   dr: mysqldatareader;
 begin
   self.Open;
-  DropDownList(target).items.Clear;
-  DropDownList(target).items.Add(listitem.Create('-- Select --','0'));
+  ListControl(target).items.Clear;
+  ListControl(target).items.Add(listitem.Create('-- Select --','0'));
   dr := mysqlcommand.Create
     (
     'SELECT id,last_name,first_name '
@@ -91,7 +91,7 @@ begin
     )
     .ExecuteReader;
   while dr.Read do begin
-    DropDownList(target).Items.Add
+    ListControl(target).Items.Add
       (listitem.Create(dr['last_name'].tostring + COMMA_SPACE + dr['first_name'].tostring,'regional_staffer_' + dr['id'].ToString));
   end;
   dr.Close;
@@ -103,8 +103,8 @@ var
   dr: mysqldatareader;
 begin
   self.Open;
-  DropDownList(target).items.Clear;
-  DropDownList(target).items.Add(listitem.Create('-- Select --','0'));
+  ListControl(target).items.Clear;
+  ListControl(target).items.Add(listitem.Create('-- Select --','0'));
   dr := mysqlcommand.Create
     (
     'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE ORDER BY name',
@@ -112,7 +112,7 @@ begin
     )
     .ExecuteReader;
   while dr.Read do begin
-    DropDownList(target).Items.Add(listitem.Create(dr['name'].tostring,'service_' + dr['id'].ToString));
+    ListControl(target).Items.Add(listitem.Create(dr['name'].tostring,'service_' + dr['id'].ToString));
   end;
   dr.Close;
   self.Close;

@@ -2,35 +2,47 @@ unit Class_biz_fiscal_years;
 
 interface
 
+uses
+  Class_db_fiscal_years;
+
 type
   TClass_biz_fiscal_years = class
   private
-    { Private Declarations }
+    db_fiscal_years: TClass_db_fiscal_years;
   public
     constructor Create;
+    procedure BindListControl(target: system.object);
+    function DesignatorOfCurrent: string;
     function IdOfCurrent: string;
     function IdOfDesignator(designator: string): string;
   end;
 
 implementation
 
-uses
-  Class_db_fiscal_years;
-
 constructor TClass_biz_fiscal_years.Create;
 begin
   inherited Create;
-  // TODO: Add any constructor code here
+  db_fiscal_years := TClass_db_fiscal_years.Create;
+end;
+
+procedure TClass_biz_fiscal_years.BindListControl(target: system.object);
+begin
+  db_fiscal_years.BindListControl(target);
+end;
+
+function TClass_biz_fiscal_years.DesignatorOfCurrent: string;
+begin
+  DesignatorOfCurrent := db_fiscal_years.DesignatorOfCurrent;
 end;
 
 function TClass_biz_fiscal_years.IdOfCurrent: string;
 begin
-  IdOfCurrent := TClass_db_fiscal_years.Create.IdOfCurrent;
+  IdOfCurrent := db_fiscal_years.IdOfCurrent;
 end;
 
 function TClass_biz_fiscal_years.IdOfDesignator(designator: string): string;
 begin
-  IdOfDesignator := TClass_db_fiscal_years.Create.IdOfDesignator(designator);
+  IdOfDesignator := db_fiscal_years.IdOfDesignator(designator);
 end;
 
 end.
