@@ -13,6 +13,12 @@ type
     db_trail: TClass_db_trail;
   public
     constructor Create;
+    function BeStalePassword
+      (
+      user_kind: string;
+      user_id: string
+      )
+      : boolean;
     procedure BindCounties(target: system.object);
     procedure BindRegionalStaffers(target: system.object);
     procedure BindServices(target: system.object);
@@ -49,6 +55,23 @@ begin
   inherited Create;
   // TODO: Add any constructor code here
   db_trail := TClass_db_trail.Create;
+end;
+
+function TClass_db_accounts.BeStalePassword
+  (
+  user_kind: string;
+  user_id: string
+  )
+  : boolean;
+begin
+  self.Open;
+  BeStalePassword := '1' = mysqlcommand.Create
+    (
+    'SELECT be_stale_password FROM ' + user_kind + '_user where id="' + user_id + '"',
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
 end;
 
 procedure TClass_db_accounts.BindCounties(target: system.object);

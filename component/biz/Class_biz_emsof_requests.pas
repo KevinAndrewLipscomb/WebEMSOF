@@ -118,6 +118,8 @@ type
     procedure BindEquipmentProcurementOverview
       (
       fy_id: string;
+      sort_order: string;
+      be_order_ascending: boolean;
       target: system.object
       );
     procedure BindDetail
@@ -564,10 +566,12 @@ end;
 procedure TClass_biz_emsof_requests.BindEquipmentProcurementOverview
   (
   fy_id: string;
+  sort_order: string;
+  be_order_ascending: boolean;
   target: system.object
   );
 begin
-  db_emsof_requests.BindEquipmentProcurementOverview(fy_id,target);
+  db_emsof_requests.BindEquipmentProcurementOverview(fy_id,sort_order,be_order_ascending,target);
 end;
 
 procedure TClass_biz_emsof_requests.BindDetail

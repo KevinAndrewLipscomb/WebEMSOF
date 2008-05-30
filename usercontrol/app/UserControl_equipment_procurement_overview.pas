@@ -17,9 +17,11 @@ type
   p_type =
     RECORD
     be_loaded: boolean;
+    be_sort_order_ascending: boolean;
     biz_emsof_requests: TClass_biz_emsof_requests;
     biz_fiscal_years: TClass_biz_fiscal_years;
     cycle: string;
+    sort_order: string;
     END;
   TWebUserControl_equipment_procurement_overview = class(ki_web_ui.usercontrol_class)
   {$REGION 'Designer Managed Code'}
@@ -29,6 +31,7 @@ type
       e: System.EventArgs);
     procedure DropDownList_cycle_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
+    procedure GridView_control_Sorting(sender: System.Object; e: System.Web.UI.WebControls.GridViewSortEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -143,7 +146,10 @@ begin
     p.biz_fiscal_years.BindListControl(DropDownList_cycle);
     p.cycle := Safe(DropDownList_cycle.selectedvalue,NUM);
     //
-    DropDownList_cycle.enabled := not assigned(session['mode:report']);
+    if assigned(session['mode:report']) then begin
+      DropDownList_cycle.enabled := FALSE;
+      GridView_control.allowsorting := FALSE;
+    end;
     //
     Bind;
     //
@@ -165,13 +171,15 @@ begin
   //
   if session['UserControl_equipment_procurement_overview.p'] <> nil then begin
     p := p_type(session['UserControl_equipment_procurement_overview.p']);
-    p.be_loaded := IsPostBack and (string(session['UserControl_member_binder_PlaceHolder_content']) = 'UserControl_equipment_procurement_overview');
+    p.be_loaded := IsPostBack and (string(session['UserControl_analyses_binder_PlaceHolder_content']) = 'UserControl_equipment_procurement_overview');
   end else begin
     //
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.biz_fiscal_years := TClass_biz_fiscal_years.Create;
     //
     p.be_loaded := FALSE;
+    p.be_sort_order_ascending := FALSE;
+    p.sort_order := 'emsof_part%';
     //
     //
   end;
@@ -186,6 +194,7 @@ end;
 procedure TWebUserControl_equipment_procurement_overview.InitializeComponent;
 begin
   Include(Self.DropDownList_cycle.SelectedIndexChanged, Self.DropDownList_cycle_SelectedIndexChanged);
+  Include(Self.GridView_control.Sorting, Self.GridView_control_Sorting);
   Include(Self.PreRender, Self.TWebUserControl_equipment_procurement_overview_PreRender);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -204,6 +213,19 @@ begin
   Fresh := self;
 end;
 
+procedure TWebUserControl_equipment_procurement_overview.GridView_control_Sorting(sender: System.Object;
+  e: System.Web.UI.WebControls.GridViewSortEventArgs);
+begin
+  if e.SortExpression = p.sort_order then begin
+    p.be_sort_order_ascending := not p.be_sort_order_ascending;
+  end else begin
+    p.sort_order := e.SortExpression;
+    p.be_sort_order_ascending := TRUE;
+  end;
+  GridView_control.editindex := -1;
+  Bind;
+end;
+
 procedure TWebUserControl_equipment_procurement_overview.DropDownList_cycle_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -213,7 +235,7 @@ end;
 
 procedure TWebUserControl_equipment_procurement_overview.Bind;
 begin
-  p.biz_emsof_requests.BindEquipmentProcurementOverview(p.cycle,GridView_control);
+  p.biz_emsof_requests.BindEquipmentProcurementOverview(p.cycle,p.sort_order,p.be_sort_order_ascending,GridView_control);
 end;
 
 end.

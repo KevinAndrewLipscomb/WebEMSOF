@@ -27,6 +27,12 @@ type
     function SelfEmailAddress: string;
   public
     constructor Create;
+    function BeStalePassword
+      (
+      user_kind: string;
+      user_id: string
+      )
+      : boolean;
     function BeValidSysAdminCredentials(encoded_password: string): boolean;
     procedure BindCounties(target: system.object);
     procedure BindRegionalStaffers(target: system.object);
@@ -136,6 +142,16 @@ begin
   biz_user := TClass_biz_user.Create;
   db_accounts := TClass_db_accounts.Create;
   db_emsof_requests := TClass_db_emsof_requests.Create;
+end;
+
+function TClass_biz_accounts.BeStalePassword
+  (
+  user_kind: string;
+  user_id: string
+  )
+  : boolean;
+begin
+  BeStalePassword := db_accounts.BeStalePassword(user_kind,user_id);
 end;
 
 function TClass_biz_accounts.BeValidSysAdminCredentials(encoded_password: string): boolean;
