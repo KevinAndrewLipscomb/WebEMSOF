@@ -122,7 +122,7 @@
     </Reference>
     <Reference Include="lib\ki\ki.dll">
       <AssemblyName>ki</AssemblyName>
-      <Version>1.0.3070.30057</Version>
+      <Version>1.0.3072.26311</Version>
       <HintPath>lib\ki\ki.dll</HintPath>
       <AssemblyTag>lib\ki\ki.dll</AssemblyTag>
       <LinkUnits>False</LinkUnits>
@@ -352,6 +352,8 @@
     </DCCReference>
     <DCCReference Include="usercontrol\ki\UserControl_bread_crumb_trail.pas">
       <DependentUpon>usercontrol\ki\UserControl_bread_crumb_trail.ascx</DependentUpon>
+      <Form>UserControl_bread_crumb_trail.TWebUserControl_bread_crumb_trail</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
     <DCCReference Include="usercontrol\ki\UserControl_drop_down_date.pas">
       <DependentUpon>usercontrol\ki\UserControl_drop_down_date.ascx</DependentUpon>

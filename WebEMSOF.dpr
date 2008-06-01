@@ -62,7 +62,7 @@ uses
   UserControl_print_div in 'usercontrol\ki\UserControl_print_div.pas' {UserControl_print_div.TWebUserControl_print_div: ki_web_ui.usercontrol_class},
   UserControl_drop_down_date in 'usercontrol\ki\UserControl_drop_down_date.pas',
   UserControl_match_level in 'usercontrol\app\UserControl_match_level.pas' {UserControl_match_level.TWebUserControl_match_level: ki_web_ui.usercontrol_class},
-  UserControl_bread_crumb_trail in 'usercontrol\ki\UserControl_bread_crumb_trail.pas',
+  UserControl_bread_crumb_trail in 'usercontrol\ki\UserControl_bread_crumb_trail.pas' {UserControl_bread_crumb_trail.TWebUserControl_bread_crumb_trail: ki_web_ui.usercontrol_class},
   UserControl_precontent in 'usercontrol\app\UserControl_precontent.pas' {UserControl_precontent.TWebUserControl_precontent: ki_web_ui.usercontrol_class},
   UserControl_common_header_bar in 'usercontrol\app\UserControl_common_header_bar.pas',
   UserControl_postcontent in 'usercontrol\app\UserControl_postcontent.pas' {UserControl_postcontent.TWebUserControl_postcontent: ki_web_ui.usercontrol_class},

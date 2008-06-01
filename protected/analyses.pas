@@ -8,16 +8,12 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
   System.Data.Common, mysql.data.mysqlclient, System.Globalization,
   system.configuration, system.web.security,
-  Class_biz_accounts,
-  Class_biz_user,
   UserControl_print_div,
   UserControl_analyses_binder;
 
 type
   p_type =
     RECORD
-    biz_accounts: TClass_biz_accounts;
-    biz_user: TClass_biz_user;
     END;
   TWebForm_analyses = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
@@ -48,8 +44,8 @@ implementation
 /// </summary>
 procedure TWebForm_analyses.InitializeComponent;
 begin
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_analyses_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -63,8 +59,6 @@ begin
 end;
 
 procedure TWebForm_analyses.OnInit(e: EventArgs);
-var
-  waypoint_stack: stack;
 begin
   //
   // Required for Designer support
@@ -79,18 +73,6 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    //
-    p.biz_user := TClass_biz_user.Create;
-    p.biz_accounts := TClass_biz_accounts.Create;
-    p.biz_accounts := TClass_biz_accounts.Create;
-    //
-    if p.biz_accounts.BeStalePassword(p.biz_user.Kind,p.biz_user.IdNum) then begin
-      server.Transfer('change_password.aspx');
-    end;
-    //
-    session.Remove('waypoint_stack');
-    waypoint_stack := system.collections.stack.Create;
-    session.Add('waypoint_stack',waypoint_stack);
     //
   end;
   //

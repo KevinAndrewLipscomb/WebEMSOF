@@ -16,6 +16,7 @@ uses
 type
   p_type =
     RECORD
+    be_interactive: boolean;
     be_loaded: boolean;
     be_sort_order_ascending: boolean;
     biz_emsof_requests: TClass_biz_emsof_requests;
@@ -32,6 +33,8 @@ type
     procedure DropDownList_cycle_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
     procedure GridView_control_Sorting(sender: System.Object; e: System.Web.UI.WebControls.GridViewSortEventArgs);
+    procedure GridView_control_RowDataBound(sender: System.Object; e: System.Web.UI.WebControls.GridViewRowEventArgs);
+    procedure GridView_control_SelectedIndexChanged(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -146,7 +149,7 @@ begin
     p.biz_fiscal_years.BindListControl(DropDownList_cycle);
     p.cycle := Safe(DropDownList_cycle.selectedvalue,NUM);
     //
-    if assigned(session['mode:report']) then begin
+    if not p.be_interactive then begin
       DropDownList_cycle.enabled := FALSE;
       GridView_control.allowsorting := FALSE;
     end;
@@ -177,10 +180,10 @@ begin
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.biz_fiscal_years := TClass_biz_fiscal_years.Create;
     //
+    p.be_interactive := not assigned(session['mode:report']);
     p.be_loaded := FALSE;
     p.be_sort_order_ascending := FALSE;
     p.sort_order := 'emsof_part%';
-    //
     //
   end;
   //
@@ -195,6 +198,8 @@ procedure TWebUserControl_equipment_procurement_overview.InitializeComponent;
 begin
   Include(Self.DropDownList_cycle.SelectedIndexChanged, Self.DropDownList_cycle_SelectedIndexChanged);
   Include(Self.GridView_control.Sorting, Self.GridView_control_Sorting);
+  Include(Self.GridView_control.RowDataBound, Self.GridView_control_RowDataBound);
+  Include(Self.GridView_control.SelectedIndexChanged, Self.GridView_control_SelectedIndexChanged);
   Include(Self.PreRender, Self.TWebUserControl_equipment_procurement_overview_PreRender);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -211,6 +216,27 @@ function TWebUserControl_equipment_procurement_overview.Fresh: TWebUserControl_e
 begin
   session.Remove('UserControl_equipment_procurement_overview.p');
   Fresh := self;
+end;
+
+procedure TWebUserControl_equipment_procurement_overview.GridView_control_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  
+end;
+
+procedure TWebUserControl_equipment_procurement_overview.GridView_control_RowDataBound(sender: System.Object;
+  e: System.Web.UI.WebControls.GridViewRowEventArgs);
+const
+  TCI_SELECT = 0;
+begin
+  if p.be_interactive then begin
+    if e.row.rowtype = datacontrolrowtype.datarow then begin
+      linkbutton(e.row.cells.item[TCI_SELECT].controls.item[0]).text :=
+        ExpandTildePath(linkbutton(e.row.cells.item[TCI_SELECT].controls.item[0]).text);
+    end;
+  end else begin
+    e.row.cells.item[TCI_SELECT].visible := FALSE;
+  end;
 end;
 
 procedure TWebUserControl_equipment_procurement_overview.GridView_control_Sorting(sender: System.Object;

@@ -5,14 +5,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-	<title id="Title" runat="server"></title>
-	<!-- $Id$ -->
+    <title id="Title" runat="server"></title>
+    <!-- $Id$ -->
   </head>
   <body>
-	<form runat="server">
-	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
-      <ASP:PlaceHolder id="PlaceHolder_analyses_binder" runat="server"></ASP:PlaceHolder>
+    <form runat="server">
+      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
+      <p><ASP:PlaceHolder id="PlaceHolder_analyses_binder" runat="server"></ASP:PlaceHolder></p>
       <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
-    <p><sstchur:SmartScroller runat="server" /></p></form>
+      <sstchur:SmartScroller runat="server" />
+    </form>
   </body>
 </html>
