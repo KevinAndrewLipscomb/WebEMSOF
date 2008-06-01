@@ -26,16 +26,12 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_requests_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure DataGrid_requests_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_requests_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure TWebForm_emsof_request_status_filter_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_retransmit_to_state_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_send_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -46,14 +42,9 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
     DataGrid_requests: System.Web.UI.WebControls.DataGrid;
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
     Label_status: System.Web.UI.WebControls.Label;
-    LinkButton_back: System.Web.UI.WebControls.LinkButton;
     TableRow_spreadsheet: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_retransmit_to_state: System.Web.UI.WebControls.LinkButton;
     UserControl_print_div: TWebUserControl_print_div;
@@ -82,17 +73,13 @@ const
 /// </summary>
 procedure TWebForm_emsof_request_status_filter.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_retransmit_to_state.Click, Self.LinkButton_retransmit_to_state_Click);
-  Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
-  Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
   Include(Self.DataGrid_requests.ItemDataBound, Self.DataGrid_requests_ItemDataBound);
+  Include(Self.DataGrid_requests.SortCommand, Self.DataGrid_requests_SortCommand);
+  Include(Self.DataGrid_requests.ItemCommand, Self.DataGrid_requests_ItemCommand);
   Include(Self.Button_send.Click, Self.Button_send_Click);
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_emsof_request_status_filter_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -107,8 +94,7 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - emsof_request_status_filter';
-    
-    Label_account_descriptor.text := session[session['target_user_table'].tostring + '_name'].tostring;
+    //
     Label_status.text := session['status_of_interest'].tostring;
     LinkButton_retransmit_to_state.visible := (status_type(session['status_of_interest']) = NEEDS_PA_DOH_EMSO_APPROVAL);
     //
@@ -156,31 +142,10 @@ begin
   Alert(LOGIC,NORMAL,'messagsnt','Message sent');
 end;
 
-procedure TWebForm_emsof_request_status_filter.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_emsof_request_status_filter.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
-end;
-
 procedure TWebForm_emsof_request_status_filter.LinkButton_retransmit_to_state_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   server.Transfer('state_required_report.aspx');
-end;
-
-procedure TWebForm_emsof_request_status_filter.LinkButton_back_Click
-  (
-  sender: System.Object;
-  e: System.EventArgs
-  );
-begin
-  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
 procedure TWebForm_emsof_request_status_filter.TWebForm_emsof_request_status_filter_PreRender
@@ -262,17 +227,6 @@ begin
   end;
   DataGrid_requests.EditItemIndex := -1;
   BindOverview;
-end;
-
-procedure TWebForm_emsof_request_status_filter.LinkButton_logout_Click
-  (
-  sender: System.Object;
-  e: System.EventArgs
-  );
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_emsof_request_status_filter.BindOverview;

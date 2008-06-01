@@ -154,8 +154,15 @@ end;
 procedure TWebForm_salogin.Button_log_in_Click(sender: System.Object; e: System.EventArgs);
 begin
   if page.isvalid then begin
+    //
+    // Set username in session for the benefit of the TableRow_account_control in UserControl_precontent.
+    //
+    session.Remove('username');
+    session.Add('username',Safe(DropDownList_user.SelectedItem.Text,ORG_NAME));
+    //
     formsauthentication.RedirectFromLoginPage
       (Safe(DropDownList_user.selectedvalue,HYPHENATED_ALPHANUM),CheckBox_keep_me_logged_in.checked);
+    //
   end;
 end;
 

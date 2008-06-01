@@ -32,16 +32,12 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_items_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure Button_approve_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_disapprove_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_full_request_review_approve_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_mark_done_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_items_EditCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_items_CancelCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_items_UpdateCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
@@ -62,11 +58,6 @@ type
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_back: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_service_name: System.Web.UI.WebControls.Label;
     Label_affiliate_num: System.Web.UI.WebControls.Label;
@@ -126,7 +117,6 @@ type
     TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
     Label_sponsor_county_2: System.Web.UI.WebControls.Label;
-    UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
   private
@@ -152,17 +142,13 @@ const
 /// </summary>
 procedure TWebForm_full_request_review_approve.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
+  Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.DataGrid_items.CancelCommand, Self.DataGrid_items_CancelCommand);
   Include(Self.DataGrid_items.EditCommand, Self.DataGrid_items_EditCommand);
   Include(Self.DataGrid_items.UpdateCommand, Self.DataGrid_items_UpdateCommand);
-  Include(Self.DataGrid_items.ItemDataBound, Self.DataGrid_items_ItemDataBound);
   Include(Self.LinkButton_new_proof_of_payment.Click, Self.LinkButton_new_proof_of_payment_Click);
-  Include(Self.DataGrid_proofs_of_payment.DeleteCommand, Self.DataGrid_proofs_of_payment_DeleteCommand);
   Include(Self.DataGrid_proofs_of_payment.ItemDataBound, Self.DataGrid_proofs_of_payment_ItemDataBound);
+  Include(Self.DataGrid_proofs_of_payment.DeleteCommand, Self.DataGrid_proofs_of_payment_DeleteCommand);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
@@ -170,8 +156,8 @@ begin
   Include(Self.Button_special_promotion.Click, Self.Button_special_promotion_Click);
   Include(Self.Button_force_open.Click, Self.Button_force_open_Click);
   Include(Self.Button_force_close.Click, Self.Button_force_close_Click);
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_full_request_review_approve_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -193,8 +179,6 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - full_request_review_approve';
-    
-    Label_account_descriptor.text := session['account_descriptor'].tostring;
     //
     // Initialize class private class members.
     //
@@ -381,8 +365,7 @@ end;
 procedure TWebForm_full_request_review_approve.LinkButton_new_proof_of_payment_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  stack(session['waypoint_stack']).Push('full_request_review_approve.aspx');
-  server.Transfer('add_proof_of_payment.aspx');
+  DropCrumbAndTransferTo('add_proof_of_payment.aspx');
 end;
 
 procedure TWebForm_full_request_review_approve.DataGrid_items_UpdateCommand
@@ -428,18 +411,6 @@ begin
   p.biz_emsof_requests.BindDetail(p.request_id,DataGrid_items);
 end;
 
-procedure TWebForm_full_request_review_approve.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_full_request_review_approve.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
-end;
-
 procedure TWebForm_full_request_review_approve.Button_mark_done_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -447,12 +418,6 @@ begin
     p.biz_emsof_requests.MarkDone(session['e_item'],session['account_descriptor'].tostring);
     server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
   end;
-end;
-
-procedure TWebForm_full_request_review_approve.LinkButton_back_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
 end;
 
 procedure TWebForm_full_request_review_approve.TWebForm_full_request_review_approve_PreRender(sender: System.Object;
@@ -513,14 +478,6 @@ begin
     p.total_emsof_ante := p.total_emsof_ante
       + decimal.Parse(databinder.Eval(e.item.dataitem,p.biz_emsof_requests.PropertyNameOfEmsofAnte).tostring);
   end;
-end;
-
-procedure TWebForm_full_request_review_approve.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_full_request_review_approve.DataGrid_proofs_of_payment_ItemDataBound

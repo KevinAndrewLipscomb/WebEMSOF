@@ -14,7 +14,6 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_regional_compliance_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_num_requests_needing_development_Click(sender: System.Object; 
       e: System.EventArgs);
@@ -35,8 +34,6 @@ type
     procedure LinkButton_deployed_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_archived_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_all_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_missed_deadlines_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_analyses_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
@@ -46,10 +43,6 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
     //
     Label_parent_appropriation: System.Web.UI.WebControls.Label;
     Label_sum_of_appropriations: System.Web.UI.WebControls.Label;
@@ -110,9 +103,6 @@ uses
 /// </summary>
 procedure TWebForm_regional_staffer_overview.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_all.Click, Self.LinkButton_all_Click);
   Include(Self.LinkButton_num_requests_needing_development.Click, Self.LinkButton_num_requests_needing_development_Click);
   Include(Self.LinkButton_num_requests_needing_finalization.Click, Self.LinkButton_num_requests_needing_finalization_Click);
@@ -147,17 +137,14 @@ var
   parent_appropriation: decimal;
   sum_of_appropriations: decimal;
   tally: string;
-  waypoint_stack: stack;
 begin
   if not IsPostback then begin
     if (session['regional_staffer_name'] = nil) or (session['regional_staffer_user_id'] = nil) then begin
       session.Clear;
-      server.Transfer('~/login.aspx');
+      DropCrumbAndTransferTo('~/login.aspx');
     end;
     //
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - regional_staffer_overview';
-    
-    Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     biz_appropriations := TClass_biz_appropriations.Create;
     biz_emsof_requests := TClass_biz_emsof_requests.Create;
@@ -222,10 +209,7 @@ begin
     LinkButton_deployed.text := biz_emsof_requests.TallyOfStatus(DEPLOYED) + LinkButton_deployed.text;
     LinkButton_archived.text := biz_emsof_requests.TallyOfStatus(ARCHIVED) + LinkButton_archived.text;
     //
-    session.Remove('waypoint_stack');
-    waypoint_stack := system.collections.stack.Create;
-    waypoint_stack.Push('regional_staffer_overview.aspx');
-    session.Add('waypoint_stack',waypoint_stack);
+    BeginBreadCrumbTrail;
     //
   end;
 end;
@@ -242,7 +226,7 @@ end;
 procedure TWebForm_regional_staffer_overview.LinkButton_analyses_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('analyses.aspx');
+  DropCrumbAndTransferTo('analyses.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_missed_deadlines_Click(sender: System.Object;
@@ -250,25 +234,13 @@ procedure TWebForm_regional_staffer_overview.LinkButton_missed_deadlines_Click(s
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',FAILED_DEADLINE);
-  server.Transfer('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_all_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('all_emsof_requests.aspx');
+  DropCrumbAndTransferTo('all_emsof_requests.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_archived_Click(sender: System.Object;
@@ -276,7 +248,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_archived_Click(sender: S
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',ARCHIVED);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_deployed_Click(sender: System.Object;
@@ -284,7 +256,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_deployed_Click(sender: S
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',DEPLOYED);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_rejected_Click(sender: System.Object;
@@ -292,7 +264,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_rejected_Click(sender: S
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',REJECTED);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_withdrawn_Click(sender: System.Object;
@@ -300,7 +272,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_withdrawn_Click(sender: 
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',WITHDRAWN);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_completed_Click(sender: System.Object;
@@ -308,7 +280,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_completed_Click(sender: 
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',REIMBURSEMENT_ISSUED);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_reimbursement_Click(sender: System.Object;
@@ -316,7 +288,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_reimbursement_Click(send
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_REIMBURSEMENT_ISSUANCE);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_canceled_check_collection_Click(sender: System.Object;
@@ -324,7 +296,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_canceled_check_collectio
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_CANCELED_CHECK_COLLECTION);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_invoice_collection_Click(sender: System.Object;
@@ -332,7 +304,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_invoice_collection_Click
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_INVOICE_COLLECTION);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_state_approval_Click(sender: System.Object;
@@ -340,7 +312,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_state_approval_Click(sen
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_PA_DOH_EMSO_APPROVAL);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_transmittal_Click(sender: System.Object;
@@ -348,7 +320,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_transmittal_Click(sender
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
-  server.Transfer('state_required_report.aspx');
+  DropCrumbAndTransferTo('state_required_report.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_exec_dir_approval_Click(sender: System.Object;
@@ -356,7 +328,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_exec_dir_approval_Click(
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_REGIONAL_EXEC_DIR_APPROVAL);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_county_approval_Click(sender: System.Object;
@@ -364,7 +336,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_cou
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_COUNTY_APPROVAL);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_finalization_Click(sender: System.Object;
@@ -372,7 +344,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_fin
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_SERVICE_FINALIZATION);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_development_Click(sender: System.Object;
@@ -380,7 +352,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_dev
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',ALLOCATED);
-  server.Transfer('emsof_request_status_filter.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_regional_compliance_Click(sender: System.Object;
@@ -388,15 +360,7 @@ procedure TWebForm_regional_staffer_overview.LinkButton_regional_compliance_Clic
 begin
   session.Remove('status_of_interest');
   session.Add('status_of_interest',NEEDS_REGIONAL_COMPLIANCE_CHECK);
-  server.Transfer('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
+  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 end.
