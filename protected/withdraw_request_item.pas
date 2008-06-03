@@ -31,10 +31,8 @@ type
     procedure InitializeComponent;
     procedure Button_yes_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_no_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_withdraw_request_item_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_request_item_detail_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -49,8 +47,6 @@ type
     Label_priority: System.Web.UI.WebControls.Label;
     Label_description: System.Web.UI.WebControls.Label;
     Label_emsof_ante: System.Web.UI.WebControls.Label;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_request_item_detail: System.Web.UI.WebControls.LinkButton;
   protected
     procedure OnInit(e: EventArgs); override;
   private
@@ -69,8 +65,6 @@ uses
 /// </summary>
 procedure TWebForm_withdraw_request_item.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_request_item_detail.Click, Self.LinkButton_request_item_detail_Click);
   Include(Self.Button_yes.Click, Self.Button_yes_Click);
   Include(Self.Button_no.Click, Self.Button_no_Click);
   Include(Self.Load, Self.Page_Load);
@@ -110,12 +104,6 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_withdraw_request_item.LinkButton_request_item_detail_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('request_item_detail.aspx');
-end;
-
 procedure TWebForm_withdraw_request_item.TWebForm_withdraw_request_item_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -123,18 +111,10 @@ begin
   session.Add('p',p);
 end;
 
-procedure TWebForm_withdraw_request_item.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
-end;
-
 procedure TWebForm_withdraw_request_item.Button_no_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack(2);
 end;
 
 procedure TWebForm_withdraw_request_item.Button_yes_Click
@@ -201,7 +181,7 @@ begin
     + '-- ' + configurationmanager.AppSettings['application_name']
     );
   //
-  server.Transfer('request_overview.aspx');
+  BackTrack(2);
 end;
 
 end.

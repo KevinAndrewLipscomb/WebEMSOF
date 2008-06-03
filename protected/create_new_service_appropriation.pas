@@ -37,11 +37,8 @@ type
     procedure Button_add_appropriation_and_stop_Click(sender: System.Object;
       e: System.EventArgs);
     procedure CheckBox_unfilter_CheckedChanged(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure CustomValidator_amount_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
     procedure TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
-      e: System.EventArgs);
-    procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
       e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -63,9 +60,6 @@ type
     Button_cancel: System.Web.UI.WebControls.Button;
     CheckBox_show_out_of_county_services: System.Web.UI.WebControls.CheckBox;
     RadioButtonList_match_level: System.Web.UI.WebControls.RadioButtonList;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    Label_county_name: System.Web.UI.WebControls.Label;
-    Label_literal_county: System.Web.UI.WebControls.Label;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_region_name: System.Web.UI.WebControls.Label;
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
@@ -74,7 +68,6 @@ type
     TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     CustomValidator_amount: System.Web.UI.WebControls.CustomValidator;
-    LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
   protected
     procedure OnInit(e: EventArgs); override;
   private
@@ -91,8 +84,6 @@ implementation
 /// </summary>
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_county_dictated_appropriations.Click, Self.LinkButton_county_dictated_appropriations_Click);
   Include(Self.CheckBox_show_out_of_county_services.CheckedChanged, Self.CheckBox_unfilter_CheckedChanged);
   Include(Self.CustomValidator_amount.ServerValidate, Self.CustomValidator_amount_ServerValidate);
   Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
@@ -113,7 +104,6 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - create_new_service_appropriation';
-    Label_county_name.text := session['county_name'].tostring;
     //
     // Initialize implementation-scoped variables.
     //
@@ -147,12 +137,6 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_create_new_service_appropriation.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('county_dictated_appropriations.aspx');
-end;
-
 procedure TWebForm_create_new_service_appropriation.TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -174,14 +158,6 @@ begin
   end;
 end;
 
-procedure TWebForm_create_new_service_appropriation.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
-end;
-
 procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object; 
   e: System.EventArgs);
 begin
@@ -194,7 +170,7 @@ procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and
 begin
   if page.isvalid then begin
     AddAppropriation;
-    server.Transfer('county_dictated_appropriations.aspx');
+    BackTrack;
   end else begin
     ValidationAlert;
   end;
@@ -203,7 +179,7 @@ end;
 procedure TWebForm_create_new_service_appropriation.Button_cancel_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('county_dictated_appropriations.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_create_new_service_appropriation.Button_add_appropriation_and_repeat_Click(sender: System.Object;

@@ -22,11 +22,7 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_submit_PreRender(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_service_overview_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -35,7 +31,6 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_service_name: System.Web.UI.WebControls.Label;
     CheckBox_rescue: System.Web.UI.WebControls.CheckBox;
     CheckBox_air_amb: System.Web.UI.WebControls.CheckBox;
     CheckBox_als_squad: System.Web.UI.WebControls.CheckBox;
@@ -62,15 +57,11 @@ type
     RegularExpressionValidator_contact_person_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
     TextBox_contact_person_name: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_contact_person_name: System.Web.UI.WebControls.RequiredFieldValidator;
-    Label_application_name: System.Web.UI.WebControls.Label;
     RegularExpressionValidator_service_name: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_city: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_address_line_2: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_address_line_1: System.Web.UI.WebControls.RegularExpressionValidator;
     RegularExpressionValidator_contact_person_name: System.Web.UI.WebControls.RegularExpressionValidator;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     LinkButton_service_overview: System.Web.UI.WebControls.LinkButton;
     UserControl_print_div: TWebUserControl_print_div;
   protected
@@ -93,10 +84,6 @@ uses
 /// </summary>
 procedure TWebForm_profile.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_service_overview.Click, Self.LinkButton_service_overview_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Button_submit.PreRender, Self.Button_submit_PreRender);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
   Include(Self.Load, Self.Page_Load);
@@ -130,16 +117,8 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - profile';
-
+    //
     p.biz_services := TClass_biz_services.Create;
-    //
-    // Set Label_service_name
-    //
-    Label_service_name.Text := session['service_name'].ToString;
-    //
-    // Set Label_application_name
-    //
-    Label_application_name.Text := configurationmanager.AppSettings['application_name'];
     //
     // Get affiliate_num and set Label_affiliate_num
     //
@@ -194,35 +173,10 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_profile.LinkButton_service_overview_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-   server.Transfer('service_overview.aspx');
-end;
-
-procedure TWebForm_profile.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_profile.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
-end;
-
 procedure TWebForm_profile.Button_submit_PreRender(sender: System.Object; e: System.EventArgs);
 begin
   session.Remove('p');
   session.Add('p',p);
-end;
-
-procedure TWebForm_profile.LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_profile.Button_submit_Click(sender: System.Object; e: System.EventArgs);
@@ -269,7 +223,7 @@ begin
       );
   end;
   //
-  server.Transfer('service_overview.aspx');
+  BackTrack;
 end;
 
 end.

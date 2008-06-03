@@ -44,24 +44,21 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_county_dictated_deadline_Click(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_service_appropriations_ItemCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_new_appropriation_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_service_appropriations_SortCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
-    procedure TWebForm_county_dictated_appropriations_PreRender(sender: System.Object; 
+    procedure TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure DataGrid_service_appropriations_EditCommand(source: System.Object; 
+    procedure DataGrid_service_appropriations_EditCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure DataGrid_service_appropriations_CancelCommand(source: System.Object; 
+    procedure DataGrid_service_appropriations_CancelCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure DataGrid_service_appropriations_UpdateCommand(source: System.Object; 
+    procedure DataGrid_service_appropriations_UpdateCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object; 
+    procedure CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -71,9 +68,7 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_county_name: System.Web.UI.WebControls.Label;
     DataGrid_service_appropriations: System.Web.UI.WebControls.DataGrid;
-    Label_literal_county: System.Web.UI.WebControls.Label;
     Label_make_appropriations_deadline: System.Web.UI.WebControls.Label;
     Label_parent_appropriation_amount: System.Web.UI.WebControls.Label;
     Label_region_name: System.Web.UI.WebControls.Label;
@@ -82,12 +77,9 @@ type
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
     LinkButton_county_dictated_deadline: System.Web.UI.WebControls.LinkButton;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_new_appropriation: System.Web.UI.WebControls.LinkButton;
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
@@ -112,9 +104,6 @@ const
 /// </summary>
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
   Include(Self.CheckBox_hide_nonapproval_requests.CheckedChanged, Self.CheckBox_hide_nonapproval_requests_CheckedChanged);
   Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
@@ -157,11 +146,8 @@ begin
     p.sort_order := 'service_name';
     p.sum_of_service_appropriations := 0;
     p.unappropriated_amount := 0;
-    //   Set up symbolic DataGrid Indices for use in other event handlers.
     //
     Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - county_dictated_appropriations';
-    
-    Label_county_name.Text := session['county_name'].ToString;
     //
     p.db.Open;
     //
@@ -230,6 +216,9 @@ begin
     //
     Table_warning_forced_amount.visible := FALSE;
     Bind_service_appropriations;  // also affected by be_before_deadline
+    //
+    BeginBreadCrumbTrail;
+    //
   end;
 end;
 
@@ -240,18 +229,7 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
-end;
-
-procedure TWebForm_county_dictated_appropriations.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_county_dictated_appropriations.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
+  //
 end;
 
 procedure TWebForm_county_dictated_appropriations.CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object;
@@ -295,7 +273,7 @@ begin
   session.Add('sum_of_service_appropriations',Safe(Label_sum_of_service_appropriations.text,REAL_NUM));
   session.Remove('unappropriated_amount');
   session.Add('unappropriated_amount',p.unappropriated_amount);
-  server.Transfer('create_new_service_appropriation.aspx');
+  DropCrumbAndTransferTo('create_new_service_appropriation.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_ItemCommand(source: System.Object;
@@ -314,18 +292,10 @@ begin
     waypoint_stack := system.collections.stack.Create;
     waypoint_stack.Push('county_dictated_appropriations.aspx');
     session.Add('waypoint_stack',waypoint_stack);
-    server.Transfer('full_request_review_approve.aspx');
+    DropCrumbAndTransferTo('full_request_review_approve.aspx');
   end else if e.commandname = 'Edit' then begin
     p.saved_amount := decimal.Parse(Safe(e.item.cells[p.biz_emsof_requests.TcciOfAppropriation].text,REAL_NUM));
   end;
-end;
-
-procedure TWebForm_county_dictated_appropriations.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.LinkButton_county_dictated_deadline_Click(sender: System.Object;
@@ -333,7 +303,7 @@ procedure TWebForm_county_dictated_appropriations.LinkButton_county_dictated_dea
 begin
   session.Remove('county_dictated_deadline');
   session.Add('county_dictated_deadline',LinkButton_county_dictated_deadline.text);
-  server.Transfer('county_dictated_deadline.aspx');
+  DropCrumbAndTransferTo('county_dictated_deadline.aspx');
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_DeleteCommand(source: System.Object;
@@ -382,7 +352,7 @@ begin
       Safe(e.item.cells[p.biz_emsof_requests.TcciOfAppropriation].text,REAL_NUM)
       );
     //
-    server.Transfer('delete_service_appropriation.aspx');
+    DropCrumbAndTransferTo('delete_service_appropriation.aspx');
   end else begin
     //
     // Nothing is linked to this appropriation, so go ahead and delete it.

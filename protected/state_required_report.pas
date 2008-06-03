@@ -33,12 +33,8 @@ type
     procedure TWebForm_state_required_report_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure LinkButton_transmit_to_state_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_back_Click(sender: System.Object; e: System.EventArgs);
     procedure DropDownList_amendment_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_export_scratch_copy_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -55,10 +51,7 @@ type
     Label_amount_available: System.Web.UI.WebControls.Label;
     DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
     Table_report: System.Web.UI.HtmlControls.HtmlTable;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     LinkButton_transmit_to_state: System.Web.UI.WebControls.LinkButton;
     TableRow_this_is_everything: System.Web.UI.HtmlControls.HtmlTableRow;
@@ -87,10 +80,6 @@ implementation
 /// </summary>
 procedure TWebForm_state_required_report.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_back.Click, Self.LinkButton_back_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_export_scratch_copy.Click, Self.LinkButton_export_scratch_copy_Click);
   Include(Self.LinkButton_transmit_to_state.Click, Self.LinkButton_transmit_to_state_Click);
   Include(Self.DropDownList_amendment.SelectedIndexChanged, Self.DropDownList_amendment_SelectedIndexChanged);
@@ -169,18 +158,6 @@ begin
     (page,'WebEmsof-UNOFFICIAL-' + datetime.Now.tostring('yyyyMMddHHmmssf'),kix.StringOfControl(Table_report));
 end;
 
-procedure TWebForm_state_required_report.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_state_required_report.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
-end;
-
 procedure TWebForm_state_required_report.DropDownList_amendment_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -190,20 +167,6 @@ begin
   Label_funding_round.text := cardinal
     (1 + p.biz_appropriations.FundingRoundsGenerated(session['regional_staffer_user_id'].tostring,p.amendment_num_string)).tostring;
   Bind;    
-end;
-
-procedure TWebForm_state_required_report.LinkButton_back_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
-end;
-
-procedure TWebForm_state_required_report.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_state_required_report.LinkButton_transmit_to_state_Click
@@ -220,7 +183,7 @@ begin
     session['regional_staffer_user_id'].tostring,
     p.amendment_num_string
     );
-  server.Transfer('state_transmittal_complete.aspx');
+  DropCrumbAndTransferTo('state_transmittal_complete.aspx');
 end;
 
 procedure TWebForm_state_required_report.DataGrid_state_export_batch_ItemDataBound

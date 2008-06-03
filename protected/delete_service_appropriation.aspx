@@ -14,8 +14,6 @@
      <form runat="server">
       <p>
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent></p>
-      <p><small>[ 
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_county_dictated_appropriations" runat="server">county-dictated allocations</ASP:LinkButton>&nbsp;form ]</small></p>
 <p>
         <table bordercolor="#ffd700" cellspacing="0" cellpadding="0" border="1">
             <tr>

@@ -12,10 +12,7 @@
 
   <body>
      <form runat="server">
-      <p>
-      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent></p>
-      <p><small>[ 
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_request_item_detail" runat="server">request item detail</ASP:LinkButton>&nbsp;form ]</small></p>
+      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
 <p>
         <table bordercolor="#ffd700" cellspacing="0" cellpadding="0" border="1">
             <tr>

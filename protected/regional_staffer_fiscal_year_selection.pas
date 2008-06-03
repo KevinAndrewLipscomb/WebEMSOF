@@ -22,10 +22,7 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_continue_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_regional_staffer_fiscal_year_selection_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
@@ -37,9 +34,6 @@ type
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     Label_regional_staffer_name: System.Web.UI.WebControls.Label;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     RequiredFieldValidator_appropriation: System.Web.UI.WebControls.RequiredFieldValidator;
     RadioButtonList_appropriation: System.Web.UI.WebControls.RadioButtonList;
     Button_continue: System.Web.UI.WebControls.Button;
@@ -60,9 +54,6 @@ implementation
 /// </summary>
 procedure TWebForm_regional_staffer_fiscal_year_selection.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.Button_continue.Click, Self.Button_continue_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_regional_staffer_fiscal_year_selection_PreRender);
@@ -136,7 +127,7 @@ begin
       dr.Close;
       p.db.Close;
       if RadioButtonList_appropriation.items.Count = 0 then begin
-        server.Transfer('no_appropriation.aspx');
+        DropCrumbAndTransferTo('no_appropriation.aspx');
       end else begin
         //
         // Add the regional staffer's email address to the session, as it will be needed by region_dictated_appropriations however
@@ -147,13 +138,13 @@ begin
         if RadioButtonList_appropriation.items.Count = 1 then begin
           session.Remove('state_dictated_appropriation_id');
           session.Add('state_dictated_appropriation_id',dr['id'].tostring);
-          server.Transfer('regional_compliance_check_overview.aspx');
+          DropCrumbAndTransferTo('regional_compliance_check_overview.aspx');
         end;
       end;
     end else begin
       dr.Close;
       p.db.Close;
-      server.Transfer('change_password.aspx');
+      DropCrumbAndTransferTo('change_password.aspx');
     end;
   end;
 end;
@@ -174,32 +165,12 @@ begin
   session.Add('p',p);
 end;
 
-procedure TWebForm_regional_staffer_fiscal_year_selection.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_regional_staffer_fiscal_year_selection.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
-end;
-
 procedure TWebForm_regional_staffer_fiscal_year_selection.Button_continue_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   session.Remove('state_dictated_appropriation_id');
   session.Add('state_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
-  server.Transfer('regional_compliance_check_overview.aspx');
-end;
-
-procedure TWebForm_regional_staffer_fiscal_year_selection.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
+  DropCrumbAndTransferTo('regional_compliance_check_overview.aspx');
 end;
 
 end.

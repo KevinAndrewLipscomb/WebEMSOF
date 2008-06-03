@@ -42,13 +42,9 @@ type
     procedure DataGrid_items_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure DataGrid_items_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_finalize_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_request_overview_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure CheckBox_has_wish_list_CheckedChanged(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_service_overview_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_add_item_to_request_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_withdraw_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
@@ -60,7 +56,6 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_service_name: System.Web.UI.WebControls.Label;
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_make_requests_deadline: System.Web.UI.WebControls.Label;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
@@ -70,16 +65,12 @@ type
     Label_unused_amount: System.Web.UI.WebControls.Label;
     TableRow_sum_of_emsof_antes: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unrequested_amount: System.Web.UI.HtmlControls.HtmlTableRow;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_sponsor_county: System.Web.UI.WebControls.Label;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
     LinkButton_finalize: System.Web.UI.WebControls.LinkButton;
     Label_master_status: System.Web.UI.WebControls.Label;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     Table_parent_appropriation_outer: System.Web.UI.HtmlControls.HtmlTable;
     CheckBox_has_wish_list: System.Web.UI.WebControls.CheckBox;
-    LinkButton_service_overview: System.Web.UI.WebControls.LinkButton;
     LinkButton_add_item_to_request: System.Web.UI.WebControls.LinkButton;
     Table_withdrawal: System.Web.UI.HtmlControls.HtmlTable;
     CheckBox_withdraw: System.Web.UI.WebControls.CheckBox;
@@ -101,10 +92,6 @@ implementation
 /// </summary>
 procedure TWebForm_request_overview.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_service_overview.Click, Self.LinkButton_service_overview_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_add_item_to_request.Click, Self.LinkButton_add_item_to_request_Click);
   Include(Self.LinkButton_finalize.Click, Self.LinkButton_finalize_Click);
   Include(Self.DataGrid_items.ItemCommand, Self.DataGrid_items_ItemCommand);
@@ -157,7 +144,6 @@ begin
     
     p.db.Open;
     //
-    Label_service_name.text := session['service_name'].ToString;
     Label_master_status.text := session['emsof_request_master_status'].tostring;
     //
     // All further rendering is deadline-dependent.
@@ -266,31 +252,13 @@ procedure TWebForm_request_overview.Button_withdraw_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   p.biz_emsof_requests.Withdraw(session['emsof_request_master_id'].tostring);
-  server.Transfer('service_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_request_overview.LinkButton_add_item_to_request_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_item_detail.aspx');
-end;
-
-procedure TWebForm_request_overview.LinkButton_service_overview_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('service_overview.aspx');
-end;
-
-procedure TWebForm_request_overview.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_request_overview.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
+  DropCrumbAndTransferTo('request_item_detail.aspx');
 end;
 
 procedure TWebForm_request_overview.CheckBox_has_wish_list_CheckedChanged(sender: System.Object;
@@ -306,14 +274,6 @@ begin
   session.Add('p',p);
 end;
 
-procedure TWebForm_request_overview.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
-end;
-
 procedure TWebForm_request_overview.LinkButton_finalize_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -321,7 +281,7 @@ begin
   session.Add('sum_of_emsof_antes',p.sum_of_emsof_antes);
   session.Remove('unused_amount');
   session.Add('unused_amount',p.unused_amount);
-  server.Transfer('finalize.aspx');
+  DropCrumbAndTransferTo('finalize.aspx');
 end;
 
 procedure TWebForm_request_overview.DataGrid_items_ItemCommand(source: System.Object;
@@ -382,7 +342,7 @@ begin
     session.Add('emsof_request_item_code',Safe(e.item.cells[p.tcci_code].text,NUM));
     session.Remove('emsof_request_item_equipment_category');
     session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[p.tcci_item_description].text,PUNCTUATED));
-    server.Transfer('request_item_detail.aspx');
+    DropCrumbAndTransferTo('request_item_detail.aspx');
   end;
   Bind_items;
 end;

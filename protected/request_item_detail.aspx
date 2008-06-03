@@ -12,21 +12,9 @@
   </head>
 
   <body>
-	 <form runat="server">
-	  <p>
-	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent></p>
-	  <p>
-		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
-			  <tr>
-				<td>
-	  <small>[
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to&nbsp;<ASP:LinkButton id="LinkButton_request_overview_1" runat="server" causesvalidation="False">request overview</ASP:LinkButton> form ]</small>
-				</td>
-				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
-				</td>
-			  </tr>
-		  </table>
-		  </p>
+    <form runat="server">
+      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
+<uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
 <div id="Div_print_area">
 	  <p><small>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
@@ -174,7 +162,7 @@
 			  <td>
                                   <div align="right">[ <ASP:LinkButton id="Button_withdraw" runat="server">Withdraw</ASP:LinkButton>&nbsp;]
                                   </div></td>
-			  <td>[&nbsp;Back&nbsp;to&nbsp;<ASP:LinkButton id="LinkButton_request_overview_2" runat="server">request&nbsp;overview</ASP:LinkButton>&nbsp;form&nbsp;]</td>
+			  <td></td>
 			  <td></td>
 			</tr>
 		  </table>

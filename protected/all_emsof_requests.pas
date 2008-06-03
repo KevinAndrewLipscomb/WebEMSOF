@@ -144,7 +144,7 @@ begin
       session.Remove('status_of_interest');
       session.Add('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
       system.collections.stack(session['waypoint_stack']).Push('all_emsof_requests.aspx');
-      server.Transfer('state_required_report.aspx');
+      DropCrumbAndTransferTo('state_required_report.aspx');
       END
     else
       BEGIN
@@ -153,7 +153,7 @@ begin
       session.Remove('e_item');
       session.Add('e_item',e.item);
       system.collections.stack(session['waypoint_stack']).Push('all_emsof_requests.aspx');
-      server.Transfer('full_request_review_approve.aspx');
+      DropCrumbAndTransferTo('full_request_review_approve.aspx');
       END;
     end;
   end;

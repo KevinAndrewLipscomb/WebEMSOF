@@ -27,9 +27,6 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
     procedure Datagrid_unrejectable_requests_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
     procedure Datagrid_unrejectable_requests_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
     procedure Datagrid_unrejectable_requests_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
@@ -47,9 +44,6 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_account_descriptor: System.Web.UI.WebControls.Label;
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_done: System.Web.UI.WebControls.LinkButton;
@@ -73,10 +67,7 @@ implementation
 /// </summary>
 procedure TWebForm_county_unrejection.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
   Include(Self.LinkButton_county_dictated_appropriations.Click, Self.LinkButton_county_dictated_appropriations_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_unreject_all.Click, Self.LinkButton_unreject_all_Click);
   Include(Self.LinkButton_done.Click, Self.LinkButton_county_dictated_appropriations_Click);
   Include(Self.DataGrid_unrejectable_requests.ItemCommand, Self.DataGrid_unrejectable_requests_ItemCommand);
@@ -140,7 +131,7 @@ end;
 procedure TWebForm_county_unrejection.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('county_dictated_appropriations.aspx');
+  BackTrack(2);
 end;
 
 procedure TWebForm_county_unrejection.Datagrid_unrejectable_requests_ItemCommand(source: System.Object;
@@ -150,18 +141,6 @@ begin
     p.biz_emsof_requests.Unreject(e.item,'county','The ' + Label_account_descriptor.text + ' EMSOF Coordinator');
     Bind;
   end;
-end;
-
-procedure TWebForm_county_unrejection.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_county_unrejection.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_county_unrejection.TWebForm_county_unrejection_PreRender(sender: System.Object;
@@ -197,14 +176,6 @@ begin
   end;
   Datagrid_unrejectable_requests.EditItemIndex := -1;
   Bind;
-end;
-
-procedure TWebForm_county_unrejection.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_county_unrejection.Bind;

@@ -14,11 +14,6 @@
      <form runat="server">
       <p>
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent></p>
-      <p><small>[ 
-		  <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_county_dictated_appropriations" runat="server">county-dictated allocations</ASP:LinkButton>&nbsp;form ]</small></p>
-<p>
-        <ASP:Label id="Label_county_name" runat="server" font-bold="True" font-size="Large"></ASP:Label>&nbsp;<ASP:Label id="Label_literal_county" runat="server" font-bold="True"
-                   font-size="Large">County</ASP:Label></p>
 <p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is:</p>
 <blockquote>
   <ASP:Label id="Label_current_deadline" runat="server" font-bold="True"></ASP:Label></blockquote>
