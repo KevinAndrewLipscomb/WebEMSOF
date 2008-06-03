@@ -145,7 +145,7 @@ end;
 procedure TWebForm_emsof_request_status_filter.LinkButton_retransmit_to_state_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('state_required_report.aspx');
+  DropCrumbAndTransferTo('state_required_report.aspx');
 end;
 
 procedure TWebForm_emsof_request_status_filter.TWebForm_emsof_request_status_filter_PreRender
@@ -208,7 +208,7 @@ begin
     session.Remove('e_item');
     session.Add('e_item',e.item);
     //
-    server.Transfer('full_request_review_approve.aspx');
+    DropCrumbAndTransferTo('full_request_review_approve.aspx');
   end;
   //
 end;

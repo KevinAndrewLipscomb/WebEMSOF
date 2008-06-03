@@ -44,7 +44,6 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_region_dictated_deadline_Click(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_county_appropriations_ItemCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure LinkButton_new_appropriation_Click(sender: System.Object; e: System.EventArgs);
@@ -58,8 +57,6 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure TWebForm_region_dictated_appropriations_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_change_password_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_change_email_address_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -73,12 +70,9 @@ type
     Label_fiscal_year_designator: System.Web.UI.WebControls.Label;
     Label_unappropriated_amount: System.Web.UI.WebControls.Label;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
-    LinkButton_change_password: System.Web.UI.WebControls.LinkButton;
-    LinkButton_change_email_address: System.Web.UI.WebControls.LinkButton;
     Label_no_appropriations: System.Web.UI.WebControls.Label;
     LinkButton_region_dictated_deadline: System.Web.UI.WebControls.LinkButton;
     Table_deadlines: System.Web.UI.HtmlControls.HtmlTable;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_new_appropriation: System.Web.UI.WebControls.LinkButton;
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
@@ -103,9 +97,6 @@ implementation
 /// </summary>
 procedure TWebForm_region_dictated_appropriations.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_change_password.Click, Self.LinkButton_change_password_Click);
-  Include(Self.LinkButton_change_email_address.Click, Self.LinkButton_change_email_address_Click);
   Include(Self.LinkButton_region_dictated_deadline.Click, Self.LinkButton_region_dictated_deadline_Click);
   Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.DataGrid_county_appropriations.ItemCommand, Self.DataGrid_county_appropriations_ItemCommand);
@@ -197,18 +188,6 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
-end;
-
-procedure TWebForm_region_dictated_appropriations.LinkButton_change_email_address_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_email_address.aspx');
-end;
-
-procedure TWebForm_region_dictated_appropriations.LinkButton_change_password_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('change_password.aspx');
 end;
 
 procedure TWebForm_region_dictated_appropriations.TWebForm_region_dictated_appropriations_PreRender(sender: System.Object;
@@ -305,7 +284,7 @@ begin
   session.Add('sum_of_county_appropriations',Safe(Label_sum_of_county_appropriations.text,REAL_NUM));
   session.Remove('unappropriated_amount');
   session.Add('unappropriated_amount',p.unappropriated_amount);
-  server.Transfer('create_new_county_appropriation.aspx');
+  DropCrumbAndTransferTo('create_new_county_appropriation.aspx');
 end;
 
 procedure TWebForm_region_dictated_appropriations.DataGrid_county_appropriations_ItemCommand(source: System.Object;
@@ -322,18 +301,10 @@ begin
     session.Add('appropriation_amount',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
     session.Remove('region_dictated_appropriation_id');
     session.Add('region_dictated_appropriation_id',Safe(e.item.cells[p.tcci_id].text,NUM));
-    server.Transfer('region_dictated_appropriation_detail.aspx');
+    DropCrumbAndTransferTo('region_dictated_appropriation_detail.aspx');
   end else if e.commandname = 'Edit' then begin
     p.saved_amount := decimal.Parse(Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
   end;
-end;
-
-procedure TWebForm_region_dictated_appropriations.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_region_dictated_appropriations.LinkButton_region_dictated_deadline_Click(sender: System.Object;
@@ -341,7 +312,7 @@ procedure TWebForm_region_dictated_appropriations.LinkButton_region_dictated_dea
 begin
   session.Remove('region_dictated_deadline');
   session.Add('region_dictated_deadline',LinkButton_region_dictated_deadline.text);
-  server.Transfer('region_dictated_deadline.aspx');
+  DropCrumbAndTransferTo('region_dictated_deadline.aspx');
 end;
 
 procedure TWebForm_region_dictated_appropriations.DataGrid_county_appropriations_DeleteCommand(source: System.Object;
@@ -384,7 +355,7 @@ begin
     session.Remove('amount_of_appropriation_selected_for_deletion');
     session.Add('amount_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
     //
-    server.Transfer('delete_county_appropriation.aspx');
+    DropCrumbAndTransferTo('delete_county_appropriation.aspx');
   end else begin
     //
     // Nothing is linked to this appropriation, so go ahead and delete it.

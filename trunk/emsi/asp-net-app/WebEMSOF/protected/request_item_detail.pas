@@ -41,11 +41,8 @@ type
     procedure Button_delete_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_update_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_withdraw_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_request_item_detail_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_request_overview_1_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_request_overview_2_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -93,9 +90,6 @@ type
     Button_update: System.Web.UI.WebControls.Button;
     Button_withdraw: System.Web.UI.WebControls.LinkButton;
     TableRow_post_finalization_actions: System.Web.UI.HtmlControls.HtmlTableRow;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_request_overview_1: System.Web.UI.WebControls.LinkButton;
-    LinkButton_request_overview_2: System.Web.UI.WebControls.LinkButton;
     UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
@@ -116,8 +110,6 @@ uses
 /// </summary>
 procedure TWebForm_request_item_detail.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_request_overview_1.Click, Self.LinkButton_request_overview_1_Click);
   Include(Self.DropDownList_equipment_category.SelectedIndexChanged, Self.DropDownList_equipment_category_SelectedIndexChanged);
   Include(Self.LinkButton_recalculate_1.Click, Self.LinkButton_recalculate_1_Click);
   Include(Self.LinkButton_recalculate_2.Click, Self.LinkButton_recalculate_2_Click);
@@ -128,7 +120,6 @@ begin
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.Button_delete.Click, Self.Button_delete_Click);
   Include(Self.Button_withdraw.Click, Self.Button_withdraw_Click);
-  Include(Self.LinkButton_request_overview_2.Click, Self.LinkButton_request_overview_2_Click);
   Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_request_item_detail_PreRender);
 end;
@@ -360,31 +351,11 @@ begin
   inherited OnInit(e);
 end;
 
-procedure TWebForm_request_item_detail.LinkButton_request_overview_2_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('request_overview.aspx');
-end;
-
-procedure TWebForm_request_item_detail.LinkButton_request_overview_1_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-   server.Transfer('request_overview.aspx');
-end;
-
 procedure TWebForm_request_item_detail.TWebForm_request_item_detail_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
   session.Remove('p');
   session.Add('p',p);
-end;
-
-procedure TWebForm_request_item_detail.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
 end;
 
 procedure TWebForm_request_item_detail.Button_withdraw_Click(sender: System.Object;
@@ -396,7 +367,7 @@ begin
   session.Add('emsof_request_item_emsof_ante',Safe(Label_emsof_ante.text,REAL_NUM));
   session.Remove('emsof_request_item_additional_service_ante');
   session.Add('emsof_request_item_additional_service_ante',p.saved_additional_service_ante.tostring);
-  server.Transfer('withdraw_request_item.aspx');
+  DropCrumbAndTransferTo('withdraw_request_item.aspx');
 end;
 
 procedure TWebForm_request_item_detail.Button_update_Click(sender: System.Object;
@@ -440,7 +411,7 @@ begin
     .ExecuteNonQuery;
   //
   p.db.Close;
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_request_item_detail.Button_delete_Click(sender: System.Object;
@@ -479,7 +450,7 @@ begin
       )
       .ExecuteNonQuery;
     p.db.Close;
-    server.Transfer('request_overview.aspx');
+    BackTrack;
   end;
 end;
 
@@ -505,7 +476,7 @@ procedure TWebForm_request_item_detail.Button_submit_and_stop_Click(sender: Syst
   e: System.EventArgs);
 begin
   AddItem;
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_request_item_detail.Button_submit_and_repeat_Click(sender: System.Object;
@@ -535,7 +506,7 @@ end;
 procedure TWebForm_request_item_detail.Button_cancel_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_request_item_detail.Recalculate;

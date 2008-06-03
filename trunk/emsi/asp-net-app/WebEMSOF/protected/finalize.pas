@@ -20,8 +20,6 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_finalize_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_request_overview_00_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_request_overview_0_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_request_overview_1_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_request_overview_2_Click(sender: System.Object; e: System.EventArgs);
@@ -45,7 +43,6 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_service_name: System.Web.UI.WebControls.Label;
     Table_sorry: System.Web.UI.HtmlControls.HtmlTable;
     Table_summary: System.Web.UI.HtmlControls.HtmlTable;
     CheckBox_understand_read_only_1: System.Web.UI.WebControls.CheckBox;
@@ -68,7 +65,6 @@ type
     Label_unused_amount: System.Web.UI.WebControls.Label;
     CheckBox_understand_remainder_goes_to_region: System.Web.UI.WebControls.CheckBox;
     Label_max_reimbursement_2: System.Web.UI.WebControls.Label;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_00: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_0: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_1: System.Web.UI.WebControls.LinkButton;
@@ -107,8 +103,6 @@ uses
 /// </summary>
 procedure TWebForm_finalize.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_request_overview_00.Click, Self.LinkButton_request_overview_00_Click);
   Include(Self.LinkButton_request_overview_0.Click, Self.LinkButton_request_overview_0_Click);
   Include(Self.LinkButton_request_overview_1.Click, Self.LinkButton_request_overview_1_Click);
   Include(Self.LinkButton_request_overview_2.Click, Self.LinkButton_request_overview_2_Click);
@@ -122,8 +116,8 @@ begin
   Include(Self.LinkButton_request_overview_10.Click, Self.LinkButton_request_overview_10_Click);
   Include(Self.Button_finalize.Click, Self.Button_finalize_Click);
   Include(Self.LinkButton_request_overview_bottom.Click, Self.LinkButton_request_overview_bottom_Click);
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_finalize_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -143,9 +137,6 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - finalize';
-    
-    //
-    Label_service_name.text := session['service_name'].tostring;
     //
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
     p.db := TClass_db.Create;
@@ -260,86 +251,73 @@ end;
 procedure TWebForm_finalize.LinkButton_request_overview_bottom_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_10_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_9_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_8_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_7_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_6_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_5_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_4_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_3_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_2_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_1_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_0_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('request_overview.aspx');
-end;
-
-procedure TWebForm_finalize.LinkButton_request_overview_00_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('request_overview.aspx');
-end;
-
-procedure TWebForm_finalize.LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_finalize.Button_finalize_Click(sender: System.Object; e: System.EventArgs);
@@ -423,7 +401,7 @@ begin
       + '-- ' + configurationmanager.AppSettings['application_name']
       );
     //
-    server.Transfer('request_overview.aspx');
+    BackTrack;
     //
   end;
 end;

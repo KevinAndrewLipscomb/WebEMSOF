@@ -26,9 +26,6 @@ type
   strict private
     procedure InitializeComponent;
     procedure Calendar_SelectionChanged(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
-      e: System.EventArgs);
     procedure LinkButton_cancel_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_county_dictated_deadline_PreRender(sender: System.Object;
       e: System.EventArgs);
@@ -40,11 +37,8 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_county_name: System.Web.UI.WebControls.Label;
-    Label_literal_county: System.Web.UI.WebControls.Label;
     Calendar: System.Web.UI.WebControls.Calendar;
     Label_current_deadline: System.Web.UI.WebControls.Label;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
     LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
     LinkButton_cancel: System.Web.UI.WebControls.LinkButton;
   protected
@@ -64,8 +58,6 @@ implementation
 /// </summary>
 procedure TWebForm_county_dictated_deadline.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_county_dictated_appropriations.Click, Self.LinkButton_county_dictated_appropriations_Click);
   Include(Self.LinkButton_cancel.Click, Self.LinkButton_cancel_Click);
   Include(Self.Calendar.SelectionChanged, Self.Calendar_SelectionChanged);
   Include(Self.Load, Self.Page_Load);
@@ -88,7 +80,6 @@ begin
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.db := TClass_db.Create;
     //
-    Label_county_name.text := session['county_name'].tostring;
     Label_current_deadline.text := session['county_dictated_deadline'].tostring;
     Calendar.selecteddate := datetime.Parse(session['county_dictated_deadline'].tostring);
     Calendar.visibledate := datetime.Parse(session['county_dictated_deadline'].tostring);
@@ -115,21 +106,7 @@ end;
 procedure TWebForm_county_dictated_deadline.LinkButton_cancel_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('county_dictated_appropriations.aspx');
-end;
-
-procedure TWebForm_county_dictated_deadline.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('county_dictated_appropriations.aspx');
-end;
-
-procedure TWebForm_county_dictated_deadline.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_county_dictated_deadline.Calendar_SelectionChanged(sender: System.Object;
@@ -142,9 +119,9 @@ begin
     and p.biz_emsof_requests.BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
       (session['region_dictated_appropriation_id'].tostring)
   then begin
-    server.Transfer('county_unrejection.aspx');
+    DropCrumbAndTransferTo('county_unrejection.aspx');
   end else begin
-    server.Transfer('county_dictated_appropriations.aspx');
+    BackTrack;
   end;
 end;
 

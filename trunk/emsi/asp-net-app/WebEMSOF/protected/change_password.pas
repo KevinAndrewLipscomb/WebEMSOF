@@ -24,8 +24,6 @@ type
   strict private
     procedure InitializeComponent;
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_overview_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_change_password_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
@@ -36,7 +34,6 @@ type
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
     Button_submit: System.Web.UI.WebControls.Button;
     TextBox_nominal_password: System.Web.UI.WebControls.TextBox;
     TextBox_confirmation_password: System.Web.UI.WebControls.TextBox;
@@ -44,8 +41,6 @@ type
     RequiredFieldValidator_confirmation_password: System.Web.UI.WebControls.RequiredFieldValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
-    LinkButton_back_to_overview: System.Web.UI.WebControls.LinkButton;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
   protected
     procedure OnInit(e: EventArgs); override;
   private
@@ -63,11 +58,9 @@ implementation
 /// </summary>
 procedure TWebForm_change_password.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_back_to_overview.Click, Self.LinkButton_overview_Click);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_change_password_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -85,11 +78,6 @@ begin
     p.db := TClass_db.Create;
     p.db_trail := TClass_db_trail.Create;
     //
-    Label_account_descriptor.Text := session[session['target_user_table'].ToString + '_name'].ToString;
-    if session['target_user_table'].tostring = 'county' then begin
-      Label_account_descriptor.Text := Label_account_descriptor.Text + ' County';
-    end;
-    LinkButton_back_to_overview.text := session['target_user_table'].tostring + ' overview';
   end;
 end;
 
@@ -107,20 +95,6 @@ procedure TWebForm_change_password.TWebForm_change_password_PreRender(sender: Sy
 begin
   session.Remove('p');
   session.Add('p',p);
-end;
-
-procedure TWebForm_change_password.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
-end;
-
-procedure TWebForm_change_password.LinkButton_overview_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer(session['target_user_table'].tostring + '_overview.aspx');
 end;
 
 procedure TWebForm_change_password.Button_submit_Click(sender: System.Object;

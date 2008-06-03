@@ -25,9 +25,6 @@ type
     procedure InitializeComponent;
     procedure Button_no_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_yes_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_logout_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_county_dictated_appropriations_Click(sender: System.Object; 
-      e: System.EventArgs);
     procedure TWebForm_delete_service_appropriation_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
@@ -46,8 +43,6 @@ type
     Label_amount: System.Web.UI.WebControls.Label;
     Label_application_name: System.Web.UI.WebControls.Label;
     Label_service_name_2: System.Web.UI.WebControls.Label;
-    LinkButton_logout: System.Web.UI.WebControls.LinkButton;
-    LinkButton_county_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
   protected
     procedure OnInit(e: EventArgs); override;
   private
@@ -65,8 +60,6 @@ implementation
 /// </summary>
 procedure TWebForm_delete_service_appropriation.InitializeComponent;
 begin
-  Include(Self.LinkButton_logout.Click, Self.LinkButton_logout_Click);
-  Include(Self.LinkButton_county_dictated_appropriations.Click, Self.LinkButton_county_dictated_appropriations_Click);
   Include(Self.Button_yes.Click, Self.Button_yes_Click);
   Include(Self.Button_no.Click, Self.Button_no_Click);
   Include(Self.Load, Self.Page_Load);
@@ -140,20 +133,6 @@ begin
   session.Add('p',p);
 end;
 
-procedure TWebForm_delete_service_appropriation.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  server.Transfer('county_dictated_appropriations.aspx');
-end;
-
-procedure TWebForm_delete_service_appropriation.LinkButton_logout_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  formsauthentication.SignOut;
-  session.Clear;
-  server.Transfer('../Default.aspx');
-end;
-
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -196,13 +175,13 @@ begin
     .ExecuteNonQuery;
   //
   p.db.Close;
-  server.Transfer('county_dictated_appropriations.aspx');
+  BackTrack;
 end;
 
 procedure TWebForm_delete_service_appropriation.Button_no_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  server.Transfer('county_dictated_appropriations.aspx');
+  BackTrack;
 end;
 
 end.

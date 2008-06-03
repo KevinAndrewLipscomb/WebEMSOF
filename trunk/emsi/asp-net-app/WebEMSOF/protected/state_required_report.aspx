@@ -11,22 +11,7 @@
   <body>
     <form runat="server">
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
-	  <p>
-		  <table cellspacing="0" cellpadding="0" width="100%" border="0">
-			  <tr>
-				<td>
-		<small>[ <ASP:LinkButton id="LinkButton_logout" runat="server" causesvalidation="False">Logout
-</ASP:LinkButton>&nbsp;] [ Back to <ASP:LinkButton id="LinkButton_back" runat="server" causesvalidation="False">previous
-</ASP:LinkButton>&nbsp;form ]&nbsp; [ Change your <asp:LinkButton id="LinkButton_change_password" runat="server">password
-</asp:LinkButton>&nbsp;| <asp:LinkButton id="LinkButton_change_email_address" runat="server">email address
-</asp:LinkButton>&nbsp;] 
-</small>
-				</td>
-				<td align="right"><uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
-				</td>
-			  </tr>
-		  </table>
-	  </p>
+<uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
 <div id="Div_print_area">
 	  <p><asp:label id="Label_account_descriptor" runat="server" font-bold="True" font-size="Large"></asp:label></p>
 	  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
