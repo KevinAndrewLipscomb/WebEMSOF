@@ -1,4 +1,3 @@
-
 unit login;
 
 interface
@@ -101,8 +100,7 @@ end;
 
 procedure TWebForm_login.TWebForm_login_PreRender(sender: System.Object; e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_login.CustomValidator_account_exists_ServerValidate(source: System.Object;
@@ -128,8 +126,7 @@ end;
 procedure TWebForm_login.DropDownList_user_kind_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('target_user_table');
-  session.Add('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD));
+  SessionSet('target_user_table',Safe(DropDownList_user_kind.selectedvalue,ECMASCRIPT_WORD));
   Label_user.enabled := TRUE;
   if DropDownList_user_kind.selectedvalue = 'service' then begin
     Label_user.text := 'Service';
@@ -160,8 +157,7 @@ begin
     //
     // Set username in session for the benefit of the TableRow_account_control in UserControl_precontent.
     //
-    session.Remove('username');
-    session.Add('username',Safe(DropDownList_user.SelectedItem.Text,ORG_NAME));
+    SessionSet('username',Safe(DropDownList_user.SelectedItem.Text,ORG_NAME));
     //
     formsauthentication.RedirectFromLoginPage
       (Safe(DropDownList_user.selectedvalue,HYPHENATED_ALPHANUM),CheckBox_keep_me_logged_in.checked);

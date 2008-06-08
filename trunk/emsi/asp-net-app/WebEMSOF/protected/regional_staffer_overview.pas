@@ -232,8 +232,7 @@ end;
 procedure TWebForm_regional_staffer_overview.LinkButton_missed_deadlines_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',FAILED_DEADLINE);
+  SessionSet('status_of_interest',FAILED_DEADLINE);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
@@ -246,120 +245,105 @@ end;
 procedure TWebForm_regional_staffer_overview.LinkButton_archived_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',ARCHIVED);
+  SessionSet('status_of_interest',ARCHIVED);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_deployed_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',DEPLOYED);
+  SessionSet('status_of_interest',DEPLOYED);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_rejected_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',REJECTED);
+  SessionSet('status_of_interest',REJECTED);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_withdrawn_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',WITHDRAWN);
+  SessionSet('status_of_interest',WITHDRAWN);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_completed_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',REIMBURSEMENT_ISSUED);
+  SessionSet('status_of_interest',REIMBURSEMENT_ISSUED);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_reimbursement_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_REIMBURSEMENT_ISSUANCE);
+  SessionSet('status_of_interest',NEEDS_REIMBURSEMENT_ISSUANCE);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_canceled_check_collection_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_CANCELED_CHECK_COLLECTION);
+  SessionSet('status_of_interest',NEEDS_CANCELED_CHECK_COLLECTION);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_invoice_collection_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_INVOICE_COLLECTION);
+  SessionSet('status_of_interest',NEEDS_INVOICE_COLLECTION);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_state_approval_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_PA_DOH_EMSO_APPROVAL);
+  SessionSet('status_of_interest',NEEDS_PA_DOH_EMSO_APPROVAL);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_transmittal_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
+  SessionSet('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
   DropCrumbAndTransferTo('state_required_report.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_exec_dir_approval_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_REGIONAL_EXEC_DIR_APPROVAL);
+  SessionSet('status_of_interest',NEEDS_REGIONAL_EXEC_DIR_APPROVAL);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_county_approval_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_COUNTY_APPROVAL);
+  SessionSet('status_of_interest',NEEDS_COUNTY_APPROVAL);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_finalization_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_SERVICE_FINALIZATION);
+  SessionSet('status_of_interest',NEEDS_SERVICE_FINALIZATION);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_development_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',ALLOCATED);
+  SessionSet('status_of_interest',ALLOCATED);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_regional_compliance_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('status_of_interest');
-  session.Add('status_of_interest',NEEDS_REGIONAL_COMPLIANCE_CHECK);
+  SessionSet('status_of_interest',NEEDS_REGIONAL_COMPLIANCE_CHECK);
   DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 

@@ -1,4 +1,3 @@
-
 unit add_proof_of_payment;
 
 interface
@@ -164,8 +163,7 @@ end;
 procedure TWebForm_add_proof_of_payment.TWebForm_add_proof_of_payment_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 end.

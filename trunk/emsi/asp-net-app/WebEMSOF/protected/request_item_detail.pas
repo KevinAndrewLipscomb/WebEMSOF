@@ -354,19 +354,15 @@ end;
 procedure TWebForm_request_item_detail.TWebForm_request_item_detail_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_request_item_detail.Button_withdraw_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('emsof_request_item_make_model');
-  session.Add('emsof_request_item_make_model',Safe(TextBox_make_model.text,MAKE_MODEL));
-  session.Remove('emsof_request_item_emsof_ante');
-  session.Add('emsof_request_item_emsof_ante',Safe(Label_emsof_ante.text,REAL_NUM));
-  session.Remove('emsof_request_item_additional_service_ante');
-  session.Add('emsof_request_item_additional_service_ante',p.saved_additional_service_ante.tostring);
+  SessionSet('emsof_request_item_make_model',Safe(TextBox_make_model.text,MAKE_MODEL));
+  SessionSet('emsof_request_item_emsof_ante',Safe(Label_emsof_ante.text,REAL_NUM));
+  SessionSet('emsof_request_item_additional_service_ante',p.saved_additional_service_ante.tostring);
   DropCrumbAndTransferTo('withdraw_request_item.aspx');
 end;
 

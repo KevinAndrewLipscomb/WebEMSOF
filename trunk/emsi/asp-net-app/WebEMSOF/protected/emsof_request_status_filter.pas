@@ -154,8 +154,7 @@ procedure TWebForm_emsof_request_status_filter.TWebForm_emsof_request_status_fil
   e: System.EventArgs
   );
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_emsof_request_status_filter.DataGrid_requests_ItemDataBound
@@ -203,10 +202,8 @@ begin
     // We are dealing with a data row, not a header or footer row.
     //
     system.collections.stack(session['waypoint_stack']).Push('emsof_request_status_filter.aspx');
-    session.Remove('account_descriptor');
-    session.Add('account_descriptor',session['regional_staffer_name'].ToString);
-    session.Remove('e_item');
-    session.Add('e_item',e.item);
+    SessionSet('account_descriptor',session['regional_staffer_name'].ToString);
+    SessionSet('e_item',e.item);
     //
     DropCrumbAndTransferTo('full_request_review_approve.aspx');
   end;

@@ -21,6 +21,11 @@ type
       match_level_enum: Class_biz_match_level.nominal_type
       )
       : boolean;
+    procedure BindListControl
+      (
+      fy_id: string;
+      target: system.object
+      );
   end;
 
 implementation
@@ -53,7 +58,15 @@ begin
   else
     BeMatchExempt := FALSE;
   end;
+end;
 
+procedure TClass_biz_equipment.BindListControl
+  (
+  fy_id: string;
+  target: system.object
+  );
+begin
+  db_equipment.BindListControl(fy_id,target);
 end;
 
 end.

@@ -1,4 +1,3 @@
-
 unit county_unrejection;
 
 interface
@@ -146,8 +145,7 @@ end;
 procedure TWebForm_county_unrejection.TWebForm_county_unrejection_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_county_unrejection.Datagrid_unrejectable_requests_ItemDataBound(sender: System.Object;

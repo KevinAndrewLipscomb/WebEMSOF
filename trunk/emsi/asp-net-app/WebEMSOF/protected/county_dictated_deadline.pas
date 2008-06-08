@@ -1,4 +1,3 @@
-
 unit county_dictated_deadline;
 
 interface
@@ -99,8 +98,7 @@ end;
 procedure TWebForm_county_dictated_deadline.TWebForm_county_dictated_deadline_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_county_dictated_deadline.LinkButton_cancel_Click(sender: System.Object;

@@ -244,8 +244,7 @@ end;
 procedure TWebForm_finalize.TWebForm_finalize_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_bottom_Click(sender: System.Object;
@@ -346,8 +345,7 @@ begin
     // Update the appropriate session object.
     //
     emsof_request_master_status := system.object(Class_biz_emsof_requests.status_type(3)).tostring;
-    session.Remove('emsof_request_master_status');
-    session.Add('emsof_request_master_status',emsof_request_master_status);
+    SessionSet('emsof_request_master_status',emsof_request_master_status);
     //
     // Send notifications to county and regional coordinators.
     //

@@ -141,17 +141,14 @@ begin
     case p.biz_emsof_requests.StatusOf(e.item) of
     NEEDS_SENT_TO_PA_DOH_EMSO:
       BEGIN
-      session.Remove('status_of_interest');
-      session.Add('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
+      SessionSet('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
       system.collections.stack(session['waypoint_stack']).Push('all_emsof_requests.aspx');
       DropCrumbAndTransferTo('state_required_report.aspx');
       END
     else
       BEGIN
-      session.Remove('account_descriptor');
-      session.Add('account_descriptor',session['regional_staffer_name'].tostring);
-      session.Remove('e_item');
-      session.Add('e_item',e.item);
+      SessionSet('account_descriptor',session['regional_staffer_name'].tostring);
+      SessionSet('e_item',e.item);
       system.collections.stack(session['waypoint_stack']).Push('all_emsof_requests.aspx');
       DropCrumbAndTransferTo('full_request_review_approve.aspx');
       END;
@@ -209,8 +206,7 @@ end;
 procedure TWebForm_all_emsof_requests.TWebForm_all_emsof_requests_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_all_emsof_requests.Bind;

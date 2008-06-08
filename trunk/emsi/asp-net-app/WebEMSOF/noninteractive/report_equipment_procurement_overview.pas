@@ -8,6 +8,7 @@ uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  ki_web_ui,
   UserControl_equipment_procurement_overview;
 
 type
@@ -16,7 +17,7 @@ type
     biz_accounts: TClass_biz_accounts;
     biz_fiscal_years: TClass_biz_fiscal_years;
     END;
-  TWebForm_report_equipment_procurement_overview = class(System.Web.UI.Page)
+  TWebForm_report_equipment_procurement_overview = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;

@@ -115,6 +115,14 @@ type
       )
       : boolean;
     function BeWithdrawable(status_code: cardinal): boolean;
+    procedure BindEquipmentProcurementDetail
+      (
+      fy_id: string;
+      equipment_code: string;
+      sort_order: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
     procedure BindEquipmentProcurementOverview
       (
       fy_id: string;
@@ -561,6 +569,18 @@ end;
 function TClass_biz_emsof_requests.BeWithdrawable(status_code: cardinal): boolean;
 begin
   BeWithdrawable := (status_type(status_code) in [NEEDS_COUNTY_APPROVAL..NEEDS_REIMBURSEMENT_ISSUANCE]);
+end;
+
+procedure TClass_biz_emsof_requests.BindEquipmentProcurementDetail
+  (
+  fy_id: string;
+  equipment_code: string;
+  sort_order: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  db_emsof_requests.BindEquipmentProcurementDetail(fy_id,equipment_code,sort_order,be_order_ascending,target);
 end;
 
 procedure TClass_biz_emsof_requests.BindEquipmentProcurementOverview

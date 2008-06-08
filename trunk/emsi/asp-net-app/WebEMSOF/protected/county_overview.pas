@@ -1,4 +1,3 @@
-
 unit county_overview;
 
 interface
@@ -128,11 +127,9 @@ begin
         // Add the county's email address to the session, as it will be needed by county_dictated_appropriations however we
         // get there.
         //
-        session.Remove('county_user_password_reset_email_address');
-        session.Add('county_user_password_reset_email_address',county_user_email_address);
+        SessionSet('county_user_password_reset_email_address',county_user_email_address);
         if RadioButtonList_appropriation.items.Count = 1 then begin
-          session.Remove('region_dictated_appropriation_id');
-          session.Add('region_dictated_appropriation_id',RadioButtonList_appropriation.items[0].value);
+          SessionSet('region_dictated_appropriation_id',RadioButtonList_appropriation.items[0].value);
           DropCrumbAndTransferTo('county_dictated_appropriations.aspx');
         end;
       end;
@@ -159,15 +156,13 @@ end;
 procedure TWebForm_county_overview.TWebForm_county_overview_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_county_overview.Button_continue_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('region_dictated_appropriation_id');
-  session.Add('region_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
+  SessionSet('region_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
   DropCrumbAndTransferTo('county_dictated_appropriations.aspx');
 end;
 

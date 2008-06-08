@@ -1,4 +1,3 @@
-
 unit exception;
 
 interface
@@ -160,8 +159,7 @@ end;
 procedure TWebForm_exception.TWebForm_exception_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 end.

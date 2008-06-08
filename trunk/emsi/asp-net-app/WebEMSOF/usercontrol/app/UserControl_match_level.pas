@@ -156,8 +156,7 @@ end;
 procedure TWebUserControl_match_level.TWebUserControl_match_level_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('UserControl_match_level.p');
-  session.Add('UserControl_match_level.p',p);
+  SessionSet('UserControl_match_level.p',p);
 end;
 
 function TWebUserControl_match_level.Fresh: TWebUserControl_match_level;

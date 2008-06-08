@@ -175,8 +175,7 @@ end;
 
 procedure TWebForm_profile.Button_submit_PreRender(sender: System.Object; e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_profile.Button_submit_Click(sender: System.Object; e: System.EventArgs);

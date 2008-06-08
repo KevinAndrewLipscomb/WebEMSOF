@@ -35,6 +35,7 @@ type
     procedure GridView_control_Sorting(sender: System.Object; e: System.Web.UI.WebControls.GridViewSortEventArgs);
     procedure GridView_control_RowDataBound(sender: System.Object; e: System.Web.UI.WebControls.GridViewRowEventArgs);
     procedure GridView_control_SelectedIndexChanged(sender: System.Object; e: System.EventArgs);
+    procedure GridView_control_RowCreated(sender: System.Object; e: System.Web.UI.WebControls.GridViewRowEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -62,8 +63,13 @@ uses
   System.Collections,
   system.configuration;
 
+const
+  TCI_SELECT = 0;
+  TCI_CODE = 1;
+
 procedure TWebUserControl_equipment_procurement_overview.InjectPersistentClientSideScript;
 begin
+{$REGION 'Persistent client-side script'}
 //  EstablishClientSideFunction(EL);
 //  EstablishClientSideFunction(KGS_TO_LBS);
 //  EstablishClientSideFunction(LBS_TO_KGS);
@@ -139,6 +145,7 @@ begin
 //    'El("' + TextBox_net_landed_in_pounds.clientid + '").value = KgsToLbs(El("' + TextBox_net_landed_in_kgs.clientid + '").value);'
 //    + ' RecalculateDependentValues();'
 //    );
+{$ENDREGION}
 end;
 
 procedure TWebUserControl_equipment_procurement_overview.Page_Load(sender: System.Object; e: System.EventArgs);
@@ -200,6 +207,7 @@ begin
   Include(Self.GridView_control.Sorting, Self.GridView_control_Sorting);
   Include(Self.GridView_control.RowDataBound, Self.GridView_control_RowDataBound);
   Include(Self.GridView_control.SelectedIndexChanged, Self.GridView_control_SelectedIndexChanged);
+  Include(Self.GridView_control.RowCreated, Self.GridView_control_RowCreated);
   Include(Self.PreRender, Self.TWebUserControl_equipment_procurement_overview_PreRender);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -208,8 +216,7 @@ end;
 procedure TWebUserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('UserControl_equipment_procurement_overview.p');
-  session.Add('UserControl_equipment_procurement_overview.p',p);
+  SessionSet('UserControl_equipment_procurement_overview.p',p);
 end;
 
 function TWebUserControl_equipment_procurement_overview.Fresh: TWebUserControl_equipment_procurement_overview;
@@ -218,16 +225,22 @@ begin
   Fresh := self;
 end;
 
+procedure TWebUserControl_equipment_procurement_overview.GridView_control_RowCreated(sender: System.Object;
+  e: System.Web.UI.WebControls.GridViewRowEventArgs);
+begin
+  e.row.cells.item[TCI_CODE].visible := FALSE;
+end;
+
 procedure TWebUserControl_equipment_procurement_overview.GridView_control_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  
+  SessionSet('equipment_procurement_cycle',p.cycle);
+  SessionSet('equipment_procurement_code',Safe(GridView_control.selectedrow.cells.item[TCI_CODE].text,NUM));
+  DropCrumbAndTransferTo('equipment_procurement_detail.aspx');
 end;
 
 procedure TWebUserControl_equipment_procurement_overview.GridView_control_RowDataBound(sender: System.Object;
   e: System.Web.UI.WebControls.GridViewRowEventArgs);
-const
-  TCI_SELECT = 0;
 begin
   if p.be_interactive then begin
     if e.row.rowtype = datacontrolrowtype.datarow then begin

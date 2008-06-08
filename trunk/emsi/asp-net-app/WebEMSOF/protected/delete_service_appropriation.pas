@@ -1,4 +1,3 @@
-
 unit delete_service_appropriation;
 
 interface
@@ -129,8 +128,7 @@ end;
 procedure TWebForm_delete_service_appropriation.TWebForm_delete_service_appropriation_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;

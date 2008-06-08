@@ -1,4 +1,3 @@
-
 unit withdraw_request_item;
 
 interface
@@ -107,8 +106,7 @@ end;
 procedure TWebForm_withdraw_request_item.TWebForm_withdraw_request_item_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_withdraw_request_item.Button_no_Click(sender: System.Object;

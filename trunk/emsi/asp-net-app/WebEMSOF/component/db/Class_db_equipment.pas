@@ -12,6 +12,11 @@ type
   public
     constructor Create;
     function AllowableCostOf(code: string): decimal;
+    procedure BindListControl
+      (
+      fy_id: string;
+      target: system.object
+      );
     function FundingLevelNonRuralOf(code: string): decimal;
     function FundingLevelRuralOf(code: string): decimal;
   end;
@@ -19,7 +24,8 @@ type
 implementation
 
 uses
-  mysql.data.mysqlclient;
+  mysql.data.mysqlclient,
+  system.web.ui.webcontrols;
 
 constructor TClass_db_equipment.Create;
 begin
@@ -45,6 +51,28 @@ begin
   end else begin
     AllowableCostOf := decimal.MaxValue;
   end;
+  self.Close;
+end;
+
+procedure TClass_db_equipment.BindListControl
+  (
+  fy_id: string;
+  target: system.object
+  );
+begin
+  self.Open;
+  ListControl(target).datasource := mysqlcommand.Create
+    (
+    'select code,description'
+    + ' from eligible_provider_equipment_list'
+    + ' where fiscal_year_id = "' + fy_id + '"'
+    + ' order by description',
+    connection
+    )
+    .ExecuteReader;
+  ListControl(target).datavaluefield := 'code';
+  ListControl(target).datatextfield := 'description';
+  ListControl(target).DataBind;
   self.Close;
 end;
 
