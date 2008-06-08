@@ -15,6 +15,7 @@
 <asp:GridView id="GridView_control" runat="server" gridlines="Horizontal" cellpadding="10" autogeneratecolumns="False" allowsorting="True" emptydatatext="No data available">
                       <Columns>
                         <asp:CommandField selecttext="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Detail&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" showselectbutton="True"></asp:CommandField>
+                        <asp:BoundField datafield="code"></asp:BoundField>
                         <asp:BoundField datafield="description" headertext="Kind of equipment" sortexpression="description%">
                           <HeaderStyle horizontalalign="Left"></HeaderStyle>
                         </asp:BoundField>

@@ -50,7 +50,7 @@ uses
   Class_biz_match_level in 'component\biz\Class_biz_match_level.pas',
   Class_biz_equipment in 'component\biz\Class_biz_equipment.pas',
   county_unrejection in 'protected\county_unrejection.pas' {county_unrejection.TWebForm_county_unrejection: ki_web_ui.page_class},
-  milestone_sweep in 'noninteractive\milestone_sweep.pas' {milestone_sweep.TWebForm_milestone_sweep: system.web.ui.page},
+  milestone_sweep in 'noninteractive\milestone_sweep.pas' {milestone_sweep.TWebForm_milestone_sweep: ki_web_ui.page_class},
   Class_biz_milestones in 'component\biz\Class_biz_milestones.pas',
   Class_db_milestones in 'component\db\Class_db_milestones.pas',
   Class_biz_counties in 'component\biz\Class_biz_counties.pas',
@@ -66,10 +66,11 @@ uses
   UserControl_precontent in 'usercontrol\app\UserControl_precontent.pas' {UserControl_precontent.TWebUserControl_precontent: ki_web_ui.usercontrol_class},
   UserControl_common_header_bar in 'usercontrol\app\UserControl_common_header_bar.pas',
   UserControl_postcontent in 'usercontrol\app\UserControl_postcontent.pas' {UserControl_postcontent.TWebUserControl_postcontent: ki_web_ui.usercontrol_class},
-  report_equipment_procurement_overview in 'noninteractive\report_equipment_procurement_overview.pas' {report_equipment_procurement_overview.TWebForm_report_equipment_procurement_overview: system.web.ui.page},
+  report_equipment_procurement_overview in 'noninteractive\report_equipment_procurement_overview.pas' {report_equipment_procurement_overview.TWebForm_report_equipment_procurement_overview: ki_web_ui.page_class},
   UserControl_equipment_procurement_overview in 'usercontrol\app\UserControl_equipment_procurement_overview.pas' {UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview: ki_web_ui.usercontrol_class},
   analyses in 'protected\analyses.pas' {analyses.TWebForm_analyses: ki_web_ui.page_class},
-  UserControl_analyses_binder in 'usercontrol\app\UserControl_analyses_binder.pas' {UserControl_analyses_binder.TWebUserControl_analyses_binder: ki_web_ui.usercontrol_class};
+  UserControl_analyses_binder in 'usercontrol\app\UserControl_analyses_binder.pas' {UserControl_analyses_binder.TWebUserControl_analyses_binder: ki_web_ui.usercontrol_class},
+  equipment_procurement_detail in 'protected\equipment_procurement_detail.pas' {equipment_procurement_detail.TWebForm_equipment_procurement_detail: ki_web_ui.page_class};
 
 //
 // General Information about an assembly is controlled through the following

@@ -1,4 +1,3 @@
-
 unit state_transmittal_complete;
 
 interface
@@ -91,8 +90,7 @@ end;
 procedure TWebForm_state_transmittal_complete.TWebForm_state_transmittal_complete_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 end.

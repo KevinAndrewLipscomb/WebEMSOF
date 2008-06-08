@@ -221,8 +221,7 @@ end;
 procedure TWebForm_state_required_report.TWebForm_state_required_report_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_state_required_report.Bind;

@@ -180,14 +180,11 @@ begin
       Label_sponsor_county.text := session['sponsor_county'].tostring;
       Label_parent_appropriation_amount.Text := county_dictated_appropriation_amount.ToString('C');
       Label_make_requests_deadline.text := make_item_requests_deadline.tostring('HH:mm:ss dddd, MMMM dd, yyyy');
-      session.Remove('emsof_request_item_priority');
-      session.Add('emsof_request_item_priority',EMPTY);
+      SessionSet('emsof_request_item_priority',EMPTY);
     end;
     //
-    session.Remove('be_before_service_to_county_submission_deadline');
-    session.Add('be_before_service_to_county_submission_deadline',p.be_before_deadline.tostring);
-    session.Remove('be_finalized');
-    session.Add('be_finalized',p.be_finalized.tostring);
+    SessionSet('be_before_service_to_county_submission_deadline',p.be_before_deadline.tostring);
+    SessionSet('be_finalized',p.be_finalized.tostring);
     //
     // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
     // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
@@ -270,17 +267,14 @@ end;
 procedure TWebForm_request_overview.TWebForm_request_overview_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_request_overview.LinkButton_finalize_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('sum_of_emsof_antes');
-  session.Add('sum_of_emsof_antes',p.sum_of_emsof_antes);
-  session.Remove('unused_amount');
-  session.Add('unused_amount',p.unused_amount);
+  SessionSet('sum_of_emsof_antes',p.sum_of_emsof_antes);
+  SessionSet('unused_amount',p.unused_amount);
   DropCrumbAndTransferTo('finalize.aspx');
 end;
 
@@ -336,12 +330,9 @@ begin
       .ExecuteNonQuery;
     p.db.Close;
   end else begin // e.commandname = 'Select'
-    session.Remove('emsof_request_item_priority');
-    session.Add('emsof_request_item_priority',Safe(e.item.cells[p.tcci_priority].text,NUM));
-    session.Remove('emsof_request_item_code');
-    session.Add('emsof_request_item_code',Safe(e.item.cells[p.tcci_code].text,NUM));
-    session.Remove('emsof_request_item_equipment_category');
-    session.Add('emsof_request_item_equipment_category',Safe(e.item.cells[p.tcci_item_description].text,PUNCTUATED));
+    SessionSet('emsof_request_item_priority',Safe(e.item.cells[p.tcci_priority].text,NUM));
+    SessionSet('emsof_request_item_code',Safe(e.item.cells[p.tcci_code].text,NUM));
+    SessionSet('emsof_request_item_equipment_category',Safe(e.item.cells[p.tcci_item_description].text,PUNCTUATED));
     DropCrumbAndTransferTo('request_item_detail.aspx');
   end;
   Bind_items;

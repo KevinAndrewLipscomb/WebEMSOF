@@ -88,8 +88,7 @@ end;
 procedure TWebForm_analyses.TWebForm_analyses_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('analyses.p');
-  session.Add('analyses.p',p);
+  SessionSet('analyses.p',p);
 end;
 
 end.

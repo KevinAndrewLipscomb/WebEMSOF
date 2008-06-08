@@ -1,4 +1,3 @@
-
 unit regional_staffer_fiscal_year_selection;
 
 interface
@@ -133,11 +132,9 @@ begin
         // Add the regional staffer's email address to the session, as it will be needed by region_dictated_appropriations however
         // we get there.
         //
-        session.Remove('regional_staffer_user_password_reset_email_address');
-        session.Add('regional_staffer_user_password_reset_email_address',regional_staffer_user_email_address);
+        SessionSet('regional_staffer_user_password_reset_email_address',regional_staffer_user_email_address);
         if RadioButtonList_appropriation.items.Count = 1 then begin
-          session.Remove('state_dictated_appropriation_id');
-          session.Add('state_dictated_appropriation_id',dr['id'].tostring);
+          SessionSet('state_dictated_appropriation_id',dr['id'].tostring);
           DropCrumbAndTransferTo('regional_compliance_check_overview.aspx');
         end;
       end;
@@ -161,15 +158,13 @@ end;
 procedure TWebForm_regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_regional_staffer_fiscal_year_selection.Button_continue_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('state_dictated_appropriation_id');
-  session.Add('state_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
+  SessionSet('state_dictated_appropriation_id',Safe(RadioButtonList_appropriation.SelectedValue,NUM));
   DropCrumbAndTransferTo('regional_compliance_check_overview.aspx');
 end;
 

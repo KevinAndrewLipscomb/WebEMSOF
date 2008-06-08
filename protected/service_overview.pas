@@ -186,27 +186,19 @@ end;
 procedure TWebForm_service_overview.TWebForm_service_overview_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
-  session.Remove('emsof_request_master_id');
-  session.Add('emsof_request_master_id',Safe(e.item.cells[p.tcci_id].text,NUM));
-  session.Remove('status_code');
-  session.Add('status_code',Safe(e.item.cells[p.tcci_status_code].text,NUM));
-  session.Remove('emsof_request_master_status');
-  session.Add('emsof_request_master_status',Safe(e.item.cells[p.tcci_status].text,PUNCTUATED));
-  session.Remove('fiscal_year_designator');
-  session.Add('fiscal_year_designator',Safe(e.item.cells[p.tcci_fy_designator].text,ALPHANUM));
-  session.Remove('sponsor_county');
-  session.Add('sponsor_county',Safe(e.item.cells[p.tcci_county_name].text,POSTAL_CITY));
-  session.Remove('county_dictated_appropriation_id');
-  session.Add('county_dictated_appropriation_id',Safe(e.item.cells[p.tcci_county_dictated_appropriation_id].text,REAL_NUM));
-  session.Remove('county_dictated_appropriation_amount');
-  session.Add('county_dictated_appropriation_amount',Safe(e.item.cells[p.tcci_county_dictated_appropriation_amount].text,REAL_NUM));
+  SessionSet('emsof_request_master_id',Safe(e.item.cells[p.tcci_id].text,NUM));
+  SessionSet('status_code',Safe(e.item.cells[p.tcci_status_code].text,NUM));
+  SessionSet('emsof_request_master_status',Safe(e.item.cells[p.tcci_status].text,PUNCTUATED));
+  SessionSet('fiscal_year_designator',Safe(e.item.cells[p.tcci_fy_designator].text,ALPHANUM));
+  SessionSet('sponsor_county',Safe(e.item.cells[p.tcci_county_name].text,POSTAL_CITY));
+  SessionSet('county_dictated_appropriation_id',Safe(e.item.cells[p.tcci_county_dictated_appropriation_id].text,REAL_NUM));
+  SessionSet('county_dictated_appropriation_amount',Safe(e.item.cells[p.tcci_county_dictated_appropriation_amount].text,REAL_NUM));
   DropCrumbAndTransferTo('request_overview.aspx');
 end;
 

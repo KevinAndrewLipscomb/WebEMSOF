@@ -5,10 +5,11 @@ interface
 uses
   System.Collections, System.ComponentModel,
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
-  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls;
+  System.Web.UI, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
+  ki_web_ui;
 
 type
-  TWebForm_milestone_sweep = class(System.Web.UI.Page)
+  TWebForm_milestone_sweep = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;

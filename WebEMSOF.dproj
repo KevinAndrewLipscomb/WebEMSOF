@@ -2,10 +2,10 @@
   <PropertyGroup>
     <ProjectGuid>{9e2bfa05-69b8-4f2c-9bb6-7b24f4b9b7c9}</ProjectGuid>
     <MainSource>WebEMSOF.dpr</MainSource>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <DCC_EnabledPackages>true</DCC_EnabledPackages>
-    <DCC_UsePackage>ki;"C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll";C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
+    <DCC_UsePackage>ki;""C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll"";C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
     <DCC_DCCCompiler>DCCIL</DCC_DCCCompiler>
     <DCC_DependencyCheckOutputName>bin\WebEMSOF.dll</DCC_DependencyCheckOutputName>
   </PropertyGroup>
@@ -22,9 +22,9 @@
     <DCC_DebugInfoInExe>True</DCC_DebugInfoInExe>
     <DCC_DebugVN>True</DCC_DebugVN>
     <DCC_ExeOutput>.\bin</DCC_ExeOutput>
-    <DCC_UnitSearchPath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki</DCC_UnitSearchPath>
-    <DCC_ResourcePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki</DCC_ResourcePath>
-    <DCC_IncludePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki</DCC_IncludePath>
+    <DCC_UnitSearchPath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_UnitSearchPath>
+    <DCC_ResourcePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_ResourcePath>
+    <DCC_IncludePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_IncludePath>
     <DCC_Define>RELEASE</DCC_Define>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -41,13 +41,13 @@
     <DCC_ResourcePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_ResourcePath>
     <DCC_IncludePath>c:\inetpub\wwwroot\webemsof;c:\windows\microsoft.net\framework\v1.1.4322;c:\inetpub\wwwroot\webemsof\component\biz;c:\inetpub\wwwroot\webemsof\component\db;c:\inetpub\wwwroot\webemsof\bin;c:\inetpub\wwwroot\webemsof\lib\ki;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Common Files\CodeGear Shared\Rad Studio\Shared Assemblies\5.0;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0</DCC_IncludePath>
     <DCC_Define>DEBUG</DCC_Define>
-    <DCC_Platform>x86</DCC_Platform>
+    <DCC_Optimize>False</DCC_Optimize>
   </PropertyGroup>
   <ProjectExtensions>
     <Borland.Personality>DelphiDotNet.Personality</Borland.Personality>
     <Borland.ProjectType>AspProject</Borland.ProjectType>
     <BorlandProject>
-<BorlandProject><DelphiDotNet.Personality><Parameters><Parameters Name="HostApplication">http://localhost/WebEMSOF/login.aspx</Parameters><Parameters Name="DebugSourceDirs">C:\Inetpub\wwwroot\WebEMSOF\component\biz\</Parameters><Parameters Name="Launcher">"C:\Program Files\Internet Explorer\iexplore.exe"</Parameters><Parameters Name="UseLauncher">True</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">False</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1033</VersionInfo><VersionInfo Name="CodePage">1252</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Options><Options Name="AspNetUseHostServer">True</Options><Options Name="AspNetLaunchBrowser">True</Options><Options Name="AspNetStartPage">login.aspx</Options><Options Name="AspNetHostServer">IIS</Options><Options Name="AspNetCassiniPortIndex">0</Options><Options Name="AspNetCassiniStartup">ProjectRun</Options><Options Name="AspNetIISVirtualDirectory">WebEMSOF</Options><Options Name="AspNetHTTPAddress"></Options><Options Name="AspNetCassiniHTTPAddress"></Options></Options><Source><Source Name="MainSource">WebEMSOF.dpr</Source></Source></DelphiDotNet.Personality></BorlandProject></BorlandProject>
+<BorlandProject><DelphiDotNet.Personality><Parameters><Parameters Name="HostApplication">http://localhost/WebEMSOF/login.aspx</Parameters><Parameters Name="DebugSourceDirs">C:\Inetpub\wwwroot\WebEMSOF\component\biz\</Parameters><Parameters Name="Launcher">"C:\Program Files\Internet Explorer\IEXPLORE.EXE"</Parameters><Parameters Name="UseLauncher">True</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">False</VersionInfo><VersionInfo Name="AutoIncBuild">False</VersionInfo><VersionInfo Name="MajorVer">1</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">0</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1033</VersionInfo><VersionInfo Name="CodePage">1252</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName"></VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="InternalName"></VersionInfoKeys><VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName"></VersionInfoKeys><VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Options><Options Name="AspNetUseHostServer">True</Options><Options Name="AspNetLaunchBrowser">True</Options><Options Name="AspNetStartPage">login.aspx</Options><Options Name="AspNetHostServer">IIS</Options><Options Name="AspNetCassiniPortIndex">0</Options><Options Name="AspNetCassiniStartup">ProjectRun</Options><Options Name="AspNetIISVirtualDirectory">WebEMSOF</Options><Options Name="AspNetHTTPAddress"></Options><Options Name="AspNetCassiniHTTPAddress"></Options></Options><Source><Source Name="MainSource">WebEMSOF.dpr</Source></Source></DelphiDotNet.Personality></BorlandProject></BorlandProject>
   </ProjectExtensions>
   <ItemGroup>
     <Reference Include="$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll">
@@ -122,7 +122,7 @@
     </Reference>
     <Reference Include="lib\ki\ki.dll">
       <AssemblyName>ki</AssemblyName>
-      <Version>1.0.3072.26311</Version>
+      <Version>1.0.3080.25177</Version>
       <HintPath>lib\ki\ki.dll</HintPath>
       <AssemblyTag>lib\ki\ki.dll</AssemblyTag>
       <LinkUnits>False</LinkUnits>
@@ -185,12 +185,12 @@
     <DCCReference Include="noninteractive\milestone_sweep.pas">
       <DependentUpon>noninteractive\milestone_sweep.aspx</DependentUpon>
       <Form>milestone_sweep.TWebForm_milestone_sweep</Form>
-      <DesignClass>system.web.ui.page</DesignClass>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
     </DCCReference>
     <DCCReference Include="noninteractive\report_equipment_procurement_overview.pas">
       <DependentUpon>noninteractive\report_equipment_procurement_overview.aspx</DependentUpon>
       <Form>report_equipment_procurement_overview.TWebForm_report_equipment_procurement_overview</Form>
-      <DesignClass>system.web.ui.page</DesignClass>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
     </DCCReference>
     <DCCReference Include="protected\add_proof_of_payment.pas">
       <DependentUpon>protected\add_proof_of_payment.aspx</DependentUpon>
@@ -250,6 +250,11 @@
     <DCCReference Include="protected\emsof_request_status_filter.pas">
       <DependentUpon>protected\emsof_request_status_filter.aspx</DependentUpon>
       <Form>emsof_request_status_filter.TWebForm_emsof_request_status_filter</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\equipment_procurement_detail.pas">
+      <DependentUpon>protected\equipment_procurement_detail.aspx</DependentUpon>
+      <Form>equipment_procurement_detail.TWebForm_equipment_procurement_detail</Form>
       <DesignClass>ki_web_ui.page_class</DesignClass>
     </DCCReference>
     <DCCReference Include="protected\finalize.pas">
@@ -388,6 +393,7 @@
     <None Include="protected\create_new_service_appropriation.aspx" />
     <None Include="protected\delete_service_appropriation.aspx" />
     <None Include="protected\emsof_request_status_filter.aspx" />
+    <None Include="protected\equipment_procurement_detail.aspx" />
     <None Include="protected\finalize.aspx" />
     <None Include="protected\full_request_review_approve.aspx" />
     <None Include="protected\image" />

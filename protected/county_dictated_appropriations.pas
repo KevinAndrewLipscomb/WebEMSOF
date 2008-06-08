@@ -198,8 +198,7 @@ begin
         )
         .ExecuteScalar
       );
-    session.Remove('county_dictated_deadline');
-    session.Add('county_dictated_deadline',county_dictated_deadline);
+    SessionSet('county_dictated_deadline',county_dictated_deadline);
     //
     if datetime.Now > make_appropriations_deadline then begin
       p.be_before_deadline := FALSE;
@@ -242,8 +241,7 @@ end;
 procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_SortCommand(source: System.Object;
@@ -263,16 +261,11 @@ end;
 procedure TWebForm_county_dictated_appropriations.LinkButton_new_appropriation_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('parent_appropriation_amount');
-  session.Add('parent_appropriation_amount',Safe(Label_parent_appropriation_amount.text,REAL_NUM));
-  session.Remove('region_name');
-  session.Add('region_name',Safe(Label_region_name.text,ORG_NAME));
-  session.Remove('fiscal_year_designator');
-  session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
-  session.Remove('sum_of_service_appropriations');
-  session.Add('sum_of_service_appropriations',Safe(Label_sum_of_service_appropriations.text,REAL_NUM));
-  session.Remove('unappropriated_amount');
-  session.Add('unappropriated_amount',p.unappropriated_amount);
+  SessionSet('parent_appropriation_amount',Safe(Label_parent_appropriation_amount.text,REAL_NUM));
+  SessionSet('region_name',Safe(Label_region_name.text,ORG_NAME));
+  SessionSet('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
+  SessionSet('sum_of_service_appropriations',Safe(Label_sum_of_service_appropriations.text,REAL_NUM));
+  SessionSet('unappropriated_amount',p.unappropriated_amount);
   DropCrumbAndTransferTo('create_new_service_appropriation.aspx');
 end;
 
@@ -282,12 +275,9 @@ var
   waypoint_stack: stack;
 begin
   if e.commandname = 'Select' then begin
-    session.Remove('calling_form');
-    session.Add('calling_form','county_dictated_appropriations.aspx');
-    session.Remove('account_descriptor');
-    session.Add('account_descriptor',session['county_name'].ToString + ' County');
-    session.Remove('e_item');
-    session.Add('e_item',e.item);
+    SessionSet('calling_form','county_dictated_appropriations.aspx');
+    SessionSet('account_descriptor',session['county_name'].ToString + ' County');
+    SessionSet('e_item',e.item);
     session.Remove('waypoint_stack');
     waypoint_stack := system.collections.stack.Create;
     waypoint_stack.Push('county_dictated_appropriations.aspx');
@@ -301,8 +291,7 @@ end;
 procedure TWebForm_county_dictated_appropriations.LinkButton_county_dictated_deadline_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('county_dictated_deadline');
-  session.Add('county_dictated_deadline',LinkButton_county_dictated_deadline.text);
+  SessionSet('county_dictated_deadline',LinkButton_county_dictated_deadline.text);
   DropCrumbAndTransferTo('county_dictated_deadline.aspx');
 end;
 
@@ -328,8 +317,7 @@ begin
     // A service has already entered equipment requests against this appropriation.  Add relevant data to the session and send the
     // county coordinator to a confirmation page.
     //
-    session.Remove('id_of_appropriation_selected_for_deletion');
-    session.Add('id_of_appropriation_selected_for_deletion',id_string);
+    SessionSet('id_of_appropriation_selected_for_deletion',id_string);
     //
     session.Remove('email_address_of_service_of_appropriation_selected_for_deletion');
     session.Add

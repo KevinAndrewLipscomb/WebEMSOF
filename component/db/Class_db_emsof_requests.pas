@@ -89,6 +89,14 @@ type
       master_id: string;
       target: system.object
       );
+    procedure BindEquipmentProcurementDetail
+      (
+      fy_id: string;
+      equipment_code: string;
+      sort_order: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
     procedure BindEquipmentProcurementOverview
       (
       fy_id: string;
@@ -641,6 +649,53 @@ begin
   self.Close;
 end;
 
+procedure TClass_db_emsof_requests.BindEquipmentProcurementDetail
+  (
+  fy_id: string;
+  equipment_code: string;
+  sort_order: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  self.Open;
+  if be_order_ascending then begin
+    sort_order := sort_order.Replace('%',' asc');
+  end else begin
+    sort_order := sort_order.Replace('%',' desc');
+  end;
+  GridView(target).datasource := mysqlcommand.Create
+    (
+    'select name'
+    + ' , make_model'
+    + ' , place_kept'
+    + ' , IF(be_refurbished,"Y","N") as be_refurbished'
+    + ' , actual_quantity'
+    + ' , actual_subtotal_cost'
+    + ' , actual_emsof_ante'
+    + ' from emsof_request_detail'
+    +   ' join emsof_request_master on'
+    +     ' (emsof_request_master.id=emsof_request_detail.master_id)'
+    +   ' join county_dictated_appropriation on'
+    +     ' (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join service on'
+    +     ' (service.id=county_dictated_appropriation.service_id)'
+    +   ' join eligible_provider_equipment_list on'
+    +     ' (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+    +   ' join fiscal_year on'
+    +     ' (fiscal_year.id=eligible_provider_equipment_list.fiscal_year_id)'
+    + ' where fiscal_year_id = "' + fy_id + '"'
+    +   ' and eligible_provider_equipment_list.code = "' + equipment_code + '"'
+    +   ' and actual_quantity > 0'
+    + ' group by name'
+    + ' order by ' + sort_order,
+    connection
+    )
+    .ExecuteReader;
+  GridView(target).DataBind;
+  self.Close;
+end;
+
 procedure TClass_db_emsof_requests.BindEquipmentProcurementOverview
   (
   fy_id: string;
@@ -657,7 +712,7 @@ begin
   end;
   GridView(target).datasource := mysqlcommand.Create
     (
-    'select description'
+    'select code,description'
     + ' , sum(actual_quantity) as quantity'
     + ' , sum(actual_emsof_ante) as emsof_part'
     + ' , sum(actual_subtotal_cost) as overall_cost'
@@ -1440,7 +1495,8 @@ begin
     +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
     +   ' join regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)'
     + ' where regional_staffer.id = ' + user_id
-    +   ' and fiscal_year_id = ' + fy_id;
+    +   ' and fiscal_year_id = ' + fy_id
+    +   ' and status_code not in (11,12,16)';
   end else if user_kind = 'county' then begin
     cmdText := 'select sum(actual_value)'
     + ' from emsof_request_master'
@@ -1451,7 +1507,8 @@ begin
     +   ' join state_dictated_appropriation'
     +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
     + ' where county_code = ' + user_id
-    +   ' and fiscal_year_id = ' + fy_id;
+    +   ' and fiscal_year_id = ' + fy_id
+    +   ' and status_code not in (11,12,16)';
   end;
   self.Open;
   sum_obj := mysqlcommand.Create(cmdText,connection).ExecuteScalar;

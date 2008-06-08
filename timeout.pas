@@ -1,4 +1,3 @@
-
 unit timeout;
 
 interface
@@ -8,6 +7,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration,
   Class_biz_user,
+  ki_web_ui,
   system.web.mail;
 
 const ID = '$Id$';
@@ -16,7 +16,7 @@ type
   p_type =
     RECORD
     END;
-  TWebForm_timeout = class(system.web.ui.page)
+  TWebForm_timeout = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
@@ -80,8 +80,7 @@ end;
 procedure TWebForm_timeout.TWebForm_timeout_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 end.

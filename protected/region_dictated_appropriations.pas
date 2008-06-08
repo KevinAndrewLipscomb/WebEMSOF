@@ -1,4 +1,3 @@
-
 unit region_dictated_appropriations;
 
 interface
@@ -193,8 +192,7 @@ end;
 procedure TWebForm_region_dictated_appropriations.TWebForm_region_dictated_appropriations_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_region_dictated_appropriations.DataGrid_county_appropriations_UpdateCommand(source: System.Object;
@@ -276,14 +274,10 @@ end;
 procedure TWebForm_region_dictated_appropriations.LinkButton_new_appropriation_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('parent_appropriation_amount');
-  session.Add('parent_appropriation_amount',Safe(Label_parent_appropriation_amount.text,REAL_NUM));
-  session.Remove('fiscal_year_designator');
-  session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
-  session.Remove('sum_of_county_appropriations');
-  session.Add('sum_of_county_appropriations',Safe(Label_sum_of_county_appropriations.text,REAL_NUM));
-  session.Remove('unappropriated_amount');
-  session.Add('unappropriated_amount',p.unappropriated_amount);
+  SessionSet('parent_appropriation_amount',Safe(Label_parent_appropriation_amount.text,REAL_NUM));
+  SessionSet('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
+  SessionSet('sum_of_county_appropriations',Safe(Label_sum_of_county_appropriations.text,REAL_NUM));
+  SessionSet('unappropriated_amount',p.unappropriated_amount);
   DropCrumbAndTransferTo('create_new_county_appropriation.aspx');
 end;
 
@@ -291,16 +285,11 @@ procedure TWebForm_region_dictated_appropriations.DataGrid_county_appropriations
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   if e.commandname = 'Select' then begin
-    session.Remove('fiscal_year_designator');
-    session.Add('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
-    session.Remove('county_name');
-    session.Add('county_name',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
-    session.Remove('county_code');
-    session.Add('county_code',Safe(e.item.cells[p.tcci_county_code].text,NUM));
-    session.Remove('appropriation_amount');
-    session.Add('appropriation_amount',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
-    session.Remove('region_dictated_appropriation_id');
-    session.Add('region_dictated_appropriation_id',Safe(e.item.cells[p.tcci_id].text,NUM));
+    SessionSet('fiscal_year_designator',Safe(Label_fiscal_year_designator.text,ALPHANUM));
+    SessionSet('county_name',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
+    SessionSet('county_code',Safe(e.item.cells[p.tcci_county_code].text,NUM));
+    SessionSet('appropriation_amount',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
+    SessionSet('region_dictated_appropriation_id',Safe(e.item.cells[p.tcci_id].text,NUM));
     DropCrumbAndTransferTo('region_dictated_appropriation_detail.aspx');
   end else if e.commandname = 'Edit' then begin
     p.saved_amount := decimal.Parse(Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
@@ -310,8 +299,7 @@ end;
 procedure TWebForm_region_dictated_appropriations.LinkButton_region_dictated_deadline_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('region_dictated_deadline');
-  session.Add('region_dictated_deadline',LinkButton_region_dictated_deadline.text);
+  SessionSet('region_dictated_deadline',LinkButton_region_dictated_deadline.text);
   DropCrumbAndTransferTo('region_dictated_deadline.aspx');
 end;
 
@@ -339,8 +327,7 @@ begin
     // A service has already entered equipment requests against this appropriation.  Add relevant data to the session and send the
     // county coordinator to a confirmation page.
     //
-    session.Remove('id_of_appropriation_selected_for_deletion');
-    session.Add('id_of_appropriation_selected_for_deletion',id_string);
+    SessionSet('id_of_appropriation_selected_for_deletion',id_string);
     //
     session.Remove('email_address_of_county_of_appropriation_selected_for_deletion');
     session.Add
@@ -349,11 +336,9 @@ begin
       Safe(e.item.cells[p.tcci_password_reset_email_address].text,EMAIL_ADDRESS)
       );
     //
-    session.Remove('county_name_of_appropriation_selected_for_deletion');
-    session.Add('county_name_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
+    SessionSet('county_name_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_name].text,ORG_NAME));
     //
-    session.Remove('amount_of_appropriation_selected_for_deletion');
-    session.Add('amount_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
+    SessionSet('amount_of_appropriation_selected_for_deletion',Safe(e.item.cells[p.tcci_amount].text,REAL_NUM));
     //
     DropCrumbAndTransferTo('delete_county_appropriation.aspx');
   end else begin

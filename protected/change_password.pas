@@ -1,4 +1,3 @@
-
 unit change_password;
 
 interface
@@ -93,8 +92,7 @@ end;
 procedure TWebForm_change_password.TWebForm_change_password_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  session.Remove('p');
-  session.Add('p',p);
+  SessionSet('p',p);
 end;
 
 procedure TWebForm_change_password.Button_submit_Click(sender: System.Object;

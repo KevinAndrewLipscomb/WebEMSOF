@@ -1,4 +1,3 @@
-
 unit new_password;
 
 interface
