@@ -228,7 +228,7 @@ end;
 procedure TWebUserControl_equipment_procurement_overview.GridView_control_RowCreated(sender: System.Object;
   e: System.Web.UI.WebControls.GridViewRowEventArgs);
 begin
-  if e.row.rowtype = datacontrolrowtype.datarow then begin
+  if e.row.rowtype <> datacontrolrowtype.EMPTYDATAROW then begin
     e.row.cells.item[TCI_CODE].visible := FALSE;
   end;
 end;
