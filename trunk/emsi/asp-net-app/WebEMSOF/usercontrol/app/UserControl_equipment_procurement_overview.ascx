@@ -6,8 +6,6 @@
             <table cellspacing="0" cellpadding="10" border="0">
                 <tr>
                   <td bgcolor="#dcdcdc"><strong>Cycle:&nbsp; <asp:DropDownList id="DropDownList_cycle" runat="server" autopostback="True"></asp:DropDownList>
-
-
 </strong></td>
                 </tr>
                 <tr>
