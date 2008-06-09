@@ -11,8 +11,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Version>7.0</Version>
-    <DCC_DebugInformation>False</DCC_DebugInformation>
-    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
     <DCC_OpenStringParams>False</DCC_OpenStringParams>
     <DCC_IntegerOverflowCheck>True</DCC_IntegerOverflowCheck>
     <DCC_RangeChecking>True</DCC_RangeChecking>
