@@ -20,13 +20,13 @@
                         <asp:BoundField datafield="quantity" headertext="Quantity" sortexpression="quantity%">
                           <ItemStyle horizontalalign="Right"></ItemStyle>
                         </asp:BoundField>
-                        <asp:BoundField datafield="emsof_part" dataformatstring="{0:c}" headertext="EMSOF portion" sortexpression="emsof_part%">
+                        <asp:BoundField datafield="emsof_part" dataformatstring="{0:C}" headertext="EMSOF portion" sortexpression="emsof_part%">
                           <ItemStyle horizontalalign="Right"></ItemStyle>
                         </asp:BoundField>
-                        <asp:BoundField datafield="overall_cost" dataformatstring="{0:c}" headertext="Overall cost" sortexpression="overall_cost%">
+                        <asp:BoundField datafield="overall_cost" dataformatstring="{0:C}" headertext="Overall cost" sortexpression="overall_cost%">
                           <ItemStyle horizontalalign="Right"></ItemStyle>
                         </asp:BoundField>
-                        <asp:BoundField datafield="avg_unit_cost" dataformatstring="{0:c}" headertext="Average unit cost" sortexpression="avg_unit_cost%">
+                        <asp:BoundField datafield="avg_unit_cost" dataformatstring="{0:C}" headertext="Average unit cost" sortexpression="avg_unit_cost%">
                           <ItemStyle horizontalalign="Right"></ItemStyle>
                         </asp:BoundField>
                       </Columns>
