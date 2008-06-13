@@ -16,18 +16,21 @@
 				<table cellspacing="0" cellpadding="10" width="100%" border="0">
 					<tr>
 					  <td bgcolor="#f5f5f5">
-              <strong>Equipment Procurement Overview</strong>
+              <strong>Equipment Procurement Overview
+</strong>
             </td>
 					</tr>
 					<tr>
 					  <td>
 						<small>
-						<p>Best practices:</p>
+						<p>Best practices:
+</p>
 						<ul>
-              <li><p>Monitor this data annually to see if group purchasing projects are indicated.</p></li>
+              <li><p>Monitor this data annually to see if group purchasing projects are indicated.
+</p></li>
 						  <li>
-							<p>Visit the <asp:label id="Label_application_name_1" runat="server"></asp:label>
-							website to use additional features, such as prior cycle selection and sorting:</p>
+							<p>Visit the <asp:label id="Label_application_name_1" runat="server"></asp:label>website to use additional features, such as prior cycle selection,&nbsp;sorting, and drill-downs:
+</p>
 							<blockquote>
 							  <ASP:HyperLink id="HyperLink_web_site" runat="server" font-bold="True"></ASP:HyperLink>
 							</blockquote>
