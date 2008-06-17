@@ -10,6 +10,7 @@
 	<title id="Title" runat="server"></title>
    <link REL="StyleSheet" HREF="../standard.css" TYPE="text/css" />
       <!-- $Id$ -->
+    <script type="text/javascript" src="../js/gradient.js"></script>
   </head>
 
   <body>
