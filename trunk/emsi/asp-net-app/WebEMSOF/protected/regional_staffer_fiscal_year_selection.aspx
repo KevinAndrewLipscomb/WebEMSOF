@@ -5,6 +5,7 @@
 <html>
   <head>
     <title id="Title" runat="server"></title>
+    <script type="text/javascript" src="../js/gradient.js"></script>
   </head>
   <body>
     <form runat="server">
