@@ -45,7 +45,6 @@ uses
   login in 'login.pas' {login.TWebForm_login: ki_web_ui.page_class},
   state_transmittal_complete in 'protected\state_transmittal_complete.pas' {state_transmittal_complete.TWebForm_state_transmittal_complete: ki_web_ui.page_class},
   exception in 'exception.pas' {exception.TWebForm_exception: ki_web_ui.page_class},
-  timeout in 'timeout.pas' {timeout.TWebForm_timeout: system.web.ui.page},
   Class_db_equipment in 'component\db\Class_db_equipment.pas',
   Class_biz_match_level in 'component\biz\Class_biz_match_level.pas',
   Class_biz_equipment in 'component\biz\Class_biz_equipment.pas',
