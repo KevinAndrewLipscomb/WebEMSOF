@@ -10,7 +10,7 @@
     <!-- $Id$ -->
     <script type="text/javascript" src="../js/gradient.js"></script>
   </head>
-  <body>
+  <body bgcolor="white">
 	<form runat="server">
 	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
 <div id="Div_print_area">
@@ -203,7 +203,7 @@
                               <html>
     <script type="text/javascript" src="../js/gradient.js"></script>
                                 <head></head>
-                                <body>
+                                <body bgcolor="white">
 <small>Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "invoice_designator") %></b><br>Quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_quantity") %></b><br>Subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %></b><br>EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_emsof_ante", "{0:C}") %></b>
 
 

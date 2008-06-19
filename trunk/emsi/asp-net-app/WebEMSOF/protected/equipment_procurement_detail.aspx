@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../js/gradient.js"></script>
   </head>
 
-  <body>
+  <body bgcolor="white">
      <form runat="server">
 	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
 <uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
