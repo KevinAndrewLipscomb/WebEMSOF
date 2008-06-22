@@ -327,7 +327,7 @@ procedure TWebForm_full_request_review_approve.Button_special_promotion_Click(se
 begin
   if CheckBox_special_promotion.checked then begin
     p.biz_emsof_requests.MarkDone(session['e_item'],session['account_descriptor'].tostring);
-    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+    BackTrack;
   end;
 end;
 
@@ -336,7 +336,7 @@ procedure TWebForm_full_request_review_approve.Button_failed_Click(sender: Syste
 begin
   if CheckBox_mark_failed.checked then begin
     p.biz_emsof_requests.MarkFailed(session['e_item'],session['account_descriptor'].tostring);
-    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+    BackTrack;
   end;
 end;
 
@@ -344,14 +344,14 @@ procedure TWebForm_full_request_review_approve.Button_force_close_Click(sender: 
   e: System.EventArgs);
 begin
   p.biz_emsof_requests.ForceClosed(p.request_id);
-  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+  BackTrack;
 end;
 
 procedure TWebForm_full_request_review_approve.Button_force_open_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   p.biz_emsof_requests.ForceOpen(p.request_id);
-  server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+  BackTrack;
 end;
 
 procedure TWebForm_full_request_review_approve.DataGrid_proofs_of_payment_DeleteCommand(source: System.Object;
@@ -416,7 +416,7 @@ procedure TWebForm_full_request_review_approve.Button_mark_done_Click(sender: Sy
 begin
   if CheckBox_mark_done.checked then begin
     p.biz_emsof_requests.MarkDone(session['e_item'],session['account_descriptor'].tostring);
-    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+    BackTrack;
   end;
 end;
 
@@ -440,7 +440,7 @@ begin
       Safe(TextArea_disapproval_reason.value,PUNCTUATED),
       Safe(Label_sum_of_emsof_antes.text,CURRENCY_USA)
       );
-    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+    BackTrack;
   end;
 end;
 
@@ -452,7 +452,7 @@ procedure TWebForm_full_request_review_approve.Button_approve_Click
 begin
   if CheckBox_approve.checked then begin
     p.biz_emsof_requests.Approve(session['e_item'],session['account_descriptor'].tostring);
-    server.Transfer(stack(session['waypoint_stack']).Pop.tostring);
+    BackTrack;
   end;
 end;
 
