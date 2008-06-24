@@ -175,6 +175,12 @@ type
       amendment_num_string: string;
       regional_staffer_user_id: string
       );
+    procedure BindValuesToServices
+      (
+      sort_order: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
     function CountyApprovalTimestampOf(master_id: string): datetime;
     function CountyCodeOfMasterId(master_id: string): string;
     function CountyDictumIdOf(master_id: string): string;
@@ -678,6 +684,16 @@ begin
     amendment_num_string,
     biz_regional_staffers.RegionCodeOf(regional_staffer_user_id)
     );
+end;
+
+procedure TClass_biz_emsof_requests.BindValuesToServices
+  (
+  sort_order: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  db_emsof_requests.BindValuesToServices(sort_order,be_order_ascending,target);
 end;
 
 function TClass_biz_emsof_requests.CountyCodeOfMasterId(master_id: string): string;

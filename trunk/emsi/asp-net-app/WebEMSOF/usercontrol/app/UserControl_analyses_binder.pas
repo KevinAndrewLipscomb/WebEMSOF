@@ -11,8 +11,8 @@ uses
   System.Web.UI,
   System.Web.UI.WebControls,
   System.Web.UI.HtmlControls,
-  UserControl_equipment_procurement_overview
-//  ,UserControl2
+  UserControl_equipment_procurement_overview,
+  UserControl_values_to_services
 //  ,UserControl3
   ;
 
@@ -56,7 +56,7 @@ uses
 
 const
   TSSI_EQUIPMENT_PROCUREMENT_OVERVIEW = 0;
-//  TSSI_1 = 1;
+  TSSI_VALUES_TO_SERVICES = 1;
 //  TSSI_2 = 2;
 
 procedure TWebUserControl_analyses_binder.Page_Load(sender: System.Object; e: System.EventArgs);
@@ -81,7 +81,7 @@ begin
   //
   if session['UserControl_analyses_binder.p'] <> nil then begin
     p := p_type(session['UserControl_analyses_binder.p']);
-    p.be_loaded := IsPostBack and (string(session['UserControl_member_binder_PlaceHolder_content']) = 'UserControl_analyses_binder');
+    p.be_loaded := IsPostBack;
     //
     // Dynamic controls must be re-added on each postback.
     //
@@ -93,13 +93,13 @@ begin
         'UserControl_equipment_procurement_overview',
         PlaceHolder_content
         );
-//    TSSI_1:
-//      p.content_id := AddIdentifiedControlToPlaceHolder
-//        (
-//        TWebUserControl2(LoadControl('~/usercontrol/app/UserControl2.ascx')),
-//        'UserControl2',
-//        PlaceHolder_content
-//        );
+    TSSI_VALUES_TO_SERVICES:
+      p.content_id := AddIdentifiedControlToPlaceHolder
+        (
+        TWebUserControl_values_to_services(LoadControl('~/usercontrol/app/UserControl_values_to_services.ascx')),
+        'UserControl_values_to_services',
+        PlaceHolder_content
+        );
 //    TSSI_2:
 //      p.content_id := AddIdentifiedControlToPlaceHolder
 //        (
@@ -112,7 +112,7 @@ begin
     //
     p.be_loaded := FALSE;
     //
-    p.tab_index := 0;
+    p.tab_index := TSSI_EQUIPMENT_PROCUREMENT_OVERVIEW;
     //
     p.content_id := AddIdentifiedControlToPlaceHolder
       (
@@ -141,13 +141,13 @@ begin
       'UserControl_equipment_procurement_overview',
       PlaceHolder_content
       );
-//  TSSI_1:
-//    p.content_id := AddIdentifiedControlToPlaceHolder
-//      (
-//      TWebUserControl2(LoadControl('~/usercontrol/app/UserControl2.ascx')).Fresh,
-//      'UserControl2',
-//      PlaceHolder_content
-//      );
+  TSSI_VALUES_TO_SERVICES:
+    p.content_id := AddIdentifiedControlToPlaceHolder
+      (
+      TWebUserControl_values_to_services(LoadControl('~/usercontrol/app/UserControl_values_to_services.ascx')).Fresh,
+      'UserControl_values_to_services',
+      PlaceHolder_content
+      );
 //  TSSI_2:
 //    p.content_id := AddIdentifiedControlToPlaceHolder
 //      (
@@ -178,8 +178,7 @@ begin
   // Indicate to children which content control was active on this pass, so that on subsequent passes a child can detect whether or
   // not it is already loaded in the user's browser.
   //
-  session.Remove(PlaceHolder_content.clientid);
-  session.Add(PlaceHolder_content.clientid,p.content_id);
+  SessionSet(PlaceHolder_content.clientid,p.content_id);
   //
   SessionSet('UserControl_analyses_binder.p',p);
   //

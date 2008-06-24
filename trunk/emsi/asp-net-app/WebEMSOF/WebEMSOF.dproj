@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <DCC_EnabledPackages>true</DCC_EnabledPackages>
-    <DCC_UsePackage>ki;""C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll"";C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
+    <DCC_UsePackage>ki;"C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll";C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
     <DCC_DCCCompiler>DCCIL</DCC_DCCCompiler>
     <DCC_DependencyCheckOutputName>bin\WebEMSOF.dll</DCC_DependencyCheckOutputName>
   </PropertyGroup>
@@ -348,6 +348,11 @@
       <Form>UserControl_precontent.TWebUserControl_precontent</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_values_to_services.pas">
+      <DependentUpon>usercontrol\app\UserControl_values_to_services.ascx</DependentUpon>
+      <Form>UserControl_values_to_services.TWebUserControl_values_to_services</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="usercontrol\ki\UserControl_bread_crumb_trail.pas">
       <DependentUpon>usercontrol\ki\UserControl_bread_crumb_trail.ascx</DependentUpon>
       <Form>UserControl_bread_crumb_trail.TWebUserControl_bread_crumb_trail</Form>
@@ -415,6 +420,7 @@
     <None Include="usercontrol\app\UserControl_match_level.ascx" />
     <None Include="usercontrol\app\UserControl_postcontent.ascx" />
     <None Include="usercontrol\app\UserControl_precontent.ascx" />
+    <None Include="usercontrol\app\UserControl_values_to_services.ascx" />
     <None Include="usercontrol\ki\UserControl_bread_crumb_trail.ascx" />
     <None Include="usercontrol\ki\UserControl_drop_down_date.ascx" />
     <None Include="usercontrol\ki\UserControl_print_div.ascx" />

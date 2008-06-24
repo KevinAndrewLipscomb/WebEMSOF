@@ -69,7 +69,8 @@ uses
   UserControl_equipment_procurement_overview in 'usercontrol\app\UserControl_equipment_procurement_overview.pas' {UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview: ki_web_ui.usercontrol_class},
   analyses in 'protected\analyses.pas' {analyses.TWebForm_analyses: ki_web_ui.page_class},
   UserControl_analyses_binder in 'usercontrol\app\UserControl_analyses_binder.pas' {UserControl_analyses_binder.TWebUserControl_analyses_binder: ki_web_ui.usercontrol_class},
-  equipment_procurement_detail in 'protected\equipment_procurement_detail.pas' {equipment_procurement_detail.TWebForm_equipment_procurement_detail: ki_web_ui.page_class};
+  equipment_procurement_detail in 'protected\equipment_procurement_detail.pas' {equipment_procurement_detail.TWebForm_equipment_procurement_detail: ki_web_ui.page_class},
+  UserControl_values_to_services in 'usercontrol\app\UserControl_values_to_services.pas' {UserControl_values_to_services.TWebUserControl_values_to_services: ki_web_ui.usercontrol_class};
 
 //
 // General Information about an assembly is controlled through the following

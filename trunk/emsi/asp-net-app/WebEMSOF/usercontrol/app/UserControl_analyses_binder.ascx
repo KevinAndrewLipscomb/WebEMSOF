@@ -7,6 +7,7 @@
 		  <iewc:TabStrip id="TabStrip_control" runat="server" tabselectedstyle="padding:10;border-top:thin solid silver;border-left:thin solid silver;border-right:thin solid silver;background-color:white;font-weight:bold;"
 			   tabdefaultstyle="padding:10;border-top:thin solid white;border-left:thin solid white;border-right:thin solid white;background-color:silver;" forecolor="Blue" tabhoverstyle="background-color:gainsboro;" width="100%" autopostback="True">
 		  <iewc:Tab text="Equipment Procurement Overview"></iewc:Tab>
+		  <iewc:Tab text="Values to services"></iewc:Tab>
 		  </iewc:TabStrip>
 		</td>
 	  </tr>
