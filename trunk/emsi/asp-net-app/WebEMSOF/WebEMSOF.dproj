@@ -327,6 +327,8 @@
     </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_common_header_bar.pas">
       <DependentUpon>usercontrol\app\UserControl_common_header_bar.ascx</DependentUpon>
+      <Form>UserControl_common_header_bar.TWebUserControl_common_header_bar</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_equipment_procurement_overview.pas">
       <DependentUpon>usercontrol\app\UserControl_equipment_procurement_overview.ascx</DependentUpon>

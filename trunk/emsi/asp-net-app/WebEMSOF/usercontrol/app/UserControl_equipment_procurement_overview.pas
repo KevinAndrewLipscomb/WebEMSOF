@@ -276,7 +276,14 @@ end;
 
 procedure TWebUserControl_equipment_procurement_overview.Bind;
 begin
-  p.biz_emsof_requests.BindEquipmentProcurementOverview(p.cycle,p.sort_order,p.be_sort_order_ascending,GridView_control);
+  p.biz_emsof_requests.BindEquipmentProcurementOverview
+    (
+    p.cycle,
+    p.sort_order,
+    p.be_sort_order_ascending,
+    GridView_control,
+    not p.be_interactive
+    );
 end;
 
 end.

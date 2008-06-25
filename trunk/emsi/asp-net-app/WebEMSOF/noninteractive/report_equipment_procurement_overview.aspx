@@ -29,7 +29,7 @@
               <li><p>Monitor this data annually to see if group purchasing projects are indicated.
 </p></li>
 						  <li>
-							<p>Visit the <asp:label id="Label_application_name_1" runat="server"></asp:label>website to use additional features, such as prior cycle selection,&nbsp;sorting, and drill-downs:
+							<p>Visit the <asp:label id="Label_application_name_1" runat="server"></asp:label> website to use additional features, such as prior cycle selection,&nbsp;sorting, and drill-downs:
 </p>
 							<blockquote>
 							  <ASP:HyperLink id="HyperLink_web_site" runat="server" font-bold="True"></ASP:HyperLink>
