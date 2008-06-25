@@ -102,7 +102,8 @@ type
       fy_id: string;
       sort_order: string;
       be_order_ascending: boolean;
-      target: system.object
+      target: system.object;
+      do_log: boolean = TRUE
       );
     procedure BindOverviewAll
       (
@@ -707,10 +708,41 @@ procedure TClass_db_emsof_requests.BindEquipmentProcurementOverview
   fy_id: string;
   sort_order: string;
   be_order_ascending: boolean;
-  target: system.object
+  target: system.object;
+  do_log: boolean = TRUE
   );
+var
+  metric_from_where_clause: string;
 begin
+  //
+  metric_from_where_clause := EMPTY
+  + ' from emsof_request_detail'
+  +   ' join eligible_provider_equipment_list on'
+  +     ' (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+  +   ' join fiscal_year on'
+  +     ' (fiscal_year.id=eligible_provider_equipment_list.fiscal_year_id)'
+  + ' where fiscal_year_id = "' + fy_id + '"';
+  //
   self.Open;
+  //
+  if do_log then begin
+    mysqlcommand.Create
+      (
+      db_trail.Saved
+        (
+        'replace indicator_equipment_quantities (fiscal_year_id,description,quantity)'
+        + ' select fiscal_year_id'
+        +   ' , description'
+        +   ' , sum(actual_quantity) as quantity'
+        + metric_from_where_clause
+        + ' group by eligible_provider_equipment_list.description'
+        ),
+      connection
+      )
+      .ExecuteNonQuery;
+    //
+  end;
+  //
   if be_order_ascending then begin
     sort_order := sort_order.Replace('%',' asc');
   end else begin
@@ -723,12 +755,7 @@ begin
     + ' , sum(actual_emsof_ante) as emsof_part'
     + ' , sum(actual_subtotal_cost) as overall_cost'
     + ' , (sum(actual_subtotal_cost)/sum(actual_quantity)) as avg_unit_cost'
-    + ' from emsof_request_detail'
-      + ' join eligible_provider_equipment_list on'
-        + ' (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
-      + ' join fiscal_year on'
-        + ' (fiscal_year.id=eligible_provider_equipment_list.fiscal_year_id)'
-    + ' where fiscal_year_id = "' + fy_id + '"'
+    + metric_from_where_clause
     + ' group by eligible_provider_equipment_list.code'
     + ' order by ' + sort_order,
     connection

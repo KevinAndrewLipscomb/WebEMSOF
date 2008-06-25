@@ -128,7 +128,8 @@ type
       fy_id: string;
       sort_order: string;
       be_order_ascending: boolean;
-      target: system.object
+      target: system.object;
+      do_log: boolean = TRUE
       );
     procedure BindDetail
       (
@@ -594,10 +595,11 @@ procedure TClass_biz_emsof_requests.BindEquipmentProcurementOverview
   fy_id: string;
   sort_order: string;
   be_order_ascending: boolean;
-  target: system.object
+  target: system.object;
+  do_log: boolean = TRUE
   );
 begin
-  db_emsof_requests.BindEquipmentProcurementOverview(fy_id,sort_order,be_order_ascending,target);
+  db_emsof_requests.BindEquipmentProcurementOverview(fy_id,sort_order,be_order_ascending,target,do_log);
 end;
 
 procedure TClass_biz_emsof_requests.BindDetail
