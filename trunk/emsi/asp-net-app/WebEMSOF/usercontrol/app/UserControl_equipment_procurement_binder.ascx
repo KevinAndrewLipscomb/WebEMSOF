@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_analyses_binder.pas" Inherits="UserControl_analyses_binder.TWebUserControl_analyses_binder"%>
+<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_equipment_procurement_binder.pas" Inherits="UserControl_equipment_procurement_binder.TWebUserControl_equipment_procurement_binder"%>
 <%@ Register TagPrefix="iewc" Namespace="Microsoft.Web.UI.WebControls" Assembly="Microsoft.Web.UI.WebControls, Version=1.0.2.226, Culture=neutral, PublicKeyToken=31bf3856ad364e35" %>
 <%@ Import namespace="Microsoft.Web.UI.WebControls"%>
   <table cellspacing="0" cellpadding="0" border="0">
@@ -6,8 +6,8 @@
 		<td>
 		  <iewc:TabStrip id="TabStrip_control" runat="server" tabselectedstyle="padding:10;border-top:thin solid silver;border-left:thin solid silver;border-right:thin solid silver;background-color:white;font-weight:bold;"
 			   tabdefaultstyle="padding:10;border-top:thin solid white;border-left:thin solid white;border-right:thin solid white;background-color:silver;" forecolor="Blue" tabhoverstyle="background-color:gainsboro;" width="100%" autopostback="True">
-		  <iewc:Tab text="Equipment Procurement"></iewc:Tab>
-		  <iewc:Tab text="Values to services"></iewc:Tab>
+		  <iewc:Tab text="Snapshot"></iewc:Tab>
+		  <iewc:Tab text="Serial"></iewc:Tab>
 		  </iewc:TabStrip>
 		</td>
 	  </tr>

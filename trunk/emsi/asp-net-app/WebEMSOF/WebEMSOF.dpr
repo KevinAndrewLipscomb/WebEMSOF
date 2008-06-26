@@ -70,7 +70,10 @@ uses
   analyses in 'protected\analyses.pas' {analyses.TWebForm_analyses: ki_web_ui.page_class},
   UserControl_analyses_binder in 'usercontrol\app\UserControl_analyses_binder.pas' {UserControl_analyses_binder.TWebUserControl_analyses_binder: ki_web_ui.usercontrol_class},
   equipment_procurement_detail in 'protected\equipment_procurement_detail.pas' {equipment_procurement_detail.TWebForm_equipment_procurement_detail: ki_web_ui.page_class},
-  UserControl_values_to_services in 'usercontrol\app\UserControl_values_to_services.pas' {UserControl_values_to_services.TWebUserControl_values_to_services: ki_web_ui.usercontrol_class};
+  UserControl_values_to_services in 'usercontrol\app\UserControl_values_to_services.pas' {UserControl_values_to_services.TWebUserControl_values_to_services: ki_web_ui.usercontrol_class},
+  UserControl_serial_indicator_equipment_quantities in 'usercontrol\app\UserControl_serial_indicator_equipment_quantities.pas' {UserControl_serial_indicator_equipment_quantities.TWebUserControl_serial_indicator_equipment_quantities: ki_web_ui.usercontrol_class},
+  UserControl_equipment_procurement_binder in 'usercontrol\app\UserControl_equipment_procurement_binder.pas' {UserControl_equipment_procurement_binder.TWebUserControl_equipment_procurement_binder: ki_web_ui.usercontrol_class},
+  serial_indicator_control_chart in 'serial_indicator_control_chart.pas' {serial_indicator_control_chart.TWebForm1: system.web.ui.page};
 
 //
 // General Information about an assembly is controlled through the following
