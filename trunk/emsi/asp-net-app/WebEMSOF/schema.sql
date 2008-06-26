@@ -338,9 +338,24 @@ INSERT INTO fy_calendar (id, fiscal_year_id, milestone_code, value) VALUES
 
 -- --------------------------------------------------------
 
--- 
+--
+-- Table structure for table `indicator_equipment_quantities`
+--
+
+DROP TABLE IF EXISTS `indicator_equipment_quantities`;
+CREATE TABLE IF NOT EXISTS `indicator_equipment_quantities` (
+  `fiscal_year_id` smallint unsigned NOT NULL,
+  `description` varchar(127) NOT NULL,
+  `quantity` INTEGER unsigned NOT NULL,
+  PRIMARY KEY  (`fiscal_year_id`,`description`),
+  KEY `description` (`description`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `item_status_code_description_map`
--- 
+--
 
 DROP TABLE IF EXISTS item_status_code_description_map;
 CREATE TABLE item_status_code_description_map (
@@ -749,9 +764,16 @@ ALTER TABLE `fy_calendar`
   ADD CONSTRAINT fy_calendar_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id),
   ADD CONSTRAINT fy_calendar_ibfk_2 FOREIGN KEY (milestone_code) REFERENCES milestone_code_name_map (`code`);
 
--- 
+--
+-- Constraints for table `indicator_equipment_quantities`
+--
+ALTER TABLE `indicator_equipment_quantities`
+  ADD CONSTRAINT `indicator_equipment_quantities_fiscal_year_id` FOREIGN KEY `fiscal_year_id` (`fiscal_year_id`) REFERENCES `fiscal_year` (`id`),
+  ADD CONSTRAINT `indicator_equipment_quantities_description` FOREIGN KEY `description` (`description`) REFERENCES `eligible_provider_equipment_list` (`description`);
+
+--
 -- Constraints for table `region_dictated_appropriation`
--- 
+--
 ALTER TABLE `region_dictated_appropriation`
   ADD CONSTRAINT region_dictated_appropriation_ibfk_1 FOREIGN KEY (state_dictated_appropriation_id) REFERENCES state_dictated_appropriation (id),
   ADD CONSTRAINT region_dictated_appropriation_ibfk_2 FOREIGN KEY (county_code) REFERENCES county_code_name_map (`code`);
