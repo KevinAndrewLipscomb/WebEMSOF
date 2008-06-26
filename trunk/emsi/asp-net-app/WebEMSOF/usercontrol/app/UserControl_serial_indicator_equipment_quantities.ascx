@@ -12,7 +12,7 @@
           </tr>
           <tr>
             <td>
-              <p>This control chart shows the procured quantity of the specified kind of equipment over time.&nbsp; Data points are logged at the <em>end</em> of each fiscal cycle.</p>
+              <p>This control chart shows the procured quantity of equipment over time.&nbsp; Data points are logged at the <em>end</em> of each fiscal cycle.</p>
               <p><img id="Image_control" runat="server" width="781" height="417" src="~/serial_indicator_control_chart.aspx?indicator=equipment_quantities&amp;description=" /></p>
             </td>
           </tr>
