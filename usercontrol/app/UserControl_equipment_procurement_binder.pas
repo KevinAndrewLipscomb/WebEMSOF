@@ -1,4 +1,4 @@
-unit UserControl_analyses_binder;
+unit UserControl_equipment_procurement_binder;
 
 interface
 
@@ -11,10 +11,10 @@ uses
   System.Web.UI,
   System.Web.UI.WebControls,
   System.Web.UI.HtmlControls,
-  UserControl_equipment_procurement_binder,
-  UserControl_values_to_services
+  UserControl_equipment_procurement_overview,
+  UserControl_serial_indicator_equipment_quantities
 //  ,UserControl3
-  ;
+;
 
 type
   p_type =
@@ -23,11 +23,11 @@ type
     content_id: string;
     tab_index: cardinal;
     END;
-  TWebUserControl_analyses_binder = class(ki_web_ui.usercontrol_class)
+  TWebUserControl_equipment_procurement_binder = class(ki_web_ui.usercontrol_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure TWebUserControl_analyses_binder_PreRender(sender: System.Object;
+    procedure TWebUserControl_equipment_procurement_binder_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure TabStrip_control_SelectedIndexChange(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
@@ -44,7 +44,7 @@ type
   public
     { Public Declarations }
   published
-    function Fresh: TWebUserControl_analyses_binder;
+    function Fresh: TWebUserControl_equipment_procurement_binder;
   end;
 
 implementation
@@ -55,11 +55,11 @@ uses
   system.configuration;
 
 const
-  TSSI_equipment_procurement_binder = 0;
-  TSSI_VALUES_TO_SERVICES = 1;
+  TSSI_SNAPSHOT = 0;
+  TSSI_SERIAL = 1;
 //  TSSI_2 = 2;
 
-procedure TWebUserControl_analyses_binder.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebUserControl_equipment_procurement_binder.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   //
   if not p.be_loaded then begin
@@ -71,7 +71,7 @@ begin
   //
 end;
 
-procedure TWebUserControl_analyses_binder.OnInit(e: System.EventArgs);
+procedure TWebUserControl_equipment_procurement_binder.OnInit(e: System.EventArgs);
 begin
   //
   // Required for Designer support
@@ -79,25 +79,25 @@ begin
   InitializeComponent;
   inherited OnInit(e);
   //
-  if session['UserControl_analyses_binder.p'] <> nil then begin
-    p := p_type(session['UserControl_analyses_binder.p']);
-    p.be_loaded := IsPostBack;
+  if session['UserControl_equipment_procurement_binder.p'] <> nil then begin
+    p := p_type(session['UserControl_equipment_procurement_binder.p']);
+    p.be_loaded := IsPostBack and (string(session['UserControl_analyses_binder_PlaceHolder_content']) = 'UserControl_equipment_procurement_binder');
     //
     // Dynamic controls must be re-added on each postback.
     //
     case p.tab_index of
-    TSSI_equipment_procurement_binder:
+    TSSI_SNAPSHOT:
       p.content_id := AddIdentifiedControlToPlaceHolder
         (
-        TWebUserControl_equipment_procurement_binder(LoadControl('~/usercontrol/app/UserControl_equipment_procurement_binder.ascx')),
-        'UserControl_equipment_procurement_binder',
+        TWebUserControl_equipment_procurement_overview(LoadControl('~/usercontrol/app/UserControl_equipment_procurement_overview.ascx')),
+        'UserControl_equipment_procurement_overview',
         PlaceHolder_content
         );
-    TSSI_VALUES_TO_SERVICES:
+    TSSI_SERIAL:
       p.content_id := AddIdentifiedControlToPlaceHolder
         (
-        TWebUserControl_values_to_services(LoadControl('~/usercontrol/app/UserControl_values_to_services.ascx')),
-        'UserControl_values_to_services',
+        TWebUserControl_serial_indicator_equipment_quantities(LoadControl('~/usercontrol/app/UserControl_serial_indicator_equipment_quantities.ascx')),
+        'UserControl_serial_indicator_equipment_quantities',
         PlaceHolder_content
         );
 //    TSSI_2:
@@ -112,12 +112,12 @@ begin
     //
     p.be_loaded := FALSE;
     //
-    p.tab_index := TSSI_equipment_procurement_binder;
+    p.tab_index := TSSI_SNAPSHOT;
     //
     p.content_id := AddIdentifiedControlToPlaceHolder
       (
-      TWebUserControl_equipment_procurement_binder(LoadControl('~/usercontrol/app/UserControl_equipment_procurement_binder.ascx')).Fresh,
-      'UserControl_equipment_procurement_binder',
+      TWebUserControl_equipment_procurement_overview(LoadControl('~/usercontrol/app/UserControl_equipment_procurement_overview.ascx')).Fresh,
+      'UserControl_equipment_procurement_overview',
       PlaceHolder_content
       );
     //
@@ -125,7 +125,7 @@ begin
   //
 end;
 
-procedure TWebUserControl_analyses_binder.TabStrip_control_SelectedIndexChange(sender: System.Object;
+procedure TWebUserControl_equipment_procurement_binder.TabStrip_control_SelectedIndexChange(sender: System.Object;
   e: System.EventArgs);
 begin
   //
@@ -134,18 +134,18 @@ begin
   PlaceHolder_content.controls.Clear;
   //
   case p.tab_index of
-  TSSI_equipment_procurement_binder:
+  TSSI_SNAPSHOT:
     p.content_id := AddIdentifiedControlToPlaceHolder
       (
-      TWebUserControl_equipment_procurement_binder(LoadControl('~/usercontrol/app/UserControl_equipment_procurement_binder.ascx')).Fresh,
-      'UserControl_equipment_procurement_binder',
+      TWebUserControl_equipment_procurement_overview(LoadControl('~/usercontrol/app/UserControl_equipment_procurement_overview.ascx')).Fresh,
+      'UserControl_equipment_procurement_overview',
       PlaceHolder_content
       );
-  TSSI_VALUES_TO_SERVICES:
+  TSSI_SERIAL:
     p.content_id := AddIdentifiedControlToPlaceHolder
       (
-      TWebUserControl_values_to_services(LoadControl('~/usercontrol/app/UserControl_values_to_services.ascx')).Fresh,
-      'UserControl_values_to_services',
+      TWebUserControl_serial_indicator_equipment_quantities(LoadControl('~/usercontrol/app/UserControl_serial_indicator_equipment_quantities.ascx')).Fresh,
+      'UserControl_serial_indicator_equipment_quantities',
       PlaceHolder_content
       );
 //  TSSI_2:
@@ -163,15 +163,15 @@ end;
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebUserControl_analyses_binder.InitializeComponent;
+procedure TWebUserControl_equipment_procurement_binder.InitializeComponent;
 begin
   Include(Self.TabStrip_control.SelectedIndexChange, Self.TabStrip_control_SelectedIndexChange);
   Include(Self.Load, Self.Page_Load);
-  Include(Self.PreRender, Self.TWebUserControl_analyses_binder_PreRender);
+  Include(Self.PreRender, Self.TWebUserControl_equipment_procurement_binder_PreRender);
 end;
 {$ENDREGION}
 
-procedure TWebUserControl_analyses_binder.TWebUserControl_analyses_binder_PreRender(sender: System.Object;
+procedure TWebUserControl_equipment_procurement_binder.TWebUserControl_equipment_procurement_binder_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
   //
@@ -180,13 +180,13 @@ begin
   //
   SessionSet(PlaceHolder_content.clientid,p.content_id);
   //
-  SessionSet('UserControl_analyses_binder.p',p);
+  SessionSet('UserControl_equipment_procurement_binder.p',p);
   //
 end;
 
-function TWebUserControl_analyses_binder.Fresh: TWebUserControl_analyses_binder;
+function TWebUserControl_equipment_procurement_binder.Fresh: TWebUserControl_equipment_procurement_binder;
 begin
-  session.Remove('UserControl_analyses_binder.p');
+  session.Remove('UserControl_equipment_procurement_binder.p');
   Fresh := self;
 end;
 

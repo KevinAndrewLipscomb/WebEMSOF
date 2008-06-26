@@ -4,12 +4,11 @@ interface
 
 uses
   Class_biz_match_level,
-  Class_db_equipment;
-
-const
-  ID = '$Id$';
+  Class_db_equipment,
+  system.collections;
 
 type
+  serial_indicator_rec_type = Class_db_equipment.serial_indicator_rec_type;
   TClass_biz_equipment = class
   private
     db_equipment: TClass_db_equipment;
@@ -21,11 +20,18 @@ type
       match_level_enum: Class_biz_match_level.nominal_type
       )
       : boolean;
+    procedure BindDescriptionsOnlyToListControl(target: system.object);
     procedure BindListControl
       (
       fy_id: string;
       target: system.object
       );
+    function SerialIndicatorData
+      (
+      indicator: string;
+      description: string
+      )
+      : queue;
   end;
 
 implementation
@@ -60,6 +66,11 @@ begin
   end;
 end;
 
+procedure TClass_biz_equipment.BindDescriptionsOnlyToListControl(target: system.object);
+begin
+  db_equipment.BindDescriptionsOnlyToListControl(target);
+end;
+
 procedure TClass_biz_equipment.BindListControl
   (
   fy_id: string;
@@ -67,6 +78,16 @@ procedure TClass_biz_equipment.BindListControl
   );
 begin
   db_equipment.BindListControl(fy_id,target);
+end;
+
+function TClass_biz_equipment.SerialIndicatorData
+  (
+  indicator: string;
+  description: string
+  )
+  : queue;
+begin
+  SerialIndicatorData := db_equipment.SerialIndicatorData(indicator,description);
 end;
 
 end.

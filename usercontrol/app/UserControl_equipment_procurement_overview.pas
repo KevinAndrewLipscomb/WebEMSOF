@@ -181,7 +181,7 @@ begin
   //
   if session['UserControl_equipment_procurement_overview.p'] <> nil then begin
     p := p_type(session['UserControl_equipment_procurement_overview.p']);
-    p.be_loaded := IsPostBack and (string(session['UserControl_analyses_binder_PlaceHolder_content']) = 'UserControl_equipment_procurement_overview');
+    p.be_loaded := IsPostBack and (string(session['UserControl_analyses_binder_UserControl_equipment_procurement_binder_PlaceHolder_content']) = 'UserControl_equipment_procurement_overview');
   end else begin
     //
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
