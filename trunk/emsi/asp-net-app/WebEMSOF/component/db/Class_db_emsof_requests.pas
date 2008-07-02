@@ -457,39 +457,55 @@ end;
 
 function TClass_db_emsof_requests.ArchiveMatured: queue;
 var
+  dr: mysqldatareader;
   id_q: queue;
-  join_clause: string;
-  where_deployed_clause: string;
+  target_id_clause: string;
 begin
+  //
   id_q := queue.Create;
-  join_clause := ' emsof_request_master'
-  + ' join emsof_request_detail on'
-    + ' (emsof_request_detail.master_id=emsof_request_master.id)'
-  + ' join eligible_provider_equipment_list on'
-    + ' (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)';
-  where_deployed_clause := ' where emsof_request_master.status_code = 14';
+  target_id_clause := EMPTY;
+  //
   self.Open;
-  mysqlcommand.Create
+  //
+  dr := mysqlcommand.Create
     (
-    db_trail.Saved
-      (
-      'update' + join_clause
-      + ' set emsof_request_master.status_code = 15'
-      + where_deployed_clause
-        + ' and emsof_request_master.id not in'
-          + ' ('
-          + ' select distinct emsof_request_master.id'
-          + ' from ' + join_clause
-            + where_deployed_clause
-            + ' and ISNULL(life_expectancy_years)'
-          + ' )'
-        + ' and state_approval_timestamp + INTERVAL life_expectancy_years YEAR < CURDATE()'
-      ),
+    'select emsof_request_master.id as master_id'
+    + ' from emsof_request_master'
+    +   ' join emsof_request_detail on'
+    +     ' (emsof_request_detail.master_id=emsof_request_master.id)'
+    +   ' join eligible_provider_equipment_list on'
+    +     ' (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+    + ' where emsof_request_master.status_code = 14'
+    + ' group by emsof_request_master.id'
+    +   ' having max((state_approval_timestamp + INTERVAL life_expectancy_years YEAR) - NOW()) < 0',
     connection
     )
-    .ExecuteNonQuery;
+    .ExecuteReader;
+  while dr.Read do begin
+    target_id_clause := target_id_clause + dr['master_id'].tostring + COMMA;
+  end;
+  target_id_clause := target_id_clause.Trim([COMMA]);
+  dr.Close;
+  //
+  if target_id_clause <> EMPTY then begin
+    mysqlcommand.Create
+      (
+      db_trail.Saved
+        (
+        'update emsof_request_master'
+        + ' set emsof_request_master.status_code = 15'
+        + ' where id in (' + target_id_clause + ')'
+        ),
+      connection
+      )
+      .ExecuteNonQuery;
+    //
+  end;
+  //
   self.Close;
+  //
   ArchiveMatured := id_q;
+  //
 end;
 
 function TClass_db_emsof_requests.BeDeadlineExempt(master_id: string): boolean;
