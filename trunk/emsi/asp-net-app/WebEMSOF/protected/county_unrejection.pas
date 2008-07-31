@@ -120,11 +120,13 @@ procedure TWebForm_county_unrejection.LinkButton_unreject_all_Click(sender: Syst
 var
   i: cardinal;
 begin
-  for i := 0 to DataGrid_unrejectable_requests.items.Count - 1 do begin
-    p.biz_emsof_requests.Unreject
-      (DataGrid_unrejectable_requests.items[i],'county','The ' + Label_account_descriptor.text + ' EMSOF Coordinator');
+  if DataGrid_unrejectable_requests.items.count > 0 then begin
+    for i := 0 to DataGrid_unrejectable_requests.items.count - 1 do begin
+      p.biz_emsof_requests.Unreject
+        (DataGrid_unrejectable_requests.items[i],'county','The ' + Label_account_descriptor.text + ' EMSOF Coordinator');
+    end;
+    Bind;
   end;
-  Bind;
 end;
 
 procedure TWebForm_county_unrejection.LinkButton_county_dictated_appropriations_Click(sender: System.Object;
