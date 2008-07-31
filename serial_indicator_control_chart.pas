@@ -81,13 +81,15 @@ begin
     Safe(request['indicator'],ECMASCRIPT_WORD),
     Safe(server.UrlDecode(request['description']),PUNCTUATED)
     );
-  for i := 0 to (history.Count - 1) do begin
-    datum := serial_indicator_rec_type(history.Dequeue);
-    chart.chartdata.AddNewSampleRecord
-      (
-      chartcalendar.Create(datum.year,5,31),
-      doublearray.Create([datum.value])
-      );
+  if history.count > 0 then begin
+    for i := 0 to (history.count - 1) do begin
+      datum := serial_indicator_rec_type(history.Dequeue);
+      chart.chartdata.AddNewSampleRecord
+        (
+        chartcalendar.Create(datum.year,5,31),
+        doublearray.Create([datum.value])
+        );
+    end;
   end;
   chart.AutoCalculatePrimaryControlLimits;
   chart.AutoScalePrimaryChartYRange;
