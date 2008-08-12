@@ -73,7 +73,9 @@ uses
   UserControl_values_to_services in 'usercontrol\app\UserControl_values_to_services.pas' {UserControl_values_to_services.TWebUserControl_values_to_services: ki_web_ui.usercontrol_class},
   UserControl_serial_indicator_equipment_quantities in 'usercontrol\app\UserControl_serial_indicator_equipment_quantities.pas' {UserControl_serial_indicator_equipment_quantities.TWebUserControl_serial_indicator_equipment_quantities: ki_web_ui.usercontrol_class},
   UserControl_equipment_procurement_binder in 'usercontrol\app\UserControl_equipment_procurement_binder.pas' {UserControl_equipment_procurement_binder.TWebUserControl_equipment_procurement_binder: ki_web_ui.usercontrol_class},
-  serial_indicator_control_chart in 'serial_indicator_control_chart.pas' {serial_indicator_control_chart.TWebForm1: system.web.ui.page};
+  serial_indicator_control_chart in 'serial_indicator_control_chart.pas' {serial_indicator_control_chart.TWebForm1: system.web.ui.page},
+  UserControl_session_interrupted in 'usercontrol\ki\UserControl_session_interrupted.pas',
+  timeout in 'timeout.pas' {timeout.TWebForm_timeout: ki_web_ui.page_class};
 
 //
 // General Information about an assembly is controlled through the following

@@ -80,8 +80,12 @@ end;
 
 procedure TWebForm_login.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
-  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
-    p := p_type(session['p']);
+  if IsPostback then begin
+    if assigned(session['p']) then begin
+      p := p_type(session['p']);
+    end else begin
+      server.Transfer('~/timeout.aspx');
+    end;
   end else begin
     Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - login';
     Label_application_name.text := configurationmanager.appsettings['application_name'];
