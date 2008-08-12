@@ -125,8 +125,12 @@ var
   county_dictated_deadline: system.datetime;
   make_appropriations_deadline: system.datetime;
 begin
-  if IsPostback and (session['p'].GetType.namespace = p.GetType.namespace) then begin
-    p := p_type(session['p']);
+  if IsPostback then begin
+    if assigned(session['p']) then begin
+      p := p_type(session['p']);
+    end else begin
+      server.Transfer('~/timeout.aspx');
+    end;
   end else begin
     if request.servervariables['URL'] = request.currentexecutionfilepath then begin
       session.Clear;
