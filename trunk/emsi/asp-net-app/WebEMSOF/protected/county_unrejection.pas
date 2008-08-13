@@ -80,8 +80,8 @@ end;
 procedure TWebForm_county_unrejection.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['county_unrejection.p']) then begin
+      p := p_type(session['county_unrejection.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -151,7 +151,7 @@ end;
 procedure TWebForm_county_unrejection.TWebForm_county_unrejection_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('county_unrejection.p',p);
 end;
 
 procedure TWebForm_county_unrejection.Datagrid_unrejectable_requests_ItemDataBound(sender: System.Object;

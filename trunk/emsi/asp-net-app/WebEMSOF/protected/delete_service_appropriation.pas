@@ -72,8 +72,8 @@ var
   service_name: string;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['delete_service_appropriation.p']) then begin
+      p := p_type(session['delete_service_appropriation.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -132,7 +132,7 @@ end;
 procedure TWebForm_delete_service_appropriation.TWebForm_delete_service_appropriation_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('delete_service_appropriation.p',p);
 end;
 
 procedure TWebForm_delete_service_appropriation.Button_yes_Click(sender: System.Object;

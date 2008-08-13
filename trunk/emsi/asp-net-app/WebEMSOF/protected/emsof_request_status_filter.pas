@@ -86,8 +86,8 @@ end;
 procedure TWebForm_emsof_request_status_filter.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['emsof_request_status_filter.p']) then begin
+      p := p_type(session['emsof_request_status_filter.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -158,7 +158,7 @@ procedure TWebForm_emsof_request_status_filter.TWebForm_emsof_request_status_fil
   e: System.EventArgs
   );
 begin
-  SessionSet('p',p);
+  SessionSet('emsof_request_status_filter.p',p);
 end;
 
 procedure TWebForm_emsof_request_status_filter.DataGrid_requests_ItemDataBound

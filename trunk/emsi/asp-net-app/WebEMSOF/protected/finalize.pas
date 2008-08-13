@@ -130,8 +130,8 @@ var
   max_reimbursement: decimal;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['finalize.p']) then begin
+      p := p_type(session['finalize.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -248,7 +248,7 @@ end;
 procedure TWebForm_finalize.TWebForm_finalize_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('finalize.p',p);
 end;
 
 procedure TWebForm_finalize.LinkButton_request_overview_bottom_Click(sender: System.Object;

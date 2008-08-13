@@ -70,8 +70,8 @@ var
   email_address: string;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['change_email_address.p']) then begin
+      p := p_type(session['change_email_address.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -115,7 +115,7 @@ end;
 procedure TWebForm_change_email_address.TWebForm_change_email_address_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('change_email_address.p',p);
 end;
 
 procedure TWebForm_change_email_address.CustomValidator_nominal_email_address_ServerValidate(source: System.Object;

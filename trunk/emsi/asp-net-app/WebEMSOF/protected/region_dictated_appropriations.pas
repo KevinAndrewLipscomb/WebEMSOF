@@ -115,8 +115,8 @@ var
   dr_appropriation_attribs: mysqldatareader;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['region_dictated_appropriations.p']) then begin
+      p := p_type(session['region_dictated_appropriations.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -196,7 +196,7 @@ end;
 procedure TWebForm_region_dictated_appropriations.TWebForm_region_dictated_appropriations_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('region_dictated_appropriations.p',p);
 end;
 
 procedure TWebForm_region_dictated_appropriations.DataGrid_county_appropriations_UpdateCommand(source: System.Object;

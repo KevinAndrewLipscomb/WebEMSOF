@@ -66,8 +66,8 @@ var
   max_fiscal_year_id_string: string;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['regional_staffer_fiscal_year_selection.p']) then begin
+      p := p_type(session['regional_staffer_fiscal_year_selection.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -162,7 +162,7 @@ end;
 procedure TWebForm_regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('regional_staffer_fiscal_year_selection.p',p);
 end;
 
 procedure TWebForm_regional_staffer_fiscal_year_selection.Button_continue_Click(sender: System.Object;

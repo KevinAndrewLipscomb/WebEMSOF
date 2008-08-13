@@ -74,8 +74,8 @@ end;
 procedure TWebForm_withdraw_request_item.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['withdraw_request_item.p']) then begin
+      p := p_type(session['withdraw_request_item.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -110,7 +110,7 @@ end;
 procedure TWebForm_withdraw_request_item.TWebForm_withdraw_request_item_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('withdraw_request_item.p',p);
 end;
 
 procedure TWebForm_withdraw_request_item.Button_no_Click(sender: System.Object;
