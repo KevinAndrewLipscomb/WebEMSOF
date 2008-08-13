@@ -86,8 +86,8 @@ end;
 procedure TWebForm_add_proof_of_payment.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['add_proof_of_payment.p']) then begin
+      p := p_type(session['add_proof_of_payment.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -167,7 +167,7 @@ end;
 procedure TWebForm_add_proof_of_payment.TWebForm_add_proof_of_payment_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('add_proof_of_payment.p',p);
 end;
 
 end.

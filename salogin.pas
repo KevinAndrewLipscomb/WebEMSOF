@@ -80,8 +80,8 @@ end;
 procedure TWebForm_salogin.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['salogin.p']) then begin
+      p := p_type(session['salogin.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -103,7 +103,7 @@ end;
 
 procedure TWebForm_salogin.TWebForm_salogin_PreRender(sender: System.Object; e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('salogin.p',p);
 end;
 
 procedure TWebForm_salogin.CustomValidator_account_exists_ServerValidate(source: System.Object;

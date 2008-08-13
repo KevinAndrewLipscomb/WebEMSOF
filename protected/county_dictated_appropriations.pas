@@ -126,8 +126,8 @@ var
   make_appropriations_deadline: system.datetime;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['county_dictated_appropriations.p']) then begin
+      p := p_type(session['county_dictated_appropriations.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -245,7 +245,7 @@ end;
 procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('county_dictated_appropriations.p',p);
 end;
 
 procedure TWebForm_county_dictated_appropriations.DataGrid_service_appropriations_SortCommand(source: System.Object;

@@ -64,8 +64,8 @@ var
   max_fiscal_year_id_string: string;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['county_overview.p']) then begin
+      p := p_type(session['county_overview.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -160,7 +160,7 @@ end;
 procedure TWebForm_county_overview.TWebForm_county_overview_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('county_overview.p',p);
 end;
 
 procedure TWebForm_county_overview.Button_continue_Click(sender: System.Object;

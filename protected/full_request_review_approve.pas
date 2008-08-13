@@ -171,8 +171,8 @@ var
   timestamp: datetime;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['full_request_review_approve.p']) then begin
+      p := p_type(session['full_request_review_approve.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -427,7 +427,7 @@ end;
 procedure TWebForm_full_request_review_approve.TWebForm_full_request_review_approve_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('full_request_review_approve.p',p);
 end;
 
 procedure TWebForm_full_request_review_approve.Button_disapprove_Click

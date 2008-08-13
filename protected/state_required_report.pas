@@ -95,8 +95,8 @@ var
   num_active_amendments: cardinal;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['state_required_report.p']) then begin
+      p := p_type(session['state_required_report.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -225,7 +225,7 @@ end;
 procedure TWebForm_state_required_report.TWebForm_state_required_report_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('state_required_report.p',p);
 end;
 
 procedure TWebForm_state_required_report.Bind;

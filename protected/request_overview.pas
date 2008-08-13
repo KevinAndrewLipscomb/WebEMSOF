@@ -111,8 +111,8 @@ var
   make_item_requests_deadline: system.datetime;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['request_overview.p']) then begin
+      p := p_type(session['request_overview.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -271,7 +271,7 @@ end;
 procedure TWebForm_request_overview.TWebForm_request_overview_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('request_overview.p',p);
 end;
 
 procedure TWebForm_request_overview.LinkButton_finalize_Click(sender: System.Object;

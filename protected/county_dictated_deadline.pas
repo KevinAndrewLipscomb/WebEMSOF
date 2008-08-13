@@ -67,8 +67,8 @@ end;
 procedure TWebForm_county_dictated_deadline.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['county_dictated_deadline.p']) then begin
+      p := p_type(session['county_dictated_deadline.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -102,7 +102,7 @@ end;
 procedure TWebForm_county_dictated_deadline.TWebForm_county_dictated_deadline_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('county_dictated_deadline.p',p);
 end;
 
 procedure TWebForm_county_dictated_deadline.LinkButton_cancel_Click(sender: System.Object;

@@ -58,8 +58,8 @@ end;
 procedure TWebForm_state_transmittal_complete.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['state_transmittal_complete.p']) then begin
+      p := p_type(session['state_transmittal_complete.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -94,7 +94,7 @@ end;
 procedure TWebForm_state_transmittal_complete.TWebForm_state_transmittal_complete_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('state_transmittal_complete.p',p);
 end;
 
 end.

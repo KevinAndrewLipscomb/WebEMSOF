@@ -66,8 +66,8 @@ end;
 procedure TWebForm_change_password.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['change_password.p']) then begin
+      p := p_type(session['change_password.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -96,7 +96,7 @@ end;
 procedure TWebForm_change_password.TWebForm_change_password_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('change_password.p',p);
 end;
 
 procedure TWebForm_change_password.Button_submit_Click(sender: System.Object;

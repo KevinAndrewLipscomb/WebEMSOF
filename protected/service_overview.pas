@@ -83,8 +83,8 @@ var
 //  make_item_requests_deadline: system.datetime;
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['service_overview.p']) then begin
+      p := p_type(session['service_overview.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -190,7 +190,7 @@ end;
 procedure TWebForm_service_overview.TWebForm_service_overview_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('service_overview.p',p);
 end;
 
 procedure TWebForm_service_overview.DataGrid_ItemCommand(source: System.Object;

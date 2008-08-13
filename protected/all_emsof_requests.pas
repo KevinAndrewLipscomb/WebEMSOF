@@ -81,8 +81,8 @@ end;
 procedure TWebForm_all_emsof_requests.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   if IsPostback then begin
-    if assigned(session['p']) then begin
-      p := p_type(session['p']);
+    if assigned(session['all_emsof_requests.p']) then begin
+      p := p_type(session['all_emsof_requests.p']);
     end else begin
       server.Transfer('~/timeout.aspx');
     end;
@@ -210,7 +210,7 @@ end;
 procedure TWebForm_all_emsof_requests.TWebForm_all_emsof_requests_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('p',p);
+  SessionSet('all_emsof_requests.p',p);
 end;
 
 procedure TWebForm_all_emsof_requests.Bind;
