@@ -764,7 +764,7 @@ begin
   end else begin
     sort_order := sort_order.Replace('%',' desc');
   end;
-  GridView(target).datasource := mysqlcommand.Create
+  DataGrid(target).datasource := mysqlcommand.Create
     (
     'select code,description'
     + ' , sum(actual_quantity) as quantity'
@@ -777,7 +777,7 @@ begin
     connection
     )
     .ExecuteReader;
-  GridView(target).DataBind;
+  DataGrid(target).DataBind;
   self.Close;
 end;
 

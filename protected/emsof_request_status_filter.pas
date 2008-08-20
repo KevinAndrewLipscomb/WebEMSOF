@@ -143,7 +143,7 @@ begin
     );
   TextBox_quick_message_subject.text := EMPTY;
   TextBox_quick_message_body.text := EMPTY;
-  Alert(LOGIC,NORMAL,'messagsnt','Message sent');
+  Alert(LOGIC,NORMAL,'messagsnt','Message sent',TRUE);
 end;
 
 procedure TWebForm_emsof_request_status_filter.LinkButton_retransmit_to_state_Click(sender: System.Object;

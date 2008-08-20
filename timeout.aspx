@@ -4,10 +4,13 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_session_interrupted" Src="~/usercontrol/ki/UserControl_session_interrupted.ascx" %>
+<%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
   <head>
     <title id="Title" runat="server"></title>
     <!-- $Id$ -->
+    <link href="../css/standard.css" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
@@ -17,6 +20,7 @@
       <uc2:UserControl_session_interrupted id="UserControl_session_interrupted_control" runat="server"></uc2:UserControl_session_interrupted>
       <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
       <p><sstchur:SmartScroller id="SmartScroller_control" runat="server" /></p>
+      <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>
     </form>
   </body>
 </html>

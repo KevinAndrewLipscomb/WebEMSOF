@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <DCC_EnabledPackages>true</DCC_EnabledPackages>
-    <DCC_UsePackage>ki;"C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll";C:\Inetpub\wwwroot\WebEMSOF\bin\System.Web.Extensions.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCSPCChartNet.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCChart2DNet.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
+    <DCC_UsePackage>ki;"C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll";"C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025\System.Web.Extensions.Design.dll";"C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin\AjaxControlToolkit.dll";C:\Inetpub\wwwroot\WebEMSOF\bin\System.Web.Extensions.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCSPCChartNet.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCChart2DNet.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
     <DCC_DCCCompiler>DCCIL</DCC_DCCCompiler>
     <DCC_DependencyCheckOutputName>bin\WebEMSOF.dll</DCC_DependencyCheckOutputName>
   </PropertyGroup>
@@ -35,9 +35,9 @@
     <DCC_DebugInfoInExe>True</DCC_DebugInfoInExe>
     <DCC_DebugVN>True</DCC_DebugVN>
     <DCC_ExeOutput>.\bin</DCC_ExeOutput>
-    <DCC_UnitSearchPath>component\biz;component\db;C:\Inetpub\wwwroot\WebEMSOF\bin;C:\Inetpub\wwwroot\WebEMSOF\lib\ki;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727</DCC_UnitSearchPath>
-    <DCC_ResourcePath>component\biz;component\db;C:\Inetpub\wwwroot\WebEMSOF\bin;C:\Inetpub\wwwroot\WebEMSOF\lib\ki;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727</DCC_ResourcePath>
-    <DCC_IncludePath>component\biz;component\db;C:\Inetpub\wwwroot\WebEMSOF\bin;C:\Inetpub\wwwroot\WebEMSOF\lib\ki;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727</DCC_IncludePath>
+    <DCC_UnitSearchPath>component\biz;component\db;C:\Inetpub\wwwroot\WebEMSOF\bin;C:\Inetpub\wwwroot\WebEMSOF\lib\ki;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin;C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025</DCC_UnitSearchPath>
+    <DCC_ResourcePath>component\biz;component\db;C:\Inetpub\wwwroot\WebEMSOF\bin;C:\Inetpub\wwwroot\WebEMSOF\lib\ki;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin;C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025</DCC_ResourcePath>
+    <DCC_IncludePath>component\biz;component\db;C:\Inetpub\wwwroot\WebEMSOF\bin;C:\Inetpub\wwwroot\WebEMSOF\lib\ki;C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin;C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025</DCC_IncludePath>
     <DCC_Define>DEBUG</DCC_Define>
     <DCC_Optimize>False</DCC_Optimize>
   </PropertyGroup>
@@ -104,13 +104,6 @@
       <AssemblyTag>$(SystemRoot)\Microsoft.NET\Framework\v2.0.50727\System.XML.dll</AssemblyTag>
       <LinkUnits>False</LinkUnits>
     </Reference>
-    <Reference Include="bin\Microsoft.Web.UI.WebControls.dll">
-      <AssemblyName>Microsoft.Web.UI.WebControls</AssemblyName>
-      <Version>1.0.2.226</Version>
-      <HintPath>bin\Microsoft.Web.UI.WebControls.dll</HintPath>
-      <AssemblyTag>bin\Microsoft.Web.UI.WebControls.dll</AssemblyTag>
-      <LinkUnits>False</LinkUnits>
-    </Reference>
     <Reference Include="bin\QCChart2DNet.dll">
       <AssemblyName>QCChart2DNet</AssemblyName>
       <Version>1.7.1.2</Version>
@@ -133,6 +126,21 @@
       <AssemblyTag>bin\System.Web.Extensions.dll</AssemblyTag>
       <LinkUnits>False</LinkUnits>
     </Reference>
+    <Reference Include="C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin\AjaxControlToolkit.dll">
+      <AssemblyName>AjaxControlToolkit</AssemblyName>
+      <Version>1.0.20229.20821</Version>
+      <HintPath>C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin\AjaxControlToolkit.dll</HintPath>
+      <AssemblyTag>C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin\AjaxControlToolkit.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
+    <Reference Include="C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025\System.Web.Extensions.Design.dll">
+      <AssemblyName>System.Web.Extensions.Design</AssemblyName>
+      <CopyLocal>False</CopyLocal>
+      <Version>1.0.61025.0</Version>
+      <HintPath>C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025\System.Web.Extensions.Design.dll</HintPath>
+      <AssemblyTag>C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025\System.Web.Extensions.Design.dll</AssemblyTag>
+      <LinkUnits>False</LinkUnits>
+    </Reference>
     <Reference Include="C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll">
       <AssemblyName>MySql.Data</AssemblyName>
       <Version>5.0.8.1</Version>
@@ -142,7 +150,7 @@
     </Reference>
     <Reference Include="lib\ki\ki.dll">
       <AssemblyName>ki</AssemblyName>
-      <Version>1.0.3145.35855</Version>
+      <Version>1.0.3148.18314</Version>
       <HintPath>lib\ki\ki.dll</HintPath>
       <AssemblyTag>lib\ki\ki.dll</AssemblyTag>
       <LinkUnits>False</LinkUnits>
@@ -392,6 +400,11 @@
       <Form>UserControl_serial_indicator_equipment_quantities.TWebUserControl_serial_indicator_equipment_quantities</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_update_progress_blocker.pas">
+      <DependentUpon>usercontrol\app\UserControl_update_progress_blocker.ascx</DependentUpon>
+      <Form>UserControl_update_progress_blocker.TWebUserControl_update_progress_blocker</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_values_to_services.pas">
       <DependentUpon>usercontrol\app\UserControl_values_to_services.ascx</DependentUpon>
       <Form>UserControl_values_to_services.TWebUserControl_values_to_services</Form>
@@ -471,6 +484,7 @@
     <None Include="usercontrol\app\UserControl_postcontent.ascx" />
     <None Include="usercontrol\app\UserControl_precontent.ascx" />
     <None Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx" />
+    <None Include="usercontrol\app\UserControl_update_progress_blocker.ascx" />
     <None Include="usercontrol\app\UserControl_values_to_services.ascx" />
     <None Include="usercontrol\ki\UserControl_bread_crumb_trail.ascx" />
     <None Include="usercontrol\ki\UserControl_drop_down_date.ascx" />

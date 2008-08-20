@@ -82,7 +82,7 @@ begin
     //
     RequireConfirmation(Button_delete,'Are you sure you want to delete this record?');
     //
-    Focus(TextBox_name);
+    Focus(TextBox_name,TRUE);
     //
     p.be_loaded := TRUE;
     //
@@ -182,7 +182,7 @@ begin
       Safe(TextBox_name.text,PUNCTUATED),
       factor
       );
-    Alert(USER,SUCCESS,'recsaved','Record saved.');
+    Alert(USER,SUCCESS,'recsaved','Record saved.',TRUE);
   end else begin
     ValidationAlert;
   end;
@@ -206,7 +206,7 @@ procedure TWebUserControl_match_level.LinkButton_reset_Click(sender: System.Obje
 begin
   Clear;
   TextBox_name.enabled := TRUE;
-  Focus(TextBox_name);
+  Focus(TextBox_name,TRUE);
 end;
 
 procedure TWebUserControl_match_level.LinkButton_search_Click(sender: System.Object;
