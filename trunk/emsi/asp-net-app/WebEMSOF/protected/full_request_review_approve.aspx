@@ -3,11 +3,14 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
   <head>
     <title id="Title" runat="server"></title>
     <!-- $Id$ -->
+    <link href="../css/standard.css" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
   <body bgcolor="white">
 	<form runat="server">
@@ -197,19 +200,18 @@
                             </ItemTemplate>
                           </ASP:TemplateColumn>
                           <ASP:TemplateColumn headertext="Actuals">
-                            <ItemTemplate>
-
-                              <html>
-                                <head></head>
-                                <body bgcolor="white">
-<small>Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "invoice_designator") %></b><br>Quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_quantity") %></b><br>Subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %></b><br>EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <b><%# DataBinder.Eval(Container.DataItem, "actual_emsof_ante", "{0:C}") %></b>
-
-
-
-</small>
-                                </body>
-                              </html>
-							</ItemTemplate>
+<ItemTemplate>
+  <small>
+    Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp;
+      <b><%# DataBinder.Eval(Container.DataItem, "invoice_designator") %></b><br>
+    Quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp;
+      <b><%# DataBinder.Eval(Container.DataItem, "actual_quantity") %></b><br>
+    Subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp;
+      <b><%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %></b><br>
+    EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp;
+      <b><%# DataBinder.Eval(Container.DataItem, "actual_emsof_ante", "{0:C}") %></b>
+  </small>
+</ItemTemplate>
 							<EditItemTemplate>
 <small>Invoice #/comment:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_invoice_designator" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "invoice_designator") %>'></ASP:TextBox><br>Actual quantity:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_quantity" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "actual_quantity") %>'></ASP:TextBox><br>Actual subtotal cost:<br>&nbsp;&nbsp;&nbsp;&nbsp; <ASP:TextBox id="TextBox_actual_subtotal_cost" runat="server" text='<%# DataBinder.Eval(Container.DataItem, "actual_subtotal_cost", "{0:C}") %>'></ASP:TextBox><br>EMSOF amount:<br>&nbsp;&nbsp;&nbsp;&nbsp; <i>(autocalculated)
 </i>
@@ -464,7 +466,7 @@
         </table>
       </p>
 </div>
-	  <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent><sstchur:SmartScroller runat="server" />
+	  <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent><sstchur:SmartScroller id="SmartScroller_control" runat="server" />
 	</form>
   </body>
 </html>

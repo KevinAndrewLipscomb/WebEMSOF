@@ -3,18 +3,20 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="sstchur" Namespace="sstchur.web.SmartNav" Assembly="sstchur.web.smartnav" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
-<html>
+<%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %><html>
   <head>
 	<title id="Title" runat="server"></title>
 	<!-- $Id$ -->
+    <link href="../css/standard.css" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
 
   <body bgcolor="white">
      <form runat="server">
-      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent><strong>Your service's profile</strong>&nbsp;&nbsp;&nbsp;&nbsp; 
-<uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
+      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent><strong>Your service's profile
+</strong>&nbsp;&nbsp;&nbsp;&nbsp; <uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
 <div id="Div_print_area">
 <p>
         <table cellspacing="0" cellpadding="0" width="%" border="1">
@@ -42,11 +44,15 @@
 						<p align="right">Type of license/recognition:<br><small>(Check all that apply.)
 </small>
 
+
+
 </p></td>
 		<td>
 		  <p>
 						  <ASP:CheckBox id="CheckBox_qrs" runat="server" text="QRS"></ASP:CheckBox>&nbsp;&nbsp; <ASP:CheckBox id="CheckBox_bls_amb" runat="server" text="BLS Ambulance"></ASP:CheckBox>&nbsp;&nbsp; <ASP:CheckBox id="CheckBox_als_amb" runat="server" text="ALS Ambulance"></ASP:CheckBox>&nbsp;&nbsp; <ASP:CheckBox id="CheckBox_als_squad" runat="server" text="ALS Squad"></ASP:CheckBox>&nbsp;&nbsp; <ASP:CheckBox id="CheckBox_air_amb" runat="server" text="Air Ambulance"></ASP:CheckBox>&nbsp;&nbsp; <ASP:CheckBox id="CheckBox_rescue" runat="server" text="Rescue"></ASP:CheckBox>
 		  
+
+
 
 </p></td>
                       <td></td>
@@ -91,6 +97,8 @@
 						<p align="right">Zip code: <br><small>(5 or 9 numerals only)
 </small>
 
+
+
 </p></td>
 		<td>
 						<ASP:TextBox id="TextBox_zip_code" runat="server" maxlength="9"></ASP:TextBox></td>
@@ -102,6 +110,8 @@
 	  <tr>
 		<td nowrap="true">						<p align="right">Federal Employer (tax) ID #: <br><small>(numerals only)
 </small>
+
+
 
 </p></td>
 </td>
@@ -125,6 +135,8 @@
 						<p align="right">Contact person's phone #: <br><small>(Include area code, numerals only)
 </small>
 
+
+
 </p></td>
         <td>
                         <ASP:TextBox id="TextBox_contact_person_phone_num" runat="server" maxlength="10"></ASP:TextBox></td>
@@ -142,4 +154,9 @@
                       <td></td>
                     </tr></table></td></tr></tbody></table></p>
 </div>
-	<uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent><sstchur:SmartScroller runat="server" /></form></body></html>
+	<uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
+      <p><sstchur:SmartScroller id="SmartScroller_control" runat="server" /></p>
+      <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>
+    </form>
+  </body>
+</html>

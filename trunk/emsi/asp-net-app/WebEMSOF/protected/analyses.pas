@@ -26,7 +26,7 @@ type
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
-    Title: System.Web.UI.HtmlControls.HtmlGenericControl;
+    Title: System.Web.UI.HtmlControls.HtmlTitle;
     PlaceHolder_analyses_binder: System.Web.UI.WebControls.PlaceHolder;
   protected
     procedure OnInit(e: EventArgs); override;
@@ -53,7 +53,7 @@ procedure TWebForm_analyses.Page_Load(sender: System.Object; e: System.EventArgs
 begin
   if not IsPostback then begin
     //
-    Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - analyses';
+    Title.text := configurationmanager.AppSettings['application_name'] + ' - analyses';
     //
   end;
 end;

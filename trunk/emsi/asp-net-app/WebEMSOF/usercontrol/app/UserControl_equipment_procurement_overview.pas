@@ -30,12 +30,11 @@ type
     procedure InitializeComponent;
     procedure TWebUserControl_equipment_procurement_overview_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure DropDownList_cycle_SelectedIndexChanged(sender: System.Object; 
+    procedure DropDownList_cycle_SelectedIndexChanged(sender: System.Object;
       e: System.EventArgs);
-    procedure GridView_control_Sorting(sender: System.Object; e: System.Web.UI.WebControls.GridViewSortEventArgs);
-    procedure GridView_control_RowDataBound(sender: System.Object; e: System.Web.UI.WebControls.GridViewRowEventArgs);
-    procedure GridView_control_SelectedIndexChanged(sender: System.Object; e: System.EventArgs);
-    procedure GridView_control_RowCreated(sender: System.Object; e: System.Web.UI.WebControls.GridViewRowEventArgs);
+    procedure DataGrid_control_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
+    procedure DataGrid_control_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
+    procedure DataGrid_control_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -44,7 +43,7 @@ type
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Label_application_name: System.Web.UI.WebControls.Label;
-    GridView_control: System.Web.UI.WebControls.GridView;
+    DataGrid_control: System.Web.UI.WebControls.DataGrid;
     DropDownList_cycle: System.Web.UI.WebControls.DropDownList;
   protected
     procedure OnInit(e: System.EventArgs); override;
@@ -158,7 +157,7 @@ begin
     //
     if not p.be_interactive then begin
       DropDownList_cycle.enabled := FALSE;
-      GridView_control.allowsorting := FALSE;
+      DataGrid_control.allowsorting := FALSE;
     end;
     //
     Bind;
@@ -204,10 +203,9 @@ end;
 procedure TWebUserControl_equipment_procurement_overview.InitializeComponent;
 begin
   Include(Self.DropDownList_cycle.SelectedIndexChanged, Self.DropDownList_cycle_SelectedIndexChanged);
-  Include(Self.GridView_control.Sorting, Self.GridView_control_Sorting);
-  Include(Self.GridView_control.RowDataBound, Self.GridView_control_RowDataBound);
-  Include(Self.GridView_control.SelectedIndexChanged, Self.GridView_control_SelectedIndexChanged);
-  Include(Self.GridView_control.RowCreated, Self.GridView_control_RowCreated);
+  Include(Self.DataGrid_control.ItemDataBound, Self.DataGrid_control_ItemDataBound);
+  Include(Self.DataGrid_control.SortCommand, Self.DataGrid_control_SortCommand);
+  Include(Self.DataGrid_control.ItemCommand, Self.DataGrid_control_ItemCommand);
   Include(Self.PreRender, Self.TWebUserControl_equipment_procurement_overview_PreRender);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -225,45 +223,43 @@ begin
   Fresh := self;
 end;
 
-procedure TWebUserControl_equipment_procurement_overview.GridView_control_RowCreated(sender: System.Object;
-  e: System.Web.UI.WebControls.GridViewRowEventArgs);
+procedure TWebUserControl_equipment_procurement_overview.DataGrid_control_ItemCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
-  if e.row.rowtype <> datacontrolrowtype.EMPTYDATAROW then begin
-    e.row.cells.item[TCI_CODE].visible := FALSE;
+  if e.item.itemtype in [listitemtype.ALTERNATINGITEM,listitemtype.ITEM,listitemtype.EDITITEM,listitemtype.SELECTEDITEM] then begin
+    SessionSet('equipment_procurement_cycle',p.cycle);
+    SessionSet('equipment_procurement_code',Safe(e.item.cells.item[TCI_CODE].text,NUM));
+    DropCrumbAndTransferTo('equipment_procurement_detail.aspx');
   end;
 end;
 
-procedure TWebUserControl_equipment_procurement_overview.GridView_control_SelectedIndexChanged(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebUserControl_equipment_procurement_overview.DataGrid_control_ItemDataBound(sender: System.Object;
+  e: System.Web.UI.WebControls.DataGridItemEventArgs);
+var
+  link_button: linkbutton;
 begin
-  SessionSet('equipment_procurement_cycle',p.cycle);
-  SessionSet('equipment_procurement_code',Safe(GridView_control.selectedrow.cells.item[TCI_CODE].text,NUM));
-  DropCrumbAndTransferTo('equipment_procurement_detail.aspx');
-end;
-
-procedure TWebUserControl_equipment_procurement_overview.GridView_control_RowDataBound(sender: System.Object;
-  e: System.Web.UI.WebControls.GridViewRowEventArgs);
-begin
+  e.item.cells.item[TCI_CODE].visible := FALSE;
   if p.be_interactive then begin
-    if e.row.rowtype = datacontrolrowtype.datarow then begin
-      linkbutton(e.row.cells.item[TCI_SELECT].controls.item[0]).text :=
-        ExpandTildePath(linkbutton(e.row.cells.item[TCI_SELECT].controls.item[0]).text);
+    if e.item.itemtype in [listitemtype.ALTERNATINGITEM,listitemtype.ITEM,listitemtype.EDITITEM,listitemtype.SELECTEDITEM] then begin
+      link_button := linkbutton(e.item.cells.item[TCI_SELECT].controls.item[0]);
+      link_button.text := ExpandTildePath(link_button.text);
+      scriptmanager.GetCurrent(page).RegisterPostBackControl(link_button);
     end;
   end else begin
-    e.row.cells.item[TCI_SELECT].visible := FALSE;
+    e.item.cells.item[TCI_SELECT].visible := FALSE;
   end;
 end;
 
-procedure TWebUserControl_equipment_procurement_overview.GridView_control_Sorting(sender: System.Object;
-  e: System.Web.UI.WebControls.GridViewSortEventArgs);
+procedure TWebUserControl_equipment_procurement_overview.DataGrid_control_SortCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
   if e.SortExpression = p.sort_order then begin
     p.be_sort_order_ascending := not p.be_sort_order_ascending;
   end else begin
-    p.sort_order := e.SortExpression;
+    p.sort_order := Safe(e.SortExpression,KI_SORT_EXPRESSION);
     p.be_sort_order_ascending := TRUE;
   end;
-  GridView_control.editindex := -1;
+  DataGrid_control.edititemindex := -1;
   Bind;
 end;
 
@@ -281,7 +277,7 @@ begin
     p.cycle,
     p.sort_order,
     p.be_sort_order_ascending,
-    GridView_control,
+    DataGrid_control,
     not p.be_interactive
     );
 end;

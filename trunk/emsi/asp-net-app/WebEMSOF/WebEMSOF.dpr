@@ -75,7 +75,8 @@ uses
   UserControl_equipment_procurement_binder in 'usercontrol\app\UserControl_equipment_procurement_binder.pas' {UserControl_equipment_procurement_binder.TWebUserControl_equipment_procurement_binder: ki_web_ui.usercontrol_class},
   serial_indicator_control_chart in 'serial_indicator_control_chart.pas' {serial_indicator_control_chart.TWebForm1: system.web.ui.page},
   UserControl_session_interrupted in 'usercontrol\ki\UserControl_session_interrupted.pas',
-  timeout in 'timeout.pas' {timeout.TWebForm_timeout: ki_web_ui.page_class};
+  timeout in 'timeout.pas' {timeout.TWebForm_timeout: ki_web_ui.page_class},
+  UserControl_update_progress_blocker in 'usercontrol\app\UserControl_update_progress_blocker.pas' {UserControl_update_progress_blocker.TWebUserControl_update_progress_blocker: ki_web_ui.usercontrol_class};
 
 //
 // General Information about an assembly is controlled through the following

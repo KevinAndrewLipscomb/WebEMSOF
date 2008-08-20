@@ -135,7 +135,7 @@ begin
     );
   TextBox_quick_message_subject.text := EMPTY;
   TextBox_quick_message_body.text := EMPTY;
-  Alert(LOGIC,NORMAL,'messagsnt','Message sent');
+  Alert(LOGIC,NORMAL,'messagsnt','Message sent',TRUE);
 end;
 
 procedure TWebForm_all_emsof_requests.DataGrid_requests_ItemCommand(source: System.Object;
