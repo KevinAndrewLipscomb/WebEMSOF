@@ -76,7 +76,12 @@ uses
   serial_indicator_control_chart in 'serial_indicator_control_chart.pas' {serial_indicator_control_chart.TWebForm1: system.web.ui.page},
   UserControl_session_interrupted in 'usercontrol\ki\UserControl_session_interrupted.pas',
   timeout in 'timeout.pas' {timeout.TWebForm_timeout: ki_web_ui.page_class},
-  UserControl_update_progress_blocker in 'usercontrol\app\UserControl_update_progress_blocker.pas' {UserControl_update_progress_blocker.TWebUserControl_update_progress_blocker: ki_web_ui.usercontrol_class};
+  UserControl_update_progress_blocker in 'usercontrol\app\UserControl_update_progress_blocker.pas' {UserControl_update_progress_blocker.TWebUserControl_update_progress_blocker: ki_web_ui.usercontrol_class},
+  Class_db_charter_kinds in 'component\db\Class_db_charter_kinds.pas',
+  Class_biz_charter_kinds in 'component\biz\Class_biz_charter_kinds.pas',
+  UserControl_charter_kind in 'usercontrol\app\UserControl_charter_kind.pas' {UserControl_charter_kind.TWebUserControl_charter_kind: ki_web_ui.usercontrol_class},
+  charter_kinds in 'protected\charter_kinds.pas' {charter_kinds.TWebForm_charter_kinds: ki_web_ui.page_class},
+  UserControl_service_profile in 'usercontrol\app\UserControl_service_profile.pas' {UserControl_service_profile.TWebUserControl_service_profile: ki_web_ui.usercontrol_class};
 
 //
 // General Information about an assembly is controlled through the following

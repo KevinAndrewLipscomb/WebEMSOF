@@ -1,0 +1,11 @@
+START TRANSACTION;
+
+DROP TABLE IF EXISTS charter_kind;
+CREATE TABLE IF NOT EXISTS charter_kind (
+  id SERIAL,
+  description VARCHAR(127) NOT NULL,
+  PRIMARY KEY(id)
+)
+ENGINE = InnoDB;
+
+COMMIT

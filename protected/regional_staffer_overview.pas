@@ -36,6 +36,8 @@ type
     procedure LinkButton_all_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_missed_deadlines_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_analyses_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_maintain_charter_kinds_Click(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -79,6 +81,7 @@ type
     LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
     LinkButton_archived: System.Web.UI.WebControls.LinkButton;
     LinkButton_analyses: System.Web.UI.WebControls.LinkButton;
+    LinkButton_maintain_charter_kinds: System.Web.UI.WebControls.LinkButton;
     //
   protected
     procedure OnInit(e: EventArgs); override;
@@ -121,6 +124,7 @@ begin
   Include(Self.LinkButton_analyses.Click, Self.LinkButton_analyses_Click);
   Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
   Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
+  Include(Self.LinkButton_maintain_charter_kinds.Click, Self.LinkButton_maintain_charter_kinds_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -221,6 +225,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_regional_staffer_overview.LinkButton_maintain_charter_kinds_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropCrumbAndTransferTo('charter_kinds.aspx');
 end;
 
 procedure TWebForm_regional_staffer_overview.LinkButton_analyses_Click(sender: System.Object;

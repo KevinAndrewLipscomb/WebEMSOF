@@ -1,0 +1,628 @@
+unit UserControl_service_profile;
+
+interface
+
+uses
+  Class_biz_services,
+  ki_web_ui,
+  System.Data,
+  System.Drawing,
+  System.Web,
+  System.Web.UI,
+  System.Web.UI.WebControls,
+  System.Web.UI.HtmlControls;
+
+type
+  p_type =
+    RECORD
+    affiliate_num: string;
+    be_authorized_to_change_affiliate_num_and_delete_service: boolean;
+    be_loaded: boolean;
+    be_profile_initially_valid: boolean;
+    be_service_user: boolean;
+    biz_services: TClass_biz_services;
+    END;
+  TWebUserControl_service_profile = class(ki_web_ui.usercontrol_class)
+  {$REGION 'Designer Managed Code'}
+  strict private
+    procedure InitializeComponent;
+    procedure TWebUserControl_service_profile_PreRender(sender: System.Object;
+      e: System.EventArgs);
+    procedure LinkButton_search_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_reset_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_delete_Click(sender: System.Object; e: System.EventArgs);
+    procedure DropDownList_affiliate_num_SelectedIndexChanged(sender: System.Object;
+      e: System.EventArgs);
+    procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
+  {$ENDREGION}
+  strict private
+    p: p_type;
+    procedure Clear;
+    procedure InjectPersistentClientSideScript;
+    procedure Page_Load(sender: System.Object; e: System.EventArgs);
+    function PresentRecord(affiliate_num: string): boolean;
+  strict protected
+    TextBox_affiliate_num: System.Web.UI.WebControls.TextBox;
+    DropDownList_affiliate_num: System.Web.UI.WebControls.DropDownList;
+    TextBox_name: System.Web.UI.WebControls.TextBox;
+    TextBox_county_code: System.Web.UI.WebControls.TextBox;
+    TextBox_business_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_business_fax_num: System.Web.UI.WebControls.TextBox;
+    TextBox_website_address: System.Web.UI.WebControls.TextBox;
+    TextBox_charter_kind: System.Web.UI.WebControls.TextBox;
+    TextBox_corpadmin_contact_name: System.Web.UI.WebControls.TextBox;
+    TextBox_corpadmin_primary_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_corpadmin_secondary_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_corpadmin_email_address: System.Web.UI.WebControls.TextBox;
+    CheckBox_be_emsof_participant: System.Web.UI.WebControls.CheckBox;
+    TextBox_emsof_nonparticipation_reason: System.Web.UI.WebControls.TextBox;
+    TextBox_emsof_contact_name: System.Web.UI.WebControls.TextBox;
+    TextBox_emsof_contact_email_address: System.Web.UI.WebControls.TextBox;
+    TextBox_emsof_contact_primary_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_emsof_contact_sms_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_coo_name: System.Web.UI.WebControls.TextBox;
+    TextBox_coo_work_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_coo_home_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_coo_email_address: System.Web.UI.WebControls.TextBox;
+    TextBox_coo_mobile_phone_or_pager_num: System.Web.UI.WebControls.TextBox;
+    TextBox_md_name: System.Web.UI.WebControls.TextBox;
+    TextBox_md_office_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_md_home_phone_num: System.Web.UI.WebControls.TextBox;
+    TextBox_md_email_address: System.Web.UI.WebControls.TextBox;
+    TextBox_md_mobile_phone_or_pager_num: System.Web.UI.WebControls.TextBox;
+    TextBox_physical_street_address_line_1: System.Web.UI.WebControls.TextBox;
+    TextBox_physical_street_address_line_2: System.Web.UI.WebControls.TextBox;
+    TextBox_physical_city: System.Web.UI.WebControls.TextBox;
+    TextBox_physical_state: System.Web.UI.WebControls.TextBox;
+    TextBox_physical_zip_code: System.Web.UI.WebControls.TextBox;
+    TextBox_mail_address_line_1: System.Web.UI.WebControls.TextBox;
+    TextBox_mail_address_line_2: System.Web.UI.WebControls.TextBox;
+    TextBox_mail_city: System.Web.UI.WebControls.TextBox;
+    TextBox_mail_state: System.Web.UI.WebControls.TextBox;
+    TextBox_mail_zip_code: System.Web.UI.WebControls.TextBox;
+    CheckBox_be_qrs: System.Web.UI.WebControls.CheckBox;
+    CheckBox_be_bls_amb: System.Web.UI.WebControls.CheckBox;
+    CheckBox_be_als_amb: System.Web.UI.WebControls.CheckBox;
+    CheckBox_be_als_squad: System.Web.UI.WebControls.CheckBox;
+    CheckBox_be_air_amb: System.Web.UI.WebControls.CheckBox;
+    CheckBox_be_rescue: System.Web.UI.WebControls.CheckBox;
+    CheckBox_be_pa_turnpike_contractor: System.Web.UI.WebControls.CheckBox;
+    TextBox_num_doh_licensed_vehicles: System.Web.UI.WebControls.TextBox;
+    TextBox_num_ambulances: System.Web.UI.WebControls.TextBox;
+    CheckBox_be_dera: System.Web.UI.WebControls.CheckBox;
+    TextBox_charter_other_kind: System.Web.UI.WebControls.TextBox;
+    Button_submit: System.Web.UI.WebControls.Button;
+    Button_delete: System.Web.UI.WebControls.Button;
+    LinkButton_search: System.Web.UI.WebControls.LinkButton;
+    LinkButton_reset: System.Web.UI.WebControls.LinkButton;
+    RequiredFieldValidator_affiliate_num: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_name: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_county_code: System.Web.UI.WebControls.RequiredFieldValidator;
+    RegularExpressionValidator_county_code: System.Web.UI.WebControls.RegularExpressionValidator;
+    RequiredFieldValidator_charter_kind: System.Web.UI.WebControls.RequiredFieldValidator;
+    RegularExpressionValidator_charter_kind: System.Web.UI.WebControls.RegularExpressionValidator;
+    RequiredFieldValidator_corpadmin_contact_name: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_corpadmin_primary_phone_num: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_coo_name: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_coo_work_phone_num: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_physical_street_address_line_1: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_physical_city: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_physical_state: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_physical_zip_code: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_mail_address_line_1: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_mail_city: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_mail_state: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_mail_zip_code: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_num_doh_licensed_vehicles: System.Web.UI.WebControls.RequiredFieldValidator;
+    RegularExpressionValidator_num_doh_licensed_vehicles: System.Web.UI.WebControls.RegularExpressionValidator;
+    RequiredFieldValidator_num_ambulances: System.Web.UI.WebControls.RequiredFieldValidator;
+    RegularExpressionValidator_num_ambulances: System.Web.UI.WebControls.RegularExpressionValidator;
+  protected
+    procedure OnInit(e: System.EventArgs); override;
+  private
+    { Private Declarations }
+  public
+    { Public Declarations }
+  published
+    function Fresh: TWebUserControl_service_profile;
+  end;
+
+implementation
+
+uses
+  kix,
+  System.Collections,
+  system.configuration;
+
+procedure TWebUserControl_service_profile.Clear;
+begin
+  //
+  TextBox_affiliate_num.text := EMPTY;
+  DropDownList_affiliate_num.visible := FALSE;
+  TextBox_name.text := EMPTY;
+  TextBox_county_code.text := EMPTY;
+  TextBox_business_phone_num.text := EMPTY;
+  TextBox_business_fax_num.text := EMPTY;
+  TextBox_website_address.text := EMPTY;
+  TextBox_charter_kind.text := EMPTY;
+  TextBox_corpadmin_contact_name.text := EMPTY;
+  TextBox_corpadmin_primary_phone_num.text := EMPTY;
+  TextBox_corpadmin_secondary_phone_num.text := EMPTY;
+  TextBox_corpadmin_email_address.text := EMPTY;
+  CheckBox_be_emsof_participant.checked := FALSE;
+  TextBox_emsof_nonparticipation_reason.text := EMPTY;
+  TextBox_emsof_contact_name.text := EMPTY;
+  TextBox_emsof_contact_email_address.text := EMPTY;
+  TextBox_emsof_contact_primary_phone_num.text := EMPTY;
+  TextBox_emsof_contact_sms_phone_num.text := EMPTY;
+  TextBox_coo_name.text := EMPTY;
+  TextBox_coo_work_phone_num.text := EMPTY;
+  TextBox_coo_home_phone_num.text := EMPTY;
+  TextBox_coo_email_address.text := EMPTY;
+  TextBox_coo_mobile_phone_or_pager_num.text := EMPTY;
+  TextBox_md_name.text := EMPTY;
+  TextBox_md_office_phone_num.text := EMPTY;
+  TextBox_md_home_phone_num.text := EMPTY;
+  TextBox_md_email_address.text := EMPTY;
+  TextBox_md_mobile_phone_or_pager_num.text := EMPTY;
+  TextBox_physical_street_address_line_1.text := EMPTY;
+  TextBox_physical_street_address_line_2.text := EMPTY;
+  TextBox_physical_city.text := EMPTY;
+  TextBox_physical_state.text := EMPTY;
+  TextBox_physical_zip_code.text := EMPTY;
+  TextBox_mail_address_line_1.text := EMPTY;
+  TextBox_mail_address_line_2.text := EMPTY;
+  TextBox_mail_city.text := EMPTY;
+  TextBox_mail_state.text := EMPTY;
+  TextBox_mail_zip_code.text := EMPTY;
+  CheckBox_be_qrs.checked := FALSE;
+  CheckBox_be_bls_amb.checked := FALSE;
+  CheckBox_be_als_amb.checked := FALSE;
+  CheckBox_be_als_squad.checked := FALSE;
+  CheckBox_be_air_amb.checked := FALSE;
+  CheckBox_be_rescue.checked := FALSE;
+  CheckBox_be_pa_turnpike_contractor.checked := FALSE;
+  TextBox_num_doh_licensed_vehicles.text := EMPTY;
+  TextBox_num_ambulances.text := EMPTY;
+  CheckBox_be_dera.checked := FALSE;
+  TextBox_charter_other_kind.text := EMPTY;
+  //
+  Button_delete.enabled := FALSE;
+  //
+end;
+
+procedure TWebUserControl_service_profile.InjectPersistentClientSideScript;
+begin
+{$REGION 'Persistent client-side script'}
+//  EstablishClientSideFunction(EL);
+//  EstablishClientSideFunction(KGS_TO_LBS);
+//  EstablishClientSideFunction(LBS_TO_KGS);
+//  EstablishClientSideFunction
+//    (
+//    'RecalculateDependentValues()',
+//    EMPTY
+//    + 'El("' + TextBox_gain_or_loss_in_lbs.clientid + '").value ='
+//    +  ' El("' + TextBox_gross_landed_weight_in_pounds.clientid + '").value - El("' + TextBox_gross_invoiced_weight_in_lbs.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_gain_or_loss_in_kgs.clientid + '").value ='
+//    +  ' El("' + TextBox_gross_landed_weight_in_kgs.clientid + '").value - El("' + TextBox_gross_invoiced_weight_in_kgs.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_gain_or_loss_per_bale_in_lbs.clientid + '").value ='
+//    +  ' El("' + TextBox_gain_or_loss_in_lbs.clientid + '").value/El("' + TextBox_bales.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_gain_or_loss_per_bale_in_kgs.clientid + '").value ='
+//    +  ' El("' + TextBox_gain_or_loss_in_kgs.clientid + '").value/El("' + TextBox_bales.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_actual_gain_or_loss_in_lbs.clientid + '").value ='
+//    +  ' El("' + TextBox_gain_or_loss_in_lbs.clientid + '").value - El("' + TextBox_franchise_in_lbs.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_actual_gain_or_loss_in_kgs.clientid + '").value ='
+//    +  ' El("' + TextBox_gain_or_loss_in_kgs.clientid + '").value - El("' + TextBox_franchise_in_kgs.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_actual_gain_or_loss_per_bale_in_lbs.clientid + '").value ='
+//    +  ' El("' + TextBox_actual_gain_or_loss_in_lbs.clientid + '").value/El("' + TextBox_bales.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_actual_gain_or_loss_per_bale_in_kgs.clientid + '").value ='
+//    +  ' El("' + TextBox_actual_gain_or_loss_in_kgs.clientid + '").value/El("' + TextBox_bales.clientid + '").value;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_percent_gain_or_loss.clientid + '").value ='
+//    +  ' Math.round(El("' + TextBox_actual_gain_or_loss_in_lbs.clientid + '").value/El("' + TextBox_net_invoiced_in_lbs.clientid + '").value*100*100)/100;'
+//    + NEW_LINE
+//    + 'El("' + TextBox_monetary_gain_or_loss.clientid + '").value ='
+//    +  ' El("' + TextBox_actual_gain_or_loss_in_lbs.clientid + '").value*El("' + TextBox_unit_price_in_cents_per_pound.clientid + '").value;'
+//    );
+//  //
+//  TextBox_bales.attributes.Add('onkeyup','RecalculateDependentValues();');
+//  TextBox_gross_landed_weight_in_pounds.attributes.Add
+//    (
+//    'onkeyup',
+//    'El("' + TextBox_gross_landed_weight_in_kgs.clientid + '").value = LbsToKgs(El("' + TextBox_gross_landed_weight_in_pounds.clientid + '").value);'
+//    + ' RecalculateDependentValues();'
+//    );
+//  TextBox_gross_landed_weight_in_kgs.attributes.Add
+//    (
+//    'onkeyup',
+//    'El("' + TextBox_gross_landed_weight_in_pounds.clientid + '").value = KgsToLbs(El("' + TextBox_gross_landed_weight_in_kgs.clientid + '").value);'
+//    + ' RecalculateDependentValues();'
+//    );
+//  TextBox_landed_or_ciq_tare.attributes.Add
+//    (
+//    'onkeyup',
+//    'El("' + TextBox_landed_or_ciq_tare_in_kgs.clientid + '").value = LbsToKgs(El("' + TextBox_landed_or_ciq_tare.clientid + '").value);'
+//    + ' RecalculateDependentValues();'
+//    );
+//  TextBox_landed_or_ciq_tare_in_kgs.attributes.Add
+//    (
+//    'onkeyup',
+//    'El("' + TextBox_landed_or_ciq_tare.clientid + '").value = KgsToLbs(El("' + TextBox_landed_or_ciq_tare_in_kgs.clientid + '").value);'
+//    + ' RecalculateDependentValues();'
+//    );
+//  TextBox_net_landed_in_pounds.attributes.Add
+//    (
+//    'onkeyup',
+//    'El("' + TextBox_net_landed_in_kgs.clientid + '").value = LbsToKgs(El("' + TextBox_net_landed_in_pounds.clientid + '").value);'
+//    + ' RecalculateDependentValues();'
+//    );
+//  TextBox_net_landed_in_kgs.attributes.Add
+//    (
+//    'onkeyup',
+//    'El("' + TextBox_net_landed_in_pounds.clientid + '").value = KgsToLbs(El("' + TextBox_net_landed_in_kgs.clientid + '").value);'
+//    + ' RecalculateDependentValues();'
+//    );
+{$ENDREGION}
+end;
+
+procedure TWebUserControl_service_profile.Page_Load(sender: System.Object; e: System.EventArgs);
+begin
+  //
+  if not p.be_loaded then begin
+    //
+    RequireConfirmation(Button_delete,'Are you sure you want to delete this record?');
+    //
+    if p.be_authorized_to_change_affiliate_num_and_delete_service then begin
+      Focus(TextBox_affiliate_num,TRUE);
+    end else begin
+      PresentRecord(p.affiliate_num);
+      Focus(TextBox_name,TRUE);
+    end;
+    //
+    p.be_loaded := TRUE;
+    //
+  end;
+  //
+  InjectPersistentClientSideScript;
+  //
+end;
+
+function TWebUserControl_service_profile.PresentRecord(affiliate_num: string): boolean;
+var
+  name: string;
+  county_code: string;
+  business_phone_num: string;
+  business_fax_num: string;
+  website_address: string;
+  charter_kind: string;
+  corpadmin_contact_name: string;
+  corpadmin_primary_phone_num: string;
+  corpadmin_secondary_phone_num: string;
+  corpadmin_email_address: string;
+  be_emsof_participant: boolean;
+  emsof_nonparticipation_reason: string;
+  emsof_contact_name: string;
+  emsof_contact_email_address: string;
+  emsof_contact_primary_phone_num: string;
+  emsof_contact_sms_phone_num: string;
+  coo_name: string;
+  coo_work_phone_num: string;
+  coo_home_phone_num: string;
+  coo_email_address: string;
+  coo_mobile_phone_or_pager_num: string;
+  md_name: string;
+  md_office_phone_num: string;
+  md_home_phone_num: string;
+  md_email_address: string;
+  md_mobile_phone_or_pager_num: string;
+  physical_street_address_line_1: string;
+  physical_street_address_line_2: string;
+  physical_city: string;
+  physical_state: string;
+  physical_zip_code: string;
+  mail_address_line_1: string;
+  mail_address_line_2: string;
+  mail_city: string;
+  mail_state: string;
+  mail_zip_code: string;
+  be_qrs: boolean;
+  be_bls_amb: boolean;
+  be_als_amb: boolean;
+  be_als_squad: boolean;
+  be_air_amb: boolean;
+  be_rescue: boolean;
+  be_pa_turnpike_contractor: boolean;
+  num_doh_licensed_vehicles: string;
+  num_ambulances: string;
+  be_dera: boolean;
+  charter_other_kind: string;
+  be_valid_profile: boolean;
+begin
+  PresentRecord := FALSE;
+  if p.biz_services.Get
+    (
+    affiliate_num,
+    name,
+    county_code,
+    business_phone_num,
+    business_fax_num,
+    website_address,
+    charter_kind,
+    corpadmin_contact_name,
+    corpadmin_primary_phone_num,
+    corpadmin_secondary_phone_num,
+    corpadmin_email_address,
+    be_emsof_participant,
+    emsof_nonparticipation_reason,
+    emsof_contact_name,
+    emsof_contact_email_address,
+    emsof_contact_primary_phone_num,
+    emsof_contact_sms_phone_num,
+    coo_name,
+    coo_work_phone_num,
+    coo_home_phone_num,
+    coo_email_address,
+    coo_mobile_phone_or_pager_num,
+    md_name,
+    md_office_phone_num,
+    md_home_phone_num,
+    md_email_address,
+    md_mobile_phone_or_pager_num,
+    physical_street_address_line_1,
+    physical_street_address_line_2,
+    physical_city,
+    physical_state,
+    physical_zip_code,
+    mail_address_line_1,
+    mail_address_line_2,
+    mail_city,
+    mail_state,
+    mail_zip_code,
+    be_qrs,
+    be_bls_amb,
+    be_als_amb,
+    be_als_squad,
+    be_air_amb,
+    be_rescue,
+    be_pa_turnpike_contractor,
+    num_doh_licensed_vehicles,
+    num_ambulances,
+    be_dera,
+    charter_other_kind,
+    be_valid_profile
+    )
+  then begin
+    //
+    TextBox_affiliate_num.text := affiliate_num;
+    TextBox_name.text := name;
+    TextBox_county_code.text := county_code;
+    TextBox_business_phone_num.text := business_phone_num;
+    TextBox_business_fax_num.text := business_fax_num;
+    TextBox_website_address.text := website_address;
+    TextBox_charter_kind.text := charter_kind;
+    TextBox_corpadmin_contact_name.text := corpadmin_contact_name;
+    TextBox_corpadmin_primary_phone_num.text := corpadmin_primary_phone_num;
+    TextBox_corpadmin_secondary_phone_num.text := corpadmin_secondary_phone_num;
+    TextBox_corpadmin_email_address.text := corpadmin_email_address;
+    CheckBox_be_emsof_participant.checked := be_emsof_participant;
+    TextBox_emsof_nonparticipation_reason.text := emsof_nonparticipation_reason;
+    TextBox_emsof_contact_name.text := emsof_contact_name;
+    TextBox_emsof_contact_email_address.text := emsof_contact_email_address;
+    TextBox_emsof_contact_primary_phone_num.text := emsof_contact_primary_phone_num;
+    TextBox_emsof_contact_sms_phone_num.text := emsof_contact_sms_phone_num;
+    TextBox_coo_name.text := coo_name;
+    TextBox_coo_work_phone_num.text := coo_work_phone_num;
+    TextBox_coo_home_phone_num.text := coo_home_phone_num;
+    TextBox_coo_email_address.text := coo_email_address;
+    TextBox_coo_mobile_phone_or_pager_num.text := coo_mobile_phone_or_pager_num;
+    TextBox_md_name.text := md_name;
+    TextBox_md_office_phone_num.text := md_office_phone_num;
+    TextBox_md_home_phone_num.text := md_home_phone_num;
+    TextBox_md_email_address.text := md_email_address;
+    TextBox_md_mobile_phone_or_pager_num.text := md_mobile_phone_or_pager_num;
+    TextBox_physical_street_address_line_1.text := physical_street_address_line_1;
+    TextBox_physical_street_address_line_2.text := physical_street_address_line_2;
+    TextBox_physical_city.text := physical_city;
+    TextBox_physical_state.text := physical_state;
+    TextBox_physical_zip_code.text := physical_zip_code;
+    TextBox_mail_address_line_1.text := mail_address_line_1;
+    TextBox_mail_address_line_2.text := mail_address_line_2;
+    TextBox_mail_city.text := mail_city;
+    TextBox_mail_state.text := mail_state;
+    TextBox_mail_zip_code.text := mail_zip_code;
+    CheckBox_be_qrs.checked := be_qrs;
+    CheckBox_be_bls_amb.checked := be_bls_amb;
+    CheckBox_be_als_amb.checked := be_als_amb;
+    CheckBox_be_als_squad.checked := be_als_squad;
+    CheckBox_be_air_amb.checked := be_air_amb;
+    CheckBox_be_rescue.checked := be_rescue;
+    CheckBox_be_pa_turnpike_contractor.checked := be_pa_turnpike_contractor;
+    TextBox_num_doh_licensed_vehicles.text := num_doh_licensed_vehicles;
+    TextBox_num_ambulances.text := num_ambulances;
+    CheckBox_be_dera.checked := be_dera;
+    TextBox_charter_other_kind.text := charter_other_kind;
+    p.be_profile_initially_valid := be_valid_profile;
+    //
+    TextBox_affiliate_num.enabled := FALSE;
+    Button_delete.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
+    //
+    PresentRecord := TRUE;
+    //
+  end;
+end;
+
+procedure TWebUserControl_service_profile.OnInit(e: System.EventArgs);
+begin
+  //
+  // Required for Designer support
+  //
+  InitializeComponent;
+  inherited OnInit(e);
+  //
+  if session['UserControl_service_profile.p'] <> nil then begin
+    p := p_type(session['UserControl_service_profile.p']);
+    p.be_loaded := IsPostBack and (string(session['UserControl_member_binder_PlaceHolder_content']) = 'UserControl_service_profile');
+  end else begin
+    //
+    p.biz_services := TClass_biz_services.Create;
+    //
+    p.be_authorized_to_change_affiliate_num_and_delete_service := p.biz_services.BeOkToChangeAffiliateNumAndDelete;
+    p.be_loaded := FALSE;
+    p.be_profile_initially_valid := FALSE;
+    p.be_service_user := (session['target_user_table'].tostring = 'service');
+    //
+    p.affiliate_num := p.biz_services.AffiliateNumOfId(session['service_user_id'].tostring);
+    //
+  end;
+  //
+end;
+
+{$REGION 'Designer Managed Code'}
+/// <summary>
+/// Required method for Designer support -- do not modify
+/// the contents of this method with the code editor.
+/// </summary>
+procedure TWebUserControl_service_profile.InitializeComponent;
+begin
+  Include(Self.LinkButton_search.Click, Self.LinkButton_search_Click);
+  Include(Self.LinkButton_reset.Click, Self.LinkButton_reset_Click);
+  Include(Self.DropDownList_affiliate_num.SelectedIndexChanged, Self.DropDownList_affiliate_num_SelectedIndexChanged);
+  Include(Self.Button_submit.Click, Self.Button_submit_Click);
+  Include(Self.Button_delete.Click, Self.Button_delete_Click);
+  Include(Self.PreRender, Self.TWebUserControl_service_profile_PreRender);
+  Include(Self.Load, Self.Page_Load);
+end;
+{$ENDREGION}
+
+procedure TWebUserControl_service_profile.TWebUserControl_service_profile_PreRender(sender: System.Object;
+  e: System.EventArgs);
+begin
+  SessionSet('UserControl_service_profile.p',p);
+end;
+
+function TWebUserControl_service_profile.Fresh: TWebUserControl_service_profile;
+begin
+  session.Remove('UserControl_service_profile.p');
+  Fresh := self;
+end;
+
+procedure TWebUserControl_service_profile.Button_submit_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  if page.IsValid then begin
+    //
+    //
+    p.biz_services.&Set
+      (
+      Safe(TextBox_affiliate_num.text,NUM).trim,
+      Safe(TextBox_name.text,ORG_NAME).trim,
+      Safe(TextBox_county_code.text,NUM).trim,
+      Safe(TextBox_business_phone_num.text,NUM).trim,
+      Safe(TextBox_business_fax_num.text,NUM).trim,
+      Safe(TextBox_website_address.text,HTTP_TARGET).trim,
+      Safe(TextBox_charter_kind.text,NUM).trim,
+      Safe(TextBox_corpadmin_contact_name.text,HUMAN_NAME).trim,
+      Safe(TextBox_corpadmin_primary_phone_num.text,NUM).trim,
+      Safe(TextBox_corpadmin_secondary_phone_num.text,NUM).trim,
+      Safe(TextBox_corpadmin_email_address.text,EMAIL_ADDRESS).trim,
+      CheckBox_be_emsof_participant.checked,
+      Safe(TextBox_emsof_nonparticipation_reason.text,PUNCTUATED).trim,
+      Safe(TextBox_emsof_contact_name.text,HUMAN_NAME).trim,
+      Safe(TextBox_emsof_contact_email_address.text,EMAIL_ADDRESS).trim,
+      Safe(TextBox_emsof_contact_primary_phone_num.text,NUM).trim,
+      Safe(TextBox_emsof_contact_sms_phone_num.text,NUM).trim,
+      Safe(TextBox_coo_name.text,HUMAN_NAME).trim,
+      Safe(TextBox_coo_work_phone_num.text,NUM).trim,
+      Safe(TextBox_coo_home_phone_num.text,NUM).trim,
+      Safe(TextBox_coo_email_address.text,EMAIL_ADDRESS).trim,
+      Safe(TextBox_coo_mobile_phone_or_pager_num.text,NUM).trim,
+      Safe(TextBox_md_name.text,HUMAN_NAME).trim,
+      Safe(TextBox_md_office_phone_num.text,NUM).trim,
+      Safe(TextBox_md_home_phone_num.text,NUM).trim,
+      Safe(TextBox_md_email_address.text,EMAIL_ADDRESS).trim,
+      Safe(TextBox_md_mobile_phone_or_pager_num.text,NUM).trim,
+      Safe(TextBox_physical_street_address_line_1.text,POSTAL_STREET_ADDRESS).trim,
+      Safe(TextBox_physical_street_address_line_2.text,POSTAL_STREET_ADDRESS).trim,
+      Safe(TextBox_physical_city.text,POSTAL_CITY).trim,
+      Safe(TextBox_physical_state.text,ALPHA).trim,
+      Safe(TextBox_physical_zip_code.text,NUM).trim,
+      Safe(TextBox_mail_address_line_1.text,POSTAL_STREET_ADDRESS).trim,
+      Safe(TextBox_mail_address_line_2.text,POSTAL_STREET_ADDRESS).trim,
+      Safe(TextBox_mail_city.text,POSTAL_CITY).trim,
+      Safe(TextBox_mail_state.text,ALPHA).trim,
+      Safe(TextBox_mail_zip_code.text,NUM).trim,
+      CheckBox_be_qrs.checked,
+      CheckBox_be_bls_amb.checked,
+      CheckBox_be_als_amb.checked,
+      CheckBox_be_als_squad.checked,
+      CheckBox_be_air_amb.checked,
+      CheckBox_be_rescue.checked,
+      CheckBox_be_pa_turnpike_contractor.checked,
+      Safe(TextBox_num_doh_licensed_vehicles.text,NUM).trim,
+      Safe(TextBox_num_ambulances.text,NUM).trim,
+      CheckBox_be_dera.checked,
+      Safe(TextBox_charter_other_kind.text,PUNCTUATED).trim,
+      (p.be_service_user and not p.be_profile_initially_valid),
+      id
+      );
+    Alert(USER,SUCCESS,'recsaved','Record saved.');
+  end else begin
+    ValidationAlert;
+  end;
+end;
+
+procedure TWebUserControl_service_profile.DropDownList_affiliate_num_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  PresentRecord(DropDownList_affiliate_num.selectedvalue);
+end;
+
+procedure TWebUserControl_service_profile.Button_delete_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  if p.biz_services.Delete(Safe(TextBox_affiliate_num.text,ALPHANUM)) then begin
+    Clear;
+  end else begin
+    Alert(kix.APPDATA,kix.FAILURE,'dependency',' Cannot delete this record because another record depends on it.');
+  end;
+end;
+
+procedure TWebUserControl_service_profile.LinkButton_reset_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  Clear;
+  TextBox_affiliate_num.enabled := TRUE;
+  Focus(TextBox_affiliate_num,TRUE);
+end;
+
+procedure TWebUserControl_service_profile.LinkButton_search_Click(sender: System.Object;
+  e: System.EventArgs);
+var
+  num_matches: cardinal;
+  saved_affiliate_num: string;
+begin
+  saved_affiliate_num := TextBox_affiliate_num.text;
+  Clear;
+  if not PresentRecord(saved_affiliate_num) then begin
+    TextBox_affiliate_num.text := saved_affiliate_num;
+    p.biz_services.Bind(saved_affiliate_num,DropDownList_affiliate_num);
+    num_matches := DropDownList_affiliate_num.items.count;
+    if num_matches > 0 then begin
+      DropDownList_affiliate_num.visible := TRUE;
+      if num_matches = 1 then begin
+        PresentRecord(DropDownList_affiliate_num.selectedvalue);
+      end else begin
+        DropDownList_affiliate_num.items.Insert(0,listitem.Create('-- Select --',EMPTY));
+      end;
+    end;
+  end;
+end;
+
+end.

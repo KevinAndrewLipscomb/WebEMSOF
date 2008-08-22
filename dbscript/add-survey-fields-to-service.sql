@@ -1,0 +1,53 @@
+START TRANSACTION;
+
+ALTER TABLE service
+  ADD COLUMN business_phone_num VARCHAR(10),
+  ADD COLUMN business_fax_num VARCHAR(10),
+  ADD COLUMN website_address VARCHAR(127),
+  ADD COLUMN charter_kind BIGINT UNSIGNED DEFAULT 9 NOT NULL,
+  ADD COLUMN corpadmin_contact_name VARCHAR(127) NOT NULL,
+  ADD COLUMN corpadmin_primary_phone_num VARCHAR(10) NOT NULL,
+  ADD COLUMN corpadmin_secondary_phone_num VARCHAR(10),
+  ADD COLUMN corpadmin_email_address VARCHAR(255),
+  ADD COLUMN be_emsof_participant BOOLEAN NOT NULL,
+  ADD COLUMN emsof_nonparticipation_reason TEXT,
+  ADD COLUMN emsof_contact_name VARCHAR(127),
+  ADD COLUMN emsof_contact_email_address VARCHAR(255),
+  ADD COLUMN emsof_contact_primary_phone_num VARCHAR(10),
+  ADD COLUMN emsof_contact_sms_phone_num VARCHAR(10),
+  ADD COLUMN coo_name VARCHAR(127) NOT NULL,
+  ADD COLUMN coo_work_phone_num VARCHAR(10) NOT NULL,
+  ADD COLUMN coo_home_phone_num VARCHAR(10),
+  ADD COLUMN coo_email_address VARCHAR(255),
+  ADD COLUMN coo_mobile_phone_or_pager_num VARCHAR(10),
+  ADD COLUMN md_name VARCHAR(127),
+  ADD COLUMN md_office_phone_num VARCHAR(10),
+  ADD COLUMN md_home_phone_num VARCHAR(10),
+  ADD COLUMN md_email_address VARCHAR(255),
+  ADD COLUMN md_mobile_phone_or_pager_num VARCHAR(10),
+  ADD COLUMN physical_street_address_line_1 VARCHAR(127) NOT NULL,
+  ADD COLUMN physical_street_address_line_2 VARCHAR(127),
+  ADD COLUMN physical_city VARCHAR(127) NOT NULL,
+  ADD COLUMN physical_state CHAR(2) DEFAULT "PA" NOT NULL,
+  ADD COLUMN physical_zip_code VARCHAR(9) NOT NULL,
+  ADD COLUMN mail_address_line_1 VARCHAR(127) NOT NULL,
+  ADD COLUMN mail_address_line_2 VARCHAR(127),
+  ADD COLUMN mail_city VARCHAR(127) NOT NULL,
+  ADD COLUMN mail_state CHAR(2) DEFAULT "PA" NOT NULL,
+  ADD COLUMN mail_zip_code VARCHAR(9) NOT NULL,
+  ADD COLUMN be_pa_turnpike_contractor BOOLEAN,
+  ADD COLUMN num_doh_licensed_vehicles SMALLINT UNSIGNED NOT NULL,
+  ADD COLUMN num_ambulances SMALLINT UNSIGNED NOT NULL,
+  ADD COLUMN be_dera BOOLEAN DEFAULT 0 NOT NULL,
+  ADD COLUMN charter_other_kind VARCHAR(255),
+  DROP COLUMN address_line_1,
+  DROP COLUMN address_line_2,
+  DROP COLUMN city,
+  DROP COLUMN zip_code,
+  DROP COLUMN contact_person_name,
+  DROP COLUMN contact_person_phone_num;
+
+ALTER TABLE service
+  ADD CONSTRAINT `service_charter_kind_id` FOREIGN KEY `service_charter_kind_id` (`charter_kind`) REFERENCES `charter_kind` (`id`);
+
+COMMIT
