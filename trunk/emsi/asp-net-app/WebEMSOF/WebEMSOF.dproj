@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <DCC_EnabledPackages>true</DCC_EnabledPackages>
-    <DCC_UsePackage>ki;"C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll";"C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025\System.Web.Extensions.Design.dll";"C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin\AjaxControlToolkit.dll";C:\Inetpub\wwwroot\WebEMSOF\bin\System.Web.Extensions.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCSPCChartNet.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCChart2DNet.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\Microsoft.Web.UI.WebControls.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
+    <DCC_UsePackage>ki;"C:\Program Files\MySQL\MySQL Connector Net 5.0.8.1\Binaries\.NET 2.0\MySql.Data.dll";"C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\v1.0.61025\System.Web.Extensions.Design.dll";"C:\Program Files\Microsoft ASP.NET\ASP.NET 2.0 AJAX Extensions\AjaxControlToolkit\SampleWebSite\Bin\AjaxControlToolkit.dll";C:\Inetpub\wwwroot\WebEMSOF\bin\System.Web.Extensions.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCSPCChartNet.dll;C:\Inetpub\wwwroot\WebEMSOF\bin\QCChart2DNet.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.XML.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Web.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Drawing.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Design.dll;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Data.dll;c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll</DCC_UsePackage>
     <DCC_DCCCompiler>DCCIL</DCC_DCCCompiler>
     <DCC_DependencyCheckOutputName>bin\WebEMSOF.dll</DCC_DependencyCheckOutputName>
   </PropertyGroup>
@@ -162,6 +162,7 @@
     </DelphiCompile>
     <DCCReference Include="component\biz\Class_biz_accounts.pas" />
     <DCCReference Include="component\biz\Class_biz_appropriations.pas" />
+    <DCCReference Include="component\biz\Class_biz_charter_kinds.pas" />
     <DCCReference Include="component\biz\Class_biz_counties.pas" />
     <DCCReference Include="component\biz\Class_biz_emsof_requests.pas" />
     <DCCReference Include="component\biz\Class_biz_equipment.pas" />
@@ -175,6 +176,7 @@
     <DCCReference Include="component\db\Class_db.pas" />
     <DCCReference Include="component\db\Class_db_accounts.pas" />
     <DCCReference Include="component\db\Class_db_appropriations.pas" />
+    <DCCReference Include="component\db\Class_db_charter_kinds.pas" />
     <DCCReference Include="component\db\Class_db_counties.pas" />
     <DCCReference Include="component\db\Class_db_emsof_requests.pas" />
     <DCCReference Include="component\db\Class_db_equipment.pas" />
@@ -243,6 +245,11 @@
     <DCCReference Include="protected\change_password.pas">
       <DependentUpon>protected\change_password.aspx</DependentUpon>
       <Form>change_password.TWebForm_change_password</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="protected\charter_kinds.pas">
+      <DependentUpon>protected\charter_kinds.aspx</DependentUpon>
+      <Form>charter_kinds.TWebForm_charter_kinds</Form>
       <DesignClass>ki_web_ui.page_class</DesignClass>
     </DCCReference>
     <DCCReference Include="protected\county_dictated_appropriations.pas">
@@ -365,6 +372,11 @@
       <Form>UserControl_analyses_binder.TWebUserControl_analyses_binder</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_charter_kind.pas">
+      <DependentUpon>usercontrol\app\UserControl_charter_kind.ascx</DependentUpon>
+      <Form>UserControl_charter_kind.TWebUserControl_charter_kind</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_common_header_bar.pas">
       <DependentUpon>usercontrol\app\UserControl_common_header_bar.ascx</DependentUpon>
       <Form>UserControl_common_header_bar.TWebUserControl_common_header_bar</Form>
@@ -398,6 +410,11 @@
     <DCCReference Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.pas">
       <DependentUpon>usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx</DependentUpon>
       <Form>UserControl_serial_indicator_equipment_quantities.TWebUserControl_serial_indicator_equipment_quantities</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_service_profile.pas">
+      <DependentUpon>usercontrol\app\UserControl_service_profile.ascx</DependentUpon>
+      <Form>UserControl_service_profile.TWebUserControl_service_profile</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_update_progress_blocker.pas">
@@ -444,6 +461,7 @@
     <None Include="protected\analyses.aspx" />
     <None Include="protected\change_email_address.aspx" />
     <None Include="protected\change_password.aspx" />
+    <None Include="protected\charter_kinds.aspx" />
     <None Include="protected\county_dictated_appropriations.aspx" />
     <None Include="protected\county_dictated_deadline.aspx" />
     <None Include="protected\county_overview.aspx" />
@@ -477,6 +495,7 @@
     <None Include="timeout.aspx" />
     <None Include="unpublished.config" />
     <None Include="usercontrol\app\UserControl_analyses_binder.ascx" />
+    <None Include="usercontrol\app\UserControl_charter_kind.ascx" />
     <None Include="usercontrol\app\UserControl_common_header_bar.ascx" />
     <None Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx" />
     <None Include="usercontrol\app\UserControl_equipment_procurement_overview.ascx" />
@@ -484,6 +503,7 @@
     <None Include="usercontrol\app\UserControl_postcontent.ascx" />
     <None Include="usercontrol\app\UserControl_precontent.ascx" />
     <None Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx" />
+    <None Include="usercontrol\app\UserControl_service_profile.ascx" />
     <None Include="usercontrol\app\UserControl_update_progress_blocker.ascx" />
     <None Include="usercontrol\app\UserControl_values_to_services.ascx" />
     <None Include="usercontrol\ki\UserControl_bread_crumb_trail.ascx" />
