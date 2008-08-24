@@ -3,8 +3,10 @@ unit Class_db_counties;
 interface
 
 uses
+  kix,
   mysql.data.mysqlclient,
-  Class_db;
+  Class_db,
+  system.web.ui.webcontrols;
 
 type
   TClass_db_counties = class(TClass_db)
@@ -12,6 +14,12 @@ type
     { Private Declarations }
   public
     constructor Create;
+    procedure BindDirectToListControl
+      (
+      target: system.object;
+      unselected_literal: string = '-- county --';
+      selected_value: string = EMPTY
+      );
     function NameOf(code: string): string;
   end;
 
@@ -21,6 +29,35 @@ constructor TClass_db_counties.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+end;
+
+procedure TClass_db_counties.BindDirectToListControl
+  (
+  target: system.object;
+  unselected_literal: string = '-- county --';
+  selected_value: string = EMPTY
+  );
+var
+  dr: mysqldatareader;
+begin
+  //
+  ListControl(target).items.Clear;
+  if unselected_literal <> EMPTY then begin
+    ListControl(target).items.Add(listitem.Create(unselected_literal,EMPTY));
+  end;
+  //
+  self.Open;
+  dr := mysqlcommand.Create('SELECT code,name FROM county_code_name_map order by name',connection).ExecuteReader;
+  while dr.Read do begin
+    ListControl(target).items.Add(listitem.Create(dr['name'].tostring,dr['code'].tostring));
+  end;
+  dr.Close;
+  self.Close;
+  //
+  if selected_value <> EMPTY then begin
+    ListControl(target).selectedvalue := selected_value;
+  end;
+  //
 end;
 
 function TClass_db_counties.NameOf(code: string): string;

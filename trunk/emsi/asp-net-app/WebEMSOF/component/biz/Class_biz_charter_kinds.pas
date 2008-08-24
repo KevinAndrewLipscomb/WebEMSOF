@@ -3,7 +3,8 @@ unit Class_biz_charter_kinds;
 interface
 
 uses
-  Class_db_charter_kinds;
+  Class_db_charter_kinds,
+  kix;
 
 type
   TClass_biz_charter_kinds = class
@@ -17,7 +18,12 @@ type
       target: system.object
       )
       : boolean;
-    procedure BindDirectToListControl(target: system.object);
+    procedure BindDirectToListControl
+      (
+      target: system.object;
+      unselected_literal: string = '-- charter_kind --';
+      selected_value: string = EMPTY
+      );
     function Delete(code: string): boolean;
     function Get
       (
@@ -51,9 +57,14 @@ begin
   Bind := db_charter_kinds.Bind(partial_code,target);
 end;
 
-procedure TClass_biz_charter_kinds.BindDirectToListControl(target: system.object);
+procedure TClass_biz_charter_kinds.BindDirectToListControl
+  (
+  target: system.object;
+  unselected_literal: string = '-- charter_kind --';
+  selected_value: string = EMPTY
+  );
 begin
-  db_charter_kinds.BindDirectToListControl(target);
+  db_charter_kinds.BindDirectToListControl(target,unselected_literal,selected_value);
 end;
 
 function TClass_biz_charter_kinds.Delete(code: string): boolean;
