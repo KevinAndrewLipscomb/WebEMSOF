@@ -132,8 +132,8 @@ begin
       ,p.db.connection
       );
     if biz_get_profile_status.ExecuteScalar.ToString = '0' then begin
-      Label_profile_status.Text := 'Not saved.';
-      LinkButton_profile_action.Text := '[Create profile]';
+      Label_profile_status.Text := 'Stale or not saved.';
+      LinkButton_profile_action.Text := '[Create/refresh profile]';
       Table_item_requests_section.visible := FALSE;
       p.db.Close;
     end else begin
@@ -172,9 +172,10 @@ begin
       //
       BindDataGrid;
       //
-      BeginBreadCrumbTrail;
-      //
     end;
+    //
+    BeginBreadCrumbTrail;
+    //
   end;
 end;
 

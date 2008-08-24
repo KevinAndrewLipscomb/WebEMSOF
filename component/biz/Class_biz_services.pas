@@ -134,7 +134,6 @@ type
       be_dera: boolean;
       charter_other_kind: string;
       be_new_affirmation: boolean;
-      id: string;
       be_valid_profile: boolean;
       federal_tax_id: string;
       be_qrs_unrecognized: boolean;
@@ -364,7 +363,6 @@ procedure TClass_biz_services.&Set
   be_dera: boolean;
   charter_other_kind: string;
   be_new_affirmation: boolean;
-  id: string;
   be_valid_profile: boolean;
   federal_tax_id: string;
   be_qrs_unrecognized: boolean;
@@ -427,13 +425,13 @@ begin
     be_qrs_unrecognized,
     be_rescue_unrecognized
     );
-  if be_new_affirmation then begin
-    //
-    // Notify regional council that contact person has affirmed responsibilities.
-    //
-    TClass_biz_accounts.Create.NotifyRegionOfServicePocAffirmation(id,name,emsof_contact_name);
-    //
-  end;
+//  if be_new_affirmation then begin
+//    //
+//    // Notify regional council that contact person has affirmed responsibilities.
+//    //
+//    TClass_biz_accounts.Create.NotifyRegionOfServicePocAffirmation(id,name,emsof_contact_name);
+//    //
+//  end;
   //
 end;
 

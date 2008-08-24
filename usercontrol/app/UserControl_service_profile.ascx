@@ -53,8 +53,7 @@
           <tr>
             <td align="right"><font class="">Federal Employer (tax) ID #:<br><small>(numerals only)</small></font></td>
             <td><font class="">
-                <asp:TextBox runat="server" columns="9" maxlength="9" id="TextBox_federal_tax_id"></asp:TextBox>*
-              </font></td>
+                <asp:TextBox runat="server" columns="9" maxlength="9" id="TextBox_federal_tax_id"></asp:TextBox>* </font></td>
             <td nowrap="true">
               <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_federal_tax_id" errormessage="Please enter a Federal Employer (tax) ID #." font-bold="True" id="RequiredFieldValidator_federal_tax_id">!ERR!</asp:RequiredFieldValidator>
               <asp:RegularExpressionValidator id="RegularExpressionValidator_federal_tax_id" runat="server" errormessage="Please enter a valid Federal Employer (tax) ID # using numerals only." font-bold="True" controltovalidate="TextBox_federal_tax_id"
@@ -95,15 +94,15 @@
             <td align="right" valign="top"><font class="">Choose the value that best describes your organization:</font></td>
             <td><font class="">
             <asp:UpdatePanel id="UpdatePanel_charter_kind" runat="server" updatemode="Conditional">
-              <ContentTemplate>
-                <asp:DropDownList id="DropDownList_charter_kind" runat="server" autopostback="True"></asp:DropDownList>*<br>
-                <asp:Label id="Label_charter_other_kind" enabled="False" runat="server" text="If Other, specify:" font-size="X-Small"></asp:Label>
-                <asp:TextBox id="TextBox_charter_other_kind" enabled="false" maxlength="255" columns="56" runat="server"></asp:TextBox>
-              </ContentTemplate>
+                              <ContentTemplate>
+                                <asp:DropDownList id="DropDownList_charter_kind" runat="server" autopostback="True"></asp:DropDownList>*
+                          <asp:RequiredFieldValidator id="RequiredFieldValidator_charter_other_kind" runat="server" errormessage="Please describe what Other kind of organization you are." font-bold="True" controltovalidate="TextBox_charter_other_kind">!ERR!</asp:RequiredFieldValidator><br>
+                                <asp:Label id="Label_charter_other_kind" runat="server" enabled="False" font-size="X-Small" text="If Other, specify:"></asp:Label>
+                                <asp:TextBox id="TextBox_charter_other_kind" runat="server" enabled="false" maxlength="255" columns="56"></asp:TextBox>
+                              </ContentTemplate>
             </asp:UpdatePanel></font></td>
             <td nowrap="true">
-              <asp:RequiredFieldValidator runat="server" controltovalidate="DropDownList_charter_kind" errormessage="Please enter Charter kind." font-bold="True" id="RequiredFieldValidator_charter_kind">!ERR!</asp:RequiredFieldValidator>
-                          <asp:RequiredFieldValidator id="RequiredFieldValidator_charter_other_kind" runat="server" errormessage="Please describe what Other kind of organization you are." font-bold="True" controltovalidate="TextBox_charter_other_kind">!ERR!</asp:RequiredFieldValidator></td>
+              <asp:RequiredFieldValidator runat="server" controltovalidate="DropDownList_charter_kind" errormessage="Please enter Charter kind." font-bold="True" id="RequiredFieldValidator_charter_kind">!ERR!</asp:RequiredFieldValidator></td>
           </tr>
           <!-- - --></table></td></tr><!-- - -->
         </table>

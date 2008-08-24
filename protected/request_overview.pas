@@ -234,6 +234,7 @@ begin
     Bind_items;  // also affected by be_before_deadline
     //
     CheckBox_has_wish_list.checked := p.biz_emsof_requests.HasWishList(session['emsof_request_master_id'].tostring);
+    CheckBox_has_wish_list.enabled := (uint32.Parse(session['status_code'].tostring) < 11);
     //
     Table_withdrawal.visible := p.biz_emsof_requests.BeWithdrawable(uint32.Parse(session['status_code'].tostring));
     //
