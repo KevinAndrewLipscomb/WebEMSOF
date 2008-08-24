@@ -3,6 +3,8 @@ unit UserControl_service_profile;
 interface
 
 uses
+  Class_biz_charter_kinds,
+  Class_biz_counties,
   Class_biz_services,
   ki_web_ui,
   System.Data,
@@ -20,6 +22,8 @@ type
     be_loaded: boolean;
     be_profile_initially_valid: boolean;
     be_service_user: boolean;
+    biz_charter_kinds: TClass_biz_charter_kinds;
+    biz_counties: TClass_biz_counties;
     biz_services: TClass_biz_services;
     END;
   TWebUserControl_service_profile = class(ki_web_ui.usercontrol_class)
@@ -34,27 +38,44 @@ type
     procedure DropDownList_affiliate_num_SelectedIndexChanged(sender: System.Object;
       e: System.EventArgs);
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
+    procedure DropDownList_charter_kind_SelectedIndexChanged(sender: System.Object; 
+      e: System.EventArgs);
+    procedure CustomValidator_corpadmin_email_address_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure CustomValidator_website_address_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure CustomValidator_coo_email_address_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure CustomValidator_be_als_medical_director_name_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure CustomValidator_md_email_address_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure CustomValidator_emsof_contact_email_address_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure RadioButtonList_be_emsof_participant_SelectedIndexChanged(sender: System.Object; 
+      e: System.EventArgs);
+    procedure CustomValidator_num_ambulances_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
     procedure Clear;
     procedure InjectPersistentClientSideScript;
+    procedure ManageCharterControlEnablements;
+    procedure ManageEmsofControlEnablements;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
     function PresentRecord(affiliate_num: string): boolean;
   strict protected
     TextBox_affiliate_num: System.Web.UI.WebControls.TextBox;
     DropDownList_affiliate_num: System.Web.UI.WebControls.DropDownList;
     TextBox_name: System.Web.UI.WebControls.TextBox;
-    TextBox_county_code: System.Web.UI.WebControls.TextBox;
     TextBox_business_phone_num: System.Web.UI.WebControls.TextBox;
     TextBox_business_fax_num: System.Web.UI.WebControls.TextBox;
     TextBox_website_address: System.Web.UI.WebControls.TextBox;
-    TextBox_charter_kind: System.Web.UI.WebControls.TextBox;
     TextBox_corpadmin_contact_name: System.Web.UI.WebControls.TextBox;
     TextBox_corpadmin_primary_phone_num: System.Web.UI.WebControls.TextBox;
     TextBox_corpadmin_secondary_phone_num: System.Web.UI.WebControls.TextBox;
     TextBox_corpadmin_email_address: System.Web.UI.WebControls.TextBox;
-    CheckBox_be_emsof_participant: System.Web.UI.WebControls.CheckBox;
     TextBox_emsof_nonparticipation_reason: System.Web.UI.WebControls.TextBox;
     TextBox_emsof_contact_name: System.Web.UI.WebControls.TextBox;
     TextBox_emsof_contact_email_address: System.Web.UI.WebControls.TextBox;
@@ -73,12 +94,10 @@ type
     TextBox_physical_street_address_line_1: System.Web.UI.WebControls.TextBox;
     TextBox_physical_street_address_line_2: System.Web.UI.WebControls.TextBox;
     TextBox_physical_city: System.Web.UI.WebControls.TextBox;
-    TextBox_physical_state: System.Web.UI.WebControls.TextBox;
     TextBox_physical_zip_code: System.Web.UI.WebControls.TextBox;
     TextBox_mail_address_line_1: System.Web.UI.WebControls.TextBox;
     TextBox_mail_address_line_2: System.Web.UI.WebControls.TextBox;
     TextBox_mail_city: System.Web.UI.WebControls.TextBox;
-    TextBox_mail_state: System.Web.UI.WebControls.TextBox;
     TextBox_mail_zip_code: System.Web.UI.WebControls.TextBox;
     CheckBox_be_qrs: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_bls_amb: System.Web.UI.WebControls.CheckBox;
@@ -89,7 +108,6 @@ type
     CheckBox_be_pa_turnpike_contractor: System.Web.UI.WebControls.CheckBox;
     TextBox_num_doh_licensed_vehicles: System.Web.UI.WebControls.TextBox;
     TextBox_num_ambulances: System.Web.UI.WebControls.TextBox;
-    CheckBox_be_dera: System.Web.UI.WebControls.CheckBox;
     TextBox_charter_other_kind: System.Web.UI.WebControls.TextBox;
     Button_submit: System.Web.UI.WebControls.Button;
     Button_delete: System.Web.UI.WebControls.Button;
@@ -98,25 +116,66 @@ type
     RequiredFieldValidator_affiliate_num: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_name: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_county_code: System.Web.UI.WebControls.RequiredFieldValidator;
-    RegularExpressionValidator_county_code: System.Web.UI.WebControls.RegularExpressionValidator;
     RequiredFieldValidator_charter_kind: System.Web.UI.WebControls.RequiredFieldValidator;
-    RegularExpressionValidator_charter_kind: System.Web.UI.WebControls.RegularExpressionValidator;
     RequiredFieldValidator_corpadmin_contact_name: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_corpadmin_primary_phone_num: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_coo_name: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_coo_work_phone_num: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_physical_street_address_line_1: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_physical_city: System.Web.UI.WebControls.RequiredFieldValidator;
-    RequiredFieldValidator_physical_state: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_physical_zip_code: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_mail_address_line_1: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_mail_city: System.Web.UI.WebControls.RequiredFieldValidator;
-    RequiredFieldValidator_mail_state: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_mail_zip_code: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_num_doh_licensed_vehicles: System.Web.UI.WebControls.RequiredFieldValidator;
     RegularExpressionValidator_num_doh_licensed_vehicles: System.Web.UI.WebControls.RegularExpressionValidator;
     RequiredFieldValidator_num_ambulances: System.Web.UI.WebControls.RequiredFieldValidator;
     RegularExpressionValidator_num_ambulances: System.Web.UI.WebControls.RegularExpressionValidator;
+    DropDownList_county: System.Web.UI.WebControls.DropDownList;
+    DropDownList_charter_kind: System.Web.UI.WebControls.DropDownList;
+    RadioButtonList_be_emsof_participant: System.Web.UI.WebControls.RadioButtonList;
+    RadioButtonList_be_dera: System.Web.UI.WebControls.RadioButtonList;
+    RegularExpressionValidator_business_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_business_fax_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_website_address: System.Web.UI.WebControls.RegularExpressionValidator;
+    UpdatePanel_charter_kind: System.Web.UI.UpdatePanel;
+    RegularExpressionValidator_corpadmin_primary_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_corpadmin_secondary_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_corpadmin_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
+    CustomValidator_corpadmin_email_address: System.Web.UI.WebControls.CustomValidator;
+    CustomValidator_website_address: System.Web.UI.WebControls.CustomValidator;
+    RequiredFieldValidator_be_emsof_participant: System.Web.UI.WebControls.RequiredFieldValidator;
+    UpdatePanel_be_emsof_particpant: System.Web.UI.UpdatePanel;
+    RegularExpressionValidator_emsof_contact_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
+    CustomValidator_emsof_contact_email_address: System.Web.UI.WebControls.CustomValidator;
+    RegularExpressionValidator_emsof_contact_primary_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RequiredFieldValidator_emsof_contact_primary_phone_num: System.Web.UI.WebControls.RequiredFieldValidator;
+    RegularExpressionValidator_emsof_contact_sms_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_coo_work_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_coo_home_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_coo_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
+    CustomValidator_coo_email_address: System.Web.UI.WebControls.CustomValidator;
+    RegularExpressionValidator_coo_mobile_phone_or_pager_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    CustomValidator_be_als_medical_director_name: System.Web.UI.WebControls.CustomValidator;
+    RegularExpressionValidator_md_office_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_md_home_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_md_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
+    CustomValidator_md_email_address: System.Web.UI.WebControls.CustomValidator;
+    RegularExpressionValidator_md_mobile_phone_or_pager_num: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_physical_zip_code: System.Web.UI.WebControls.RegularExpressionValidator;
+    RegularExpressionValidator_mail_zip_code: System.Web.UI.WebControls.RegularExpressionValidator;
+    CustomValidator_num_ambulances: System.Web.UI.WebControls.CustomValidator;
+    RequiredFieldValidator_be_dera: System.Web.UI.WebControls.RequiredFieldValidator;
+    CustomValidator_emsof_contact_name: System.Web.UI.WebControls.CustomValidator;
+    TableRow_emsof_contact_name: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_emsof_contact_email_address: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_emsof_contact_primary_phone_num: System.Web.UI.HtmlControls.HtmlTableRow;
+    TableRow_emsof_contact_sms_phone_num: System.Web.UI.HtmlControls.HtmlTableRow;
+    Label_emsof_nonparticipation_reason: System.Web.UI.WebControls.Label;
+    Label_charter_other_kind: System.Web.UI.WebControls.Label;
+    RequiredFieldValidator_emsof_contact_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_emsof_contact_name: System.Web.UI.WebControls.RequiredFieldValidator;
+    RequiredFieldValidator_charter_other_kind: System.Web.UI.WebControls.RequiredFieldValidator;
   protected
     procedure OnInit(e: System.EventArgs); override;
   private
@@ -140,16 +199,16 @@ begin
   TextBox_affiliate_num.text := EMPTY;
   DropDownList_affiliate_num.visible := FALSE;
   TextBox_name.text := EMPTY;
-  TextBox_county_code.text := EMPTY;
+  DropDownList_county.ClearSelection;
   TextBox_business_phone_num.text := EMPTY;
   TextBox_business_fax_num.text := EMPTY;
   TextBox_website_address.text := EMPTY;
-  TextBox_charter_kind.text := EMPTY;
+  DropDownList_charter_kind.ClearSelection;
   TextBox_corpadmin_contact_name.text := EMPTY;
   TextBox_corpadmin_primary_phone_num.text := EMPTY;
   TextBox_corpadmin_secondary_phone_num.text := EMPTY;
   TextBox_corpadmin_email_address.text := EMPTY;
-  CheckBox_be_emsof_participant.checked := FALSE;
+  RadioButtonList_be_emsof_participant.ClearSelection;
   TextBox_emsof_nonparticipation_reason.text := EMPTY;
   TextBox_emsof_contact_name.text := EMPTY;
   TextBox_emsof_contact_email_address.text := EMPTY;
@@ -168,12 +227,10 @@ begin
   TextBox_physical_street_address_line_1.text := EMPTY;
   TextBox_physical_street_address_line_2.text := EMPTY;
   TextBox_physical_city.text := EMPTY;
-  TextBox_physical_state.text := EMPTY;
   TextBox_physical_zip_code.text := EMPTY;
   TextBox_mail_address_line_1.text := EMPTY;
   TextBox_mail_address_line_2.text := EMPTY;
   TextBox_mail_city.text := EMPTY;
-  TextBox_mail_state.text := EMPTY;
   TextBox_mail_zip_code.text := EMPTY;
   CheckBox_be_qrs.checked := FALSE;
   CheckBox_be_bls_amb.checked := FALSE;
@@ -184,9 +241,11 @@ begin
   CheckBox_be_pa_turnpike_contractor.checked := FALSE;
   TextBox_num_doh_licensed_vehicles.text := EMPTY;
   TextBox_num_ambulances.text := EMPTY;
-  CheckBox_be_dera.checked := FALSE;
+  RadioButtonList_be_dera.ClearSelection;
   TextBox_charter_other_kind.text := EMPTY;
   //
+  ManageCharterControlEnablements;
+  ManageEmsofControlEnablements;
   Button_delete.enabled := FALSE;
   //
 end;
@@ -276,6 +335,9 @@ procedure TWebUserControl_service_profile.Page_Load(sender: System.Object; e: Sy
 begin
   //
   if not p.be_loaded then begin
+    //
+    p.biz_counties.BindDirectToListControl(DropDownList_county,'-- County --');
+    p.biz_charter_kinds.BindDirectToListControl(DropDownList_charter_kind,'-- Charter kind --');
     //
     RequireConfirmation(Button_delete,'Are you sure you want to delete this record?');
     //
@@ -402,16 +464,16 @@ begin
     //
     TextBox_affiliate_num.text := affiliate_num;
     TextBox_name.text := name;
-    TextBox_county_code.text := county_code;
+    DropDownList_county.selectedvalue := county_code;
     TextBox_business_phone_num.text := business_phone_num;
     TextBox_business_fax_num.text := business_fax_num;
     TextBox_website_address.text := website_address;
-    TextBox_charter_kind.text := charter_kind;
+    DropDownList_charter_kind.selectedvalue := charter_kind;
     TextBox_corpadmin_contact_name.text := corpadmin_contact_name;
     TextBox_corpadmin_primary_phone_num.text := corpadmin_primary_phone_num;
     TextBox_corpadmin_secondary_phone_num.text := corpadmin_secondary_phone_num;
     TextBox_corpadmin_email_address.text := corpadmin_email_address;
-    CheckBox_be_emsof_participant.checked := be_emsof_participant;
+    RadioButtonList_be_emsof_participant.selectedvalue := be_emsof_participant.tostring.toupper;
     TextBox_emsof_nonparticipation_reason.text := emsof_nonparticipation_reason;
     TextBox_emsof_contact_name.text := emsof_contact_name;
     TextBox_emsof_contact_email_address.text := emsof_contact_email_address;
@@ -430,12 +492,10 @@ begin
     TextBox_physical_street_address_line_1.text := physical_street_address_line_1;
     TextBox_physical_street_address_line_2.text := physical_street_address_line_2;
     TextBox_physical_city.text := physical_city;
-    TextBox_physical_state.text := physical_state;
     TextBox_physical_zip_code.text := physical_zip_code;
     TextBox_mail_address_line_1.text := mail_address_line_1;
     TextBox_mail_address_line_2.text := mail_address_line_2;
     TextBox_mail_city.text := mail_city;
-    TextBox_mail_state.text := mail_state;
     TextBox_mail_zip_code.text := mail_zip_code;
     CheckBox_be_qrs.checked := be_qrs;
     CheckBox_be_bls_amb.checked := be_bls_amb;
@@ -446,11 +506,13 @@ begin
     CheckBox_be_pa_turnpike_contractor.checked := be_pa_turnpike_contractor;
     TextBox_num_doh_licensed_vehicles.text := num_doh_licensed_vehicles;
     TextBox_num_ambulances.text := num_ambulances;
-    CheckBox_be_dera.checked := be_dera;
+    RadioButtonList_be_dera.selectedvalue := be_dera.tostring.toupper;
     TextBox_charter_other_kind.text := charter_other_kind;
     p.be_profile_initially_valid := be_valid_profile;
     //
     TextBox_affiliate_num.enabled := FALSE;
+    ManageCharterControlEnablements;
+    ManageEmsofControlEnablements;
     Button_delete.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
     //
     PresentRecord := TRUE;
@@ -468,9 +530,11 @@ begin
   //
   if session['UserControl_service_profile.p'] <> nil then begin
     p := p_type(session['UserControl_service_profile.p']);
-    p.be_loaded := IsPostBack and (string(session['UserControl_member_binder_PlaceHolder_content']) = 'UserControl_service_profile');
+    p.be_loaded := IsPostBack;
   end else begin
     //
+    p.biz_charter_kinds := TClass_biz_charter_kinds.Create;
+    p.biz_counties := TClass_biz_counties.Create;
     p.biz_services := TClass_biz_services.Create;
     //
     p.be_authorized_to_change_affiliate_num_and_delete_service := p.biz_services.BeOkToChangeAffiliateNumAndDelete;
@@ -494,6 +558,15 @@ begin
   Include(Self.LinkButton_search.Click, Self.LinkButton_search_Click);
   Include(Self.LinkButton_reset.Click, Self.LinkButton_reset_Click);
   Include(Self.DropDownList_affiliate_num.SelectedIndexChanged, Self.DropDownList_affiliate_num_SelectedIndexChanged);
+  Include(Self.CustomValidator_website_address.ServerValidate, Self.CustomValidator_website_address_ServerValidate);
+  Include(Self.DropDownList_charter_kind.SelectedIndexChanged, Self.DropDownList_charter_kind_SelectedIndexChanged);
+  Include(Self.CustomValidator_corpadmin_email_address.ServerValidate, Self.CustomValidator_corpadmin_email_address_ServerValidate);
+  Include(Self.CustomValidator_emsof_contact_email_address.ServerValidate, Self.CustomValidator_emsof_contact_email_address_ServerValidate);
+  Include(Self.RadioButtonList_be_emsof_participant.SelectedIndexChanged, Self.RadioButtonList_be_emsof_participant_SelectedIndexChanged);
+  Include(Self.CustomValidator_coo_email_address.ServerValidate, Self.CustomValidator_coo_email_address_ServerValidate);
+  Include(Self.CustomValidator_be_als_medical_director_name.ServerValidate, Self.CustomValidator_be_als_medical_director_name_ServerValidate);
+  Include(Self.CustomValidator_md_email_address.ServerValidate, Self.CustomValidator_md_email_address_ServerValidate);
+  Include(Self.CustomValidator_num_ambulances.ServerValidate, Self.CustomValidator_num_ambulances_ServerValidate);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
   Include(Self.Button_delete.Click, Self.Button_delete_Click);
   Include(Self.PreRender, Self.TWebUserControl_service_profile_PreRender);
@@ -513,6 +586,68 @@ begin
   Fresh := self;
 end;
 
+procedure TWebUserControl_service_profile.CustomValidator_num_ambulances_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid :=
+    (uint32.Parse(Safe(TextBox_num_ambulances.text,NUM)) <= uint32.Parse(Safe(TextBox_num_doh_licensed_vehicles.text,NUM)));
+  //
+end;
+
+procedure TWebUserControl_service_profile.RadioButtonList_be_emsof_participant_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  ManageEmsofControlEnablements;
+end;
+
+procedure TWebUserControl_service_profile.CustomValidator_emsof_contact_email_address_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := BeValidDomainPartOfEmailAddress(Safe(TextBox_emsof_contact_email_address.text,EMAIL_ADDRESS));
+end;
+
+procedure TWebUserControl_service_profile.CustomValidator_md_email_address_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := BeValidDomainPartOfEmailAddress(Safe(TextBox_md_email_address.text,EMAIL_ADDRESS));
+end;
+
+procedure TWebUserControl_service_profile.CustomValidator_be_als_medical_director_name_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := not
+    (
+      (CheckBox_be_als_amb.checked or CheckBox_be_als_squad.checked or CheckBox_be_air_amb.checked)
+    and
+      (TextBox_md_name.text = EMPTY)
+    );
+  //
+end;
+
+procedure TWebUserControl_service_profile.CustomValidator_coo_email_address_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := BeValidDomainPartOfEmailAddress(Safe(TextBox_coo_email_address.text,EMAIL_ADDRESS));
+end;
+
+procedure TWebUserControl_service_profile.CustomValidator_website_address_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := BeValidDomainPartOfEmailAddress('@' + Safe(TextBox_website_address.text,HTTP_TARGET));
+end;
+
+procedure TWebUserControl_service_profile.CustomValidator_corpadmin_email_address_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := BeValidDomainPartOfEmailAddress(Safe(TextBox_corpadmin_email_address.text,EMAIL_ADDRESS));
+end;
+
+procedure TWebUserControl_service_profile.DropDownList_charter_kind_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  ManageCharterControlEnablements;
+end;
+
 procedure TWebUserControl_service_profile.Button_submit_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -523,16 +658,16 @@ begin
       (
       Safe(TextBox_affiliate_num.text,NUM).trim,
       Safe(TextBox_name.text,ORG_NAME).trim,
-      Safe(TextBox_county_code.text,NUM).trim,
+      Safe(DropDownList_county.selectedvalue,NUM).trim,
       Safe(TextBox_business_phone_num.text,NUM).trim,
       Safe(TextBox_business_fax_num.text,NUM).trim,
       Safe(TextBox_website_address.text,HTTP_TARGET).trim,
-      Safe(TextBox_charter_kind.text,NUM).trim,
+      Safe(DropDownList_charter_kind.selectedvalue,NUM).trim,
       Safe(TextBox_corpadmin_contact_name.text,HUMAN_NAME).trim,
       Safe(TextBox_corpadmin_primary_phone_num.text,NUM).trim,
       Safe(TextBox_corpadmin_secondary_phone_num.text,NUM).trim,
       Safe(TextBox_corpadmin_email_address.text,EMAIL_ADDRESS).trim,
-      CheckBox_be_emsof_participant.checked,
+      (RadioButtonList_be_emsof_participant.selectedvalue = 'TRUE'),
       Safe(TextBox_emsof_nonparticipation_reason.text,PUNCTUATED).trim,
       Safe(TextBox_emsof_contact_name.text,HUMAN_NAME).trim,
       Safe(TextBox_emsof_contact_email_address.text,EMAIL_ADDRESS).trim,
@@ -551,12 +686,12 @@ begin
       Safe(TextBox_physical_street_address_line_1.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_physical_street_address_line_2.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_physical_city.text,POSTAL_CITY).trim,
-      Safe(TextBox_physical_state.text,ALPHA).trim,
+      'PA',
       Safe(TextBox_physical_zip_code.text,NUM).trim,
       Safe(TextBox_mail_address_line_1.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_mail_address_line_2.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_mail_city.text,POSTAL_CITY).trim,
-      Safe(TextBox_mail_state.text,ALPHA).trim,
+      'PA',
       Safe(TextBox_mail_zip_code.text,NUM).trim,
       CheckBox_be_qrs.checked,
       CheckBox_be_bls_amb.checked,
@@ -567,7 +702,7 @@ begin
       CheckBox_be_pa_turnpike_contractor.checked,
       Safe(TextBox_num_doh_licensed_vehicles.text,NUM).trim,
       Safe(TextBox_num_ambulances.text,NUM).trim,
-      CheckBox_be_dera.checked,
+      (RadioButtonList_be_dera.selectedvalue = 'TRUE'),
       Safe(TextBox_charter_other_kind.text,PUNCTUATED).trim,
       (p.be_service_user and not p.be_profile_initially_valid),
       id
@@ -622,6 +757,40 @@ begin
         DropDownList_affiliate_num.items.Insert(0,listitem.Create('-- Select --',EMPTY));
       end;
     end;
+  end;
+end;
+
+procedure TWebUserControl_service_profile.ManageEmsofControlEnablements;
+var
+  be_emsof_participant: boolean;
+begin
+  be_emsof_participant := (RadioButtonList_be_emsof_participant.selectedvalue <> 'FALSE');
+  Label_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
+  TextBox_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
+  TableRow_emsof_contact_name.visible := be_emsof_participant;
+  TableRow_emsof_contact_email_address.visible := be_emsof_participant;
+  TableRow_emsof_contact_primary_phone_num.visible := be_emsof_participant;
+  TableRow_emsof_contact_sms_phone_num.visible := be_emsof_participant;
+  if be_emsof_participant then begin
+    TextBox_emsof_nonparticipation_reason.text := EMPTY;
+  end else begin
+    TextBox_emsof_contact_name.text := EMPTY;
+    TextBox_emsof_contact_email_address.text := EMPTY;
+    TextBox_emsof_contact_primary_phone_num.text := EMPTY;
+    TextBox_emsof_contact_sms_phone_num.text := EMPTY;
+  end;
+end;
+
+procedure TWebUserControl_service_profile.ManageCharterControlEnablements;
+var
+  be_charter_other_kind: boolean;
+begin
+  be_charter_other_kind := (DropDownList_charter_kind.selecteditem.text = 'Other');
+  Label_charter_other_kind.enabled := be_charter_other_kind;
+  TextBox_charter_other_kind.enabled := be_charter_other_kind;
+  RequiredFieldValidator_charter_other_kind.enabled := be_charter_other_kind;
+  if not be_charter_other_kind then begin
+    TextBox_charter_other_kind.text := EMPTY;
   end;
 end;
 
