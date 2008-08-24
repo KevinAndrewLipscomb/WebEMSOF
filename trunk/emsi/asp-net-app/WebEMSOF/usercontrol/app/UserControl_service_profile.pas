@@ -179,7 +179,9 @@ type
     RequiredFieldValidator_emsof_contact_name: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_charter_other_kind: System.Web.UI.WebControls.RequiredFieldValidator;
     RadioButtonList_be_valid_profile: System.Web.UI.WebControls.RadioButtonList;
-    TextBox_federal_tax_id: TextBox;
+    TextBox_federal_tax_id: System.Web.UI.WebControls.TextBox;
+    RequiredFieldValidator_federal_tax_id: System.Web.UI.WebControls.RequiredFieldValidator;
+    RegularExpressionValidator_federal_tax_id: System.Web.UI.WebControls.RegularExpressionValidator;
   protected
     procedure OnInit(e: System.EventArgs); override;
   private
@@ -724,7 +726,6 @@ begin
       (RadioButtonList_be_dera.selectedvalue = 'TRUE'),
       Safe(TextBox_charter_other_kind.text,PUNCTUATED).trim,
       (p.be_service_user and not p.be_profile_initially_valid),
-      id,
       (p.be_service_user or (RadioButtonList_be_valid_profile.selectedvalue = 'TRUE')),
       Safe(TextBox_federal_tax_id.text,NUM),
       CheckBox_be_qrs_unrecognized.checked,

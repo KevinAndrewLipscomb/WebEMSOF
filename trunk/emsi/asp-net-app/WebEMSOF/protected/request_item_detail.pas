@@ -341,6 +341,8 @@ begin
       TableRow_post_finalization_actions.visible := FALSE;
     end;
     //
+    Button_withdraw.enabled := (uint32.Parse(session['status_code'].tostring) < 11);
+    //
     p.db.Close;
     //
   end;

@@ -7,4 +7,6 @@ ALTER TABLE `service`
   ADD COLUMN `be_qrs_unrecognized` BOOLEAN NOT NULL,
   ADD COLUMN `be_rescue_unrecognized` BOOLEAN NOT NULL;
 
+update service set be_valid_profile = FALSE;
+
 COMMIT
