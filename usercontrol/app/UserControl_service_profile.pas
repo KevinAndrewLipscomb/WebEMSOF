@@ -99,11 +99,13 @@ type
     TextBox_mail_address_line_2: System.Web.UI.WebControls.TextBox;
     TextBox_mail_city: System.Web.UI.WebControls.TextBox;
     TextBox_mail_zip_code: System.Web.UI.WebControls.TextBox;
+    CheckBox_be_qrs_unrecognized: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_qrs: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_bls_amb: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_als_amb: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_als_squad: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_air_amb: System.Web.UI.WebControls.CheckBox;
+    CheckBox_be_rescue_unrecognized: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_rescue: System.Web.UI.WebControls.CheckBox;
     CheckBox_be_pa_turnpike_contractor: System.Web.UI.WebControls.CheckBox;
     TextBox_num_doh_licensed_vehicles: System.Web.UI.WebControls.TextBox;
@@ -176,6 +178,8 @@ type
     RequiredFieldValidator_emsof_contact_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_emsof_contact_name: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_charter_other_kind: System.Web.UI.WebControls.RequiredFieldValidator;
+    RadioButtonList_be_valid_profile: System.Web.UI.WebControls.RadioButtonList;
+    TextBox_federal_tax_id: TextBox;
   protected
     procedure OnInit(e: System.EventArgs); override;
   private
@@ -232,17 +236,20 @@ begin
   TextBox_mail_address_line_2.text := EMPTY;
   TextBox_mail_city.text := EMPTY;
   TextBox_mail_zip_code.text := EMPTY;
+  CheckBox_be_qrs_unrecognized.checked := FALSE;
   CheckBox_be_qrs.checked := FALSE;
   CheckBox_be_bls_amb.checked := FALSE;
   CheckBox_be_als_amb.checked := FALSE;
   CheckBox_be_als_squad.checked := FALSE;
   CheckBox_be_air_amb.checked := FALSE;
+  CheckBox_be_rescue_unrecognized.checked := FALSE;
   CheckBox_be_rescue.checked := FALSE;
   CheckBox_be_pa_turnpike_contractor.checked := FALSE;
   TextBox_num_doh_licensed_vehicles.text := EMPTY;
   TextBox_num_ambulances.text := EMPTY;
   RadioButtonList_be_dera.ClearSelection;
   TextBox_charter_other_kind.text := EMPTY;
+  RadioButtonList_be_valid_profile.ClearSelection;
   //
   ManageCharterControlEnablements;
   ManageEmsofControlEnablements;
@@ -394,11 +401,13 @@ var
   mail_city: string;
   mail_state: string;
   mail_zip_code: string;
+  be_qrs_unrecognized: boolean;
   be_qrs: boolean;
   be_bls_amb: boolean;
   be_als_amb: boolean;
   be_als_squad: boolean;
   be_air_amb: boolean;
+  be_rescue_unrecognized: boolean;
   be_rescue: boolean;
   be_pa_turnpike_contractor: boolean;
   num_doh_licensed_vehicles: string;
@@ -406,6 +415,7 @@ var
   be_dera: boolean;
   charter_other_kind: string;
   be_valid_profile: boolean;
+  federal_tax_id: string;
 begin
   PresentRecord := FALSE;
   if p.biz_services.Get
@@ -458,7 +468,10 @@ begin
     num_ambulances,
     be_dera,
     charter_other_kind,
-    be_valid_profile
+    be_valid_profile,
+    federal_tax_id,
+    be_qrs_unrecognized,
+    be_rescue_unrecognized
     )
   then begin
     //
@@ -497,20 +510,26 @@ begin
     TextBox_mail_address_line_2.text := mail_address_line_2;
     TextBox_mail_city.text := mail_city;
     TextBox_mail_zip_code.text := mail_zip_code;
+    CheckBox_be_qrs_unrecognized.checked := be_qrs_unrecognized;
     CheckBox_be_qrs.checked := be_qrs;
     CheckBox_be_bls_amb.checked := be_bls_amb;
     CheckBox_be_als_amb.checked := be_als_amb;
     CheckBox_be_als_squad.checked := be_als_squad;
     CheckBox_be_air_amb.checked := be_air_amb;
+    CheckBox_be_rescue_unrecognized.checked := be_rescue_unrecognized;
     CheckBox_be_rescue.checked := be_rescue;
     CheckBox_be_pa_turnpike_contractor.checked := be_pa_turnpike_contractor;
     TextBox_num_doh_licensed_vehicles.text := num_doh_licensed_vehicles;
     TextBox_num_ambulances.text := num_ambulances;
     RadioButtonList_be_dera.selectedvalue := be_dera.tostring.toupper;
     TextBox_charter_other_kind.text := charter_other_kind;
+    RadioButtonList_be_valid_profile.selectedvalue := be_valid_profile.tostring.toupper;
+    TextBox_federal_tax_id.text := federal_tax_id;
+    //
     p.be_profile_initially_valid := be_valid_profile;
     //
     TextBox_affiliate_num.enabled := FALSE;
+    RadioButtonList_be_valid_profile.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
     ManageCharterControlEnablements;
     ManageEmsofControlEnablements;
     Button_delete.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
@@ -656,43 +675,43 @@ begin
     //
     p.biz_services.&Set
       (
-      Safe(TextBox_affiliate_num.text,NUM).trim,
+      Safe(TextBox_affiliate_num.text,NUM),
       Safe(TextBox_name.text,ORG_NAME).trim,
-      Safe(DropDownList_county.selectedvalue,NUM).trim,
-      Safe(TextBox_business_phone_num.text,NUM).trim,
-      Safe(TextBox_business_fax_num.text,NUM).trim,
+      Safe(DropDownList_county.selectedvalue,NUM),
+      Safe(TextBox_business_phone_num.text,NUM),
+      Safe(TextBox_business_fax_num.text,NUM),
       Safe(TextBox_website_address.text,HTTP_TARGET).trim,
-      Safe(DropDownList_charter_kind.selectedvalue,NUM).trim,
+      Safe(DropDownList_charter_kind.selectedvalue,NUM),
       Safe(TextBox_corpadmin_contact_name.text,HUMAN_NAME).trim,
-      Safe(TextBox_corpadmin_primary_phone_num.text,NUM).trim,
-      Safe(TextBox_corpadmin_secondary_phone_num.text,NUM).trim,
+      Safe(TextBox_corpadmin_primary_phone_num.text,NUM),
+      Safe(TextBox_corpadmin_secondary_phone_num.text,NUM),
       Safe(TextBox_corpadmin_email_address.text,EMAIL_ADDRESS).trim,
       (RadioButtonList_be_emsof_participant.selectedvalue = 'TRUE'),
       Safe(TextBox_emsof_nonparticipation_reason.text,PUNCTUATED).trim,
       Safe(TextBox_emsof_contact_name.text,HUMAN_NAME).trim,
       Safe(TextBox_emsof_contact_email_address.text,EMAIL_ADDRESS).trim,
-      Safe(TextBox_emsof_contact_primary_phone_num.text,NUM).trim,
-      Safe(TextBox_emsof_contact_sms_phone_num.text,NUM).trim,
+      Safe(TextBox_emsof_contact_primary_phone_num.text,NUM),
+      Safe(TextBox_emsof_contact_sms_phone_num.text,NUM),
       Safe(TextBox_coo_name.text,HUMAN_NAME).trim,
-      Safe(TextBox_coo_work_phone_num.text,NUM).trim,
-      Safe(TextBox_coo_home_phone_num.text,NUM).trim,
+      Safe(TextBox_coo_work_phone_num.text,NUM),
+      Safe(TextBox_coo_home_phone_num.text,NUM),
       Safe(TextBox_coo_email_address.text,EMAIL_ADDRESS).trim,
-      Safe(TextBox_coo_mobile_phone_or_pager_num.text,NUM).trim,
+      Safe(TextBox_coo_mobile_phone_or_pager_num.text,NUM),
       Safe(TextBox_md_name.text,HUMAN_NAME).trim,
-      Safe(TextBox_md_office_phone_num.text,NUM).trim,
-      Safe(TextBox_md_home_phone_num.text,NUM).trim,
+      Safe(TextBox_md_office_phone_num.text,NUM),
+      Safe(TextBox_md_home_phone_num.text,NUM),
       Safe(TextBox_md_email_address.text,EMAIL_ADDRESS).trim,
-      Safe(TextBox_md_mobile_phone_or_pager_num.text,NUM).trim,
+      Safe(TextBox_md_mobile_phone_or_pager_num.text,NUM),
       Safe(TextBox_physical_street_address_line_1.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_physical_street_address_line_2.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_physical_city.text,POSTAL_CITY).trim,
       'PA',
-      Safe(TextBox_physical_zip_code.text,NUM).trim,
+      Safe(TextBox_physical_zip_code.text,NUM),
       Safe(TextBox_mail_address_line_1.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_mail_address_line_2.text,POSTAL_STREET_ADDRESS).trim,
       Safe(TextBox_mail_city.text,POSTAL_CITY).trim,
       'PA',
-      Safe(TextBox_mail_zip_code.text,NUM).trim,
+      Safe(TextBox_mail_zip_code.text,NUM),
       CheckBox_be_qrs.checked,
       CheckBox_be_bls_amb.checked,
       CheckBox_be_als_amb.checked,
@@ -700,12 +719,16 @@ begin
       CheckBox_be_air_amb.checked,
       CheckBox_be_rescue.checked,
       CheckBox_be_pa_turnpike_contractor.checked,
-      Safe(TextBox_num_doh_licensed_vehicles.text,NUM).trim,
-      Safe(TextBox_num_ambulances.text,NUM).trim,
+      Safe(TextBox_num_doh_licensed_vehicles.text,NUM),
+      Safe(TextBox_num_ambulances.text,NUM),
       (RadioButtonList_be_dera.selectedvalue = 'TRUE'),
       Safe(TextBox_charter_other_kind.text,PUNCTUATED).trim,
       (p.be_service_user and not p.be_profile_initially_valid),
-      id
+      id,
+      (p.be_service_user or (RadioButtonList_be_valid_profile.selectedvalue = 'TRUE')),
+      Safe(TextBox_federal_tax_id.text,NUM),
+      CheckBox_be_qrs_unrecognized.checked,
+      CheckBox_be_rescue_unrecognized.checked
       );
     Alert(USER,SUCCESS,'recsaved','Record saved.');
   end else begin

@@ -76,7 +76,10 @@ type
       out num_ambulances: string;
       out be_dera: boolean;
       out charter_other_kind: string;
-      out be_valid_profile: boolean
+      out be_valid_profile: boolean;
+      out federal_tax_id: string;
+      out be_qrs_unrecognized: boolean;
+      out be_rescue_unrecognized: boolean
       )
       : boolean;
     function NameOf(service_id: string): string;
@@ -129,7 +132,11 @@ type
       num_doh_licensed_vehicles: string;
       num_ambulances: string;
       be_dera: boolean;
-      charter_other_kind: string
+      charter_other_kind: string;
+      be_valid_profile: boolean;
+      federal_tax_id: string;
+      be_qrs_unrecognized: boolean;
+      be_rescue_unrecognized: boolean
       );
   end;
 
@@ -282,7 +289,10 @@ function TClass_db_services.Get
   out num_ambulances: string;
   out be_dera: boolean;
   out charter_other_kind: string;
-  out be_valid_profile: boolean
+  out be_valid_profile: boolean;
+  out federal_tax_id: string;
+  out be_qrs_unrecognized: boolean;
+  out be_rescue_unrecognized: boolean
   )
   : boolean;
 var
@@ -342,6 +352,9 @@ begin
     be_dera := (dr['be_dera'].tostring = '1');
     charter_other_kind := dr['charter_other_kind'].tostring;
     be_valid_profile := (dr['be_valid_profile'].tostring = '1');
+    federal_tax_id := dr['federal_tax_id_num'].tostring;
+    be_qrs_unrecognized := (dr['be_qrs_unrecognized'].tostring = '1');
+    be_rescue_unrecognized := (dr['be_rescue_unrecognized'].tostring = '1');
     //
     Get := TRUE;
     //
@@ -406,7 +419,11 @@ procedure TClass_db_services.&Set
   num_doh_licensed_vehicles: string;
   num_ambulances: string;
   be_dera: boolean;
-  charter_other_kind: string
+  charter_other_kind: string;
+  be_valid_profile: boolean;
+  federal_tax_id: string;
+  be_qrs_unrecognized: boolean;
+  be_rescue_unrecognized: boolean
   );
 var
   childless_field_assignments_clause: string;
@@ -459,7 +476,10 @@ begin
   + ' , num_ambulances = NULLIF("' + num_ambulances + '","")'
   + ' , be_dera = ' + be_dera.tostring
   + ' , charter_other_kind = NULLIF("' + charter_other_kind + '","")'
-  + ' , be_valid_profile = TRUE';
+  + ' , be_valid_profile = ' + be_valid_profile.tostring
+  + ' , federal_tax_id_num = NULLIF("' + federal_tax_id + '","")'
+  + ' , be_qrs_unrecognized = ' + be_qrs_unrecognized.tostring
+  + ' , be_rescue_unrecognized = ' + be_rescue_unrecognized.tostring;
   //
   self.Open;
   mysqlcommand.Create

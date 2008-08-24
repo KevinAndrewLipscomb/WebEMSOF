@@ -1,6 +1,33 @@
 <%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_service_profile.pas" Inherits="UserControl_service_profile.TWebUserControl_service_profile"%>
 <%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
 <div id="Div_print_area">
+  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+    <tr>
+      <td>
+        <table cellspacing="0" cellpadding="10" border="0">
+          <tr>
+            <td bgcolor="#f5f5f5"><strong>Introduction</strong></td>
+          </tr>
+          <tr>
+            <td>
+              <small>
+                <ul>
+                  <li><p>Changes will <em>not</em> be saved until you press the Submit button at the bottom of the page.</p></li>
+                  <li><p>Asterisks ("*") indicate required items.</p></li>
+                  <li><p>For the Regional Annual Survey, this profile...<br>
+                    <asp:RadioButtonList id="RadioButtonList_be_valid_profile" runat="server">
+                      <asp:ListItem value="FALSE">has NOT yet been accepted</asp:ListItem>
+                      <asp:ListItem value="TRUE">HAS been accepted</asp:ListItem>
+                    </asp:RadioButtonList><br>...by WebEMSOF and the Regional Council.</p></li>
+                </ul>
+              </small>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -22,6 +49,16 @@
                 <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_name"></asp:TextBox>* </font></td>
             <td nowrap="true">
               <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_name" errormessage="Please enter service Name." font-bold="True" id="RequiredFieldValidator_name">!ERR!</asp:RequiredFieldValidator></td>
+          </tr>
+          <tr>
+            <td align="right"><font class="">Federal Employer (tax) ID #:<br><small>(numerals only)</small></font></td>
+            <td><font class="">
+                <asp:TextBox runat="server" columns="9" maxlength="9" id="TextBox_federal_tax_id"></asp:TextBox>*
+              </font></td>
+            <td nowrap="true">
+              <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_federal_tax_id" errormessage="Please enter a Federal Employer (tax) ID #." font-bold="True" id="RequiredFieldValidator_federal_tax_id">!ERR!</asp:RequiredFieldValidator>
+              <asp:RegularExpressionValidator id="RegularExpressionValidator_federal_tax_id" runat="server" errormessage="Please enter a valid Federal Employer (tax) ID # using numerals only." font-bold="True" controltovalidate="TextBox_federal_tax_id"
+                validationexpression="\d{9}">!ERR!</asp:RegularExpressionValidator></td>
           </tr>
           <tr>
             <td align="right"><font class="">County in EMSI region in which you are headquartered:</font></td>
@@ -73,7 +110,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -126,7 +163,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -151,23 +188,21 @@
                     <asp:TextBox id="TextBox_emsof_nonparticipation_reason" enabled="False" columns="50" runat="server" rows="2" textmode="MultiLine"></asp:TextBox>
                   </p>
                 </font></td>
-              <td nowrap="true">
+              <td nowrap>
                 <asp:RequiredFieldValidator id="RequiredFieldValidator_be_emsof_participant" runat="server" font-bold="True" errormessage="Please answer the question about EMSOF participation." controltovalidate="RadioButtonList_be_emsof_participant">!ERR!</asp:RequiredFieldValidator></td>
             </tr>
             <tr id="TableRow_emsof_contact_name" runat="server">
               <td align="right"><font class="">EMSOF contact person's name:</font></td>
-              <td><font class="">
-                  <asp:TextBox id="TextBox_emsof_contact_name" maxlength="127" columns="72" runat="server"></asp:TextBox>
-                </font></td>
-              <td nowrap="true">
+              <td nowrap><font class="">
+                  <asp:TextBox id="TextBox_emsof_contact_name" maxlength="127" columns="60" runat="server"></asp:TextBox>*                </font></td>
+              <td nowrap>
                 <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_name" runat="server" font-bold="True" errormessage="Please enter an EMSOF Contact name." controltovalidate="TextBox_emsof_contact_name">!ERR!</asp:RequiredFieldValidator></td>
             </tr>
             <tr id="TableRow_emsof_contact_email_address" runat="server">
               <td align="right"><font class="">Email address:</font></td>
-              <td><font class="">
-                  <asp:TextBox id="TextBox_emsof_contact_email_address" maxlength="255" columns="72" runat="server"></asp:TextBox>
-                </font></td>
-              <td nowrap="true">
+              <td nowrap><font class="">
+                  <asp:TextBox id="TextBox_emsof_contact_email_address" maxlength="255" columns="60" runat="server"></asp:TextBox>*                </font></td>
+              <td nowrap>
                 <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_email_address" runat="server" font-bold="True" errormessage="Please enter an EMSOF Contact email address." controltovalidate="TextBox_emsof_contact_email_address">!ERR!</asp:RequiredFieldValidator>
                 <asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_email_address" runat="server" font-bold="True" errormessage="Please enter a valid EMSOF Contact email address." controltovalidate="TextBox_emsof_contact_email_address"
                                                 validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*">!ERR!</asp:RegularExpressionValidator>
@@ -177,12 +212,10 @@
             <tr id="TableRow_emsof_contact_primary_phone_num" runat="server">
               <td align="right"><font class="">Primary phone #:</font></td>
               <td><font class="">
-                  <asp:TextBox id="TextBox_emsof_contact_primary_phone_num" maxlength="10" columns="10" runat="server"></asp:TextBox>
-                </font></td>
-              <td nowrap="true">
+                  <asp:TextBox id="TextBox_emsof_contact_primary_phone_num" maxlength="10" columns="10" runat="server"></asp:TextBox>*                </font></td>
+              <td nowrap>
                 <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Please enter an EMSOF Contact primary phone number."
-                                            controltovalidate="TextBox_emsof_contact_primary_phone_num">!ERR!</asp:RequiredFieldValidator>
-                <asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Please enter a valid EMSOF Contact primary phone number using numerals only."
+                                            controltovalidate="TextBox_emsof_contact_primary_phone_num">!ERR!</asp:RequiredFieldValidator><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Please enter a valid EMSOF Contact primary phone number using numerals only."
                                                 controltovalidate="TextBox_emsof_contact_primary_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
             </tr>
             <tr id="TableRow_emsof_contact_sms_phone_num" runat="server">
@@ -194,8 +227,7 @@
               <td valign="bottom"><font class="">
                   <asp:TextBox id="TextBox_emsof_contact_sms_phone_num" maxlength="10" columns="10" runat="server"></asp:TextBox>
                 </font></td>
-              <td nowrap="true">
-                <asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_sms_phone_num" runat="server" font-bold="True" errormessage="Please enter a valid EMSOF Contact cellphone number using numerals only."
+              <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_sms_phone_num" runat="server" font-bold="True" errormessage="Please enter a valid EMSOF Contact cellphone number using numerals only."
                                                 controltovalidate="TextBox_emsof_contact_sms_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
             </tr>
         <!-- - --></table></ContentTemplate></asp:UpdatePanel></td></tr><!-- - -->
@@ -203,7 +235,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -263,7 +295,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -325,7 +357,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -381,7 +413,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -434,7 +466,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -449,12 +481,14 @@
             <td align="right" valign="top" nowrap="true">
               <p align="right">Which of these services do you provide?<br>
                 <small>(Check all that apply.)</small></p></td>
-            <td>
+            <td nowrap="true">
+              <asp:CheckBox runat="server" text="QRS (unrecognized)" id="CheckBox_be_qrs_unrecognized"></asp:CheckBox><br>
               <asp:CheckBox runat="server" text="QRS (recognized)" id="CheckBox_be_qrs"></asp:CheckBox><br>
               <asp:CheckBox runat="server" text="BLS Ambulance" id="CheckBox_be_bls_amb"></asp:CheckBox><br>
               <asp:CheckBox runat="server" text="ALS Ambulance" id="CheckBox_be_als_amb"></asp:CheckBox><br>
               <asp:CheckBox runat="server" text="ALS squad" id="CheckBox_be_als_squad"></asp:CheckBox><br>
               <asp:CheckBox runat="server" text="Air ambulance" id="CheckBox_be_air_amb"></asp:CheckBox><br>
+              <asp:CheckBox runat="server" text="Rescue (unrecognized)" id="CheckBox_be_rescue_unrecognized"></asp:CheckBox><br>
               <asp:CheckBox runat="server" text="Rescue (recognized)" id="CheckBox_be_rescue"></asp:CheckBox><br>
               <asp:CheckBox runat="server" text="PA Turnpike contracted responses" id="CheckBox_be_pa_turnpike_contractor"></asp:CheckBox></td>
             <td></td>
@@ -495,7 +529,7 @@
       </td>
     </tr>
   </table>
-  <p>&nbsp;</p>
+  <br>
   <table cellspacing="0" cellpadding="0" border="1" bordercolor="gainsboro">
     <tr>
       <td>
@@ -520,5 +554,5 @@
       </td>
     </tr>
   </table></div>
-<p>&nbsp;</p>
-<ASP:Button id="Button_submit" text="Submit" runat="server"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False"></ASP:Button>&nbsp;&nbsp;&nbsp;&nbsp; <uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
+<br>
+<ASP:Button id="Button_submit" text="SUBMIT profile for Annual Survey" runat="server"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False"></ASP:Button>&nbsp;&nbsp;&nbsp;&nbsp; <uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>

@@ -76,7 +76,10 @@ type
       out num_ambulances: string;
       out be_dera: boolean;
       out charter_other_kind: string;
-      out be_valid_profile: boolean
+      out be_valid_profile: boolean;
+      out federal_tax_id: string;
+      out be_qrs_unrecognized: boolean;
+      out be_rescue_unrecognized: boolean
       )
       : boolean;
     function NameOf(service_id: string): string;
@@ -131,7 +134,11 @@ type
       be_dera: boolean;
       charter_other_kind: string;
       be_new_affirmation: boolean;
-      id: string
+      id: string;
+      be_valid_profile: boolean;
+      federal_tax_id: string;
+      be_qrs_unrecognized: boolean;
+      be_rescue_unrecognized: boolean
       );
   end;
 
@@ -235,7 +242,10 @@ function TClass_biz_services.Get
   out num_ambulances: string;
   out be_dera: boolean;
   out charter_other_kind: string;
-  out be_valid_profile: boolean
+  out be_valid_profile: boolean;
+  out federal_tax_id: string;
+  out be_qrs_unrecognized: boolean;
+  out be_rescue_unrecognized: boolean
   )
   : boolean;
 begin
@@ -290,7 +300,10 @@ begin
     num_ambulances,
     be_dera,
     charter_other_kind,
-    be_valid_profile
+    be_valid_profile,
+    federal_tax_id,
+    be_qrs_unrecognized,
+    be_rescue_unrecognized
     );
   //
 end;
@@ -351,7 +364,11 @@ procedure TClass_biz_services.&Set
   be_dera: boolean;
   charter_other_kind: string;
   be_new_affirmation: boolean;
-  id: string
+  id: string;
+  be_valid_profile: boolean;
+  federal_tax_id: string;
+  be_qrs_unrecognized: boolean;
+  be_rescue_unrecognized: boolean
   );
 begin
   //
@@ -404,7 +421,11 @@ begin
     num_doh_licensed_vehicles,
     num_ambulances,
     be_dera,
-    charter_other_kind
+    charter_other_kind,
+    be_valid_profile,
+    federal_tax_id,
+    be_qrs_unrecognized,
+    be_rescue_unrecognized
     );
   if be_new_affirmation then begin
     //
