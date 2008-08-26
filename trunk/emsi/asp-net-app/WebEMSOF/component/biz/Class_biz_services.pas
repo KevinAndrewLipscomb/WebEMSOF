@@ -82,6 +82,7 @@ type
       out be_rescue_unrecognized: boolean
       )
       : boolean;
+    procedure MarkProfilesStale;
     function NameOf(service_id: string): string;
     procedure &Set
       (
@@ -305,6 +306,11 @@ begin
     be_rescue_unrecognized
     );
   //
+end;
+
+procedure TClass_biz_services.MarkProfilesStale;
+begin
+  db_services.MarkProfilesStale;
 end;
 
 function TClass_biz_services.NameOf(service_id: string): string;

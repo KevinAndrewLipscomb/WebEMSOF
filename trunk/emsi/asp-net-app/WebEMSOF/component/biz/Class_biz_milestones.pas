@@ -28,6 +28,7 @@ implementation
 uses
   Class_biz_accounts,
   Class_biz_emsof_requests,
+  Class_biz_services,
   system.collections;
 
 //
@@ -72,6 +73,7 @@ var
   be_processed: boolean;
   biz_accounts: TClass_biz_accounts;
   biz_emsof_requests: TClass_biz_emsof_requests;
+  biz_services: TClass_biz_services;
   deadline: datetime;
   i: cardinal;
   j: cardinal;
@@ -83,6 +85,7 @@ var
 begin
   biz_accounts := TClass_biz_accounts.Create;
   biz_emsof_requests := TClass_biz_emsof_requests.Create;
+  biz_services := TClass_biz_services.Create;
   master_id_q := nil;
   today := datetime.Today;
   //
@@ -104,6 +107,7 @@ begin
           biz_emsof_requests.DeployCompleted;
           master_id_q := biz_emsof_requests.FailUncompleted;
           biz_emsof_requests.ArchiveMatured;
+          biz_services.MarkProfilesStale;
           END;
         end;
         for i := 1 to master_id_q.Count do begin

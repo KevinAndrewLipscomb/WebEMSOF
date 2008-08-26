@@ -82,6 +82,7 @@ type
       out be_rescue_unrecognized: boolean
       )
       : boolean;
+    procedure MarkProfilesStale;
     function NameOf(service_id: string): string;
     procedure &Set
       (
@@ -360,6 +361,13 @@ begin
     //
   end;
   dr.Close;
+  self.Close;
+end;
+
+procedure TClass_db_services.MarkProfilesStale;
+begin
+  self.Open;
+  mysqlcommand.Create(db_trail.Saved('update service set be_valid_profile = FALSE'),connection).ExecuteNonquery;
   self.Close;
 end;
 
