@@ -21,11 +21,39 @@ START TRANSACTION;
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table `charter_kind`
+-- 
+
+DROP TABLE IF EXISTS `charter_kind`;
+CREATE TABLE IF NOT EXISTS `charter_kind` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `description` varchar(127) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- 
+-- Dumping data for table `charter_kind`
+-- 
+
+INSERT INTO `charter_kind` VALUES (1, 'Non-profit corporation (includes most Volunteer Fire Departments)');
+INSERT INTO `charter_kind` VALUES (2, 'Municipally-owned EMS');
+INSERT INTO `charter_kind` VALUES (3, 'Municipally-owned Fire');
+INSERT INTO `charter_kind` VALUES (4, 'Other Fire');
+INSERT INTO `charter_kind` VALUES (5, 'Joint-municipality authority');
+INSERT INTO `charter_kind` VALUES (6, 'Hospital');
+INSERT INTO `charter_kind` VALUES (7, 'Industrial');
+INSERT INTO `charter_kind` VALUES (8, 'Private for-profit');
+INSERT INTO `charter_kind` VALUES (9, 'Other');
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table `county_code_name_map`
 -- 
 
-DROP TABLE IF EXISTS county_code_name_map;
-CREATE TABLE county_code_name_map (
+DROP TABLE IF EXISTS `county_code_name_map`;
+CREATE TABLE IF NOT EXISTS `county_code_name_map` (
   `code` tinyint(3) unsigned NOT NULL auto_increment,
   `name` varchar(15) NOT NULL,
   PRIMARY KEY  (`code`),
@@ -36,17 +64,16 @@ CREATE TABLE county_code_name_map (
 -- Dumping data for table `county_code_name_map`
 -- 
 
-INSERT INTO county_code_name_map (code, name) VALUES 
-(1, 'Allegheny'),
-(2, 'Armstrong'),
-(3, 'Beaver'),
-(4, 'Butler'),
-(5, 'Fayette'),
-(6, 'Greene'),
-(7, 'Indiana'),
-(8, 'Lawrence'),
-(9, 'Washington'),
-(10, 'Westmoreland');
+INSERT INTO `county_code_name_map` VALUES (1, 'Allegheny');
+INSERT INTO `county_code_name_map` VALUES (2, 'Armstrong');
+INSERT INTO `county_code_name_map` VALUES (3, 'Beaver');
+INSERT INTO `county_code_name_map` VALUES (4, 'Butler');
+INSERT INTO `county_code_name_map` VALUES (5, 'Fayette');
+INSERT INTO `county_code_name_map` VALUES (6, 'Greene');
+INSERT INTO `county_code_name_map` VALUES (7, 'Indiana');
+INSERT INTO `county_code_name_map` VALUES (8, 'Lawrence');
+INSERT INTO `county_code_name_map` VALUES (9, 'Washington');
+INSERT INTO `county_code_name_map` VALUES (10, 'Westmoreland');
 
 -- --------------------------------------------------------
 
@@ -378,19 +405,19 @@ INSERT INTO item_status_code_description_map (code, description) VALUES
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `journal`
---
+-- 
 
-DROP TABLE IF EXISTS journal;
-CREATE TABLE IF NOT EXISTS journal (
-  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `timestamp` TIMESTAMP NOT NULL,
-  actor VARCHAR(31) NOT NULL,
-  action VARCHAR(8190) NOT NULL,
-  PRIMARY KEY(`id`),
-  INDEX actor (actor)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `journal`;
+CREATE TABLE IF NOT EXISTS `journal` (
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `actor` varchar(31) NOT NULL,
+  `action` varchar(8190) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  PRIMARY KEY  (`id`),
+  KEY `actor` (`actor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -408,7 +435,7 @@ CREATE TABLE match_level (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- 
+--
 -- Dumping data for table `match_level`
 -- 
 
@@ -632,34 +659,70 @@ INSERT INTO request_status_code_description_map (code, description) VALUES
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `service`
---
+-- 
 
-DROP TABLE IF EXISTS service;
-CREATE TABLE service (
-  id smallint(5) unsigned NOT NULL auto_increment,
-  county_code tinyint(3) unsigned NOT NULL,
-  affiliate_num char(5) NOT NULL,
+DROP TABLE IF EXISTS `service`;
+CREATE TABLE IF NOT EXISTS `service` (
+  `id` smallint(5) unsigned NOT NULL auto_increment,
+  `county_code` tinyint(3) unsigned NOT NULL,
+  `affiliate_num` char(5) NOT NULL,
   `name` varchar(127) NOT NULL,
-  be_qrs tinyint(1) NOT NULL default '0',
-  be_bls_amb tinyint(1) NOT NULL default '0',
-  be_als_amb tinyint(1) NOT NULL default '0',
-  be_als_squad tinyint(1) NOT NULL default '0',
-  be_air_amb tinyint(1) NOT NULL default '0',
-  be_rescue tinyint(1) NOT NULL default '0',
-  address_line_1 varchar(127) default '',
-  address_line_2 varchar(127) default '',
-  city varchar(127) default NULL,
-  zip_code varchar(9) default '',
-  federal_tax_id_num varchar(9) default '',
-  contact_person_name varchar(127) default '',
-  contact_person_phone_num varchar(10) default '',
-  be_valid_profile tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (id),
-  UNIQUE KEY affiliate_num (affiliate_num),
+  `be_qrs` tinyint(1) NOT NULL default '0',
+  `be_bls_amb` tinyint(1) NOT NULL default '0',
+  `be_als_amb` tinyint(1) NOT NULL default '0',
+  `be_als_squad` tinyint(1) NOT NULL default '0',
+  `be_air_amb` tinyint(1) NOT NULL default '0',
+  `be_rescue` tinyint(1) NOT NULL default '0',
+  `federal_tax_id_num` varchar(9) default '',
+  `be_valid_profile` tinyint(1) NOT NULL default '0',
+  `business_phone_num` varchar(10) default NULL,
+  `business_fax_num` varchar(10) default NULL,
+  `website_address` varchar(127) default NULL,
+  `charter_kind` bigint(20) unsigned NOT NULL default '9',
+  `corpadmin_contact_name` varchar(127) NOT NULL,
+  `corpadmin_primary_phone_num` varchar(10) NOT NULL,
+  `corpadmin_secondary_phone_num` varchar(10) default NULL,
+  `corpadmin_email_address` varchar(255) default NULL,
+  `be_emsof_participant` tinyint(1) NOT NULL,
+  `emsof_nonparticipation_reason` text,
+  `emsof_contact_name` varchar(127) default NULL,
+  `emsof_contact_email_address` varchar(255) default NULL,
+  `emsof_contact_primary_phone_num` varchar(10) default NULL,
+  `emsof_contact_sms_phone_num` varchar(10) default NULL,
+  `coo_name` varchar(127) NOT NULL,
+  `coo_work_phone_num` varchar(10) NOT NULL,
+  `coo_home_phone_num` varchar(10) default NULL,
+  `coo_email_address` varchar(255) default NULL,
+  `coo_mobile_phone_or_pager_num` varchar(10) default NULL,
+  `md_name` varchar(127) default NULL,
+  `md_office_phone_num` varchar(10) default NULL,
+  `md_home_phone_num` varchar(10) default NULL,
+  `md_email_address` varchar(255) default NULL,
+  `md_mobile_phone_or_pager_num` varchar(10) default NULL,
+  `physical_street_address_line_1` varchar(127) NOT NULL,
+  `physical_street_address_line_2` varchar(127) default NULL,
+  `physical_city` varchar(127) NOT NULL,
+  `physical_state` char(2) NOT NULL default 'PA',
+  `physical_zip_code` varchar(9) NOT NULL,
+  `mail_address_line_1` varchar(127) NOT NULL,
+  `mail_address_line_2` varchar(127) default NULL,
+  `mail_city` varchar(127) NOT NULL,
+  `mail_state` char(2) NOT NULL default 'PA',
+  `mail_zip_code` varchar(9) NOT NULL,
+  `be_pa_turnpike_contractor` tinyint(1) default NULL,
+  `num_doh_licensed_vehicles` smallint(5) unsigned NOT NULL,
+  `num_ambulances` smallint(5) unsigned NOT NULL,
+  `be_dera` tinyint(1) NOT NULL default '0',
+  `charter_other_kind` varchar(255) default NULL,
+  `be_qrs_unrecognized` tinyint(1) NOT NULL,
+  `be_rescue_unrecognized` tinyint(1) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `affiliate_num` (`affiliate_num`),
   KEY `name` (`name`),
-  KEY county_code (county_code)
+  KEY `county_code` (`county_code`),
+  KEY `service_charter_kind_id` (`charter_kind`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -680,9 +743,9 @@ CREATE TABLE service_user (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `state_dictated_appropriation`
--- 
+--
 
 DROP TABLE IF EXISTS state_dictated_appropriation;
 CREATE TABLE state_dictated_appropriation (
@@ -697,124 +760,126 @@ CREATE TABLE state_dictated_appropriation (
   KEY fiscal_year_id (fiscal_year_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Dumping data for table `state_dictated_appropriation`
--- 
+--
 
-INSERT INTO state_dictated_appropriation (id, region_code, fiscal_year_id, amount) VALUES 
+INSERT INTO state_dictated_appropriation (id, region_code, fiscal_year_id, amount) VALUES
 (1, 1, 1, 350172.00);
 
--- 
+--
 -- Constraints for dumped tables
--- 
+--
 
--- 
+--
 -- Constraints for table `county_dictated_appropriation`
--- 
+--
 ALTER TABLE `county_dictated_appropriation`
-  ADD CONSTRAINT county_dictated_appropriation_ibfk_1 FOREIGN KEY (region_dictated_appropriation_id) REFERENCES region_dictated_appropriation (id),
-  ADD CONSTRAINT county_dictated_appropriation_ibfk_2 FOREIGN KEY (service_id) REFERENCES service (id),
-  ADD CONSTRAINT county_dictated_appropriation_ibfk_3 FOREIGN KEY (match_level_id) REFERENCES match_level (id);
+  ADD CONSTRAINT `county_dictated_appropriation_ibfk_1` FOREIGN KEY (`region_dictated_appropriation_id`) REFERENCES `region_dictated_appropriation` (`id`),
+  ADD CONSTRAINT `county_dictated_appropriation_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`),
+  ADD CONSTRAINT `county_dictated_appropriation_ibfk_3` FOREIGN KEY (`match_level_id`) REFERENCES `match_level` (`id`);
 
--- 
+--
 -- Constraints for table `county_region_map`
--- 
+--
 ALTER TABLE `county_region_map`
-  ADD CONSTRAINT county_region_map_ibfk_2 FOREIGN KEY (county_code) REFERENCES county_code_name_map (`code`),
-  ADD CONSTRAINT county_region_map_ibfk_3 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`);
+  ADD CONSTRAINT `county_region_map_ibfk_2` FOREIGN KEY (`county_code`) REFERENCES `county_code_name_map` (`code`),
+  ADD CONSTRAINT `county_region_map_ibfk_3` FOREIGN KEY (`region_code`) REFERENCES `region_code_name_map` (`code`);
 
--- 
+--
 -- Constraints for table `county_user`
--- 
+--
 ALTER TABLE `county_user`
-  ADD CONSTRAINT county_user_ibfk_1 FOREIGN KEY (id) REFERENCES county_code_name_map (`code`);
+  ADD CONSTRAINT `county_user_ibfk_1` FOREIGN KEY (`id`) REFERENCES `county_code_name_map` (`code`);
 
 --
 -- Constraints for table `eligible_provider_equipment_list`
 --
 ALTER TABLE `eligible_provider_equipment_list`
-  ADD CONSTRAINT eligible_provider_equipment_list_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id);
+  ADD CONSTRAINT `eligible_provider_equipment_list_ibfk_1` FOREIGN KEY (`fiscal_year_id`) REFERENCES `fiscal_year` (`id`);
 
 --
 -- Constraints for table `emsof_purchase_payment`
 --
-ALTER TABLE emsof_purchase_payment
-  ADD CONSTRAINT emsof_purchase_payment_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id),
-  ADD CONSTRAINT emsof_purchase_payment_ibfk_2 FOREIGN KEY (method_code) REFERENCES payment_proof_method_code_description_map (`code`);
+ALTER TABLE `emsof_purchase_payment`
+  ADD CONSTRAINT `emsof_purchase_payment_ibfk_1` FOREIGN KEY (`master_id`) REFERENCES `emsof_request_master` (`id`),
+  ADD CONSTRAINT `emsof_purchase_payment_ibfk_2` FOREIGN KEY (`method_code`) REFERENCES `payment_proof_method_code_description_map` (`code`),
+  ADD CONSTRAINT `emsof_purchase_payment_ibfk_3` FOREIGN KEY (`master_id`) REFERENCES `emsof_request_master` (`id`);
 
 --
 -- Constraints for table `emsof_request_detail`
 --
 ALTER TABLE `emsof_request_detail`
-  ADD CONSTRAINT emsof_request_detail_ibfk_1 FOREIGN KEY (master_id) REFERENCES emsof_request_master (id) ON DELETE CASCADE,
-  ADD CONSTRAINT emsof_request_detail_ibfk_2 FOREIGN KEY (equipment_code) REFERENCES eligible_provider_equipment_list (`code`),
-  ADD CONSTRAINT emsof_request_detail_ibfk_3 FOREIGN KEY (status_code) REFERENCES item_status_code_description_map (`code`);
+  ADD CONSTRAINT `emsof_request_detail_ibfk_2` FOREIGN KEY (`equipment_code`) REFERENCES `eligible_provider_equipment_list` (`code`),
+  ADD CONSTRAINT `emsof_request_detail_ibfk_3` FOREIGN KEY (`status_code`) REFERENCES `item_status_code_description_map` (`code`),
+  ADD CONSTRAINT `emsof_request_detail_ibfk_4` FOREIGN KEY (`master_id`) REFERENCES `emsof_request_master` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `emsof_request_master`
 --
 ALTER TABLE `emsof_request_master`
-  ADD CONSTRAINT emsof_request_master_ibfk_1 FOREIGN KEY (county_dictated_appropriation_id) REFERENCES county_dictated_appropriation (id) ON DELETE CASCADE,
-  ADD CONSTRAINT emsof_request_master_ibfk_2 FOREIGN KEY (status_code) REFERENCES request_status_code_description_map (`code`);
+  ADD CONSTRAINT `emsof_request_master_ibfk_1` FOREIGN KEY (`county_dictated_appropriation_id`) REFERENCES `county_dictated_appropriation` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `emsof_request_master_ibfk_2` FOREIGN KEY (`status_code`) REFERENCES `request_status_code_description_map` (`code`);
 
--- 
+--
 -- Constraints for table `fy_calendar`
--- 
+--
 ALTER TABLE `fy_calendar`
-  ADD CONSTRAINT fy_calendar_ibfk_1 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id),
-  ADD CONSTRAINT fy_calendar_ibfk_2 FOREIGN KEY (milestone_code) REFERENCES milestone_code_name_map (`code`);
+  ADD CONSTRAINT `fy_calendar_ibfk_1` FOREIGN KEY (`fiscal_year_id`) REFERENCES `fiscal_year` (`id`),
+  ADD CONSTRAINT `fy_calendar_ibfk_2` FOREIGN KEY (`milestone_code`) REFERENCES `milestone_code_name_map` (`code`);
 
 --
 -- Constraints for table `indicator_equipment_quantities`
 --
 ALTER TABLE `indicator_equipment_quantities`
-  ADD CONSTRAINT `indicator_equipment_quantities_fiscal_year_id` FOREIGN KEY `fiscal_year_id` (`fiscal_year_id`) REFERENCES `fiscal_year` (`id`),
-  ADD CONSTRAINT `indicator_equipment_quantities_description` FOREIGN KEY `description` (`description`) REFERENCES `eligible_provider_equipment_list` (`description`);
+  ADD CONSTRAINT `indicator_equipment_quantities_description` FOREIGN KEY (`description`) REFERENCES `eligible_provider_equipment_list` (`description`),
+  ADD CONSTRAINT `indicator_equipment_quantities_fiscal_year_id` FOREIGN KEY (`fiscal_year_id`) REFERENCES `fiscal_year` (`id`);
 
 --
 -- Constraints for table `region_dictated_appropriation`
 --
 ALTER TABLE `region_dictated_appropriation`
-  ADD CONSTRAINT region_dictated_appropriation_ibfk_1 FOREIGN KEY (state_dictated_appropriation_id) REFERENCES state_dictated_appropriation (id),
-  ADD CONSTRAINT region_dictated_appropriation_ibfk_2 FOREIGN KEY (county_code) REFERENCES county_code_name_map (`code`);
+  ADD CONSTRAINT `region_dictated_appropriation_ibfk_1` FOREIGN KEY (`state_dictated_appropriation_id`) REFERENCES `state_dictated_appropriation` (`id`),
+  ADD CONSTRAINT `region_dictated_appropriation_ibfk_2` FOREIGN KEY (`county_code`) REFERENCES `county_code_name_map` (`code`);
 
--- 
+--
 -- Constraints for table `regional_staffer`
--- 
+--
 ALTER TABLE `regional_staffer`
-  ADD CONSTRAINT regional_staffer_ibfk_1 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`);
+  ADD CONSTRAINT `regional_staffer_ibfk_1` FOREIGN KEY (`region_code`) REFERENCES `region_code_name_map` (`code`);
 
--- 
+--
 -- Constraints for table `regional_staffer_role`
--- 
+--
 ALTER TABLE `regional_staffer_role`
-  ADD CONSTRAINT regional_staffer_role_ibfk_1 FOREIGN KEY (user_id) REFERENCES regional_staffer_user (id),
-  ADD CONSTRAINT regional_staffer_role_ibfk_2 FOREIGN KEY (group_id) REFERENCES regional_staffer_group (id);
+  ADD CONSTRAINT `regional_staffer_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `regional_staffer_user` (`id`),
+  ADD CONSTRAINT `regional_staffer_role_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `regional_staffer_group` (`id`);
 
--- 
+--
 -- Constraints for table `regional_staffer_user`
--- 
+--
 ALTER TABLE `regional_staffer_user`
-  ADD CONSTRAINT regional_staffer_user_ibfk_1 FOREIGN KEY (id) REFERENCES regional_staffer (id);
+  ADD CONSTRAINT `regional_staffer_user_ibfk_1` FOREIGN KEY (`id`) REFERENCES `regional_staffer` (`id`);
 
--- 
+--
 -- Constraints for table `service`
--- 
+--
 ALTER TABLE `service`
-  ADD CONSTRAINT service_ibfk_1 FOREIGN KEY (county_code) REFERENCES county_code_name_map (`code`);
+  ADD CONSTRAINT `service_charter_kind_id` FOREIGN KEY (`charter_kind`) REFERENCES `charter_kind` (`id`),
+  ADD CONSTRAINT `service_ibfk_1` FOREIGN KEY (`county_code`) REFERENCES `county_code_name_map` (`code`);
 
--- 
+--
 -- Constraints for table `service_user`
--- 
+--
 ALTER TABLE `service_user`
-  ADD CONSTRAINT service_user_ibfk_1 FOREIGN KEY (id) REFERENCES service (id);
+  ADD CONSTRAINT `service_user_ibfk_1` FOREIGN KEY (`id`) REFERENCES `service` (`id`);
 
--- 
+--
 -- Constraints for table `state_dictated_appropriation`
--- 
+--
 ALTER TABLE `state_dictated_appropriation`
-  ADD CONSTRAINT state_dictated_appropriation_ibfk_1 FOREIGN KEY (region_code) REFERENCES region_code_name_map (`code`),
-  ADD CONSTRAINT state_dictated_appropriation_ibfk_2 FOREIGN KEY (fiscal_year_id) REFERENCES fiscal_year (id);
+  ADD CONSTRAINT `state_dictated_appropriation_ibfk_1` FOREIGN KEY (`region_code`) REFERENCES `region_code_name_map` (`code`),
+  ADD CONSTRAINT `state_dictated_appropriation_ibfk_2` FOREIGN KEY (`fiscal_year_id`) REFERENCES `fiscal_year` (`id`);
 
 SET FOREIGN_KEY_CHECKS=1;
 
