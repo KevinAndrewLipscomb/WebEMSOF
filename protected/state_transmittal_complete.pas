@@ -26,10 +26,6 @@ type
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
-    PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
-    PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
-    LinkButton_back: System.Web.UI.WebControls.LinkButton;
     Label_application_name: System.Web.UI.WebControls.Label;
     Button_return_to_overview: System.Web.UI.WebControls.Button;
   protected
@@ -70,7 +66,6 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - state_transmittal_complete';
-    Label_account_descriptor.text := session.item['regional_staffer_name'].tostring;
     Label_application_name.text := configurationmanager.appsettings['application_name'];
     //
   end;

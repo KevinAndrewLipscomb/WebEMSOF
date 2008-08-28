@@ -13,6 +13,7 @@ type
     constructor Create;
     function AffiliateNumOfId(id: string): string;
     function BeOkToChangeAffiliateNumAndDelete: boolean;
+    function BeValidAndParticipating(id: string): boolean;
     function Bind
       (
       partial_affiliate_num: string;
@@ -23,7 +24,8 @@ type
       (
       county_user_id: string;
       target: system.object;
-      be_unfiltered: boolean = FALSE
+      be_unfiltered: boolean = FALSE;
+      be_inclusive_of_invalids_and_nonparticipants: boolean = FALSE
       );
     function Delete(affiliate_num: string): boolean;
     function Get
@@ -167,6 +169,11 @@ begin
     or httpcontext.current.user.IsInRole('emsof-planner');
 end;
 
+function TClass_biz_services.BeValidAndParticipating(id: string): boolean;
+begin
+  BeValidAndParticipating := db_services.BeValidAndParticipating(id);
+end;
+
 function TClass_biz_services.Bind
   (
   partial_affiliate_num: string;
@@ -181,10 +188,11 @@ procedure TClass_biz_services.BindListControl
   (
   county_user_id: string;
   target: system.object;
-  be_unfiltered: boolean = FALSE
+  be_unfiltered: boolean = FALSE;
+  be_inclusive_of_invalids_and_nonparticipants: boolean = FALSE
   );
 begin
-  db_services.BindListControl(county_user_id,target,be_unfiltered);
+  db_services.BindListControl(county_user_id,target,be_unfiltered,be_inclusive_of_invalids_and_nonparticipants);
 end;
 
 function TClass_biz_services.Delete(affiliate_num: string): boolean;

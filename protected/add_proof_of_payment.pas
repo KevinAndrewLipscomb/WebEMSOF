@@ -40,10 +40,6 @@ type
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
-    PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
-    PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
-    LinkButton_back: System.Web.UI.WebControls.LinkButton;
     Button_submit: System.Web.UI.WebControls.Button;
     Button_cancel: System.Web.UI.WebControls.Button;
     RequiredFieldValidator_method: System.Web.UI.WebControls.RequiredFieldValidator;
@@ -101,7 +97,6 @@ begin
     end else begin
       //
       Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - add_proof_of_payment';
-      Label_account_descriptor.text := session.item['account_descriptor'].tostring;
       //
       p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
       p.biz_payment_proof_methods := TClass_biz_payment_proof_methods.Create;
