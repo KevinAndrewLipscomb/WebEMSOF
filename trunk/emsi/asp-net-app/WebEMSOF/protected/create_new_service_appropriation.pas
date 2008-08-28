@@ -7,6 +7,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   mysql.data.mysqlclient,
+  Class_biz_appropriations,
   Class_biz_services,
   Class_db,
   Class_db_trail,
@@ -21,6 +22,7 @@ type
   p_type =
     RECORD
     amount: decimal;
+    biz_appropriations: TClass_biz_appropriations;
     biz_services: TClass_biz_services;
     db: TClass_db;
     db_trail: TClass_db_trail;
@@ -88,8 +90,8 @@ begin
   Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
   Include(Self.Button_add_appropriation_and_stop.Click, Self.Button_add_appropriation_and_stop_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_create_new_service_appropriation_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -125,9 +127,13 @@ begin
       Label_unappropriated_amount.forecolor := color.red;
     end;
     //
+    p.biz_appropriations := TClass_biz_appropriations.Create;
     p.biz_services := TClass_biz_services.Create;
     p.biz_services.BindListControl
       (session['county_user_id'].tostring,DropDownList_services,CheckBox_show_out_of_county_services.checked);
+    //
+    RadioButtonList_match_level.selectedvalue := p.biz_appropriations.MatchLevelIdOfRegionDictum(session['region_dictated_appropriation_id'].tostring).tostring;
+    //
   end;
 end;
 

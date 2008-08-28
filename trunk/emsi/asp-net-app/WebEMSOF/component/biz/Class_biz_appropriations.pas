@@ -19,6 +19,7 @@ type
     db_appropriations: TClass_db_appropriations;
   public
     constructor Create;
+    function BeAnyCurrentToService(service_id: string): boolean;
     function CountyCodeOfCountyDictum(county_dictum_id: string): string;
     function FundingRoundsGenerated
       (
@@ -28,6 +29,7 @@ type
       : cardinal;
     function MatchFactorOf(county_dictum_id: string): decimal;
     function MatchLevelIdOf(county_dictum_id: string): cardinal;
+    function MatchLevelIdOfRegionDictum(region_dictum_id: string): cardinal;
     function NumActiveAmendments(regional_staffer_id: string): cardinal;
     function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
     procedure ReduceBy
@@ -79,19 +81,9 @@ begin
   db_appropriations := TClass_db_appropriations.Create;
 end;
 
-function TClass_biz_appropriations.MatchFactorOf(county_dictum_id: string): decimal;
+function TClass_biz_appropriations.BeAnyCurrentToService(service_id: string): boolean;
 begin
-  MatchFactorOf := db_appropriations.MatchFactorOf(county_dictum_id);
-end;
-
-function TClass_biz_appropriations.MatchLevelIdOf(county_dictum_id: string): cardinal;
-begin
-  MatchLevelIdOf := db_appropriations.MatchLevelIdOf(county_dictum_id);
-end;
-
-function TClass_biz_appropriations.NumActiveAmendments(regional_staffer_id: string): cardinal;
-begin
-  NumActiveAmendments := db_appropriations.NumActiveAmendments(regional_staffer_id);
+  BeAnyCurrentToService := db_appropriations.BeAnyCurrentToService(service_id);
 end;
 
 function TClass_biz_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
@@ -107,6 +99,26 @@ function TClass_biz_appropriations.FundingRoundsGenerated
   : cardinal;
 begin
   FundingRoundsGenerated := db_appropriations.FundingRoundsGenerated(regional_staffer_id,amendment_num_string);
+end;
+
+function TClass_biz_appropriations.MatchFactorOf(county_dictum_id: string): decimal;
+begin
+  MatchFactorOf := db_appropriations.MatchFactorOf(county_dictum_id);
+end;
+
+function TClass_biz_appropriations.MatchLevelIdOf(county_dictum_id: string): cardinal;
+begin
+  MatchLevelIdOf := db_appropriations.MatchLevelIdOf(county_dictum_id);
+end;
+
+function TClass_biz_appropriations.MatchLevelIdOfRegionDictum(region_dictum_id: string): cardinal;
+begin
+  MatchLevelIdOfRegionDictum := db_appropriations.MatchLevelIdOfRegionDictum(region_dictum_id);
+end;
+
+function TClass_biz_appropriations.NumActiveAmendments(regional_staffer_id: string): cardinal;
+begin
+  NumActiveAmendments := db_appropriations.NumActiveAmendments(regional_staffer_id);
 end;
 
 function TClass_biz_appropriations.ParentAppropriationOfEmsofRequest(master_id: string): decimal;

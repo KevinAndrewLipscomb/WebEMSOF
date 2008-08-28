@@ -19,6 +19,7 @@ type
     db_trail: TClass_db_trail;
   public
     constructor Create;
+    function BeAnyCurrentToService(service_id: string): boolean;
     function CountyCodeOfCountyDictum(county_dictum_id: string): string;
     function FundingRoundsGenerated
       (
@@ -33,6 +34,7 @@ type
       );
     function MatchFactorOf(county_dictum_id: string): decimal;
     function MatchLevelIdOf(county_dictum_id: string): cardinal;
+    function MatchLevelIdOfRegionDictum(region_dictum_id: string): cardinal;
     function NumActiveAmendments(regional_staffer_id: string): cardinal;
     function ParentAppropriationOfEmsofRequest(master_id: string): decimal;
     procedure ReduceBy
@@ -85,6 +87,25 @@ begin
   biz_fiscal_years := TClass_biz_fiscal_years.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
   db_trail := TClass_db_trail.Create;
+end;
+
+function TClass_db_appropriations.BeAnyCurrentToService(service_id: string): boolean;
+begin
+  self.Open;
+  BeAnyCurrentToService := '0' <> mysqlcommand.Create
+    (
+    'select count(*)'
+    + ' from county_dictated_appropriation'
+    +   ' join region_dictated_appropriation'
+    +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    +   ' join state_dictated_appropriation'
+    +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' where fiscal_year_id = "' + biz_fiscal_years.IdOfCurrent + '"'
+    +   ' and service_id = "' + service_id + '"',
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
 end;
 
 function TClass_db_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;
@@ -168,13 +189,30 @@ end;
 function TClass_db_appropriations.MatchLevelIdOf(county_dictum_id: string): cardinal;
 begin
   self.Open;
-  MatchLevelIdOf := int32.Parse
+  MatchLevelIdOf := uint32.Parse
     (
     mysqlcommand.Create
       (
       'select match_level_id'
       + ' from county_dictated_appropriation'
       + ' where county_dictated_appropriation.id = ' + county_dictum_id,
+      connection
+      )
+    .ExecuteScalar.tostring
+    );
+  self.Close;
+end;
+
+function TClass_db_appropriations.MatchLevelIdOfRegionDictum(region_dictum_id: string): cardinal;
+begin
+  self.Open;
+  MatchLevelIdOfRegionDictum := uint32.Parse
+    (
+    mysqlcommand.Create
+      (
+      'select match_level_id'
+      + ' from region_dictated_appropriation'
+      + ' where region_dictated_appropriation.id = ' + region_dictum_id,
       connection
       )
     .ExecuteScalar.tostring

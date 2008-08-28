@@ -490,7 +490,8 @@ INSERT INTO payment_proof_method_code_description_map (code, description) VALUES
 (1, 'Cancelled check'),
 (2, 'Bank draft'),
 (3, 'Bank statement'),
-(4, 'Wire transfer');
+(4, 'Wire transfer'),
+(5, 'Credit card');
 
 -- --------------------------------------------------------
 
@@ -526,6 +527,7 @@ CREATE TABLE region_dictated_appropriation (
   county_code tinyint(3) unsigned NOT NULL,
   amount decimal(10,2) unsigned NOT NULL,
   service_to_county_submission_deadline datetime default NULL,
+  `match_level_id` TINYINT UNSIGNED DEFAULT 1,
   PRIMARY KEY  (id),
   KEY county_code (county_code),
   KEY state_dictated_appropriation_id (state_dictated_appropriation_id)
@@ -840,7 +842,8 @@ ALTER TABLE `indicator_equipment_quantities`
 --
 ALTER TABLE `region_dictated_appropriation`
   ADD CONSTRAINT `region_dictated_appropriation_ibfk_1` FOREIGN KEY (`state_dictated_appropriation_id`) REFERENCES `state_dictated_appropriation` (`id`),
-  ADD CONSTRAINT `region_dictated_appropriation_ibfk_2` FOREIGN KEY (`county_code`) REFERENCES `county_code_name_map` (`code`);
+  ADD CONSTRAINT `region_dictated_appropriation_ibfk_2` FOREIGN KEY (`county_code`) REFERENCES `county_code_name_map` (`code`),
+  ADD CONSTRAINT `region_dictated_appropriation_match_level` FOREIGN KEY `region_dictated_appropriation_match_level` (`match_level_id`) REFERENCES `match_level` (`id`);
 
 --
 -- Constraints for table `regional_staffer`

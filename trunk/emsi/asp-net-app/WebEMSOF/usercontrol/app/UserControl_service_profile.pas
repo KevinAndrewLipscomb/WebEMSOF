@@ -3,6 +3,7 @@ unit UserControl_service_profile;
 interface
 
 uses
+  Class_biz_appropriations,
   Class_biz_charter_kinds,
   Class_biz_counties,
   Class_biz_services,
@@ -22,6 +23,7 @@ type
     be_loaded: boolean;
     be_profile_initially_valid: boolean;
     be_service_user: boolean;
+    biz_appropriations: TClass_biz_appropriations;
     biz_charter_kinds: TClass_biz_charter_kinds;
     biz_counties: TClass_biz_counties;
     biz_services: TClass_biz_services;
@@ -554,6 +556,7 @@ begin
     p.be_loaded := IsPostBack;
   end else begin
     //
+    p.biz_appropriations := TClass_biz_appropriations.Create;
     p.biz_charter_kinds := TClass_biz_charter_kinds.Create;
     p.biz_counties := TClass_biz_counties.Create;
     p.biz_services := TClass_biz_services.Create;
@@ -789,6 +792,8 @@ var
   be_emsof_participant: boolean;
 begin
   be_emsof_participant := (RadioButtonList_be_emsof_participant.selectedvalue <> 'FALSE');
+  RadioButtonList_be_emsof_participant.enabled :=
+    not (p.biz_appropriations.BeAnyCurrentToService(session['service_user_id'].tostring) and be_emsof_participant);
   Label_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
   TextBox_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
   TableRow_emsof_contact_name.visible := be_emsof_participant;

@@ -13,6 +13,7 @@ type
   public
     constructor Create;
     function AffiliateNumOfId(id: string): string;
+    function BeValidAndParticipating(id: string): boolean;
     function Bind
       (
       partial_affiliate_num: string;
@@ -23,7 +24,8 @@ type
       (
       county_user_id: string;
       target: system.object;
-      be_unfiltered: boolean = FALSE
+      be_unfiltered: boolean = FALSE;
+      be_inclusive_of_invalids_and_nonparticipants: boolean = FALSE
       );
     function Delete(affiliate_num: string): boolean;
     function Get
@@ -167,6 +169,14 @@ begin
   self.Close;
 end;
 
+function TClass_db_services.BeValidAndParticipating(id: string): boolean;
+begin
+  self.Open;
+  BeValidAndParticipating := '1' = mysqlcommand.Create
+    ('select be_valid_profile and be_emsof_participant from service where id = "' + id + '"',connection).ExecuteScalar.tostring;
+  self.Close;
+end;
+
 function TClass_db_services.Bind
   (
   partial_affiliate_num: string;
@@ -198,7 +208,8 @@ procedure TClass_db_services.BindListControl
   (
   county_user_id: string;
   target: system.object;
-  be_unfiltered: boolean = FALSE
+  be_unfiltered: boolean = FALSE;
+  be_inclusive_of_invalids_and_nonparticipants: boolean = FALSE
   );
 var
   dr: mysqldatareader;
@@ -208,9 +219,12 @@ begin
   ListControl(target).Items.Clear;
   ListControl(target).Items.Add(listitem.Create('-- Select --','0'));
   //
-  cmdText := 'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active = TRUE';
+  cmdText := 'SELECT id,name FROM service_user JOIN service using (id) WHERE be_active';
   if not be_unfiltered then begin
     cmdText := cmdText + ' and county_code = "' + county_user_id + '"';
+  end;
+  if not be_inclusive_of_invalids_and_nonparticipants then begin
+    cmdtext := cmdtext + ' and be_valid_profile and be_emsof_participant';
   end;
   cmdText := cmdText + ' ORDER BY name';
   //
