@@ -41,9 +41,6 @@ type
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
-    PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
-    PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_done: System.Web.UI.WebControls.LinkButton;
     LinkButton_unreject_all: System.Web.UI.WebControls.LinkButton;
@@ -95,7 +92,6 @@ begin
     end else begin
       //
       Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - county_unrejection';
-      Label_account_descriptor.text := session['county_name'].tostring + ' County';
       //
       // Initialize implementation-wide vars.
       //
@@ -127,7 +123,7 @@ begin
   if DataGrid_unrejectable_requests.items.count > 0 then begin
     for i := 0 to DataGrid_unrejectable_requests.items.count - 1 do begin
       p.biz_emsof_requests.Unreject
-        (DataGrid_unrejectable_requests.items[i],'county','The ' + Label_account_descriptor.text + ' EMSOF Coordinator');
+        (DataGrid_unrejectable_requests.items[i],'county','The ' + session['county_name'].tostring + ' County EMSOF Coordinator');
     end;
     Bind;
   end;
@@ -143,7 +139,7 @@ procedure TWebForm_county_unrejection.Datagrid_unrejectable_requests_ItemCommand
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   if e.commandname = 'Unreject' then begin
-    p.biz_emsof_requests.Unreject(e.item,'county','The ' + Label_account_descriptor.text + ' EMSOF Coordinator');
+    p.biz_emsof_requests.Unreject(e.item,'county','The ' + session['county_name'].tostring + ' County EMSOF Coordinator');
     Bind;
   end;
 end;
