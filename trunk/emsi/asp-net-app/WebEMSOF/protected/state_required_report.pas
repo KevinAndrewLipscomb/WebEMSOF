@@ -52,7 +52,6 @@ type
     DataGrid_state_export_batch: System.Web.UI.WebControls.DataGrid;
     Table_report: System.Web.UI.HtmlControls.HtmlTable;
     LinkButton_back: System.Web.UI.WebControls.LinkButton;
-    Label_account_descriptor: System.Web.UI.WebControls.Label;
     LinkButton_transmit_to_state: System.Web.UI.WebControls.LinkButton;
     TableRow_this_is_everything: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_this_is_just_some: System.Web.UI.HtmlControls.HtmlTableRow;
@@ -107,8 +106,6 @@ begin
     end;
     //
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - state_required_report';
-    
-    Label_account_descriptor.text := session['regional_staffer_name'].tostring;
     //
     // Initialize implementation-wide vars.
     //
