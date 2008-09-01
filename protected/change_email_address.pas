@@ -26,6 +26,7 @@ type
     procedure CustomValidator_nominal_email_address_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
     procedure TWebForm_change_email_address_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure Button_cancel_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -42,6 +43,7 @@ type
     RegularExpressionValidator_nominal_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
     CustomValidator_nominal_email_address: System.Web.UI.WebControls.CustomValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
+    Button_cancel: System.Web.UI.WebControls.Button;
   protected
     procedure OnInit(e: EventArgs); override;
   private
@@ -60,6 +62,7 @@ procedure TWebForm_change_email_address.InitializeComponent;
 begin
   Include(Self.CustomValidator_nominal_email_address.ServerValidate, Self.CustomValidator_nominal_email_address_ServerValidate);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
+  Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.PreRender, Self.TWebForm_change_email_address_PreRender);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -112,6 +115,12 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_change_email_address.Button_cancel_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  BackTrack;
+end;
+
 procedure TWebForm_change_email_address.TWebForm_change_email_address_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -149,7 +158,7 @@ begin
       )
       .ExecuteNonQuery;
     p.db.Close;
-    server.Transfer(session['target_user_table'].ToString + '_overview.aspx');
+    BackTrack;
   end else begin
     ValidationAlert;
   end;

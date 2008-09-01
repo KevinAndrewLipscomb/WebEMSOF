@@ -25,6 +25,7 @@ type
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_change_password_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure Button_cancel_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -40,6 +41,7 @@ type
     RequiredFieldValidator_confirmation_password: System.Web.UI.WebControls.RequiredFieldValidator;
     CompareValidator1: System.Web.UI.WebControls.CompareValidator;
     RegularExpressionValidator_password: System.Web.UI.WebControls.RegularExpressionValidator;
+    Button_cancel: System.Web.UI.WebControls.Button;
   protected
     procedure OnInit(e: EventArgs); override;
   private
@@ -58,6 +60,7 @@ implementation
 procedure TWebForm_change_password.InitializeComponent;
 begin
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
+  Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.PreRender, Self.TWebForm_change_password_PreRender);
   Include(Self.Load, Self.Page_Load);
 end;
@@ -93,6 +96,12 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_change_password.Button_cancel_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  BackTrack;
+end;
+
 procedure TWebForm_change_password.TWebForm_change_password_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -118,7 +127,7 @@ begin
     p.db.connection
     ).ExecuteNonQuery;
   p.db.Close;
-  server.Transfer(session['target_user_table'].ToString + '_overview.aspx');
+  BackTrack;
 end;
 
 end.
