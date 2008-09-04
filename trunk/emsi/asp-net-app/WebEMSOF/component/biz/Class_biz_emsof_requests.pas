@@ -1173,7 +1173,7 @@ begin
   + 'Replies to this message will be addressed to the ' + region_name + ' EMSOF Coordinator.' + NEW_LINE
   + NEW_LINE
   + '-- ' + configurationmanager.AppSettings['application_name'];
-  kix.SendControlAsAttachmentToEmailMessage
+  SendControlAsAttachmentToEmailMessage
     (
     Table_report,
     path.GetDirectoryName(request_physical_path) + '/' + configurationmanager.appsettings['scratch_folder'] + '/'

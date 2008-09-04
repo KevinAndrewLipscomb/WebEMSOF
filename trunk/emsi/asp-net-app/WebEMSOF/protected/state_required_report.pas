@@ -155,8 +155,7 @@ end;
 procedure TWebForm_state_required_report.LinkButton_export_scratch_copy_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  kix.ExportToExcel
-    (page,'WebEmsof-UNOFFICIAL-' + datetime.Now.tostring('yyyyMMddHHmmssf'),kix.StringOfControl(Table_report));
+  ExportToExcel(page,'WebEmsof-UNOFFICIAL-' + datetime.Now.tostring('yyyyMMddHHmmssf'),StringOfControl(Table_report));
 end;
 
 procedure TWebForm_state_required_report.DropDownList_amendment_SelectedIndexChanged(sender: System.Object;
@@ -167,7 +166,7 @@ begin
     (status_type(session['status_of_interest']),p.amendment_num_string,session['regional_staffer_user_id'].tostring).tostring;
   Label_funding_round.text := cardinal
     (1 + p.biz_appropriations.FundingRoundsGenerated(session['regional_staffer_user_id'].tostring,p.amendment_num_string)).tostring;
-  Bind;    
+  Bind;
 end;
 
 procedure TWebForm_state_required_report.LinkButton_transmit_to_state_Click
