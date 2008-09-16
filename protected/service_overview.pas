@@ -78,7 +78,7 @@ end;
 
 procedure TWebForm_service_overview.Page_Load(sender: System.Object; e: System.EventArgs);
 var
-  biz_get_profile_status: mysqlcommand;
+  biz_get_profile_status: string;
   be_stale_password: string;
 //  make_item_requests_deadline: system.datetime;
 begin
@@ -94,12 +94,14 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
+    BeginBreadCrumbTrail;
+    //
     p.db := TClass_db.Create;
     p.db.Open;
     //
     be_stale_password := mysqlcommand.Create
       (
-      'SELECT be_stale_password FROM service_user where id=' + session['service_user_id'].tostring,
+      'SELECT be_stale_password FROM service_user where id="' + session['service_user_id'].tostring + '"',
       p.db.connection
       )
       .ExecuteScalar.tostring;
@@ -130,8 +132,9 @@ begin
       (
       'select be_valid_profile from service where id = "' + session['service_user_id'].ToString + '"'
       ,p.db.connection
-      );
-    if biz_get_profile_status.ExecuteScalar.ToString = '0' then begin
+      )
+      .ExecuteScalar.tostring;
+    if biz_get_profile_status = '0' then begin
       Label_profile_status.Text := 'Stale or not saved.';
       LinkButton_profile_action.Text := '[Create/refresh profile]';
       Table_item_requests_section.visible := FALSE;
@@ -173,8 +176,6 @@ begin
       BindDataGrid;
       //
     end;
-    //
-    BeginBreadCrumbTrail;
     //
   end;
 end;
