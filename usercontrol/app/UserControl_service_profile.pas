@@ -657,7 +657,7 @@ end;
 procedure TWebUserControl_service_profile.CustomValidator_website_address_ServerValidate(source: System.Object;
   args: System.Web.UI.WebControls.ServerValidateEventArgs);
 begin
-  args.isvalid := BeValidDomainPartOfEmailAddress('@' + Safe(TextBox_website_address.text,HTTP_TARGET));
+  args.isvalid := BeValidDomainPartOfWebAddress(Safe(TextBox_website_address.text,HTTP_TARGET));
 end;
 
 procedure TWebUserControl_service_profile.CustomValidator_corpadmin_email_address_ServerValidate(source: System.Object;
