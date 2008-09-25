@@ -27,6 +27,8 @@ type
     procedure TWebForm_change_email_address_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure Button_cancel_Click(sender: System.Object; e: System.EventArgs);
+    procedure CustomValidator_confirmation_email_address_ServerValidate(source: System.Object; 
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
   strict private
     p: p_type;
@@ -42,7 +44,7 @@ type
     RequiredFieldValidator_confirmation_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
     RegularExpressionValidator_nominal_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
     CustomValidator_nominal_email_address: System.Web.UI.WebControls.CustomValidator;
-    CompareValidator1: System.Web.UI.WebControls.CompareValidator;
+    CustomValidator_confirmation_email_address: System.Web.UI.WebControls.CustomValidator;
     Button_cancel: System.Web.UI.WebControls.Button;
   protected
     procedure OnInit(e: EventArgs); override;
@@ -61,6 +63,7 @@ implementation
 procedure TWebForm_change_email_address.InitializeComponent;
 begin
   Include(Self.CustomValidator_nominal_email_address.ServerValidate, Self.CustomValidator_nominal_email_address_ServerValidate);
+  Include(Self.CustomValidator_confirmation_email_address.ServerValidate, Self.CustomValidator_confirmation_email_address_ServerValidate);
   Include(Self.Button_submit.Click, Self.Button_submit_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
   Include(Self.PreRender, Self.TWebForm_change_email_address_PreRender);
@@ -114,6 +117,13 @@ begin
   InitializeComponent;
   inherited OnInit(e);
 end;
+
+procedure TWebForm_change_email_address.CustomValidator_confirmation_email_address_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+begin
+  args.isvalid := (TextBox_nominal_email_address.text.trim = TextBox_confirmation_email_address.text.trim);
+end;
+
 
 procedure TWebForm_change_email_address.Button_cancel_Click(sender: System.Object;
   e: System.EventArgs);
