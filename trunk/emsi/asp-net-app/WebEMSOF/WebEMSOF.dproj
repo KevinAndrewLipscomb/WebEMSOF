@@ -150,7 +150,7 @@
     </Reference>
     <Reference Include="lib\ki\ki.dll">
       <AssemblyName>ki</AssemblyName>
-      <Version>1.0.3155.33423</Version>
+      <Version>1.0.3185.24747</Version>
       <HintPath>lib\ki\ki.dll</HintPath>
       <AssemblyTag>lib\ki\ki.dll</AssemblyTag>
       <LinkUnits>False</LinkUnits>
@@ -367,6 +367,11 @@
       <Form>timeout.TWebForm_timeout</Form>
       <DesignClass>ki_web_ui.page_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_about.pas">
+      <DependentUpon>usercontrol\app\UserControl_about.ascx</DependentUpon>
+      <Form>UserControl_about.TWebUserControl_about</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_analyses_binder.pas">
       <DependentUpon>usercontrol\app\UserControl_analyses_binder.ascx</DependentUpon>
       <Form>UserControl_analyses_binder.TWebUserControl_analyses_binder</Form>
@@ -382,6 +387,11 @@
       <Form>UserControl_common_header_bar.TWebUserControl_common_header_bar</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_config_binder.pas">
+      <DependentUpon>usercontrol\app\UserControl_config_binder.ascx</DependentUpon>
+      <Form>UserControl_config_binder.TWebUserControl_config_binder</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_equipment_procurement_binder.pas">
       <DependentUpon>usercontrol\app\UserControl_equipment_procurement_binder.ascx</DependentUpon>
       <Form>UserControl_equipment_procurement_binder.TWebUserControl_equipment_procurement_binder</Form>
@@ -392,9 +402,19 @@
       <Form>UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_financial_snapshot.pas">
+      <DependentUpon>usercontrol\app\UserControl_financial_snapshot.ascx</DependentUpon>
+      <Form>UserControl_financial_snapshot.TWebUserControl_financial_snapshot</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_match_level.pas">
       <DependentUpon>usercontrol\app\UserControl_match_level.ascx</DependentUpon>
       <Form>UserControl_match_level.TWebUserControl_match_level</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_outcomes.pas">
+      <DependentUpon>usercontrol\app\UserControl_outcomes.ascx</DependentUpon>
+      <Form>UserControl_outcomes.TWebUserControl_outcomes</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_postcontent.pas">
@@ -405,6 +425,21 @@
     <DCCReference Include="usercontrol\app\UserControl_precontent.pas">
       <DependentUpon>usercontrol\app\UserControl_precontent.ascx</DependentUpon>
       <Form>UserControl_precontent.TWebUserControl_precontent</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_regional_staffer_binder.pas">
+      <DependentUpon>usercontrol\app\UserControl_regional_staffer_binder.ascx</DependentUpon>
+      <Form>UserControl_regional_staffer_binder.TWebUserControl_regional_staffer_binder</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_regional_staffer_current_binder.pas">
+      <DependentUpon>usercontrol\app\UserControl_regional_staffer_current_binder.ascx</DependentUpon>
+      <Form>UserControl_regional_staffer_current_binder.TWebUserControl_regional_staffer_current_binder</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_regional_staffer_old_binder.pas">
+      <DependentUpon>usercontrol\app\UserControl_regional_staffer_old_binder.ascx</DependentUpon>
+      <Form>UserControl_regional_staffer_old_binder.TWebUserControl_regional_staffer_old_binder</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.pas">
@@ -426,6 +461,17 @@
       <DependentUpon>usercontrol\app\UserControl_values_to_services.ascx</DependentUpon>
       <Form>UserControl_values_to_services.TWebUserControl_values_to_services</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_workflow.pas">
+      <DependentUpon>usercontrol\app\UserControl_workflow.ascx</DependentUpon>
+      <Form>UserControl_workflow.TWebUserControl_workflow</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
+    <DCCReference Include="usercontrol\ki\UserControl_about_by.pas">
+      <DependentUpon>usercontrol\ki\UserControl_about_by.ascx</DependentUpon>
+    </DCCReference>
+    <DCCReference Include="usercontrol\ki\UserControl_about_tools.pas">
+      <DependentUpon>usercontrol\ki\UserControl_about_tools.ascx</DependentUpon>
     </DCCReference>
     <DCCReference Include="usercontrol\ki\UserControl_bread_crumb_trail.pas">
       <DependentUpon>usercontrol\ki\UserControl_bread_crumb_trail.ascx</DependentUpon>
@@ -496,18 +542,28 @@
     <None Include="testdata.sql" />
     <None Include="timeout.aspx" />
     <None Include="unpublished.config" />
+    <None Include="usercontrol\app\UserControl_about.ascx" />
     <None Include="usercontrol\app\UserControl_analyses_binder.ascx" />
     <None Include="usercontrol\app\UserControl_charter_kind.ascx" />
     <None Include="usercontrol\app\UserControl_common_header_bar.ascx" />
+    <None Include="usercontrol\app\UserControl_config_binder.ascx" />
     <None Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx" />
     <None Include="usercontrol\app\UserControl_equipment_procurement_overview.ascx" />
+    <None Include="usercontrol\app\UserControl_financial_snapshot.ascx" />
     <None Include="usercontrol\app\UserControl_match_level.ascx" />
+    <None Include="usercontrol\app\UserControl_outcomes.ascx" />
     <None Include="usercontrol\app\UserControl_postcontent.ascx" />
     <None Include="usercontrol\app\UserControl_precontent.ascx" />
+    <None Include="usercontrol\app\UserControl_regional_staffer_binder.ascx" />
+    <None Include="usercontrol\app\UserControl_regional_staffer_current_binder.ascx" />
+    <None Include="usercontrol\app\UserControl_regional_staffer_old_binder.ascx" />
     <None Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx" />
     <None Include="usercontrol\app\UserControl_service_profile.ascx" />
     <None Include="usercontrol\app\UserControl_update_progress_blocker.ascx" />
     <None Include="usercontrol\app\UserControl_values_to_services.ascx" />
+    <None Include="usercontrol\app\UserControl_workflow.ascx" />
+    <None Include="usercontrol\ki\UserControl_about_by.ascx" />
+    <None Include="usercontrol\ki\UserControl_about_tools.ascx" />
     <None Include="usercontrol\ki\UserControl_bread_crumb_trail.ascx" />
     <None Include="usercontrol\ki\UserControl_drop_down_date.ascx" />
     <None Include="usercontrol\ki\UserControl_print_div.ascx" />

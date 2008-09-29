@@ -81,7 +81,7 @@ begin
   //
   if session['UserControl_analyses_binder.p'] <> nil then begin
     p := p_type(session['UserControl_analyses_binder.p']);
-    p.be_loaded := IsPostBack;
+    p.be_loaded := IsPostBack and (string(session['UserControl_regional_staffer_binder_PlaceHolder_content']) = 'UserControl_analyses_binder');
     //
     // Dynamic controls must be re-added on each postback.
     //

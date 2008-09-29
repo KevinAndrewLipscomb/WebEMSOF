@@ -81,7 +81,17 @@ uses
   Class_biz_charter_kinds in 'component\biz\Class_biz_charter_kinds.pas',
   UserControl_charter_kind in 'usercontrol\app\UserControl_charter_kind.pas' {UserControl_charter_kind.TWebUserControl_charter_kind: ki_web_ui.usercontrol_class},
   charter_kinds in 'protected\charter_kinds.pas' {charter_kinds.TWebForm_charter_kinds: ki_web_ui.page_class},
-  UserControl_service_profile in 'usercontrol\app\UserControl_service_profile.pas' {UserControl_service_profile.TWebUserControl_service_profile: ki_web_ui.usercontrol_class};
+  UserControl_service_profile in 'usercontrol\app\UserControl_service_profile.pas' {UserControl_service_profile.TWebUserControl_service_profile: ki_web_ui.usercontrol_class},
+  UserControl_regional_staffer_binder in 'usercontrol\app\UserControl_regional_staffer_binder.pas' {UserControl_regional_staffer_binder.TWebUserControl_regional_staffer_binder: ki_web_ui.usercontrol_class},
+  UserControl_regional_staffer_current_binder in 'usercontrol\app\UserControl_regional_staffer_current_binder.pas' {UserControl_regional_staffer_current_binder.TWebUserControl_regional_staffer_current_binder: ki_web_ui.usercontrol_class},
+  UserControl_financial_snapshot in 'usercontrol\app\UserControl_financial_snapshot.pas' {UserControl_financial_snapshot.TWebUserControl_financial_snapshot: ki_web_ui.usercontrol_class},
+  UserControl_about in 'usercontrol\app\UserControl_about.pas' {UserControl_about.TWebUserControl_about: ki_web_ui.usercontrol_class},
+  UserControl_about_tools in 'usercontrol\ki\UserControl_about_tools.pas',
+  UserControl_about_by in 'usercontrol\ki\UserControl_about_by.pas',
+  UserControl_workflow in 'usercontrol\app\UserControl_workflow.pas' {UserControl_workflow.TWebUserControl_workflow: ki_web_ui.usercontrol_class},
+  UserControl_outcomes in 'usercontrol\app\UserControl_outcomes.pas' {UserControl_outcomes.TWebUserControl_outcomes: ki_web_ui.usercontrol_class},
+  UserControl_regional_staffer_old_binder in 'usercontrol\app\UserControl_regional_staffer_old_binder.pas' {UserControl_regional_staffer_old_binder.TWebUserControl_regional_staffer_old_binder: ki_web_ui.usercontrol_class},
+  UserControl_config_binder in 'usercontrol\app\UserControl_config_binder.pas' {UserControl_config_binder.TWebUserControl_config_binder: ki_web_ui.usercontrol_class};
 
 //
 // General Information about an assembly is controlled through the following
