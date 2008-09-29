@@ -14,90 +14,18 @@ type
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure LinkButton_regional_compliance_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_num_requests_needing_development_Click(sender: System.Object; 
-      e: System.EventArgs);
-    procedure LinkButton_num_requests_needing_finalization_Click(sender: System.Object; 
-      e: System.EventArgs);
-    procedure LinkButton_num_requests_needing_county_approval_Click(sender: System.Object; 
-      e: System.EventArgs);
-    procedure LinkButton_exec_dir_approval_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_transmittal_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_state_approval_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_invoice_collection_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_canceled_check_collection_Click(sender: System.Object; 
-      e: System.EventArgs);
-    procedure LinkButton_reimbursement_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_completed_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_withdrawn_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_rejected_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_deployed_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_archived_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_all_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_missed_deadlines_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_analyses_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_maintain_charter_kinds_Click(sender: System.Object; 
-      e: System.EventArgs);
   {$ENDREGION}
   strict private
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
-    Title: System.Web.UI.HtmlControls.HtmlGenericControl;
+    Title: htmltitle;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
-    //
-    Label_parent_appropriation: System.Web.UI.WebControls.Label;
-    Label_sum_of_appropriations: System.Web.UI.WebControls.Label;
-    Label_appropriated_to_services: System.Web.UI.WebControls.Label;
-    Label_requested_by_services: System.Web.UI.WebControls.Label;
-    Label_actually_spent: System.Web.UI.WebControls.Label;
-    Label_remaining: System.Web.UI.WebControls.Label;
-    //
-    LinkButton_num_requests_needing_development: System.Web.UI.WebControls.LinkButton;
-    LinkButton_num_requests_needing_finalization: System.Web.UI.WebControls.LinkButton;
-    LinkButton_num_requests_needing_county_approval: System.Web.UI.WebControls.LinkButton;
-    LinkButton_regional_compliance: System.Web.UI.WebControls.LinkButton;
-    LinkButton_exec_dir_approval: System.Web.UI.WebControls.LinkButton;
-    LinkButton_transmittal: System.Web.UI.WebControls.LinkButton;
-    LinkButton_state_approval: System.Web.UI.WebControls.LinkButton;
-    LinkButton_invoice_collection: System.Web.UI.WebControls.LinkButton;
-    LinkButton_canceled_check_collection: System.Web.UI.WebControls.LinkButton;
-    LinkButton_reimbursement: System.Web.UI.WebControls.LinkButton;
-    //
-    LinkButton_completed: System.Web.UI.WebControls.LinkButton;
-    LinkButton_withdrawn: System.Web.UI.WebControls.LinkButton;
-    LinkButton_rejected: System.Web.UI.WebControls.LinkButton;
-    //
-    LinkButton_set_deadlines: System.Web.UI.WebControls.LinkButton;
-    LinkButton_all: System.Web.UI.WebControls.LinkButton;
-    LinkButton_missed_deadlines: System.Web.UI.WebControls.LinkButton;
-    LinkButton_maintain_service_accounts: System.Web.UI.WebControls.LinkButton;
-    LinkButton_maintain_county_accounts: System.Web.UI.WebControls.LinkButton;
-    LinkButton_maintain_regional_staffer_accounts: System.Web.UI.WebControls.LinkButton;
-    LinkButton_init_new_fy: System.Web.UI.WebControls.LinkButton;
-    LinkButton_maintain_epels: System.Web.UI.WebControls.LinkButton;
-    LinkButton_maintain_region_dictated_appropriations: System.Web.UI.WebControls.LinkButton;
-    UserControl_print_div: TWebUserControl_print_div;
-    LinkButton_deployed: System.Web.UI.WebControls.LinkButton;
-    LinkButton_archived: System.Web.UI.WebControls.LinkButton;
-    LinkButton_analyses: System.Web.UI.WebControls.LinkButton;
-    LinkButton_maintain_charter_kinds: System.Web.UI.WebControls.LinkButton;
-    //
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation
-
-uses
-  Class_biz_appropriations,
-  Class_biz_emsof_requests,
-  Class_biz_fiscal_years,
-  Class_biz_regional_staffers;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -106,25 +34,6 @@ uses
 /// </summary>
 procedure TWebForm_regional_staffer_overview.InitializeComponent;
 begin
-  Include(Self.LinkButton_all.Click, Self.LinkButton_all_Click);
-  Include(Self.LinkButton_num_requests_needing_development.Click, Self.LinkButton_num_requests_needing_development_Click);
-  Include(Self.LinkButton_num_requests_needing_finalization.Click, Self.LinkButton_num_requests_needing_finalization_Click);
-  Include(Self.LinkButton_num_requests_needing_county_approval.Click, Self.LinkButton_num_requests_needing_county_approval_Click);
-  Include(Self.LinkButton_regional_compliance.Click, Self.LinkButton_regional_compliance_Click);
-  Include(Self.LinkButton_exec_dir_approval.Click, Self.LinkButton_exec_dir_approval_Click);
-  Include(Self.LinkButton_transmittal.Click, Self.LinkButton_transmittal_Click);
-  Include(Self.LinkButton_state_approval.Click, Self.LinkButton_state_approval_Click);
-  Include(Self.LinkButton_invoice_collection.Click, Self.LinkButton_invoice_collection_Click);
-  Include(Self.LinkButton_canceled_check_collection.Click, Self.LinkButton_canceled_check_collection_Click);
-  Include(Self.LinkButton_reimbursement.Click, Self.LinkButton_reimbursement_Click);
-  Include(Self.LinkButton_completed.Click, Self.LinkButton_completed_Click);
-  Include(Self.LinkButton_missed_deadlines.Click, Self.LinkButton_missed_deadlines_Click);
-  Include(Self.LinkButton_withdrawn.Click, Self.LinkButton_withdrawn_Click);
-  Include(Self.LinkButton_rejected.Click, Self.LinkButton_rejected_Click);
-  Include(Self.LinkButton_analyses.Click, Self.LinkButton_analyses_Click);
-  Include(Self.LinkButton_deployed.Click, Self.LinkButton_deployed_Click);
-  Include(Self.LinkButton_archived.Click, Self.LinkButton_archived_Click);
-  Include(Self.LinkButton_maintain_charter_kinds.Click, Self.LinkButton_maintain_charter_kinds_Click);
   Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
@@ -134,13 +43,6 @@ procedure TWebForm_regional_staffer_overview.Page_Load
   sender: System.Object;
   e: System.EventArgs
   );
-var
-  amount_actually_spent: decimal;
-  biz_appropriations: TClass_biz_appropriations;
-  biz_emsof_requests: TClass_biz_emsof_requests;
-  parent_appropriation: decimal;
-  sum_of_appropriations: decimal;
-  tally: string;
 begin
   if not IsPostback then begin
     if (session['regional_staffer_name'] = nil) or (session['regional_staffer_user_id'] = nil) then begin
@@ -148,70 +50,7 @@ begin
       DropCrumbAndTransferTo('~/login.aspx');
     end;
     //
-    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - regional_staffer_overview';
-    //
-    biz_appropriations := TClass_biz_appropriations.Create;
-    biz_emsof_requests := TClass_biz_emsof_requests.Create;
-    //
-    parent_appropriation := biz_appropriations.SumOfAppropriationsFromOnlyParent;
-    Label_parent_appropriation.text := parent_appropriation.tostring('C');
-    sum_of_appropriations := biz_appropriations.SumOfSelfDictatedAppropriations;
-    Label_sum_of_appropriations.text := sum_of_appropriations.tostring('C');
-    Label_appropriated_to_services.text := biz_appropriations.SumOfAppropriationsToServicesInRegion
-      (
-      TClass_biz_regional_staffers.Create.RegionCodeOf(session['regional_staffer_user_id'].tostring),
-      TClass_biz_fiscal_years.Create.IdOfCurrent
-      )
-      .tostring('C');
-    Label_requested_by_services.text := biz_emsof_requests.SumOfRequestValues.tostring('C');
-    amount_actually_spent := biz_emsof_requests.SumOfActualValues;
-    Label_actually_spent.text := amount_actually_spent.tostring('C');
-    Label_remaining.text := (parent_appropriation - amount_actually_spent).tostring('C');
-    //
-    LinkButton_num_requests_needing_development.text :=
-      biz_emsof_requests.TallyOfStatus(ALLOCATED) + LinkButton_num_requests_needing_development.text;
-    LinkButton_num_requests_needing_finalization.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_SERVICE_FINALIZATION) + LinkButton_num_requests_needing_finalization.text;
-    LinkButton_num_requests_needing_county_approval.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_COUNTY_APPROVAL) + LinkButton_num_requests_needing_county_approval.text;
-    //
-    tally := biz_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_COMPLIANCE_CHECK);
-    LinkButton_regional_compliance.text := tally + LinkButton_regional_compliance.text;
-    if (tally <> '0') and biz_emsof_requests.BeOkToApproveEmsofRequest(NEEDS_REGIONAL_COMPLIANCE_CHECK) then begin
-      LinkButton_regional_compliance.font.bold := TRUE;
-      LinkButton_regional_compliance.text := LinkButton_regional_compliance.text.ToUpper;
-    end;
-    //
-    tally := biz_emsof_requests.TallyOfStatus(NEEDS_REGIONAL_EXEC_DIR_APPROVAL);
-    LinkButton_exec_dir_approval.text := tally + LinkButton_exec_dir_approval.text;
-    if (tally <> '0') and biz_emsof_requests.BeOkToApproveEmsofRequest(NEEDS_REGIONAL_EXEC_DIR_APPROVAL) then begin
-      LinkButton_exec_dir_approval.font.bold := TRUE;
-      LinkButton_exec_dir_approval.text := LinkButton_exec_dir_approval.text.ToUpper;
-    end;
-    //
-    LinkButton_transmittal.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_SENT_TO_PA_DOH_EMSO) + LinkButton_transmittal.text;
-    LinkButton_state_approval.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_PA_DOH_EMSO_APPROVAL) + LinkButton_state_approval.text;
-    LinkButton_invoice_collection.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_INVOICE_COLLECTION) + LinkButton_invoice_collection.text;
-    LinkButton_canceled_check_collection.text :=
-      biz_emsof_requests.TallyOfStatus(NEEDS_CANCELED_CHECK_COLLECTION) + LinkButton_canceled_check_collection.text;
-    //
-    tally := biz_emsof_requests.TallyOfStatus(NEEDS_REIMBURSEMENT_ISSUANCE);
-    LinkButton_reimbursement.text := tally + LinkButton_reimbursement.text;
-    if (tally <> '0') then begin
-      LinkButton_reimbursement.font.bold := TRUE;
-      LinkButton_reimbursement.text := LinkButton_reimbursement.text.ToUpper;
-    end;
-    //
-    LinkButton_completed.text := biz_emsof_requests.TallyOfStatus(REIMBURSEMENT_ISSUED) + LinkButton_completed.text;
-    LinkButton_missed_deadlines.text := biz_emsof_requests.TallyOfStatus(FAILED_DEADLINE) + LinkButton_missed_deadlines.text;
-    LinkButton_withdrawn.text := biz_emsof_requests.TallyOfStatus(WITHDRAWN) + LinkButton_withdrawn.text;
-    LinkButton_rejected.text := biz_emsof_requests.TallyOfStatus(REJECTED) + LinkButton_rejected.text;
-    //
-    LinkButton_deployed.text := biz_emsof_requests.TallyOfStatus(DEPLOYED) + LinkButton_deployed.text;
-    LinkButton_archived.text := biz_emsof_requests.TallyOfStatus(ARCHIVED) + LinkButton_archived.text;
+    Title.text := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - regional_staffer_overview';
     //
     BeginBreadCrumbTrail;
     //
@@ -225,136 +64,6 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_maintain_charter_kinds_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  DropCrumbAndTransferTo('charter_kinds.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_analyses_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  DropCrumbAndTransferTo('analyses.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_missed_deadlines_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',FAILED_DEADLINE);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_all_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  DropCrumbAndTransferTo('all_emsof_requests.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_archived_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',ARCHIVED);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_deployed_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',DEPLOYED);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_rejected_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',REJECTED);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_withdrawn_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',WITHDRAWN);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_completed_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',REIMBURSEMENT_ISSUED);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_reimbursement_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_REIMBURSEMENT_ISSUANCE);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_canceled_check_collection_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_CANCELED_CHECK_COLLECTION);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_invoice_collection_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_INVOICE_COLLECTION);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_state_approval_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_PA_DOH_EMSO_APPROVAL);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_transmittal_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_SENT_TO_PA_DOH_EMSO);
-  DropCrumbAndTransferTo('state_required_report.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_exec_dir_approval_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_REGIONAL_EXEC_DIR_APPROVAL);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_county_approval_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_COUNTY_APPROVAL);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_finalization_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_SERVICE_FINALIZATION);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_num_requests_needing_development_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',ALLOCATED);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
-end;
-
-procedure TWebForm_regional_staffer_overview.LinkButton_regional_compliance_Click(sender: System.Object;
-  e: System.EventArgs);
-begin
-  SessionSet('status_of_interest',NEEDS_REGIONAL_COMPLIANCE_CHECK);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
 end;
 
 end.
