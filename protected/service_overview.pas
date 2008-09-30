@@ -8,26 +8,9 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
   System.Data.Common, mysql.data.mysqlclient, System.Globalization,
    system.configuration, system.web.security,
-  Class_db,
-  UserControl_print_div;
+  Class_db;
 
 type
-  p_type =
-    RECORD
-    be_before_deadline: boolean;
-    db: TClass_db;
-    tcci_id: cardinal;
-    tcci_fy_designator: cardinal;
-    tcci_county_name: cardinal;
-    tcci_county_dictated_appropriation_id: cardinal;
-    tcci_county_dictated_appropriation_amount: cardinal;
-    tcci_status_code: cardinal;
-    tcci_status: cardinal;
-    tcci_value: cardinal;
-    tcci_linkbutton: cardinal;
-    max_fiscal_year_id_string: string;
-    num_dg_items: cardinal;
-    END;
   TWebForm_service_overview = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -38,6 +21,24 @@ type
     procedure TWebForm_service_overview_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        be_before_deadline: boolean;
+        db: TClass_db;
+        tcci_id: cardinal;
+        tcci_fy_designator: cardinal;
+        tcci_county_name: cardinal;
+        tcci_county_dictated_appropriation_id: cardinal;
+        tcci_county_dictated_appropriation_amount: cardinal;
+        tcci_status_code: cardinal;
+        tcci_status: cardinal;
+        tcci_value: cardinal;
+        tcci_linkbutton: cardinal;
+        max_fiscal_year_id_string: string;
+        num_dg_items: cardinal;
+        END;
   strict private
     p: p_type;
     procedure BindDataGrid;
@@ -51,12 +52,8 @@ type
     DataGrid: System.Web.UI.WebControls.DataGrid;
     Label_no_dg_items: System.Web.UI.WebControls.Label;
     Table_item_requests_section: System.Web.UI.HtmlControls.HtmlTable;
-    UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
   end;
 
 implementation

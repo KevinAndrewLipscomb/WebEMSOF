@@ -9,19 +9,9 @@ uses
   mysql.data.mysqlclient,
   system.io,
   Class_biz_emsof_requests,
-  Class_biz_user,
-  UserControl_print_div;
+  Class_biz_user;
 
 type
-  p_type =
-    RECORD
-    be_sort_order_ascending: boolean;
-    biz_emsof_requests: TClass_biz_emsof_requests;
-    biz_user: TClass_biz_user;
-    distribution_list: string;
-    num_qualifying_requests: cardinal;
-    sort_order: string;
-    END;
   TWebForm_emsof_request_status_filter = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -35,6 +25,17 @@ type
     procedure Button_send_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    type
+      p_type =
+        RECORD
+        be_sort_order_ascending: boolean;
+        biz_emsof_requests: TClass_biz_emsof_requests;
+        biz_user: TClass_biz_user;
+        distribution_list: string;
+        num_qualifying_requests: cardinal;
+        sort_order: string;
+        END;
+  strict private
     p: p_type;
     procedure BindOverview;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -47,7 +48,6 @@ type
     Label_status: System.Web.UI.WebControls.Label;
     TableRow_spreadsheet: System.Web.UI.HtmlControls.HtmlTableRow;
     LinkButton_retransmit_to_state: System.Web.UI.WebControls.LinkButton;
-    UserControl_print_div: TWebUserControl_print_div;
     TableRow_data: System.Web.UI.HtmlControls.HtmlTableRow;
     TextBox_quick_message_subject: System.Web.UI.WebControls.TextBox;
     TextBox_quick_message_body: System.Web.UI.WebControls.TextBox;
@@ -57,8 +57,6 @@ type
     Table_quick_message: System.Web.UI.HtmlControls.HtmlTable;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
   end;
 
 implementation

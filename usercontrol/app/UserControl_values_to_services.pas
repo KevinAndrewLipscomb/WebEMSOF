@@ -163,7 +163,7 @@ begin
   //
   if session['UserControl_values_to_services.p'] <> nil then begin
     p := p_type(session['UserControl_values_to_services.p']);
-    p.be_loaded := IsPostBack and (string(session['parent_PlaceHolder_content']) = 'UserControl_values_to_services');
+    p.be_loaded := IsPostBack and (string(session['UserControl_regional_staffer_binder_UserControl_analyses_binder_PlaceHolder_content']) = 'UserControl_values_to_services');
   end else begin
     //
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;

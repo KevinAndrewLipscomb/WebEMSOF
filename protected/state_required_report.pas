@@ -9,22 +9,9 @@ uses
   mysql.data.mysqlclient,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
-  kix,
-  UserControl_print_div;
+  kix;
 
 type
-  p_type =
-    RECORD
-    amendment_num_string: string;
-    be_datagrid_empty: boolean;
-    be_replacement_rows_present: boolean;
-    biz_appropriations: TClass_biz_appropriations;
-    biz_emsof_requests: TClass_biz_emsof_requests;
-    grand_total_cost: decimal;
-    num_datagrid_rows: cardinal;
-    total_emsof_ante: decimal;
-    total_provider_match: decimal;
-    END;
   TWebForm_state_required_report = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -37,6 +24,20 @@ type
       e: System.EventArgs);
     procedure LinkButton_export_scratch_copy_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        amendment_num_string: string;
+        be_datagrid_empty: boolean;
+        be_replacement_rows_present: boolean;
+        biz_appropriations: TClass_biz_appropriations;
+        biz_emsof_requests: TClass_biz_emsof_requests;
+        grand_total_cost: decimal;
+        num_datagrid_rows: cardinal;
+        total_emsof_ante: decimal;
+        total_provider_match: decimal;
+        END;
   strict private
     p: p_type;
     procedure Bind;
@@ -61,13 +62,8 @@ type
     Label_total_num_requests: System.Web.UI.WebControls.Label;
     LinkButton_export_scratch_copy: System.Web.UI.WebControls.LinkButton;
     Table_replacement_note: System.Web.UI.HtmlControls.HtmlTable;
-    UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation

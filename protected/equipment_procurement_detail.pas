@@ -9,18 +9,9 @@ uses
   Class_biz_emsof_requests,
   Class_biz_equipment,
   Class_biz_fiscal_years,
-  ki_web_ui,
-  UserControl_print_div;
+  ki_web_ui;
 
 type
-  p_type =
-    RECORD
-    be_sort_order_ascending: boolean;
-    biz_emsof_requests: TClass_biz_emsof_requests;
-    biz_equipment: TClass_biz_equipment;
-    biz_fiscal_years: TClass_biz_fiscal_years;
-    sort_order: string;
-    END;
   TWebForm_equipment_procurement_detail = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -33,28 +24,27 @@ type
       e: System.EventArgs);
     procedure GridView_control_Sorting(sender: System.Object; e: System.Web.UI.WebControls.GridViewSortEventArgs);
   {$ENDREGION}
-  //
-  // Expected session objects:
-  //
-  //   waypoint_stack: system.collections.stack;
-  //
-  //
+  strict private
+    type
+      p_type =
+        RECORD
+        be_sort_order_ascending: boolean;
+        biz_emsof_requests: TClass_biz_emsof_requests;
+        biz_equipment: TClass_biz_equipment;
+        biz_fiscal_years: TClass_biz_fiscal_years;
+        sort_order: string;
+        END;
   strict private
     p: p_type;
     procedure Bind;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlGenericControl;
-    UserControl_print_div: TWebUserControl_print_div;
     GridView_control: System.Web.UI.WebControls.GridView;
     DropDownList_equipment: System.Web.UI.WebControls.DropDownList;
     DropDownList_cycle: System.Web.UI.WebControls.DropDownList;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation
