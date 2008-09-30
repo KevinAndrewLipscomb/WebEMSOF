@@ -1,32 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <%@ Page language="c#" Debug="true" Codebehind="equipment_procurement_detail.pas" AutoEventWireup="false" Inherits="equipment_procurement_detail.TWebForm_equipment_procurement_detail" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
-<%@ Register TagPrefix="uc1" TagName="UserControl_print_div" Src="~/usercontrol/ki/UserControl_print_div.ascx" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
   <head>
-	<title id="Title" runat="server"></title>
-   <link REL="StyleSheet" HREF="../standard.css" TYPE="text/css" />
-      <!-- $Id$ -->
+    <title id="Title" runat="server"></title>
+    <link REL="StyleSheet" HREF="../standard.css" TYPE="text/css" />
+    <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
-
   <body bgcolor="white">
      <form runat="server">
 	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
-<uc1:UserControl_print_div id="UserControl_print_div" runat="server"></uc1:UserControl_print_div>
-<div id="Div_print_area">
-</div><table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+<table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
   <tr>
     <td>
       <table cellspacing="0" cellpadding="10" border="0">
         <tr>
-          <td bgcolor="#dcdcdc"><strong>Cycle:&nbsp; <asp:DropDownList id="DropDownList_cycle" runat="server" autopostback="True"></asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp; Equipment:&nbsp; <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True"></asp:DropDownList>
-
-</strong></td>
+          <td bgcolor="#dcdcdc"><strong>Cycle:&nbsp; <asp:DropDownList id="DropDownList_cycle" runat="server" autopostback="True"></asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp; Equipment:&nbsp; <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True"></asp:DropDownList></strong></td>
         </tr>
         <tr>
           <td>

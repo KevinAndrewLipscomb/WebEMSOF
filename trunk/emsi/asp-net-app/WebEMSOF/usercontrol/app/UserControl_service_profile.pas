@@ -7,6 +7,7 @@ uses
   Class_biz_charter_kinds,
   Class_biz_counties,
   Class_biz_services,
+  Class_biz_user,
   ki_web_ui,
   System.Data,
   System.Drawing,
@@ -16,18 +17,6 @@ uses
   System.Web.UI.HtmlControls;
 
 type
-  p_type =
-    RECORD
-    affiliate_num: string;
-    be_authorized_to_change_affiliate_num_and_delete_service: boolean;
-    be_loaded: boolean;
-    be_profile_initially_valid: boolean;
-    be_service_user: boolean;
-    biz_appropriations: TClass_biz_appropriations;
-    biz_charter_kinds: TClass_biz_charter_kinds;
-    biz_counties: TClass_biz_counties;
-    biz_services: TClass_biz_services;
-    END;
   TWebUserControl_service_profile = class(ki_web_ui.usercontrol_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -59,6 +48,21 @@ type
     procedure CustomValidator_num_ambulances_ServerValidate(source: System.Object; 
       args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        affiliate_num: string;
+        be_authorized_to_change_affiliate_num_and_delete_service: boolean;
+        be_loaded: boolean;
+        be_profile_initially_valid: boolean;
+        be_service_user: boolean;
+        biz_appropriations: TClass_biz_appropriations;
+        biz_charter_kinds: TClass_biz_charter_kinds;
+        biz_counties: TClass_biz_counties;
+        biz_services: TClass_biz_services;
+        biz_user: TClass_biz_user;
+        END;
   strict private
     p: p_type;
     procedure Clear;
@@ -186,10 +190,6 @@ type
     RegularExpressionValidator_federal_tax_id: System.Web.UI.WebControls.RegularExpressionValidator;
   protected
     procedure OnInit(e: System.EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   published
     function Fresh: TWebUserControl_service_profile;
   end;
@@ -560,13 +560,14 @@ begin
     p.biz_charter_kinds := TClass_biz_charter_kinds.Create;
     p.biz_counties := TClass_biz_counties.Create;
     p.biz_services := TClass_biz_services.Create;
+    p.biz_user := TClass_biz_user.Create;
     //
     p.be_authorized_to_change_affiliate_num_and_delete_service := p.biz_services.BeOkToChangeAffiliateNumAndDelete;
     p.be_loaded := FALSE;
     p.be_profile_initially_valid := FALSE;
-    p.be_service_user := (session['target_user_table'].tostring = 'service');
+    p.be_service_user := (p.biz_user.Kind = 'service');
     //
-    p.affiliate_num := p.biz_services.AffiliateNumOfId(session['service_user_id'].tostring);
+    p.affiliate_num := p.biz_services.AffiliateNumOfId(p.biz_user.IdNum);
     //
   end;
   //
@@ -734,9 +735,9 @@ begin
       CheckBox_be_qrs_unrecognized.checked,
       CheckBox_be_rescue_unrecognized.checked
       );
-    Alert(USER,SUCCESS,'recsaved','Record saved.');
+    Alert(USER,SUCCESS,'recsaved','Record saved.',TRUE);
   end else begin
-    ValidationAlert;
+    ValidationAlert(TRUE);
   end;
 end;
 
@@ -752,7 +753,7 @@ begin
   if p.biz_services.Delete(Safe(TextBox_affiliate_num.text,ALPHANUM)) then begin
     Clear;
   end else begin
-    Alert(kix.APPDATA,kix.FAILURE,'dependency',' Cannot delete this record because another record depends on it.');
+    Alert(kix.APPDATA,kix.FAILURE,'dependency',' Cannot delete this record because another record depends on it.',TRUE);
   end;
 end;
 

@@ -7,19 +7,20 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
   System.Globalization,
-  System.Data.Common, system.configuration, system.web.security,
-  UserControl_print_div;
+  System.Data.Common, system.configuration, system.web.security;
 
 type
-  p_type =
-    RECORD
-    END;
   TWebForm_profile = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
     procedure TWebForm_profile_PreRender(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        END;
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -58,10 +59,6 @@ type
     Button_submit: System.Web.UI.WebControls.Button;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation

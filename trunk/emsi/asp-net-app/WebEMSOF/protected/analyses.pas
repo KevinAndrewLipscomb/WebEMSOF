@@ -8,13 +8,9 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
   System.Data.Common, mysql.data.mysqlclient, System.Globalization,
   system.configuration, system.web.security,
-  UserControl_print_div,
   UserControl_analyses_binder;
 
 type
-  p_type =
-    RECORD
-    END;
   TWebForm_analyses = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -23,15 +19,17 @@ type
       e: System.EventArgs);
   {$ENDREGION}
   strict private
+    type
+      p_type =
+        RECORD
+        END;
+  strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlTitle;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
   end;
 
 implementation

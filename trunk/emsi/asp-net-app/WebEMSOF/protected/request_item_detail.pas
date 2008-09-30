@@ -8,24 +8,9 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.mail, system.web.security,
   Class_db,
-  Class_db_trail,
-  UserControl_print_div;
+  Class_db_trail;
 
 type
-  p_type =
-    RECORD
-    additional_service_ante: decimal;
-    allowable_cost: decimal;
-    dri_equipment_category_allowable_cost: cardinal;
-    dri_equipment_category_funding_level: cardinal;
-    cmdText_get_equipment_category_monetary_details: string;
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    funding_level: decimal;
-    match_level: decimal;
-    saved_emsof_ante: decimal;
-    saved_additional_service_ante: decimal;
-    END;
   TWebForm_request_item_detail = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -44,6 +29,22 @@ type
     procedure TWebForm_request_item_detail_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        additional_service_ante: decimal;
+        allowable_cost: decimal;
+        dri_equipment_category_allowable_cost: cardinal;
+        dri_equipment_category_funding_level: cardinal;
+        cmdText_get_equipment_category_monetary_details: string;
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        funding_level: decimal;
+        match_level: decimal;
+        saved_emsof_ante: decimal;
+        saved_additional_service_ante: decimal;
+        END;
   strict private
     p: p_type;
     procedure AddItem;
@@ -90,12 +91,8 @@ type
     Button_update: System.Web.UI.WebControls.Button;
     Button_withdraw: System.Web.UI.WebControls.LinkButton;
     TableRow_post_finalization_actions: System.Web.UI.HtmlControls.HtmlTableRow;
-    UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-  public
-    { Public Declarations }
   end;
 
 implementation

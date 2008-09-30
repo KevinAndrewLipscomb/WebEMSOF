@@ -10,31 +10,9 @@ uses
   Class_biz_emsof_requests,
   Class_db,
   Class_db_trail,
-  ki_web_ui,
-  UserControl_print_div;
+  ki_web_ui;
 
 type
-  p_type =
-    RECORD
-    be_before_deadline: boolean;
-    be_completely_approved: boolean;
-    be_finalized: boolean;
-    biz_emsof_requests: TClass_biz_emsof_requests;
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    tcci_master_id: cardinal;
-    tcci_priority: cardinal;
-    tcci_code: cardinal;
-    tcci_item_description: cardinal;
-    tcci_status: cardinal;
-    tcci_linkbutton_select: cardinal;
-    tcci_linkbutton_increase_priority: cardinal;
-    tcci_linkbutton_decrease_priority: cardinal;
-    tcci_emsof_ante: cardinal;
-    num_items: cardinal;
-    sum_of_emsof_antes: decimal;
-    unused_amount: decimal;
-    END;
   TWebForm_request_overview = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -48,6 +26,29 @@ type
     procedure LinkButton_add_item_to_request_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_withdraw_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        be_before_deadline: boolean;
+        be_completely_approved: boolean;
+        be_finalized: boolean;
+        biz_emsof_requests: TClass_biz_emsof_requests;
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        tcci_master_id: cardinal;
+        tcci_priority: cardinal;
+        tcci_code: cardinal;
+        tcci_item_description: cardinal;
+        tcci_status: cardinal;
+        tcci_linkbutton_select: cardinal;
+        tcci_linkbutton_increase_priority: cardinal;
+        tcci_linkbutton_decrease_priority: cardinal;
+        tcci_emsof_ante: cardinal;
+        num_items: cardinal;
+        sum_of_emsof_antes: decimal;
+        unused_amount: decimal;
+        END;
   strict private
     p: p_type;
     procedure Bind_items;
@@ -75,12 +76,8 @@ type
     Table_withdrawal: System.Web.UI.HtmlControls.HtmlTable;
     CheckBox_withdraw: System.Web.UI.WebControls.CheckBox;
     Button_withdraw: System.Web.UI.WebControls.Button;
-    UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
   end;
 
 implementation

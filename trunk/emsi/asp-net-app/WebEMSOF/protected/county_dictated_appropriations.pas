@@ -14,26 +14,9 @@ uses
   Class_db_trail,
   system.configuration,
   system.web.mail,
-  system.web.security,
-  UserControl_print_div;
+  system.web.security;
 
 type
-  p_type =
-    RECORD
-    biz_appropriations: TClass_biz_appropriations;
-    biz_emsof_requests: TClass_biz_emsof_requests;
-    be_before_deadline: boolean;
-    be_filtered: boolean;
-    be_sort_order_ascending: boolean;
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    num_appropriations: cardinal;
-    region_dictated_appropriation_amount: decimal;
-    saved_amount: decimal;
-    sort_order: string;
-    sum_of_service_appropriations: decimal;
-    unappropriated_amount: decimal;
-    END;
   TWebForm_county_dictated_appropriations = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -61,6 +44,24 @@ type
       e: System.EventArgs);
   {$ENDREGION}
   strict private
+    type
+      p_type =
+        RECORD
+        biz_appropriations: TClass_biz_appropriations;
+        biz_emsof_requests: TClass_biz_emsof_requests;
+        be_before_deadline: boolean;
+        be_filtered: boolean;
+        be_sort_order_ascending: boolean;
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        num_appropriations: cardinal;
+        region_dictated_appropriation_amount: decimal;
+        saved_amount: decimal;
+        sort_order: string;
+        sum_of_service_appropriations: decimal;
+        unappropriated_amount: decimal;
+        END;
+  strict private
     p: p_type;
     procedure Bind_service_appropriations;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -84,11 +85,8 @@ type
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
     CheckBox_hide_nonapproval_requests: System.Web.UI.WebControls.CheckBox;
-    UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
-  public
-    { Public Declarations }
   end;
 
 implementation

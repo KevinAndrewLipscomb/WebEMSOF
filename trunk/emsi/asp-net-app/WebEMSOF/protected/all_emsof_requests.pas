@@ -8,20 +8,9 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security,
   mysql.data.mysqlclient,
   Class_biz_emsof_requests,
-  Class_biz_user,
-  UserControl_print_div;
+  Class_biz_user;
 
 type
-  p_type =
-    RECORD
-    biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
-    be_datagrid_empty: boolean;
-    be_sort_order_ascending: boolean;
-    biz_user: TClass_biz_user;
-    distribution_list: string;
-    num_datagrid_rows: cardinal;
-    sort_order: string;
-    END;
   TWebForm_all_emsof_requests = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -34,6 +23,18 @@ type
     procedure Button_send_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
+    type
+      p_type =
+        RECORD
+        biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
+        be_datagrid_empty: boolean;
+        be_sort_order_ascending: boolean;
+        biz_user: TClass_biz_user;
+        distribution_list: string;
+        num_datagrid_rows: cardinal;
+        sort_order: string;
+        END;
+  strict private
     p: p_type;
     procedure Bind;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -44,7 +45,6 @@ type
     TableRow_none: System.Web.UI.HtmlControls.HtmlTableRow;
     DataGrid_requests: System.Web.UI.WebControls.DataGrid;
     Label_num_datagrid_rows: System.Web.UI.WebControls.Label;
-    UserControl_print_div: TWebUserControl_print_div;
     TableRow_data: System.Web.UI.HtmlControls.HtmlTableRow;
     TextBox_quick_message_subject: System.Web.UI.WebControls.TextBox;
     TextBox_quick_message_body: System.Web.UI.WebControls.TextBox;
@@ -54,10 +54,6 @@ type
     Table_quick_message: System.Web.UI.HtmlControls.HtmlTable;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation

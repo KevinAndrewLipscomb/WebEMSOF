@@ -7,14 +7,9 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.mail, system.web.security,
-  Class_db,
-  UserControl_print_div;
+  Class_db;
 
 type
-  p_type =
-    RECORD
-    db: TClass_db;
-    END;
   TWebForm_finalize = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -36,6 +31,12 @@ type
     procedure TWebForm_finalize_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        db: TClass_db;
+        END;
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -79,13 +80,8 @@ type
     LinkButton_request_overview_10: System.Web.UI.WebControls.LinkButton;
     LinkButton_request_overview_bottom: System.Web.UI.WebControls.LinkButton;
     HyperLink_terms_and_conditions: System.Web.UI.WebControls.HyperLink;
-    UserControl_print_div: TWebUserControl_print_div;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation
