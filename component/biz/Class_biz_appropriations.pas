@@ -38,6 +38,7 @@ type
       county_dictum_id: string
       );
     function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    procedure SetNewStateToRegion(amount: decimal);
     procedure SetServiceToCountySubmissionDeadline
       (
       id: string;
@@ -139,6 +140,11 @@ function TClass_biz_appropriations.RegionCodeOfCountyDictum(county_dictum_id: st
 begin
   RegionCodeOfCountyDictum :=
     db_appropriations.RegionCodeOfCountyDictum(county_dictum_id);
+end;
+
+procedure TClass_biz_appropriations.SetNewStateToRegion(amount: decimal);
+begin
+  db_appropriations.SetNewStateToRegion(amount);
 end;
 
 procedure TClass_biz_appropriations.SetServiceToCountySubmissionDeadline

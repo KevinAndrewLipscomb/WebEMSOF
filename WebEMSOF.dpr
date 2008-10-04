@@ -91,7 +91,11 @@ uses
   UserControl_workflow in 'usercontrol\app\UserControl_workflow.pas' {UserControl_workflow.TWebUserControl_workflow: ki_web_ui.usercontrol_class},
   UserControl_outcomes in 'usercontrol\app\UserControl_outcomes.pas' {UserControl_outcomes.TWebUserControl_outcomes: ki_web_ui.usercontrol_class},
   UserControl_regional_staffer_old_binder in 'usercontrol\app\UserControl_regional_staffer_old_binder.pas' {UserControl_regional_staffer_old_binder.TWebUserControl_regional_staffer_old_binder: ki_web_ui.usercontrol_class},
-  UserControl_config_binder in 'usercontrol\app\UserControl_config_binder.pas' {UserControl_config_binder.TWebUserControl_config_binder: ki_web_ui.usercontrol_class};
+  UserControl_config_binder in 'usercontrol\app\UserControl_config_binder.pas' {UserControl_config_binder.TWebUserControl_config_binder: ki_web_ui.usercontrol_class},
+  UserControl_regional_staffer_new_binder in 'usercontrol\app\UserControl_regional_staffer_new_binder.pas' {UserControl_regional_staffer_new_binder.TWebUserControl_regional_staffer_new_binder: ki_web_ui.usercontrol_class},
+  UserControl_annual_cycle_setup in 'usercontrol\app\UserControl_annual_cycle_setup.pas' {UserControl_annual_cycle_setup.TWebUserControl_annual_cycle_setup: ki_web_ui.usercontrol_class},
+  Class_biz_fy_calendar in 'component\biz\Class_biz_fy_calendar.pas',
+  Class_db_fy_calendar in 'component\db\Class_db_fy_calendar.pas';
 
 //
 // General Information about an assembly is controlled through the following

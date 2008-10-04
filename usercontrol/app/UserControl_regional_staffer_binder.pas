@@ -51,9 +51,8 @@ uses
   UserControl_analyses_binder,
   UserControl_config_binder,
   UserControl_regional_staffer_current_binder,
-//  UserControl_new_binder,
-  UserControl_regional_staffer_old_binder
-  ;
+  UserControl_regional_staffer_new_binder,
+  UserControl_regional_staffer_old_binder;
 
 const
   TSSI_CURRENT = 0;
@@ -110,13 +109,13 @@ begin
         'UserControl_regional_staffer_old_binder',
         PlaceHolder_content
         );
-//    TSSI_NEW:
-//      p.content_id := AddIdentifiedControlToPlaceHolder
-//        (
-//        TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')),
-//        'UserControl3',
-//        PlaceHolder_content
-//        );
+    TSSI_NEW:
+      p.content_id := AddIdentifiedControlToPlaceHolder
+        (
+        TWebUserControl_regional_staffer_new_binder(LoadControl('~/usercontrol/app/UserControl_regional_staffer_new_binder.ascx')),
+        'UserControl_regional_staffer_new_binder',
+        PlaceHolder_content
+        );
     TSSI_ANALYSES:
       p.content_id := AddIdentifiedControlToPlaceHolder
         (
@@ -179,13 +178,13 @@ begin
       'UserControl_regional_staffer_old_binder',
       PlaceHolder_content
       );
-//  TSSI_NEW:
-//    p.content_id := AddIdentifiedControlToPlaceHolder
-//      (
-//      TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')).Fresh,
-//      'UserControl3',
-//      PlaceHolder_content
-//      );
+  TSSI_NEW:
+    p.content_id := AddIdentifiedControlToPlaceHolder
+      (
+      TWebUserControl_regional_staffer_new_binder(LoadControl('~/usercontrol/app/UserControl_regional_staffer_new_binder.ascx')).Fresh,
+      'UserControl_regional_staffer_new_binder',
+      PlaceHolder_content
+      );
   TSSI_ANALYSES:
     p.content_id := AddIdentifiedControlToPlaceHolder
       (
