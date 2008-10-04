@@ -43,6 +43,7 @@ type
       county_dictum_id: string
       );
     function RegionCodeOfCountyDictum(county_dictum_id: string): string;
+    procedure SetNewStateToRegion(amount: decimal);
     procedure SetServiceToCountySubmissionDeadline
       (
       id: string;
@@ -289,6 +290,30 @@ begin
     connection
     )
     .ExecuteScalar.tostring;
+  self.Close;
+end;
+
+procedure TClass_db_appropriations.SetNewStateToRegion(amount: decimal);
+var
+  settings: string;
+begin
+  //
+  settings := ' region_code = 1'
+  + ' , fiscal_year_id = (select max(id) from fiscal_year)'
+  + ' , amount = "' + amount.tostring + '"';
+  //
+  self.Open;
+  mysqlcommand.Create
+    (
+    db_trail.Saved
+      (
+      'insert state_dictated_appropriation'
+      + ' set ' + settings
+      + ' on duplicate key update ' + settings
+      ),
+    connection
+    )
+    .ExecuteNonquery;
   self.Close;
 end;
 

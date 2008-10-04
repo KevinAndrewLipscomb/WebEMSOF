@@ -16,6 +16,7 @@ type
     function DesignatorOfCurrent: string;
     function IdOfCurrent: string;
     function IdOfDesignator(designator: string): string;
+    procedure StartNew(designator: string);
   end;
 
 implementation
@@ -59,6 +60,13 @@ begin
   self.Open;
   IdOfDesignator := mysqlcommand.Create
     ('select id from fiscal_year where designator = "' + designator + '"',connection).ExecuteScalar.tostring;
+  self.Close;
+end;
+
+procedure TClass_db_fiscal_years.StartNew(designator: string);
+begin
+  self.Open;
+  mysqlcommand.Create('insert ignore fiscal_year set designator = "' + designator + '"',connection).ExecuteNonquery;
   self.Close;
 end;
 
