@@ -8,14 +8,15 @@ uses
 
 type
   TClass_biz_counties = class
-  private
+  strict private
     db_counties: TClass_db_counties;
   public
     constructor Create;
+  published
     procedure BindDirectToListControl
       (
       target: system.object;
-      unselected_literal: string = '-- county --';
+      unselected_literal: string = '-- County --';
       selected_value: string = EMPTY
       );
     function NameOf(code: string): string;
@@ -33,7 +34,7 @@ end;
 procedure TClass_biz_counties.BindDirectToListControl
   (
   target: system.object;
-  unselected_literal: string = '-- county --';
+  unselected_literal: string = '-- County --';
   selected_value: string = EMPTY
   );
 begin

@@ -35,6 +35,8 @@ type
   strict protected
     TabContainer_control: AjaxControlToolkit.TabContainer;
     PlaceHolder_content: System.Web.UI.WebControls.PlaceHolder;
+    TabPanel_new: tabpanel;
+    TabPanel_config: tabpanel;
   protected
     procedure OnInit(e: System.EventArgs); override;
   published
@@ -68,6 +70,11 @@ begin
   if not p.be_loaded then begin
     //
     TabContainer_control.activetabindex := p.tab_index;
+    //
+    TabPanel_new.enabled := httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator');
+    TabPanel_config.enabled := httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator');
     //
     p.be_loaded := TRUE;
     //

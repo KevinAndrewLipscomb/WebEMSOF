@@ -10,14 +10,15 @@ uses
 
 type
   TClass_db_counties = class(TClass_db)
-  private
+  strict private
     { Private Declarations }
   public
     constructor Create;
+  published
     procedure BindDirectToListControl
       (
       target: system.object;
-      unselected_literal: string = '-- county --';
+      unselected_literal: string = '-- County --';
       selected_value: string = EMPTY
       );
     function NameOf(code: string): string;
@@ -34,7 +35,7 @@ end;
 procedure TClass_db_counties.BindDirectToListControl
   (
   target: system.object;
-  unselected_literal: string = '-- county --';
+  unselected_literal: string = '-- County --';
   selected_value: string = EMPTY
   );
 var

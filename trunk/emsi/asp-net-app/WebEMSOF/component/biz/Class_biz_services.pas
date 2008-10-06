@@ -11,7 +11,16 @@ type
     db_services: TClass_db_services;
   public
     constructor Create;
+    function BeAdded
+      (
+      service_name: string;
+      affiliate_num: string;
+      password_reset_email_address: string;
+      county_code: string
+      )
+      : boolean;
     function AffiliateNumOfId(id: string): string;
+    function BeKnown(affiliate_num: string): boolean;
     function BeOkToChangeAffiliateNumAndDelete: boolean;
     function BeValidAndParticipating(id: string): boolean;
     function Bind
@@ -160,6 +169,23 @@ end;
 function TClass_biz_services.AffiliateNumOfId(id: string): string;
 begin
   AffiliateNumOfId := db_services.AffiliateNumOfId(id);
+end;
+
+function TClass_biz_services.BeAdded
+  (
+  service_name: string;
+  affiliate_num: string;
+  password_reset_email_address: string;
+  county_code: string
+  )
+  : boolean;
+begin
+  BeAdded := db_services.BeAdded(service_name,affiliate_num,password_reset_email_address,county_code);
+end;
+
+function TClass_biz_services.BeKnown(affiliate_num: string): boolean;
+begin
+  BeKnown := db_services.BeKnown(affiliate_num);
 end;
 
 function TClass_biz_services.BeOkToChangeAffiliateNumAndDelete: boolean;

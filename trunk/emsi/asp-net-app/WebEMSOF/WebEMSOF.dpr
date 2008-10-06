@@ -95,7 +95,9 @@ uses
   UserControl_regional_staffer_new_binder in 'usercontrol\app\UserControl_regional_staffer_new_binder.pas' {UserControl_regional_staffer_new_binder.TWebUserControl_regional_staffer_new_binder: ki_web_ui.usercontrol_class},
   UserControl_annual_cycle_setup in 'usercontrol\app\UserControl_annual_cycle_setup.pas' {UserControl_annual_cycle_setup.TWebUserControl_annual_cycle_setup: ki_web_ui.usercontrol_class},
   Class_biz_fy_calendar in 'component\biz\Class_biz_fy_calendar.pas',
-  Class_db_fy_calendar in 'component\db\Class_db_fy_calendar.pas';
+  Class_db_fy_calendar in 'component\db\Class_db_fy_calendar.pas',
+  UserControl_new_service in 'usercontrol\app\UserControl_new_service.pas' {UserControl_new_service.TWebUserControl_new_service: ki_web_ui.usercontrol_class},
+  Class_biz_notifications in 'component\biz\Class_biz_notifications.pas';
 
 //
 // General Information about an assembly is controlled through the following

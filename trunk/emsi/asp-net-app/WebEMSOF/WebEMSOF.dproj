@@ -170,6 +170,7 @@
     <DCCReference Include="component\biz\Class_biz_fy_calendar.pas" />
     <DCCReference Include="component\biz\Class_biz_match_level.pas" />
     <DCCReference Include="component\biz\Class_biz_milestones.pas" />
+    <DCCReference Include="component\biz\Class_biz_notifications.pas" />
     <DCCReference Include="component\biz\Class_biz_payment_proof_methods.pas" />
     <DCCReference Include="component\biz\Class_biz_regional_staffers.pas" />
     <DCCReference Include="component\biz\Class_biz_services.pas" />
@@ -419,6 +420,11 @@
       <Form>UserControl_match_level.TWebUserControl_match_level</Form>
       <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="usercontrol\app\UserControl_new_service.pas">
+      <DependentUpon>usercontrol\app\UserControl_new_service.ascx</DependentUpon>
+      <Form>UserControl_new_service.TWebUserControl_new_service</Form>
+      <DesignClass>ki_web_ui.usercontrol_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="usercontrol\app\UserControl_outcomes.pas">
       <DependentUpon>usercontrol\app\UserControl_outcomes.ascx</DependentUpon>
       <Form>UserControl_outcomes.TWebUserControl_outcomes</Form>
@@ -564,6 +570,7 @@
     <None Include="usercontrol\app\UserControl_equipment_procurement_overview.ascx" />
     <None Include="usercontrol\app\UserControl_financial_snapshot.ascx" />
     <None Include="usercontrol\app\UserControl_match_level.ascx" />
+    <None Include="usercontrol\app\UserControl_new_service.ascx" />
     <None Include="usercontrol\app\UserControl_outcomes.ascx" />
     <None Include="usercontrol\app\UserControl_postcontent.ascx" />
     <None Include="usercontrol\app\UserControl_precontent.ascx" />
