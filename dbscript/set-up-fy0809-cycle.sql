@@ -3,17 +3,17 @@ START TRANSACTION;
 insert fiscal_year
 set designator = 'FY0809';
 
+insert state_dictated_appropriation
+set region_code = 1,
+  fiscal_year_id = (select id from fiscal_year where designator = 'FY0809'),
+  amount = 370000;
+
 insert fy_calendar (fiscal_year_id,milestone_code,`value`) VALUES
 ((select id from fiscal_year where designator = 'FY0809'),1,'2008-11-28 23:59:59'),
 ((select id from fiscal_year where designator = 'FY0809'),2,'2009-01-30 23:59:59'),
 ((select id from fiscal_year where designator = 'FY0809'),3,'2009-02-27 23:59:59'),
 ((select id from fiscal_year where designator = 'FY0809'),4,'2009-05-29 23:59:59'),
 ((select id from fiscal_year where designator = 'FY0809'),5,'2009-06-30 23:59:59');
-
-insert state_dictated_appropriation
-set region_code = 1,
-  fiscal_year_id = (select id from fiscal_year where designator = 'FY0809'),
-  amount = 370000;
 
 insert region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount,service_to_county_submission_deadline,match_level_id) VALUES
 ((select max(id) from state_dictated_appropriation),1,101462,'2008-11-14 23:59:59',1),
