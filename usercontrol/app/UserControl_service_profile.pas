@@ -23,7 +23,7 @@ type
     procedure InitializeComponent;
     procedure TWebUserControl_service_profile_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_search_Click(sender: System.Object; e: System.EventArgs);
+    procedure Button_lookup_Click(sender: System.Object; e: System.EventArgs);
     procedure LinkButton_reset_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_delete_Click(sender: System.Object; e: System.EventArgs);
     procedure DropDownList_affiliate_num_SelectedIndexChanged(sender: System.Object;
@@ -55,6 +55,7 @@ type
         affiliate_num: string;
         be_authorized_to_change_affiliate_num_and_delete_service: boolean;
         be_loaded: boolean;
+        be_ok_to_config_service_profiles: boolean;
         be_profile_initially_valid: boolean;
         be_service_user: boolean;
         biz_appropriations: TClass_biz_appropriations;
@@ -119,7 +120,9 @@ type
     TextBox_charter_other_kind: System.Web.UI.WebControls.TextBox;
     Button_submit: System.Web.UI.WebControls.Button;
     Button_delete: System.Web.UI.WebControls.Button;
-    LinkButton_search: System.Web.UI.WebControls.LinkButton;
+    Button_lookup: System.Web.UI.WebControls.Button;
+    Label_lookup_arrow: &label;
+    Label_lookup_hint: &label;
     LinkButton_reset: System.Web.UI.WebControls.LinkButton;
     RequiredFieldValidator_affiliate_num: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_name: System.Web.UI.WebControls.RequiredFieldValidator;
@@ -257,6 +260,7 @@ begin
   //
   ManageCharterControlEnablements;
   ManageEmsofControlEnablements;
+  Button_submit.enabled := FALSE;
   Button_delete.enabled := FALSE;
   //
 end;
@@ -346,6 +350,14 @@ procedure TWebUserControl_service_profile.Page_Load(sender: System.Object; e: Sy
 begin
   //
   if not p.be_loaded then begin
+    //
+    if p.be_service_user then begin
+      Button_lookup.visible := FALSE;
+      Label_lookup_arrow.visible := FALSE;
+      Label_lookup_hint.visible := FALSE;
+      LinkButton_reset.visible := FALSE;
+      Button_delete.visible := FALSE;
+    end;
     //
     p.biz_counties.BindDirectToListControl(DropDownList_county,'-- County --');
     p.biz_charter_kinds.BindDirectToListControl(DropDownList_charter_kind,'-- Charter kind --');
@@ -533,9 +545,69 @@ begin
     p.be_profile_initially_valid := be_valid_profile;
     //
     TextBox_affiliate_num.enabled := FALSE;
+    Button_lookup.enabled := FALSE;
+    Label_lookup_arrow.enabled := FALSE;
+    Label_lookup_hint.enabled := FALSE;
+    LinkButton_reset.enabled := TRUE;
+    //
+    // Proforma enablements of all dependent fields
+    //
+    TextBox_name.enabled := p.be_ok_to_config_service_profiles;
+    DropDownList_county.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_business_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_business_fax_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_website_address.enabled := p.be_ok_to_config_service_profiles;
+    DropDownList_charter_kind.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_corpadmin_contact_name.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_corpadmin_primary_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_corpadmin_secondary_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_corpadmin_email_address.enabled := p.be_ok_to_config_service_profiles;
+    RadioButtonList_be_emsof_participant.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_emsof_nonparticipation_reason.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_emsof_contact_name.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_emsof_contact_email_address.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_emsof_contact_primary_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_emsof_contact_sms_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_coo_name.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_coo_work_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_coo_home_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_coo_email_address.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_coo_mobile_phone_or_pager_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_md_name.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_md_office_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_md_home_phone_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_md_email_address.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_md_mobile_phone_or_pager_num.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_physical_street_address_line_1.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_physical_street_address_line_2.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_physical_city.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_physical_zip_code.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_mail_address_line_1.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_mail_address_line_2.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_mail_city.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_mail_zip_code.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_qrs_unrecognized.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_qrs.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_bls_amb.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_als_amb.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_als_squad.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_air_amb.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_rescue_unrecognized.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_rescue.enabled := p.be_ok_to_config_service_profiles;
+    CheckBox_be_pa_turnpike_contractor.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_num_doh_licensed_vehicles.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_num_ambulances.enabled := p.be_ok_to_config_service_profiles;
+    RadioButtonList_be_dera.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_charter_other_kind.enabled := p.be_ok_to_config_service_profiles;
+    RadioButtonList_be_valid_profile.enabled := p.be_ok_to_config_service_profiles;
+    TextBox_federal_tax_id.enabled := p.be_ok_to_config_service_profiles;
+    //
+    // Ablement customizations unique to this control
+    //
     RadioButtonList_be_valid_profile.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
     ManageCharterControlEnablements;
     ManageEmsofControlEnablements;
+    Button_submit.enabled := p.be_ok_to_config_service_profiles;
     Button_delete.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
     //
     PresentRecord := TRUE;
@@ -562,12 +634,15 @@ begin
     p.biz_services := TClass_biz_services.Create;
     p.biz_user := TClass_biz_user.Create;
     //
+    p.affiliate_num := p.biz_services.AffiliateNumOfId(p.biz_user.IdNum);
     p.be_authorized_to_change_affiliate_num_and_delete_service := p.biz_services.BeOkToChangeAffiliateNumAndDelete;
     p.be_loaded := FALSE;
-    p.be_profile_initially_valid := FALSE;
     p.be_service_user := (p.biz_user.Kind = 'service');
+    p.be_profile_initially_valid := FALSE;
     //
-    p.affiliate_num := p.biz_services.AffiliateNumOfId(p.biz_user.IdNum);
+    p.be_ok_to_config_service_profiles := p.be_service_user
+      or httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator');
     //
   end;
   //
@@ -580,7 +655,7 @@ end;
 /// </summary>
 procedure TWebUserControl_service_profile.InitializeComponent;
 begin
-  Include(Self.LinkButton_search.Click, Self.LinkButton_search_Click);
+  Include(Self.Button_lookup.Click, Self.Button_lookup_Click);
   Include(Self.LinkButton_reset.Click, Self.LinkButton_reset_Click);
   Include(Self.DropDownList_affiliate_num.SelectedIndexChanged, Self.DropDownList_affiliate_num_SelectedIndexChanged);
   Include(Self.CustomValidator_website_address.ServerValidate, Self.CustomValidator_website_address_ServerValidate);
@@ -762,10 +837,64 @@ procedure TWebUserControl_service_profile.LinkButton_reset_Click(sender: System.
 begin
   Clear;
   TextBox_affiliate_num.enabled := TRUE;
+  Button_lookup.enabled := TRUE;
+  Label_lookup_arrow.enabled := TRUE;
+  Label_lookup_hint.enabled := TRUE;
+  LinkButton_reset.enabled := FALSE;
+  RadioButtonList_be_valid_profile.enabled := FALSE;
+  TextBox_name.enabled := FALSE;
+  DropDownList_county.enabled := FALSE;
+  TextBox_business_phone_num.enabled := FALSE;
+  TextBox_business_fax_num.enabled := FALSE;
+  TextBox_website_address.enabled := FALSE;
+  DropDownList_charter_kind.enabled := FALSE;
+  TextBox_corpadmin_contact_name.enabled := FALSE;
+  TextBox_corpadmin_primary_phone_num.enabled := FALSE;
+  TextBox_corpadmin_secondary_phone_num.enabled := FALSE;
+  TextBox_corpadmin_email_address.enabled := FALSE;
+  RadioButtonList_be_emsof_participant.enabled := FALSE;
+  TextBox_emsof_nonparticipation_reason.enabled := FALSE;
+  TextBox_emsof_contact_name.enabled := FALSE;
+  TextBox_emsof_contact_email_address.enabled := FALSE;
+  TextBox_emsof_contact_primary_phone_num.enabled := FALSE;
+  TextBox_emsof_contact_sms_phone_num.enabled := FALSE;
+  TextBox_coo_name.enabled := FALSE;
+  TextBox_coo_work_phone_num.enabled := FALSE;
+  TextBox_coo_home_phone_num.enabled := FALSE;
+  TextBox_coo_email_address.enabled := FALSE;
+  TextBox_coo_mobile_phone_or_pager_num.enabled := FALSE;
+  TextBox_md_name.enabled := FALSE;
+  TextBox_md_office_phone_num.enabled := FALSE;
+  TextBox_md_home_phone_num.enabled := FALSE;
+  TextBox_md_email_address.enabled := FALSE;
+  TextBox_md_mobile_phone_or_pager_num.enabled := FALSE;
+  TextBox_physical_street_address_line_1.enabled := FALSE;
+  TextBox_physical_street_address_line_2.enabled := FALSE;
+  TextBox_physical_city.enabled := FALSE;
+  TextBox_physical_zip_code.enabled := FALSE;
+  TextBox_mail_address_line_1.enabled := FALSE;
+  TextBox_mail_address_line_2.enabled := FALSE;
+  TextBox_mail_city.enabled := FALSE;
+  TextBox_mail_zip_code.enabled := FALSE;
+  CheckBox_be_qrs_unrecognized.enabled := FALSE;
+  CheckBox_be_qrs.enabled := FALSE;
+  CheckBox_be_bls_amb.enabled := FALSE;
+  CheckBox_be_als_amb.enabled := FALSE;
+  CheckBox_be_als_squad.enabled := FALSE;
+  CheckBox_be_air_amb.enabled := FALSE;
+  CheckBox_be_rescue_unrecognized.enabled := FALSE;
+  CheckBox_be_rescue.enabled := FALSE;
+  CheckBox_be_pa_turnpike_contractor.enabled := FALSE;
+  TextBox_num_doh_licensed_vehicles.enabled := FALSE;
+  TextBox_num_ambulances.enabled := FALSE;
+  RadioButtonList_be_dera.enabled := FALSE;
+  TextBox_charter_other_kind.enabled := FALSE;
+  RadioButtonList_be_valid_profile.enabled := FALSE;
+  TextBox_federal_tax_id.enabled := FALSE;
   Focus(TextBox_affiliate_num,TRUE);
 end;
 
-procedure TWebUserControl_service_profile.LinkButton_search_Click(sender: System.Object;
+procedure TWebUserControl_service_profile.Button_lookup_Click(sender: System.Object;
   e: System.EventArgs);
 var
   num_matches: cardinal;
