@@ -51,11 +51,10 @@ type
     DropDownList_spec: System.Web.UI.WebControls.DropDownList;
     TextBox_description: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_description: System.Web.UI.WebControls.RequiredFieldValidator;
-    RegularExpressionValidator_code: System.Web.UI.WebControls.RegularExpressionValidator;
     Button_lookup: System.Web.UI.WebControls.Button;
     LinkButton_new_record: System.Web.UI.WebControls.LinkButton;
-    Label_lookup_arrow: &label;
-    Label_lookup_hint: &label;
+    Label_lookup_arrow: System.Web.UI.WebControls.Label;
+    Label_lookup_hint: System.Web.UI.WebControls.Label;
   protected
     procedure OnInit(e: System.EventArgs); override;
   published
@@ -273,9 +272,10 @@ begin
       Safe(TextBox_id.text,NUM),
       Safe(TextBox_description.text,PUNCTUATED)
       );
-    Alert(USER,SUCCESS,'recsaved','Record saved.');
+    Alert(USER,SUCCESS,'recsaved','Record saved.',TRUE);
+    Clear;
   end else begin
-    ValidationAlert;
+    ValidationAlert(TRUE);
   end;
 end;
 
@@ -291,7 +291,7 @@ begin
   if p.biz_charter_kinds.Delete(Safe(TextBox_id.text,ALPHANUM)) then begin
     Clear;
   end else begin
-    Alert(kix.APPDATA,kix.FAILURE,'dependency',' Cannot delete this record because another record depends on it.');
+    Alert(kix.APPDATA,kix.FAILURE,'dependency',' Cannot delete this record because another record depends on it.',TRUE);
   end;
 end;
 

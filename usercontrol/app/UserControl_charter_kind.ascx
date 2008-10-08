@@ -37,9 +37,7 @@
               <ASP:DropDownList id="DropDownList_spec" runat="server" visible="False" autopostback="True"></ASP:DropDownList><br>
             </font>
           </td>
-          <td valign="top">
-            <asp:RegularExpressionValidator id="RegularExpressionValidator_code" runat="server" errormessage="Please enter a valid Code." font-bold="True" display="Dynamic" controltovalidate="TextBox_id" validationexpression="\d+">!ERR!</asp:RegularExpressionValidator>
-          </td>
+          <td valign="top"></td>
         </tr>
         <tr>
           <td><font class="compact">Description:</font></td>
