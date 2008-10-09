@@ -16,7 +16,7 @@
       <ASP:TextBox id="TextBox_name" runat="server" columns="31" maxlength="31"></ASP:TextBox><ASP:Button id="Button_lookup" runat="server" causesvalidation="False" text="LOOKUP"></ASP:Button>
                         </td>
                         <td nowrap="True"><small><small><asp:Label id="Label_lookup_arrow" runat="server">&lt;--</asp:Label></small></small></td>
-                        <td><small><small><em><asp:Label id="Label_lookup_hint" runat="server">Lookup by partial or full field value</asp:Label></em></small></small></td>
+                        <td><small><small><em><asp:Label id="Label_lookup_hint" runat="server">Lookup by partial or full Match level name</asp:Label></em></small></small></td>
                       </tr>
                     </table>
                   </td>
