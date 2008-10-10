@@ -39,8 +39,10 @@ type
   strict private
     p: p_type;
     procedure Clear;
+    procedure ManageDependentFieldEnablements;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
     function PresentRecord(name: string): boolean;
+    procedure SetLookupMode;
   strict protected
     Label_application_name: System.Web.UI.WebControls.Label;
     Button_submit: System.Web.UI.WebControls.Button;
@@ -72,6 +74,10 @@ begin
   TextBox_name.text := EMPTY;
   DropDownList_name.visible := FALSE;
   TextBox_factor.text := EMPTY;
+  //
+  // Disable dependent fields.
+  //
+  TextBox_factor.enabled := p.be_ok_to_config_match_levels;
   //
   Button_submit.enabled := FALSE;
   Button_delete.enabled := FALSE;
@@ -115,13 +121,25 @@ begin
     Label_lookup_arrow.enabled := FALSE;
     Label_lookup_hint.enabled := FALSE;
     LinkButton_reset.enabled := TRUE;
-    TextBox_factor.enabled := p.be_ok_to_config_match_levels;
+    ManageDependentFieldEnablements;
     Button_submit.enabled := p.be_ok_to_config_match_levels;
     Button_delete.enabled := p.be_ok_to_config_match_levels;
     //
     PresentRecord := TRUE;
     //
   end;
+end;
+
+procedure TWebUserControl_match_level.SetLookupMode;
+begin
+  Clear;
+  TextBox_name.enabled := TRUE;
+  Button_lookup.enabled := TRUE;
+  Label_lookup_arrow.enabled := TRUE;
+  Label_lookup_hint.enabled := TRUE;
+  LinkButton_reset.enabled := FALSE;
+  LinkButton_new_record.enabled := p.be_ok_to_config_match_levels;
+  Focus(TextBox_name,TRUE);
 end;
 
 procedure TWebUserControl_match_level.OnInit(e: System.EventArgs);
@@ -198,6 +216,7 @@ begin
       factor
       );
     Alert(USER,SUCCESS,'recsaved','Record saved.',TRUE);
+    SetLookupMode;
   end else begin
     ValidationAlert;
   end;
@@ -213,7 +232,7 @@ procedure TWebUserControl_match_level.Button_delete_Click(sender: System.Object;
   e: System.EventArgs);
 begin
   p.biz_match_level.Delete(Safe(TextBox_name.text,ALPHANUM));
-  Clear;
+  SetLookupMode;
 end;
 
 procedure TWebUserControl_match_level.LinkButton_new_record_Click(sender: System.Object;
@@ -227,7 +246,7 @@ begin
   Label_lookup_hint.enabled := FALSE;
   LinkButton_reset.enabled := TRUE;
   LinkButton_new_record.enabled := FALSE;
-  TextBox_factor.enabled := p.be_ok_to_config_match_levels;
+  ManageDependentFieldEnablements;
   Button_submit.enabled := p.be_ok_to_config_match_levels;
   Button_delete.enabled := FALSE;
   Focus(TextBox_name,TRUE);
@@ -236,15 +255,12 @@ end;
 procedure TWebUserControl_match_level.LinkButton_reset_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  Clear;
-  TextBox_name.enabled := TRUE;
-  Button_lookup.enabled := TRUE;
-  Label_lookup_arrow.enabled := TRUE;
-  Label_lookup_hint.enabled := TRUE;
-  LinkButton_reset.enabled := FALSE;
-  LinkButton_new_record.enabled := p.be_ok_to_config_match_levels;
-  TextBox_factor.enabled := FALSE;
-  Focus(TextBox_name,TRUE);
+  SetLookupMode;
+end;
+
+procedure TWebUserControl_match_level.ManageDependentFieldEnablements;
+begin
+  TextBox_factor.enabled := p.be_ok_to_config_match_levels;
 end;
 
 procedure TWebUserControl_match_level.Button_lookup_Click(sender: System.Object;
