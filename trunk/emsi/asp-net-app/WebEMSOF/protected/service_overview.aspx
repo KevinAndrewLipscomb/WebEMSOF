@@ -19,7 +19,7 @@
             <td>
               <table cellspacing="0" cellpadding="10" width="100%" border="0">
                 <tr>
-                  <td bgcolor="#f5f5f5"><strong>Your service's WebEMSOF profile is:</strong></td>
+                  <td bgcolor="#f5f5f5"><strong>Your service's WebEMSOF profile ("ANNUAL SURVEY") is:</strong></td>
                   <td><ASP:Label id="Label_profile_status" runat="server"></ASP:Label></td>
                   <td><ASP:LinkButton id="LinkButton_profile_action" runat="server" font-size="Small"></ASP:LinkButton></td>
                 </tr>

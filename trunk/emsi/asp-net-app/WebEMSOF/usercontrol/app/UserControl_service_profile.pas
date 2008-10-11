@@ -259,6 +259,7 @@ begin
   RadioButtonList_be_dera.ClearSelection;
   TextBox_charter_other_kind.text := EMPTY;
   RadioButtonList_be_valid_profile.ClearSelection;
+  TextBox_federal_tax_id.text := EMPTY;
   //
   ManageCharterControlEnablements;
   ManageEmsofControlEnablements;
@@ -777,8 +778,12 @@ begin
       CheckBox_be_qrs_unrecognized.checked,
       CheckBox_be_rescue_unrecognized.checked
       );
-    Alert(USER,SUCCESS,'recsaved','Record saved.',TRUE);
-    SetLookupMode;
+    if p.be_service_user then begin
+      BackTrack;
+    end else begin
+      Alert(USER,SUCCESS,'recsaved','Record saved.',TRUE);
+      SetLookupMode;
+    end;
   end else begin
     ValidationAlert(TRUE);
   end;
