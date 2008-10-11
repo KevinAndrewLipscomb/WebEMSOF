@@ -39,7 +39,7 @@ type
   strict private
     p: p_type;
     procedure Clear;
-    procedure ManageDependentFieldEnablements;
+    procedure SetDependentFieldAblements(ablement: boolean);
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
     function PresentRecord(name: string): boolean;
     procedure SetLookupMode;
@@ -75,10 +75,7 @@ begin
   DropDownList_name.visible := FALSE;
   TextBox_factor.text := EMPTY;
   //
-  // Disable dependent fields.
-  //
-  TextBox_factor.enabled := p.be_ok_to_config_match_levels;
-  //
+  SetDependentFieldAblements(FALSE);
   Button_submit.enabled := FALSE;
   Button_delete.enabled := FALSE;
   //
@@ -121,7 +118,7 @@ begin
     Label_lookup_arrow.enabled := FALSE;
     Label_lookup_hint.enabled := FALSE;
     LinkButton_reset.enabled := TRUE;
-    ManageDependentFieldEnablements;
+    SetDependentFieldAblements(p.be_ok_to_config_match_levels);
     Button_submit.enabled := p.be_ok_to_config_match_levels;
     Button_delete.enabled := p.be_ok_to_config_match_levels;
     //
@@ -246,7 +243,7 @@ begin
   Label_lookup_hint.enabled := FALSE;
   LinkButton_reset.enabled := TRUE;
   LinkButton_new_record.enabled := FALSE;
-  ManageDependentFieldEnablements;
+  SetDependentFieldAblements(p.be_ok_to_config_match_levels);
   Button_submit.enabled := p.be_ok_to_config_match_levels;
   Button_delete.enabled := FALSE;
   Focus(TextBox_name,TRUE);
@@ -258,9 +255,9 @@ begin
   SetLookupMode;
 end;
 
-procedure TWebUserControl_match_level.ManageDependentFieldEnablements;
+procedure TWebUserControl_match_level.SetDependentFieldAblements(ablement: boolean);
 begin
-  TextBox_factor.enabled := p.be_ok_to_config_match_levels;
+  TextBox_factor.enabled := ablement;
 end;
 
 procedure TWebUserControl_match_level.Button_lookup_Click(sender: System.Object;
