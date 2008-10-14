@@ -32,6 +32,12 @@ type
       target: system.object
       )
       : boolean;
+    procedure BindAnnualRespondents
+      (
+      sort_order: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
     procedure BindListControl
       (
       county_user_id: string;
@@ -289,6 +295,36 @@ begin
   dr.Close;
   self.Close;
   Bind := ListControl(target).items.count > 0;
+end;
+
+procedure TClass_db_services.BindAnnualRespondents
+  (
+  sort_order: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  if be_order_ascending then begin
+    sort_order := sort_order.Replace('%',' asc');
+  end else begin
+    sort_order := sort_order.Replace('%',' desc');
+  end;
+  self.Open;
+  BaseDataList(target).datasource := mysqlcommand.Create
+    (
+    'select id'
+    + ' , service.name as service_name'
+    + ' , county_code_name_map.name as county_name'
+    + ' , IF(be_emsof_participant,"YES","no") as be_emsof_participant'
+    + ' from service'
+    +   ' join county_code_name_map on (county_code_name_map.code=service.county_code)'
+    + ' where be_valid_profile'
+    + ' order by ' + sort_order,
+    connection
+    )
+    .ExecuteReader;
+  BaseDataList(target).DataBind;
+  self.Close;
 end;
 
 procedure TClass_db_services.BindListControl

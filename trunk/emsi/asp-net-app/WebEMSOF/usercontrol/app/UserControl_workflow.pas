@@ -226,7 +226,7 @@ begin
   //
   if session['UserControl_workflow.p'] <> nil then begin
     p := p_type(session['UserControl_workflow.p']);
-    p.be_loaded := IsPostBack and (string(session['UserControl_member_binder_PlaceHolder_content']) = 'UserControl_workflow');
+    p.be_loaded := IsPostBack and (string(session['UserControl_regional_staffer_binder_control_UserControl_regional_staffer_current_binder_PlaceHolder_content']) = 'UserControl_workflow');
   end else begin
     //
     p.be_loaded := FALSE;
