@@ -62,7 +62,7 @@ uses
 
 const
   TCI_SELECT = 0;
-  TCI_ID = 1;
+  TCI_AFFILIATE_NUM = 1;
   TCI_SERVICE_NAME = 2;
   TCI_COUNTY_NAME = 3;
   TCI_BE_EMSOF_PARTICIPANT = 4;
@@ -224,7 +224,7 @@ procedure TWebUserControl_responding_services.DataGrid_control_ItemCommand(sourc
   e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
   if e.item.itemtype in [listitemtype.ALTERNATINGITEM,listitemtype.ITEM,listitemtype.EDITITEM,listitemtype.SELECTEDITEM] then begin
-    SessionSet('responding_services_selected_id',Safe(e.item.cells.item[TCI_ID].text,NUM));
+    SessionSet('affiliate_num',Safe(e.item.cells.item[TCI_AFFILIATE_NUM].text,NUM));
     DropCrumbAndTransferTo('responding_services_detail.aspx');
   end;
 end;
@@ -234,7 +234,6 @@ procedure TWebUserControl_responding_services.DataGrid_control_ItemDataBound(sen
 var
   link_button: linkbutton;
 begin
-  e.item.cells.item[TCI_ID].visible := FALSE;
   if p.be_interactive then begin
     if e.item.itemtype in [listitemtype.ALTERNATINGITEM,listitemtype.ITEM,listitemtype.EDITITEM,listitemtype.SELECTEDITEM] then begin
       link_button := linkbutton(e.item.cells.item[TCI_SELECT].controls.item[0]);

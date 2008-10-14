@@ -369,10 +369,13 @@ begin
     //
     RequireConfirmation(Button_delete,'Are you sure you want to delete this record?');
     //
+    if p.affiliate_num <> EMPTY then begin
+      PresentRecord(p.affiliate_num);
+    end;
+    //
     if p.be_authorized_to_change_affiliate_num_and_delete_service then begin
       Focus(TextBox_affiliate_num,TRUE);
     end else begin
-      PresentRecord(p.affiliate_num);
       Focus(TextBox_name,TRUE);
     end;
     //
@@ -602,11 +605,17 @@ begin
     p.biz_services := TClass_biz_services.Create;
     p.biz_user := TClass_biz_user.Create;
     //
-    p.affiliate_num := p.biz_services.AffiliateNumOfId(p.biz_user.IdNum);
+    p.affiliate_num := EMPTY;
     p.be_authorized_to_change_affiliate_num_and_delete_service := p.biz_services.BeOkToChangeAffiliateNumAndDelete;
     p.be_loaded := FALSE;
     p.be_service_user := (p.biz_user.Kind = 'service');
     p.be_profile_initially_valid := FALSE;
+    //
+    if p.be_service_user then begin
+      p.affiliate_num := p.biz_services.AffiliateNumOfId(p.biz_user.IdNum);
+    end else if assigned(session['affiliate_num']) then begin
+      p.affiliate_num := session['affiliate_num'].tostring;
+    end;
     //
     p.be_ok_to_config_service_profiles := p.be_service_user
       or httpcontext.current.User.IsInRole('director')
@@ -893,7 +902,7 @@ var
 begin
   be_emsof_participant := (RadioButtonList_be_emsof_participant.selectedvalue <> 'FALSE');
   RadioButtonList_be_emsof_participant.enabled :=
-    not (p.biz_appropriations.BeAnyCurrentToService(session['service_user_id'].tostring) and be_emsof_participant);
+    not (p.biz_appropriations.BeAnyCurrentToService(p.affiliate_num) and be_emsof_participant);
   Label_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
   TextBox_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
   TableRow_emsof_contact_name.visible := be_emsof_participant;

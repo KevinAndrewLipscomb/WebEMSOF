@@ -19,7 +19,7 @@ type
     db_trail: TClass_db_trail;
   public
     constructor Create;
-    function BeAnyCurrentToService(service_id: string): boolean;
+    function BeAnyCurrentToService(affiliate_num: string): boolean;
     function CountyCodeOfCountyDictum(county_dictum_id: string): string;
     function FundingRoundsGenerated
       (
@@ -90,7 +90,7 @@ begin
   db_trail := TClass_db_trail.Create;
 end;
 
-function TClass_db_appropriations.BeAnyCurrentToService(service_id: string): boolean;
+function TClass_db_appropriations.BeAnyCurrentToService(affiliate_num: string): boolean;
 begin
   self.Open;
   BeAnyCurrentToService := '0' <> mysqlcommand.Create
@@ -101,8 +101,9 @@ begin
     +     ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
     +   ' join state_dictated_appropriation'
     +     ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    +   ' join service on (service.id=county_dictated_appropriation.service_id)'
     + ' where fiscal_year_id = "' + biz_fiscal_years.IdOfCurrent + '"'
-    +   ' and service_id = "' + service_id + '"',
+    +   ' and affiliate_num = "' + affiliate_num + '"',
     connection
     )
     .ExecuteScalar.tostring;
