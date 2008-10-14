@@ -47,12 +47,14 @@ uses
   system.configuration,
   UserControl_financial_snapshot,
   UserControl_outcomes,
+  UserControl_responding_services,
   UserControl_workflow;
 
 const
   TSSI_SNAPSHOT = 0;
   TSSI_WORKFLOW = 1;
   TSSI_OUTCOMES = 2;
+  TSSI_SERVICES = 3;
 
 procedure TWebUserControl_regional_staffer_current_binder.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
@@ -108,6 +110,13 @@ begin
         'UserControl_outcomes',
         PlaceHolder_content
         );
+    TSSI_SERVICES:
+      p.content_id := AddIdentifiedControlToPlaceHolder
+        (
+        TWebUserControl_responding_services(LoadControl('~/usercontrol/app/UserControl_responding_services.ascx')),
+        'UserControl_responding_services',
+        PlaceHolder_content
+        );
     end;
   end else begin
     //
@@ -154,6 +163,13 @@ begin
       (
       TWebUserControl_outcomes(LoadControl('~/usercontrol/app/UserControl_outcomes.ascx')).Fresh,
       'UserControl_outcomes',
+      PlaceHolder_content
+      );
+  TSSI_SERVICES:
+    p.content_id := AddIdentifiedControlToPlaceHolder
+      (
+      TWebUserControl_responding_services(LoadControl('~/usercontrol/app/UserControl_responding_services.ascx')).Fresh,
+      'UserControl_responding_services',
       PlaceHolder_content
       );
   end;

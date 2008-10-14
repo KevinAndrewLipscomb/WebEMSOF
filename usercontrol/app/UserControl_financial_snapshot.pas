@@ -180,7 +180,7 @@ begin
   //
   if session['UserControl_financial_snapshot.p'] <> nil then begin
     p := p_type(session['UserControl_financial_snapshot.p']);
-    p.be_loaded := IsPostBack and (string(session['UserControl_member_binder_PlaceHolder_content']) = 'UserControl_financial_snapshot');
+    p.be_loaded := IsPostBack and (string(session['UserControl_regional_staffer_binder_control_UserControl_regional_staffer_current_binder_PlaceHolder_content']) = 'UserControl_financial_snapshot');
   end else begin
     //
     p.be_loaded := FALSE;

@@ -1,9 +1,10 @@
-unit UserControl_outcomes;
+unit UserControl_responding_services;
+  // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.pas
 
 interface
 
 uses
-  Class_biz_emsof_requests,
+  Class_biz_services,
   ki_web_ui,
   System.Data,
   System.Drawing,
@@ -13,37 +14,43 @@ uses
   System.Web.UI.HtmlControls;
 
 type
-  TWebUserControl_outcomes = class(ki_web_ui.usercontrol_class)
+  TWebUserControl_responding_services = class(ki_web_ui.usercontrol_class)
   {$REGION 'Designer Managed Code'}
   strict private
     procedure InitializeComponent;
-    procedure TWebUserControl_outcomes_PreRender(sender: System.Object;
+    procedure TWebUserControl_responding_services_PreRender(sender: System.Object;
       e: System.EventArgs);
-    procedure LinkButton_completed_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_withdrawn_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_rejected_Click(sender: System.Object; e: System.EventArgs);
-    procedure LinkButton_missed_deadlines_Click(sender: System.Object; e: System.EventArgs);
+    procedure DataGrid_control_SortCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
+    procedure DataGrid_control_ItemDataBound(sender: System.Object; e: System.Web.UI.WebControls.DataGridItemEventArgs);
+    procedure DataGrid_control_ItemCommand(source: System.Object; e: System.Web.UI.WebControls.DataGridCommandEventArgs);
   {$ENDREGION}
   strict private
     type
       p_type =
         RECORD
+        be_interactive: boolean;
         be_loaded: boolean;
-        biz_emsof_requests: TClass_biz_emsof_requests;
+        be_sort_order_ascending: boolean;
+        biz_services: TClass_biz_services;
+        num_participants: cardinal;
+        num_nonparticipants: cardinal;
+        sort_order: string;
         END;
   strict private
     p: p_type;
+    procedure Bind;
     procedure InjectPersistentClientSideScript;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
-    LinkButton_rejected: System.Web.UI.WebControls.LinkButton;
-    LinkButton_withdrawn: System.Web.UI.WebControls.LinkButton;
-    LinkButton_missed_deadlines: System.Web.UI.WebControls.LinkButton;
-    LinkButton_completed: System.Web.UI.WebControls.LinkButton;
+    DataGrid_control: System.Web.UI.WebControls.DataGrid;
+    UpdatePanel_control: System.Web.UI.UpdatePanel;
+    Label_num_respondents: System.Web.UI.WebControls.Label;
+    Label_num_participants: System.Web.UI.WebControls.Label;
+    Label_num_nonparticipants: System.Web.UI.WebControls.Label;
   protected
     procedure OnInit(e: System.EventArgs); override;
   published
-    function Fresh: TWebUserControl_outcomes;
+    function Fresh: TWebUserControl_responding_services;
   end;
 
 implementation
@@ -53,7 +60,14 @@ uses
   System.Collections,
   system.configuration;
 
-procedure TWebUserControl_outcomes.InjectPersistentClientSideScript;
+const
+  TCI_SELECT = 0;
+  TCI_ID = 1;
+  TCI_SERVICE_NAME = 2;
+  TCI_COUNTY_NAME = 3;
+  TCI_BE_EMSOF_PARTICIPANT = 4;
+
+procedure TWebUserControl_responding_services.InjectPersistentClientSideScript;
 begin
 {$REGION 'Persistent client-side script'}
 //  EstablishClientSideFunction(EL);
@@ -134,20 +148,16 @@ begin
 {$ENDREGION}
 end;
 
-procedure TWebUserControl_outcomes.Page_Load(sender: System.Object; e: System.EventArgs);
+procedure TWebUserControl_responding_services.Page_Load(sender: System.Object; e: System.EventArgs);
 begin
   //
   if not p.be_loaded then begin
     //
-    LinkButton_completed.text := p.biz_emsof_requests.TallyOfStatus(REIMBURSEMENT_ISSUED) + LinkButton_completed.text;
-    LinkButton_missed_deadlines.text := p.biz_emsof_requests.TallyOfStatus(FAILED_DEADLINE) + LinkButton_missed_deadlines.text;
-    LinkButton_withdrawn.text := p.biz_emsof_requests.TallyOfStatus(WITHDRAWN) + LinkButton_withdrawn.text;
-    LinkButton_rejected.text := p.biz_emsof_requests.TallyOfStatus(REJECTED) + LinkButton_rejected.text;
+    if not p.be_interactive then begin
+      DataGrid_control.allowsorting := FALSE;
+    end;
     //
-    scriptmanager.GetCurrent(page).RegisterPostBackControl(LinkButton_completed);
-    scriptmanager.GetCurrent(page).RegisterPostBackControl(LinkButton_missed_deadlines);
-    scriptmanager.GetCurrent(page).RegisterPostBackControl(LinkButton_withdrawn);
-    scriptmanager.GetCurrent(page).RegisterPostBackControl(LinkButton_rejected);
+    Bind;
     //
     p.be_loaded := TRUE;
     //
@@ -157,7 +167,7 @@ begin
   //
 end;
 
-procedure TWebUserControl_outcomes.OnInit(e: System.EventArgs);
+procedure TWebUserControl_responding_services.OnInit(e: System.EventArgs);
 begin
   //
   // Required for Designer support
@@ -165,14 +175,19 @@ begin
   InitializeComponent;
   inherited OnInit(e);
   //
-  if session['UserControl_outcomes.p'] <> nil then begin
-    p := p_type(session['UserControl_outcomes.p']);
-    p.be_loaded := IsPostBack and (string(session['UserControl_regional_staffer_binder_control_UserControl_regional_staffer_current_binder_PlaceHolder_content_PlaceHolder_content']) = 'UserControl_outcomes');
+  if session['UserControl_responding_services.p'] <> nil then begin
+    p := p_type(session['UserControl_responding_services.p']);
+    p.be_loaded := IsPostBack and (string(session['UserControl_regional_staffer_binder_control_UserControl_regional_staffer_current_binder_PlaceHolder_content']) = 'UserControl_responding_services');
   end else begin
     //
-    p.be_loaded := FALSE;
+    p.biz_services := TClass_biz_services.Create;
     //
-    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
+    p.be_interactive := not assigned(session['mode:report']);
+    p.be_loaded := FALSE;
+    p.be_sort_order_ascending := TRUE;
+    p.num_participants := 0;
+    p.num_nonparticipants := 0;
+    p.sort_order := 'service_name%';
     //
   end;
   //
@@ -183,55 +198,89 @@ end;
 /// Required method for Designer support -- do not modify
 /// the contents of this method with the code editor.
 /// </summary>
-procedure TWebUserControl_outcomes.InitializeComponent;
+procedure TWebUserControl_responding_services.InitializeComponent;
 begin
-  Include(Self.PreRender, Self.TWebUserControl_outcomes_PreRender);
+  Include(Self.DataGrid_control.ItemDataBound, Self.DataGrid_control_ItemDataBound);
+  Include(Self.DataGrid_control.SortCommand, Self.DataGrid_control_SortCommand);
+  Include(Self.DataGrid_control.ItemCommand, Self.DataGrid_control_ItemCommand);
+  Include(Self.PreRender, Self.TWebUserControl_responding_services_PreRender);
   Include(Self.Load, Self.Page_Load);
-  Include(Self.LinkButton_completed.Click, Self.LinkButton_completed_Click);
-  Include(Self.LinkButton_missed_deadlines.Click, Self.LinkButton_missed_deadlines_Click);
-  Include(Self.LinkButton_withdrawn.Click, Self.LinkButton_withdrawn_Click);
-  Include(Self.LinkButton_rejected.Click, Self.LinkButton_rejected_Click);
 end;
 {$ENDREGION}
 
-procedure TWebUserControl_outcomes.TWebUserControl_outcomes_PreRender(sender: System.Object;
+procedure TWebUserControl_responding_services.TWebUserControl_responding_services_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
-  SessionSet('UserControl_outcomes.p',p);
+  SessionSet('UserControl_responding_services.p',p);
 end;
 
-function TWebUserControl_outcomes.Fresh: TWebUserControl_outcomes;
+function TWebUserControl_responding_services.Fresh: TWebUserControl_responding_services;
 begin
-  session.Remove('UserControl_outcomes.p');
+  session.Remove('UserControl_responding_services.p');
   Fresh := self;
 end;
 
-procedure TWebUserControl_outcomes.LinkButton_rejected_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebUserControl_responding_services.DataGrid_control_ItemCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridCommandEventArgs);
 begin
-  SessionSet('status_of_interest',REJECTED);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
+  if e.item.itemtype in [listitemtype.ALTERNATINGITEM,listitemtype.ITEM,listitemtype.EDITITEM,listitemtype.SELECTEDITEM] then begin
+    SessionSet('responding_services_selected_id',Safe(e.item.cells.item[TCI_ID].text,NUM));
+    DropCrumbAndTransferTo('responding_services_detail.aspx');
+  end;
 end;
 
-procedure TWebUserControl_outcomes.LinkButton_withdrawn_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebUserControl_responding_services.DataGrid_control_ItemDataBound(sender: System.Object;
+  e: System.Web.UI.WebControls.DataGridItemEventArgs);
+var
+  link_button: linkbutton;
 begin
-  SessionSet('status_of_interest',WITHDRAWN);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
+  e.item.cells.item[TCI_ID].visible := FALSE;
+  if p.be_interactive then begin
+    if e.item.itemtype in [listitemtype.ALTERNATINGITEM,listitemtype.ITEM,listitemtype.EDITITEM,listitemtype.SELECTEDITEM] then begin
+      link_button := linkbutton(e.item.cells.item[TCI_SELECT].controls.item[0]);
+      link_button.text := ExpandTildePath(link_button.text);
+      scriptmanager.GetCurrent(page).RegisterPostBackControl(link_button);
+      if e.item.cells.item[TCI_BE_EMSOF_PARTICIPANT].text = 'YES' then begin
+        p.num_participants := p.num_participants + 1;
+      end else begin
+        p.num_nonparticipants := p.num_nonparticipants + 1;
+      end;
+    end;
+  end else begin
+    e.item.cells.item[TCI_SELECT].visible := FALSE;
+  end;
 end;
 
-procedure TWebUserControl_outcomes.LinkButton_completed_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebUserControl_responding_services.DataGrid_control_SortCommand(source: System.Object;
+  e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
 begin
-  SessionSet('status_of_interest',REIMBURSEMENT_ISSUED);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
+  if e.SortExpression = p.sort_order then begin
+    p.be_sort_order_ascending := not p.be_sort_order_ascending;
+  end else begin
+    p.sort_order := Safe(e.SortExpression,KI_SORT_EXPRESSION);
+    p.be_sort_order_ascending := TRUE;
+  end;
+  DataGrid_control.edititemindex := -1;
+  Bind;
 end;
 
-procedure TWebUserControl_outcomes.LinkButton_missed_deadlines_Click(sender: System.Object;
-  e: System.EventArgs);
+procedure TWebUserControl_responding_services.Bind;
 begin
-  SessionSet('status_of_interest',FAILED_DEADLINE);
-  DropCrumbAndTransferTo('emsof_request_status_filter.aspx');
+  //
+  p.biz_services.BindAnnualRespondents
+    (
+    p.sort_order,
+    p.be_sort_order_ascending,
+    DataGrid_control
+    );
+  //
+  Label_num_respondents.text := uint32(p.num_participants + p.num_nonparticipants).tostring;
+  Label_num_participants.text := p.num_participants.tostring;
+  Label_num_nonparticipants.text := p.num_nonparticipants.tostring;
+  //
+  p.num_participants := 0;
+  p.num_nonparticipants := 0;
+  //
 end;
 
 end.

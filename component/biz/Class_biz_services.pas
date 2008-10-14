@@ -29,6 +29,12 @@ type
       target: system.object
       )
       : boolean;
+    procedure BindAnnualRespondents
+      (
+      sort_order: string;
+      be_order_ascending: boolean;
+      target: system.object
+      );
     procedure BindListControl
       (
       county_user_id: string;
@@ -208,6 +214,16 @@ function TClass_biz_services.Bind
   : boolean;
 begin
   Bind := db_services.Bind(partial_affiliate_num,target);
+end;
+
+procedure TClass_biz_services.BindAnnualRespondents
+  (
+  sort_order: string;
+  be_order_ascending: boolean;
+  target: system.object
+  );
+begin
+  db_services.BindAnnualRespondents(sort_order,be_order_ascending,target);
 end;
 
 procedure TClass_biz_services.BindListControl
