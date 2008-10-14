@@ -19,7 +19,7 @@ type
     db_appropriations: TClass_db_appropriations;
   public
     constructor Create;
-    function BeAnyCurrentToService(service_id: string): boolean;
+    function BeAnyCurrentToService(affiliate_num: string): boolean;
     function CountyCodeOfCountyDictum(county_dictum_id: string): string;
     function FundingRoundsGenerated
       (
@@ -82,9 +82,9 @@ begin
   db_appropriations := TClass_db_appropriations.Create;
 end;
 
-function TClass_biz_appropriations.BeAnyCurrentToService(service_id: string): boolean;
+function TClass_biz_appropriations.BeAnyCurrentToService(affiliate_num: string): boolean;
 begin
-  BeAnyCurrentToService := db_appropriations.BeAnyCurrentToService(service_id);
+  BeAnyCurrentToService := db_appropriations.BeAnyCurrentToService(affiliate_num);
 end;
 
 function TClass_biz_appropriations.CountyCodeOfCountyDictum(county_dictum_id: string): string;

@@ -335,6 +335,11 @@
       <Form>request_overview.TWebForm_request_overview</Form>
       <DesignClass>ki_web_ui.page_class</DesignClass>
     </DCCReference>
+    <DCCReference Include="protected\responding_services_detail.pas">
+      <DependentUpon>protected\responding_services_detail.aspx</DependentUpon>
+      <Form>responding_services_detail.TWebForm_responding_services_detail</Form>
+      <DesignClass>ki_web_ui.page_class</DesignClass>
+    </DCCReference>
     <DCCReference Include="protected\service_overview.pas">
       <DependentUpon>protected\service_overview.aspx</DependentUpon>
       <Form>service_overview.TWebForm_service_overview</Form>
@@ -550,6 +555,7 @@
     <None Include="protected\region_dictated_appropriations.aspx" />
     <None Include="protected\request_item_detail.aspx" />
     <None Include="protected\request_overview.aspx" />
+    <None Include="protected\responding_services_detail.aspx" />
     <None Include="protected\scratch" />
     <None Include="protected\service_overview.aspx" />
     <None Include="protected\state_required_report.aspx" />

@@ -284,13 +284,18 @@ begin
   //
   dr := mysqlcommand.Create
     (
-    'SELECT affiliate_num FROM service WHERE affiliate_num like "' + partial_affiliate_num + '%" order by affiliate_num',
+    'SELECT affiliate_num'
+    + ' , name'
+    + ' , concat(affiliate_num," - ",name) as descriptor'
+    + ' FROM service'
+    + ' WHERE concat(affiliate_num," - ",name) like "%' + partial_affiliate_num + '%"'
+    + ' order by name',
     connection
     )
     .ExecuteReader;
   while dr.Read do begin
     ListControl(target).Items.Add
-      (listitem.Create(dr['affiliate_num'].tostring,dr['affiliate_num'].tostring));
+      (listitem.Create(dr['descriptor'].tostring,dr['affiliate_num'].tostring));
   end;
   dr.Close;
   self.Close;
@@ -312,7 +317,7 @@ begin
   self.Open;
   BaseDataList(target).datasource := mysqlcommand.Create
     (
-    'select id'
+    'select affiliate_num'
     + ' , service.name as service_name'
     + ' , county_code_name_map.name as county_name'
     + ' , IF(be_emsof_participant,"YES","no") as be_emsof_participant'
