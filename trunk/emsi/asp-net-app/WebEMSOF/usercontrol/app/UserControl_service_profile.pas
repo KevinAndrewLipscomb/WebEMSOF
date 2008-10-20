@@ -47,6 +47,10 @@ type
       e: System.EventArgs);
     procedure CustomValidator_num_ambulances_ServerValidate(source: System.Object; 
       args: System.Web.UI.WebControls.ServerValidateEventArgs);
+    procedure LinkButton_go_to_match_first_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_go_to_match_prior_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_go_to_match_next_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_go_to_match_last_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     type
@@ -193,6 +197,10 @@ type
     TextBox_federal_tax_id: System.Web.UI.WebControls.TextBox;
     RequiredFieldValidator_federal_tax_id: System.Web.UI.WebControls.RequiredFieldValidator;
     RegularExpressionValidator_federal_tax_id: System.Web.UI.WebControls.RegularExpressionValidator;
+    LinkButton_go_to_match_prior: System.Web.UI.WebControls.LinkButton;
+    LinkButton_go_to_match_next: System.Web.UI.WebControls.LinkButton;
+    LinkButton_go_to_match_last: System.Web.UI.WebControls.LinkButton;
+    LinkButton_go_to_match_first: System.Web.UI.WebControls.LinkButton;
   protected
     procedure OnInit(e: System.EventArgs); override;
   published
@@ -263,6 +271,10 @@ begin
   //
   ManageCharterControlEnablements;
   ManageEmsofControlEnablements;
+  LinkButton_go_to_match_prior.visible := FALSE;
+  LinkButton_go_to_match_next.visible := FALSE;
+  LinkButton_go_to_match_last.visible := FALSE;
+  LinkButton_go_to_match_first.visible := FALSE;
   //
   SetDependentFieldAblements(FALSE);
   Button_submit.enabled := FALSE;
@@ -366,6 +378,10 @@ begin
     //
     p.biz_counties.BindDirectToListControl(DropDownList_county,'-- County --');
     p.biz_charter_kinds.BindDirectToListControl(DropDownList_charter_kind,'-- Charter kind --');
+    LinkButton_go_to_match_first.text := ExpandTildePath(LinkButton_go_to_match_first.text);
+    LinkButton_go_to_match_prior.text := ExpandTildePath(LinkButton_go_to_match_prior.text);
+    LinkButton_go_to_match_next.text := ExpandTildePath(LinkButton_go_to_match_next.text);
+    LinkButton_go_to_match_last.text := ExpandTildePath(LinkButton_go_to_match_last.text);
     //
     RequireConfirmation(Button_delete,'Are you sure you want to delete this record?');
     //
@@ -633,6 +649,10 @@ end;
 procedure TWebUserControl_service_profile.InitializeComponent;
 begin
   Include(Self.Button_lookup.Click, Self.Button_lookup_Click);
+  Include(Self.LinkButton_go_to_match_first.Click, Self.LinkButton_go_to_match_first_Click);
+  Include(Self.LinkButton_go_to_match_prior.Click, Self.LinkButton_go_to_match_prior_Click);
+  Include(Self.LinkButton_go_to_match_next.Click, Self.LinkButton_go_to_match_next_Click);
+  Include(Self.LinkButton_go_to_match_last.Click, Self.LinkButton_go_to_match_last_Click);
   Include(Self.LinkButton_reset.Click, Self.LinkButton_reset_Click);
   Include(Self.DropDownList_affiliate_num.SelectedIndexChanged, Self.DropDownList_affiliate_num_SelectedIndexChanged);
   Include(Self.CustomValidator_website_address.ServerValidate, Self.CustomValidator_website_address_ServerValidate);
@@ -801,7 +821,35 @@ end;
 procedure TWebUserControl_service_profile.DropDownList_affiliate_num_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  PresentRecord(DropDownList_affiliate_num.selectedvalue);
+  PresentRecord(Safe(DropDownList_affiliate_num.selectedvalue,NUM));
+end;
+
+procedure TWebUserControl_service_profile.LinkButton_go_to_match_first_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_affiliate_num.selectedindex := 1;
+  PresentRecord(Safe(DropDownList_affiliate_num.selectedvalue,NUM));
+end;
+
+procedure TWebUserControl_service_profile.LinkButton_go_to_match_prior_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_affiliate_num.selectedindex := math.Max(1,(DropDownList_affiliate_num.selectedindex - 1));
+  PresentRecord(Safe(DropDownList_affiliate_num.selectedvalue,NUM));
+end;
+
+procedure TWebUserControl_service_profile.LinkButton_go_to_match_next_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_affiliate_num.selectedindex := math.Min((DropDownList_affiliate_num.selectedindex + 1),(DropDownList_affiliate_num.items.count - 1));
+  PresentRecord(Safe(DropDownList_affiliate_num.selectedvalue,NUM));
+end;
+
+procedure TWebUserControl_service_profile.LinkButton_go_to_match_last_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_affiliate_num.selectedindex := DropDownList_affiliate_num.items.count - 1;
+  PresentRecord(Safe(DropDownList_affiliate_num.selectedvalue,NUM));
 end;
 
 procedure TWebUserControl_service_profile.Button_delete_Click(sender: System.Object;
@@ -886,9 +934,13 @@ begin
     p.biz_services.Bind(saved_affiliate_num,DropDownList_affiliate_num);
     num_matches := DropDownList_affiliate_num.items.count;
     if num_matches > 0 then begin
+      LinkButton_go_to_match_prior.visible := TRUE;
+      LinkButton_go_to_match_next.visible := TRUE;
+      LinkButton_go_to_match_last.visible := TRUE;
+      LinkButton_go_to_match_first.visible := TRUE;
       DropDownList_affiliate_num.visible := TRUE;
       if num_matches = 1 then begin
-        PresentRecord(DropDownList_affiliate_num.selectedvalue);
+        PresentRecord(Safe(DropDownList_affiliate_num.selectedvalue,NUM));
       end else begin
         DropDownList_affiliate_num.items.Insert(0,listitem.Create('-- Select --',EMPTY));
       end;

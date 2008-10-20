@@ -27,6 +27,10 @@ type
     procedure DropDownList_name_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
     procedure Button_submit_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_go_to_match_first_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_go_to_match_prior_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_go_to_match_next_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_go_to_match_last_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     type
@@ -55,6 +59,10 @@ type
     TextBox_name: TextBox;
     DropDownList_name: DropDownList;
     TextBox_factor: TextBox;
+    LinkButton_go_to_match_prior: System.Web.UI.WebControls.LinkButton;
+    LinkButton_go_to_match_next: System.Web.UI.WebControls.LinkButton;
+    LinkButton_go_to_match_last: System.Web.UI.WebControls.LinkButton;
+    LinkButton_go_to_match_first: System.Web.UI.WebControls.LinkButton;
   protected
     procedure OnInit(e: System.EventArgs); override;
   published
@@ -74,6 +82,10 @@ begin
   TextBox_name.text := EMPTY;
   DropDownList_name.visible := FALSE;
   TextBox_factor.text := EMPTY;
+  LinkButton_go_to_match_prior.visible := FALSE;
+  LinkButton_go_to_match_next.visible := FALSE;
+  LinkButton_go_to_match_last.visible := FALSE;
+  LinkButton_go_to_match_first.visible := FALSE;
   //
   SetDependentFieldAblements(FALSE);
   Button_submit.enabled := FALSE;
@@ -87,6 +99,10 @@ begin
   if not p.be_loaded then begin
     //
     LinkButton_new_record.visible := p.be_ok_to_config_match_levels;
+    LinkButton_go_to_match_first.text := ExpandTildePath(LinkButton_go_to_match_first.text);
+    LinkButton_go_to_match_prior.text := ExpandTildePath(LinkButton_go_to_match_prior.text);
+    LinkButton_go_to_match_next.text := ExpandTildePath(LinkButton_go_to_match_next.text);
+    LinkButton_go_to_match_last.text := ExpandTildePath(LinkButton_go_to_match_last.text);
     //
     RequireConfirmation(Button_delete,'Are you sure you want to delete this record?');
     //
@@ -173,6 +189,10 @@ end;
 procedure TWebUserControl_match_level.InitializeComponent;
 begin
   Include(Self.Button_lookup.Click, Self.Button_lookup_Click);
+  Include(Self.LinkButton_go_to_match_first.Click, Self.LinkButton_go_to_match_first_Click);
+  Include(Self.LinkButton_go_to_match_prior.Click, Self.LinkButton_go_to_match_prior_Click);
+  Include(Self.LinkButton_go_to_match_next.Click, Self.LinkButton_go_to_match_next_Click);
+  Include(Self.LinkButton_go_to_match_last.Click, Self.LinkButton_go_to_match_last_Click);
   Include(Self.LinkButton_reset.Click, Self.LinkButton_reset_Click);
   Include(Self.LinkButton_new_record.Click, Self.LinkButton_new_record_Click);
   Include(Self.DropDownList_name.SelectedIndexChanged, Self.DropDownList_name_SelectedIndexChanged);
@@ -209,7 +229,7 @@ begin
     //
     p.biz_match_level.&Set
       (
-      Safe(TextBox_name.text,PUNCTUATED),
+      Safe(TextBox_name.text,HUMAN_NAME),
       factor
       );
     Alert(USER,SUCCESS,'recsaved','Record saved.',TRUE);
@@ -222,7 +242,35 @@ end;
 procedure TWebUserControl_match_level.DropDownList_name_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
-  PresentRecord(DropDownList_name.selectedvalue);
+  PresentRecord(Safe(DropDownList_name.selectedvalue,HUMAN_NAME));
+end;
+
+procedure TWebUserControl_match_level.LinkButton_go_to_match_first_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_name.selectedindex := 1;
+  PresentRecord(Safe(DropDownList_name.selectedvalue,HUMAN_NAME));
+end;
+
+procedure TWebUserControl_match_level.LinkButton_go_to_match_prior_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_name.selectedindex := math.Max(1,(DropDownList_name.selectedindex - 1));
+  PresentRecord(Safe(DropDownList_name.selectedvalue,HUMAN_NAME));
+end;
+
+procedure TWebUserControl_match_level.LinkButton_go_to_match_next_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_name.selectedindex := math.Min((DropDownList_name.selectedindex + 1),(DropDownList_name.items.count - 1));
+  PresentRecord(Safe(DropDownList_name.selectedvalue,HUMAN_NAME));
+end;
+
+procedure TWebUserControl_match_level.LinkButton_go_to_match_last_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  DropDownList_name.selectedindex := DropDownList_name.items.count - 1;
+  PresentRecord(Safe(DropDownList_name.selectedvalue,HUMAN_NAME));
 end;
 
 procedure TWebUserControl_match_level.Button_delete_Click(sender: System.Object;
@@ -273,9 +321,13 @@ begin
     p.biz_match_level.Bind(saved_name,DropDownList_name);
     num_matches := DropDownList_name.items.count;
     if num_matches > 0 then begin
+      LinkButton_go_to_match_prior.visible := TRUE;
+      LinkButton_go_to_match_next.visible := TRUE;
+      LinkButton_go_to_match_last.visible := TRUE;
+      LinkButton_go_to_match_first.visible := TRUE;
       DropDownList_name.visible := TRUE;
       if num_matches = 1 then begin
-        PresentRecord(DropDownList_name.selectedvalue);
+        PresentRecord(Safe(DropDownList_name.selectedvalue,HUMAN_NAME));
       end else begin
         DropDownList_name.items.Insert(0,listitem.Create('-- Select --',EMPTY));
       end;
