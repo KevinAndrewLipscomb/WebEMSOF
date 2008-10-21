@@ -12,7 +12,11 @@
   <body bgcolor="white">
     <form runat="server">
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
-      <uc2:UserControl_service_profile id="UserControl_service_profile_control" runat="server"></uc2:UserControl_service_profile>
+      <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
+        <ContentTemplate>
+          <uc2:UserControl_service_profile id="UserControl_service_profile_control" runat="server"></uc2:UserControl_service_profile>
+        </ContentTemplate>
+      </asp:UpdatePanel>
       <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
     </form>
   </body>

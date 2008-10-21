@@ -27,6 +27,7 @@ type
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
     Title: System.Web.UI.HtmlControls.HtmlTitle;
+    UpdatePanel_control: System.Web.UI.UpdatePanel;
   protected
     procedure OnInit(e: EventArgs); override;
   end;
