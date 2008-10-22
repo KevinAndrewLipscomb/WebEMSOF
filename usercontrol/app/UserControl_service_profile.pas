@@ -41,8 +41,6 @@ type
       args: System.Web.UI.WebControls.ServerValidateEventArgs);
     procedure CustomValidator_md_email_address_ServerValidate(source: System.Object; 
       args: System.Web.UI.WebControls.ServerValidateEventArgs);
-    procedure CustomValidator_emsof_contact_email_address_ServerValidate(source: System.Object; 
-      args: System.Web.UI.WebControls.ServerValidateEventArgs);
     procedure RadioButtonList_be_emsof_participant_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
     procedure CustomValidator_num_ambulances_ServerValidate(source: System.Object; 
@@ -91,7 +89,6 @@ type
     TextBox_corpadmin_email_address: System.Web.UI.WebControls.TextBox;
     TextBox_emsof_nonparticipation_reason: System.Web.UI.WebControls.TextBox;
     TextBox_emsof_contact_name: System.Web.UI.WebControls.TextBox;
-    TextBox_emsof_contact_email_address: System.Web.UI.WebControls.TextBox;
     TextBox_emsof_contact_primary_phone_num: System.Web.UI.WebControls.TextBox;
     TextBox_emsof_contact_sms_phone_num: System.Web.UI.WebControls.TextBox;
     TextBox_coo_name: System.Web.UI.WebControls.TextBox;
@@ -127,8 +124,8 @@ type
     Button_submit: System.Web.UI.WebControls.Button;
     Button_delete: System.Web.UI.WebControls.Button;
     Button_lookup: System.Web.UI.WebControls.Button;
-    Label_lookup_arrow: &label;
-    Label_lookup_hint: &label;
+    Label_lookup_arrow: System.Web.UI.WebControls.Label;
+    Label_lookup_hint: System.Web.UI.WebControls.Label;
     LinkButton_reset: System.Web.UI.WebControls.LinkButton;
     RequiredFieldValidator_affiliate_num: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_name: System.Web.UI.WebControls.RequiredFieldValidator;
@@ -163,8 +160,6 @@ type
     CustomValidator_website_address: System.Web.UI.WebControls.CustomValidator;
     RequiredFieldValidator_be_emsof_participant: System.Web.UI.WebControls.RequiredFieldValidator;
     UpdatePanel_be_emsof_particpant: System.Web.UI.UpdatePanel;
-    RegularExpressionValidator_emsof_contact_email_address: System.Web.UI.WebControls.RegularExpressionValidator;
-    CustomValidator_emsof_contact_email_address: System.Web.UI.WebControls.CustomValidator;
     RegularExpressionValidator_emsof_contact_primary_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
     RequiredFieldValidator_emsof_contact_primary_phone_num: System.Web.UI.WebControls.RequiredFieldValidator;
     RegularExpressionValidator_emsof_contact_sms_phone_num: System.Web.UI.WebControls.RegularExpressionValidator;
@@ -185,12 +180,10 @@ type
     RequiredFieldValidator_be_dera: System.Web.UI.WebControls.RequiredFieldValidator;
     CustomValidator_emsof_contact_name: System.Web.UI.WebControls.CustomValidator;
     TableRow_emsof_contact_name: System.Web.UI.HtmlControls.HtmlTableRow;
-    TableRow_emsof_contact_email_address: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_emsof_contact_primary_phone_num: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_emsof_contact_sms_phone_num: System.Web.UI.HtmlControls.HtmlTableRow;
     Label_emsof_nonparticipation_reason: System.Web.UI.WebControls.Label;
     Label_charter_other_kind: System.Web.UI.WebControls.Label;
-    RequiredFieldValidator_emsof_contact_email_address: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_emsof_contact_name: System.Web.UI.WebControls.RequiredFieldValidator;
     RequiredFieldValidator_charter_other_kind: System.Web.UI.WebControls.RequiredFieldValidator;
     RadioButtonList_be_valid_profile: System.Web.UI.WebControls.RadioButtonList;
@@ -232,7 +225,6 @@ begin
   RadioButtonList_be_emsof_participant.ClearSelection;
   TextBox_emsof_nonparticipation_reason.text := EMPTY;
   TextBox_emsof_contact_name.text := EMPTY;
-  TextBox_emsof_contact_email_address.text := EMPTY;
   TextBox_emsof_contact_primary_phone_num.text := EMPTY;
   TextBox_emsof_contact_sms_phone_num.text := EMPTY;
   TextBox_coo_name.text := EMPTY;
@@ -418,7 +410,6 @@ var
   be_emsof_participant: boolean;
   emsof_nonparticipation_reason: string;
   emsof_contact_name: string;
-  emsof_contact_email_address: string;
   emsof_contact_primary_phone_num: string;
   emsof_contact_sms_phone_num: string;
   coo_name: string;
@@ -474,7 +465,6 @@ begin
     be_emsof_participant,
     emsof_nonparticipation_reason,
     emsof_contact_name,
-    emsof_contact_email_address,
     emsof_contact_primary_phone_num,
     emsof_contact_sms_phone_num,
     coo_name,
@@ -529,7 +519,6 @@ begin
     RadioButtonList_be_emsof_participant.selectedvalue := be_emsof_participant.tostring.toupper;
     TextBox_emsof_nonparticipation_reason.text := emsof_nonparticipation_reason;
     TextBox_emsof_contact_name.text := emsof_contact_name;
-    TextBox_emsof_contact_email_address.text := emsof_contact_email_address;
     TextBox_emsof_contact_primary_phone_num.text := emsof_contact_primary_phone_num;
     TextBox_emsof_contact_sms_phone_num.text := emsof_contact_sms_phone_num;
     TextBox_coo_name.text := coo_name;
@@ -649,16 +638,15 @@ end;
 procedure TWebUserControl_service_profile.InitializeComponent;
 begin
   Include(Self.Button_lookup.Click, Self.Button_lookup_Click);
+  Include(Self.LinkButton_reset.Click, Self.LinkButton_reset_Click);
   Include(Self.LinkButton_go_to_match_first.Click, Self.LinkButton_go_to_match_first_Click);
   Include(Self.LinkButton_go_to_match_prior.Click, Self.LinkButton_go_to_match_prior_Click);
   Include(Self.LinkButton_go_to_match_next.Click, Self.LinkButton_go_to_match_next_Click);
   Include(Self.LinkButton_go_to_match_last.Click, Self.LinkButton_go_to_match_last_Click);
-  Include(Self.LinkButton_reset.Click, Self.LinkButton_reset_Click);
   Include(Self.DropDownList_affiliate_num.SelectedIndexChanged, Self.DropDownList_affiliate_num_SelectedIndexChanged);
   Include(Self.CustomValidator_website_address.ServerValidate, Self.CustomValidator_website_address_ServerValidate);
   Include(Self.DropDownList_charter_kind.SelectedIndexChanged, Self.DropDownList_charter_kind_SelectedIndexChanged);
   Include(Self.CustomValidator_corpadmin_email_address.ServerValidate, Self.CustomValidator_corpadmin_email_address_ServerValidate);
-  Include(Self.CustomValidator_emsof_contact_email_address.ServerValidate, Self.CustomValidator_emsof_contact_email_address_ServerValidate);
   Include(Self.RadioButtonList_be_emsof_participant.SelectedIndexChanged, Self.RadioButtonList_be_emsof_participant_SelectedIndexChanged);
   Include(Self.CustomValidator_coo_email_address.ServerValidate, Self.CustomValidator_coo_email_address_ServerValidate);
   Include(Self.CustomValidator_be_als_medical_director_name.ServerValidate, Self.CustomValidator_be_als_medical_director_name_ServerValidate);
@@ -695,12 +683,6 @@ procedure TWebUserControl_service_profile.RadioButtonList_be_emsof_participant_S
   e: System.EventArgs);
 begin
   ManageEmsofControlEnablements;
-end;
-
-procedure TWebUserControl_service_profile.CustomValidator_emsof_contact_email_address_ServerValidate(source: System.Object;
-  args: System.Web.UI.WebControls.ServerValidateEventArgs);
-begin
-  args.isvalid := BeValidDomainPartOfEmailAddress(Safe(TextBox_emsof_contact_email_address.text,EMAIL_ADDRESS));
 end;
 
 procedure TWebUserControl_service_profile.CustomValidator_md_email_address_ServerValidate(source: System.Object;
@@ -767,7 +749,6 @@ begin
       (RadioButtonList_be_emsof_participant.selectedvalue = 'TRUE'),
       Safe(TextBox_emsof_nonparticipation_reason.text,PUNCTUATED).trim,
       Safe(TextBox_emsof_contact_name.text,HUMAN_NAME).trim,
-      Safe(TextBox_emsof_contact_email_address.text,EMAIL_ADDRESS).trim,
       Safe(TextBox_emsof_contact_primary_phone_num.text,NUM),
       Safe(TextBox_emsof_contact_sms_phone_num.text,NUM),
       Safe(TextBox_coo_name.text,HUMAN_NAME).trim,
@@ -883,7 +864,6 @@ begin
   RadioButtonList_be_emsof_participant.enabled := ablement;
   TextBox_emsof_nonparticipation_reason.enabled := ablement;
   TextBox_emsof_contact_name.enabled := ablement;
-  TextBox_emsof_contact_email_address.enabled := ablement;
   TextBox_emsof_contact_primary_phone_num.enabled := ablement;
   TextBox_emsof_contact_sms_phone_num.enabled := ablement;
   TextBox_coo_name.enabled := ablement;
@@ -958,14 +938,12 @@ begin
   Label_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
   TextBox_emsof_nonparticipation_reason.enabled := not be_emsof_participant;
   TableRow_emsof_contact_name.visible := be_emsof_participant;
-  TableRow_emsof_contact_email_address.visible := be_emsof_participant;
   TableRow_emsof_contact_primary_phone_num.visible := be_emsof_participant;
   TableRow_emsof_contact_sms_phone_num.visible := be_emsof_participant;
   if be_emsof_participant then begin
     TextBox_emsof_nonparticipation_reason.text := EMPTY;
   end else begin
     TextBox_emsof_contact_name.text := EMPTY;
-    TextBox_emsof_contact_email_address.text := EMPTY;
     TextBox_emsof_contact_primary_phone_num.text := EMPTY;
     TextBox_emsof_contact_sms_phone_num.text := EMPTY;
   end;

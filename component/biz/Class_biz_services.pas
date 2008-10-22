@@ -59,7 +59,6 @@ type
       out be_emsof_participant: boolean;
       out emsof_nonparticipation_reason: string;
       out emsof_contact_name: string;
-      out emsof_contact_email_address: string;
       out emsof_contact_primary_phone_num: string;
       out emsof_contact_sms_phone_num: string;
       out coo_name: string;
@@ -117,7 +116,6 @@ type
       be_emsof_participant: boolean;
       emsof_nonparticipation_reason: string;
       emsof_contact_name: string;
-      emsof_contact_email_address: string;
       emsof_contact_primary_phone_num: string;
       emsof_contact_sms_phone_num: string;
       coo_name: string;
@@ -258,7 +256,6 @@ function TClass_biz_services.Get
   out be_emsof_participant: boolean;
   out emsof_nonparticipation_reason: string;
   out emsof_contact_name: string;
-  out emsof_contact_email_address: string;
   out emsof_contact_primary_phone_num: string;
   out emsof_contact_sms_phone_num: string;
   out coo_name: string;
@@ -316,7 +313,6 @@ begin
     be_emsof_participant,
     emsof_nonparticipation_reason,
     emsof_contact_name,
-    emsof_contact_email_address,
     emsof_contact_primary_phone_num,
     emsof_contact_sms_phone_num,
     coo_name,
@@ -384,7 +380,6 @@ procedure TClass_biz_services.&Set
   be_emsof_participant: boolean;
   emsof_nonparticipation_reason: string;
   emsof_contact_name: string;
-  emsof_contact_email_address: string;
   emsof_contact_primary_phone_num: string;
   emsof_contact_sms_phone_num: string;
   coo_name: string;
@@ -442,7 +437,6 @@ begin
     be_emsof_participant,
     emsof_nonparticipation_reason,
     emsof_contact_name,
-    emsof_contact_email_address,
     emsof_contact_primary_phone_num,
     emsof_contact_sms_phone_num,
     coo_name,

@@ -217,17 +217,6 @@
             <td nowrap>
               <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_name" runat="server" font-bold="True" errormessage="Please enter an EMSOF Contact name." controltovalidate="TextBox_emsof_contact_name">!ERR!</asp:RequiredFieldValidator></td>
           </tr>
-          <tr id="TableRow_emsof_contact_email_address" runat="server">
-            <td align="right"><font class="">Email address:</font></td>
-            <td nowrap><font class="">
-                <asp:TextBox id="TextBox_emsof_contact_email_address" maxlength="255" columns="60" runat="server" enabled="False"></asp:TextBox>*</font></td>
-            <td nowrap>
-              <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_email_address" runat="server" font-bold="True" errormessage="Please enter an EMSOF Contact email address." controltovalidate="TextBox_emsof_contact_email_address">!ERR!</asp:RequiredFieldValidator>
-              <asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_email_address" runat="server" font-bold="True" errormessage="Please enter a valid EMSOF Contact email address." controltovalidate="TextBox_emsof_contact_email_address"
-                                              validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*">!ERR!</asp:RegularExpressionValidator>
-              <asp:CustomValidator id="CustomValidator_emsof_contact_email_address" runat="server" font-bold="True"
-                                   errormessage='EMSOF participants must enter an EMSOF Contact email address, and it must have a valid domain name (the part after the "@").' controltovalidate="TextBox_emsof_contact_email_address">!ERR!</asp:CustomValidator></td>
-          </tr>
           <tr id="TableRow_emsof_contact_primary_phone_num" runat="server">
             <td align="right"><font class="">Primary phone #:</font></td>
             <td><font class="">
@@ -269,15 +258,14 @@
         <tr>
           <td align="right"><font class="">Primary operations officer name:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_coo_name" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_coo_name" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_coo_name" errormessage="Please enter Operations officer name." font-bold="True" id="RequiredFieldValidator_coo_name">!ERR!</asp:RequiredFieldValidator></td>
         </tr>
         <tr>
           <td align="right"><font class="">Work phone #:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_coo_work_phone_num" enabled="False"></asp:TextBox></font></td>
+              <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_coo_work_phone_num" enabled="False"></asp:TextBox>*</font></td>
           <td nowrap="true"><asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_coo_work_phone_num" errormessage="Please enter Operations officer work phone num." font-bold="True" id="RequiredFieldValidator_coo_work_phone_num">!ERR!</asp:RequiredFieldValidator>
         <asp:RegularExpressionValidator id="RegularExpressionValidator_coo_work_phone_num" runat="server" errormessage="Please enter a valid operations officer work phone number, using numerals only." font-bold="True" controltovalidate="TextBox_coo_work_phone_num"
                                         validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
@@ -391,8 +379,7 @@
         <tr>
           <td align="right"><font class="">Street address line 1:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_physical_street_address_line_1" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_physical_street_address_line_1" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_physical_street_address_line_1" errormessage="Please enter Physical street address line 1." font-bold="True" id="RequiredFieldValidator_physical_street_address_line_1">!ERR!</asp:RequiredFieldValidator></td>
         </tr>
@@ -406,8 +393,7 @@
         <tr>
           <td align="right"><font class="">City:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_physical_city" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_physical_city" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_physical_city" errormessage="Please enter Physical city." font-bold="True" id="RequiredFieldValidator_physical_city">!ERR!</asp:RequiredFieldValidator></td>
         </tr>
@@ -420,8 +406,7 @@
         <tr>
           <td align="right"><font class="">Zip code:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_physical_zip_code" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_physical_zip_code" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_physical_zip_code" errormessage="Please enter Physical zip code." font-bold="True" id="RequiredFieldValidator_physical_zip_code">!ERR!</asp:RequiredFieldValidator>
         <asp:RegularExpressionValidator id="RegularExpressionValidator_physical_zip_code" runat="server" errormessage="Please enter a valid zip code using only numerals." font-bold="True" controltovalidate="TextBox_physical_zip_code"
@@ -447,8 +432,7 @@
         <tr>
           <td align="right"><font class="">Mailing address line 1:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_mail_address_line_1" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_mail_address_line_1" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_mail_address_line_1" errormessage="Please enter Mailing address line 1." font-bold="True" id="RequiredFieldValidator_mail_address_line_1">!ERR!</asp:RequiredFieldValidator></td>
         </tr>
@@ -462,8 +446,7 @@
         <tr>
           <td align="right"><font class="">City:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_mail_city" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_mail_city" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_mail_city" errormessage="Please enter Mailing address city." font-bold="True" id="RequiredFieldValidator_mail_city">!ERR!</asp:RequiredFieldValidator></td>
         </tr><tr>
@@ -475,10 +458,9 @@
         <tr>
           <td align="right"><font class="">Zip code:</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" columns="9" maxlength="9" id="TextBox_mail_zip_code" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" columns="9" maxlength="9" id="TextBox_mail_zip_code" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
-            <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_mail_zip_code" errormessage="Please enter Mail ing address zip code." font-bold="True" id="RequiredFieldValidator_mail_zip_code">!ERR!</asp:RequiredFieldValidator>
+            <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_mail_zip_code" errormessage="Please enter Mailing address zip code." font-bold="True" id="RequiredFieldValidator_mail_zip_code">!ERR!</asp:RequiredFieldValidator>
         <asp:RegularExpressionValidator id="RegularExpressionValidator_mail_zip_code" runat="server" errormessage="Please enter a valid Mailing zip code." font-bold="True" controltovalidate="TextBox_mail_zip_code" validationexpression="\d{5,9}">!ERR!</asp:RegularExpressionValidator></td>
         </tr>
         <!-- - --></table></td></tr><!-- - --></table>
@@ -515,8 +497,7 @@
         <tr>
           <td align="right"><font class="">How many&nbsp;DOH-licensed vehicles do you have?</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" id="TextBox_num_doh_licensed_vehicles" columns="3" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" id="TextBox_num_doh_licensed_vehicles" columns="3" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_num_doh_licensed_vehicles" errormessage="Please enter Number of DOH licensed vehicles." font-bold="True" id="RequiredFieldValidator_num_doh_licensed_vehicles">!ERR!</asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator runat="server" validationexpression="\d*" controltovalidate="TextBox_num_doh_licensed_vehicles" errormessage="Please enter a valid Number of DOH licensed vehicles." font-bold="True"
@@ -525,15 +506,14 @@
         <tr>
           <td align="right"><font class="">How many of your DOH-licensed vehicles are&nbsp;AMBULANCES (including air ambulances)?</font></td>
           <td><font class="">
-              <asp:TextBox runat="server" id="TextBox_num_ambulances" columns="3" enabled="False"></asp:TextBox>
-            </font></td>
+              <asp:TextBox runat="server" id="TextBox_num_ambulances" columns="3" enabled="False"></asp:TextBox>* </font></td>
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_num_ambulances" errormessage="Please enter Number of ambulances." font-bold="True" id="RequiredFieldValidator_num_ambulances">!ERR!</asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator runat="server" validationexpression="\d*" controltovalidate="TextBox_num_ambulances" errormessage="Please enter a valid Number of ambulances." font-bold="True" id="RegularExpressionValidator_num_ambulances">!ERR!</asp:RegularExpressionValidator><asp:CustomValidator id="CustomValidator_num_ambulances" runat="server" errormessage="Please enter a number of ambulances no higher than the number of your vehicles." font-bold="True"
                              controltovalidate="TextBox_num_ambulances">!ERR!</asp:CustomValidator></td>
         </tr>
         <tr>
-          <td align="right"><font class="">Has a local government body designated you as the primary EMS response agency for a specific geographic area?</font></td>
+          <td align="right"><font class="">Has a local government body designated you as the primary EMS response agency for a specific geographic area?*</font></td>
           <td><font class="">
           <asp:RadioButtonList id="RadioButtonList_be_dera" runat="server" repeatdirection="Horizontal" enabled="False">
             <asp:ListItem value="TRUE">Yes</asp:ListItem>
