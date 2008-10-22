@@ -62,7 +62,6 @@ type
       out be_emsof_participant: boolean;
       out emsof_nonparticipation_reason: string;
       out emsof_contact_name: string;
-      out emsof_contact_email_address: string;
       out emsof_contact_primary_phone_num: string;
       out emsof_contact_sms_phone_num: string;
       out coo_name: string;
@@ -120,7 +119,6 @@ type
       be_emsof_participant: boolean;
       emsof_nonparticipation_reason: string;
       emsof_contact_name: string;
-      emsof_contact_email_address: string;
       emsof_contact_primary_phone_num: string;
       emsof_contact_sms_phone_num: string;
       coo_name: string;
@@ -398,7 +396,6 @@ function TClass_db_services.Get
   out be_emsof_participant: boolean;
   out emsof_nonparticipation_reason: string;
   out emsof_contact_name: string;
-  out emsof_contact_email_address: string;
   out emsof_contact_primary_phone_num: string;
   out emsof_contact_sms_phone_num: string;
   out coo_name: string;
@@ -460,7 +457,6 @@ begin
     be_emsof_participant := (dr['be_emsof_participant'].tostring = '1');
     emsof_nonparticipation_reason := dr['emsof_nonparticipation_reason'].tostring;
     emsof_contact_name := dr['emsof_contact_name'].tostring;
-    emsof_contact_email_address := dr['emsof_contact_email_address'].tostring;
     emsof_contact_primary_phone_num := dr['emsof_contact_primary_phone_num'].tostring;
     emsof_contact_sms_phone_num := dr['emsof_contact_sms_phone_num'].tostring;
     coo_name := dr['coo_name'].tostring;
@@ -536,7 +532,6 @@ procedure TClass_db_services.&Set
   be_emsof_participant: boolean;
   emsof_nonparticipation_reason: string;
   emsof_contact_name: string;
-  emsof_contact_email_address: string;
   emsof_contact_primary_phone_num: string;
   emsof_contact_sms_phone_num: string;
   coo_name: string;
@@ -592,7 +587,6 @@ begin
   + ' , be_emsof_participant = ' + be_emsof_participant.tostring
   + ' , emsof_nonparticipation_reason = NULLIF("' + emsof_nonparticipation_reason + '","")'
   + ' , emsof_contact_name = NULLIF("' + emsof_contact_name + '","")'
-  + ' , emsof_contact_email_address = NULLIF("' + emsof_contact_email_address + '","")'
   + ' , emsof_contact_primary_phone_num = NULLIF("' + emsof_contact_primary_phone_num + '","")'
   + ' , emsof_contact_sms_phone_num = NULLIF("' + emsof_contact_sms_phone_num + '","")'
   + ' , coo_name = NULLIF("' + coo_name + '","")'
