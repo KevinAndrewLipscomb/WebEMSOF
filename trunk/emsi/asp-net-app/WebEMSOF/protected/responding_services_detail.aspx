@@ -3,6 +3,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_service_profile" Src="~/usercontrol/app/UserControl_service_profile.ascx" %>
+<%@ Register TagPrefix="uc3" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
   <head runat="server">
     <title id="Title" runat="server"></title>
@@ -18,6 +19,7 @@
         </ContentTemplate>
       </asp:UpdatePanel>
       <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
+      <uc3:UserControl_update_progress_blocker id="UserControl_update_progress_blocker1" runat="server"></uc3:UserControl_update_progress_blocker>
     </form>
   </body>
 </html>
