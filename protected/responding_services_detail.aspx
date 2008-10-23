@@ -20,7 +20,7 @@
         </ContentTemplate>
       </asp:UpdatePanel>
       <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
-      <uc3:UserControl_update_progress_blocker id="UserControl_update_progress_blocker1" runat="server"></uc3:UserControl_update_progress_blocker>
+      <uc3:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc3:UserControl_update_progress_blocker>
     </form>
   </body>
 </html>

@@ -14,16 +14,7 @@ uses
   system.web.mail,
   system.web.security;
 
-const ID = '$Id$';
-
 type
-  p_type =
-    RECORD
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    saved_emsof_ante: decimal;
-    saved_shortage: decimal;
-    END;
   TWebForm_withdraw_request_item = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -33,6 +24,15 @@ type
     procedure TWebForm_withdraw_request_item_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        saved_emsof_ante: decimal;
+        saved_shortage: decimal;
+        END;
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -48,8 +48,6 @@ type
     Label_emsof_ante: System.Web.UI.WebControls.Label;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-  public
   end;
 
 implementation
@@ -180,11 +178,18 @@ begin
     + NEW_LINE
     + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + configurationmanager.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name'],
+    // be_html
+    FALSE,
+    // cc
+    EMPTY,
+    // bcc
+    EMPTY,
+    // reply_to
+    service_email_address
     );
   //
   BackTrack(2);
 end;
 
 end.
-

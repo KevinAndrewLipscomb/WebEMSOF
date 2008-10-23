@@ -373,7 +373,15 @@ begin
       + NEW_LINE
       + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      // be_html
+      FALSE,
+      // cc
+      EMPTY,
+      // bcc
+      EMPTY,
+      // reply_to
+      service_email_address
       );
     kix.SmtpMailSend
       (
@@ -396,7 +404,15 @@ begin
       + NEW_LINE
       + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      // be_html
+      FALSE,
+      // cc
+      EMPTY,
+      // bcc
+      EMPTY,
+      // reply_to
+      service_email_address
       );
     //
     BackTrack;

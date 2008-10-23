@@ -373,7 +373,15 @@ begin
       + NEW_LINE
       + '   ' + session['county_user_password_reset_email_address'].tostring + '  (mailto:' + session['county_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      // be_html
+      FALSE,
+      // cc
+      EMPTY,
+      // bcc
+      EMPTY,
+      // reply_to
+      session['county_user_password_reset_email_address'].tostring
       );
     //
     p.db.Close;
@@ -494,7 +502,15 @@ begin
       + NEW_LINE
       + '   ' + session['county_user_password_reset_email_address'].tostring + '  (mailto:' + session['county_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      // be_html
+      FALSE,
+      // cc
+      EMPTY,
+      // bcc
+      EMPTY,
+      // reply_to
+      session['county_user_password_reset_email_address'].tostring
       );
     p.db.Close;
     //

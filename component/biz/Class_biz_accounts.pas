@@ -14,8 +14,6 @@ uses
   system.configuration,
   system.web.mail;
 
-const ID = '$Id$';
-
 type
   TClass_biz_accounts = class
   private
@@ -207,8 +205,10 @@ procedure TClass_biz_accounts.IssueForcedOpenNotice
   county_code: string
   );
 var
+  emsof_coordinator_email_address: string;
   service_name: string;
 begin
+  emsof_coordinator_email_address := EmailTargetByRole('emsof-coordinator');
   service_name := biz_services.NameOf(service_id);
   //
   kix.SmtpMailSend
@@ -216,7 +216,7 @@ begin
     configurationmanager.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id)
     + COMMA + EmailAddressByKindId('county',county_code)
-    + COMMA + EmailTargetByRole('emsof-coordinator'),
+    + COMMA + emsof_coordinator_email_address,
     'Special re-opening of EMSOF request',
     sponsor_region_name + ' has re-opened an EMSOF request from ' + service_name + ' for additional rework.  '
     + 'The re-opened request is temporarily exempt from normal submission deadlines but ' + sponsor_region_name + ' reserves the '
@@ -229,9 +229,17 @@ begin
     + NEW_LINE
     + sponsor_region_name + ' can be contacted as follows:' + NEW_LINE
     + NEW_LINE
-    + '   ' + EmailTargetByRole('emsof-coordinator') + NEW_LINE
+    + '   ' + emsof_coordinator_email_address + NEW_LINE
     + NEW_LINE
-    + '-- ' + configurationmanager.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name'],
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    emsof_coordinator_email_address
     );
 end;
 
@@ -278,6 +286,7 @@ begin
   + '   -  Copy of bank draft' + NEW_LINE
   + '   -  Copy of bank statement' + NEW_LINE
   + '   -  Copy of wire transfer slip' + NEW_LINE
+  + '   -  Copy of credit card statement' + NEW_LINE
   + NEW_LINE
   + '5. Watch your mailbox for the reimbursement check!' + NEW_LINE
   + NEW_LINE
@@ -311,7 +320,15 @@ begin
     configurationmanager.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
     'NOTICE TO PROCEED with EMSOF project',
-    message_text
+    message_text,
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    emsof_coord_email_address
     );
   //
   //   Send notification to region.
@@ -365,7 +382,15 @@ begin
     + NEW_LINE
     + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + configurationmanager.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name'],
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    service_email_address
     );
 end;
 
@@ -424,7 +449,21 @@ begin
   + NEW_LINE
   + '-- ' + configurationmanager.AppSettings['application_name'];
   //
-  kix.SmtpMailSend(configurationmanager.AppSettings['sender_email_address'],service_email_address,'Missed deadline',message_text);
+  kix.SmtpMailSend
+    (
+    configurationmanager.AppSettings['sender_email_address'],
+    service_email_address,
+    'Missed deadline',
+    message_text,
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    county_coord_email_address
+    );
   //
   message_text := service_name + ' has missed the regional deadline to ' + deadline_description + SPACE
   + 'associated with an allocation from ' + county_name + ' County.' + NEW_LINE
@@ -516,7 +555,15 @@ begin
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      //be_html
+      FALSE,
+      //cc
+      EMPTY,
+      //bcc
+      EMPTY,
+      //reply_to
+      self_email_address
       );
     //
     if role <> 'county' then begin
@@ -556,7 +603,15 @@ begin
         + NEW_LINE
         + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
         + NEW_LINE
-        + '-- ' + configurationmanager.AppSettings['application_name']
+        + '-- ' + configurationmanager.AppSettings['application_name'],
+        //be_html
+        FALSE,
+        //cc
+        EMPTY,
+        //bcc
+        EMPTY,
+        //reply_to
+        self_email_address
         );
       //
     end;
@@ -601,7 +656,15 @@ begin
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      //be_html
+      FALSE,
+      //cc
+      EMPTY,
+      //bcc
+      EMPTY,
+      //reply_to
+      self_email_address
       );
     kix.SmtpMailSend
       (
@@ -636,7 +699,15 @@ begin
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      //be_html
+      FALSE,
+      //cc
+      EMPTY,
+      //bcc
+      EMPTY,
+      //reply_to
+      self_email_address
       );
   end;
 end;
@@ -701,7 +772,15 @@ begin
     configurationmanager.AppSettings['sender_email_address'],
     EmailAddressByKindId('service',service_id),
     'Promotion of EMSOF request',
-    messageText
+    messageText,
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    self_email_address
     );
   //
   //   Send notification to region.
@@ -725,7 +804,15 @@ begin
       + NEW_LINE
       + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      //be_html
+      FALSE,
+      //cc
+      EMPTY,
+      //bcc
+      EMPTY,
+      //reply_to
+      self_email_address
       );
   end;
 end;
@@ -768,7 +855,15 @@ begin
     + NEW_LINE
     + '   ' + self_email_address + '  (mailto:' + self_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + configurationmanager.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name'],
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    self_email_address
     );
   //
   if role <> 'county' then begin
@@ -796,7 +891,15 @@ begin
       + NEW_LINE
       + '   ' + service_email_address + '  (mailto:' + service_email_address + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      //be_html
+      FALSE,
+      //cc
+      EMPTY,
+      //bcc
+      EMPTY,
+      //reply_to
+      self_email_address
       );
     //
   end;
@@ -833,7 +936,15 @@ begin
     + NEW_LINE
     + '   ' + poc_email_address + '  (mailto:' + poc_email_address + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + configurationmanager.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name'],
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    poc_email_address
     );
 
 end;

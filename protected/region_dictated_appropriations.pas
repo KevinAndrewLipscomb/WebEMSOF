@@ -10,29 +10,7 @@ uses
   Class_db,
   Class_db_trail;
 
-const ID = '$Id$';
-
 type
-  p_type =
-    RECORD
-    be_before_deadline: boolean;
-    be_sort_order_ascending: boolean;
-    county_appropriations_sort_order: string;
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    tcci_id: cardinal;
-    tcci_password_reset_email_address: cardinal;
-    tcci_county_code: cardinal;
-    tcci_name: cardinal;
-    tcci_amount: cardinal;
-    tcci_linkbutton_edit: cardinal;
-    tcci_linkbutton_delete: cardinal;
-    num_appropriations: cardinal;
-    saved_amount: decimal;
-    state_dictated_appropriation_amount: decimal;
-    sum_of_county_appropriations: decimal;
-    unappropriated_amount: decimal;
-    END;
   TWebForm_region_dictated_appropriations = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -57,6 +35,28 @@ type
     procedure TWebForm_region_dictated_appropriations_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        be_before_deadline: boolean;
+        be_sort_order_ascending: boolean;
+        county_appropriations_sort_order: string;
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        tcci_id: cardinal;
+        tcci_password_reset_email_address: cardinal;
+        tcci_county_code: cardinal;
+        tcci_name: cardinal;
+        tcci_amount: cardinal;
+        tcci_linkbutton_edit: cardinal;
+        tcci_linkbutton_delete: cardinal;
+        num_appropriations: cardinal;
+        saved_amount: decimal;
+        state_dictated_appropriation_amount: decimal;
+        sum_of_county_appropriations: decimal;
+        unappropriated_amount: decimal;
+        END;
   strict private
     p: p_type;
     procedure Bind_county_appropriations;
@@ -83,8 +83,6 @@ type
     procedure SortCommand_county_appropriations(source: System.Object; e: System.Web.UI.WebControls.DataGridSortCommandEventArgs);
   protected
     procedure OnInit(e: EventArgs); override;
-  public
-    { Public Declarations }
   end;
 
 implementation
@@ -245,7 +243,15 @@ begin
       + NEW_LINE
       + '   ' + session['regional_staffer_user_password_reset_email_address'].tostring + '  (mailto:' + session['regional_staffer_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      // be_html
+      FALSE,
+      // cc
+      EMPTY,
+      // bcc
+      EMPTY,
+      // reply_to
+      session['regional_staffer_user_password_reset_email_address'].tostring
       );
     p.db.Close;
     //
@@ -375,7 +381,15 @@ begin
       + NEW_LINE
       + '   ' + session['regional_staffer_user_password_reset_email_address'].tostring + '  (mailto:' + session['regional_staffer_user_password_reset_email_address'].tostring + ')' + NEW_LINE
       + NEW_LINE
-      + '-- ' + configurationmanager.AppSettings['application_name']
+      + '-- ' + configurationmanager.AppSettings['application_name'],
+      // be_html
+      FALSE,
+      // cc
+      EMPTY,
+      // bcc
+      EMPTY,
+      // reply_to
+      session['regional_staffer_user_password_reset_email_address'].tostring
       );
     //
     p.db.Close;
