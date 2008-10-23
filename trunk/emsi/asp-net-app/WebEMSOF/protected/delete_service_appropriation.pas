@@ -10,14 +10,7 @@ uses
   Class_db,
   Class_db_trail;
 
-const ID = '$Id$';
-
 type
-  p_type =
-    RECORD
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    END;
   TWebForm_delete_service_appropriation = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -27,6 +20,13 @@ type
     procedure TWebForm_delete_service_appropriation_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        END;
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -44,10 +44,6 @@ type
     Label_service_name_2: System.Web.UI.WebControls.Label;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation
@@ -162,7 +158,15 @@ begin
     + NEW_LINE
     + '   ' + session['county_user_password_reset_email_address'].tostring + '  (mailto:' + session['county_user_password_reset_email_address'].tostring + ')' + NEW_LINE
     + NEW_LINE
-    + '-- ' + configurationmanager.AppSettings['application_name']
+    + '-- ' + configurationmanager.AppSettings['application_name'],
+    // be_html
+    FALSE,
+    // cc
+    EMPTY,
+    // bcc
+    EMPTY,
+    // reply_to
+    session['county_user_password_reset_email_address'].tostring
     );
   //
   mysqlcommand.Create

@@ -1,0 +1,4 @@
+CORRUPTION DETECTED
+<application_name/> detected corruption of the <user_kind/> and <user_kind/>_USER relationship <detection_phase/> an attempt to create a new <user_kind/>.  Specifically, the maximum ID values of the <user_kind/> and <user_kind/>_USER tables, which should always be synchronized, are unequal.  You should resolve this immediately or further data corruption will most likely ensue.
+
+-- <application_name/>

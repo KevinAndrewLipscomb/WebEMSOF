@@ -7,6 +7,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security,
   mysql.data.mysqlclient,
+  Class_biz_accounts,
   Class_biz_emsof_requests,
   Class_biz_user;
 
@@ -26,6 +27,7 @@ type
     type
       p_type =
         RECORD
+        biz_accounts: TClass_biz_accounts;
         biz_emsof_requests: Class_biz_emsof_requests.TClass_biz_emsof_requests;
         be_datagrid_empty: boolean;
         be_sort_order_ascending: boolean;
@@ -92,6 +94,7 @@ begin
     //
     // Initialize private class instance vars.
     //
+    p.biz_accounts := TClass_biz_accounts.Create;
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     p.biz_user := TClass_biz_user.Create;
     p.be_sort_order_ascending := TRUE;
@@ -127,7 +130,15 @@ begin
     '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationmanager.appsettings['application_name']
     + ')' + NEW_LINE
     + NEW_LINE
-    + TextBox_quick_message_body.text
+    + TextBox_quick_message_body.text,
+    // be_html
+    FALSE,
+    // cc
+    EMPTY,
+    // bcc
+    EMPTY,
+    // reply_to
+    p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind,p.biz_user.IdNum)
     );
   TextBox_quick_message_subject.text := EMPTY;
   TextBox_quick_message_body.text := EMPTY;

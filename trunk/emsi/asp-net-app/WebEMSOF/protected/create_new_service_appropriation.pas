@@ -16,18 +16,7 @@ uses
   system.web.mail,
   system.web.security;
 
-const ID = '$Id$';
-
 type
-  p_type =
-    RECORD
-    amount: decimal;
-    biz_appropriations: TClass_biz_appropriations;
-    biz_services: TClass_biz_services;
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    unappropriated_amount: decimal;
-    END;
   TWebForm_create_new_service_appropriation = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -42,6 +31,17 @@ type
     procedure TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
       e: System.EventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        amount: decimal;
+        biz_appropriations: TClass_biz_appropriations;
+        biz_services: TClass_biz_services;
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        unappropriated_amount: decimal;
+        END;
   strict private
     p: p_type;
     procedure AddAppropriation;
@@ -71,9 +71,6 @@ type
     CustomValidator_amount: System.Web.UI.WebControls.CustomValidator;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-  public
-    { Public Declarations }
   end;
 
 implementation
@@ -166,7 +163,7 @@ begin
   end;
 end;
 
-procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object; 
+procedure TWebForm_create_new_service_appropriation.CheckBox_unfilter_CheckedChanged(sender: System.Object;
   e: System.EventArgs);
 begin
   p.biz_services.BindListControl
@@ -309,7 +306,15 @@ begin
     configurationmanager.AppSettings['sender_email_address'],
     mysql_get_service_email_address.ExecuteScalar.tostring,
     'New ' + configurationmanager.AppSettings['application_name'] + ' allocation for your service',
-    messageText
+    messageText,
+    // be_html
+    FALSE,
+    // cc
+    EMPTY,
+    // bcc
+    EMPTY,
+    // reply_to
+    cc_email_address
     );
   //
   p.db.Close;
