@@ -30,6 +30,8 @@ type
     procedure CustomValidator_amount_ServerValidate(source: System.Object; args: System.Web.UI.WebControls.ServerValidateEventArgs);
     procedure TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure DropDownList_services_SelectedIndexChanged(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     type
@@ -40,6 +42,7 @@ type
         biz_services: TClass_biz_services;
         db: TClass_db;
         db_trail: TClass_db_trail;
+        match_level_id_of_region_dictum: string;
         unappropriated_amount: decimal;
         END;
   strict private
@@ -47,7 +50,7 @@ type
     procedure AddAppropriation;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
-    Title: System.Web.UI.HtmlControls.HtmlGenericControl;
+    Title: System.Web.UI.HtmlControls.HtmlTitle;
     PlaceHolder_precontent: System.Web.UI.WebControls.PlaceHolder;
     PlaceHolder_postcontent: System.Web.UI.WebControls.PlaceHolder;
     DropDownList_services: System.Web.UI.WebControls.DropDownList;
@@ -69,6 +72,7 @@ type
     TableRow_sum_of_service_appropriations: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_unappropriated_amount: System.Web.UI.HtmlControls.HtmlTableRow;
     CustomValidator_amount: System.Web.UI.WebControls.CustomValidator;
+    UpdatePanel_control: System.Web.UI.UpdatePanel;
   protected
     procedure OnInit(e: EventArgs); override;
   end;
@@ -82,6 +86,7 @@ implementation
 /// </summary>
 procedure TWebForm_create_new_service_appropriation.InitializeComponent;
 begin
+  Include(Self.DropDownList_services.SelectedIndexChanged, Self.DropDownList_services_SelectedIndexChanged);
   Include(Self.CheckBox_show_out_of_county_services.CheckedChanged, Self.CheckBox_unfilter_CheckedChanged);
   Include(Self.CustomValidator_amount.ServerValidate, Self.CustomValidator_amount_ServerValidate);
   Include(Self.Button_add_appropriation_and_repeat.Click, Self.Button_add_appropriation_and_repeat_Click);
@@ -105,7 +110,7 @@ begin
       session.Clear;
       server.Transfer('~/login.aspx');
     end;
-    Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - create_new_service_appropriation';
+    Title.text := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - create_new_service_appropriation';
     //
     // Initialize implementation-scoped variables.
     //
@@ -129,9 +134,15 @@ begin
     p.biz_services.BindListControl
       (session['county_user_id'].tostring,DropDownList_services,CheckBox_show_out_of_county_services.checked);
     //
-    RadioButtonList_match_level.selectedvalue := p.biz_appropriations.MatchLevelIdOfRegionDictum(session['region_dictated_appropriation_id'].tostring).tostring;
+    p.match_level_id_of_region_dictum := p.biz_appropriations.MatchLevelIdOfRegionDictum(session['region_dictated_appropriation_id'].tostring).tostring;
+    RadioButtonList_match_level.selectedvalue := p.match_level_id_of_region_dictum;
     //
   end;
+  //
+  scriptmanager.GetCurrent(page).RegisterPostBackControl(Button_add_appropriation_and_repeat);
+  scriptmanager.GetCurrent(page).RegisterPostBackControl(Button_add_appropriation_and_stop);
+  scriptmanager.GetCurrent(page).RegisterPostBackControl(Button_cancel);
+  //
 end;
 
 procedure TWebForm_create_new_service_appropriation.OnInit(e: EventArgs);
@@ -141,6 +152,16 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_create_new_service_appropriation.DropDownList_services_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  if p.biz_services.BeDistressed(Safe(DropDownList_services.selectedvalue,NUM)) then begin
+    RadioButtonList_match_level.selectedvalue := '3';
+  end else begin
+    RadioButtonList_match_level.selectedvalue := p.match_level_id_of_region_dictum;
+  end;
 end;
 
 procedure TWebForm_create_new_service_appropriation.TWebForm_create_new_service_appropriation_PreRender(sender: System.Object;

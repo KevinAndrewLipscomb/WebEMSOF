@@ -17,6 +17,11 @@
                     <asp:ListItem value="FALSE">has NOT yet been accepted</asp:ListItem>
                     <asp:ListItem value="TRUE">HAS been accepted</asp:ListItem>
                   </asp:RadioButtonList><br>...by WebEMSOF and the Regional Council.</p></li>
+                <li><p>This service...<br>
+                  <asp:RadioButtonList id="RadioButtonList_be_distressed" runat="server">
+                    <asp:ListItem value="FALSE">does NOT qualify</asp:ListItem>
+                    <asp:ListItem value="TRUE">DOES qualify</asp:ListItem>
+                  </asp:RadioButtonList><br>...for DISTRESSED status under EMSOF rules.</p></li>
               </ul>
             </small>
           </td>

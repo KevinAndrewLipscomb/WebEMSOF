@@ -194,6 +194,7 @@ type
     LinkButton_go_to_match_next: System.Web.UI.WebControls.LinkButton;
     LinkButton_go_to_match_last: System.Web.UI.WebControls.LinkButton;
     LinkButton_go_to_match_first: System.Web.UI.WebControls.LinkButton;
+    RadioButtonList_be_distressed: System.Web.UI.WebControls.RadioButtonList;
   protected
     procedure OnInit(e: System.EventArgs); override;
   published
@@ -260,6 +261,7 @@ begin
   TextBox_charter_other_kind.text := EMPTY;
   RadioButtonList_be_valid_profile.ClearSelection;
   TextBox_federal_tax_id.text := EMPTY;
+  RadioButtonList_be_distressed.ClearSelection;
   //
   ManageCharterControlEnablements;
   ManageEmsofControlEnablements;
@@ -447,6 +449,7 @@ var
   charter_other_kind: string;
   be_valid_profile: boolean;
   federal_tax_id: string;
+  be_distressed: boolean;
 begin
   PresentRecord := FALSE;
   if p.biz_services.Get
@@ -501,7 +504,8 @@ begin
     be_valid_profile,
     federal_tax_id,
     be_qrs_unrecognized,
-    be_rescue_unrecognized
+    be_rescue_unrecognized,
+    be_distressed
     )
   then begin
     //
@@ -554,6 +558,7 @@ begin
     TextBox_charter_other_kind.text := charter_other_kind;
     RadioButtonList_be_valid_profile.selectedvalue := be_valid_profile.tostring.toupper;
     TextBox_federal_tax_id.text := federal_tax_id;
+    RadioButtonList_be_distressed.selectedvalue := be_distressed.tostring.toupper;
     //
     p.be_profile_initially_valid := be_valid_profile;
     //
@@ -570,6 +575,7 @@ begin
     // Ablement customizations unique to this control
     //
     RadioButtonList_be_valid_profile.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
+    RadioButtonList_be_distressed.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
     ManageCharterControlEnablements;
     ManageEmsofControlEnablements;
     Button_submit.enabled := p.be_ok_to_config_service_profiles;
@@ -786,7 +792,8 @@ begin
       (p.be_service_user or (RadioButtonList_be_valid_profile.selectedvalue = 'TRUE')),
       Safe(TextBox_federal_tax_id.text,NUM),
       CheckBox_be_qrs_unrecognized.checked,
-      CheckBox_be_rescue_unrecognized.checked
+      CheckBox_be_rescue_unrecognized.checked,
+      (RadioButtonList_be_distressed.selectedvalue = 'TRUE')
       );
     if p.be_service_user then begin
       BackTrack;
@@ -899,6 +906,7 @@ begin
   TextBox_charter_other_kind.enabled := ablement;
   RadioButtonList_be_valid_profile.enabled := ablement;
   TextBox_federal_tax_id.enabled := ablement;
+  RadioButtonList_be_distressed.enabled := ablement;
 end;
 
 procedure TWebUserControl_service_profile.Button_lookup_Click(sender: System.Object;
