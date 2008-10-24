@@ -3,11 +3,13 @@ unit Class_biz_services;
 interface
 
 uses
+  Class_db_appropriations,
   Class_db_services;
 
 type
   TClass_biz_services = class
   private
+    db_appropriations: TClass_db_appropriations;
     db_services: TClass_db_services;
   public
     constructor Create;
@@ -19,6 +21,7 @@ type
       county_code: string
       )
       : boolean;
+    function BeDistressed(id: string): boolean;
     function AffiliateNumOfId(id: string): string;
     function BeKnown(affiliate_num: string): boolean;
     function BeOkToChangeAffiliateNumAndDelete: boolean;
@@ -95,7 +98,8 @@ type
       out be_valid_profile: boolean;
       out federal_tax_id: string;
       out be_qrs_unrecognized: boolean;
-      out be_rescue_unrecognized: boolean
+      out be_rescue_unrecognized: boolean;
+      out be_distressed: boolean
       )
       : boolean;
     procedure MarkProfilesStale;
@@ -153,7 +157,8 @@ type
       be_valid_profile: boolean;
       federal_tax_id: string;
       be_qrs_unrecognized: boolean;
-      be_rescue_unrecognized: boolean
+      be_rescue_unrecognized: boolean;
+      be_distressed: boolean
       );
   end;
 
@@ -166,7 +171,7 @@ uses
 constructor TClass_biz_services.Create;
 begin
   inherited Create;
-  // TODO: Add any constructor code here
+  db_appropriations := TClass_db_appropriations.Create;
   db_services := TClass_db_services.Create;
 end;
 
@@ -185,6 +190,11 @@ function TClass_biz_services.BeAdded
   : boolean;
 begin
   BeAdded := db_services.BeAdded(service_name,affiliate_num,password_reset_email_address,county_code);
+end;
+
+function TClass_biz_services.BeDistressed(id: string): boolean;
+begin
+  BeDistressed := db_services.BeDistressed(id);
 end;
 
 function TClass_biz_services.BeKnown(affiliate_num: string): boolean;
@@ -292,7 +302,8 @@ function TClass_biz_services.Get
   out be_valid_profile: boolean;
   out federal_tax_id: string;
   out be_qrs_unrecognized: boolean;
-  out be_rescue_unrecognized: boolean
+  out be_rescue_unrecognized: boolean;
+  out be_distressed: boolean
   )
   : boolean;
 begin
@@ -349,7 +360,8 @@ begin
     be_valid_profile,
     federal_tax_id,
     be_qrs_unrecognized,
-    be_rescue_unrecognized
+    be_rescue_unrecognized,
+    be_distressed
     );
   //
 end;
@@ -417,7 +429,8 @@ procedure TClass_biz_services.&Set
   be_valid_profile: boolean;
   federal_tax_id: string;
   be_qrs_unrecognized: boolean;
-  be_rescue_unrecognized: boolean
+  be_rescue_unrecognized: boolean;
+  be_distressed: boolean
   );
 begin
   //
@@ -473,8 +486,10 @@ begin
     be_valid_profile,
     federal_tax_id,
     be_qrs_unrecognized,
-    be_rescue_unrecognized
+    be_rescue_unrecognized,
+    be_distressed
     );
+  db_appropriations.ApplyDistressedToExisting(affiliate_num);
 //  if be_new_affirmation then begin
 //    //
 //    // Notify regional council that contact person has affirmed responsibilities.

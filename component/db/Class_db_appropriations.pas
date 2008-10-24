@@ -19,6 +19,7 @@ type
     db_trail: TClass_db_trail;
   public
     constructor Create;
+    procedure ApplyDistressedToExisting(affiliate_num: string);
     function BeAnyCurrentToService(affiliate_num: string): boolean;
     function CountyCodeOfCountyDictum(county_dictum_id: string): string;
     function FundingRoundsGenerated
@@ -88,6 +89,27 @@ begin
   biz_fiscal_years := TClass_biz_fiscal_years.Create;
   biz_regional_staffers := TClass_biz_regional_staffers.Create;
   db_trail := TClass_db_trail.Create;
+end;
+
+procedure TClass_db_appropriations.ApplyDistressedToExisting(affiliate_num: string);
+begin
+  self.Open;
+  mysqlcommand.Create
+    (
+    'update county_dictated_appropriation'
+    + ' join region_dictated_appropriation'
+    +   ' on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)'
+    + ' join state_dictated_appropriation'
+    +   ' on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)'
+    + ' join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)'
+    + ' join service on (service.id=county_dictated_appropriation.service_id)'
+    + ' set county_dictated_appropriation.match_level_id = (select id from match_level where factor = 1)'
+    + ' where service_id = (select id from service where affiliate_num = "' + affiliate_num + '")'
+    +   ' and fiscal_year_id = (select max(id) from fiscal_year)',
+    connection
+    )
+    .ExecuteNonquery;
+  self.Close;
 end;
 
 function TClass_db_appropriations.BeAnyCurrentToService(affiliate_num: string): boolean;

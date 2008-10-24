@@ -24,6 +24,7 @@ type
       county_code: string
       )
       : boolean;
+    function BeDistressed(id: string): boolean;
     function BeKnown(affiliate_num: string): boolean;
     function BeValidAndParticipating(id: string): boolean;
     function Bind
@@ -98,7 +99,8 @@ type
       out be_valid_profile: boolean;
       out federal_tax_id: string;
       out be_qrs_unrecognized: boolean;
-      out be_rescue_unrecognized: boolean
+      out be_rescue_unrecognized: boolean;
+      out be_distressed: boolean
       )
       : boolean;
     procedure MarkProfilesStale;
@@ -155,7 +157,8 @@ type
       be_valid_profile: boolean;
       federal_tax_id: string;
       be_qrs_unrecognized: boolean;
-      be_rescue_unrecognized: boolean
+      be_rescue_unrecognized: boolean;
+      be_distressed: boolean
       );
   end;
 
@@ -249,6 +252,18 @@ begin
   end;
   self.Close;
   //
+end;
+
+function TClass_db_services.BeDistressed(id: string): boolean;
+begin
+  self.Open;
+  BeDistressed := '1' = mysqlcommand.Create
+    (
+    'select be_distressed from service where id = "' + id + '"',
+    connection
+    )
+    .ExecuteScalar.tostring;
+  self.Close;
 end;
 
 function TClass_db_services.BeKnown(affiliate_num: string): boolean;
@@ -432,7 +447,8 @@ function TClass_db_services.Get
   out be_valid_profile: boolean;
   out federal_tax_id: string;
   out be_qrs_unrecognized: boolean;
-  out be_rescue_unrecognized: boolean
+  out be_rescue_unrecognized: boolean;
+  out be_distressed: boolean
   )
   : boolean;
 var
@@ -494,6 +510,7 @@ begin
     federal_tax_id := dr['federal_tax_id_num'].tostring;
     be_qrs_unrecognized := (dr['be_qrs_unrecognized'].tostring = '1');
     be_rescue_unrecognized := (dr['be_rescue_unrecognized'].tostring = '1');
+    be_distressed := (dr['be_distressed'].tostring = '1');
     //
     Get := TRUE;
     //
@@ -568,7 +585,8 @@ procedure TClass_db_services.&Set
   be_valid_profile: boolean;
   federal_tax_id: string;
   be_qrs_unrecognized: boolean;
-  be_rescue_unrecognized: boolean
+  be_rescue_unrecognized: boolean;
+  be_distressed: boolean
   );
 var
   childless_field_assignments_clause: string;
@@ -623,7 +641,8 @@ begin
   + ' , be_valid_profile = ' + be_valid_profile.tostring
   + ' , federal_tax_id_num = NULLIF("' + federal_tax_id + '","")'
   + ' , be_qrs_unrecognized = ' + be_qrs_unrecognized.tostring
-  + ' , be_rescue_unrecognized = ' + be_rescue_unrecognized.tostring;
+  + ' , be_rescue_unrecognized = ' + be_rescue_unrecognized.tostring
+  + ' , be_distressed = ' + be_distressed.tostring;
   //
   self.Open;
   mysqlcommand.Create
