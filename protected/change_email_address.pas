@@ -10,14 +10,7 @@ uses
   Class_db,
   Class_db_trail;
 
-const ID = '$Id$';
-
 type
-  p_type =
-    RECORD
-    db: TClass_db;
-    db_trail: TClass_db_trail;
-    END;
   TWebForm_change_email_address = class(ki_web_ui.page_class)
   {$REGION 'Designer Managed Code'}
   strict private
@@ -27,9 +20,16 @@ type
     procedure TWebForm_change_email_address_PreRender(sender: System.Object;
       e: System.EventArgs);
     procedure Button_cancel_Click(sender: System.Object; e: System.EventArgs);
-    procedure CustomValidator_confirmation_email_address_ServerValidate(source: System.Object; 
+    procedure CustomValidator_confirmation_email_address_ServerValidate(source: System.Object;
       args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
+  strict private
+    type
+      p_type =
+        RECORD
+        db: TClass_db;
+        db_trail: TClass_db_trail;
+        END;
   strict private
     p: p_type;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
@@ -48,9 +48,6 @@ type
     Button_cancel: System.Web.UI.WebControls.Button;
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
   end;
 
 implementation
@@ -124,7 +121,6 @@ begin
   args.isvalid := (TextBox_nominal_email_address.text.trim = TextBox_confirmation_email_address.text.trim);
 end;
 
-
 procedure TWebForm_change_email_address.Button_cancel_Click(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -140,12 +136,7 @@ end;
 procedure TWebForm_change_email_address.CustomValidator_nominal_email_address_ServerValidate(source: System.Object;
   args: System.Web.UI.WebControls.ServerValidateEventArgs);
 begin
-  args.isvalid := TRUE;
-  try
-    dns.GetHostEntry(args.value.Substring(args.value.LastIndexOf('@') + 1));
-  except
-    args.isvalid := FALSE;
-  end;
+  args.isvalid := BeValidDomainPartOfEmailAddress(args.value);
 end;
 
 procedure TWebForm_change_email_address.Button_submit_Click(sender: System.Object;
