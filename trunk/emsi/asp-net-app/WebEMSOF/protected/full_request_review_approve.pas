@@ -7,6 +7,7 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, system.web.security,
   mysql.data.mysqlclient,
+  Class_biz_emsof_request_return_comments,
   Class_biz_emsof_requests;
 
 type
@@ -40,6 +41,7 @@ type
         be_all_costs_proven: boolean;
         be_before_improvement_deadline: boolean;
         be_ok_to_track_payments: boolean;
+        biz_emsof_request_return_comments: TClass_biz_emsof_request_return_comments;
         biz_emsof_requests: TClass_biz_emsof_requests;
         display_actuals: boolean;
         modify_actuals: boolean;
@@ -118,6 +120,8 @@ type
     TableRow_reject: System.Web.UI.HtmlControls.HtmlTableRow;
     TextArea_disapproval_reason: System.Web.UI.HtmlControls.HtmlTextArea;
     Label_sponsor_county_2: System.Web.UI.WebControls.Label;
+    Table_prior_rejection_comments: System.Web.UI.HtmlControls.HtmlTable;
+    GridView_rejection_comments: System.Web.UI.WebControls.GridView;
   protected
     procedure OnInit(e: EventArgs); override;
   end;
@@ -183,7 +187,8 @@ begin
     //
     // Initialize class private class members.
     //
-    p.biz_emsof_requests := Class_biz_emsof_requests.TClass_biz_emsof_requests.Create;
+    p.biz_emsof_request_return_comments := TClass_biz_emsof_request_return_comments.Create;
+    p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
     //
     // Initialize class private data members.
     //
@@ -200,6 +205,10 @@ begin
     Label_fiscal_year_designator.text := p.biz_emsof_requests.FyDesignatorOf(session['e_item']);
     Label_service_name.text := p.biz_emsof_requests.ServiceNameOf(session['e_item']);
     Label_affiliate_num.text := p.biz_emsof_requests.AffiliateNumOf(session['e_item']);
+    //
+    // Manage Prior rejections block.
+    //
+    Table_prior_rejection_comments.visible := p.biz_emsof_request_return_comments.Bind(GridView_rejection_comments,p.request_id);
     //
     // Manage Prior approvals block.
     //
@@ -432,14 +441,23 @@ procedure TWebForm_full_request_review_approve.Button_disapprove_Click
   sender: System.Object;
   e: System.EventArgs
   );
+var
+  disapproval_reason: string;
 begin
   if TextArea_disapproval_reason.Value <> EMPTY then begin
+    disapproval_reason := Safe(TextArea_disapproval_reason.value,PUNCTUATED);
     p.biz_emsof_requests.Demote
       (
       session['e_item'],
       session['account_descriptor'].tostring,
-      Safe(TextArea_disapproval_reason.value,PUNCTUATED),
+      disapproval_reason,
       Safe(Label_sum_of_emsof_antes.text,CURRENCY_USA)
+      );
+    p.biz_emsof_request_return_comments.Log
+      (
+      p.biz_emsof_requests.IdOf(session['e_item']),
+      session['account_descriptor'].tostring,
+      disapproval_reason
       );
     BackTrack;
   end;

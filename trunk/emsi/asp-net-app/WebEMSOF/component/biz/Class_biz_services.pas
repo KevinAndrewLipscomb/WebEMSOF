@@ -24,7 +24,7 @@ type
     function BeDistressed(id: string): boolean;
     function AffiliateNumOfId(id: string): string;
     function BeKnown(affiliate_num: string): boolean;
-    function BeOkToChangeAffiliateNumAndDelete: boolean;
+    function BeOkToDelete: boolean;
     function BeValidAndParticipating(id: string): boolean;
     function Bind
       (
@@ -202,9 +202,9 @@ begin
   BeKnown := db_services.BeKnown(affiliate_num);
 end;
 
-function TClass_biz_services.BeOkToChangeAffiliateNumAndDelete: boolean;
+function TClass_biz_services.BeOkToDelete: boolean;
 begin
-  BeOkToChangeAffiliateNumAndDelete := httpcontext.current.user.IsInRole('director')
+  BeOkToDelete := httpcontext.current.user.IsInRole('director')
     or httpcontext.current.user.IsInRole('emsof-coordinator')
     or httpcontext.current.user.IsInRole('emsof-planner');
 end;

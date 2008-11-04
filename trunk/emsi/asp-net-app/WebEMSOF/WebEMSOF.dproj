@@ -150,7 +150,7 @@
     </Reference>
     <Reference Include="lib\ki\ki.dll">
       <AssemblyName>ki</AssemblyName>
-      <Version>1.0.3208.29125</Version>
+      <Version>1.0.3217.33033</Version>
       <HintPath>lib\ki\ki.dll</HintPath>
       <AssemblyTag>lib\ki\ki.dll</AssemblyTag>
       <LinkUnits>False</LinkUnits>
@@ -165,6 +165,7 @@
     <DCCReference Include="component\biz\Class_biz_charter_kinds.pas" />
     <DCCReference Include="component\biz\Class_biz_counties.pas" />
     <DCCReference Include="component\biz\Class_biz_emsof_requests.pas" />
+    <DCCReference Include="component\biz\Class_biz_emsof_request_return_comments.pas" />
     <DCCReference Include="component\biz\Class_biz_equipment.pas" />
     <DCCReference Include="component\biz\Class_biz_fiscal_years.pas" />
     <DCCReference Include="component\biz\Class_biz_fy_calendar.pas" />
@@ -181,6 +182,7 @@
     <DCCReference Include="component\db\Class_db_charter_kinds.pas" />
     <DCCReference Include="component\db\Class_db_counties.pas" />
     <DCCReference Include="component\db\Class_db_emsof_requests.pas" />
+    <DCCReference Include="component\db\Class_db_emsof_request_return_comments.pas" />
     <DCCReference Include="component\db\Class_db_equipment.pas" />
     <DCCReference Include="component\db\Class_db_fiscal_years.pas" />
     <DCCReference Include="component\db\Class_db_fy_calendar.pas" />
