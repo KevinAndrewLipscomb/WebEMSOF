@@ -55,7 +55,7 @@ type
       p_type =
         RECORD
         affiliate_num: string;
-        be_authorized_to_change_affiliate_num_and_delete_service: boolean;
+        be_authorized_to_delete_service: boolean;
         be_loaded: boolean;
         be_ok_to_config_service_profiles: boolean;
         be_profile_initially_valid: boolean;
@@ -383,11 +383,7 @@ begin
       PresentRecord(p.affiliate_num);
     end;
     //
-    if p.be_authorized_to_change_affiliate_num_and_delete_service then begin
-      Focus(TextBox_affiliate_num,TRUE);
-    end else begin
-      Focus(TextBox_name,TRUE);
-    end;
+    Focus(TextBox_name,TRUE);
     //
     p.be_loaded := TRUE;
     //
@@ -574,12 +570,12 @@ begin
     //
     // Ablement customizations unique to this control
     //
-    RadioButtonList_be_valid_profile.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
-    RadioButtonList_be_distressed.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
+    RadioButtonList_be_valid_profile.enabled := p.be_authorized_to_delete_service;
+    RadioButtonList_be_distressed.enabled := p.be_authorized_to_delete_service;
     ManageCharterControlEnablements;
     ManageEmsofControlEnablements;
     Button_submit.enabled := p.be_ok_to_config_service_profiles;
-    Button_delete.enabled := p.be_authorized_to_change_affiliate_num_and_delete_service;
+    Button_delete.enabled := p.be_authorized_to_delete_service;
     //
     PresentRecord := TRUE;
     //
@@ -617,7 +613,7 @@ begin
     p.biz_user := TClass_biz_user.Create;
     //
     p.affiliate_num := EMPTY;
-    p.be_authorized_to_change_affiliate_num_and_delete_service := p.biz_services.BeOkToChangeAffiliateNumAndDelete;
+    p.be_authorized_to_delete_service := p.biz_services.BeOkToDelete;
     p.be_loaded := FALSE;
     p.be_service_user := (p.biz_user.Kind = 'service');
     p.be_profile_initially_valid := FALSE;

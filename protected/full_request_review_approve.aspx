@@ -77,6 +77,21 @@
 		  </td>
 		</tr>
 	  </table>
+    <p></p>
+    <table id="Table_prior_rejection_comments" bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" runat="server">
+      <tr>
+        <td>
+          <table cellspacing="0" cellpadding="5" border="0">
+            <tr><td bgcolor="#f5f5f5" colspan="2"><strong>Prior rejection comments</strong></td></tr>
+            <tr>
+              <td>
+                <asp:GridView id="GridView_rejection_comments" runat="server" gridlines="Horizontal" cellpadding="10" emptydatatext="None"></asp:GridView>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
 	  <p>
 		<table id="Table_prior_approvals" bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1" runat="server">
 			<tr><td>
@@ -106,7 +121,7 @@
 			</tr>
         </table>
       </p>
-	  <p></p>
+    <p></p>
       <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
         <tr>
           <td>
@@ -344,8 +359,7 @@
 						<td>
                               <table cellspacing="0" cellpadding="5" border="0">
                                   <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    <td>Check <ASP:CheckBox id="CheckBox_mark_failed" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_failed" runat="server" text="FAILED"></ASP:Button>.</td>
-                                  </tr></table></td></tr>
+                                    <td>Check <ASP:CheckBox id="CheckBox_mark_failed" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_failed" runat="server" text="FAILED"></ASP:Button>.</td></tr></table></td></tr>
 				  </table>
 				  <table cellspacing="0" cellpadding="10" width="100%" border="0" id="Table_special_promotion" runat="server">
 					  <tr>

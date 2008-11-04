@@ -210,7 +210,7 @@ begin
       (
       db_trail.Saved
         (
-        'START TRANSACTION'
+        'SET FOREIGN_KEY_CHECKS=0; SET AUTOCOMMIT=0; START TRANSACTION'
         + ';'
         + ' insert service'
         + ' set county_code = "' + county_code + '"'
@@ -237,7 +237,7 @@ begin
         + ';'
         + ' insert service_user set password_reset_email_address = "' + password_reset_email_address + '"'
         + ';'
-        + ' COMMIT'
+        + ' SET FOREIGN_KEY_CHECKS=1; COMMIT'
         ),
       connection
       )
