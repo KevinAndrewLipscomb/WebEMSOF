@@ -8,10 +8,10 @@ uses
 
 type
   TClass_biz_services = class
-  private
+  strict private
     db_appropriations: TClass_db_appropriations;
     db_services: TClass_db_services;
-  public
+  published
     constructor Create;
     function BeAdded
       (
@@ -433,7 +433,6 @@ procedure TClass_biz_services.&Set
   be_distressed: boolean
   );
 begin
-  //
   db_services.&Set
     (
     affiliate_num,
@@ -489,15 +488,7 @@ begin
     be_rescue_unrecognized,
     be_distressed
     );
-  db_appropriations.ApplyDistressedToExisting(affiliate_num);
-//  if be_new_affirmation then begin
-//    //
-//    // Notify regional council that contact person has affirmed responsibilities.
-//    //
-//    TClass_biz_accounts.Create.NotifyRegionOfServicePocAffirmation(id,name,emsof_contact_name);
-//    //
-//  end;
-  //
+  db_appropriations.ApplyToExisting(affiliate_num,be_distressed);
 end;
 
 end.
