@@ -1682,21 +1682,21 @@ function TClass_db_emsof_requests.SusceptibleTo(milestone: milestone_type): queu
 var
   dr: mysqldatareader;
   id_q: queue;
-  status_code: string;
+  where_clause: string;
 begin
   id_q := queue.Create;
   case milestone of
   COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
-    status_code := '3';
+    where_clause := 'status_code < 3';
   SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
-    status_code := '9';
+    where_clause := 'status_code = 8';
   SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
-    status_code := '9';
+    where_clause := 'status_code = 8';
   SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
-    status_code := '10';
+    where_clause := 'status_code in (8,9)';
   end;
   self.Open;
-  dr := mysqlcommand.Create('select id from emsof_request_master where status_code < ' + status_code,connection).ExecuteReader;
+  dr := mysqlcommand.Create('select id from emsof_request_master where ' + where_clause,connection).ExecuteReader;
   while dr.Read do begin
     id_q.Enqueue(dr['id']);
   end;
