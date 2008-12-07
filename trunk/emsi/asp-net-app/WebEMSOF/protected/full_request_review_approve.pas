@@ -33,6 +33,7 @@ type
     procedure Button_force_close_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_failed_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_special_promotion_Click(sender: System.Object; e: System.EventArgs);
+    procedure LinkButton_back_2_Click(sender: System.Object; e: System.EventArgs);
   {$ENDREGION}
   strict private
     type
@@ -150,6 +151,7 @@ begin
   Include(Self.LinkButton_new_proof_of_payment.Click, Self.LinkButton_new_proof_of_payment_Click);
   Include(Self.DataGrid_proofs_of_payment.ItemDataBound, Self.DataGrid_proofs_of_payment_ItemDataBound);
   Include(Self.DataGrid_proofs_of_payment.DeleteCommand, Self.DataGrid_proofs_of_payment_DeleteCommand);
+  Include(Self.LinkButton_back_2.Click, Self.LinkButton_back_2_Click);
   Include(Self.Button_approve.Click, Self.Button_approve_Click);
   Include(Self.Button_disapprove.Click, Self.Button_disapprove_Click);
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
@@ -330,6 +332,12 @@ begin
   //
   InitializeComponent;
   inherited OnInit(e);
+end;
+
+procedure TWebForm_full_request_review_approve.LinkButton_back_2_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  BackTrack;
 end;
 
 procedure TWebForm_full_request_review_approve.Button_special_promotion_Click(sender: System.Object;

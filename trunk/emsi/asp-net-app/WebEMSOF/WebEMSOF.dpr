@@ -86,7 +86,7 @@ uses
   UserControl_regional_staffer_current_binder in 'usercontrol\app\UserControl_regional_staffer_current_binder.pas' {UserControl_regional_staffer_current_binder.TWebUserControl_regional_staffer_current_binder: ki_web_ui.usercontrol_class},
   UserControl_financial_snapshot in 'usercontrol\app\UserControl_financial_snapshot.pas' {UserControl_financial_snapshot.TWebUserControl_financial_snapshot: ki_web_ui.usercontrol_class},
   UserControl_about in 'usercontrol\app\UserControl_about.pas' {UserControl_about.TWebUserControl_about: ki_web_ui.usercontrol_class},
-  UserControl_about_tools in 'usercontrol\ki\UserControl_about_tools.pas',
+  UserControl_about_tools in 'usercontrol\ki\UserControl_about_tools.pas' {UserControl_about_tools.TWebUserControl_about_tools: ki_web_ui.usercontrol_class},
   UserControl_about_by in 'usercontrol\ki\UserControl_about_by.pas',
   UserControl_workflow in 'usercontrol\app\UserControl_workflow.pas' {UserControl_workflow.TWebUserControl_workflow: ki_web_ui.usercontrol_class},
   UserControl_outcomes in 'usercontrol\app\UserControl_outcomes.pas' {UserControl_outcomes.TWebUserControl_outcomes: ki_web_ui.usercontrol_class},
