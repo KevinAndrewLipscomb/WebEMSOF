@@ -885,12 +885,13 @@ begin
     + ' , if((be_als_amb or be_als_squad or be_air_amb),"ALS",if(be_bls_amb,"BLS",if(be_rescue,"RESCUE","QRS")))'
     +     ' as life_support_level'                                                         // column 3
     + ' , description as equipment_description'                                            // column 4
-    + ' , quantity'                                                                        // column 5
-    + ' , unit_cost'                                                                       // column 6
-    + ' , quantity*unit_cost as total_cost'                                                // column 7
-    + ' , emsof_ante'                                                                      // column 8
-    + ' , (quantity*unit_cost - emsof_ante) as provider_match'                             // column 9
-    + ' , "YES" as recommendation'                                                         // column 10
+    + ' , make_model'                                                                      // column 5
+    + ' , quantity'                                                                        // column 6
+    + ' , unit_cost'                                                                       // column 7
+    + ' , quantity*unit_cost as total_cost'                                                // column 8
+    + ' , emsof_ante'                                                                      // column 9
+    + ' , (quantity*unit_cost - emsof_ante) as provider_match'                             // column 10
+    + ' , "YES" as recommendation'                                                         // column 11
     + ' from emsof_request_detail'
     +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
     +   ' join county_dictated_appropriation'
