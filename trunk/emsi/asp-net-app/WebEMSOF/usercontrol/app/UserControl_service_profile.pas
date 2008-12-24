@@ -620,14 +620,16 @@ begin
     //
     if p.be_service_user then begin
       p.affiliate_num := p.biz_services.AffiliateNumOfId(p.biz_user.IdNum);
-    end else if assigned(session['affiliate_num']) then begin
-      p.affiliate_num := session['affiliate_num'].tostring;
     end;
     //
     p.be_ok_to_config_service_profiles := p.be_service_user
       or httpcontext.current.User.IsInRole('director')
       or httpcontext.current.User.IsInRole('emsof-coordinator');
     //
+  end;
+  //
+  if assigned(session['affiliate_num']) then begin
+    p.affiliate_num := session['affiliate_num'].tostring;
   end;
   //
 end;
