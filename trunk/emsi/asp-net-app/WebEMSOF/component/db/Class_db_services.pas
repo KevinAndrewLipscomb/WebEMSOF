@@ -47,6 +47,13 @@ type
       be_inclusive_of_invalids_and_nonparticipants: boolean = FALSE
       );
     function Delete(affiliate_num: string): boolean;
+    function EmailTargetForCounty
+      (
+      county_id: string;
+      be_filtered_by_emsof_participation: boolean = FALSE;
+      be_emsof_participant: boolean = TRUE
+      )
+      : string;
     function Get
       (
       affiliate_num: string;
@@ -393,6 +400,39 @@ begin
     end;
   end;
   self.Close;
+end;
+
+function TClass_db_services.EmailTargetForCounty
+  (
+  county_id: string;
+  be_filtered_by_emsof_participation: boolean = FALSE;
+  be_emsof_participant: boolean = TRUE
+  )
+  : string;
+var
+  dr: mysqldatareader;
+  email_target: string;
+  sql: string;
+begin
+  //
+  email_target := EMPTY;
+  //
+  sql := 'select password_reset_email_address'
+    + ' from service_user'
+    +   ' join service using (id)'
+    + ' where county_code = "' + county_id + '"';
+  if be_filtered_by_emsof_participation then begin
+    sql := sql
+    + ' and be_emsof_participant = ' + be_emsof_participant.tostring;
+  end;
+  //
+  self.Open;
+  dr := mysqlcommand.Create(sql,connection).ExecuteReader;
+  while dr.Read do begin
+    email_target := email_target + dr['password_reset_email_address'].tostring + COMMA_SPACE;
+  end;
+  self.Close;
+  EmailTargetForCounty := email_target.TrimEnd([',',' ']);
 end;
 
 function TClass_db_services.Get

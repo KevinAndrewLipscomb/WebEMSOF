@@ -46,6 +46,13 @@ type
       be_inclusive_of_invalids_and_nonparticipants: boolean = FALSE
       );
     function Delete(affiliate_num: string): boolean;
+    function EmailTargetForCounty
+      (
+      county_id: string;
+      be_filtered_by_emsof_participation: boolean = FALSE;
+      be_emsof_participant: boolean = TRUE
+      )
+      : string;
     function Get
       (
       affiliate_num: string;
@@ -248,6 +255,17 @@ end;
 function TClass_biz_services.Delete(affiliate_num: string): boolean;
 begin
   Delete := db_services.Delete(affiliate_num);
+end;
+
+function TClass_biz_services.EmailTargetForCounty
+  (
+  county_id: string;
+  be_filtered_by_emsof_participation: boolean = FALSE;
+  be_emsof_participant: boolean = TRUE
+  )
+  : string;
+begin
+  EmailTargetForCounty := db_services.EmailTargetForCounty(county_id,be_filtered_by_emsof_participation,be_emsof_participant);
 end;
 
 function TClass_biz_services.Get

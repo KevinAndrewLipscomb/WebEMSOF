@@ -29,18 +29,13 @@
                   <asp:label id="Label_parent_appropriation_amount" runat="server"></asp:label>
 				  </p>
 				</td>
-				<td>
-				  from
-				  <asp:label id="Label_region_name" runat="server">
-				  </asp:label>&nbsp;for
-				  <asp:label id="Label_fiscal_year_designator" runat="server"></asp:label>
+				<td>from <asp:label id="Label_region_name" runat="server">
+				  </asp:label>&nbsp;for <asp:label id="Label_fiscal_year_designator" runat="server"></asp:label>
 				</td>
 			  </tr>
 			  <tr id="TableRow_sum_of_service_appropriations" runat="server">
 				<td>
-				  <p align="right">
-					-
-				  </p>
+				  <p align="right">- </p>
 				</td>
 				<td>
 				  <p align="right">
@@ -51,9 +46,7 @@
 			  </tr>
 			  <tr id="TableRow_unappropriated_amount" runat="server">
 				<td>
-				  <p align="right">
-					=
-				  </p>
+				  <p align="right">= </p>
 				</td>
 				<td>
 				  <p align="right">
@@ -61,9 +54,7 @@
 				  </asp:label>
 				  </p>
 				</td>
-				<td>
-				  remaining
-				</td>
+				<td>remaining </td>
 			  </tr>
 			</table>
 		  </td>
@@ -81,13 +72,11 @@
 			</tr>
 			<tr>
 			  <td>
-				<p align="left">You must&nbsp;make service allocations by
-			  <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>.</p></td>
+				<p align="left">You must&nbsp;make service allocations by <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>.</p></td>
 			</tr>
 			<tr>
 			  <td>
-<p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is
-				<ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True"></ASP:LinkButton>.</p></td>
+<p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True"></ASP:LinkButton>.</p></td>
 						  </tr>
 		</table></td>
 		  </tr>
@@ -101,8 +90,7 @@
                     <td bgcolor="#ffd700"><strong>Warning</strong></td>
                   </tr>
                   <tr>
-                    <td>To prevent you from exceeding your own allocation, 
-                      <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;reduced the amount of the service allocation that you just updated.</td>
+                    <td>To prevent you from exceeding your own allocation, <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;reduced the amount of the service allocation that you just updated.</td>
                   </tr>
               </table></td>
             </tr>
@@ -183,6 +171,51 @@
 		  </td>
 		</tr>
 	  </table>
+	  <p></p>
+<table id="Table_quick_message" runat="server" bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+  <tr>
+    <td>
+      <table cellspacing="0" cellpadding="10" width="100%" border="0">
+        <tr><td bgcolor="#f5f5f5"><a id="QuickMessage"><strong>QuickMessage</strong></a></td></tr>
+        <tr>
+          <td>
+            <table cellspacing="0" cellpadding="10" width="100%" border="0">
+              <tr>
+                <td>Send email to:</td>
+                <td>
+                  <ASP:DropDownList id="DropDownList_quick_message_targets" runat="server" autopostback="True">
+                    <asp:ListItem selected="True" value="with_allocations">all agencies shown above</asp:ListItem>
+                    <asp:ListItem value="emsof_participants_true">all agencies in my county who are EMSOF participants</asp:ListItem>
+                    <asp:ListItem value="emsof_participants_false">all agencies in my county who are *not* EMSOF participants</asp:ListItem>
+                    <asp:ListItem value="in_county">all agencies in my county</asp:ListItem>
+                  </ASP:DropDownList>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Subject:</td>
+                <td><ASP:TextBox id="TextBox_quick_message_subject" runat="server" maxlength="255" columns="72"></ASP:TextBox></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td valign="top">Body:</td>
+                <td><ASP:TextBox id="TextBox_quick_message_body" runat="server" columns="72" rows="18" textmode="MultiLine"></ASP:TextBox></td>
+                <td nowrap="true" valign="top"><ASP:RequiredFieldValidator id="RequiredFieldValidator_quick_message_body" runat="server" errormessage="Please enter a message body." font-bold="True" controltovalidate="TextBox_quick_message_body">!ERR!</ASP:RequiredFieldValidator></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><ASP:Button id="Button_send" runat="server" text="Send"></ASP:Button></td>
+                <td></td>
+              </tr>
+              <tr><td valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
+                <td></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr></table>
 	  <p>
 	  <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent></p>
       <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>
