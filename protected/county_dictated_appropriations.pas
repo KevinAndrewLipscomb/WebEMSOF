@@ -8,8 +8,11 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls,
   kix,
   mysql.data.mysqlclient,
+  Class_biz_accounts,
   Class_biz_appropriations,
   Class_biz_emsof_requests,
+  Class_biz_services,
+  Class_biz_user,
   Class_db,
   Class_db_trail,
   system.configuration,
@@ -42,18 +45,25 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object;
       e: System.EventArgs);
+    procedure Button_send_Click(sender: System.Object; e: System.EventArgs);
+    procedure DropDownList_quick_message_targets_SelectedIndexChanged(sender: System.Object; 
+      e: System.EventArgs);
   {$ENDREGION}
   strict private
     type
       p_type =
         RECORD
+        biz_accounts: TClass_biz_accounts;
         biz_appropriations: TClass_biz_appropriations;
         biz_emsof_requests: TClass_biz_emsof_requests;
+        biz_services: TClass_biz_services;
+        biz_user: TClass_biz_user;
         be_before_deadline: boolean;
         be_filtered: boolean;
         be_sort_order_ascending: boolean;
         db: TClass_db;
         db_trail: TClass_db_trail;
+        distribution_list_for_services_with_allocations: string;
         num_appropriations: cardinal;
         region_dictated_appropriation_amount: decimal;
         saved_amount: decimal;
@@ -63,6 +73,7 @@ type
         END;
   strict private
     p: p_type;
+    procedure Bind_distribution_target;
     procedure Bind_service_appropriations;
     procedure Page_Load(sender: System.Object; e: System.EventArgs);
   strict protected
@@ -85,6 +96,13 @@ type
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
     CheckBox_hide_nonapproval_requests: System.Web.UI.WebControls.CheckBox;
+    Label_distribution_list: System.Web.UI.WebControls.Label;
+    Button_send: System.Web.UI.WebControls.Button;
+    RequiredFieldValidator_quick_message_body: System.Web.UI.WebControls.RequiredFieldValidator;
+    TextBox_quick_message_body: System.Web.UI.WebControls.TextBox;
+    TextBox_quick_message_subject: System.Web.UI.WebControls.TextBox;
+    DropDownList_quick_message_targets: System.Web.UI.WebControls.DropDownList;
+    Table_quick_message: System.Web.UI.HtmlControls.HtmlTable;
   protected
     procedure OnInit(e: EventArgs); override;
   end;
@@ -105,15 +123,17 @@ begin
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
   Include(Self.CheckBox_hide_nonapproval_requests.CheckedChanged, Self.CheckBox_hide_nonapproval_requests_CheckedChanged);
   Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
-  Include(Self.DataGrid_service_appropriations.ItemCommand, Self.DataGrid_service_appropriations_ItemCommand);
+  Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.DataGrid_service_appropriations_CancelCommand);
   Include(Self.DataGrid_service_appropriations.EditCommand, Self.DataGrid_service_appropriations_EditCommand);
   Include(Self.DataGrid_service_appropriations.SortCommand, Self.DataGrid_service_appropriations_SortCommand);
-  Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.DataGrid_service_appropriations_UpdateCommand);
+  Include(Self.DataGrid_service_appropriations.ItemCommand, Self.DataGrid_service_appropriations_ItemCommand);
   Include(Self.DataGrid_service_appropriations.DeleteCommand, Self.DataGrid_service_appropriations_DeleteCommand);
-  Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
-  Include(Self.Load, Self.Page_Load);
+  Include(Self.DataGrid_service_appropriations.UpdateCommand, Self.DataGrid_service_appropriations_UpdateCommand);
+  Include(Self.DropDownList_quick_message_targets.SelectedIndexChanged, Self.DropDownList_quick_message_targets_SelectedIndexChanged);
+  Include(Self.Button_send.Click, Self.Button_send_Click);
   Include(Self.PreRender, Self.TWebForm_county_dictated_appropriations_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -135,10 +155,11 @@ begin
       server.Transfer('~/login.aspx');
     end;
     //
-    // Initialize implementation-global variables.
-    //
+    p.biz_accounts := TClass_biz_accounts.Create;
     p.biz_appropriations := TClass_biz_appropriations.Create;
     p.biz_emsof_requests := TClass_biz_emsof_requests.Create;
+    p.biz_services := TClass_biz_services.Create;
+    p.biz_user := TClass_biz_user.Create;
     p.be_before_deadline := TRUE;
     p.be_filtered := FALSE;
     p.be_sort_order_ascending := TRUE;
@@ -231,6 +252,42 @@ begin
   InitializeComponent;
   inherited OnInit(e);
   //
+end;
+
+procedure TWebForm_county_dictated_appropriations.DropDownList_quick_message_targets_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  Bind_distribution_target;
+end;
+
+procedure TWebForm_county_dictated_appropriations.Button_send_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  kix.SmtpMailSend
+    (
+    // from
+    configurationmanager.appsettings['sender_email_address'],
+    // to
+    Label_distribution_list.text,
+    // subject
+    TextBox_quick_message_subject.text,
+    // body
+    '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationmanager.appsettings['application_name']
+    + ')' + NEW_LINE
+    + NEW_LINE
+    + TextBox_quick_message_body.text,
+    // be_html
+    FALSE,
+    // cc
+    EMPTY,
+    // bcc
+    EMPTY,
+    // reply_to
+    p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind,p.biz_user.IdNum)
+    );
+  TextBox_quick_message_subject.text := EMPTY;
+  TextBox_quick_message_body.text := EMPTY;
+  Alert(LOGIC,NORMAL,'messagsnt','Message sent',TRUE);
 end;
 
 procedure TWebForm_county_dictated_appropriations.CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object;
@@ -453,6 +510,10 @@ begin
       LinkButton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).enabled := FALSE;
     end;
     //
+    if e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text <> '&nbsp;' then begin
+       p.distribution_list_for_services_with_allocations := p.distribution_list_for_services_with_allocations + e.item.cells[p.biz_emsof_requests.TcciOfPasswordResetEmailAddress].text + COMMA_SPACE;
+    end;
+    //
   end;
 end;
 
@@ -538,6 +599,9 @@ procedure TWebForm_county_dictated_appropriations.Bind_service_appropriations;
 var
   be_datagrid_empty: boolean;
 begin
+  //
+  p.distribution_list_for_services_with_allocations := EMPTY;
+  //
   if p.be_filtered then begin
     p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus
       (
@@ -574,10 +638,26 @@ begin
     Label_unappropriated_amount.forecolor := color.red;
   end;
   //
+  Bind_distribution_target;
+  //
   // Clear aggregation vars for next bind, if any.
   //
   p.num_appropriations := 0;
   p.sum_of_service_appropriations := 0;
+end;
+
+procedure TWebForm_county_dictated_appropriations.Bind_distribution_target;
+begin
+  if DropDownList_quick_message_targets.selectedvalue = 'with_allocations' then begin
+    Label_distribution_list.text := (p.distribution_list_for_services_with_allocations + SPACE).TrimEnd([',',' ']);
+  end else if DropDownList_quick_message_targets.selectedvalue = 'emsof_participants_true' then begin
+    Label_distribution_list.text := p.biz_services.EmailTargetForCounty(p.biz_user.IdNum,TRUE,TRUE);
+  end else if DropDownList_quick_message_targets.selectedvalue = 'emsof_participants_false' then begin
+    Label_distribution_list.text := p.biz_services.EmailTargetForCounty(p.biz_user.IdNum,TRUE,FALSE);
+  end else if DropDownList_quick_message_targets.selectedvalue = 'in_county' then begin
+    Label_distribution_list.text := p.biz_services.EmailTargetForCounty(p.biz_user.IdNum);
+  end;
+  //
 end;
 
 end.
