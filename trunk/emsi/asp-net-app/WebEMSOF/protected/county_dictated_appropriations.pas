@@ -272,7 +272,7 @@ begin
     // subject
     TextBox_quick_message_subject.text,
     // body
-    '-- From ' + session[p.biz_user.Kind + '_name'].tostring + ' (via ' + configurationmanager.appsettings['application_name']
+    '-- From the ' + session[p.biz_user.Kind + '_name'].tostring + ' County EMSOF Coordinator (via ' + configurationmanager.appsettings['application_name']
     + ')' + NEW_LINE
     + NEW_LINE
     + TextBox_quick_message_body.text,
@@ -648,6 +648,7 @@ end;
 
 procedure TWebForm_county_dictated_appropriations.Bind_distribution_target;
 begin
+  //
   if DropDownList_quick_message_targets.selectedvalue = 'with_allocations' then begin
     Label_distribution_list.text := (p.distribution_list_for_services_with_allocations + SPACE).TrimEnd([',',' ']);
   end else if DropDownList_quick_message_targets.selectedvalue = 'emsof_participants_true' then begin
@@ -657,6 +658,10 @@ begin
   end else if DropDownList_quick_message_targets.selectedvalue = 'in_county' then begin
     Label_distribution_list.text := p.biz_services.EmailTargetForCounty(p.biz_user.IdNum);
   end;
+  //
+  TextBox_quick_message_subject.enabled := Label_distribution_list.text <> EMPTY;
+  TextBox_quick_message_body.enabled := Label_distribution_list.text <> EMPTY;
+  Button_send.enabled := Label_distribution_list.text <> EMPTY;
   //
 end;
 
