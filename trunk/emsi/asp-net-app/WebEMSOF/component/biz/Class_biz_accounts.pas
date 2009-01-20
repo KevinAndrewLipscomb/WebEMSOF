@@ -64,6 +64,12 @@ type
       sponsor_county_name: string;
       master_id: string
       );
+    procedure IssueUndoInvoiceCollectionCompletionNotice
+      (
+      service_id: string;
+      sponsor_region_name: string;
+      county_code: string
+      );
     procedure IssueWithdrawalNotice
       (
       master_id: string;
@@ -346,6 +352,50 @@ begin
     + message_text + NEW_LINE
     + NEW_LINE
     + '... END COPY OF NOTICE TO PROCEED ...'
+    );
+end;
+
+procedure TClass_biz_accounts.IssueUndoInvoiceCollectionCompletionNotice
+  (
+  service_id: string;
+  sponsor_region_name: string;
+  county_code: string
+  );
+var
+  emsof_coordinator_email_address: string;
+  service_name: string;
+begin
+  emsof_coordinator_email_address := EmailTargetByRole('emsof-coordinator');
+  service_name := biz_services.NameOf(service_id);
+  //
+  kix.SmtpMailSend
+    (
+    configurationmanager.AppSettings['sender_email_address'],
+    EmailAddressByKindId('service',service_id)
+    + COMMA + EmailAddressByKindId('county',county_code)
+    + COMMA + emsof_coordinator_email_address,
+    'Status change for EMSOF request',
+    sponsor_region_name + ' has reverted an EMSOF request from ' + service_name + ' to the NEEDS_INVOICE_COLLECTION status.  '
+    + 'Unless otherwise advised by ' + sponsor_region_name + ', no action is required from you at this time.' + NEW_LINE
+    + NEW_LINE
+    + service_name + ' can review this EMSOF request by visiting:' + NEW_LINE
+    + NEW_LINE
+    + '   http://' + configurationmanager.AppSettings['host_domain_name'] + '/'
+    + configurationmanager.AppSettings['application_name'] + NEW_LINE
+    + NEW_LINE
+    + sponsor_region_name + ' can be contacted as follows:' + NEW_LINE
+    + NEW_LINE
+    + '   ' + emsof_coordinator_email_address + NEW_LINE
+    + NEW_LINE
+    + '-- ' + configurationmanager.AppSettings['application_name'],
+    //be_html
+    FALSE,
+    //cc
+    EMPTY,
+    //bcc
+    EMPTY,
+    //reply_to
+    emsof_coordinator_email_address
     );
 end;
 

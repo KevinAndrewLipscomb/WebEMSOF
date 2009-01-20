@@ -29,6 +29,7 @@ type
     procedure LinkButton_new_proof_of_payment_Click(sender: System.Object; e: System.EventArgs);
     procedure DataGrid_proofs_of_payment_DeleteCommand(source: System.Object; 
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
+    procedure Button_back_step_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_force_open_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_force_close_Click(sender: System.Object; e: System.EventArgs);
     procedure Button_failed_Click(sender: System.Object; e: System.EventArgs);
@@ -101,8 +102,10 @@ type
     Label_total_of_actual_costs: System.Web.UI.WebControls.Label;
     Label_total_of_proven_payments: System.Web.UI.WebControls.Label;
     Label_total_of_emsof_amounts: System.Web.UI.WebControls.Label;
+    Button_back_step: System.Web.UI.WebControls.Button;
     Button_force_open: System.Web.UI.WebControls.Button;
     Table_extraordinary_actions: System.Web.UI.HtmlControls.HtmlTable;
+    TableRow_back_step: System.Web.UI.HtmlControls.HtmlTableRow;
     TableRow_force_open: System.Web.UI.HtmlControls.HtmlTableRow;
     Label_application_name: System.Web.UI.WebControls.Label;
     Button_force_close: System.Web.UI.WebControls.Button;
@@ -157,6 +160,7 @@ begin
   Include(Self.Button_mark_done.Click, Self.Button_mark_done_Click);
   Include(Self.Button_failed.Click, Self.Button_failed_Click);
   Include(Self.Button_special_promotion.Click, Self.Button_special_promotion_Click);
+  Include(Self.Button_back_step.Click, Self.Button_back_step_Click);
   Include(Self.Button_force_open.Click, Self.Button_force_open_Click);
   Include(Self.Button_force_close.Click, Self.Button_force_close_Click);
   Include(Self.PreRender, Self.TWebForm_full_request_review_approve_PreRender);
@@ -315,9 +319,12 @@ begin
     //
     // Manage Extraordinary actions block.
     //
+    TableRow_back_step.visible := p.biz_emsof_requests.StatusOf(session['e_item']) = NEEDS_CANCELED_CHECK_COLLECTION;
     TableRow_force_open.visible := p.biz_emsof_requests.BeOkToForceOpen(session['e_item']);
     TableRow_force_closed.visible := p.biz_emsof_requests.BeOkToRevokeDeadlineExemption(session['e_item']);
-    Table_extraordinary_actions.visible := TableRow_force_open.visible or TableRow_force_closed.visible;
+    Table_extraordinary_actions.visible := TableRow_back_step.visible
+      or TableRow_force_open.visible
+      or TableRow_force_closed.visible;
     if Table_extraordinary_actions.visible then begin
       Label_application_name.text := configurationmanager.appsettings['application_name'];
     end;
@@ -362,6 +369,13 @@ procedure TWebForm_full_request_review_approve.Button_force_close_Click(sender: 
   e: System.EventArgs);
 begin
   p.biz_emsof_requests.ForceClosed(p.request_id);
+  BackTrack;
+end;
+
+procedure TWebForm_full_request_review_approve.Button_back_step_Click(sender: System.Object;
+  e: System.EventArgs);
+begin
+  p.biz_emsof_requests.UndoInvoiceCollectionCompletion(p.request_id);
   BackTrack;
 end;
 

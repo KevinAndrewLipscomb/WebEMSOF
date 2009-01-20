@@ -282,6 +282,7 @@ type
     function TcciOfSrrReplacementRowIndicator: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
+    procedure UndoInvoiceCollectionCompletion(master_id: string);
     procedure Unreject
       (
       e_item: system.object;
@@ -1289,6 +1290,12 @@ end;
 function TClass_biz_emsof_requests.TcciOfStatusDescription: cardinal;
 begin
   TcciOfStatusDescription := db_emsof_requests.TcciOfStatusDescription;
+end;
+
+procedure TClass_biz_emsof_requests.UndoInvoiceCollectionCompletion(master_id: string);
+begin
+  db_emsof_requests.UndoInvoiceCollectionCompletion(master_id);
+  biz_accounts.IssueUndoInvoiceCollectionCompletionNotice(ServiceIdOfMasterId(master_id),SponsorRegionNameOf(master_id),CountyCodeOfMasterId(master_id));
 end;
 
 procedure TClass_biz_emsof_requests.Unreject
