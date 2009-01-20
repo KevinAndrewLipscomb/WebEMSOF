@@ -393,6 +393,10 @@
                     </tr>
                     <tr>
                       <td><p><table cellspacing="0" cellpadding="10" border="0">
+                              <tr id="TableRow_back_step" runat="server">
+                                <td><small>Set this request back to NEEDS_INVOICE_COLLECTION status to allow changes to its invoice data.</small></td>
+								<td valign="top"><ASP:Button id="Button_back_step" runat="server" text="Do"></ASP:Button></td>
+                              </tr>
                               <tr id="TableRow_force_open" runat="server">
                                 <td><small>Force this request back to NEEDS_SERVICE_FINALIZATION status and make it exempt from normal deadlines.&nbsp; This action will cause <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;to forget about the invoices and proofs of payment that are currently associated with this request.&nbsp; The request must then advance through the entire approval and evidence collection process again.</small></td>
 								<td valign="top"><ASP:Button id="Button_force_open" runat="server" text="Do"></ASP:Button></td>
