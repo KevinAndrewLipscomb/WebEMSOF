@@ -64,7 +64,7 @@ type
       sponsor_county_name: string;
       master_id: string
       );
-    procedure IssueUndoInvoiceCollectionCompletionNotice
+    procedure IssueRegressionNotice
       (
       service_id: string;
       sponsor_region_name: string;
@@ -355,7 +355,7 @@ begin
     );
 end;
 
-procedure TClass_biz_accounts.IssueUndoInvoiceCollectionCompletionNotice
+procedure TClass_biz_accounts.IssueRegressionNotice
   (
   service_id: string;
   sponsor_region_name: string;
@@ -374,8 +374,10 @@ begin
     EmailAddressByKindId('service',service_id)
     + COMMA + EmailAddressByKindId('county',county_code)
     + COMMA + emsof_coordinator_email_address,
-    'Status change for EMSOF request',
-    sponsor_region_name + ' has reverted an EMSOF request from ' + service_name + ' to the NEEDS_INVOICE_COLLECTION status.  '
+    'Administrative regression of EMSOF request',
+    sponsor_region_name + ' has regressed the status of an EMSOF request from ' + service_name + '.  This change will allow '
+    + sponsor_region_name + ' to revise the request''s invoice or canceled check data.' + NEW_LINE
+    + NEW_LINE
     + 'Unless otherwise advised by ' + sponsor_region_name + ', no action is required from you at this time.' + NEW_LINE
     + NEW_LINE
     + service_name + ' can review this EMSOF request by visiting:' + NEW_LINE

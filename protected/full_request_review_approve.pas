@@ -126,6 +126,7 @@ type
     Label_sponsor_county_2: System.Web.UI.WebControls.Label;
     Table_prior_rejection_comments: System.Web.UI.HtmlControls.HtmlTable;
     GridView_rejection_comments: System.Web.UI.WebControls.GridView;
+    Label_predecessor_status: &label;
   protected
     procedure OnInit(e: EventArgs); override;
   end;
@@ -319,7 +320,10 @@ begin
     //
     // Manage Extraordinary actions block.
     //
-    TableRow_back_step.visible := p.biz_emsof_requests.StatusOf(session['e_item']) = NEEDS_CANCELED_CHECK_COLLECTION;
+    TableRow_back_step.visible := p.biz_emsof_requests.BeOkToRegress(session['e_item']);
+    if TableRow_back_step.visible then begin
+      Label_predecessor_status.text := system.object(pred(p.biz_emsof_requests.StatusOf(session['e_item']))).tostring;
+    end;
     TableRow_force_open.visible := p.biz_emsof_requests.BeOkToForceOpen(session['e_item']);
     TableRow_force_closed.visible := p.biz_emsof_requests.BeOkToRevokeDeadlineExemption(session['e_item']);
     Table_extraordinary_actions.visible := TableRow_back_step.visible
@@ -375,7 +379,7 @@ end;
 procedure TWebForm_full_request_review_approve.Button_back_step_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  p.biz_emsof_requests.UndoInvoiceCollectionCompletion(p.request_id);
+  p.biz_emsof_requests.Regress(p.request_id);
   BackTrack;
 end;
 
