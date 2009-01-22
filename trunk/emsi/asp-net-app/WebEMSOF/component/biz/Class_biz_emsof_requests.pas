@@ -84,6 +84,7 @@ type
     function BeOkToRevokeDeadlineExemption(e_item: system.object): boolean;
     function BeOkToTrackInvoices(status: status_type): boolean;
     function BeOkToTrackPayments(status: status_type): boolean;
+    function BeOkToRegress(e_item: system.object): boolean;
     function BeOkToViewInvoices(status: status_type): boolean;
     function BeRequestsEligibleForUnrejectionByRegionDictatedAppropriation
       (
@@ -282,7 +283,7 @@ type
     function TcciOfSrrReplacementRowIndicator: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
-    procedure UndoInvoiceCollectionCompletion(master_id: string);
+    procedure Regress(master_id: string);
     procedure Unreject
       (
       e_item: system.object;
@@ -559,6 +560,11 @@ begin
       httpcontext.current.User.IsInRole('director')
       or httpcontext.current.User.IsInRole('emsof-coordinator')
       );
+end;
+
+function TClass_biz_emsof_requests.BeOkToRegress(e_item: system.object): boolean;
+begin
+  BeOkToRegress := StatusOf(e_item) in [NEEDS_REIMBURSEMENT_ISSUANCE,NEEDS_CANCELED_CHECK_COLLECTION];
 end;
 
 function TClass_biz_emsof_requests.BeOkToViewInvoices(status: status_type): boolean;
@@ -1292,10 +1298,10 @@ begin
   TcciOfStatusDescription := db_emsof_requests.TcciOfStatusDescription;
 end;
 
-procedure TClass_biz_emsof_requests.UndoInvoiceCollectionCompletion(master_id: string);
+procedure TClass_biz_emsof_requests.Regress(master_id: string);
 begin
-  db_emsof_requests.UndoInvoiceCollectionCompletion(master_id);
-  biz_accounts.IssueUndoInvoiceCollectionCompletionNotice(ServiceIdOfMasterId(master_id),SponsorRegionNameOf(master_id),CountyCodeOfMasterId(master_id));
+  db_emsof_requests.Regress(master_id);
+  biz_accounts.IssueRegressionNotice(ServiceIdOfMasterId(master_id),SponsorRegionNameOf(master_id),CountyCodeOfMasterId(master_id));
 end;
 
 procedure TClass_biz_emsof_requests.Unreject

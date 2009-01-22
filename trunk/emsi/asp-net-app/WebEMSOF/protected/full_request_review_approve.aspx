@@ -394,7 +394,7 @@
                     <tr>
                       <td><p><table cellspacing="0" cellpadding="10" border="0">
                               <tr id="TableRow_back_step" runat="server">
-                                <td><small>Set this request back to NEEDS_INVOICE_COLLECTION status to allow changes to its invoice data.</small></td>
+                                <td><small>Set this request back to <ASP:Label id="Label_predecessor_status" runat="server"></ASP:Label>.</small></td>
 								<td valign="top"><ASP:Button id="Button_back_step" runat="server" text="Do"></ASP:Button></td>
                               </tr>
                               <tr id="TableRow_force_open" runat="server">

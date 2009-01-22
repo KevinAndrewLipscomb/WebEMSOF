@@ -262,7 +262,7 @@ type
     function TcciOfSrrReplacementRowIndicator: cardinal;
     function TcciOfStatusCode: cardinal;
     function TcciOfStatusDescription: cardinal;
-    procedure UndoInvoiceCollectionCompletion(master_id: string);
+    procedure Regress(master_id: string);
     procedure Unreject(master_id: string);
     procedure Withdraw(master_id: string);
   end;
@@ -1786,7 +1786,7 @@ begin
   TcciOfStatusDescription := TCCI_STATUS_DESCRIPTION;
 end;
 
-procedure TClass_db_emsof_requests.UndoInvoiceCollectionCompletion(master_id: string);
+procedure TClass_db_emsof_requests.Regress(master_id: string);
 begin
   self.Open;
   mysqlcommand.Create
@@ -1794,8 +1794,8 @@ begin
     db_trail.Saved
       (
       'update emsof_request_master'
-      +   ' set status_code = 8'
-      +   ' where id = ' + master_id
+      +   ' set status_code = status_code - 1'
+      +   ' where id = "' + master_id + '"'
       ),
     connection
     )
