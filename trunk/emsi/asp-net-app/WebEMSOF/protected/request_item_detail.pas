@@ -8,7 +8,8 @@ uses
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix, system.configuration, mysql.data.mysqlclient,
   system.web.mail, system.web.security,
   Class_db,
-  Class_db_trail;
+  Class_db_trail,
+  Class_biz_equipment;
 
 type
   TWebForm_request_item_detail = class(ki_web_ui.page_class)
@@ -28,6 +29,8 @@ type
     procedure Button_withdraw_Click(sender: System.Object; e: System.EventArgs);
     procedure TWebForm_request_item_detail_PreRender(sender: System.Object;
       e: System.EventArgs);
+    procedure CustomValidator_special_conditions_ServerValidate(source: System.Object;
+      args: System.Web.UI.WebControls.ServerValidateEventArgs);
   {$ENDREGION}
   strict private
     type
@@ -35,6 +38,7 @@ type
         RECORD
         additional_service_ante: decimal;
         allowable_cost: decimal;
+        biz_equipment: TClass_biz_equipment;
         dri_equipment_category_allowable_cost: cardinal;
         dri_equipment_category_funding_level: cardinal;
         cmdText_get_equipment_category_monetary_details: string;
@@ -91,6 +95,7 @@ type
     Button_update: System.Web.UI.WebControls.Button;
     Button_withdraw: System.Web.UI.WebControls.LinkButton;
     TableRow_post_finalization_actions: System.Web.UI.HtmlControls.HtmlTableRow;
+    CustomValidator_special_conditions: System.Web.UI.WebControls.CustomValidator;
   protected
     procedure OnInit(e: EventArgs); override;
   end;
@@ -115,10 +120,11 @@ begin
   Include(Self.Button_submit_and_stop.Click, Self.Button_submit_and_stop_Click);
   Include(Self.Button_update.Click, Self.Button_update_Click);
   Include(Self.Button_cancel.Click, Self.Button_cancel_Click);
+  Include(Self.CustomValidator_special_conditions.ServerValidate, Self.CustomValidator_special_conditions_ServerValidate);
   Include(Self.Button_delete.Click, Self.Button_delete_Click);
   Include(Self.Button_withdraw.Click, Self.Button_withdraw_Click);
-  Include(Self.Load, Self.Page_Load);
   Include(Self.PreRender, Self.TWebForm_request_item_detail_PreRender);
+  Include(Self.Load, Self.Page_Load);
 end;
 {$ENDREGION}
 
@@ -146,8 +152,9 @@ begin
       server.Transfer('~/login.aspx');
     end;
     Title.InnerText := server.HtmlEncode(configurationmanager.AppSettings['application_name']) + ' - request_item_detail';
-    
+    //
     biz_fiscal_years := TClass_biz_fiscal_years.Create;
+    p.biz_equipment := TClass_biz_equipment.Create;
     p.db := TClass_db.Create;
     p.db_trail := TClass_db_trail.Create;
     //
@@ -354,6 +361,20 @@ begin
   inherited OnInit(e);
 end;
 
+procedure TWebForm_request_item_detail.CustomValidator_special_conditions_ServerValidate(source: System.Object;
+  args: System.Web.UI.WebControls.ServerValidateEventArgs);
+var
+  special_rules_violation: string;
+begin
+  args.isvalid := TRUE;
+  special_rules_violation := p.biz_equipment.SpecialRulesViolation
+    (session['service_user_id'].tostring,Safe(DropDownList_equipment_category.selectedvalue,NUM),Safe(TextBox_quantity.text,NUM));
+  if special_rules_violation <> EMPTY then begin
+    args.isvalid := FALSE;
+    CustomValidator_special_conditions.errormessage := special_rules_violation;
+  end;
+end;
+
 procedure TWebForm_request_item_detail.TWebForm_request_item_detail_PreRender(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -375,42 +396,44 @@ begin
   //
   Recalculate;  // Forces setting of additional_service_ante
   //
-  p.db.Open;
-  //
-  // Update the detail record.
-  // Update the master record.
-  //
-  mysqlcommand.Create
-    (
-    p.db_trail.Saved
+  if page.IsValid then begin
+    p.db.Open;
+    //
+    // Update the detail record.
+    // Update the master record.
+    //
+    mysqlcommand.Create
       (
-      'START TRANSACTION'
-      + ';'
-      + 'update emsof_request_detail'
-      + ' set equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + COMMA
-      +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
-      +   ' place_kept = "' + Safe(TextBox_place_kept.text,PUNCTUATED) + '",'
-      +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + COMMA
-      +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + COMMA
-      +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + COMMA
-      +   ' additional_service_ante = ' + p.additional_service_ante.tostring + COMMA
-      +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
-      + ' where master_id = ' + session['emsof_request_master_id'].tostring
-      +   ' and priority = ' + session['emsof_request_item_priority'].tostring
-      + ';'
-      + 'update emsof_request_master'
-      + ' set value = value - ' + p.saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
-      +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring + ' + ' + p.additional_service_ante.tostring
-      + ' where id = ' + session['emsof_request_master_id'].tostring
-      + ';'
-      + 'COMMIT;'
-      ),
-    p.db.connection
-    )
-    .ExecuteNonQuery;
-  //
-  p.db.Close;
-  BackTrack;
+      p.db_trail.Saved
+        (
+        'START TRANSACTION'
+        + ';'
+        + 'update emsof_request_detail'
+        + ' set equipment_code = ' + Safe(DropDownList_equipment_category.selectedvalue,NUM) + COMMA
+        +   ' make_model = "' + Safe(TextBox_make_model.text,MAKE_MODEL) + '",'
+        +   ' place_kept = "' + Safe(TextBox_place_kept.text,PUNCTUATED) + '",'
+        +   ' be_refurbished = ' + Safe(RadioButtonList_condition.selectedvalue,NUM) + COMMA
+        +   ' quantity = ' + Safe(TextBox_quantity.text,NUM) + COMMA
+        +   ' unit_cost = ' + Safe(TextBox_unit_cost.text,REAL_NUM) + COMMA
+        +   ' additional_service_ante = ' + p.additional_service_ante.tostring + COMMA
+        +   ' emsof_ante = ' + Safe(Label_emsof_ante.text,REAL_NUM)
+        + ' where master_id = ' + session['emsof_request_master_id'].tostring
+        +   ' and priority = ' + session['emsof_request_item_priority'].tostring
+        + ';'
+        + 'update emsof_request_master'
+        + ' set value = value - ' + p.saved_emsof_ante.tostring + ' + ' + Safe(Label_emsof_ante.text,REAL_NUM)
+        +   ' , shortage = shortage - ' + p.saved_additional_service_ante.tostring + ' + ' + p.additional_service_ante.tostring
+        + ' where id = ' + session['emsof_request_master_id'].tostring
+        + ';'
+        + 'COMMIT;'
+        ),
+      p.db.connection
+      )
+      .ExecuteNonQuery;
+    //
+    p.db.Close;
+    BackTrack;
+  end;
 end;
 
 procedure TWebForm_request_item_detail.Button_delete_Click(sender: System.Object;
@@ -474,26 +497,30 @@ end;
 procedure TWebForm_request_item_detail.Button_submit_and_stop_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  AddItem;
-  BackTrack;
+  if page.isvalid then begin
+    AddItem;
+    BackTrack;
+  end;
 end;
 
 procedure TWebForm_request_item_detail.Button_submit_and_repeat_Click(sender: System.Object;
   e: System.EventArgs);
 begin
-  AddItem;
-  DropDownList_equipment_category.SelectedIndex := -1;
-  Label_life_expectancy.text := '';
-  TextBox_make_model.text := '';
-  TextBox_place_kept.text := '';
-  RadioButtonList_condition.selectedindex := -1;
-  Label_allowable_cost.text := '';
-  TextBox_unit_cost.text := '';
-  TextBox_quantity.text := '';
-  Label_total_cost.text := '';
-  Label_min_service_ante.text := '';
-  TextBox_additional_service_ante.text := '';
-  Label_emsof_ante.text := '';
+  if page.isvalid then begin
+    AddItem;
+    DropDownList_equipment_category.SelectedIndex := -1;
+    Label_life_expectancy.text := '';
+    TextBox_make_model.text := '';
+    TextBox_place_kept.text := '';
+    RadioButtonList_condition.selectedindex := -1;
+    Label_allowable_cost.text := '';
+    TextBox_unit_cost.text := '';
+    TextBox_quantity.text := '';
+    Label_total_cost.text := '';
+    Label_min_service_ante.text := '';
+    TextBox_additional_service_ante.text := '';
+    Label_emsof_ante.text := '';
+  end;
 end;
 
 procedure TWebForm_request_item_detail.DropDownList_equipment_category_SelectedIndexChanged(sender: System.Object;

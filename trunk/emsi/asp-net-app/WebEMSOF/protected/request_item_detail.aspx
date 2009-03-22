@@ -4,8 +4,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-    <title id="Title" runat="server"></title>
+  <head><title id="Title" runat="server"></title>
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -27,8 +26,7 @@
 			  <tr>
 				<td><p align="right">Equipment category:</p></td>
 				<td>
-				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server" autopostback="True"></ASP:DropDownList>&nbsp;&nbsp;
-				</td>
+				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server" autopostback="True"></ASP:DropDownList>&nbsp;&nbsp; </td>
 				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
 			  </tr>
 			  <tr>
@@ -58,8 +56,7 @@
 			  </tr>
 			<tr>
 			  <td>
-			  <p align="right">Maximum&nbsp;unit cost allowed by EMSOF:&nbsp; $
-  <br><small><i>If you excede this amount <strong>per unit</strong>, your service must pay the overage.</i></small></p></td>
+			  <p align="right">Maximum&nbsp;unit cost allowed by EMSOF:&nbsp; $ <br><small><i>If you excede this amount <strong>per unit</strong>, your service must pay the overage.</i></small></p></td>
 			  <td>
 				<ASP:Label id="Label_allowable_cost" runat="server"></ASP:Label></td>
 			  <td></td>
@@ -80,8 +77,7 @@
 			  <td>
 			  <p align="right">Anticipated quantity:</p></td>
 			  <td>&nbsp; 
-
-						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_quantity" runat="server" width="6pc"></ASP:TextBox></td>
 							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_2" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
@@ -107,8 +103,7 @@
 			  <td>
 			  <p align="right"><strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>:&nbsp; $</p></td>
 			  <td>&nbsp; 
-
-						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
 							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
@@ -129,27 +124,18 @@
 
 						</div></td>
 			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>
-								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp;
-													             &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
+								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp; &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
 
 			  </td>
-			  <td></td>
+			  <td>
+                                  <asp:CustomValidator id="CustomValidator_special_conditions" runat="server" errormessage="Your request does not comply with special rules in the Eligible Providers Equipment List." font-bold="True">!ERR!</asp:CustomValidator></td>
 			</tr>
 			<tr id="TableRow_delete" runat="server">
 			  <td colspan="2">
 								  <div align="center">
 								  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="5" border="1" align="center">
 									  <tr>
-										<td>Check the box <u>and</u>&nbsp;click the button to delete:&nbsp; 
-
-
-
-
-											<ASP:CheckBox id="CheckBox_delete" runat="server" text="Delete this equipment request item"></ASP:CheckBox>&nbsp; 
-
-
-
-											<ASP:Button id="Button_delete" runat="server" text="Delete" causesvalidation="False"></ASP:Button></td>
+										<td>Check the box <u>and</u>&nbsp;click the button to delete:&nbsp; <ASP:CheckBox id="CheckBox_delete" runat="server" text="Delete this equipment request item"></ASP:CheckBox>&nbsp; <ASP:Button id="Button_delete" runat="server" text="Delete" causesvalidation="False"></ASP:Button></td>
 									  </tr>
 								  </table>
 								  </div></td>
@@ -157,8 +143,7 @@
 			</tr>
 			<tr id="TableRow_post_finalization_actions" runat="server">
 			  <td>
-                                  <div align="right">[ <ASP:LinkButton id="Button_withdraw" runat="server">Withdraw</ASP:LinkButton>&nbsp;]
-                                  </div></td>
+                                  <div align="right">[ <ASP:LinkButton id="Button_withdraw" runat="server">Withdraw</ASP:LinkButton>&nbsp;] </div></td>
 			  <td></td>
 			  <td></td>
 			</tr>
