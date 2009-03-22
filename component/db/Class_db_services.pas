@@ -111,7 +111,10 @@ type
       )
       : boolean;
     procedure MarkProfilesStale;
+    function MdNameOf(service_id: string): string;
     function NameOf(service_id: string): string;
+    function NumAmbulancesOf(service_id: string): cardinal;
+    function NumDohLicensedVehiclesOf(service_id: string): cardinal;
     procedure &Set
       (
       affiliate_num: string;
@@ -566,10 +569,37 @@ begin
   self.Close;
 end;
 
+function TClass_db_services.MdNameOf(service_id: string): string;
+begin
+  self.Open;
+  MdNameOf := mysqlcommand.Create('select md_name from service where id = ' + service_id,connection).ExecuteScalar.tostring;
+  self.Close;
+end;
+
 function TClass_db_services.NameOf(service_id: string): string;
 begin
   self.Open;
   NameOf := mysqlcommand.Create('select name from service where id = ' + service_id,connection).ExecuteScalar.tostring;
+  self.Close;
+end;
+
+function TClass_db_services.NumAmbulancesOf(service_id: string): cardinal;
+begin
+  self.Open;
+  NumAmbulancesOf := uint32.Parse
+    (
+    mysqlcommand.Create('select num_ambulances from service where id = ' + service_id,connection).ExecuteScalar.tostring
+    );
+  self.Close;
+end;
+
+function TClass_db_services.NumDohLicensedVehiclesOf(service_id: string): cardinal;
+begin
+  self.Open;
+  NumDohLicensedVehiclesOf := uint32.Parse
+    (
+    mysqlcommand.Create('select num_doh_licensed_vehicles from service where id = ' + service_id,connection).ExecuteScalar.tostring
+    );
   self.Close;
 end;
 

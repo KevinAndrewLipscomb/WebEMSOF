@@ -32,6 +32,7 @@ type
       description: string
       )
       : queue;
+    function SpecialRuleNames(code: string): queue;
   end;
 
 implementation
@@ -187,6 +188,35 @@ begin
   self.Close;
   //
   SerialIndicatorData := serial_indicator_rec_q;
+  //
+end;
+
+function TClass_db_equipment.SpecialRuleNames(code: string): queue;
+var
+  dr: mysqldatareader;
+  special_rule_names_q: queue;
+begin
+  //
+  special_rule_names_q := queue.Create;
+  //
+  self.Open;
+  dr := mysqlcommand.Create
+    (
+    'select name'
+    + ' from special_rule'
+    +   ' join epel_special_rule_map on (epel_special_rule_map.special_rule_id=special_rule.id)'
+    +   ' join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=epel_special_rule_map.epel_code)'
+    + ' where code = "' + code + '"',
+    connection
+    )
+    .ExecuteReader;
+  while dr.Read do begin
+    special_rule_names_q.Enqueue(dr['name'].tostring);
+  end;
+  dr.Close;
+  self.Close;
+  //
+  SpecialRuleNames := special_rule_names_q;
   //
 end;
 
