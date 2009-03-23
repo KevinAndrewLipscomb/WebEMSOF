@@ -4,6 +4,7 @@ interface
 
 uses
   Class_biz_match_level,
+  Class_db_emsof_requests,
   Class_db_equipment,
   Class_db_services,
   system.collections;
@@ -12,6 +13,7 @@ type
   serial_indicator_rec_type = Class_db_equipment.serial_indicator_rec_type;
   TClass_biz_equipment = class
   private
+    db_emsof_requests: TClass_db_emsof_requests;
     db_equipment: TClass_db_equipment;
     db_services: TClass_db_services;
   public
@@ -52,6 +54,7 @@ constructor TClass_biz_equipment.Create;
 begin
   inherited Create;
   // TODO: Add any constructor code here
+  db_emsof_requests := TClass_db_emsof_requests.Create;
   db_equipment := TClass_db_equipment.Create;
   db_services := TClass_db_services.Create;
 end;
@@ -102,19 +105,19 @@ begin
     // UpTo1PerVehicle
     //
     if (name = 'UpTo1PerVehicle')
-      and (uint32.Parse(quantity_string) > db_services.NumDohLicensedVehiclesOf(service_id))
+      and (uint32.Parse(quantity_string) + db_emsof_requests.NumEquipmentItemsDeployedInService(code,service_id) > db_services.NumDohLicensedVehiclesOf(service_id))
     then begin
       special_rules_violation := special_rules_violation
-      + 'You must limit the quantity of your request to 1 per DOH-licensed vehicle.'
+      + 'The quantity of the requested items, plus those you''ve procured from recent EMSOF cycles, exceeds 1 per DOH licensed vehicle.'
       + SPACE + SPACE;
     //
     // UpTo2PerVehicle
     //
     end else if (name = 'UpTo2PerVehicle')
-      and (uint32.Parse(quantity_string) > db_services.NumDohLicensedVehiclesOf(service_id)*2)
+      and (uint32.Parse(quantity_string) + db_emsof_requests.NumEquipmentItemsDeployedInService(code,service_id) > db_services.NumDohLicensedVehiclesOf(service_id)*2)
     then begin
       special_rules_violation := special_rules_violation
-      + 'You must limit the quantity of your request to 2 per DOH licensed vehicle.'
+      + 'The quantity of the requested items, plus those you''ve procured from recent EMSOF cycles, exceeds 2 per DOH licensed vehicle.'
       + SPACE + SPACE;
     //
     // UpTo5
@@ -123,7 +126,7 @@ begin
       and (uint32.Parse(quantity_string) > 5)
     then begin
       special_rules_violation := special_rules_violation
-      + 'You must limit the quantity of your request to 5.'
+      + 'The quantity of the requested items exceeds 5.'
       + SPACE + SPACE;
     //
     // HasMedicalDirector
@@ -138,10 +141,10 @@ begin
     // UpTo1PerAmbulance
     //
     end else if (name = 'UpTo1PerAmbulance')
-      and (uint32.Parse(quantity_string) > db_services.NumAmbulancesOf(service_id))
+      and (uint32.Parse(quantity_string) + db_emsof_requests.NumEquipmentItemsDeployedInService(code,service_id) > db_services.NumAmbulancesOf(service_id))
     then begin
       special_rules_violation := special_rules_violation
-      + 'You must limit the quantity of your request to 1 per ambulance.'
+      + 'The quantity of the requested items, plus those you''ve procured from recent EMSOF cycles, exceeds 1 per ambulance.'
       + SPACE + SPACE;
     end;
   end;
