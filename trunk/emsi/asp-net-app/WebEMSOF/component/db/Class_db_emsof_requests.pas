@@ -200,6 +200,12 @@ type
       current_status: cardinal;
       next_status: cardinal
       );
+    function NumEquipmentItemsDeployedInService
+      (
+      code: string;
+      service_id: string
+      )
+      : cardinal;
     function NumRequestsInStateExportBatch
       (
       status: cardinal;
@@ -1356,6 +1362,39 @@ begin
     )
     .ExecuteNonQuery;
   self.Close;
+end;
+
+function TClass_db_emsof_requests.NumEquipmentItemsDeployedInService
+  (
+  code: string;
+  service_id: string
+  )
+  : cardinal;
+var
+  num_equipment_items_deployed_in_service_obj: system.object;
+begin
+  self.Open;
+  num_equipment_items_deployed_in_service_obj := mysqlcommand.Create
+    (
+    'select sum(quantity)'
+    + ' from emsof_request_detail'
+    +   ' join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)'
+    +   ' join county_dictated_appropriation'
+    +     ' on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)'
+    +   ' join status on (status.id=emsof_request_master.status_code)'
+    +   ' join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
+    + ' where description = (select description from eligible_provider_equipment_list where code = "' + code + '")'
+    +   ' and status.name = "Deployed"'
+    +   ' and service_id = "' + service_id + '"',
+    connection
+    )
+    .ExecuteScalar;
+  self.Close;
+  if num_equipment_items_deployed_in_service_obj = dbnull.value then begin
+    NumEquipmentItemsDeployedInService := 0;
+  end else begin
+    NumEquipmentItemsDeployedInService := uint32.Parse(num_equipment_items_deployed_in_service_obj.tostring);
+  end;
 end;
 
 function TClass_db_emsof_requests.NumRequestsInStateExportBatch
