@@ -7,7 +7,8 @@ uses
   System.Data, System.Drawing, System.Web, System.Web.SessionState,
   system.web.ui, ki_web_ui, System.Web.UI.WebControls, System.Web.UI.HtmlControls, kix,
   System.Data.Common, mysql.data.mysqlclient, System.Globalization,
-   system.configuration, system.web.security,
+  system.configuration, system.web.security,
+  Class_biz_fiscal_years,
   Class_db;
 
 type
@@ -26,6 +27,7 @@ type
       p_type =
         RECORD
         be_before_deadline: boolean;
+        biz_fiscal_years: TClass_biz_fiscal_years;
         db: TClass_db;
         tcci_id: cardinal;
         tcci_fy_designator: cardinal;
@@ -110,6 +112,8 @@ begin
     Title.InnerText := configurationmanager.AppSettings['application_name'] + ' - service_overview';
     //
     // Initialize implementation-scoped vars.
+    //
+    p.biz_fiscal_years := TClass_biz_fiscal_years.Create;
     //
     p.be_before_deadline := TRUE;
     p.tcci_id := 0;
@@ -232,7 +236,7 @@ begin
     //
     // Deemphasize requests from former cycles.
     //
-    if p.num_dg_items > 1 then begin
+    if e.item.cells[p.tcci_fy_designator].text <> p.biz_fiscal_years.DesignatorOfCurrent then begin
       e.item.cells[p.tcci_fy_designator].enabled := FALSE;
       e.item.cells[p.tcci_county_name].enabled := FALSE;
       e.item.cells[p.tcci_county_dictated_appropriation_amount].enabled := FALSE;
