@@ -368,7 +368,13 @@ var
 begin
   args.isvalid := TRUE;
   special_rules_violation := p.biz_equipment.SpecialRulesViolation
-    (session['service_user_id'].tostring,Safe(DropDownList_equipment_category.selectedvalue,NUM),Safe(TextBox_quantity.text,NUM));
+    (
+    session['service_user_id'].tostring,
+    session['emsof_request_master_id'].tostring,
+    session['emsof_request_item_priority'].tostring,
+    Safe(DropDownList_equipment_category.selectedvalue,NUM),
+    Safe(TextBox_quantity.text,NUM)
+    );
   if special_rules_violation <> EMPTY then begin
     args.isvalid := FALSE;
     CustomValidator_special_conditions.errormessage := special_rules_violation;
