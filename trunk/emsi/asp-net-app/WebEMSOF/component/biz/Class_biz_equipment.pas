@@ -27,6 +27,8 @@ type
     function SpecialRulesViolation
       (
       service_id: string;
+      master_id: string;
+      priority: string;
       code: string;
       quantity_string: string
       )
@@ -85,6 +87,8 @@ end;
 function TClass_biz_equipment.SpecialRulesViolation
   (
   service_id: string;
+  master_id: string;
+  priority: string;
   code: string;
   quantity_string: string
   )
@@ -105,7 +109,7 @@ begin
     // UpTo1PerVehicle
     //
     if (name = 'UpTo1PerVehicle')
-      and (uint32.Parse(quantity_string) + db_emsof_requests.NumEquipmentItemsDeployedInService(code,service_id) > db_services.NumDohLicensedVehiclesOf(service_id))
+      and (uint32.Parse(quantity_string) + db_emsof_requests.NumCompetingEquipmentItems(code,service_id,master_id,priority) > db_services.NumDohLicensedVehiclesOf(service_id))
     then begin
       special_rules_violation := special_rules_violation
       + 'The quantity of the requested items, plus those you''ve procured from recent EMSOF cycles, exceeds 1 per DOH licensed vehicle.'
@@ -114,7 +118,7 @@ begin
     // UpTo2PerVehicle
     //
     end else if (name = 'UpTo2PerVehicle')
-      and (uint32.Parse(quantity_string) + db_emsof_requests.NumEquipmentItemsDeployedInService(code,service_id) > db_services.NumDohLicensedVehiclesOf(service_id)*2)
+      and (uint32.Parse(quantity_string) + db_emsof_requests.NumCompetingEquipmentItems(code,service_id,master_id,priority) > db_services.NumDohLicensedVehiclesOf(service_id)*2)
     then begin
       special_rules_violation := special_rules_violation
       + 'The quantity of the requested items, plus those you''ve procured from recent EMSOF cycles, exceeds 2 per DOH licensed vehicle.'
@@ -141,7 +145,7 @@ begin
     // UpTo1PerAmbulance
     //
     end else if (name = 'UpTo1PerAmbulance')
-      and (uint32.Parse(quantity_string) + db_emsof_requests.NumEquipmentItemsDeployedInService(code,service_id) > db_services.NumAmbulancesOf(service_id))
+      and (uint32.Parse(quantity_string) + db_emsof_requests.NumCompetingEquipmentItems(code,service_id,master_id,priority) > db_services.NumAmbulancesOf(service_id))
     then begin
       special_rules_violation := special_rules_violation
       + 'The quantity of the requested items, plus those you''ve procured from recent EMSOF cycles, exceeds 1 per ambulance.'

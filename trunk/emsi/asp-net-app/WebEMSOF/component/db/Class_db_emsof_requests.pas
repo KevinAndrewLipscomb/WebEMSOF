@@ -200,10 +200,12 @@ type
       current_status: cardinal;
       next_status: cardinal
       );
-    function NumEquipmentItemsDeployedInService
+    function NumCompetingEquipmentItems
       (
       code: string;
-      service_id: string
+      service_id: string;
+      master_id: string;
+      priority: string
       )
       : cardinal;
     function NumRequestsInStateExportBatch
@@ -1364,17 +1366,19 @@ begin
   self.Close;
 end;
 
-function TClass_db_emsof_requests.NumEquipmentItemsDeployedInService
+function TClass_db_emsof_requests.NumCompetingEquipmentItems
   (
   code: string;
-  service_id: string
+  service_id: string;
+  master_id: string;
+  priority: string
   )
   : cardinal;
 var
-  num_equipment_items_deployed_in_service_obj: system.object;
+  num_competing_equipment_items_obj: system.object;
 begin
   self.Open;
-  num_equipment_items_deployed_in_service_obj := mysqlcommand.Create
+  num_competing_equipment_items_obj := mysqlcommand.Create
     (
     'select sum(quantity)'
     + ' from emsof_request_detail'
@@ -1384,16 +1388,17 @@ begin
     +   ' join status on (status.id=emsof_request_master.status_code)'
     +   ' join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)'
     + ' where description = (select description from eligible_provider_equipment_list where code = "' + code + '")'
-    +   ' and status.name = "Deployed"'
-    +   ' and service_id = "' + service_id + '"',
+    +   ' and status.name not in ("Rejected","Withdrawn by service","Archived")'
+    +   ' and service_id = "' + service_id + '"'
+    +   ' and not (master_id = "' + master_id + '" and priority = "' + priority + '")',
     connection
     )
     .ExecuteScalar;
   self.Close;
-  if num_equipment_items_deployed_in_service_obj = dbnull.value then begin
-    NumEquipmentItemsDeployedInService := 0;
+  if num_competing_equipment_items_obj = dbnull.value then begin
+    NumCompetingEquipmentItems := 0;
   end else begin
-    NumEquipmentItemsDeployedInService := uint32.Parse(num_equipment_items_deployed_in_service_obj.tostring);
+    NumCompetingEquipmentItems := uint32.Parse(num_competing_equipment_items_obj.tostring);
   end;
 end;
 
