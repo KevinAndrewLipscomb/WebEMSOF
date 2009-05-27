@@ -76,9 +76,11 @@
 			</tr>
 			<tr>
 			  <td>
-<p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True" causesvalidation="False"></ASP:LinkButton>.</p></td>
-						  </tr>
-		</table></td>
+                <p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True" causesvalidation="False"></ASP:LinkButton>.</p>
+              </td>
+            </tr>
+		</table>
+            </td>
 		  </tr>
 	  </table>
 	  <p></p>
@@ -107,7 +109,7 @@
 				<td>
 				  <strong>Service allocations</strong>
 				</td>
-				<td align="center"><ASP:CheckBox id="CheckBox_hide_nonapproval_requests" runat="server" text="Only show requests needing approval" font-size="Small" autopostback="True"></ASP:CheckBox></td>
+				<td align="center">Only&nbsp;show&nbsp;requests&nbsp;in&nbsp;status:&nbsp;<ASP:DropDownList id="DropDownList_status_filter" runat="server" font-size="Small" autopostback="True"></ASP:DropDownList></td>
 				<td align="right">
 				  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True" causesvalidation="False">New</asp:LinkButton>
 				</td>

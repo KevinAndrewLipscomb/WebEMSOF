@@ -43,10 +43,10 @@ type
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
     procedure DataGrid_service_appropriations_UpdateCommand(source: System.Object;
       e: System.Web.UI.WebControls.DataGridCommandEventArgs);
-    procedure CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object;
-      e: System.EventArgs);
     procedure Button_send_Click(sender: System.Object; e: System.EventArgs);
     procedure DropDownList_quick_message_targets_SelectedIndexChanged(sender: System.Object; 
+      e: System.EventArgs);
+    procedure DropDownList_status_filter_SelectedIndexChanged(sender: System.Object; 
       e: System.EventArgs);
   {$ENDREGION}
   strict private
@@ -59,7 +59,6 @@ type
         biz_services: TClass_biz_services;
         biz_user: TClass_biz_user;
         be_before_deadline: boolean;
-        be_filtered: boolean;
         be_sort_order_ascending: boolean;
         db: TClass_db;
         db_trail: TClass_db_trail;
@@ -68,6 +67,7 @@ type
         region_dictated_appropriation_amount: decimal;
         saved_amount: decimal;
         sort_order: string;
+        status_filter: string;
         sum_of_service_appropriations: decimal;
         unappropriated_amount: decimal;
         END;
@@ -95,7 +95,6 @@ type
     LinkButton_new_appropriation: System.Web.UI.WebControls.LinkButton;
     Table_warning_forced_amount: System.Web.UI.HtmlControls.HtmlTable;
     Label_application_name: System.Web.UI.WebControls.Label;
-    CheckBox_hide_nonapproval_requests: System.Web.UI.WebControls.CheckBox;
     Label_distribution_list: System.Web.UI.WebControls.Label;
     Button_send: System.Web.UI.WebControls.Button;
     RequiredFieldValidator_quick_message_body: System.Web.UI.WebControls.RequiredFieldValidator;
@@ -103,6 +102,7 @@ type
     TextBox_quick_message_subject: System.Web.UI.WebControls.TextBox;
     DropDownList_quick_message_targets: System.Web.UI.WebControls.DropDownList;
     Table_quick_message: System.Web.UI.HtmlControls.HtmlTable;
+    DropDownList_status_filter: System.Web.UI.WebControls.DropDownList;
   protected
     procedure OnInit(e: EventArgs); override;
   end;
@@ -121,7 +121,7 @@ const
 procedure TWebForm_county_dictated_appropriations.InitializeComponent;
 begin
   Include(Self.LinkButton_county_dictated_deadline.Click, Self.LinkButton_county_dictated_deadline_Click);
-  Include(Self.CheckBox_hide_nonapproval_requests.CheckedChanged, Self.CheckBox_hide_nonapproval_requests_CheckedChanged);
+  Include(Self.DropDownList_status_filter.SelectedIndexChanged, Self.DropDownList_status_filter_SelectedIndexChanged);
   Include(Self.LinkButton_new_appropriation.Click, Self.LinkButton_new_appropriation_Click);
   Include(Self.DataGrid_service_appropriations.ItemDataBound, Self.DataGrid_service_appropriations_ItemDataBound);
   Include(Self.DataGrid_service_appropriations.CancelCommand, Self.DataGrid_service_appropriations_CancelCommand);
@@ -161,12 +161,12 @@ begin
     p.biz_services := TClass_biz_services.Create;
     p.biz_user := TClass_biz_user.Create;
     p.be_before_deadline := TRUE;
-    p.be_filtered := FALSE;
     p.be_sort_order_ascending := TRUE;
     p.db := TClass_db.Create;
     p.db_trail := TClass_db_trail.Create;
     p.num_appropriations := 0;
     p.sort_order := 'service_name';
+    p.status_filter := EMPTY;
     p.sum_of_service_appropriations := 0;
     p.unappropriated_amount := 0;
     //
@@ -254,6 +254,13 @@ begin
   //
 end;
 
+procedure TWebForm_county_dictated_appropriations.DropDownList_status_filter_SelectedIndexChanged(sender: System.Object;
+  e: System.EventArgs);
+begin
+  p.status_filter := Safe(DropDownList_status_filter.selectedvalue,NUM);
+  Bind_service_appropriations;
+end;
+
 procedure TWebForm_county_dictated_appropriations.DropDownList_quick_message_targets_SelectedIndexChanged(sender: System.Object;
   e: System.EventArgs);
 begin
@@ -288,13 +295,6 @@ begin
   TextBox_quick_message_subject.text := EMPTY;
   TextBox_quick_message_body.text := EMPTY;
   Alert(LOGIC,NORMAL,'messagsnt','Message sent',TRUE);
-end;
-
-procedure TWebForm_county_dictated_appropriations.CheckBox_hide_nonapproval_requests_CheckedChanged(sender: System.Object;
-  e: System.EventArgs);
-begin
-  p.be_filtered := not p.be_filtered;
-  Bind_service_appropriations;
 end;
 
 procedure TWebForm_county_dictated_appropriations.TWebForm_county_dictated_appropriations_PreRender(sender: System.Object;
@@ -473,6 +473,18 @@ begin
     //
     p.num_appropriations := p.num_appropriations + 1;
     //
+    if not assigned(DropDownList_status_filter.items.FindByValue(e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text)) then begin
+      DropDownList_status_filter.Items.Add
+        (
+        listitem.Create
+          (
+          linkbutton(e.item.cells[p.biz_emsof_requests.TcciOfStatusDescription].controls.item[0]).text,
+          e.item.cells[p.biz_emsof_requests.TcciOfStatusCode].text
+          )
+        );
+      //
+    end;
+    //
     // Manage the way some of the row values are rendered.
     //
     //   By default, do not display the Leftover / Shortage value.  But save it off just in case.
@@ -600,17 +612,22 @@ var
   be_datagrid_empty: boolean;
 begin
   //
+  if DropDownList_status_filter.items.Count = 0 then begin
+    DropDownList_status_filter.items.Add(listitem.Create('(all)',EMPTY));
+  end;
+  //
   p.distribution_list_for_services_with_allocations := EMPTY;
   //
-  if p.be_filtered then begin
+  if p.status_filter <> EMPTY then begin
     p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus
       (
       session['region_dictated_appropriation_id'].tostring,
-      Class_biz_emsof_requests.NEEDS_COUNTY_APPROVAL,
+      status_type(convert.ToInt16(p.status_filter)),
       p.sort_order,
       p.be_sort_order_ascending,
       DataGrid_service_appropriations
       );
+    DropDownList_status_filter.selectedvalue := p.status_filter;
   end else begin
     p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriation
       (
