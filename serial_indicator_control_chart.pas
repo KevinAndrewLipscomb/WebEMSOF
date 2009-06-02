@@ -46,7 +46,6 @@ procedure TWebForm1.Page_Load(sender: System.Object; e: System.EventArgs);
 const
   AVERAGE_NUM_MINUTES_PER_YEAR = 525948; // takes into account all scheduled leap days
 var
-  be_saved: boolean;
   chart: spctimevariablecontrolchart;
   datum: serial_indicator_rec_type;
   history: queue;
@@ -99,22 +98,7 @@ begin
   //
   image := bufferedimage.Create(chart,imageformat.JPEG);
   image.jpegimagequality := 100;
-  //
-  be_saved := FALSE;
-  repeat
-    try
-      image.SaveImage(response.outputstream);
-      be_saved := TRUE;
-    except on e: exception do
-      //
-      // Tolerate "Object is currently in use elsewhere." exception, which seems to happen when folks open emails with several
-      // invocations of this page embedded, and re-attempt the operation instead.  Raise any other exception.
-      //
-      if e.message <> 'Object is currently in use elsewhere.' then begin
-        raise e;
-      end;
-    end;
-  until be_saved;
+  image.SaveImage(response.outputstream);
   //
   autoresetevent(application['spcchartnet_avail']).&Set;
   //
