@@ -33,6 +33,7 @@ implementation
 
 uses
   Class_biz_user,
+  system.threading,
   system.web.security;
 
 {$REGION 'Designer Managed Code'}
@@ -60,7 +61,11 @@ end;
 
 procedure TGlobal.Application_Start(sender: System.Object; e: EventArgs);
 begin
-
+  //
+  // Establish an application-scoped object to allows synchronized control of nonreentrant spcchartnet code.
+  //
+  application.Add('spcchartnet_avail',autoresetevent.Create(TRUE));
+  //
 end;
 
 procedure TGlobal.Session_Start(sender: System.Object; e: EventArgs);

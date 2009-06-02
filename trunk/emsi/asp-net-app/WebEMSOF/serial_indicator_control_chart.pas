@@ -18,10 +18,6 @@ type
   strict protected
   protected
     procedure OnInit(e: EventArgs); override;
-  private
-    { Private Declarations }
-  public
-    { Public Declarations }
   end;
 
 implementation
@@ -32,10 +28,8 @@ uses
   com.quinncurtis.spcchartnet,
   kix,
   system.drawing.imaging,
-  system.drawing.text;
-
-CONST
-  AVERAGE_NUM_MINUTES_PER_YEAR = 525948; // takes into account all scheduled leap days
+  system.drawing.text,
+  system.threading;
 
 {$REGION 'Designer Managed Code'}
 /// <summary>
@@ -49,6 +43,8 @@ end;
 {$ENDREGION}
 
 procedure TWebForm1.Page_Load(sender: System.Object; e: System.EventArgs);
+const
+  AVERAGE_NUM_MINUTES_PER_YEAR = 525948; // takes into account all scheduled leap days
 var
   be_saved: boolean;
   chart: spctimevariablecontrolchart;
@@ -57,6 +53,9 @@ var
   i: cardinal;
   image: bufferedimage;
 begin
+  //
+  autoresetevent(application['spcchartnet_avail']).WaitOne;
+  //
   chart := spctimevariablecontrolchart.Create
     (
     spccontrolchartdata.INDIVIDUAL_RANGE_CHART,
@@ -116,6 +115,8 @@ begin
       end;
     end;
   until be_saved;
+  //
+  autoresetevent(application['spcchartnet_avail']).&Set;
   //
 end;
 
