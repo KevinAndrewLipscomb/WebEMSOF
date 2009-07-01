@@ -564,7 +564,12 @@ end;
 
 function TClass_biz_emsof_requests.BeOkToRegress(e_item: system.object): boolean;
 begin
-  BeOkToRegress := StatusOf(e_item) in [NEEDS_REIMBURSEMENT_ISSUANCE,NEEDS_CANCELED_CHECK_COLLECTION];
+  BeOkToRegress := (StatusOf(e_item) in [NEEDS_REIMBURSEMENT_ISSUANCE,NEEDS_CANCELED_CHECK_COLLECTION])
+    and
+      (
+      httpcontext.current.User.IsInRole('director')
+      or httpcontext.current.User.IsInRole('emsof-coordinator')
+      );
 end;
 
 function TClass_biz_emsof_requests.BeOkToViewInvoices(status: status_type): boolean;
