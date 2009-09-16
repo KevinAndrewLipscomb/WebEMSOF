@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ Page language="c#" Debug="true" Codebehind="request_item_detail.pas" AutoEventWireup="false" Inherits="request_item_detail.TWebForm_request_item_detail" %>
+<%@ Page language="c#" Debug="true" Codebehind="request_item_detail.aspx.cs" AutoEventWireup="True" Inherits="request_item_detail.TWebForm_request_item_detail" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
@@ -26,7 +26,7 @@
 			  <tr>
 				<td><p align="right">Equipment category:</p></td>
 				<td>
-				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server" autopostback="True"></ASP:DropDownList>&nbsp;&nbsp; </td>
+				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server" autopostback="True" onselectedindexchanged="DropDownList_equipment_category_SelectedIndexChanged"></ASP:DropDownList>&nbsp;&nbsp; </td>
 				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
 			  </tr>
 			  <tr>
@@ -68,7 +68,7 @@
 						<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_unit_cost" runat="server" width="6pc"></ASP:TextBox></td>
-							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_1" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
+							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_1" runat="server" font-size="Small" onclick="LinkButton_recalculate_1_Click">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_unit_cost" runat="server" errormessage="Please enter a unit cost." font-bold="True" controltovalidate="TextBox_unit_cost">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_unit_cost" runat="server" font-bold="True" errormessage="Please enter a valid unit cost." validationexpression="[$0\.]*[1-9][0-9,\.]*" controltovalidate="TextBox_unit_cost">!ERR!</ASP:RegularExpressionValidator></td>
@@ -80,7 +80,7 @@
 <table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_quantity" runat="server" width="6pc"></ASP:TextBox></td>
-							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_2" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
+							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_2" runat="server" font-size="Small" onclick="LinkButton_recalculate_2_Click">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
 			  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_quantity" runat="server" errormessage="Please enter a quantity." font-bold="True" controltovalidate="TextBox_quantity">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_quantity" runat="server" font-bold="True" errormessage="Please enter a valid quantity." validationexpression="[1-9][0-9]*" controltovalidate="TextBox_quantity">!ERR!</ASP:RegularExpressionValidator></td>
@@ -106,7 +106,7 @@
 <table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
-							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small">Recalculate</ASP:LinkButton></td>
+							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small" onclick="LinkButton_recalculate_3_Click">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
 			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additional_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[0-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
@@ -120,22 +120,22 @@
 			</tr>
 			<tr>
 			  <td>
-						<div align="right"><ASP:Button id="Button_submit_and_repeat" runat="server" text="Submit and Repeat"></ASP:Button>
+						<div align="right"><ASP:Button id="Button_submit_and_repeat" runat="server" text="Submit and Repeat" onclick="Button_submit_and_repeat_Click"></ASP:Button>
 
 						</div></td>
-			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop"></ASP:Button>
-								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False"></ASP:Button>&nbsp; &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button>
+			  <td>&nbsp;<ASP:Button id="Button_submit_and_stop" runat="server" text="Submit and Stop" onclick="Button_submit_and_stop_Click"></ASP:Button>
+								  <ASP:Button id="Button_update" runat="server" text="Update" visible="False" onclick="Button_update_Click"></ASP:Button>&nbsp; &nbsp;&nbsp;<ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False" onclick="Button_cancel_Click"></ASP:Button>
 
 			  </td>
 			  <td>
-                                  <asp:CustomValidator id="CustomValidator_special_conditions" runat="server" errormessage="Your request does not comply with special rules in the Eligible Providers Equipment List." font-bold="True">!ERR!</asp:CustomValidator></td>
+                                  <asp:CustomValidator id="CustomValidator_special_conditions" runat="server" errormessage="Your request does not comply with special rules in the Eligible Providers Equipment List." font-bold="True" onservervalidate="CustomValidator_special_conditions_ServerValidate">!ERR!</asp:CustomValidator></td>
 			</tr>
 			<tr id="TableRow_delete" runat="server">
 			  <td colspan="2">
 								  <div align="center">
 								  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="5" border="1" align="center">
 									  <tr>
-										<td>Check the box <u>and</u>&nbsp;click the button to delete:&nbsp; <ASP:CheckBox id="CheckBox_delete" runat="server" text="Delete this equipment request item"></ASP:CheckBox>&nbsp; <ASP:Button id="Button_delete" runat="server" text="Delete" causesvalidation="False"></ASP:Button></td>
+										<td>Check the box <u>and</u>&nbsp;click the button to delete:&nbsp; <ASP:CheckBox id="CheckBox_delete" runat="server" text="Delete this equipment request item"></ASP:CheckBox>&nbsp; <ASP:Button id="Button_delete" runat="server" text="Delete" causesvalidation="False" onclick="Button_delete_Click"></ASP:Button></td>
 									  </tr>
 								  </table>
 								  </div></td>
@@ -143,7 +143,7 @@
 			</tr>
 			<tr id="TableRow_post_finalization_actions" runat="server">
 			  <td>
-                                  <div align="right">[ <ASP:LinkButton id="Button_withdraw" runat="server">Withdraw</ASP:LinkButton>&nbsp;] </div></td>
+                                  <div align="right">[ <ASP:LinkButton id="Button_withdraw" runat="server" onclick="Button_withdraw_Click">Withdraw</ASP:LinkButton>&nbsp;] </div></td>
 			  <td></td>
 			  <td></td>
 			</tr>

@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_financial_snapshot.pas" Inherits="UserControl_financial_snapshot.TWebUserControl_financial_snapshot"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_financial_snapshot.ascx.cs" Inherits="UserControl_financial_snapshot.TWebUserControl_financial_snapshot"%>
 <table cellspacing="0" cellpadding="20" border="0">
   <tr>
     <td>

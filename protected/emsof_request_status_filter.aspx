@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ Page language="c#" Debug="true" Codebehind="emsof_request_status_filter.pas" AutoEventWireup="false" Inherits="emsof_request_status_filter.TWebForm_emsof_request_status_filter" %>
+<%@ Page language="c#" Debug="true" Codebehind="emsof_request_status_filter.aspx.cs" AutoEventWireup="True" Inherits="emsof_request_status_filter.TWebForm_emsof_request_status_filter" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
@@ -24,7 +24,7 @@
   <table cellspacing="0" cellpadding="5" width="100%" border="0">
       <tr>
 		<td><strong>Requests in status "<ASP:Label id="Label_status" runat="server" font-bold="True"></ASP:Label>"</strong></td>
-        <td><ASP:LinkButton id="LinkButton_retransmit_to_state" runat="server" enabled="False" visible="False">Retransmit to State</ASP:LinkButton></td>
+        <td><ASP:LinkButton id="LinkButton_retransmit_to_state" runat="server" enabled="False" visible="False" onclick="LinkButton_retransmit_to_state_Click">Retransmit to State</ASP:LinkButton></td>
       </tr>
   </table></strong></td>
 					</tr>
@@ -90,7 +90,7 @@
 				  </tr>
 				  <tr>
 					<td></td>
-					<td><ASP:Button id="Button_send" runat="server" text="Send"></ASP:Button></td>
+					<td><ASP:Button id="Button_send" runat="server" text="Send" onclick="Button_send_Click"></ASP:Button></td>
 					<td></td>
 				  </tr>
 				  <tr><td valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>

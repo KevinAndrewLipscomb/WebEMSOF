@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="delete_service_appropriation.pas" AutoEventWireup="false" Inherits="delete_service_appropriation.TWebForm_delete_service_appropriation" %>
+<%@ Page language="c#" Debug="true" Codebehind="delete_service_appropriation.aspx.cs" AutoEventWireup="True" Inherits="delete_service_appropriation.TWebForm_delete_service_appropriation" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -37,13 +37,13 @@
 			<tr>
 			  <td>
 				<div align="center">
-		<ASP:Button id="Button_yes" runat="server" text="Yes"></ASP:Button>
+		<ASP:Button id="Button_yes" runat="server" text="Yes" onclick="Button_yes_Click"></ASP:Button>
 				</div></td>
 			  <td>-- Delete the allocation and the linked equipment requests.</td>
 			</tr>
 			<tr>
 			  <td>
-				<div align="center"><ASP:Button id="Button_no" runat="server" text="No"></ASP:Button>
+				<div align="center"><ASP:Button id="Button_no" runat="server" text="No" onclick="Button_no_Click"></ASP:Button>
 				</div></td>
 			  <td>-- Leave the allocation the way it is.</td>
 			</tr>

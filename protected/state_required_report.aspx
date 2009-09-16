@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ Page language="c#" Debug="true" Codebehind="state_required_report.pas" AutoEventWireup="false" Inherits="state_required_report.TWebForm_state_required_report" %>
+<%@ Page language="c#" Debug="true" Codebehind="state_required_report.aspx.cs" AutoEventWireup="True" Inherits="state_required_report.TWebForm_state_required_report" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
@@ -24,12 +24,12 @@
                       <td><strong>State-required report</strong></td>
                       <td>
                         <p align="center">
-                          <ASP:LinkButton id="LinkButton_export_scratch_copy" runat="server" enabled="False">Export scratch copy</ASP:LinkButton>
+                          <ASP:LinkButton id="LinkButton_export_scratch_copy" runat="server" enabled="False" onclick="LinkButton_export_scratch_copy_Click">Export scratch copy</ASP:LinkButton>
                         </p>
                       </td>
                       <td>
                         <div align="center">
-                          <asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False" font-bold="True">TRANSMIT TO STATE</asp:linkbutton>
+                          <asp:linkbutton id="LinkButton_transmit_to_state" runat="server" enabled="False" font-bold="True" onclick="LinkButton_transmit_to_state_Click">TRANSMIT TO STATE</asp:linkbutton>
                         </div>
                       </td>
                     </tr>
@@ -45,7 +45,7 @@
                     </tr>
                     <tr id="TableRow_this_is_just_some" runat="server" visible="False">
                       <td colspan="3">
-                        <small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against <ASP:DropDownList id="DropDownList_amendment" runat="server" autopostback="True"></ASP:DropDownList>.</small>
+                        <small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against <ASP:DropDownList id="DropDownList_amendment" runat="server" autopostback="True" onselectedindexchanged="DropDownList_amendment_SelectedIndexChanged"></ASP:DropDownList>.</small>
                       </td>
                     </tr>
                   </table>

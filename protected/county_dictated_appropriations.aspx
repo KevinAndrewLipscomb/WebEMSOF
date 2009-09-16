@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriations.pas" AutoEventWireup="false" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" %>
+<%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriations.aspx.cs" AutoEventWireup="True" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
@@ -76,7 +76,7 @@
 			</tr>
 			<tr>
 			  <td>
-                <p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True" causesvalidation="False"></ASP:LinkButton>.</p>
+                <p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True" causesvalidation="False" onclick="LinkButton_county_dictated_deadline_Click"></ASP:LinkButton>.</p>
               </td>
             </tr>
 		</table>
@@ -109,9 +109,9 @@
 				<td>
 				  <strong>Service allocations</strong>
 				</td>
-				<td align="center">Only&nbsp;show&nbsp;requests&nbsp;in&nbsp;status:&nbsp;<ASP:DropDownList id="DropDownList_status_filter" runat="server" font-size="Small" autopostback="True"></ASP:DropDownList></td>
+				<td align="center">Only&nbsp;show&nbsp;requests&nbsp;in&nbsp;status:&nbsp;<ASP:DropDownList id="DropDownList_status_filter" runat="server" font-size="Small" autopostback="True" onselectedindexchanged="DropDownList_status_filter_SelectedIndexChanged"></ASP:DropDownList></td>
 				<td align="right">
-				  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True" causesvalidation="False">New</asp:LinkButton>
+				  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True" causesvalidation="False" onclick="LinkButton_new_appropriation_Click">New</asp:LinkButton>
 				</td>
 			  </tr>
 			</table>
@@ -185,7 +185,7 @@
               <tr>
                 <td>Send email to:</td>
                 <td>
-                  <ASP:DropDownList id="DropDownList_quick_message_targets" runat="server" autopostback="True">
+                  <ASP:DropDownList id="DropDownList_quick_message_targets" runat="server" autopostback="True" onselectedindexchanged="DropDownList_quick_message_targets_SelectedIndexChanged">
                     <asp:ListItem selected="True" value="with_allocations">all agencies shown above</asp:ListItem>
                     <asp:ListItem value="emsof_participants_true">all agencies in my county who are EMSOF participants</asp:ListItem>
                     <asp:ListItem value="emsof_participants_false">all agencies in my county who are *not* EMSOF participants</asp:ListItem>
@@ -206,7 +206,7 @@
               </tr>
               <tr>
                 <td></td>
-                <td><ASP:Button id="Button_send" runat="server" text="Send" validationgroup="quick_message"></ASP:Button></td>
+                <td><ASP:Button id="Button_send" runat="server" text="Send" validationgroup="quick_message" onclick="Button_send_Click"></ASP:Button></td>
                 <td></td>
               </tr>
               <tr><td valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>

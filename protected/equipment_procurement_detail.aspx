@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ Page language="c#" Debug="true" Codebehind="equipment_procurement_detail.pas" AutoEventWireup="false" Inherits="equipment_procurement_detail.TWebForm_equipment_procurement_detail" %>
+<%@ Page language="c#" Debug="true" Codebehind="equipment_procurement_detail.aspx.cs" AutoEventWireup="True" Inherits="equipment_procurement_detail.TWebForm_equipment_procurement_detail" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
@@ -19,7 +19,7 @@
     <td>
       <table cellspacing="0" cellpadding="10" border="0">
         <tr>
-          <td bgcolor="#dcdcdc"><strong>Cycle:&nbsp; <asp:DropDownList id="DropDownList_cycle" runat="server" autopostback="True"></asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp; Equipment:&nbsp; <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True"></asp:DropDownList></strong></td>
+          <td bgcolor="#dcdcdc"><strong>Cycle:&nbsp; <asp:DropDownList id="DropDownList_cycle" runat="server" autopostback="True" onselectedindexchanged="DropDownList_cycle_SelectedIndexChanged"></asp:DropDownList>&nbsp;&nbsp;&nbsp;&nbsp; Equipment:&nbsp; <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True" onselectedindexchanged="DropDownList_equipment_SelectedIndexChanged"></asp:DropDownList></strong></td>
         </tr>
         <tr>
           <td>

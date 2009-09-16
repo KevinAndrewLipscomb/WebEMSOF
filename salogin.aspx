@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="salogin.pas" AutoEventWireup="false" Inherits="salogin.TWebForm_salogin" %>
+<%@ Page language="c#" Debug="true" Codebehind="salogin.aspx.cs" AutoEventWireup="True" Inherits="salogin.TWebForm_salogin" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -26,7 +26,7 @@
 							  <td><strong>System Administrator log in</strong></td>
 							  <td>
 								<div align="right">
-							  <ASP:CustomValidator id="CustomValidator_account_exists" runat="server" errormessage="Invalid user/password combination. Please try again." font-bold="True">!ERR!</ASP:CustomValidator>
+							  <ASP:CustomValidator id="CustomValidator_account_exists" runat="server" errormessage="Invalid user/password combination. Please try again." font-bold="True" onservervalidate="CustomValidator_account_exists_ServerValidate">!ERR!</ASP:CustomValidator>
 								</div></td>
 							</tr>
 						</table></strong></td>
@@ -39,7 +39,7 @@
 				  <td>Mimic what kind of
 							  <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;user?</td>
 				  <td>
-									  <ASP:DropDownList id="DropDownList_user_kind" runat="server" autopostback="True">
+									  <ASP:DropDownList id="DropDownList_user_kind" runat="server" autopostback="True" onselectedindexchanged="DropDownList_user_kind_SelectedIndexChanged">
 								<ASP:ListItem value="0">-- Select (then wait for form to refresh) --</ASP:ListItem>
 								<ASP:ListItem value="service">Service (Ambulance, QRS, ALS Squad, etc)</ASP:ListItem>
 								<ASP:ListItem value="county">County Coordinator</ASP:ListItem>
@@ -52,7 +52,7 @@
 				  </td>
 				  <td>
 							<asp:dropdownlist id="DropDownList_user"
-											  runat="server">
+											  runat="server" onselectedindexchanged="DropDownList_user_SelectedIndexChanged">
 							</asp:dropdownlist><ASP:RegularExpressionValidator id="RegularExpressionValidator_user" runat="server" errormessage="Please select a user." font-bold="True" controltovalidate="DropDownList_user" validationexpression="[^0].+">!ERR!</ASP:RegularExpressionValidator>
 				  </td>
 				</tr>
@@ -83,10 +83,10 @@
 						<table cellspacing="0" cellpadding="5" width="1%">
 							<tr>
 							  <td><asp:button id="Button_log_in"
-								runat="server" text="Log in" font-bold="True">
+								runat="server" text="Log in" font-bold="True" onclick="Button_log_in_Click">
 					</asp:button></td>
 							  <td nowrap="true">
-								<ASP:button id="Button_new_password" runat="server" text="Email new password"></ASP:button></td>
+								<ASP:button id="Button_new_password" runat="server" text="Email new password" onclick="Button_new_password_Click"></ASP:button></td>
 							</tr>
 						</table>
 				  </td>

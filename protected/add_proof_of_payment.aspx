@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="add_proof_of_payment.pas" AutoEventWireup="false" Inherits="add_proof_of_payment.TWebForm_add_proof_of_payment" %>
+<%@ Page language="c#" Debug="true" Codebehind="add_proof_of_payment.aspx.cs" AutoEventWireup="True" Inherits="add_proof_of_payment.TWebForm_add_proof_of_payment" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -53,7 +53,7 @@
 							<tr>
 							  <td>Amount:</td>
 							  <td><ASP:TextBox id="TextBox_amount" runat="server" width="6pc"></ASP:TextBox></td>
-							  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_amount" runat="server" errormessage="Please specify the amount of the payment." font-bold="True" controltovalidate="TextBox_amount">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_amount" runat="server" errormessage="Please specify a valid amount." font-bold="True" controltovalidate="TextBox_amount" validationexpression="[$0\.]*[1-9][0-9,\.]*">!ERR!</ASP:RegularExpressionValidator><ASP:CustomValidator id="CustomValidator_amount" runat="server" errormessage="Please enter a valid amount." controltovalidate="TextBox_amount" font-bold="True">!ERR!</ASP:CustomValidator></td>
+							  <td><ASP:RequiredFieldValidator id="RequiredFieldValidator_amount" runat="server" errormessage="Please specify the amount of the payment." font-bold="True" controltovalidate="TextBox_amount">!ERR!</ASP:RequiredFieldValidator><ASP:RegularExpressionValidator id="RegularExpressionValidator_amount" runat="server" errormessage="Please specify a valid amount." font-bold="True" controltovalidate="TextBox_amount" validationexpression="[$0\.]*[1-9][0-9,\.]*">!ERR!</ASP:RegularExpressionValidator><ASP:CustomValidator id="CustomValidator_amount" runat="server" errormessage="Please enter a valid amount." controltovalidate="TextBox_amount" font-bold="True" onservervalidate="CustomValidator_amount_ServerValidate">!ERR!</ASP:CustomValidator></td>
 							</tr>
 							<tr>
 							  <td>Note:</td>
@@ -62,7 +62,7 @@
 							</tr>
 							<tr>
 							  <td></td>
-							  <td><ASP:Button id="Button_submit" runat="server" text="Submit"></ASP:Button>&nbsp; <ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False"></ASP:Button></td>
+							  <td><ASP:Button id="Button_submit" runat="server" text="Submit" onclick="Button_submit_Click"></ASP:Button>&nbsp; <ASP:Button id="Button_cancel" runat="server" text="Cancel" causesvalidation="False" onclick="Button_cancel_Click"></ASP:Button></td>
 							  <td></td>
 							</tr>
 						</table></td>

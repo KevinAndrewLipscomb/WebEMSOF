@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="region_dictated_appropriations.pas" AutoEventWireup="false" Inherits="region_dictated_appropriations.TWebForm_region_dictated_appropriations" %>
+<%@ Page language="c#" Debug="true" Codebehind="region_dictated_appropriations.aspx.cs" AutoEventWireup="True" Inherits="region_dictated_appropriations.TWebForm_region_dictated_appropriations" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -104,7 +104,7 @@
 			<tr>
 			  <td>
 <p>The last day you will accept EMSOF request submissions&nbsp;from services is
-				<ASP:LinkButton id="LinkButton_region_dictated_deadline" runat="server" font-bold="True">LinkButton_region_dictated_deadline</ASP:LinkButton>.</p></td>
+				<ASP:LinkButton id="LinkButton_region_dictated_deadline" runat="server" font-bold="True" onclick="LinkButton_region_dictated_deadline_Click">LinkButton_region_dictated_deadline</ASP:LinkButton>.</p></td>
 						  </tr>
 		</table></td>
 		  </tr>
@@ -135,7 +135,7 @@
 		  </td>
 		  <td>
 			<div align="center">
-			  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True" enabled="False">New</asp:LinkButton>
+			  <asp:LinkButton id="LinkButton_new_appropriation" runat="server" font-bold="True" enabled="False" onclick="LinkButton_new_appropriation_Click">New</asp:LinkButton>
 			</div>
 		  </td>
 		</tr>

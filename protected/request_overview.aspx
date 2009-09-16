@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ Page language="c#" Debug="true" Codebehind="request_overview.pas" AutoEventWireup="false" Inherits="request_overview.TWebForm_request_overview" %>
+<%@ Page language="c#" Debug="true" Codebehind="request_overview.aspx.cs" AutoEventWireup="True" Inherits="request_overview.TWebForm_request_overview" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
@@ -80,11 +80,11 @@
 			<tr bgcolor="#f5f5f5">
 			  <td><strong>Items requested</strong></td>
 			  <td>
-			  <div align="center"><ASP:LinkButton id="LinkButton_add_item_to_request" runat="server">New</ASP:LinkButton>
+			  <div align="center"><ASP:LinkButton id="LinkButton_add_item_to_request" runat="server" onclick="LinkButton_add_item_to_request_Click">New</ASP:LinkButton>
 			  </div></td>
 			  <td>
 						<p align="center">
-						  <ASP:LinkButton id="LinkButton_finalize" runat="server" font-bold="True">FINALIZE...</ASP:LinkButton>
+						  <ASP:LinkButton id="LinkButton_finalize" runat="server" font-bold="True" onclick="LinkButton_finalize_Click">FINALIZE...</ASP:LinkButton>
 						</p></td>
 			</tr>
 			<tr>
@@ -149,7 +149,7 @@
                       <td>
                         <p>If your County EMSOF Coordinator could find a way to allocate more EMSOF money to your service, would you <strong>want</strong> to, and could you <strong>afford</strong> to add more items to your EMSOF request in this cycle? &nbsp;(Keep in mind that your service would have to pay for the additional item(s) up front, with only partial reimbursement.)</p>
                         <p>
-                          <ASP:CheckBox id="CheckBox_has_wish_list" runat="server" autopostback="True" text='Yes, we have a "wish list".'></ASP:CheckBox></p>
+                          <ASP:CheckBox id="CheckBox_has_wish_list" runat="server" autopostback="True" text='Yes, we have a "wish list".' oncheckedchanged="CheckBox_has_wish_list_CheckedChanged"></ASP:CheckBox></p>
                         <p><small>When changing this setting, wait for the page to refresh.</small></p></td>
                     </tr>
                 </table></td>
@@ -166,7 +166,7 @@
             <tr>
               <td>
 <p>If you are sure you want to withdraw&nbsp;your&nbsp;<strong>entire&nbsp;</strong>request, and surrender all of the above allocated EMSOF funds for use by others...</p>
-                        <p>Check <ASP:CheckBox id="CheckBox_withdraw" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_withdraw" runat="server" text="WITHDRAW"></ASP:Button>.</p></td>
+                        <p>Check <ASP:CheckBox id="CheckBox_withdraw" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_withdraw" runat="server" text="WITHDRAW" onclick="Button_withdraw_Click"></ASP:Button>.</p></td>
             </tr>
         </table></td>
     </tr>

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="county_unrejection.pas" AutoEventWireup="false" Inherits="county_unrejection.TWebForm_county_unrejection" %>
+<%@ Page language="c#" Debug="true" Codebehind="county_unrejection.aspx.cs" AutoEventWireup="True" Inherits="county_unrejection.TWebForm_county_unrejection" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -38,8 +38,8 @@
                       <td bgcolor="#f5f5f5"><strong>
                           <table cellspacing="0" cellpadding="10" width="100%" border="0">
                               <tr>
-                                <td><strong>Requests eligible for UN-rejection</strong></td><td><strong><ASP:LinkButton id="LinkButton_unreject_all" runat="server">UN-reject ALL</ASP:LinkButton></strong></td>
-                                <td><ASP:LinkButton id="LinkButton_done" runat="server">Done</ASP:LinkButton></td>
+                                <td><strong>Requests eligible for UN-rejection</strong></td><td><strong><ASP:LinkButton id="LinkButton_unreject_all" runat="server" onclick="LinkButton_unreject_all_Click">UN-reject ALL</ASP:LinkButton></strong></td>
+                                <td><ASP:LinkButton id="LinkButton_done" runat="server" onclick="LinkButton_county_dictated_appropriations_Click">Done</ASP:LinkButton></td>
                               </tr>
                           </table>&nbsp;</strong></td>
 					</tr>

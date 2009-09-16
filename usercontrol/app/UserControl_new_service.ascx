@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_new_service.pas" Inherits="UserControl_new_service.TWebUserControl_new_service"%>
+<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_new_service.ascx.cs" Inherits="UserControl_new_service.TWebUserControl_new_service"%>
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
     <table cellspacing="0" cellpadding="20" border="0">

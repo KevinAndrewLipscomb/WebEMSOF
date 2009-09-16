@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_service_profile.pas" Inherits="UserControl_service_profile.TWebUserControl_service_profile"%>
+<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_service_profile.ascx.cs" Inherits="UserControl_service_profile.TWebUserControl_service_profile"%>
 <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
   <tr>
     <td>

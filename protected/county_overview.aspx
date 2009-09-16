@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="county_overview.pas" AutoEventWireup="false" Inherits="county_overview.TWebForm_county_overview" %>
+<%@ Page language="c#" Debug="true" Codebehind="county_overview.aspx.cs" AutoEventWireup="True" Inherits="county_overview.TWebForm_county_overview" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -30,7 +30,7 @@
 <p>
         <ASP:RadioButtonList id="RadioButtonList_appropriation" runat="server"></ASP:RadioButtonList></p>
 <p>
-        <ASP:Button id="Button_continue" runat="server" text="Continue"></ASP:Button></p></td>
+        <ASP:Button id="Button_continue" runat="server" text="Continue" onclick="Button_continue_Click"></ASP:Button></p></td>
                     </tr>
                 </table></td>
             </tr>
