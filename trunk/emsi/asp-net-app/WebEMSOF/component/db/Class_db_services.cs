@@ -190,7 +190,7 @@ namespace Class_db_services
                 email_target = email_target + dr["password_reset_email_address"].ToString() + k.COMMA_SPACE;
             }
             this.Close();
-            result = email_target.TrimEnd(new char[] {k.COMMA, k.SPACE});
+            result = email_target.TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
             return result;
         }
 

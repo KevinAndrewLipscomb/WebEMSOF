@@ -199,9 +199,9 @@ namespace Class_biz_accounts
             // Get service's email address of record.
             service_email_address = EmailAddressByKindId("service", service_id);
             self_email_address = SelfEmailAddress();
-            BreakChars[1] = k.SPACE;
+            BreakChars[1] = Convert.ToChar(k.SPACE);
             BreakChars[2] = Convert.ToChar(k.TAB);
-            BreakChars[3] = k.HYPHEN;
+            BreakChars[3] = Convert.ToChar(k.HYPHEN);
             if (be_ok_to_rework)
             {
                 // Send notification to service.

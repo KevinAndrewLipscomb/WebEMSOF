@@ -156,7 +156,7 @@ namespace emsof_request_status_filter
             TableRow_data.Visible = !be_datagrid_empty;
             LinkButton_retransmit_to_state.Enabled = !be_datagrid_empty;
             Table_quick_message.Visible = !be_datagrid_empty;
-            Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {k.COMMA, k.SPACE});
+            Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
             // Clear aggregation vars for next bind, if any.
             p.num_qualifying_requests = 0;
 

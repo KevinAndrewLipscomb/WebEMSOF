@@ -163,7 +163,7 @@ namespace all_emsof_requests
             TableRow_none.Visible = p.be_datagrid_empty;
             TableRow_data.Visible = !p.be_datagrid_empty;
             Table_quick_message.Visible = !p.be_datagrid_empty;
-            Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {k.COMMA, k.SPACE});
+            Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
             // Clear aggregation vars for next bind, if any.
             Label_num_datagrid_rows.Text = p.num_datagrid_rows.ToString();
             p.num_datagrid_rows = 0;

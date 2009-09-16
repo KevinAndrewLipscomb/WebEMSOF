@@ -139,7 +139,7 @@ namespace Class_db_emsof_requests
             {
                 target_id_clause = target_id_clause + dr["master_id"].ToString() + k.COMMA;
             }
-            target_id_clause = target_id_clause.Trim(new char[] {k.COMMA});
+            target_id_clause = target_id_clause.Trim(new char[] {Convert.ToChar(k.COMMA)});
             dr.Close();
             if (target_id_clause != k.EMPTY)
             {
