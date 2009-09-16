@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_equipment_procurement_overview.pas" Inherits="UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview"%>
+<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_equipment_procurement_overview.ascx.cs" Inherits="UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview"%>
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
     <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">

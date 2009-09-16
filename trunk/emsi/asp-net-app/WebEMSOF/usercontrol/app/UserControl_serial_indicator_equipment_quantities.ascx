@@ -1,11 +1,11 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_serial_indicator_equipment_quantities.pas" Inherits="UserControl_serial_indicator_equipment_quantities.TWebUserControl_serial_indicator_equipment_quantities"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_serial_indicator_equipment_quantities.ascx.cs" Inherits="UserControl_serial_indicator_equipment_quantities.TWebUserControl_serial_indicator_equipment_quantities"%>
 <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
   <tr>
     <td>
       <table cellspacing="0" cellpadding="10" border="0">
         <tr>
           <td bgcolor="#f5f5f5"><strong>Equipment:</strong>
-            <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True"></asp:DropDownList>
+            <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True" onselectedindexchanged="DropDownList_equipment_SelectedIndexChanged"></asp:DropDownList>
           </td>
         </tr>
         <tr>

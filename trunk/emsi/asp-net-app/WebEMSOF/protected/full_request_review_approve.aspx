@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ Page language="c#" Debug="true" Codebehind="full_request_review_approve.pas" AutoEventWireup="false" Inherits="full_request_review_approve.TWebForm_full_request_review_approve" %>
+<%@ Page language="c#" Debug="true" Codebehind="full_request_review_approve.aspx.cs" AutoEventWireup="True" Inherits="full_request_review_approve.TWebForm_full_request_review_approve" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
@@ -220,7 +220,7 @@
 							  <td><strong>Proofs of payment</strong></td>
 							  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							  <td>
-								<p align="right"><ASP:LinkButton id="LinkButton_new_proof_of_payment" runat="server" font-bold="True" causesvalidation="False">New</ASP:LinkButton></p></td>
+								<p align="right"><ASP:LinkButton id="LinkButton_new_proof_of_payment" runat="server" font-bold="True" causesvalidation="False" onclick="LinkButton_new_proof_of_payment_Click">New</ASP:LinkButton></p></td>
 							</tr>
 						</table></strong>
 				</td>
@@ -277,7 +277,7 @@
 			  </tr>
 			  <tr>
 				<td>
-				  <p>If you are not ready to disposition this request, <asp:LinkButton id="LinkButton_back_2" runat="server">go back to the previous form</asp:LinkButton>. </p></td>
+				  <p>If you are not ready to disposition this request, <asp:LinkButton id="LinkButton_back_2" runat="server" onclick="LinkButton_back_2_Click">go back to the previous form</asp:LinkButton>. </p></td>
 			  </tr>
 			  <tr>
 				<td>
@@ -291,7 +291,7 @@
                               <table cellspacing="0" cellpadding="5" border="0">
                                   <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td>Check&nbsp; <asp:checkbox id="CheckBox_approve" runat="server">
-						</asp:checkbox>&nbsp;and click <asp:button id="Button_approve" runat="server" text="APPROVE"></asp:button>. </td>
+						</asp:checkbox>&nbsp;and click <asp:button id="Button_approve" runat="server" text="APPROVE" onclick="Button_approve_Click"></asp:button>. </td>
                                   </tr>
                               </table></td>
 					</tr>
@@ -309,7 +309,7 @@
 							<td valign="top">
 							  <textarea rows="3" cols="30" id="TextArea_disapproval_reason" name="TextArea_disapproval_comment" runat="Server"></textarea>
 							</td>
-							<td valign="top">and click <asp:button id="Button_disapprove" runat="server"></asp:button>. </td>
+							<td valign="top">and click <asp:button id="Button_disapprove" runat="server" onclick="Button_disapprove_Click"></asp:button>. </td>
 						  </tr>
 						</table>
 					  </td>
@@ -346,7 +346,7 @@
                               <table cellspacing="0" cellpadding="5" border="0">
                                   <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td>Check&nbsp; <asp:checkbox id="CheckBox_mark_done" runat="server">
-						</asp:checkbox>&nbsp;and click <asp:button id="Button_mark_done" runat="server" text="DONE"></asp:button>. </td>
+						</asp:checkbox>&nbsp;and click <asp:button id="Button_mark_done" runat="server" text="DONE" onclick="Button_mark_done_Click"></asp:button>. </td>
                                   </tr>
                               </table></td>
 					</tr>
@@ -359,7 +359,7 @@
 						<td>
                               <table cellspacing="0" cellpadding="5" border="0">
                                   <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    <td>Check <ASP:CheckBox id="CheckBox_mark_failed" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_failed" runat="server" text="FAILED"></ASP:Button>.</td></tr></table></td></tr>
+                                    <td>Check <ASP:CheckBox id="CheckBox_mark_failed" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_failed" runat="server" text="FAILED" onclick="Button_failed_Click"></ASP:Button>.</td></tr></table></td></tr>
 				  </table>
 				  <table cellspacing="0" cellpadding="10" width="100%" border="0" id="Table_special_promotion" runat="server">
 					  <tr>
@@ -372,7 +372,7 @@
 									  <p><em><small>Note that this request would not normally be ready for reimbursement because not all declared costs have been covered by proven payments. The rules for releasing EMSOF funds in this situation may not be well-defined.</small>
                                         </em>
                                       </p>
-                                      <p>Check <ASP:CheckBox id="CheckBox_special_promotion" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_special_promotion" runat="server" text="SPECIAL PROMOTION"></ASP:Button>.</p></td>
+                                      <p>Check <ASP:CheckBox id="CheckBox_special_promotion" runat="server"></ASP:CheckBox>&nbsp;and click <ASP:Button id="Button_special_promotion" runat="server" text="SPECIAL PROMOTION" onclick="Button_special_promotion_Click"></ASP:Button>.</p></td>
                                   </tr>
                               </table></td>
 					  </tr>
@@ -395,15 +395,15 @@
                       <td><p><table cellspacing="0" cellpadding="10" border="0">
                               <tr id="TableRow_back_step" runat="server">
                                 <td><small>Set this request back to <ASP:Label id="Label_predecessor_status" runat="server"></ASP:Label>.</small></td>
-								<td valign="top"><ASP:Button id="Button_back_step" runat="server" text="Do"></ASP:Button></td>
+								<td valign="top"><ASP:Button id="Button_back_step" runat="server" text="Do" onclick="Button_back_step_Click"></ASP:Button></td>
                               </tr>
                               <tr id="TableRow_force_open" runat="server">
                                 <td><small>Force this request back to NEEDS_SERVICE_FINALIZATION status and make it exempt from normal deadlines.&nbsp; This action will cause <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;to forget about the invoices and proofs of payment that are currently associated with this request.&nbsp; The request must then advance through the entire approval and evidence collection process again.</small></td>
-								<td valign="top"><ASP:Button id="Button_force_open" runat="server" text="Do"></ASP:Button></td>
+								<td valign="top"><ASP:Button id="Button_force_open" runat="server" text="Do" onclick="Button_force_open_Click"></ASP:Button></td>
                               </tr>
 							  <tr id="TableRow_force_closed" runat="server">
 								<td><small>Revoke this request's deadline exemption.&nbsp; This action will prevent the service from making any further modifications to this request.&nbsp; After taking this action, you will still be able to accept or reject the request as usual.</small></td>
-								<td valign="top"><ASP:Button id="Button_force_close" runat="server" text="Do"></ASP:Button></td>
+								<td valign="top"><ASP:Button id="Button_force_close" runat="server" text="Do" onclick="Button_force_close_Click"></ASP:Button></td>
 							  </tr>
 						  </table>
                         </p></td>

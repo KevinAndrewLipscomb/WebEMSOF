@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_values_to_services.pas" Inherits="UserControl_values_to_services.TWebUserControl_values_to_services"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_values_to_services.ascx.cs" Inherits="UserControl_values_to_services.TWebUserControl_values_to_services"%>
 <asp:GridView id="GridView_control" runat="server" gridlines="Horizontal" cellpadding="10" autogeneratecolumns="False" allowsorting="True" emptydatatext="No data available"><Columns>
     <asp:BoundField datafield="fiscal_year" headertext="Cycle" sortexpression="fiscal_year%">
       <HeaderStyle horizontalalign="Left"></HeaderStyle>

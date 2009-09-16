@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="regional_staffer_fiscal_year_selection.pas" AutoEventWireup="false" Inherits="regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection"%>
+<%@ Page language="c#" Debug="true" Codebehind="regional_staffer_fiscal_year_selection.aspx.cs" AutoEventWireup="True" Inherits="regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>

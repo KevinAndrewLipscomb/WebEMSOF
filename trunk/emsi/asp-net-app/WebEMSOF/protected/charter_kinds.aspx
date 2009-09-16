@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="charter_kinds.pas" AutoEventWireup="false" Inherits="charter_kinds.TWebForm_charter_kinds"%>
+<%@ Page language="c#" Debug="true" Codebehind="charter_kinds.aspx.cs" AutoEventWireup="True" Inherits="charter_kinds.TWebForm_charter_kinds"%>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
