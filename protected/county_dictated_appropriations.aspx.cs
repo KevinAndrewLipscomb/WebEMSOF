@@ -386,7 +386,7 @@ namespace county_dictated_appropriations
         {
             if (DropDownList_quick_message_targets.SelectedValue == "with_allocations")
             {
-                Label_distribution_list.Text = (p.distribution_list_for_services_with_allocations + k.SPACE).TrimEnd(new char[] {k.COMMA, k.SPACE});
+                Label_distribution_list.Text = (p.distribution_list_for_services_with_allocations + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
             }
             else if (DropDownList_quick_message_targets.SelectedValue == "emsof_participants_true")
             {

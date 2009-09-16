@@ -53,9 +53,9 @@ namespace Class_biz_notifications.Units
         //Constructor  Class_biz_notifications()
         static Class_biz_notifications()
         {
-            BreakChars[1] = k.SPACE;
+            BreakChars[1] = Convert.ToChar(k.SPACE);
             BreakChars[2] = Convert.ToChar(k.TAB);
-            BreakChars[3] = k.HYPHEN;
+            BreakChars[3] = Convert.ToChar(k.HYPHEN);
         }
     } // end Class_biz_notifications
 
