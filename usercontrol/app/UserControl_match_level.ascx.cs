@@ -103,7 +103,7 @@ namespace UserControl_match_level
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebUserControl_match_level_PreRender;
         }
 

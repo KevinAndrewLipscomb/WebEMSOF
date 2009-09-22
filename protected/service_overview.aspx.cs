@@ -35,7 +35,7 @@ namespace service_overview
             this.DataGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_ItemDataBound);
             this.DataGrid.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_ItemCommand);
             this.PreRender += this.TWebForm_service_overview_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

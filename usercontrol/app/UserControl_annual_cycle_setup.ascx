@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_annual_cycle_setup.ascx.cs" Inherits="UserControl_annual_cycle_setup.TWebUserControl_annual_cycle_setup"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_annual_cycle_setup.ascx.cs" Inherits="UserControl_annual_cycle_setup.TWebUserControl_annual_cycle_setup"%>
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
     <table cellspacing="0" cellpadding="20" border="0">
@@ -27,7 +27,7 @@
               </tr>
               <tr>
                 <td></td>
-                <td><asp:Button id="Button_submit" runat="server" text="Submit"></asp:Button></td>
+                <td><asp:Button id="Button_submit" runat="server" text="Submit" onclick="Button_submit_Click"></asp:Button></td>
                 <td></td>
               </tr>
             </TABLE>

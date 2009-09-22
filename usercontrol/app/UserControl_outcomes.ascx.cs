@@ -135,7 +135,7 @@ namespace UserControl_outcomes
         private void InitializeComponent()
         {
             this.PreRender += this.TWebUserControl_outcomes_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_outcomes_PreRender(object sender, System.EventArgs e)

@@ -187,7 +187,7 @@ namespace UserControl_charter_kind
         private void InitializeComponent()
         {
             this.PreRender += this.TWebUserControl_charter_kind_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_charter_kind_PreRender(object sender, System.EventArgs e)

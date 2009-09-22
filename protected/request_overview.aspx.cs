@@ -29,7 +29,7 @@ namespace request_overview
         {
             this.DataGrid_items.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_items_ItemCommand);
             this.DataGrid_items.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_items_ItemDataBound);
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_request_overview_PreRender;
         }
 

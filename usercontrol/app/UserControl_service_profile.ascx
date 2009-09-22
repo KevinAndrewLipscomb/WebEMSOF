@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_service_profile.ascx.cs" Inherits="UserControl_service_profile.TWebUserControl_service_profile"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_service_profile.ascx.cs" Inherits="UserControl_service_profile.TWebUserControl_service_profile"%>
 <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
   <tr>
     <td>
@@ -46,7 +46,7 @@
                     <table cellspacing="0" cellpadding="0" border="0">
                       <tr>
                         <td>
-              <asp:TextBox runat="server" columns="5" maxlength="5" id="TextBox_affiliate_num" enabled="false"></asp:TextBox>*<ASP:Button id="Button_lookup" runat="server" causesvalidation="False" text="LOOKUP"></ASP:Button>
+              <asp:TextBox runat="server" columns="5" maxlength="5" id="TextBox_affiliate_num" enabled="false"></asp:TextBox>*<ASP:Button id="Button_lookup" runat="server" causesvalidation="False" text="LOOKUP" onclick="Button_lookup_Click"></ASP:Button>
                         </td>
                         <td nowrap="True"><small><small><asp:Label id="Label_lookup_arrow" runat="server">&lt;--</asp:Label></small></small></td>
                         <td><small><small><em><asp:Label id="Label_lookup_hint" runat="server">Lookup by partial or full Affiliate # or Name</asp:Label></em></small></small></td>
@@ -56,15 +56,15 @@
                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                   <td valign="middle">
                     <small>
-                      <ASP:LinkButton id="LinkButton_reset" runat="server" causesvalidation="False" enabled="False">New lookup</ASP:LinkButton>
+                      <ASP:LinkButton id="LinkButton_reset" runat="server" causesvalidation="False" enabled="False" onclick="LinkButton_reset_Click">New lookup</ASP:LinkButton>
                     </small>
                   </td>
                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                   <td valign="middle"></td>
                 </tr>
               </table>
-              <asp:LinkButton id="LinkButton_go_to_match_first" runat="server" text='<IMG src="~/protected/image/first_track_blue16_h.png" alt="First match" border="0" height="16" width="16" />' causesvalidation="False" visible="False"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_prior" runat="server" text='<IMG src="~/protected/image/play_blue16_h-flipped.png" alt="Prior match" border="0" height="16" width="16" />' causesvalidation="False" visible="False"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_next" runat="server" text='<IMG src="~/protected/image/play_blue16_h.png" alt="Next match" border="0" height="16" width="16" />' causesvalidation="False" visible="False"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_last" runat="server" text='<IMG src="~/protected/image/last_track_blue16_h.png" alt="Last match" border="0" height="16" width="16" />' causesvalidation="False" visible="False"></asp:LinkButton>
-              <asp:DropDownList runat="server" autopostback="True" id="DropDownList_affiliate_num" visible="False"></asp:DropDownList><br></font></td>
+              <asp:LinkButton id="LinkButton_go_to_match_first" runat="server" text='<IMG src="~/protected/image/first_track_blue16_h.png" alt="First match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_first_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_prior" runat="server" text='<IMG src="~/protected/image/play_blue16_h-flipped.png" alt="Prior match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_prior_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_next" runat="server" text='<IMG src="~/protected/image/play_blue16_h.png" alt="Next match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_next_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_last" runat="server" text='<IMG src="~/protected/image/last_track_blue16_h.png" alt="Last match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_last_Click"></asp:LinkButton>
+              <asp:DropDownList runat="server" autopostback="True" id="DropDownList_affiliate_num" visible="False" onselectedindexchanged="DropDownList_affiliate_num_SelectedIndexChanged"></asp:DropDownList><br></font></td>
           <td nowrap="true" valign="top">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_affiliate_num" errormessage="Please enter Affiliate num." font-bold="True" id="RequiredFieldValidator_affiliate_num">!ERR!</asp:RequiredFieldValidator></td>
         </tr>
@@ -113,14 +113,14 @@
                         <tt>http://</tt><asp:TextBox runat="server" columns="40" maxlength="127" id="TextBox_website_address" enabled="False"></asp:TextBox></td>
           <td nowrap="true">
         <asp:RegularExpressionValidator id="RegularExpressionValidator_website_address" runat="server" errormessage="Please enter a valid Website address." font-bold="True" controltovalidate="TextBox_website_address" validationexpression="[0-9a-zA-Z\-_./]+">!ERR!</asp:RegularExpressionValidator>
-        <asp:CustomValidator id="CustomValidator_website_address" runat="server" errormessage="Please enter a valid Website address domain name." font-bold="True" controltovalidate="TextBox_website_address">!ERR!</asp:CustomValidator></td>
+        <asp:CustomValidator id="CustomValidator_website_address" runat="server" errormessage="Please enter a valid Website address domain name." font-bold="True" controltovalidate="TextBox_website_address" onservervalidate="CustomValidator_website_address_ServerValidate">!ERR!</asp:CustomValidator></td>
         </tr>
         <tr>
           <td align="right" valign="top"><font class="">Choose the value that best describes your organization:</font></td>
           <td><font class="">
           <asp:UpdatePanel id="UpdatePanel_charter_kind" runat="server" updatemode="Conditional">
                             <ContentTemplate>
-                              <asp:DropDownList id="DropDownList_charter_kind" runat="server" autopostback="True" enabled="False"></asp:DropDownList>*
+                              <asp:DropDownList id="DropDownList_charter_kind" runat="server" autopostback="True" enabled="False" onselectedindexchanged="DropDownList_charter_kind_SelectedIndexChanged"></asp:DropDownList>*
                         <asp:RequiredFieldValidator id="RequiredFieldValidator_charter_other_kind" runat="server" errormessage="Please describe what Other kind of organization you are." font-bold="True" controltovalidate="TextBox_charter_other_kind">!ERR!</asp:RequiredFieldValidator><br>
                               <asp:Label id="Label_charter_other_kind" runat="server" enabled="False" font-size="X-Small" text="If Other, specify:"></asp:Label>
                               <asp:TextBox id="TextBox_charter_other_kind" runat="server" enabled="false" maxlength="255" columns="56"></asp:TextBox>
@@ -180,7 +180,7 @@
         <asp:RegularExpressionValidator id="RegularExpressionValidator_corpadmin_email_address" runat="server" errormessage="Please enter a valid Corporate/Admin email address" font-bold="True" controltovalidate="TextBox_corpadmin_email_address"
           validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*">!ERR!</asp:RegularExpressionValidator>
         <asp:CustomValidator id="CustomValidator_corpadmin_email_address" runat="server" errormessage='Please enter a Corporate/Admin email address with a valid Domain Name (the part after the "@").' font-bold="True"
-          controltovalidate="TextBox_corpadmin_email_address">!ERR!</asp:CustomValidator></td>
+          controltovalidate="TextBox_corpadmin_email_address" onservervalidate="CustomValidator_corpadmin_email_address_ServerValidate">!ERR!</asp:CustomValidator></td>
         </tr>
         <!-- - --></table></td></tr><!-- - -->
       </table>
@@ -203,7 +203,7 @@
           <tr>
             <td valign="top" align="right"><font class="">Does your service plan to participate in this year's EMSOF Provider Equipment grant program?*</font></td>
             <td><font class="">
-                <asp:RadioButtonList id="RadioButtonList_be_emsof_participant" runat="server" autopostback="True" repeatdirection="Horizontal" enabled="False">
+                <asp:RadioButtonList id="RadioButtonList_be_emsof_participant" runat="server" autopostback="True" repeatdirection="Horizontal" enabled="False" onselectedindexchanged="RadioButtonList_be_emsof_participant_SelectedIndexChanged">
                   <asp:ListItem selected="True" value="TRUE">Yes</asp:ListItem>
                   <asp:ListItem value="FALSE">No</asp:ListItem>
                 </asp:RadioButtonList>
@@ -291,7 +291,7 @@
           <td nowrap="true">
         <asp:RegularExpressionValidator id="RegularExpressionValidator_coo_email_address" runat="server" errormessage="Please enter a valid operations officer email address." font-bold="True" controltovalidate="TextBox_coo_email_address"
                                         validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*">!ERR!</asp:RegularExpressionValidator>
-        <asp:CustomValidator id="CustomValidator_coo_email_address" runat="server" errormessage='Please enter an operations officer email address with a valid domain name (the part after the "@").' font-bold="True" controltovalidate="TextBox_coo_email_address">!ERR!</asp:CustomValidator></td>
+        <asp:CustomValidator id="CustomValidator_coo_email_address" runat="server" errormessage='Please enter an operations officer email address with a valid domain name (the part after the "@").' font-bold="True" controltovalidate="TextBox_coo_email_address" onservervalidate="CustomValidator_coo_email_address_ServerValidate">!ERR!</asp:CustomValidator></td>
         </tr>
         <tr>
           <td align="right"><font class="">Mobile phone/pager #:</font></td>
@@ -325,7 +325,7 @@
               <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_md_name" enabled="False"></asp:TextBox>
             </font></td>
           <td nowrap="true">
-        <asp:CustomValidator id="CustomValidator_be_als_medical_director_name" runat="server" errormessage="Medical Director name is required for an ALS service." font-bold="True">!ERR!</asp:CustomValidator></td>
+        <asp:CustomValidator id="CustomValidator_be_als_medical_director_name" runat="server" errormessage="Medical Director name is required for an ALS service." font-bold="True" onservervalidate="CustomValidator_be_als_medical_director_name_ServerValidate">!ERR!</asp:CustomValidator></td>
         </tr>
         <tr>
           <td align="right"><font class="">Office phone #:</font></td>
@@ -353,7 +353,7 @@
           <td nowrap="true">
         <asp:RegularExpressionValidator id="RegularExpressionValidator_md_email_address" runat="server" errormessage="Please enter a valid Medical director email address." font-bold="True" controltovalidate="TextBox_md_email_address"
                                         validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*">!ERR!</asp:RegularExpressionValidator>
-        <asp:CustomValidator id="CustomValidator_md_email_address" runat="server" errormessage='Please enter a Medical director email address with a valid domain name (the part after the "@").' font-bold="True" controltovalidate="TextBox_md_email_address">!ERR!</asp:CustomValidator></td>
+        <asp:CustomValidator id="CustomValidator_md_email_address" runat="server" errormessage='Please enter a Medical director email address with a valid domain name (the part after the "@").' font-bold="True" controltovalidate="TextBox_md_email_address" onservervalidate="CustomValidator_md_email_address_ServerValidate">!ERR!</asp:CustomValidator></td>
         </tr>
         <tr>
           <td align="right"><font class="">Mobile phone or pager #:</font></td>
@@ -515,7 +515,7 @@
           <td nowrap="true">
             <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_num_ambulances" errormessage="Please enter Number of ambulances." font-bold="True" id="RequiredFieldValidator_num_ambulances">!ERR!</asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator runat="server" validationexpression="\d*" controltovalidate="TextBox_num_ambulances" errormessage="Please enter a valid Number of ambulances." font-bold="True" id="RegularExpressionValidator_num_ambulances">!ERR!</asp:RegularExpressionValidator><asp:CustomValidator id="CustomValidator_num_ambulances" runat="server" errormessage="Please enter a number of ambulances no higher than the number of your vehicles." font-bold="True"
-                             controltovalidate="TextBox_num_ambulances">!ERR!</asp:CustomValidator></td>
+                             controltovalidate="TextBox_num_ambulances" onservervalidate="CustomValidator_num_ambulances_ServerValidate">!ERR!</asp:CustomValidator></td>
         </tr>
         <tr>
           <td align="right"><font class="">Has a local government body designated you as the primary EMS response agency for a specific geographic area?*</font></td>
@@ -559,4 +559,4 @@
   </tr>
 </table>
 <br>
-<ASP:Button id="Button_submit" text="SUBMIT profile for Annual Survey" runat="server" enabled="False"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False"></ASP:Button>
+<ASP:Button id="Button_submit" text="SUBMIT profile for Annual Survey" runat="server" enabled="False" onclick="Button_submit_Click"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False" onclick="Button_delete_Click"></ASP:Button>

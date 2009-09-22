@@ -167,7 +167,7 @@ namespace UserControl_workflow
         private void InitializeComponent()
         {
             this.PreRender += this.TWebUserControl_workflow_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_workflow_PreRender(object sender, System.EventArgs e)

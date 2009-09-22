@@ -38,7 +38,7 @@ namespace county_dictated_appropriations
             this.DataGrid_service_appropriations.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_service_appropriations_DeleteCommand);
             this.DataGrid_service_appropriations.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_service_appropriations_UpdateCommand);
             this.PreRender += this.TWebForm_county_dictated_appropriations_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

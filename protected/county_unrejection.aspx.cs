@@ -37,7 +37,7 @@ namespace county_unrejection
             this.DataGrid_unrejectable_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.Datagrid_unrejectable_requests_ItemCommand);
             this.DataGrid_unrejectable_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.Datagrid_unrejectable_requests_SortCommand);
             this.DataGrid_unrejectable_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.Datagrid_unrejectable_requests_ItemDataBound);
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_county_unrejection_PreRender;
         }
 

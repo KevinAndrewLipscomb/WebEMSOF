@@ -16,14 +16,10 @@ using UserControl_regional_staffer_new_binder;
 using UserControl_regional_staffer_old_binder;
 namespace UserControl_regional_staffer_binder
 {
-    public class TWebUserControl_regional_staffer_binder: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_regional_staffer_binder: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        protected TabContainer TabContainer_control = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_content = null;
-        protected TabPanel TabPanel_new = null;
-        protected TabPanel TabPanel_config = null;
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
             {
@@ -115,7 +111,7 @@ namespace UserControl_regional_staffer_binder
         private void InitializeComponent()
         {
             this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebUserControl_regional_staffer_binder_PreRender;
         }
 

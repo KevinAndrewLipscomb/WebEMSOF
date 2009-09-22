@@ -35,7 +35,7 @@ namespace request_item_detail
         private void InitializeComponent()
         {
             this.PreRender += this.TWebForm_request_item_detail_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

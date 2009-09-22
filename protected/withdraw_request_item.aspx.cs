@@ -32,7 +32,7 @@ namespace withdraw_request_item
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_withdraw_request_item_PreRender;
         }
 

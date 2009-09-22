@@ -32,14 +32,14 @@ namespace exception
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_exception_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
             System.Exception the_exception;
-            switch(NatureOfVisit("p"))
+            switch(NatureOfVisit("exception.p"))
             {
                 case nature_of_visit_type.VISIT_INITIAL:
                     Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - exception";

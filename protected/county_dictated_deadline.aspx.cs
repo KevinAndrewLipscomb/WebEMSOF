@@ -35,7 +35,7 @@ namespace county_dictated_deadline
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_county_dictated_deadline_PreRender;
         }
 

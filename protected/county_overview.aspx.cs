@@ -34,7 +34,7 @@ namespace county_overview
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_county_overview_PreRender;
         }
 

@@ -18,13 +18,11 @@ namespace UserControl_analyses_binder
         public uint tab_index;
     } // end p_type
 
-    public class TWebUserControl_analyses_binder: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_analyses_binder: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_content = null;
-        protected TabContainer TabContainer_control = null;
         // TSSI_2 = 2;
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
             {
@@ -77,7 +75,7 @@ namespace UserControl_analyses_binder
         {
             this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
             this.PreRender += this.TWebUserControl_analyses_binder_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_analyses_binder_PreRender(object sender, System.EventArgs e)

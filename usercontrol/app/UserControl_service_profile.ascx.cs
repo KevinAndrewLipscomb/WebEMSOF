@@ -13,127 +13,10 @@ using Class_biz_services;
 using Class_biz_user;
 namespace UserControl_service_profile
 {
-    public class TWebUserControl_service_profile: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_service_profile: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        protected System.Web.UI.WebControls.TextBox TextBox_affiliate_num = null;
-        protected System.Web.UI.WebControls.DropDownList DropDownList_affiliate_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_name = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_business_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_business_fax_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_website_address = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_corpadmin_contact_name = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_corpadmin_primary_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_corpadmin_secondary_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_corpadmin_email_address = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_emsof_nonparticipation_reason = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_emsof_contact_name = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_emsof_contact_primary_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_emsof_contact_sms_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_coo_name = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_coo_work_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_coo_home_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_coo_email_address = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_coo_mobile_phone_or_pager_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_md_name = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_md_office_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_md_home_phone_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_md_email_address = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_md_mobile_phone_or_pager_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_physical_street_address_line_1 = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_physical_street_address_line_2 = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_physical_city = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_physical_zip_code = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_mail_address_line_1 = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_mail_address_line_2 = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_mail_city = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_mail_zip_code = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_qrs_unrecognized = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_qrs = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_bls_amb = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_als_amb = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_als_squad = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_air_amb = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_rescue_unrecognized = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_rescue = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_be_pa_turnpike_contractor = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_num_doh_licensed_vehicles = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_num_ambulances = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_charter_other_kind = null;
-        protected System.Web.UI.WebControls.Button Button_submit = null;
-        protected System.Web.UI.WebControls.Button Button_delete = null;
-        protected System.Web.UI.WebControls.Button Button_lookup = null;
-        protected System.Web.UI.WebControls.Label Label_lookup_arrow = null;
-        protected System.Web.UI.WebControls.Label Label_lookup_hint = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_reset = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_affiliate_num = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_name = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_county_code = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_charter_kind = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_corpadmin_contact_name = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_corpadmin_primary_phone_num = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_coo_name = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_coo_work_phone_num = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_physical_street_address_line_1 = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_physical_city = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_physical_zip_code = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_mail_address_line_1 = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_mail_city = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_mail_zip_code = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_num_doh_licensed_vehicles = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_num_doh_licensed_vehicles = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_num_ambulances = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_num_ambulances = null;
-        protected System.Web.UI.WebControls.DropDownList DropDownList_county = null;
-        protected System.Web.UI.WebControls.DropDownList DropDownList_charter_kind = null;
-        protected System.Web.UI.WebControls.RadioButtonList RadioButtonList_be_emsof_participant = null;
-        protected System.Web.UI.WebControls.RadioButtonList RadioButtonList_be_dera = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_business_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_business_fax_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_website_address = null;
-        protected System.Web.UI.UpdatePanel UpdatePanel_charter_kind = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_corpadmin_primary_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_corpadmin_secondary_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_corpadmin_email_address = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_corpadmin_email_address = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_website_address = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_be_emsof_participant = null;
-        protected System.Web.UI.UpdatePanel UpdatePanel_be_emsof_particpant = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_emsof_contact_primary_phone_num = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_emsof_contact_primary_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_emsof_contact_sms_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_coo_work_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_coo_home_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_coo_email_address = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_coo_email_address = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_coo_mobile_phone_or_pager_num = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_be_als_medical_director_name = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_md_office_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_md_home_phone_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_md_email_address = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_md_email_address = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_md_mobile_phone_or_pager_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_physical_zip_code = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_mail_zip_code = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_num_ambulances = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_be_dera = null;
         protected System.Web.UI.WebControls.CustomValidator CustomValidator_emsof_contact_name = null;
-        protected System.Web.UI.HtmlControls.HtmlTableRow TableRow_emsof_contact_name = null;
-        protected System.Web.UI.HtmlControls.HtmlTableRow TableRow_emsof_contact_primary_phone_num = null;
-        protected System.Web.UI.HtmlControls.HtmlTableRow TableRow_emsof_contact_sms_phone_num = null;
-        protected System.Web.UI.WebControls.Label Label_emsof_nonparticipation_reason = null;
-        protected System.Web.UI.WebControls.Label Label_charter_other_kind = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_emsof_contact_name = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_charter_other_kind = null;
-        protected System.Web.UI.WebControls.RadioButtonList RadioButtonList_be_valid_profile = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_federal_tax_id = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_federal_tax_id = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_federal_tax_id = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_go_to_match_prior = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_go_to_match_next = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_go_to_match_last = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_go_to_match_first = null;
-        protected System.Web.UI.WebControls.RadioButtonList RadioButtonList_be_distressed = null;
         private void Clear()
         {
             TextBox_affiliate_num.Text = k.EMPTY;
@@ -279,7 +162,7 @@ namespace UserControl_service_profile
 
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
             {
@@ -488,25 +371,8 @@ namespace UserControl_service_profile
         // / </summary>
         private void InitializeComponent()
         {
-            this.Button_lookup.Click += new System.EventHandler(this.Button_lookup_Click);
-            this.LinkButton_reset.Click += new System.EventHandler(this.LinkButton_reset_Click);
-            this.LinkButton_go_to_match_first.Click += new System.EventHandler(this.LinkButton_go_to_match_first_Click);
-            this.LinkButton_go_to_match_prior.Click += new System.EventHandler(this.LinkButton_go_to_match_prior_Click);
-            this.LinkButton_go_to_match_next.Click += new System.EventHandler(this.LinkButton_go_to_match_next_Click);
-            this.LinkButton_go_to_match_last.Click += new System.EventHandler(this.LinkButton_go_to_match_last_Click);
-            this.DropDownList_affiliate_num.SelectedIndexChanged += new System.EventHandler(this.DropDownList_affiliate_num_SelectedIndexChanged);
-            this.CustomValidator_website_address.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_website_address_ServerValidate);
-            this.DropDownList_charter_kind.SelectedIndexChanged += new System.EventHandler(this.DropDownList_charter_kind_SelectedIndexChanged);
-            this.CustomValidator_corpadmin_email_address.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_corpadmin_email_address_ServerValidate);
-            this.RadioButtonList_be_emsof_participant.SelectedIndexChanged += new System.EventHandler(this.RadioButtonList_be_emsof_participant_SelectedIndexChanged);
-            this.CustomValidator_coo_email_address.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_coo_email_address_ServerValidate);
-            this.CustomValidator_be_als_medical_director_name.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_be_als_medical_director_name_ServerValidate);
-            this.CustomValidator_md_email_address.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_md_email_address_ServerValidate);
-            this.CustomValidator_num_ambulances.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_num_ambulances_ServerValidate);
-            this.Button_submit.Click += new System.EventHandler(this.Button_submit_Click);
-            this.Button_delete.Click += new System.EventHandler(this.Button_delete_Click);
             this.PreRender += this.TWebUserControl_service_profile_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_service_profile_PreRender(object sender, System.EventArgs e)
@@ -522,49 +388,49 @@ namespace UserControl_service_profile
             return result;
         }
 
-        private void CustomValidator_num_ambulances_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_num_ambulances_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = (uint.Parse(k.Safe(TextBox_num_ambulances.Text, k.safe_hint_type.NUM)) <= uint.Parse(k.Safe(TextBox_num_doh_licensed_vehicles.Text, k.safe_hint_type.NUM)));
 
         }
 
-        private void RadioButtonList_be_emsof_participant_SelectedIndexChanged(object sender, System.EventArgs e)
+        protected void RadioButtonList_be_emsof_participant_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             ManageEmsofControlEnablements();
         }
 
-        private void CustomValidator_md_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_md_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = k.BeValidDomainPartOfEmailAddress(k.Safe(TextBox_md_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS));
         }
 
-        private void CustomValidator_be_als_medical_director_name_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_be_als_medical_director_name_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = !((CheckBox_be_als_amb.Checked || CheckBox_be_als_squad.Checked || CheckBox_be_air_amb.Checked) && (TextBox_md_name.Text == k.EMPTY));
 
         }
 
-        private void CustomValidator_coo_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_coo_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = k.BeValidDomainPartOfEmailAddress(k.Safe(TextBox_coo_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS));
         }
 
-        private void CustomValidator_website_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_website_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = k.BeValidDomainPartOfWebAddress(k.Safe(TextBox_website_address.Text, k.safe_hint_type.HTTP_TARGET));
         }
 
-        private void CustomValidator_corpadmin_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_corpadmin_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = k.BeValidDomainPartOfEmailAddress(k.Safe(TextBox_corpadmin_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS));
         }
 
-        private void DropDownList_charter_kind_SelectedIndexChanged(object sender, System.EventArgs e)
+        protected void DropDownList_charter_kind_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             ManageCharterControlEnablements();
         }
 
-        private void Button_submit_Click(object sender, System.EventArgs e)
+        protected void Button_submit_Click(object sender, System.EventArgs e)
         {
             if (Page.IsValid)
             {
@@ -585,36 +451,36 @@ namespace UserControl_service_profile
             }
         }
 
-        private void DropDownList_affiliate_num_SelectedIndexChanged(object sender, System.EventArgs e)
+        protected void DropDownList_affiliate_num_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             PresentRecord(k.Safe(DropDownList_affiliate_num.SelectedValue, k.safe_hint_type.NUM));
         }
 
-        private void LinkButton_go_to_match_first_Click(object sender, System.EventArgs e)
+        protected void LinkButton_go_to_match_first_Click(object sender, System.EventArgs e)
         {
             DropDownList_affiliate_num.SelectedIndex = 1;
             PresentRecord(k.Safe(DropDownList_affiliate_num.SelectedValue, k.safe_hint_type.NUM));
         }
 
-        private void LinkButton_go_to_match_prior_Click(object sender, System.EventArgs e)
+        protected void LinkButton_go_to_match_prior_Click(object sender, System.EventArgs e)
         {
             DropDownList_affiliate_num.SelectedIndex = Math.Max(1, (DropDownList_affiliate_num.SelectedIndex - 1));
             PresentRecord(k.Safe(DropDownList_affiliate_num.SelectedValue, k.safe_hint_type.NUM));
         }
 
-        private void LinkButton_go_to_match_next_Click(object sender, System.EventArgs e)
+        protected void LinkButton_go_to_match_next_Click(object sender, System.EventArgs e)
         {
             DropDownList_affiliate_num.SelectedIndex = Math.Min((DropDownList_affiliate_num.SelectedIndex + 1), (DropDownList_affiliate_num.Items.Count - 1));
             PresentRecord(k.Safe(DropDownList_affiliate_num.SelectedValue, k.safe_hint_type.NUM));
         }
 
-        private void LinkButton_go_to_match_last_Click(object sender, System.EventArgs e)
+        protected void LinkButton_go_to_match_last_Click(object sender, System.EventArgs e)
         {
             DropDownList_affiliate_num.SelectedIndex = DropDownList_affiliate_num.Items.Count - 1;
             PresentRecord(k.Safe(DropDownList_affiliate_num.SelectedValue, k.safe_hint_type.NUM));
         }
 
-        private void Button_delete_Click(object sender, System.EventArgs e)
+        protected void Button_delete_Click(object sender, System.EventArgs e)
         {
             if (p.biz_services.Delete(k.Safe(TextBox_affiliate_num.Text, k.safe_hint_type.ALPHANUM)))
             {
@@ -626,7 +492,7 @@ namespace UserControl_service_profile
             }
         }
 
-        private void LinkButton_reset_Click(object sender, System.EventArgs e)
+        protected void LinkButton_reset_Click(object sender, System.EventArgs e)
         {
             SetLookupMode();
         }
@@ -684,7 +550,7 @@ namespace UserControl_service_profile
             RadioButtonList_be_distressed.Enabled = ablement;
         }
 
-        private void Button_lookup_Click(object sender, System.EventArgs e)
+        protected void Button_lookup_Click(object sender, System.EventArgs e)
         {
             uint num_matches;
             string saved_affiliate_num;

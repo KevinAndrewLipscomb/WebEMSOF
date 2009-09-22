@@ -10,23 +10,9 @@ using Class_biz_counties;
 using Class_biz_services;
 namespace UserControl_new_service
 {
-    public class TWebUserControl_new_service: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_new_service: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        protected System.Web.UI.UpdatePanel UpdatePanel_control = null;
-        protected System.Web.UI.WebControls.Button Button_submit = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_service_name = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_affiliate_num = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_email_address = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_service_name = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_affiliate_num = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_affiliate_num = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_email_address = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_email_address = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_email_address = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_county = null;
-        protected System.Web.UI.WebControls.DropDownList DropDownList_county = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_affiliate_num = null;
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -107,7 +93,7 @@ namespace UserControl_new_service
 
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
             {
@@ -143,11 +129,8 @@ namespace UserControl_new_service
         // / </summary>
         private void InitializeComponent()
         {
-            this.Button_submit.Click += new System.EventHandler(this.Button_submit_Click);
-            this.CustomValidator_email_address.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_email_address_ServerValidate);
-            this.CustomValidator_affiliate_num.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_affiliate_num_ServerValidate);
             this.PreRender += this.TWebUserControl_new_service_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_new_service_PreRender(object sender, System.EventArgs e)
@@ -163,12 +146,12 @@ namespace UserControl_new_service
             return result;
         }
 
-        private void CustomValidator_affiliate_num_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_affiliate_num_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = !p.biz_services.BeKnown(k.Safe(TextBox_affiliate_num.Text, k.safe_hint_type.NUM));
         }
 
-        private void Button_submit_Click(object sender, System.EventArgs e)
+        protected void Button_submit_Click(object sender, System.EventArgs e)
         {
             if (Page.IsValid)
             {
@@ -196,7 +179,7 @@ namespace UserControl_new_service
             DropDownList_county.ClearSelection();
         }
 
-        private void CustomValidator_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = k.BeValidDomainPartOfEmailAddress(k.Safe(TextBox_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS));
         }

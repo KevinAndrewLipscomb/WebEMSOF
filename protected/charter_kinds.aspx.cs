@@ -29,7 +29,7 @@ namespace charter_kinds
         private void InitializeComponent()
         {
             this.PreRender += this.TWebForm_charter_kinds_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

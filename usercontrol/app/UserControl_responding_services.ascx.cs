@@ -10,14 +10,9 @@ using Class_biz_services;
 namespace UserControl_responding_services
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.pas
-    public class TWebUserControl_responding_services: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_responding_services: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        protected System.Web.UI.WebControls.DataGrid DataGrid_control = null;
-        protected System.Web.UI.UpdatePanel UpdatePanel_control = null;
-        protected System.Web.UI.WebControls.Label Label_num_respondents = null;
-        protected System.Web.UI.WebControls.Label Label_num_participants = null;
-        protected System.Web.UI.WebControls.Label Label_num_nonparticipants = null;
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -98,7 +93,7 @@ namespace UserControl_responding_services
 
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
             {
@@ -146,7 +141,7 @@ namespace UserControl_responding_services
             this.DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_control_SortCommand);
             this.DataGrid_control.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_control_ItemCommand);
             this.PreRender += this.TWebUserControl_responding_services_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_responding_services_PreRender(object sender, System.EventArgs e)

@@ -28,7 +28,7 @@ namespace equipment_procurement_detail
         {
             this.GridView_control.Sorting += new System.Web.UI.WebControls.GridViewSortEventHandler(this.GridView_control_Sorting);
             this.PreRender += this.TWebForm_equipment_procurement_detail_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
