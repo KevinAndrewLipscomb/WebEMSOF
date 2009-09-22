@@ -33,7 +33,7 @@ namespace emsof_request_status_filter
             this.DataGrid_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_requests_SortCommand);
             this.DataGrid_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_requests_ItemCommand);
             this.PreRender += this.TWebForm_emsof_request_status_filter_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

@@ -144,7 +144,7 @@ namespace UserControl_values_to_services
         {
             this.GridView_control.Sorting += new System.Web.UI.WebControls.GridViewSortEventHandler(this.GridView_control_Sorting);
             this.PreRender += this.TWebUserControl_values_to_services_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_values_to_services_PreRender(object sender, System.EventArgs e)

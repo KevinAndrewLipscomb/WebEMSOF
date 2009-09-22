@@ -31,7 +31,7 @@ namespace delete_service_appropriation
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_delete_service_appropriation_PreRender;
         }
 

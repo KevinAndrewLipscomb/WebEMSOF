@@ -14,11 +14,9 @@ using System.Web.UI.WebControls;
 namespace responding_services_detail
 {
     // Derived from KiAspdotnetFramework/protected/template~protected~nonlanding.pas~template
-    public class TWebForm_responding_services_detail: ki_web_ui.page_class
+    public partial class TWebForm_responding_services_detail: ki_web_ui.page_class
     {
         private p_type p;
-        protected new System.Web.UI.HtmlControls.HtmlTitle Title = null;
-        protected System.Web.UI.UpdatePanel UpdatePanel_control = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -26,10 +24,10 @@ namespace responding_services_detail
         private void InitializeComponent()
         {
             this.PreRender += this.TWebForm_responding_services_detail_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!IsPostBack)
             {

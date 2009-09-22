@@ -25,28 +25,23 @@ namespace regional_staffer_fiscal_year_selection
         public TClass_db db;
     } // end p_type
 
-    public class TWebForm_regional_staffer_fiscal_year_selection: ki_web_ui.page_class
+    public partial class TWebForm_regional_staffer_fiscal_year_selection: ki_web_ui.page_class
     {
         private p_type p;
-        protected new System.Web.UI.HtmlControls.HtmlGenericControl Title = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         protected System.Web.UI.WebControls.Label Label_regional_staffer_name = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_appropriation = null;
-        protected System.Web.UI.WebControls.RadioButtonList RadioButtonList_appropriation = null;
-        protected System.Web.UI.WebControls.Button Button_continue = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            this.Button_continue.Click += new System.EventHandler(this.Button_continue_Click);
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_regional_staffer_fiscal_year_selection_PreRender;
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             MySqlDataReader dr;
             string regional_staffer_user_email_address;
@@ -128,7 +123,7 @@ namespace regional_staffer_fiscal_year_selection
             SessionSet("regional_staffer_fiscal_year_selection.p", p);
         }
 
-        private void Button_continue_Click(object sender, System.EventArgs e)
+        protected void Button_continue_Click(object sender, System.EventArgs e)
         {
             SessionSet("state_dictated_appropriation_id", k.Safe(RadioButtonList_appropriation.SelectedValue, k.safe_hint_type.NUM));
             DropCrumbAndTransferTo("regional_compliance_check_overview.aspx");

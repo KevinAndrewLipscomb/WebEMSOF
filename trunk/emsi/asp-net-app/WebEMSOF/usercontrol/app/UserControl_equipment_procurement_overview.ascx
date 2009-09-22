@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_equipment_procurement_overview.ascx.cs" Inherits="UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_equipment_procurement_overview.ascx.cs" Inherits="UserControl_equipment_procurement_overview.TWebUserControl_equipment_procurement_overview"%>
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
     <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
@@ -6,7 +6,7 @@
         <td>
           <table cellspacing="0" cellpadding="10" border="0">
             <tr>
-              <td bgcolor="#dcdcdc"><strong>Cycle:&nbsp;<asp:DropDownList id="DropDownList_cycle" runat="server" autopostback="True"></asp:DropDownList></strong></td>
+              <td bgcolor="#dcdcdc"><strong>Cycle:&nbsp;<asp:DropDownList id="DropDownList_cycle" runat="server" autopostback="True" onselectedindexchanged="DropDownList_cycle_SelectedIndexChanged"></asp:DropDownList></strong></td>
             </tr>
             <tr>
               <td>

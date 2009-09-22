@@ -130,7 +130,7 @@ namespace UserControl_regional_staffer_old_binder
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebUserControl_regional_staffer_old_binder_PreRender;
         }
 

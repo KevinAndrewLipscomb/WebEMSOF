@@ -36,7 +36,7 @@ namespace full_request_review_approve
             this.DataGrid_proofs_of_payment.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_proofs_of_payment_ItemDataBound);
             this.DataGrid_proofs_of_payment.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_proofs_of_payment_DeleteCommand);
             this.PreRender += this.TWebForm_full_request_review_approve_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

@@ -30,7 +30,7 @@
                           </asp:BoundField>
                           <asp:BoundField datafield="make_model" headertext="Make/model"></asp:BoundField>
                           <asp:BoundField datafield="place_kept" headertext="Place kept"></asp:BoundField>
-                          <asp:BoundField datafield="be_refurbished" headertext="Refurb" sortexpression="be_refurbinshed%">
+                          <asp:BoundField datafield="be_refurbished" headertext="Refurb" sortexpression="be_refurbished%">
                             <ItemStyle horizontalalign="Center"></ItemStyle>
                           </asp:BoundField>
                           <asp:BoundField datafield="actual_quantity" headertext="Qty" sortexpression="actual_quantity%">

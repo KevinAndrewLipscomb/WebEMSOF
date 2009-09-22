@@ -56,7 +56,7 @@ namespace UserControl_serial_indicator_equipment_quantities
         private void InitializeComponent()
         {
             this.PreRender += this.TWebUserControl_serial_indicator_equipment_quantities_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_serial_indicator_equipment_quantities_PreRender(object sender, System.EventArgs e)

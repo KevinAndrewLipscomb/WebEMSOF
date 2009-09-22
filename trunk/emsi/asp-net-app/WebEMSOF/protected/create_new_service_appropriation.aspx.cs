@@ -17,49 +17,22 @@ using System.Web.UI.WebControls;
 
 namespace create_new_service_appropriation
 {
-    public class TWebForm_create_new_service_appropriation: ki_web_ui.page_class
+    public partial class TWebForm_create_new_service_appropriation: ki_web_ui.page_class
     {
         private p_type p;
-        protected new System.Web.UI.HtmlControls.HtmlTitle Title = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
-        protected System.Web.UI.WebControls.DropDownList DropDownList_services = null;
-        protected System.Web.UI.WebControls.RangeValidator RangeValidator_service = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_new_amount = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_new_amount = null;
-        protected System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_new_amount = null;
-        protected System.Web.UI.WebControls.Button Button_add_appropriation_and_repeat = null;
-        protected System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_service = null;
-        protected System.Web.UI.WebControls.Button Button_add_appropriation_and_stop = null;
-        protected System.Web.UI.WebControls.Button Button_cancel = null;
-        protected System.Web.UI.WebControls.CheckBox CheckBox_show_out_of_county_services = null;
-        protected System.Web.UI.WebControls.RadioButtonList RadioButtonList_match_level = null;
-        protected System.Web.UI.WebControls.Label Label_parent_appropriation_amount = null;
-        protected System.Web.UI.WebControls.Label Label_region_name = null;
-        protected System.Web.UI.WebControls.Label Label_fiscal_year_designator = null;
-        protected System.Web.UI.WebControls.Label Label_sum_of_service_appropriations = null;
-        protected System.Web.UI.WebControls.Label Label_unappropriated_amount = null;
-        protected System.Web.UI.HtmlControls.HtmlTableRow TableRow_sum_of_service_appropriations = null;
-        protected System.Web.UI.HtmlControls.HtmlTableRow TableRow_unappropriated_amount = null;
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_amount = null;
-        protected System.Web.UI.UpdatePanel UpdatePanel_control = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            this.DropDownList_services.SelectedIndexChanged += new System.EventHandler(this.DropDownList_services_SelectedIndexChanged);
-            this.CheckBox_show_out_of_county_services.CheckedChanged += new System.EventHandler(this.CheckBox_unfilter_CheckedChanged);
-            this.CustomValidator_amount.ServerValidate += new System.Web.UI.WebControls.ServerValidateEventHandler(this.CustomValidator_amount_ServerValidate);
-            this.Button_add_appropriation_and_repeat.Click += new System.EventHandler(this.Button_add_appropriation_and_repeat_Click);
-            this.Button_add_appropriation_and_stop.Click += new System.EventHandler(this.Button_add_appropriation_and_stop_Click);
-            this.Button_cancel.Click += new System.EventHandler(this.Button_cancel_Click);
             this.PreRender += this.TWebForm_create_new_service_appropriation_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (IsPostBack)
             {
@@ -114,7 +87,7 @@ namespace create_new_service_appropriation
             base.OnInit(e);
         }
 
-        private void DropDownList_services_SelectedIndexChanged(object sender, System.EventArgs e)
+        protected void DropDownList_services_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (p.biz_services.BeDistressed(k.Safe(DropDownList_services.SelectedValue, k.safe_hint_type.NUM)))
             {
@@ -131,7 +104,7 @@ namespace create_new_service_appropriation
             SessionSet("create_new_service_appropriation.p", p);
         }
 
-        private void CustomValidator_amount_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+        protected void CustomValidator_amount_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             string amount_string;
             amount_string = k.Safe(args.Value, k.safe_hint_type.REAL_NUM);
@@ -146,12 +119,12 @@ namespace create_new_service_appropriation
             }
         }
 
-        private void CheckBox_unfilter_CheckedChanged(object sender, System.EventArgs e)
+        protected void CheckBox_unfilter_CheckedChanged(object sender, System.EventArgs e)
         {
             p.biz_services.BindListControl(Session["county_user_id"].ToString(), DropDownList_services, CheckBox_show_out_of_county_services.Checked);
         }
 
-        private void Button_add_appropriation_and_stop_Click(object sender, System.EventArgs e)
+        protected void Button_add_appropriation_and_stop_Click(object sender, System.EventArgs e)
         {
             if (Page.IsValid)
             {
@@ -164,12 +137,12 @@ namespace create_new_service_appropriation
             }
         }
 
-        private void Button_cancel_Click(object sender, System.EventArgs e)
+        protected void Button_cancel_Click(object sender, System.EventArgs e)
         {
             BackTrack();
         }
 
-        private void Button_add_appropriation_and_repeat_Click(object sender, System.EventArgs e)
+        protected void Button_add_appropriation_and_repeat_Click(object sender, System.EventArgs e)
         {
             if (Page.IsValid)
             {

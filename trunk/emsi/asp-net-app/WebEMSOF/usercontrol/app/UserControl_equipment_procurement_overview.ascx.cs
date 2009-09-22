@@ -21,12 +21,10 @@ namespace UserControl_equipment_procurement_overview
         public string sort_order;
     } // end p_type
 
-    public class TWebUserControl_equipment_procurement_overview: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_equipment_procurement_overview: ki_web_ui.usercontrol_class
     {
         private p_type p;
         protected System.Web.UI.WebControls.Label Label_application_name = null;
-        protected System.Web.UI.WebControls.DataGrid DataGrid_control = null;
-        protected System.Web.UI.WebControls.DropDownList DropDownList_cycle = null;
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -107,7 +105,7 @@ namespace UserControl_equipment_procurement_overview
 
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
             {
@@ -153,12 +151,11 @@ namespace UserControl_equipment_procurement_overview
         // / </summary>
         private void InitializeComponent()
         {
-            this.DropDownList_cycle.SelectedIndexChanged += new System.EventHandler(this.DropDownList_cycle_SelectedIndexChanged);
             this.DataGrid_control.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_control_ItemDataBound);
             this.DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_control_SortCommand);
             this.DataGrid_control.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_control_ItemCommand);
             this.PreRender += this.TWebUserControl_equipment_procurement_overview_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_equipment_procurement_overview_PreRender(object sender, System.EventArgs e)
@@ -218,7 +215,7 @@ namespace UserControl_equipment_procurement_overview
             Bind();
         }
 
-        private void DropDownList_cycle_SelectedIndexChanged(object sender, System.EventArgs e)
+        protected void DropDownList_cycle_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             p.cycle = k.Safe(DropDownList_cycle.SelectedValue, k.safe_hint_type.NUM);
             Bind();

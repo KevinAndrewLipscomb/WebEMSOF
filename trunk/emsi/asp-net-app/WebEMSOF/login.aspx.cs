@@ -38,7 +38,7 @@ namespace login
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_login_PreRender;
         }
 

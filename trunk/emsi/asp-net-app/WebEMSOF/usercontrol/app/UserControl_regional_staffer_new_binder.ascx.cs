@@ -12,15 +12,11 @@ using UserControl_annual_cycle_setup;
 using UserControl_new_service;
 namespace UserControl_regional_staffer_new_binder
 {
-    public class TWebUserControl_regional_staffer_new_binder: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_regional_staffer_new_binder: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        protected TabContainer TabContainer_control = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_content = null;
-        protected TabPanel TabPanel_annual_cycle = null;
-        protected TabPanel TabPanel_service = null;
         // TSSI_2 = 2;
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
             {
@@ -102,7 +98,7 @@ namespace UserControl_regional_staffer_new_binder
         private void InitializeComponent()
         {
             this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebUserControl_regional_staffer_new_binder_PreRender;
         }
 

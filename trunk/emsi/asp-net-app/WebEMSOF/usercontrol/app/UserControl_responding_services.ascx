@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="UserControl_responding_services.ascx.cs" Inherits="UserControl_responding_services.TWebUserControl_responding_services"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_responding_services.ascx.cs" Inherits="UserControl_responding_services.TWebUserControl_responding_services"%>
 <!-- Derived from KiAspdotnetFramework/usercontrol/app/UserControl~template~datagrid~sortable.ascx-template -->
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>

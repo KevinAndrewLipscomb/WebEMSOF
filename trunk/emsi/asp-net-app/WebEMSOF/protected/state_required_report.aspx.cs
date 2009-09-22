@@ -32,7 +32,7 @@ namespace state_required_report
         {
             this.DataGrid_state_export_batch.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_state_export_batch_ItemDataBound);
             this.PreRender += this.TWebForm_state_required_report_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

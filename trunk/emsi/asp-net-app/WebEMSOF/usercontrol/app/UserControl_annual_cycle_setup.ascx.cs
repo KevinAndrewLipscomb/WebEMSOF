@@ -12,15 +12,9 @@ using Class_biz_fy_calendar;
 using Class_biz_milestones;
 namespace UserControl_annual_cycle_setup
 {
-    public class TWebUserControl_annual_cycle_setup: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_annual_cycle_setup: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        protected System.Web.UI.UpdatePanel UpdatePanel_control = null;
-        protected System.Web.UI.WebControls.Label Label_fy_designator = null;
-        protected System.Web.UI.WebControls.TextBox TextBox_state_dictated_appropriation = null;
-        protected System.Web.UI.WebControls.Button Button_submit = null;
-        protected System.Web.UI.WebControls.Panel Panel_control = null;
-        protected System.Web.UI.WebControls.Label Label_end_of_cycle_milestone = null;
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -101,7 +95,7 @@ namespace UserControl_annual_cycle_setup
 
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             DateTime end_of_cycle_milestone_value;
             if (!p.be_loaded)
@@ -145,9 +139,8 @@ namespace UserControl_annual_cycle_setup
         // / </summary>
         private void InitializeComponent()
         {
-            this.Button_submit.Click += new System.EventHandler(this.Button_submit_Click);
             this.PreRender += this.TWebUserControl_annual_cycle_setup_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_annual_cycle_setup_PreRender(object sender, System.EventArgs e)
@@ -163,7 +156,7 @@ namespace UserControl_annual_cycle_setup
             return result;
         }
 
-        private void Button_submit_Click(object sender, System.EventArgs e)
+        protected void Button_submit_Click(object sender, System.EventArgs e)
         {
             if (Page.IsValid)
             {

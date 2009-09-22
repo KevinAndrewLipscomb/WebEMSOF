@@ -5,10 +5,8 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 namespace UserControl_update_progress_blocker
 {
-    public class TWebUserControl_update_progress_blocker: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_update_progress_blocker: ki_web_ui.usercontrol_class
     {
-        protected System.Web.UI.UpdateProgress UpdateProgress_control = null;
-        protected System.Web.UI.WebControls.Image Image_processing_indicator = null;
         protected override void OnInit(System.EventArgs e)
         {
             // Required for Designer support

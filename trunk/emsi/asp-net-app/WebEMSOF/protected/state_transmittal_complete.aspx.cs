@@ -26,7 +26,7 @@ namespace state_transmittal_complete
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_state_transmittal_complete_PreRender;
         }
 

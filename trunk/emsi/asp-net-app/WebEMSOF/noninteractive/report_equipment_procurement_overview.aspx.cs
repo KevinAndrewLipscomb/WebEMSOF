@@ -26,24 +26,20 @@ namespace report_equipment_procurement_overview
         public TClass_biz_fiscal_years biz_fiscal_years;
     } // end p_type
 
-    public class TWebForm_report_equipment_procurement_overview: ki_web_ui.page_class
+    public partial class TWebForm_report_equipment_procurement_overview: ki_web_ui.page_class
     {
         private p_type p;
-        protected new System.Web.UI.HtmlControls.HtmlGenericControl Title = null;
-        protected System.Web.UI.WebControls.Label Label_application_name_1 = null;
         protected System.Web.UI.WebControls.Label Label_application_name_2 = null;
-        protected System.Web.UI.WebControls.HyperLink HyperLink_web_site = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_control = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
-        private void Page_Load(object sender, System.EventArgs e)
+        protected void Page_Load(object sender, System.EventArgs e)
         {
             string url;
             Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - report_equipment_procurement_overview";

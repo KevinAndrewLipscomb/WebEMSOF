@@ -32,7 +32,7 @@ namespace add_proof_of_payment
         // / </summary>
         private void InitializeComponent()
         {
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_add_proof_of_payment_PreRender;
         }
 

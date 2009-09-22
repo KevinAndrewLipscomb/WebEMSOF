@@ -145,7 +145,7 @@ namespace UserControl_financial_snapshot
         private void InitializeComponent()
         {
             this.PreRender += this.TWebUserControl_financial_snapshot_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         private void TWebUserControl_financial_snapshot_PreRender(object sender, System.EventArgs e)

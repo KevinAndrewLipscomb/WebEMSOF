@@ -57,7 +57,7 @@ namespace profile
         private void InitializeComponent()
         {
             this.PreRender += this.TWebForm_profile_PreRender;
-            this.Load += this.Page_Load;
+            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
