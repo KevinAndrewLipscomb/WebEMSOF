@@ -74,16 +74,15 @@
                             <ASP:BoundColumn datafield="service_name" readonly="True" headertext="Organization Name"></ASP:BoundColumn>
                             <ASP:BoundColumn datafield="life_support_level" readonly="True" headertext="Type of Organization"></ASP:BoundColumn>
                             <ASP:BoundColumn datafield="equipment_description" readonly="True" headertext="Equipment/Program">
-                              <FooterStyle horizontalalign="Right"></FooterStyle>
                             </ASP:BoundColumn>
                             <ASP:BoundColumn datafield="make_model" readonly="True" headertext="Make/Model">
-                              <FooterStyle horizontalalign="Right"></FooterStyle>
                             </ASP:BoundColumn>
                             <ASP:BoundColumn datafield="quantity" readonly="True" headertext="# Units">
                               <ItemStyle horizontalalign="Right"></ItemStyle>
                             </ASP:BoundColumn>
                             <ASP:BoundColumn datafield="unit_cost" readonly="True" headertext="Unit Cost" dataformatstring="{0:C}">
                               <ItemStyle horizontalalign="Right"></ItemStyle>
+                              <FooterStyle horizontalalign="Right"></FooterStyle>
                             </ASP:BoundColumn>
                             <ASP:BoundColumn datafield="total_cost" readonly="True" headertext="Total Cost Amount" dataformatstring="{0:C}">
                               <HeaderStyle horizontalalign="Center"></HeaderStyle>

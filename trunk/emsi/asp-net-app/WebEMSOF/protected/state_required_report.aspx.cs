@@ -130,10 +130,10 @@ namespace state_required_report
             }
             else if ((e.Item.ItemType == ListItemType.Footer))
             {
-                e.Item.Cells[4].Text = "TOTALS:";
-                e.Item.Cells[7].Text = p.grand_total_cost.ToString("C");
-                e.Item.Cells[8].Text = p.total_emsof_ante.ToString("C");
-                e.Item.Cells[9].Text = p.total_provider_match.ToString("C");
+                e.Item.Cells[7].Text = "TOTALS:";
+                e.Item.Cells[8].Text = p.grand_total_cost.ToString("C");
+                e.Item.Cells[9].Text = p.total_emsof_ante.ToString("C");
+                e.Item.Cells[10].Text = p.total_provider_match.ToString("C");
             }
         }
 
