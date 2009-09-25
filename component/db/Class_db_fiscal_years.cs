@@ -1,17 +1,19 @@
+using Class_db;
+using Class_db_trail;
 using MySql.Data.MySqlClient;
 using System;
-
 using System.Web.UI.WebControls;
-using Class_db;
+
 namespace Class_db_fiscal_years
 {
     public class TClass_db_fiscal_years: TClass_db
     {
+        private TClass_db_trail db_trail = null;
+
         //Constructor  Create()
         public TClass_db_fiscal_years() : base()
         {
-            // TODO: Add any constructor code here
-
+            db_trail = new TClass_db_trail();
         }
         public void BindListControl(object target)
         {
@@ -53,7 +55,7 @@ namespace Class_db_fiscal_years
         public void StartNew(string designator)
         {
             this.Open();
-            new MySqlCommand("insert ignore fiscal_year set designator = \"" + designator + "\"", this.connection).ExecuteNonQuery();
+            new MySqlCommand(db_trail.Saved("insert ignore fiscal_year set designator = \"" + designator + "\""), this.connection).ExecuteNonQuery();
             this.Close();
         }
 
