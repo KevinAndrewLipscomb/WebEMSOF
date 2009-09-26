@@ -674,6 +674,7 @@
     <Content Include="usercontrol\ki\UserControl_drop_down_date.ascx" />
     <Content Include="usercontrol\ki\UserControl_print_div.ascx" />
     <Content Include="usercontrol\ki\UserControl_session_interrupted.ascx" />
+    <Content Include="Web.config" />
     <None Include="work.bat" />
     <Content Include="x-files\alentus.com\Web-new.config" />
   </ItemGroup>
