@@ -55,9 +55,10 @@ namespace serial_indicator_control_chart
             chart.PrimaryChart.DisplayChart = true;
             chart.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             history = new TClass_biz_equipment().SerialIndicatorData(k.Safe(this.Request["indicator"], k.safe_hint_type.ECMASCRIPT_WORD), k.Safe(this.Server.UrlDecode(this.Request["description"]), k.safe_hint_type.PUNCTUATED));
-            if (history.Count > 0)
+            uint history_count = (uint)(history.Count);
+            if (history_count > 0)
             {
-                for (i = 0; i <= (history.Count - 1); i ++ )
+                for (i = 0; i <= (history_count - 1); i ++ )
                 {
                     datum = ((serial_indicator_rec_type)(history.Dequeue()));
                     chart.ChartData.AddNewSampleRecord(new ChartCalendar((int)(datum.year), 5, 31), new DoubleArray(new double[] {datum.value}));

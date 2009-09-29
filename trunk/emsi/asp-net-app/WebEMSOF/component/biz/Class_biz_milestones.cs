@@ -104,7 +104,8 @@ namespace Class_biz_milestones
                                 biz_services.MarkProfilesStale();
                                 break;
                         }
-                        for (i = 1; i <= master_id_q.Count; i ++ )
+                        uint master_id_q_count = (uint)(master_id_q.Count);
+                        for (i = 1; i <= master_id_q_count; i ++ )
                         {
                             master_id = master_id_q.Dequeue().ToString();
                             biz_accounts.MakeDeadlineFailureNotification(milestone, biz_emsof_requests.ServiceIdOfMasterId(master_id), biz_emsof_requests.CountyCodeOfMasterId(master_id));
@@ -121,7 +122,8 @@ namespace Class_biz_milestones
                             if (today == deadline.AddDays( -relative_day_num).Date)
                             {
                                 master_id_q = biz_emsof_requests.SusceptibleTo(milestone);
-                                for (j = 1; j <= master_id_q.Count; j ++ )
+                                uint master_id_q_count = (uint)(master_id_q.Count);
+                                for (j = 1; j <= master_id_q_count; j ++ )
                                 {
                                     master_id = master_id_q.Dequeue().ToString();
                                     biz_accounts.Remind(milestone, relative_day_num, deadline, biz_emsof_requests.ServiceIdOfMasterId(master_id));

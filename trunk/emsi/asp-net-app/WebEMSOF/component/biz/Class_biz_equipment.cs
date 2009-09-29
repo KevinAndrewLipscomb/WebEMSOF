@@ -53,7 +53,8 @@ namespace Class_biz_equipment
             string special_rules_violation;
             special_rules_violation = k.EMPTY;
             q = db_equipment.SpecialRuleNames(code);
-            for (i = 1; i <= q.Count; i ++ )
+            uint q_count = (uint)(q.Count);
+            for (i = 1; i <= q_count; i ++ )
             {
                 name = q.Dequeue().ToString();
                 // UpTo1PerVehicle

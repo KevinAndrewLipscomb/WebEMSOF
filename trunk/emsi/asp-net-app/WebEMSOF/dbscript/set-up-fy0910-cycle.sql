@@ -60,4 +60,40 @@ INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expecta
 ((select id from fiscal_year where designator = 'FY0910'), 'EMT-P Written Test', NULL, 1, 1, 0, 0, 300.00, 300.00, 300.00),
 ((select id from fiscal_year where designator = 'FY0910'), 'Other - with attached documentation', NULL, 1, 1, 1, 1, NULL, NULL, NULL);
 
+INSERT ignore INTO `epel_special_rule_map` (epel_code,special_rule_id)
+  select code as epel_code,
+    id as special_rule_id
+  from eligible_provider_equipment_list,
+    special_rule
+  where description like "%(%2/%vehicle)%"
+    and name = "UpTo2PerVehicle";
+INSERT ignore INTO `epel_special_rule_map` (epel_code,special_rule_id)
+  select code as epel_code,
+    id as special_rule_id
+  from eligible_provider_equipment_list,
+    special_rule
+  where ((description like "%(1/vehicle)%") or (description like "%Stairchair%") or (description like "%Vehicle safety monitoring system%"))
+    and name = "UpTo1PerVehicle";
+INSERT ignore INTO `epel_special_rule_map` (epel_code,special_rule_id)
+  select code as epel_code,
+    id as special_rule_id
+  from eligible_provider_equipment_list,
+    special_rule
+  where description like "%(up to 5)%"
+    and name = "UpTo5";
+INSERT ignore INTO `epel_special_rule_map` (epel_code,special_rule_id)
+  select code as epel_code,
+    id as special_rule_id
+  from eligible_provider_equipment_list,
+    special_rule
+  where ((description like "AED") or (description like "%Ventilator%"))
+    and name = "HasMedicalDirector";
+INSERT ignore INTO `epel_special_rule_map` (epel_code,special_rule_id)
+  select code as epel_code,
+    id as special_rule_id
+  from eligible_provider_equipment_list,
+    special_rule
+  where description like "%Stretcher %"
+    and name = "UpTo1PerAmbulance";
+
 COMMIT
