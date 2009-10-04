@@ -340,13 +340,13 @@ namespace request_item_detail
         {
             decimal effective_emsof_ante;
             decimal max_emsof_ante;
-            decimal quantity;
+            var quantity = new k.decimal_nonnegative();
             decimal total_cost;
-            decimal unit_cost;
+            var unit_cost = new k.decimal_nonnegative();
             if ((k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM) != k.EMPTY) && (k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM) != k.EMPTY))
             {
-                unit_cost = decimal.Parse(k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM));
-                quantity = decimal.Parse(k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM));
+                unit_cost.val = decimal.Parse(k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM));
+                quantity.val = decimal.Parse(k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM));
                 if (TextBox_additional_service_ante.Text != k.EMPTY)
                 {
                     p.additional_service_ante = decimal.Parse(k.Safe(TextBox_additional_service_ante.Text, k.safe_hint_type.REAL_NUM));
@@ -355,7 +355,7 @@ namespace request_item_detail
                 {
                     p.additional_service_ante = 0;
                 }
-                total_cost = unit_cost * quantity;
+                total_cost = unit_cost.val * quantity.val;
                 Label_total_cost.Text = total_cost.ToString("N2");
                 // This is the zebra case where a distressed service wants an item with no specified allowable cost (initially an ambulance
                 // or squad/response vehicle).  Basically, they can have whatever they want, up to the limit of the remainder of their
@@ -364,15 +364,15 @@ namespace request_item_detail
                 // This is the case where items in an "equipment category" are always fully funded (up to the limit of a service's
                 // appropriation, which is not within the scope of this form).  This initially describes only Data Collection Software and
                 // the EMT-P Written Test.  The "Other - with external documentation" category is specifically excluded from this case.
-                if ((decimal.Equals(p.match_level,1.00) && (p.allowable_cost == decimal.MaxValue)) || ((unit_cost <= p.allowable_cost) && (p.funding_level == p.allowable_cost) && (p.allowable_cost < decimal.MaxValue)))
+                if ((decimal.Equals(p.match_level,1.00) && (p.allowable_cost == decimal.MaxValue)) || ((unit_cost.val <= p.allowable_cost) && (p.funding_level == p.allowable_cost) && (p.allowable_cost < decimal.MaxValue)))
                 {
                     max_emsof_ante = total_cost;
                 }
                 else
                 {
-                    if (unit_cost > p.allowable_cost)
+                    if (unit_cost.val > p.allowable_cost)
                     {
-                        max_emsof_ante = Math.Max(p.allowable_cost * p.match_level, p.funding_level) * quantity;
+                        max_emsof_ante = Math.Max(p.allowable_cost * p.match_level, p.funding_level) * quantity.val;
                     }
                     else
                     {
