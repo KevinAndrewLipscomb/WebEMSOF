@@ -1,23 +1,23 @@
 START TRANSACTION;
 
 insert fy_calendar (fiscal_year_id,milestone_code,`value`) VALUES
-((select id from fiscal_year where designator = 'FY0910'),1,'2009-11-28 23:59:59'),
-((select id from fiscal_year where designator = 'FY0910'),2,'2010-01-30 23:59:59'),
-((select id from fiscal_year where designator = 'FY0910'),3,'2010-02-27 23:59:59'),
-((select id from fiscal_year where designator = 'FY0910'),4,'2010-05-29 23:59:59'),
+((select id from fiscal_year where designator = 'FY0910'),1,'2009-11-27 23:59:59'),
+((select id from fiscal_year where designator = 'FY0910'),2,'2010-01-29 23:59:59'),
+((select id from fiscal_year where designator = 'FY0910'),3,'2010-02-26 23:59:59'),
+((select id from fiscal_year where designator = 'FY0910'),4,'2010-05-28 23:59:59'),
 ((select id from fiscal_year where designator = 'FY0910'),5,'2010-06-30 23:59:59');
 
 insert region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount,service_to_county_submission_deadline,match_level_id) VALUES
-((select max(id) from state_dictated_appropriation),1,101462,'2009-11-14 23:59:59',1),
-((select max(id) from state_dictated_appropriation),2,20509,'2009-11-14 23:59:59',2),
-((select max(id) from state_dictated_appropriation),3,26299,'2009-11-14 23:59:59',1),
-((select max(id) from state_dictated_appropriation),4,38020,'2009-11-14 23:59:59',2),
-((select max(id) from state_dictated_appropriation),5,32022,'2009-11-14 23:59:59',2),
-((select max(id) from state_dictated_appropriation),6,14360,'2009-11-14 23:59:59',2),
-((select max(id) from state_dictated_appropriation),7,25704,'2009-11-14 23:59:59',2),
-((select max(id) from state_dictated_appropriation),8,17700,'2009-11-14 23:59:59',2),
-((select max(id) from state_dictated_appropriation),9,38611,'2009-11-14 23:59:59',2),
-((select max(id) from state_dictated_appropriation),10,55313,'2009-11-14 23:59:59',1);
+((select max(id) from state_dictated_appropriation),1,101671,'2009-11-13 23:59:59',1),
+((select max(id) from state_dictated_appropriation),2,20388,'2009-11-13 23:59:59',2),
+((select max(id) from state_dictated_appropriation),3,26102,'2009-11-13 23:59:59',1),
+((select max(id) from state_dictated_appropriation),4,38314,'2009-11-13 23:59:59',2),
+((select max(id) from state_dictated_appropriation),5,31954,'2009-11-13 23:59:59',2),
+((select max(id) from state_dictated_appropriation),6,14196,'2009-11-13 23:59:59',2),
+((select max(id) from state_dictated_appropriation),7,25727,'2009-11-13 23:59:59',2),
+((select max(id) from state_dictated_appropriation),8,17604,'2009-11-13 23:59:59',2),
+((select max(id) from state_dictated_appropriation),9,38896,'2009-11-13 23:59:59',2),
+((select max(id) from state_dictated_appropriation),10,55147,'2009-11-13 23:59:59',1);
 
 INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expectancy_years,be_eligible_als_amb,be_eligible_als_squad,be_eligible_bls_amb,be_eligible_qrs,allowable_cost,funding_level_nonrural,funding_level_rural) VALUES
 ((select id from fiscal_year where designator = 'FY0910'), 'EKG monitor/defibrillator w/pacer', 5, 1, 1, 0, 0, 12000.00, 6000.00, 7200.00),
