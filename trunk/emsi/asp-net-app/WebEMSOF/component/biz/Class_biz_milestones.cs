@@ -116,9 +116,9 @@ namespace Class_biz_milestones
                     {
                         be_handled = false;
                         i = 0;
-                        while (!be_handled && (i < Class_biz_milestones_Static.REMINDER_CONTROL_TABLE[(int)milestone].num_reminders))
+                        while (!be_handled && (i < Class_biz_milestones_Static.REMINDER_CONTROL_TABLE[(int)(milestone) - 1].num_reminders))
                         {
-                            relative_day_num = Class_biz_milestones_Static.REMINDER_CONTROL_TABLE[(int)milestone].relative_day_num_array[i];
+                            relative_day_num = Class_biz_milestones_Static.REMINDER_CONTROL_TABLE[(int)(milestone) - 1].relative_day_num_array[i];
                             if (today == deadline.AddDays( -relative_day_num).Date)
                             {
                                 master_id_q = biz_emsof_requests.SusceptibleTo(milestone);
