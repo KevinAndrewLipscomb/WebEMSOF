@@ -896,7 +896,7 @@ namespace Class_db_emsof_requests
             uint result;
             string sql;
             sql = "select count(*) as count" + " from emsof_request_master" + " join county_dictated_appropriation" + " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)" + " join region_dictated_appropriation" + " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " join state_dictated_appropriation" + " on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)" + " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)" + " where status_code = " + status.ToString();
-            if (!(new ArrayList(new int[] {14, 15}).Contains(status)))
+            if (!(new ArrayList(new uint[] {14, 15}).Contains(status)))
             {
                 // Unless tallying DEPLOYED or ARCHIVED statuses, limit tally to requests belonging to the current cycle.
                 sql = sql + " and fiscal_year.id = (select max(id) from fiscal_year)";
