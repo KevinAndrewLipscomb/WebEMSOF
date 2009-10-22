@@ -88,16 +88,23 @@ namespace create_new_service_appropriation
         }
 
         protected void DropDownList_services_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
+          {
+          if (DropDownList_services.SelectedValue == k.EMPTY)
+            {
+            RadioButtonList_match_level.ClearSelection();
+            }
+          else
+            {
             if (p.biz_services.BeDistressed(k.Safe(DropDownList_services.SelectedValue, k.safe_hint_type.NUM)))
-            {
-                RadioButtonList_match_level.SelectedValue = "3";
-            }
+              {
+              RadioButtonList_match_level.SelectedValue = "3";
+              }
             else
-            {
-                RadioButtonList_match_level.SelectedValue = p.match_level_id_of_region_dictum;
+              {
+              RadioButtonList_match_level.SelectedValue = p.match_level_id_of_region_dictum;
+              }
             }
-        }
+          }
 
         private void TWebForm_create_new_service_appropriation_PreRender(object sender, System.EventArgs e)
         {
