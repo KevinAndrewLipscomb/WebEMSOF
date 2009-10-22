@@ -119,7 +119,7 @@ namespace Class_db_services
             string cmdText;
             this.Open();
             ((target) as ListControl).Items.Clear();
-            ((target) as ListControl).Items.Add(new ListItem("-- Select --", "0"));
+            ((target) as ListControl).Items.Add(new ListItem("-- Select --", ""));
             cmdText = "SELECT id,name FROM service_user JOIN service using (id) WHERE be_active";
             if (!be_unfiltered)
             {

@@ -7,6 +7,7 @@
 @robocopy C:\Inetpub\wwwroot\WebEMSOF                                 ready-to-deploy                                 *.aspx    /m /np /ns /z | qgrep "New "
 @robocopy C:\Inetpub\wwwroot\WebEMSOF                                 ready-to-deploy                                 *.pdf     /m /np /ns /z | qgrep "New "
 @robocopy C:\Inetpub\wwwroot\WebEMSOF\bin                             ready-to-deploy\bin                             *.dll     /m /np /ns /z | qgrep "New "
+@robocopy C:\Inetpub\wwwroot\WebEMSOF\bin                             ready-to-deploy\bin                             *.pdb     /m /np /ns /z | qgrep "New "
 @robocopy C:\Inetpub\wwwroot\WebEMSOF\bin                             ready-to-deploy\bin                             *.TTF     /m /np /ns /z | qgrep "New "
 @robocopy C:\Inetpub\wwwroot\WebEMSOF\css                             ready-to-deploy\css                                       /m /np /ns /z | qgrep "New "
 @robocopy C:\Inetpub\wwwroot\WebEMSOF\image                           ready-to-deploy\image                                     /m /np /ns /z | qgrep "New "
