@@ -78,7 +78,7 @@ namespace county_dictated_appropriations
                 p.status_filter = k.EMPTY;
                 p.sum_of_service_appropriations = 0;
                 p.unappropriated_amount = 0;
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - county_dictated_appropriations";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - county_dictated_appropriations";
                 p.db.Open();
                 // Set parent appropriation labels.
                 dr_appropriation_attribs = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = " + Session["region_dictated_appropriation_id"].ToString(), p.db.connection).ExecuteReader();
@@ -388,11 +388,19 @@ namespace county_dictated_appropriations
             {
                 Label_distribution_list.Text = (p.distribution_list_for_services_with_allocations + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
             }
-            else if (DropDownList_quick_message_targets.SelectedValue == "emsof_participants_true")
+            else if (DropDownList_quick_message_targets.SelectedValue == "emsof_respondents")
             {
                 Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, true);
             }
+            else if (DropDownList_quick_message_targets.SelectedValue == "emsof_participants_true")
+            {
+                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, true, true, true);
+            }
             else if (DropDownList_quick_message_targets.SelectedValue == "emsof_participants_false")
+            {
+                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, true, true, false);
+            }
+            else if (DropDownList_quick_message_targets.SelectedValue == "emsof_nonrespondents")
             {
                 Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, false);
             }
