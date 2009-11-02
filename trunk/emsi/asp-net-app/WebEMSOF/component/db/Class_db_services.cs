@@ -171,38 +171,27 @@ namespace Class_db_services
             return result;
         }
 
-        public string EmailTargetForCounty(string county_id, bool be_filtered_by_emsof_participation, bool be_emsof_participant)
-        {
-            string result;
-            MySqlDataReader dr;
-            string email_target;
-            string sql;
-            email_target = k.EMPTY;
-            sql = "select password_reset_email_address" + " from service_user" + " join service using (id)" + " where county_code = \"" + county_id + "\"";
+        public string EmailTargetForCounty(string county_id, bool be_filtered_by_valid_profile, bool be_valid_profile, bool be_filtered_by_emsof_participation, bool be_emsof_participant)
+          {
+          var email_target = k.EMPTY;
+          var sql = "select password_reset_email_address" + " from service_user" + " join service using (id)" + " where county_code = '" + county_id + "'";
+          if (be_filtered_by_valid_profile)
+            {
+            sql += " and be_valid_profile = " + be_valid_profile.ToString();
             if (be_filtered_by_emsof_participation)
-            {
-                sql = sql + " and be_emsof_participant = " + be_emsof_participant.ToString();
+              {
+              sql += " and be_emsof_participant = " + be_emsof_participant.ToString();
+              }
             }
-            this.Open();
-            dr = new MySqlCommand(sql, this.connection).ExecuteReader();
-            while (dr.Read())
+          Open();
+          var dr = new MySqlCommand(sql, this.connection).ExecuteReader();
+          while (dr.Read())
             {
-                email_target = email_target + dr["password_reset_email_address"].ToString() + k.COMMA_SPACE;
+            email_target += dr["password_reset_email_address"].ToString() + k.COMMA_SPACE;
             }
-            this.Close();
-            result = email_target.TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
-            return result;
-        }
-
-        public string EmailTargetForCounty(string county_id)
-        {
-            return EmailTargetForCounty(county_id, false);
-        }
-
-        public string EmailTargetForCounty(string county_id, bool be_filtered_by_emsof_participation)
-        {
-            return EmailTargetForCounty(county_id, be_filtered_by_emsof_participation, true);
-        }
+          Close();
+          return email_target.TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
+          }
 
         public bool Get(string affiliate_num, out string name, out string county_code, out string business_phone_num, out string business_fax_num, out string website_address, out string charter_kind, out string corpadmin_contact_name, out string corpadmin_primary_phone_num, out string corpadmin_secondary_phone_num, out string corpadmin_email_address, out bool be_emsof_participant, out string emsof_nonparticipation_reason, out string emsof_contact_name, out string emsof_contact_primary_phone_num, out string emsof_contact_sms_phone_num, out string coo_name, out string coo_work_phone_num, out string coo_home_phone_num, out string coo_email_address, out string coo_mobile_phone_or_pager_num, out string md_name, out string md_office_phone_num, out string md_home_phone_num, out string md_email_address, out string md_mobile_phone_or_pager_num, out string physical_street_address_line_1, out string physical_street_address_line_2, out string physical_city, out string physical_state, out string physical_zip_code, out string mail_address_line_1, out string mail_address_line_2, out string mail_city, out string mail_state, out string mail_zip_code, out bool be_qrs, out bool be_bls_amb, out bool be_als_amb, out bool be_als_squad, out bool be_air_amb, out bool be_rescue, out bool be_pa_turnpike_contractor, out string num_doh_licensed_vehicles, out string num_ambulances, out bool be_dera, out string charter_other_kind, out bool be_valid_profile, out string federal_tax_id, out bool be_qrs_unrecognized, out bool be_rescue_unrecognized, out bool be_distressed)
         {

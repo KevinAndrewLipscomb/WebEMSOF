@@ -92,22 +92,18 @@ namespace Class_biz_services
             return result;
         }
 
-        public string EmailTargetForCounty(string county_id, bool be_filtered_by_emsof_participation, bool be_emsof_participant)
-        {
-            string result;
-            result = db_services.EmailTargetForCounty(county_id, be_filtered_by_emsof_participation, be_emsof_participant);
-            return result;
-        }
-
+        public string EmailTargetForCounty(string county_id, bool be_filtered_by_valid_profile, bool be_valid_profile, bool be_filtered_by_emsof_participation, bool be_emsof_participant)
+          {
+          return db_services.EmailTargetForCounty(county_id, be_filtered_by_valid_profile, be_valid_profile, be_filtered_by_emsof_participation, be_emsof_participant);
+          }
+        public string EmailTargetForCounty(string county_id, bool be_filtered_by_valid_profile, bool be_valid_profile)
+          {
+          return EmailTargetForCounty(county_id, be_filtered_by_valid_profile, be_valid_profile, false, false);
+          }
         public string EmailTargetForCounty(string county_id)
-        {
-            return EmailTargetForCounty(county_id, false);
-        }
-
-        public string EmailTargetForCounty(string county_id, bool be_filtered_by_emsof_participation)
-        {
-            return EmailTargetForCounty(county_id, be_filtered_by_emsof_participation, true);
-        }
+          {
+          return EmailTargetForCounty(county_id, false, false);
+          }
 
         public bool Get(string affiliate_num, out string name, out string county_code, out string business_phone_num, out string business_fax_num, out string website_address, out string charter_kind, out string corpadmin_contact_name, out string corpadmin_primary_phone_num, out string corpadmin_secondary_phone_num, out string corpadmin_email_address, out bool be_emsof_participant, out string emsof_nonparticipation_reason, out string emsof_contact_name, out string emsof_contact_primary_phone_num, out string emsof_contact_sms_phone_num, out string coo_name, out string coo_work_phone_num, out string coo_home_phone_num, out string coo_email_address, out string coo_mobile_phone_or_pager_num, out string md_name, out string md_office_phone_num, out string md_home_phone_num, out string md_email_address, out string md_mobile_phone_or_pager_num, out string physical_street_address_line_1, out string physical_street_address_line_2, out string physical_city, out string physical_state, out string physical_zip_code, out string mail_address_line_1, out string mail_address_line_2, out string mail_city, out string mail_state, out string mail_zip_code, out bool be_qrs, out bool be_bls_amb, out bool be_als_amb, out bool be_als_squad, out bool be_air_amb, out bool be_rescue, out bool be_pa_turnpike_contractor, out string num_doh_licensed_vehicles, out string num_ambulances, out bool be_dera, out string charter_other_kind, out bool be_valid_profile, out string federal_tax_id, out bool be_qrs_unrecognized, out bool be_rescue_unrecognized, out bool be_distressed)
         {

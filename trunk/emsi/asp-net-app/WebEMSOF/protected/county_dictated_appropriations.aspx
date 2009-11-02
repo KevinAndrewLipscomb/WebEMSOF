@@ -4,8 +4,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-    <title id="Title" runat="server"></title>
+  <head runat="server">
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -187,8 +186,10 @@
                 <td>
                   <ASP:DropDownList id="DropDownList_quick_message_targets" runat="server" autopostback="True" onselectedindexchanged="DropDownList_quick_message_targets_SelectedIndexChanged">
                     <asp:ListItem selected="True" value="with_allocations">all agencies shown above</asp:ListItem>
-                    <asp:ListItem value="emsof_participants_true">all agencies in my county who are EMSOF participants</asp:ListItem>
-                    <asp:ListItem value="emsof_participants_false">all agencies in my county who are *not* EMSOF participants</asp:ListItem>
+                    <asp:ListItem value="emsof_participants_true">all agencies in my county who said in Annual Survey they would be EMSOF participants</asp:ListItem>
+                    <asp:ListItem value="emsof_participants_false">all agencies in my county who said in Annual Survey they would *not* be EMSOF participants</asp:ListItem>
+                    <asp:ListItem value="emsof_respondents">all agencies in my county who have responded to the Annual Survey</asp:ListItem>
+                    <asp:ListItem value="emsof_nonrespondents">all agencies in my county who have *not* responded to the Annual Survey</asp:ListItem>
                     <asp:ListItem value="in_county">all agencies in my county</asp:ListItem>
                   </ASP:DropDownList>
                 </td>
