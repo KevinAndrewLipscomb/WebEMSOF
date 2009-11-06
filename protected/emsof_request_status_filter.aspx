@@ -4,8 +4,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-    <title id="Title" runat="server"></title>
+  <head runat="server">
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -78,6 +77,12 @@
 		  <tr>
 			<td><p>Send email to the agencies listed in the above table.</p>
 			  <table cellspacing="0" cellpadding="10" width="100%" border="0">
+          <tr>
+            <td>Bcc:</td>
+            <td>
+              <ASP:Label id="Label_author_email_address" runat="server"></ASP:Label></td>
+            <td></td>
+          </tr>
 				  <tr>
 					<td>Subject:</td>
 					<td><ASP:TextBox id="TextBox_quick_message_subject" runat="server" maxlength="255" columns="72"></ASP:TextBox></td>

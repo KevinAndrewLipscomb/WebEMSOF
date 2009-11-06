@@ -56,7 +56,7 @@ namespace emsof_request_status_filter
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - emsof_request_status_filter";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - emsof_request_status_filter";
                 Label_status.Text = Session["status_of_interest"].ToString();
                 LinkButton_retransmit_to_state.Visible = (((status_type)(Session["status_of_interest"])) == Class_biz_emsof_requests.status_type.NEEDS_PA_DOH_EMSO_APPROVAL);
                 // Initialize instance private data members.
@@ -66,6 +66,7 @@ namespace emsof_request_status_filter
                 p.be_sort_order_ascending = true;
                 p.num_qualifying_requests = 0;
                 p.sort_order = "affiliate_num";
+                Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
                 BindOverview();
             }
         }
@@ -87,7 +88,7 @@ namespace emsof_request_status_filter
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
             TextBox_quick_message_subject.Text = k.EMPTY;
             TextBox_quick_message_body.Text = k.EMPTY;
             Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);
