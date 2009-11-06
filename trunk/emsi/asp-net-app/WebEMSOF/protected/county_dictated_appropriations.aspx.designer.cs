@@ -185,6 +185,15 @@ namespace county_dictated_appropriations {
         protected global::System.Web.UI.WebControls.DropDownList DropDownList_quick_message_targets;
         
         /// <summary>
+        /// Label_author_email_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label_author_email_address;
+        
+        /// <summary>
         /// TextBox_quick_message_subject control.
         /// </summary>
         /// <remarks>

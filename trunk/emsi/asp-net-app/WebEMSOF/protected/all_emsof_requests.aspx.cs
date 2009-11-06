@@ -52,7 +52,7 @@ namespace all_emsof_requests
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - all_emsof_requests";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - all_emsof_requests";
                 // Initialize private class instance vars.
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_emsof_requests = new TClass_biz_emsof_requests();
@@ -60,6 +60,7 @@ namespace all_emsof_requests
                 p.be_sort_order_ascending = true;
                 p.num_datagrid_rows = 0;
                 p.sort_order = "service_name";
+                Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
                 Bind();
             }
         }
@@ -81,7 +82,7 @@ namespace all_emsof_requests
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
             TextBox_quick_message_subject.Text = k.EMPTY;
             TextBox_quick_message_body.Text = k.EMPTY;
             Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);

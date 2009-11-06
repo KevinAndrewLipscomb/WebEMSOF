@@ -89,6 +89,7 @@ namespace county_dictated_appropriations
                 Label_region_name.Text = dr_appropriation_attribs["name"].ToString();
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 dr_appropriation_attribs.Close();
+                Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
                 // All further rendering is deadline-dependent.
                 make_appropriations_deadline = (DateTime)(new MySqlCommand("select value" + " from fy_calendar" + " join fiscal_year on (fiscal_year.id = fiscal_year_id)" + " join milestone_code_name_map on (code = milestone_code)" + " where designator = \"" + k.Safe(Label_fiscal_year_designator.Text, k.safe_hint_type.ALPHANUM) + "\"" + " and name = \"emsof-county-dictated-appropriation-deadline\"", p.db.connection).ExecuteScalar());
                 county_dictated_deadline = (DateTime)(new MySqlCommand("select service_to_county_submission_deadline from region_dictated_appropriation" + " where id = " + Session["region_dictated_appropriation_id"].ToString(), p.db.connection).ExecuteScalar());
@@ -143,7 +144,7 @@ namespace county_dictated_appropriations
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From the " + Session[p.biz_user.Kind() + "_name"].ToString() + " County EMSOF Coordinator (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From the " + Session[p.biz_user.Kind() + "_name"].ToString() + " County EMSOF Coordinator (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
             TextBox_quick_message_subject.Text = k.EMPTY;
             TextBox_quick_message_body.Text = k.EMPTY;
             Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);
