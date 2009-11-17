@@ -68,15 +68,6 @@ namespace emsof_request_status_filter {
         protected global::System.Web.UI.WebControls.DataGrid DataGrid_requests;
         
         /// <summary>
-        /// TableRow_spreadsheet control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_spreadsheet;
-        
-        /// <summary>
         /// Table_quick_message control.
         /// </summary>
         /// <remarks>
