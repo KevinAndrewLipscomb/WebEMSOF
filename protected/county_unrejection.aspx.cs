@@ -26,14 +26,12 @@ namespace county_unrejection
     public partial class TWebForm_county_unrejection: ki_web_ui.page_class
     {
         private p_type p;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_county_dictated_appropriations = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            this.LinkButton_county_dictated_appropriations.Click += new System.EventHandler(this.LinkButton_county_dictated_appropriations_Click);
             this.DataGrid_unrejectable_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.Datagrid_unrejectable_requests_ItemCommand);
             this.DataGrid_unrejectable_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.Datagrid_unrejectable_requests_SortCommand);
             this.DataGrid_unrejectable_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.Datagrid_unrejectable_requests_ItemDataBound);
