@@ -226,7 +226,12 @@ namespace county_dictated_appropriations
                 Session.Remove("service_name_of_appropriation_selected_for_deletion");
                 Session.Add("service_name_of_appropriation_selected_for_deletion", k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfServiceName())].Text, k.safe_hint_type.ORG_NAME));
                 Session.Remove("amount_of_appropriation_selected_for_deletion");
-                Session.Add("amount_of_appropriation_selected_for_deletion", k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfAppropriation())].Text, k.safe_hint_type.REAL_NUM));
+                var amount_of_appropriation_selected_for_deletion = k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfAppropriation())].Text, k.safe_hint_type.REAL_NUM);
+                if (amount_of_appropriation_selected_for_deletion == k.EMPTY)
+                  {
+                  amount_of_appropriation_selected_for_deletion = k.Safe((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfAppropriation())].Controls[0] as TextBox).Text, k.safe_hint_type.REAL_NUM);
+                  }
+                Session.Add("amount_of_appropriation_selected_for_deletion", amount_of_appropriation_selected_for_deletion);
                 DropCrumbAndTransferTo("delete_service_appropriation.aspx");
             }
             else
