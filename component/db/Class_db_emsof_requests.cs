@@ -671,6 +671,11 @@ namespace Class_db_emsof_requests
             return result;
         }
 
+        public string PasswordResetEmailAddressOf(object e_item)
+          {
+          return k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_PASSWORD_RESET_EMAIL_ADDRESS].Text, k.safe_hint_type.EMAIL_ADDRESS);
+          }
+
         public string PropertyNameOfAppropriation()
         {
             string result;

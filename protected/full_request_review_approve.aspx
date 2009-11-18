@@ -4,8 +4,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-    <title id="Title" runat="server"></title>
+  <head runat="server">
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -39,9 +38,6 @@
 				  </p>
 				</td>
 				<td align="right">
-				  <p align="right">
-
-				  </p>
 				  <asp:label id="Label_parent_appropriation_amount" runat="server"></asp:label>
 				</td>
 				<td>from <asp:label id="Label_sponsor_county" runat="server">
@@ -52,9 +48,6 @@
 				  <p align="right">- </p>
 				</td>
 				<td align="right">
-				  <p align="right">
-
-				  </p>
 				  <asp:label id="Label_sum_of_emsof_antes" runat="server"
 				  font-underline="True"></asp:label>
 				</td>
@@ -65,9 +58,6 @@
 				  <p align="right">= </p>
 				</td>
 				<td align="right">
-				  <p align="right">
-
-				  </p>
 				  <asp:label id="Label_unused_amount" runat="server">
 				  </asp:label>
 				</td>
@@ -207,7 +197,6 @@
 		</tr>
 	  </table>
 	  <p></p>
-	  <p></p>
 	  <table cellspacing="0" cellpadding="0" border="1" id="Table_proofs_of_payment" runat="server" bordercolor="#dcdcdc">
 		<tr>
 		  <td>
@@ -265,6 +254,50 @@
 		  <td align="center"><ASP:Label id="Label_total_of_emsof_amounts" runat="server" font-bold="True"></ASP:Label></td>
 		</tr>
 	  </table>
+	  <p></p>
+<table id="Table_quick_message" runat="server" bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+  <tr>
+    <td>
+      <table cellspacing="0" cellpadding="10" width="100%" border="0">
+        <tr><td bgcolor="#f5f5f5"><a id="QuickMessage"><strong>QuickMessage</strong></a></td></tr>
+        <tr>
+          <td>
+            <table cellspacing="0" cellpadding="10" width="100%" border="0">
+              <tr>
+                <td>Send email to:</td>
+                <td><ASP:Literal id="Literal_emsof_contact_name" runat="server"></ASP:Literal></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Bcc:</td>
+                <td><ASP:Label id="Label_author_email_address" runat="server"></ASP:Label></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Subject:</td>
+                <td><ASP:TextBox id="TextBox_quick_message_subject" runat="server" maxlength="255" columns="72"></ASP:TextBox></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td valign="top">Body:</td>
+                <td><ASP:TextBox id="TextBox_quick_message_body" runat="server" columns="72" rows="18" textmode="MultiLine"></ASP:TextBox></td>
+                <td nowrap="true" valign="top"><ASP:RequiredFieldValidator id="RequiredFieldValidator_quick_message_body" runat="server" errormessage="Please enter a message body." font-bold="True" controltovalidate="TextBox_quick_message_body" validationgroup="quick_message">!ERR!</ASP:RequiredFieldValidator></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><ASP:Button id="Button_send" runat="server" text="Send" validationgroup="quick_message" onclick="Button_send_Click"></ASP:Button></td>
+                <td></td>
+              </tr>
+              <tr><td valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
+                <td></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 	  <p></p>
 	  <table cellspacing="0" cellpadding="0" border="1" id="Table_disposition_nominal" runat="server" bordercolor="#98fb98">
 		<tr>
