@@ -612,6 +612,11 @@ namespace Class_biz_emsof_requests
             return result;
         }
 
+        public string PasswordResetEmailAddressOf(object e_item)
+          {
+          return db_emsof_requests.PasswordResetEmailAddressOf(e_item);
+          }
+
         public DateTime ReworkDeadline(object e_item)
         {
             DateTime result;

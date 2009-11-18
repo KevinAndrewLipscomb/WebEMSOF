@@ -1,21 +1,15 @@
-using System.Configuration;
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-using System.Web.UI;
+using Class_biz_accounts;
+using Class_biz_appropriations;
 using Class_biz_emsof_request_return_comments;
 using Class_biz_emsof_requests;
-using Class_biz_appropriations;
+using Class_biz_user;
+using kix;
+using System;
+using System.Collections;
+using System.Configuration;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
 namespace full_request_review_approve
 {
     public partial class TWebForm_full_request_review_approve: ki_web_ui.page_class
@@ -61,10 +55,12 @@ namespace full_request_review_approve
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - full_request_review_approve";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - full_request_review_approve";
                 // Initialize class private class members.
+                p.biz_accounts = new TClass_biz_accounts();
                 p.biz_emsof_request_return_comments = new TClass_biz_emsof_request_return_comments();
                 p.biz_emsof_requests = new TClass_biz_emsof_requests();
+                p.biz_user = new TClass_biz_user();
                 // Initialize class private data members.
                 p.status = p.biz_emsof_requests.StatusOf(Session["e_item"]);
                 // Must be set before next two statements.
@@ -141,6 +137,10 @@ namespace full_request_review_approve
                     BindProofsOfPayment();
                     Label_total_of_emsof_amounts.Text = p.biz_emsof_requests.ActualValueOf(p.request_id).ToString("C");
                 }
+                // Manage QuickMessage block.
+                Literal_emsof_contact_name.Text = p.biz_emsof_requests.ServiceNameOf(Session["e_item"]);
+                Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
+                Label_distribution_list.Text = p.biz_emsof_requests.PasswordResetEmailAddressOf(Session["e_item"]);
                 // Manage Disposition (ie, current approval action) block.
                 if (p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.status))
                 {
@@ -372,8 +372,10 @@ namespace full_request_review_approve
         {
             public bool be_all_costs_proven;
             public bool be_ok_to_track_payments;
+            public TClass_biz_accounts biz_accounts;
             public TClass_biz_emsof_request_return_comments biz_emsof_request_return_comments;
             public TClass_biz_emsof_requests biz_emsof_requests;
+            public TClass_biz_user biz_user;
             public bool display_actuals;
             public bool modify_actuals;
             public uint num_items;
@@ -384,7 +386,15 @@ namespace full_request_review_approve
             public decimal sum_of_actual_costs;
             public decimal sum_of_proven_payments;
             public decimal total_emsof_ante;
-        } // end p_type
+        }
+
+        protected void Button_send_Click(object sender, EventArgs e)
+          {
+          k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From the " + Session[p.biz_user.Kind() + "_name"].ToString() + " County EMSOF Coordinator (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
+          TextBox_quick_message_subject.Text = k.EMPTY;
+          TextBox_quick_message_body.Text = k.EMPTY;
+          Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);
+          }
 
     } // end TWebForm_full_request_review_approve
 
