@@ -4,7 +4,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head><title id="Title" runat="server"></title>
+  <head runat="server">
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -68,6 +68,7 @@
 						<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_unit_cost" runat="server" width="6pc"></ASP:TextBox></td>
+							  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_1" runat="server" font-size="Small" onclick="LinkButton_recalculate_1_Click">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
@@ -80,6 +81,7 @@
 <table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><ASP:TextBox id="TextBox_quantity" runat="server" width="6pc"></ASP:TextBox></td>
+							  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_2" runat="server" font-size="Small" onclick="LinkButton_recalculate_2_Click">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
@@ -105,7 +107,8 @@
 			  <td>&nbsp; 
 <table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
-							  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(optional)</td>
+							  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(leave blank unless directed otherwise by WebEMSOF)</td>
+							  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small" onclick="LinkButton_recalculate_3_Click">Recalculate</ASP:LinkButton></td>
 							</tr>
 						</table></td>
