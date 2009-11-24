@@ -67,7 +67,7 @@ namespace request_item_detail
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - request_item_detail";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - request_item_detail";
                 biz_fiscal_years = new TClass_biz_fiscal_years();
                 p.biz_equipment = new TClass_biz_equipment();
                 p.db = new TClass_db();
