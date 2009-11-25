@@ -101,17 +101,18 @@
 				<ASP:Label id="Label_min_service_ante" runat="server" font-bold="True"></ASP:Label></td>
 			  <td></td>
 			</tr>
-			<tr>
+			<tr bgcolor="Khaki">
+			  <td valign="middle"><p align="right"><strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>, to prevent exceeding your allocation:&nbsp; $</p></td>
 			  <td>
-			  <p align="right"><strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>:&nbsp; $</p></td>
-			  <td>&nbsp; 
-<table cellspacing="0" cellpadding="0" width="100%" border="0">
-							<tr>
-							  <td><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox>&nbsp;(leave blank unless directed otherwise by WebEMSOF)</td>
-							  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							  <td align="right"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small" onclick="LinkButton_recalculate_3_Click">Recalculate</ASP:LinkButton></td>
-							</tr>
-						</table></td>
+          <table cellspacing="0" cellpadding="0" width="100%" border="0">
+						<tr>
+						  <td valign="middle"><ASP:TextBox id="TextBox_additional_service_ante" runat="server" width="6pc"></ASP:TextBox></td>
+						  <td valign="middle"><small>(If unsure, LEAVE BLANK unless directed otherwise by WebEMSOF)</small></td>
+						  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						  <td align="right" valign="middle"><ASP:LinkButton id="LinkButton_recalculate_3" runat="server" font-size="Small" onclick="LinkButton_recalculate_3_Click">Recalculate</ASP:LinkButton></td>
+						</tr>
+					</table>
+				</td>
 			  <td><ASP:RegularExpressionValidator id="RegularExpressionValidator_additional_service_ante" runat="server" font-bold="True" errormessage="Please enter a valid additional amount that your service will pay." validationexpression="[$0\.]*[0-9][0-9,\.]*" controltovalidate="TextBox_additional_service_ante">!ERR!</ASP:RegularExpressionValidator></td>
 			</tr>
 			<tr>

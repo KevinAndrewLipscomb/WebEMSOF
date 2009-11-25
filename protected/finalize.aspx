@@ -27,7 +27,9 @@
 						<p>You've requested too much.</p>
 						<p>The specified EMSOF reimbursement is more than the allocation you received from the sponsoring county.</p>
 						<p>Please&nbsp;<ASP:LinkButton id="LinkButton_request_overview_0" runat="server" font-bold="True" onclick="LinkButton_request_overview_0_Click">go back to the request overview form</ASP:LinkButton> and&nbsp;adjust your request to fit your allocation.</p>
-						<p>HINT:&nbsp; Make a note of the negative "remaining" amount.&nbsp; Select one of your request items.&nbsp; Enter an equivalent [positive] amount in the field labeled, "<strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong>".&nbsp; Your request will no longer exceed your allocation, and finalization will proceed normally.</p></td>
+						<p>HINT:&nbsp; Make a note of the <span style="color:Red"><b>negative "remaining" amount</b></span>.&nbsp; Select one of your request items.&nbsp; Enter an equivalent [positive] amount in the field labeled,
+						<blockquote><span style="background-color:Khaki"><strong>Additional</strong> amount, if any, that your service&nbsp;will pay, <strong>unreimbursed</strong></span></blockquote>
+						Your request will no longer exceed your allocation, and finalization will proceed normally.</p></td>
 					</tr>
 				</table></td>
 			</tr>
