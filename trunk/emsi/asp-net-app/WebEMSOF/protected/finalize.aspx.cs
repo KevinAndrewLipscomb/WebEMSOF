@@ -1,26 +1,13 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-
-using Class_db;
 using Class_biz_accounts;
 using Class_biz_appropriations;
 using Class_biz_emsof_requests;
 using Class_biz_fiscal_years;
+using Class_db;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+
 namespace finalize
 {
     public partial class TWebForm_finalize: ki_web_ui.page_class
@@ -64,7 +51,7 @@ namespace finalize
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - finalize";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - finalize";
                 biz_fiscal_years = new TClass_biz_fiscal_years();
                 p.db = new TClass_db();
                 if ((decimal)(Session["unused_amount"]) >= 0)
