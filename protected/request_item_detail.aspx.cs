@@ -1,26 +1,14 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-
-using System.Web.UI;
-using Class_db;
-using Class_db_trail;
 using Class_biz_equipment;
 using Class_biz_fiscal_years;
+using Class_db;
+using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
 namespace request_item_detail
 {
     public partial class TWebForm_request_item_detail: ki_web_ui.page_class
@@ -254,33 +242,47 @@ namespace request_item_detail
         }
 
         protected void Button_update_Click(object sender, System.EventArgs e)
-        {
+          {
+          //
+          // The following test should not be necessary because the program's logic is supposed to prevent this routine from being entered in the first place under the tested condition.  Yet it happens, and causes a crash on the call to ExecuteNonQuery.
+          // Better to let the user get no response or change at all than to crash.
+          //
+          if (Session["emsof_request_item_priority"].ToString() != k.EMPTY)
+            {
             Recalculate();
             // Forces setting of additional_service_ante
             if (Page.IsValid)
-            {
-                p.db.Open();
-                // Update the detail record.
-                // Update the master record.
-                new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "update emsof_request_detail" + " set equipment_code = " + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " make_model = \"" + k.Safe(TextBox_make_model.Text, k.safe_hint_type.MAKE_MODEL) + "\"," + " place_kept = \"" + k.Safe(TextBox_place_kept.Text, k.safe_hint_type.PUNCTUATED) + "\"," + " be_refurbished = " + k.Safe(RadioButtonList_condition.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " quantity = " + k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM) + k.COMMA + " unit_cost = " + k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM) + k.COMMA + " additional_service_ante = " + p.additional_service_ante.ToString() + k.COMMA + " emsof_ante = " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " + " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " + " + p.additional_service_ante.ToString() + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
-                p.db.Close();
-                BackTrack();
+              {
+              p.db.Open();
+              // Update the detail record.
+              // Update the master record.
+              new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "update emsof_request_detail" + " set equipment_code = " + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " make_model = \"" + k.Safe(TextBox_make_model.Text, k.safe_hint_type.MAKE_MODEL) + "\"," + " place_kept = \"" + k.Safe(TextBox_place_kept.Text, k.safe_hint_type.PUNCTUATED) + "\"," + " be_refurbished = " + k.Safe(RadioButtonList_condition.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " quantity = " + k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM) + k.COMMA + " unit_cost = " + k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM) + k.COMMA + " additional_service_ante = " + p.additional_service_ante.ToString() + k.COMMA + " emsof_ante = " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " + " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " + " + p.additional_service_ante.ToString() + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
+              p.db.Close();
+              BackTrack();
+              }
             }
-        }
+          }
 
         protected void Button_delete_Click(object sender, System.EventArgs e)
-        {
-            if (CheckBox_delete.Checked)
+          {
+          //
+          // The following test should not be necessary because the program's logic is supposed to prevent this routine from being entered in the first place under the tested condition.  Yet it happens, and causes a crash on the call to ExecuteNonQuery.
+          // Better to let the user get no response or change at all than to crash.
+          //
+          if (Session["emsof_request_item_priority"].ToString() != k.EMPTY)
             {
-                p.db.Open();
-                // Delete the detail record.
-                // Eliminate the resulting gap in the priority sequence.
-                // Update the master record.
-                new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "delete from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_detail set priority = priority - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority > " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " , num_items = num_items - 1" + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
-                p.db.Close();
-                BackTrack();
+            if (CheckBox_delete.Checked)
+              {
+              p.db.Open();
+              // Delete the detail record.
+              // Eliminate the resulting gap in the priority sequence.
+              // Update the master record.
+              new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "delete from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_detail set priority = priority - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority > " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " , num_items = num_items - 1" + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
+              p.db.Close();
+              BackTrack();
+              }
             }
-        }
+          }
 
         protected void LinkButton_recalculate_3_Click(object sender, System.EventArgs e)
         {
