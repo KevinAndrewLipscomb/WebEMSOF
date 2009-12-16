@@ -57,7 +57,7 @@ namespace state_required_report
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_required_report";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_required_report";
                 // Initialize implementation-wide vars.
                 p.amendment_num_string = "0";
                 p.be_replacement_rows_present = false;
