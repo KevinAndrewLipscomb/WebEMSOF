@@ -1,13 +1,13 @@
-using MySql.Data.MySqlClient;
-using kix;
-using System;
-
-using System.Web.UI.WebControls;
-using System.Collections;
 using Class_biz_milestones;
 using Class_db;
 using Class_db_fiscal_years;
 using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections;
+using System.Web.UI.WebControls;
+
 namespace Class_db_emsof_requests
 {
     public class TClass_db_emsof_requests: TClass_db
@@ -404,6 +404,37 @@ namespace Class_db_emsof_requests
               )
               .ExecuteReader();
             ((target) as DataGrid).DataBind();
+            Close();
+        }
+
+        public void BindValuesToRegion(string sort_order, bool be_order_ascending, object target)
+        {
+            Open();
+            if (be_order_ascending)
+            {
+                sort_order = sort_order.Replace("%", " asc");
+            }
+            else
+            {
+                sort_order = sort_order.Replace("%", " desc");
+            }
+            ((target) as GridView).DataSource = new MySqlCommand
+              (
+              "SELECT designator as fiscal_year"
+              + " , (state_dictated_appropriation.amount - sum(actual_emsof_ante)) as emsof"
+              + " FROM emsof_request_detail"
+              +   " JOIN emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)"
+              +   " JOIN county_dictated_appropriation ON (county_dictated_appropriation.id=emsof_request_detail.master_id)"
+              +   " JOIN region_dictated_appropriation ON (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)"
+              +   " JOIN state_dictated_appropriation ON (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+              +   " JOIN fiscal_year ON (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
+              + " WHERE emsof_request_master.status_code in (10,13,14)"
+              + " GROUP BY fiscal_year.designator"
+              + " order by " + sort_order,
+              connection
+              )
+              .ExecuteReader();
+            ((target) as GridView).DataBind();
             Close();
         }
 

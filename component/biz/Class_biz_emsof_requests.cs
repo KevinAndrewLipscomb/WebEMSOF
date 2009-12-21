@@ -1,26 +1,20 @@
-using System.Configuration;
-
-using kix;
-
-using System;
-
-
-
-
-
-using System.Collections;
-using System.Web;
-using System.IO;
-using Class_db_appropriations;
-using Class_db_emsof_requests;
 using Class_biz_accounts;
 using Class_biz_appropriations;
 using Class_biz_equipment;
+using Class_biz_fiscal_years;
 using Class_biz_match_level;
 using Class_biz_milestones;
 using Class_biz_regional_staffers;
 using Class_biz_user;
-using Class_biz_fiscal_years;
+using Class_db_appropriations;
+using Class_db_emsof_requests;
+using kix;
+using System;
+using System.Collections;
+using System.Configuration;
+using System.IO;
+using System.Web;
+
 namespace Class_biz_emsof_requests
 {
     public class TClass_biz_emsof_requests
@@ -326,6 +320,11 @@ namespace Class_biz_emsof_requests
         public void BindStateExportBatch(object target, status_type status, string amendment_num_string, string regional_staffer_user_id)
         {
             db_emsof_requests.BindStateExportBatch(target, (uint)(status), amendment_num_string, biz_regional_staffers.RegionCodeOf(regional_staffer_user_id));
+        }
+
+        public void BindValuesToRegion(string sort_order, bool be_order_ascending, object target)
+        {
+            db_emsof_requests.BindValuesToRegion(sort_order, be_order_ascending, target);
         }
 
         public void BindValuesToServices(string sort_order, bool be_order_ascending, object target)

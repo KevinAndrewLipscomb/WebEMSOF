@@ -514,6 +514,13 @@
     <Compile Include="usercontrol\app\UserControl_update_progress_blocker.ascx.designer.cs">
       <DependentUpon>UserControl_update_progress_blocker.ascx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrol\app\UserControl_values_to_region.ascx.cs">
+      <DependentUpon>UserControl_values_to_region.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_values_to_region.ascx.designer.cs">
+      <DependentUpon>UserControl_values_to_region.ascx</DependentUpon>
+    </Compile>
     <Compile Include="usercontrol\app\UserControl_values_to_services.ascx.cs">
       <DependentUpon>UserControl_values_to_services.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -666,6 +673,7 @@
     <Content Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx" />
     <Content Include="usercontrol\app\UserControl_service_profile.ascx" />
     <Content Include="usercontrol\app\UserControl_update_progress_blocker.ascx" />
+    <Content Include="usercontrol\app\UserControl_values_to_region.ascx" />
     <Content Include="usercontrol\app\UserControl_values_to_services.ascx" />
     <Content Include="usercontrol\app\UserControl_workflow.ascx" />
     <Content Include="usercontrol\ki\image\delete_x16_h.png" />
