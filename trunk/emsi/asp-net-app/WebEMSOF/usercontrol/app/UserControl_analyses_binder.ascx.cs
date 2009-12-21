@@ -1,27 +1,27 @@
-using AjaxControlToolkit;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using UserControl_equipment_procurement_binder;
+using UserControl_values_to_region;
 using UserControl_values_to_services;
+
 namespace UserControl_analyses_binder
 {
-    // ,UserControl3
+    public class UserControl_analyses_binder_Static
+    {
+        public const int TSSI_equipment_procurement_binder = 0;
+        public const int TSSI_VALUES_TO_SERVICES = 1;
+        public const int TSSI_VALUES_TO_REGION = 2;
+    }
+
     public struct p_type
     {
         public bool be_loaded;
         public string content_id;
         public uint tab_index;
-    } // end p_type
+    }
 
     public partial class TWebUserControl_analyses_binder: ki_web_ui.usercontrol_class
     {
         private p_type p;
-        // TSSI_2 = 2;
+
         protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
@@ -42,26 +42,22 @@ namespace UserControl_analyses_binder
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_PlaceHolder_content"] as string) == "UserControl_analyses_binder");
                 switch(p.tab_index)
                 {
-                    case Units.UserControl_analyses_binder.TSSI_equipment_procurement_binder:
+                    case UserControl_analyses_binder_Static.TSSI_equipment_procurement_binder:
                         // Dynamic controls must be re-added on each postback.
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_binder)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_binder.ascx"))), "UserControl_equipment_procurement_binder", PlaceHolder_content);
                         break;
-                    case Units.UserControl_analyses_binder.TSSI_VALUES_TO_SERVICES:
+                    case UserControl_analyses_binder_Static.TSSI_VALUES_TO_SERVICES:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_values_to_services)(LoadControl("~/usercontrol/app/UserControl_values_to_services.ascx"))), "UserControl_values_to_services", PlaceHolder_content);
                         break;
-                // TSSI_2:
-                // p.content_id := AddIdentifiedControlToPlaceHolder
-                // (
-                // TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')),
-                // 'UserControl3',
-                // PlaceHolder_content
-                // );
+                    case UserControl_analyses_binder_Static.TSSI_VALUES_TO_REGION:
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_values_to_region)(LoadControl("~/usercontrol/app/UserControl_values_to_region.ascx"))), "UserControl_values_to_region", PlaceHolder_content);
+                        break;
                 }
             }
             else
             {
                 p.be_loaded = false;
-                p.tab_index = Units.UserControl_analyses_binder.TSSI_equipment_procurement_binder;
+                p.tab_index = UserControl_analyses_binder_Static.TSSI_equipment_procurement_binder;
                 p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_binder)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_binder.ascx"))).Fresh(), "UserControl_equipment_procurement_binder", PlaceHolder_content);
             }
 
@@ -101,33 +97,19 @@ namespace UserControl_analyses_binder
             PlaceHolder_content.Controls.Clear();
             switch(p.tab_index)
             {
-                case Units.UserControl_analyses_binder.TSSI_equipment_procurement_binder:
+                case UserControl_analyses_binder_Static.TSSI_equipment_procurement_binder:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_binder)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_binder.ascx"))).Fresh(), "UserControl_equipment_procurement_binder", PlaceHolder_content);
                     break;
-                case Units.UserControl_analyses_binder.TSSI_VALUES_TO_SERVICES:
+                case UserControl_analyses_binder_Static.TSSI_VALUES_TO_SERVICES:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_values_to_services)(LoadControl("~/usercontrol/app/UserControl_values_to_services.ascx"))).Fresh(), "UserControl_values_to_services", PlaceHolder_content);
                     break;
-            // TSSI_2:
-            // p.content_id := AddIdentifiedControlToPlaceHolder
-            // (
-            // TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')).Fresh,
-            // 'UserControl3',
-            // PlaceHolder_content
-            // );
+                case UserControl_analyses_binder_Static.TSSI_VALUES_TO_REGION:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_values_to_region)(LoadControl("~/usercontrol/app/UserControl_values_to_region.ascx"))).Fresh(), "UserControl_values_to_region", PlaceHolder_content);
+                    break;
             }
         }
 
     } // end TWebUserControl_analyses_binder
-
-}
-
-namespace UserControl_analyses_binder.Units
-{
-    public class UserControl_analyses_binder
-    {
-        public const int TSSI_equipment_procurement_binder = 0;
-        public const int TSSI_VALUES_TO_SERVICES = 1;
-    } // end UserControl_analyses_binder
 
 }
 
