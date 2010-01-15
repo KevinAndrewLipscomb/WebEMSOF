@@ -1,19 +1,28 @@
-using MySql.Data.MySqlClient;
-using kix;
-using System;
-
-using System.Web.UI.WebControls;
 using Class_db;
+using Class_db_fiscal_years;
+using kix;
+using MySql.Data.MySqlClient;
+using System.Web.UI.WebControls;
+
 namespace Class_db_counties
 {
+  public class county_summary
+    {
+    public string code;
+    public string name;
+    }
+
     public class TClass_db_counties: TClass_db
     {
+
+        private TClass_db_fiscal_years db_fiscal_years;
+
         //Constructor  Create()
         public TClass_db_counties() : base()
-        {
-            // TODO: Add any constructor code here
+          {
+          db_fiscal_years = new TClass_db_fiscal_years();
+          }
 
-        }
         public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
         {
             MySqlDataReader dr;
@@ -47,6 +56,40 @@ namespace Class_db_counties
             BindDirectToListControl(target, unselected_literal, k.EMPTY);
         }
 
+        public void BindGrid(string sort_order, bool be_sort_order_ascending, object target)
+          {
+          if (be_sort_order_ascending)
+            {
+            sort_order = sort_order.Replace("%", " asc");
+            }
+          else
+            {
+            sort_order = sort_order.Replace("%", " desc");
+            }
+          Open();
+          ((target) as BaseDataList).DataSource = new MySqlCommand
+            (
+            "select code"
+            + " , county_code_name_map.name as name"
+            + " , password_reset_email_address as email_address"
+            + " , region_dictated_appropriation.amount as amount"
+            + " , DATE_FORMAT(service_to_county_submission_deadline,'%Y-%m-%d %H:%i:%s') as deadline"
+            + " , concat(match_level.name,' (',FORMAT(factor*100,0),'%)') as match_level_description"
+            + " from county_code_name_map"
+            +   " join county_user on (county_user.id=county_code_name_map.code)"
+            +   " join region_dictated_appropriation on (region_dictated_appropriation.county_code=county_code_name_map.code)"
+            +   " join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+            +   " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
+            +   " join match_level on (match_level.id=region_dictated_appropriation.match_level_id)"
+            + " where fiscal_year.id = '" + db_fiscal_years.IdOfCurrent() + "'"
+            + " order by " + sort_order,
+            connection
+            )
+            .ExecuteReader();
+          ((target) as BaseDataList).DataBind();
+          Close();
+          }
+
         public string NameOf(string code)
         {
             string result;
@@ -55,6 +98,30 @@ namespace Class_db_counties
             this.Close();
             return result;
         }
+
+    public object Summary(string code)
+      {
+      Open();
+      var dr =
+        (
+        new MySqlCommand
+          (
+          "select name"
+          + " from county_code_name_map"
+          + " where code = '" + code + "'",
+          connection
+          )
+          .ExecuteReader()
+        );
+      dr.Read();
+      var the_summary = new county_summary()
+        {
+        code = code,
+        name = dr["name"].ToString()
+        };
+      Close();
+      return the_summary;
+      }
 
     } // end TClass_db_counties
 

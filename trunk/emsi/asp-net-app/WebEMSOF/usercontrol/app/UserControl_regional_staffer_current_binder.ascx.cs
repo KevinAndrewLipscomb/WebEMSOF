@@ -1,17 +1,20 @@
-using AjaxControlToolkit;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
+using UserControl_counties;
 using UserControl_financial_snapshot;
 using UserControl_outcomes;
 using UserControl_responding_services;
 using UserControl_workflow;
+
 namespace UserControl_regional_staffer_current_binder
 {
+    public static class UserControl_regional_staffer_current_binder_Static
+    {
+        public const int TSSI_SNAPSHOT = 0;
+        public const int TSSI_WORKFLOW = 1;
+        public const int TSSI_OUTCOMES = 2;
+        public const int TSSI_COUNTIES = 3;
+        public const int TSSI_SERVICES = 4;
+    }
+
     public struct p_type
     {
         public bool be_loaded;
@@ -48,17 +51,20 @@ namespace UserControl_regional_staffer_current_binder
                 }
                 switch(p.tab_index)
                 {
-                    case Units.UserControl_regional_staffer_current_binder.TSSI_SNAPSHOT:
+                    case UserControl_regional_staffer_current_binder_Static.TSSI_SNAPSHOT:
                         // Dynamic controls must be re-added on each postback.
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_financial_snapshot)(LoadControl("~/usercontrol/app/UserControl_financial_snapshot.ascx"))), "UserControl_financial_snapshot", PlaceHolder_content);
                         break;
-                    case Units.UserControl_regional_staffer_current_binder.TSSI_WORKFLOW:
+                    case UserControl_regional_staffer_current_binder_Static.TSSI_WORKFLOW:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_workflow)(LoadControl("~/usercontrol/app/UserControl_workflow.ascx"))), "UserControl_workflow", PlaceHolder_content);
                         break;
-                    case Units.UserControl_regional_staffer_current_binder.TSSI_OUTCOMES:
+                    case UserControl_regional_staffer_current_binder_Static.TSSI_OUTCOMES:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_outcomes)(LoadControl("~/usercontrol/app/UserControl_outcomes.ascx"))), "UserControl_outcomes", PlaceHolder_content);
                         break;
-                    case Units.UserControl_regional_staffer_current_binder.TSSI_SERVICES:
+                    case UserControl_regional_staffer_current_binder_Static.TSSI_COUNTIES:
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_counties)(LoadControl("~/usercontrol/app/UserControl_counties.ascx"))), "UserControl_counties", PlaceHolder_content);
+                        break;
+                    case UserControl_regional_staffer_current_binder_Static.TSSI_SERVICES:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))), "UserControl_responding_services", PlaceHolder_content);
                         break;
                 }
@@ -66,7 +72,7 @@ namespace UserControl_regional_staffer_current_binder
             else
             {
                 p.be_loaded = false;
-                p.tab_index = Units.UserControl_regional_staffer_current_binder.TSSI_SNAPSHOT;
+                p.tab_index = UserControl_regional_staffer_current_binder_Static.TSSI_SNAPSHOT;
                 p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_financial_snapshot)(LoadControl("~/usercontrol/app/UserControl_financial_snapshot.ascx"))).Fresh(), "UserControl_financial_snapshot", PlaceHolder_content);
             }
 
@@ -78,16 +84,19 @@ namespace UserControl_regional_staffer_current_binder
             PlaceHolder_content.Controls.Clear();
             switch(p.tab_index)
             {
-                case Units.UserControl_regional_staffer_current_binder.TSSI_SNAPSHOT:
+                case UserControl_regional_staffer_current_binder_Static.TSSI_SNAPSHOT:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_financial_snapshot)(LoadControl("~/usercontrol/app/UserControl_financial_snapshot.ascx"))).Fresh(), "UserControl_financial_snapshot", PlaceHolder_content);
                     break;
-                case Units.UserControl_regional_staffer_current_binder.TSSI_WORKFLOW:
+                case UserControl_regional_staffer_current_binder_Static.TSSI_WORKFLOW:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_workflow)(LoadControl("~/usercontrol/app/UserControl_workflow.ascx"))).Fresh(), "UserControl_workflow", PlaceHolder_content);
                     break;
-                case Units.UserControl_regional_staffer_current_binder.TSSI_OUTCOMES:
+                case UserControl_regional_staffer_current_binder_Static.TSSI_OUTCOMES:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_outcomes)(LoadControl("~/usercontrol/app/UserControl_outcomes.ascx"))).Fresh(), "UserControl_outcomes", PlaceHolder_content);
                     break;
-                case Units.UserControl_regional_staffer_current_binder.TSSI_SERVICES:
+                case UserControl_regional_staffer_current_binder_Static.TSSI_COUNTIES:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_counties)(LoadControl("~/usercontrol/app/UserControl_counties.ascx"))).Fresh(), "UserControl_counties", PlaceHolder_content);
+                    break;
+                case UserControl_regional_staffer_current_binder_Static.TSSI_SERVICES:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))).Fresh(), "UserControl_responding_services", PlaceHolder_content);
                     break;
             }
@@ -124,16 +133,3 @@ namespace UserControl_regional_staffer_current_binder
     } // end TWebUserControl_regional_staffer_current_binder
 
 }
-
-namespace UserControl_regional_staffer_current_binder.Units
-{
-    public class UserControl_regional_staffer_current_binder
-    {
-        public const int TSSI_SNAPSHOT = 0;
-        public const int TSSI_WORKFLOW = 1;
-        public const int TSSI_OUTCOMES = 2;
-        public const int TSSI_SERVICES = 3;
-    } // end UserControl_regional_staffer_current_binder
-
-}
-

@@ -1,6 +1,6 @@
-using kix;
-using System;
 using Class_db_counties;
+using kix;
+
 namespace Class_biz_counties
 {
     public class TClass_biz_counties
@@ -27,12 +27,27 @@ namespace Class_biz_counties
             BindDirectToListControl(target, unselected_literal, k.EMPTY);
         }
 
+        public void BindGrid
+          (
+          string sort_order,
+          bool be_sort_order_ascending,
+          object target
+          )
+          {
+          db_counties.BindGrid(sort_order,be_sort_order_ascending,target);
+          }
+
         public string NameOf(string code)
         {
             string result;
             result = db_counties.NameOf(code);
             return result;
         }
+
+        public object Summary(string code)
+          {
+          return db_counties.Summary(code);
+          }
 
     } // end TClass_biz_counties
 
