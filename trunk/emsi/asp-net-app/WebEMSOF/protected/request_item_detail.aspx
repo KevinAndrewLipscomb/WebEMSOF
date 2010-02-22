@@ -3,6 +3,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
+<%@ Register src="../usercontrol/ki/UserControl_attachment_explorer.ascx" tagname="UserControl_attachment_explorer" tagprefix="uc3" %>
 <html>
   <head runat="server">
     <!-- $Id$ -->
@@ -24,10 +25,15 @@
 						<td>
 		  <table cellspacing="0" cellpadding="10" border="0">
 			  <tr>
-				<td><p align="right">Equipment category:</p></td>
-				<td>
-				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server" autopostback="True" onselectedindexchanged="DropDownList_equipment_category_SelectedIndexChanged"></ASP:DropDownList>&nbsp;&nbsp; </td>
-				<td><ASP:RequiredFieldValidator id="RequiredFieldValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
+				<td valign="top"><p align="right">Equipment category:</p></td>
+				<td valign="top">
+				  <ASP:DropDownList id="DropDownList_equipment_category" runat="server" autopostback="True" onselectedindexchanged="DropDownList_equipment_category_SelectedIndexChanged"></ASP:DropDownList>
+				  <asp:Panel ID="Panel_attached_documentation" runat="server" Visible="False">
+				    Attach documentation here:
+            <uc3:UserControl_attachment_explorer ID="UserControl_attachment_explorer_control" runat="server" />
+          </asp:Panel>
+				</td>
+				<td valign="top"><ASP:RequiredFieldValidator id="RequiredFieldValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category">!ERR!</ASP:RequiredFieldValidator><ASP:RangeValidator id="RangeValidator_equipment_category" runat="server" errormessage="Please select an equipment category." font-bold="True" controltovalidate="DropDownList_equipment_category" minimumvalue="1" maximumvalue="99999">!ERR!</ASP:RangeValidator></td>
 			  </tr>
 			  <tr>
 				<td><p align="right">Life expectancy:</p></td>

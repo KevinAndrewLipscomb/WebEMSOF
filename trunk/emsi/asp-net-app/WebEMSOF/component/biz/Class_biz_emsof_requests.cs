@@ -884,10 +884,10 @@ namespace Class_biz_emsof_requests
             biz_accounts.MakeUnrejectionNotification(role, reviewer_descriptor, ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item), SponsorCountyCodeOf(e_item));
         }
 
-        public void Withdraw(string master_id)
+        public Queue Withdraw(string master_id)
         {
             biz_accounts.IssueWithdrawalNotice(master_id, ServiceIdOfMasterId(master_id), CountyCodeOfMasterId(master_id));
-            db_emsof_requests.Withdraw(master_id);
+            return db_emsof_requests.Withdraw(master_id);
         }
 
     } // end TClass_biz_emsof_requests

@@ -1,24 +1,12 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-
+using Class_biz_accounts;
 using Class_db;
 using Class_db_trail;
-using Class_biz_accounts;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+using System.IO;
+
 namespace withdraw_request_item
 {
     public partial class TWebForm_withdraw_request_item: ki_web_ui.page_class
@@ -91,6 +79,10 @@ namespace withdraw_request_item
             p.db.Open();
             new MySqlCommand(p.db_trail.Saved("START TRANSACTION;" + "update emsof_request_detail" + " set quantity = 0," + " additional_service_ante = 0," + " emsof_ante = 0," + " status_code = 6" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " , shortage = shortage - " + p.saved_shortage.ToString() + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
             p.db.Close();
+            if (Directory.Exists(Session["emsof_request_item_attachment_folder"].ToString()))
+              {
+              File.Create(Session["emsof_request_item_attachment_folder"].ToString() + "/.webemsof_noninteractive_delete_pending");
+              }
             // Send the notification message.
             biz_accounts = new TClass_biz_accounts();
             service_email_address = biz_accounts.EmailAddressByKindId("service", Session["service_user_id"].ToString());

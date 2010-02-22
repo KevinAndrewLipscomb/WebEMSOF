@@ -32,6 +32,24 @@ namespace request_item_detail {
         protected global::System.Web.UI.WebControls.DropDownList DropDownList_equipment_category;
         
         /// <summary>
+        /// Panel_attached_documentation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_attached_documentation;
+        
+        /// <summary>
+        /// UserControl_attachment_explorer_control control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::UserControl_attachment_explorer.TWebUserControl_attachment_explorer UserControl_attachment_explorer_control;
+        
+        /// <summary>
         /// RequiredFieldValidator_equipment_category control.
         /// </summary>
         /// <remarks>

@@ -1,3 +1,4 @@
+using Class_biz_emsof_requests;
 using Class_biz_equipment;
 using Class_biz_fiscal_years;
 using Class_db;
@@ -6,6 +7,8 @@ using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
+using System.IO;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -25,6 +28,13 @@ namespace request_item_detail
             this.PreRender += this.TWebForm_request_item_detail_PreRender;
             //this.Load += this.Page_Load;
         }
+
+        private void ManageDropDownListEquipmentCategoryEnablement()
+          {
+          var be_other = (k.Safe(DropDownList_equipment_category.SelectedItem.Text,k.safe_hint_type.HYPHENATED_ALPHA_WORDS) == "Other - with attached documentation");
+          Panel_attached_documentation.Visible = be_other;
+          DropDownList_equipment_category.Enabled &= (!be_other || UserControl_attachment_explorer_control.be_empty);
+          }
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
@@ -57,6 +67,7 @@ namespace request_item_detail
                 }
                 Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - request_item_detail";
                 biz_fiscal_years = new TClass_biz_fiscal_years();
+                p.attachment_key = k.EMPTY;
                 p.biz_equipment = new TClass_biz_equipment();
                 p.db = new TClass_db();
                 p.db_trail = new TClass_db_trail();
@@ -143,13 +154,15 @@ namespace request_item_detail
                     TableRow_delete.Visible = false;
                 }
                 // Manage the filling of the other data elements.
+                Panel_attached_documentation.Visible = (k.Safe(DropDownList_equipment_category.SelectedItem.Text,k.safe_hint_type.HYPHENATED_ALPHA_WORDS) == "Other - with attached documentation");
                 if (!be_new)
                 {
                     p.db.Close();
                     ShowDependentData();
                     p.db.Open();
-                    dr_user_details = new MySqlCommand("select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante" + " from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString(), p.db.connection).ExecuteReader();
+                    dr_user_details = new MySqlCommand("select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante,attachment_key" + " from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString(), p.db.connection).ExecuteReader();
                     dr_user_details.Read();
+                    p.attachment_key = dr_user_details["attachment_key"].ToString();
                     TextBox_make_model.Text = dr_user_details["make_model"].ToString();
                     TextBox_place_kept.Text = dr_user_details["place_kept"].ToString();
                     if (dr_user_details["be_refurbished"].ToString() == "0")
@@ -169,6 +182,11 @@ namespace request_item_detail
                     dr_user_details.Close();
                     Recalculate();
                 }
+                if (p.attachment_key == k.EMPTY)
+                  {
+                  p.attachment_key = DateTime.Now.Ticks.ToString("D19");
+                  }
+                UserControl_attachment_explorer_control.path = HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + p.attachment_key);
                 // Manage the availability of the remaining item-detail-related controls.
                 if (be_locked)
                 {
@@ -202,6 +220,8 @@ namespace request_item_detail
                 }
                 else
                 {
+                    UserControl_attachment_explorer_control.be_ok_to_add = true;
+                    UserControl_attachment_explorer_control.be_ok_to_delete = true;
                     TableRow_post_finalization_actions.Visible = false;
                 }
                 Button_withdraw.Enabled = (uint.Parse(Session["status_code"].ToString()) < 11);
@@ -214,6 +234,9 @@ namespace request_item_detail
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
+            //
+            p.biz_emsof_requests = new TClass_biz_emsof_requests();
+            //
         }
 
         protected void CustomValidator_special_conditions_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
@@ -231,6 +254,7 @@ namespace request_item_detail
         private void TWebForm_request_item_detail_PreRender(object sender, System.EventArgs e)
         {
             SessionSet("request_item_detail.p", p);
+            ManageDropDownListEquipmentCategoryEnablement();
         }
 
         protected void Button_withdraw_Click(object sender, System.EventArgs e)
@@ -238,6 +262,7 @@ namespace request_item_detail
             SessionSet("emsof_request_item_make_model", k.Safe(TextBox_make_model.Text, k.safe_hint_type.MAKE_MODEL));
             SessionSet("emsof_request_item_emsof_ante", k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM));
             SessionSet("emsof_request_item_additional_service_ante", p.saved_additional_service_ante.ToString());
+            SessionSet("emsof_request_item_attachment_folder",UserControl_attachment_explorer_control.path);
             DropCrumbAndTransferTo("withdraw_request_item.aspx");
         }
 
@@ -256,7 +281,33 @@ namespace request_item_detail
               p.db.Open();
               // Update the detail record.
               // Update the master record.
-              new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "update emsof_request_detail" + " set equipment_code = " + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " make_model = \"" + k.Safe(TextBox_make_model.Text, k.safe_hint_type.MAKE_MODEL) + "\"," + " place_kept = \"" + k.Safe(TextBox_place_kept.Text, k.safe_hint_type.PUNCTUATED) + "\"," + " be_refurbished = " + k.Safe(RadioButtonList_condition.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " quantity = " + k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM) + k.COMMA + " unit_cost = " + k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM) + k.COMMA + " additional_service_ante = " + p.additional_service_ante.ToString() + k.COMMA + " emsof_ante = " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " + " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " + " + p.additional_service_ante.ToString() + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
+              new MySqlCommand
+                (
+                p.db_trail.Saved
+                  (
+                  "START TRANSACTION"
+                  + ";"
+                  + "update emsof_request_detail" + " set equipment_code = " + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM) + k.COMMA
+                  +   " make_model = \"" + k.Safe(TextBox_make_model.Text, k.safe_hint_type.MAKE_MODEL) + "\","
+                  +   " place_kept = \"" + k.Safe(TextBox_place_kept.Text, k.safe_hint_type.PUNCTUATED) + "\","
+                  +   " be_refurbished = " + k.Safe(RadioButtonList_condition.SelectedValue, k.safe_hint_type.NUM) + k.COMMA
+                  +   " quantity = " + k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM) + k.COMMA
+                  +   " unit_cost = " + k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM) + k.COMMA
+                  +   " additional_service_ante = " + p.additional_service_ante.ToString() + k.COMMA
+                  +   " emsof_ante = " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + k.COMMA
+                  +   " attachment_key = '" + p.attachment_key + "'"
+                  + " where master_id = " + Session["emsof_request_master_id"].ToString()
+                  + " and priority = " + Session["emsof_request_item_priority"].ToString()
+                  + ";"
+                  + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " + " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM)
+                  + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " + " + p.additional_service_ante.ToString()
+                  + " where id = " + Session["emsof_request_master_id"].ToString()
+                  + ";"
+                  + "COMMIT;"
+                  ),
+                p.db.connection
+                )
+                .ExecuteNonQuery();
               p.db.Close();
               BackTrack();
               }
@@ -279,6 +330,10 @@ namespace request_item_detail
               // Update the master record.
               new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "delete from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_detail set priority = priority - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority > " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " , num_items = num_items - 1" + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
               p.db.Close();
+              if (Directory.Exists(UserControl_attachment_explorer_control.path))
+                {
+                File.Create(UserControl_attachment_explorer_control.path + "/.webemsof_noninteractive_delete_pending");
+                }
               BackTrack();
               }
             }
@@ -329,9 +384,9 @@ namespace request_item_detail
         }
 
         protected void DropDownList_equipment_category_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            ShowDependentData();
-        }
+          {
+          ShowDependentData();
+          }
 
         protected void Button_cancel_Click(object sender, System.EventArgs e)
         {
@@ -401,7 +456,35 @@ namespace request_item_detail
             priority_string = new MySqlCommand("select (num_items + 1) from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection).ExecuteScalar().ToString();
             // Record the new request item.
             // Update the master record.
-            new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "insert into emsof_request_detail" + " set master_id = " + Session["emsof_request_master_id"].ToString() + k.COMMA + " equipment_code = " + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " make_model = \"" + k.Safe(TextBox_make_model.Text, k.safe_hint_type.MAKE_MODEL) + "\"," + " place_kept = \"" + k.Safe(TextBox_place_kept.Text, k.safe_hint_type.PUNCTUATED) + "\"," + " be_refurbished = " + k.Safe(RadioButtonList_condition.SelectedValue, k.safe_hint_type.NUM) + k.COMMA + " quantity = " + k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM) + k.COMMA + " unit_cost = " + k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM) + k.COMMA + " additional_service_ante = " + p.additional_service_ante.ToString() + k.COMMA + " emsof_ante = " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + k.COMMA + " priority = " + priority_string + ";" + "update emsof_request_master" + " set status_code = 2," + " value = value + " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM) + k.COMMA + " shortage = shortage + " + p.additional_service_ante.ToString() + k.COMMA + " num_items = num_items + 1" + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
+            new MySqlCommand
+              (
+              p.db_trail.Saved
+                (
+                "START TRANSACTION"
+                + ";"
+                + "insert into emsof_request_detail set master_id = " + Session["emsof_request_master_id"].ToString()
+                +   " , equipment_code = " + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM)
+                +   " , make_model = \"" + k.Safe(TextBox_make_model.Text, k.safe_hint_type.MAKE_MODEL) + "\""
+                +   " , place_kept = \"" + k.Safe(TextBox_place_kept.Text, k.safe_hint_type.PUNCTUATED) + "\""
+                +   " , be_refurbished = " + k.Safe(RadioButtonList_condition.SelectedValue, k.safe_hint_type.NUM)
+                +   " , quantity = " + k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM)
+                +   " , unit_cost = " + k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM)
+                +   " , additional_service_ante = " + p.additional_service_ante.ToString()
+                +   " , emsof_ante = " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM)
+                +   " , priority = " + priority_string
+                +   " , attachment_key = '" + p.attachment_key + "'"
+                + ";"
+                + "update emsof_request_master set status_code = 2"
+                +   " , value = value + " + k.Safe(Label_emsof_ante.Text, k.safe_hint_type.REAL_NUM)
+                +   " , shortage = shortage + " + p.additional_service_ante.ToString()
+                +   " , num_items = num_items + 1"
+                + " where id = " + Session["emsof_request_master_id"].ToString()
+                + ";"
+                + "COMMIT"
+                ),
+              p.db.connection
+              )
+              .ExecuteNonQuery();
             p.db.Close();
         }
 
@@ -452,6 +535,8 @@ namespace request_item_detail
         {
             public decimal additional_service_ante;
             public decimal allowable_cost;
+            public string attachment_key;
+            public TClass_biz_emsof_requests biz_emsof_requests;
             public TClass_biz_equipment biz_equipment;
             public uint dri_equipment_category_allowable_cost;
             public uint dri_equipment_category_funding_level;
