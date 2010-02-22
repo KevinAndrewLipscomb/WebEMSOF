@@ -263,10 +263,35 @@ namespace Class_db_emsof_requests
 
         public void BindDetail(string master_id, object target)
         {
-            this.Open();
-            ((target) as DataGrid).DataSource = new MySqlCommand("select priority" + " ,make_model" + " ,if(be_refurbished,\"(refurbished)\",\"\") as be_refurbished" + " ,description as category" + " ,place_kept" + " ,quantity" + " ,unit_cost" + " ,(quantity*unit_cost) as subtotal" + " ,allowable_cost" + " ,emsof_ante" + " ,invoice_designator" + " ,actual_quantity" + " ,actual_subtotal_cost" + " ,actual_emsof_ante" + " from emsof_request_detail" + " join eligible_provider_equipment_list" + " on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)" + " join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)" + " where master_id = " + master_id + " order by priority", this.connection).ExecuteReader();
+            Open();
+            ((target) as DataGrid).DataSource = new MySqlCommand
+              (
+              "select priority"
+              + " , make_model"
+              + " , if(be_refurbished,\"(refurbished)\",\"\") as be_refurbished"
+              + " , description as category"
+              + " , place_kept"
+              + " , quantity"
+              + " , unit_cost"
+              + " , (quantity*unit_cost) as subtotal"
+              + " , allowable_cost"
+              + " , emsof_ante"
+              + " , invoice_designator"
+              + " , actual_quantity"
+              + " , actual_subtotal_cost"
+              + " , actual_emsof_ante"
+              + " , attachment_key"
+              + " from emsof_request_detail"
+              +   " join eligible_provider_equipment_list"
+              +     " on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)"
+              +   " join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)"
+              + " where master_id = '" + master_id + "'"
+              + " order by priority",
+              connection
+              )
+              .ExecuteReader();
             ((target) as DataGrid).DataBind();
-            this.Close();
+            Close();
         }
 
         public void BindEquipmentProcurementDetail(string fy_id, string equipment_code, string sort_order, bool be_order_ascending, object target)
@@ -1061,12 +1086,20 @@ namespace Class_db_emsof_requests
             this.Close();
         }
 
-        public void Withdraw(string master_id)
-        {
-            this.Open();
-            new MySqlCommand(db_trail.Saved("START TRANSACTION;" + "delete from emsof_request_detail where master_id = " + master_id + ";" + "update emsof_request_master" + " set status_code = 12" + " , value = 0" + " , num_items = 0" + " , shortage = 0" + " , has_wish_list = FALSE" + " , actual_value = 0" + " , be_deadline_exempt = FALSE" + " , be_reopened_after_going_to_state = FALSE" + " where id = " + master_id + ";" + "COMMIT;"), this.connection).ExecuteNonQuery();
-            this.Close();
-        }
+        public Queue Withdraw(string master_id)
+          {
+          var attachment_key_q = new Queue();
+          this.Open();
+          var dr = new MySqlCommand("select attachment_key from emsof_request_detail where master_id = '" + master_id + "' and attachment_key is not null",connection).ExecuteReader();
+          while (dr.Read())
+            {
+            attachment_key_q.Enqueue(dr["attachment_key"].ToString());
+            }
+          dr.Close();
+          new MySqlCommand(db_trail.Saved("START TRANSACTION;" + "delete from emsof_request_detail where master_id = " + master_id + ";" + "update emsof_request_master" + " set status_code = 12" + " , value = 0" + " , num_items = 0" + " , shortage = 0" + " , has_wish_list = FALSE" + " , actual_value = 0" + " , be_deadline_exempt = FALSE" + " , be_reopened_after_going_to_state = FALSE" + " where id = " + master_id + ";" + "COMMIT;"), this.connection).ExecuteNonQuery();
+          this.Close();
+          return attachment_key_q;
+          }
 
     } // end TClass_db_emsof_requests
 

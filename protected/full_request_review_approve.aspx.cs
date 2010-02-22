@@ -7,11 +7,22 @@ using kix;
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using UserControl_attachment_explorer;
 
 namespace full_request_review_approve
-{
+  {
+  public class full_request_review_approve_Static
+    {
+    public const int TCCI_DETAIL = 1;
+    public const int TCCI_ATTACHMENT_KEY = 2;
+    public const int TCCI_ACTUALS = 3;
+    public const int TCCI_LINKBUTTONS = 4;
+    public const int TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 6;
+    }
+
     public partial class TWebForm_full_request_review_approve: ki_web_ui.page_class
     {
         private p_type p;
@@ -42,6 +53,7 @@ namespace full_request_review_approve
                 if ((Session["full_request_review_approve.p"] != null))
                 {
                     p = (p_type)(Session["full_request_review_approve.p"]);
+                    p.biz_emsof_requests.BindDetail(p.request_id, DataGrid_items);
                 }
                 else
                 {
@@ -328,11 +340,15 @@ namespace full_request_review_approve
         private void DataGrid_items_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
         {
             // Manage column visibility
-            e.Item.Cells[Units.full_request_review_approve.TCCI_ACTUALS].Visible = p.display_actuals;
-            e.Item.Cells[Units.full_request_review_approve.TCCI_LINKBUTTONS].Visible = p.modify_actuals;
+            e.Item.Cells[full_request_review_approve_Static.TCCI_ACTUALS].Visible = p.display_actuals;
+            e.Item.Cells[full_request_review_approve_Static.TCCI_LINKBUTTONS].Visible = p.modify_actuals;
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
+                var UserControl_attachment_explorer_control = ((TWebUserControl_attachment_explorer)(LoadControl("~/usercontrol/ki/UserControl_attachment_explorer.ascx")));
+                var PlaceHolder_attachment_explorer = (e.Item.FindControl("PlaceHolder_control") as PlaceHolder);
+                AddIdentifiedControlToPlaceHolder(UserControl_attachment_explorer_control, "UserControl_attachment_explorer", PlaceHolder_attachment_explorer);
+                UserControl_attachment_explorer_control.path = HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + e.Item.Cells[full_request_review_approve_Static.TCCI_ATTACHMENT_KEY].Text);
                 p.num_items = p.num_items + 1;
                 p.total_emsof_ante = p.total_emsof_ante + decimal.Parse(DataBinder.Eval(e.Item.DataItem, p.biz_emsof_requests.PropertyNameOfEmsofAnte()).ToString());
             }
@@ -341,7 +357,7 @@ namespace full_request_review_approve
         private void DataGrid_proofs_of_payment_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
         {
             // Manage column visibility
-            e.Item.Cells[Units.full_request_review_approve.TCCI_PROOF_OF_PAYMENT_LINKBUTTON].Visible = p.be_ok_to_track_payments;
+            e.Item.Cells[full_request_review_approve_Static.TCCI_PROOF_OF_PAYMENT_LINKBUTTON].Visible = p.be_ok_to_track_payments;
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
@@ -398,16 +414,5 @@ namespace full_request_review_approve
 
     } // end TWebForm_full_request_review_approve
 
-}
-
-namespace full_request_review_approve.Units
-{
-    public class full_request_review_approve
-    {
-        public const int TCCI_ACTUALS = 2;
-        public const int TCCI_LINKBUTTONS = 3;
-        public const int TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 5;
-    } // end full_request_review_approve
-
-}
+  }
 

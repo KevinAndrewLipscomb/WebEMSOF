@@ -8,6 +8,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
+using System.IO;
 using System.Web;
 using System.Web.SessionState;
 using System.Web.UI;
@@ -147,10 +148,19 @@ namespace request_overview
         }
 
         protected void Button_withdraw_Click(object sender, System.EventArgs e)
-        {
-            p.biz_emsof_requests.Withdraw(Session["emsof_request_master_id"].ToString());
-            BackTrack();
-        }
+          {
+          var attachment_key_q = new Queue();
+          attachment_key_q = p.biz_emsof_requests.Withdraw(Session["emsof_request_master_id"].ToString());
+          while (attachment_key_q.Count > 0)
+            {
+            var attachment_folder_path = HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + attachment_key_q.Dequeue().ToString());
+            if (Directory.Exists(attachment_folder_path))
+              {
+              File.Create(attachment_folder_path + "/.webemsof_noninteractive_delete_pending");
+              }
+            }
+          BackTrack();
+          }
 
         protected void LinkButton_add_item_to_request_Click(object sender, System.EventArgs e)
         {

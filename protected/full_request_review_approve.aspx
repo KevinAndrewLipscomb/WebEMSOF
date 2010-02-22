@@ -3,6 +3,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
+<%@ Register src="../usercontrol/ki/UserControl_attachment_explorer.ascx" tagname="UserControl_attachment_explorer" tagprefix="uc3" %>
 <html>
   <head runat="server">
     <!-- $Id$ -->
@@ -142,10 +143,12 @@
                               </td>
                             </tr>
                             <tr>
-                              <td>
+                              <td valign="top">
 								<small>Category:</small>
 							  </td>
-							  <td><small><strong><%# DataBinder.Eval(Container.DataItem, "category") %></strong></small></td>
+							  <td><small><strong><%# DataBinder.Eval(Container.DataItem, "category") %></strong></small>
+							                  <asp:PlaceHolder ID="PlaceHolder_control" runat="server"></asp:PlaceHolder>
+							                </td>
 							</tr>
                             <tr>
 							  <td><small>Place kept:</small></td>
@@ -170,6 +173,7 @@
 						  </table>
                             </ItemTemplate>
                           </ASP:TemplateColumn>
+             <asp:BoundColumn DataField="attachment_key" ReadOnly="True" Visible="False"></asp:BoundColumn>
                           <ASP:TemplateColumn headertext="Actuals">
 <ItemTemplate>
   <small>
@@ -188,7 +192,7 @@
 							</EditItemTemplate>
 						  </ASP:TemplateColumn>
 						  <ASP:EditCommandColumn buttontype="LinkButton" updatetext="Update" canceltext="Cancel" edittext="Edit"></ASP:EditCommandColumn>
-						</Columns>
+ 						</Columns>
 				  </asp:datagrid>
 				</td>
 			  </tr>
