@@ -33,7 +33,7 @@ namespace request_item_detail
           {
           var be_other = (k.Safe(DropDownList_equipment_category.SelectedItem.Text,k.safe_hint_type.HYPHENATED_ALPHA_WORDS) == "Other - with attached documentation");
           Panel_attached_documentation.Visible = be_other;
-          DropDownList_equipment_category.Enabled &= (!be_other || UserControl_attachment_explorer_control.be_empty);
+          DropDownList_equipment_category.Enabled = !p.be_locked && (!be_other || UserControl_attachment_explorer_control.be_empty);
           }
 
         protected void Page_Load(object sender, System.EventArgs e)
@@ -43,7 +43,6 @@ namespace request_item_detail
             MySqlDataReader dr_user_details;
             bool be_before_deadline;
             bool be_finalized;
-            bool be_locked;
             bool be_new;
             TClass_biz_fiscal_years biz_fiscal_years;
             string cmdText;
@@ -96,7 +95,7 @@ namespace request_item_detail
                 // Case matters.
                 be_finalized = Session["be_finalized"].ToString() == "True";
                 // Case matters.
-                be_locked = !be_before_deadline || be_finalized;
+                p.be_locked = !be_before_deadline || be_finalized;
                 be_new = Session["emsof_request_item_priority"].ToString() == k.EMPTY;
                 // Manage whether or not the instruction ("-- Select --") appears at the top of DropDownList_equipment_category.
                 if (be_new)
@@ -104,7 +103,7 @@ namespace request_item_detail
                     DropDownList_equipment_category.Items.Add(new ListItem("-- Select (then wait for form to refresh) --", "0"));
                 }
                 // Manage the loading of nominal elements into DropDownList_equipment_category.
-                if (be_new || !be_locked)
+                if (be_new || !p.be_locked)
                 {
                     // Determine this service's eligibility factors.
                     dr_factors = new MySqlCommand("select (be_als_amb or be_air_amb) as be_als_amb," + " (be_als_amb or be_als_squad) as be_als_squad," + " (be_bls_amb or be_als_amb) as be_bls_amb," + " (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs" + " FROM service" + " WHERE id = " + Session["service_user_id"].ToString(), p.db.connection).ExecuteReader();
@@ -142,7 +141,7 @@ namespace request_item_detail
                 }
                 // Manage the initially selected value in DropDownList_equipment_category and the availability of the submit/update/delete
                 // options.
-                if (!(be_new || be_locked))
+                if (!(be_new || p.be_locked))
                 {
                     DropDownList_equipment_category.SelectedValue = Session["emsof_request_item_code"].ToString();
                     Button_submit_and_repeat.Visible = false;
@@ -188,7 +187,7 @@ namespace request_item_detail
                   }
                 UserControl_attachment_explorer_control.path = HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + p.attachment_key);
                 // Manage the availability of the remaining item-detail-related controls.
-                if (be_locked)
+                if (p.be_locked)
                 {
                     DropDownList_equipment_category.Enabled = false;
                     RequiredFieldValidator_equipment_category.Enabled = false;
@@ -536,6 +535,7 @@ namespace request_item_detail
             public decimal additional_service_ante;
             public decimal allowable_cost;
             public string attachment_key;
+            public bool be_locked;
             public TClass_biz_emsof_requests biz_emsof_requests;
             public TClass_biz_equipment biz_equipment;
             public uint dri_equipment_category_allowable_cost;

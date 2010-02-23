@@ -23,4 +23,5 @@
 @robocopy C:\Inetpub\wwwroot\WebEMSOF\template\notification           ready-to-deploy\template\notification                     /m /np /ns /z | qgrep "New "
 @robocopy C:\Inetpub\wwwroot\WebEMSOF\usercontrol\app                 ready-to-deploy\usercontrol\app                 *.ascx    /m /np /ns /z | qgrep "New "
 @robocopy C:\Inetpub\wwwroot\WebEMSOF\usercontrol\ki                  ready-to-deploy\usercontrol\ki                  *.ascx    /A /np /ns /z | qgrep "New "
+@robocopy C:\Inetpub\wwwroot\WebEMSOF\usercontrol\ki\image            ready-to-deploy\usercontrol\ki\image                      /A /np /ns /z | qgrep "New "
 @pause
