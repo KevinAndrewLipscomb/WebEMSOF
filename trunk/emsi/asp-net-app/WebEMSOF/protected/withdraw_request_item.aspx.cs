@@ -81,7 +81,7 @@ namespace withdraw_request_item
             p.db.Close();
             if (Directory.Exists(Session["emsof_request_item_attachment_folder"].ToString()))
               {
-              File.Create(Session["emsof_request_item_attachment_folder"].ToString() + "/.webemsof_noninteractive_delete_pending");
+              File.Create(Session["emsof_request_item_attachment_folder"].ToString() + "\\noninteractive_delete_pending.kaf");
               }
             // Send the notification message.
             biz_accounts = new TClass_biz_accounts();
