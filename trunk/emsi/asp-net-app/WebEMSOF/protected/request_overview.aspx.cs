@@ -14,6 +14,7 @@ using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using WebEMSOF.component.os;
 
 namespace request_overview
 {
@@ -145,6 +146,7 @@ namespace request_overview
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
+            p.fs = new Class_fs();
         }
 
         protected void Button_withdraw_Click(object sender, System.EventArgs e)
@@ -153,11 +155,7 @@ namespace request_overview
           attachment_key_q = p.biz_emsof_requests.Withdraw(Session["emsof_request_master_id"].ToString());
           while (attachment_key_q.Count > 0)
             {
-            var attachment_folder_path = HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + attachment_key_q.Dequeue().ToString());
-            if (Directory.Exists(attachment_folder_path))
-              {
-              File.Create(attachment_folder_path + "\\noninteractive_delete_pending.kaf");
-              }
+            p.fs.CondemnFolder(HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + attachment_key_q.Dequeue().ToString()));
             }
           BackTrack();
           }
@@ -257,6 +255,7 @@ namespace request_overview
             public TClass_biz_emsof_requests biz_emsof_requests;
             public TClass_db db;
             public TClass_db_trail db_trail;
+            public Class_fs fs;
             public uint tcci_master_id;
             public uint tcci_priority;
             public uint tcci_code;

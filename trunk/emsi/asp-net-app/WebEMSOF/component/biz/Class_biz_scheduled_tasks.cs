@@ -14,7 +14,7 @@ namespace Class_biz_scheduled_tasks
 
     public void DoDailyChores(string current_working_directory_spec)
       {
-      fs.PurgeDanglingAttachments(current_working_directory_spec + "/../protected/attachment");
+      fs.DeleteCondemnedFolders(current_working_directory_spec + "/../protected/attachment");
       }
 
     } // end TClass_biz_scheduled_tasks
