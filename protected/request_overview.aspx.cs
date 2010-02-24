@@ -77,7 +77,7 @@ namespace request_overview
                 p.num_items = 0;
                 p.sum_of_emsof_antes = 0;
                 be_deadline_exempt = p.biz_emsof_requests.BeDeadlineExempt(Session["emsof_request_master_id"].ToString());
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - request_overview";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - request_overview";
                 p.db.Open();
                 Label_master_status.Text = Session["emsof_request_master_status"].ToString();
                 // All further rendering is deadline-dependent.
@@ -156,7 +156,7 @@ namespace request_overview
             var attachment_folder_path = HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + attachment_key_q.Dequeue().ToString());
             if (Directory.Exists(attachment_folder_path))
               {
-              File.Create(attachment_folder_path + "/.webemsof_noninteractive_delete_pending");
+              File.Create(attachment_folder_path + "\\noninteractive_delete_pending.kaf");
               }
             }
           BackTrack();

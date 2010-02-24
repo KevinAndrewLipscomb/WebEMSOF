@@ -331,7 +331,7 @@ namespace request_item_detail
               p.db.Close();
               if (Directory.Exists(UserControl_attachment_explorer_control.path))
                 {
-                File.Create(UserControl_attachment_explorer_control.path + "/.webemsof_noninteractive_delete_pending");
+                File.Create(UserControl_attachment_explorer_control.path + "\\noninteractive_delete_pending.kaf");
                 }
               BackTrack();
               }
