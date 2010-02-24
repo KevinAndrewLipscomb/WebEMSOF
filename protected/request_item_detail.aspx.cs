@@ -11,6 +11,7 @@ using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using WebEMSOF.component.os;
 
 namespace request_item_detail
 {
@@ -235,6 +236,7 @@ namespace request_item_detail
             base.OnInit(e);
             //
             p.biz_emsof_requests = new TClass_biz_emsof_requests();
+            p.fs = new Class_fs();
             //
         }
 
@@ -329,10 +331,7 @@ namespace request_item_detail
               // Update the master record.
               new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "delete from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_detail set priority = priority - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority > " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " , num_items = num_items - 1" + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
               p.db.Close();
-              if (Directory.Exists(UserControl_attachment_explorer_control.path))
-                {
-                File.Create(UserControl_attachment_explorer_control.path + "\\noninteractive_delete_pending.kaf");
-                }
+              p.fs.CondemnFolder(UserControl_attachment_explorer_control.path);
               BackTrack();
               }
             }
@@ -543,6 +542,7 @@ namespace request_item_detail
             public string cmdText_get_equipment_category_monetary_details;
             public TClass_db db;
             public TClass_db_trail db_trail;
+            public Class_fs fs;
             public decimal funding_level;
             public decimal match_level;
             public decimal saved_emsof_ante;
