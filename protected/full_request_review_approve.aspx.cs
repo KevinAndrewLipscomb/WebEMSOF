@@ -53,7 +53,6 @@ namespace full_request_review_approve
                 if ((Session["full_request_review_approve.p"] != null))
                 {
                     p = (p_type)(Session["full_request_review_approve.p"]);
-                    p.biz_emsof_requests.BindDetail(p.request_id, DataGrid_items);
                 }
                 else
                 {
