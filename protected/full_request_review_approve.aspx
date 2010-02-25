@@ -147,7 +147,7 @@
 								<small>Category:</small>
 							  </td>
 							  <td><small><strong><%# DataBinder.Eval(Container.DataItem, "category") %></strong></small>
-							                  <asp:PlaceHolder ID="PlaceHolder_control" runat="server"></asp:PlaceHolder>
+							                  <uc3:UserControl_attachment_explorer ID="UserControl_attachment_explorer_control" runat="server" />
 							                </td>
 							</tr>
                             <tr>
