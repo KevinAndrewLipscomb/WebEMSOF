@@ -20,7 +20,7 @@ namespace full_request_review_approve
     public const int TCCI_ATTACHMENT_KEY = 2;
     public const int TCCI_ACTUALS = 3;
     public const int TCCI_LINKBUTTONS = 4;
-    public const int TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 6;
+    public const int TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 5;
     }
 
     public partial class TWebForm_full_request_review_approve: ki_web_ui.page_class
