@@ -254,8 +254,8 @@ namespace request_item_detail
 
         private void TWebForm_request_item_detail_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("request_item_detail.p", p);
-            ManageDropDownListEquipmentCategoryEnablement();
+        ManageDropDownListEquipmentCategoryEnablement();
+        SessionSet("request_item_detail.p", p);
         }
 
         protected void Button_withdraw_Click(object sender, System.EventArgs e)
