@@ -10,7 +10,7 @@
               <td>
                 <asp:DataGrid id="DataGrid_control" runat="server" gridlines="Horizontal" cellpadding="10" autogeneratecolumns="False" allowsorting="True">
                   <Columns>
-                    <asp:ButtonColumn text="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Detail&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" commandname="Select"></asp:ButtonColumn>
+                    <asp:ButtonColumn text="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Detail&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" commandname="Select" Visible="False"></asp:ButtonColumn>
                     <asp:BoundColumn datafield="code" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn datafield="email_address" Visible="false"></asp:BoundColumn>
                     <asp:BoundColumn datafield="name" headertext="Name" sortexpression="name%"></asp:BoundColumn>
