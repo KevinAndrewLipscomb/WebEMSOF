@@ -57,10 +57,12 @@ namespace salogin
             }
             else
             {
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - salogin";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - salogin";
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 p.biz_accounts = new TClass_biz_accounts();
             }
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_new_password);
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_log_in);
         }
 
         protected override void OnInit(EventArgs e)

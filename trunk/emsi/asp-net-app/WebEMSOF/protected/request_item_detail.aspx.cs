@@ -227,6 +227,13 @@ namespace request_item_detail
                 Button_withdraw.Enabled = (uint.Parse(Session["status_code"].ToString()) < 11);
                 p.db.Close();
             }
+            //
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_withdraw);
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_update);
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_delete);
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_submit_and_stop);
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_cancel);
+            //
         }
 
         protected override void OnInit(EventArgs e)

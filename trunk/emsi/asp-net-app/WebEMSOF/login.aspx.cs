@@ -1,25 +1,10 @@
-using System.Configuration;
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Globalization;
-using System.Data.SqlClient;
-using System.Data.Common;
-
-
-
-
-
-using System.Web.UI;
-using System.Web.Security;
 using Class_biz_accounts;
+using kix;
+using System;
+using System.Configuration;
+using System.Web.Security;
+using System.Web.UI;
+
 namespace login
 {
     public struct p_type
@@ -57,10 +42,12 @@ namespace login
             }
             else
             {
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - login";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - login";
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 p.biz_accounts = new TClass_biz_accounts();
             }
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_new_password);
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_log_in);
         }
 
         protected override void OnInit(EventArgs e)

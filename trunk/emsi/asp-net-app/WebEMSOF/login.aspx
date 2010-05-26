@@ -5,9 +5,8 @@
 
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-	<title id="Title" runat="server"></title>
-	<!-- $Id$ -->
+  <head runat="server">
+	  <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
@@ -33,6 +32,8 @@
 					  </tr>
 					  <tr>
 						<td>
+<asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
+  <ContentTemplate>
 			<table cellspacing="0" cellpadding="5">
 			  <tbody>
 				<tr>
@@ -93,6 +94,8 @@
 				</tr>
 			  </tbody>
 			</table>
+  </ContentTemplate>
+</asp:UpdatePanel>
 						</td>
 					  </tr>
 				  </table>

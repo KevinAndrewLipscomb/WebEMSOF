@@ -147,9 +147,13 @@
                     <tr>
                       <td>
                         <p>If your County EMSOF Coordinator could find a way to allocate more EMSOF money to your service, would you <strong>want</strong> to, and could you <strong>afford</strong> to add more items to your EMSOF request in this cycle? &nbsp;(Keep in mind that your service would have to pay for the additional item(s) up front, with only partial reimbursement.)</p>
+<asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
+  <ContentTemplate>
                         <p>
                           <ASP:CheckBox id="CheckBox_has_wish_list" runat="server" autopostback="True" text='Yes, we have a "wish list".' oncheckedchanged="CheckBox_has_wish_list_CheckedChanged"></ASP:CheckBox></p>
-                        <p><small>When changing this setting, wait for the page to refresh.</small></p></td>
+  </ContentTemplate>
+</asp:UpdatePanel>
+                        </td>
                     </tr>
                 </table></td>
             </tr>
