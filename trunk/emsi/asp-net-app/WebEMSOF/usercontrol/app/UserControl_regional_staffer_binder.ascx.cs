@@ -1,19 +1,11 @@
-using AjaxControlToolkit;
-
-
-using System;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using UserControl_about;
 using UserControl_analyses_binder;
 using UserControl_config_binder;
 using UserControl_regional_staffer_current_binder;
 using UserControl_regional_staffer_new_binder;
 using UserControl_regional_staffer_old_binder;
+
 namespace UserControl_regional_staffer_binder
 {
     public partial class TWebUserControl_regional_staffer_binder: ki_web_ui.usercontrol_class
@@ -147,9 +139,9 @@ namespace UserControl_regional_staffer_binder.Units
 {
     public class UserControl_regional_staffer_binder
     {
-        public const int TSSI_CURRENT = 0;
-        public const int TSSI_OLD = 1;
-        public const int TSSI_NEW = 2;
+        public const int TSSI_NEW = 0;
+        public const int TSSI_CURRENT = 1;
+        public const int TSSI_OLD = 2;
         public const int TSSI_ANALYSES = 3;
         public const int TSSI_CONFIG = 4;
         public const int TSSI_ABOUT = 5;
