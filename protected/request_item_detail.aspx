@@ -128,7 +128,9 @@
 			  <p align="right"><strong>Portion of total cost that EMSOF will reimburse you</strong>:&nbsp; $</p></td>
 			  <td>
 				<ASP:Label id="Label_emsof_ante" runat="server" font-bold="True"></ASP:Label></td>
-			  <td></td>
+			  <td><asp:CustomValidator ID="CustomValidator_emsof_ante" runat="server" 
+            ErrorMessage="The EMSOF reimbursement cannot be a negative amount.  Please reduce the &quot;Additional amount, if any, that your service will pay, unreimbursed, to prevent exceeding your allocation&quot;." Font-Bold="True" 
+            onservervalidate="CustomValidator_emsof_ante_ServerValidate">!ERR!</asp:CustomValidator></td>
 			</tr>
 			<tr>
 			  <td>
