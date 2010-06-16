@@ -384,7 +384,7 @@
                               <table cellspacing="0" cellpadding="5" border="0">
                                   <tr><td nowrap="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td>Check&nbsp; <asp:checkbox id="CheckBox_mark_done" runat="server">
-						</asp:checkbox>&nbsp;and click <asp:button id="Button_mark_done" runat="server" text="DONE" onclick="Button_mark_done_Click"></asp:button>. </td>
+						</asp:checkbox>&nbsp;and click <asp:button id="Button_mark_done" runat="server" text="DONE" onclick="Button_mark_done_Click"></asp:button>.</td>
                                   </tr>
                               </table></td>
 					</tr>

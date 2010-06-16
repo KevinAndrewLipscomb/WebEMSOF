@@ -2,6 +2,7 @@ using Class_biz_accounts;
 using Class_biz_appropriations;
 using Class_biz_emsof_request_return_comments;
 using Class_biz_emsof_requests;
+using Class_biz_equipment;
 using Class_biz_user;
 using kix;
 using System;
@@ -71,6 +72,7 @@ namespace full_request_review_approve
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_emsof_request_return_comments = new TClass_biz_emsof_request_return_comments();
                 p.biz_emsof_requests = new TClass_biz_emsof_requests();
+                p.biz_equipment = new TClass_biz_equipment();
                 p.biz_user = new TClass_biz_user();
                 // Initialize class private data members.
                 p.status = p.biz_emsof_requests.StatusOf(Session["e_item"]);
@@ -274,7 +276,7 @@ namespace full_request_review_approve
         }
 
         private void DataGrid_items_UpdateCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
-        {
+          {
             string actual_quantity;
             string actual_subtotal_cost;
             string invoice_designator;
@@ -283,8 +285,12 @@ namespace full_request_review_approve
             invoice_designator = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_invoice_designator")) as TextBox).Text.Trim(), k.safe_hint_type.PUNCTUATED);
             actual_quantity = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_actual_quantity")) as TextBox).Text.Trim(), k.safe_hint_type.NUM);
             actual_subtotal_cost = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_actual_subtotal_cost")) as TextBox).Text.Trim(), k.safe_hint_type.REAL_NUM);
+            var be_ok_to_end_edit_and_rebind = true;
             if ((invoice_designator != k.EMPTY) && (actual_quantity != k.EMPTY) && (actual_subtotal_cost != k.EMPTY))
-            {
+              {
+              var special_rules_violation = p.biz_equipment.SpecialRulesViolation(p.biz_emsof_requests.ServiceIdOf(Session["e_item"]), p.request_id, priority, p.biz_emsof_requests.EquipmentCodeOf(p.request_id, priority), actual_quantity);
+              if (special_rules_violation == k.EMPTY)
+                {
                 p.biz_emsof_requests.SetActuals
                   (
                   p.request_id,
@@ -295,11 +301,25 @@ namespace full_request_review_approve
                   (p.parent_appropriation_amount - p.biz_emsof_requests.SumOfActualEmsofAntesOfOtherRequestItems(p.request_id,priority)).ToString(),
                   allowable_cost
                   );
-            }
-            DataGrid_items.EditItemIndex =  -1;
-            p.biz_emsof_requests.BindDetail(p.request_id, DataGrid_items);
-
-        }
+                }
+              else
+                {
+                be_ok_to_end_edit_and_rebind = false;
+                Alert
+                  (
+                  k.alert_cause_type.APPDATA,
+                  k.alert_state_type.WARNING,
+                  "sperulvio",
+                  "The Actual data you entered for the priority " + priority + " item violates the special rules in the Eligible Providers Equipment List.  The message for the service is: '" + special_rules_violation + "'"
+                  );
+                }
+              }
+            if (be_ok_to_end_edit_and_rebind)
+              {
+              DataGrid_items.EditItemIndex =  -1;
+              p.biz_emsof_requests.BindDetail(p.request_id, DataGrid_items);
+              }
+          }
 
         private void DataGrid_items_CancelCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
@@ -314,13 +334,16 @@ namespace full_request_review_approve
         }
 
         protected void Button_mark_done_Click(object sender, System.EventArgs e)
-        {
-            if (CheckBox_mark_done.Checked)
+          {
+          if (Page.IsValid)
             {
-                p.biz_emsof_requests.MarkDone(Session["e_item"], Session["account_descriptor"].ToString());
-                BackTrack();
+            if (CheckBox_mark_done.Checked)
+              {
+              p.biz_emsof_requests.MarkDone(Session["e_item"], Session["account_descriptor"].ToString());
+              BackTrack();
+              }
             }
-        }
+          }
 
         private void TWebForm_full_request_review_approve_PreRender(object sender, System.EventArgs e)
         {
@@ -400,6 +423,7 @@ namespace full_request_review_approve
             public TClass_biz_accounts biz_accounts;
             public TClass_biz_emsof_request_return_comments biz_emsof_request_return_comments;
             public TClass_biz_emsof_requests biz_emsof_requests;
+            public TClass_biz_equipment biz_equipment;
             public TClass_biz_user biz_user;
             public bool display_actuals;
             public bool modify_actuals;
