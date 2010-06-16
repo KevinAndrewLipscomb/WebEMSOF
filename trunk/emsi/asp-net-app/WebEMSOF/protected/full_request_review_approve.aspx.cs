@@ -16,10 +16,10 @@ namespace full_request_review_approve
   {
   public class full_request_review_approve_Static
     {
-    public const int TCCI_DETAIL = 1;
-    public const int TCCI_ATTACHMENT_KEY = 2;
-    public const int TCCI_ACTUALS = 3;
-    public const int TCCI_LINKBUTTONS = 4;
+    public const int TCCI_DETAIL = 2;
+    public const int TCCI_ATTACHMENT_KEY = 3;
+    public const int TCCI_ACTUALS = 4;
+    public const int TCCI_LINKBUTTONS = 5;
     public const int TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 5;
     }
 
@@ -146,7 +146,10 @@ namespace full_request_review_approve
                     p.be_ok_to_track_payments = p.biz_emsof_requests.BeOkToTrackPayments(p.status);
                     LinkButton_new_proof_of_payment.Visible = p.be_ok_to_track_payments;
                     BindProofsOfPayment();
-                    Label_total_of_emsof_amounts.Text = p.biz_emsof_requests.ActualValueOf(p.request_id).ToString("C");
+                    var actual_value = p.biz_emsof_requests.ActualValueOf(p.request_id);
+                    Label_total_of_emsof_amounts.Text = actual_value.ToString("C");
+                    Label_sum_of_emsof_antes.Text = Label_total_of_emsof_amounts.Text;
+                    Label_unused_amount.Text = (p.parent_appropriation_amount - actual_value).ToString("C");
                 }
                 // Manage QuickMessage block.
                 Literal_emsof_contact_name.Text = p.biz_emsof_requests.ServiceNameOf(Session["e_item"]);
@@ -275,14 +278,23 @@ namespace full_request_review_approve
             string actual_quantity;
             string actual_subtotal_cost;
             string invoice_designator;
-            string priority;
-            priority = k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestPriority())].Text.Trim(), k.safe_hint_type.PUNCTUATED);
+            var priority = k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestPriority())].Text.Trim(), k.safe_hint_type.PUNCTUATED);
+            var allowable_cost = k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestAllowableCost())].Text,k.safe_hint_type.REAL_NUM);
             invoice_designator = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_invoice_designator")) as TextBox).Text.Trim(), k.safe_hint_type.PUNCTUATED);
             actual_quantity = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_actual_quantity")) as TextBox).Text.Trim(), k.safe_hint_type.NUM);
             actual_subtotal_cost = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_actual_subtotal_cost")) as TextBox).Text.Trim(), k.safe_hint_type.REAL_NUM);
             if ((invoice_designator != k.EMPTY) && (actual_quantity != k.EMPTY) && (actual_subtotal_cost != k.EMPTY))
             {
-                p.biz_emsof_requests.SetActuals(p.request_id, priority, invoice_designator, actual_quantity, actual_subtotal_cost);
+                p.biz_emsof_requests.SetActuals
+                  (
+                  p.request_id,
+                  priority,
+                  invoice_designator,
+                  actual_quantity,
+                  actual_subtotal_cost,
+                  (p.parent_appropriation_amount - p.biz_emsof_requests.SumOfActualEmsofAntesOfOtherRequestItems(p.request_id,priority)).ToString(),
+                  allowable_cost
+                  );
             }
             DataGrid_items.EditItemIndex =  -1;
             p.biz_emsof_requests.BindDetail(p.request_id, DataGrid_items);

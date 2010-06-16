@@ -562,6 +562,11 @@ namespace Class_biz_emsof_requests
             return result;
         }
 
+        public string PropertyNameOfActualEmsofAnte()
+          {
+          return db_emsof_requests.PropertyNameOfActualEmsofAnte();
+          }
+
         public string PropertyNameOfAppropriation()
         {
             string result;
@@ -644,19 +649,20 @@ namespace Class_biz_emsof_requests
             return result;
         }
 
-        public void SetActuals(string master_id, string priority, string invoice_designator, string quantity, string subtotal_cost)
+        public void SetActuals(string master_id, string priority, string invoice_designator, string quantity, string subtotal_cost, string unused_allocation, string allowable_cost)
         {
-            string county_dictum_id;
+            var county_dictum_id = CountyDictumIdOf(master_id);
             uint item_status_code;
-            decimal val2;
-            county_dictum_id = CountyDictumIdOf(master_id);
+            var match_factor = biz_appropriations.MatchFactorOf(county_dictum_id);
+            decimal match_portion_of_subtotal_cost;
+            var subtotal_cost_value = decimal.Parse(subtotal_cost);
             if (biz_equipment.BeMatchExempt(EquipmentCodeOf(master_id, priority), biz_match_level.EnumOfId(biz_appropriations.MatchLevelIdOf(county_dictum_id))))
             {
-                val2 = decimal.Parse(subtotal_cost);
+                match_portion_of_subtotal_cost = subtotal_cost_value;
             }
             else
             {
-                val2 = decimal.Parse(subtotal_cost) * biz_appropriations.MatchFactorOf(county_dictum_id);
+                match_portion_of_subtotal_cost = subtotal_cost_value * match_factor;
             }
             if ((decimal.Parse(quantity) > 0) && (decimal.Parse(subtotal_cost) > 0))
             {
@@ -666,7 +672,36 @@ namespace Class_biz_emsof_requests
             {
                 item_status_code = (int)(item_status_type.REGION_NEEDS_INVOICE);
             }
-            db_emsof_requests.SetActuals(master_id, priority, invoice_designator, quantity, subtotal_cost, Math.Min(EmsofAnteOfItem(master_id, priority), val2), item_status_code);
+            var effective_emsof_ante = new k.decimal_nonnegative();
+            var quantity_value = decimal.Parse(quantity);
+            var unused_allocation_value = decimal.Parse(unused_allocation);
+            if (unused_allocation_value > 0)
+              {
+              decimal additional_service_ante = 0;
+              var allowable_cost_value = decimal.Parse(allowable_cost);
+              var emsof_ante_string = k.EMPTY;
+              var min_service_ante_string = k.EMPTY;
+              var total_cost_string = k.EMPTY;
+              biz_equipment.CostsAndAntes
+                (
+                (subtotal_cost_value/quantity_value).ToString(),
+                quantity,
+                "0",
+                match_factor,
+                allowable_cost_value,
+                biz_equipment.FundingLevel(EquipmentCodeOf(master_id,priority),match_factor,allowable_cost_value),
+                ref additional_service_ante,
+                ref total_cost_string,
+                ref emsof_ante_string,
+                ref min_service_ante_string
+                );
+              effective_emsof_ante.val = Math.Min(unused_allocation_value,decimal.Parse(emsof_ante_string));
+              }
+            else
+              {
+              effective_emsof_ante.val = Math.Min(EmsofAnteOfItem(master_id, priority), match_portion_of_subtotal_cost);
+              }
+            db_emsof_requests.SetActuals(master_id, priority, invoice_designator, quantity, subtotal_cost, effective_emsof_ante.val, item_status_code);
         }
 
         public void SetHasWishList(string master_id, bool value)
@@ -762,6 +797,15 @@ namespace Class_biz_emsof_requests
             return result;
         }
 
+        public decimal SumOfActualEmsofAntesOfOtherRequestItems
+          (
+          string request_id,
+          string priority
+          )
+          {
+          return db_emsof_requests.SumOfActualEmsofAntesOfOtherRequestItems(request_id,priority);
+          }
+
         public decimal SumOfProvenPaymentsOfRequest(string request_id)
         {
             decimal result;
@@ -822,6 +866,16 @@ namespace Class_biz_emsof_requests
             result = db_emsof_requests.TcciOfFullRequestActuals();
             return result;
         }
+
+        public uint TcciOfFullRequestDetail()
+          {
+          return db_emsof_requests.TcciOfFullRequestDetail();
+          }
+
+        public uint TcciOfFullRequestAllowableCost()
+          {
+          return db_emsof_requests.TcciOfFullRequestAllowableCost();
+          }
 
         public uint TcciOfFullRequestPriority()
         {

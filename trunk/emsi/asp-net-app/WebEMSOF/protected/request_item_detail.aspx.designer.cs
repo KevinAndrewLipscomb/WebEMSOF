@@ -292,6 +292,15 @@ namespace request_item_detail {
         protected global::System.Web.UI.WebControls.Label Label_emsof_ante;
         
         /// <summary>
+        /// CustomValidator_emsof_ante control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_emsof_ante;
+        
+        /// <summary>
         /// Button_submit_and_repeat control.
         /// </summary>
         /// <remarks>

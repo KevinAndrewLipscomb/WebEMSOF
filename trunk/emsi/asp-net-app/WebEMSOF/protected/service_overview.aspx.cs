@@ -197,7 +197,29 @@ namespace service_overview
             // column 5
             // column 6
             // column 7
-            DataGrid.DataSource = new MySqlCommand("SELECT emsof_request_master.id," + " designator as fy_designator," + " name as county_name," + " county_dictated_appropriation.id as county_dictated_appropriation_id," + " county_dictated_appropriation.amount as county_dictated_appropriation_amount," + " status_code," + " request_status_code_description_map.description as status," + " emsof_request_master.value as value" + " FROM emsof_request_master" + " JOIN county_dictated_appropriation" + " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)" + " JOIN region_dictated_appropriation" + " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " JOIN state_dictated_appropriation" + " on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)" + " JOIN fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)" + " JOIN county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)" + " JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)" + " WHERE service_id = " + Session["service_user_id"].ToString() + " and fiscal_year.id >= (" + p.max_fiscal_year_id_string + " - 1)" + " order by fy_designator desc,county_name", p.db.connection).ExecuteReader();
+            DataGrid.DataSource = new MySqlCommand
+              (
+              "SELECT emsof_request_master.id"
+              + " , designator as fy_designator"
+              + " , name as county_name"
+              + " , county_dictated_appropriation.id as county_dictated_appropriation_id"
+              + " , county_dictated_appropriation.amount as county_dictated_appropriation_amount"
+              + " , status_code"
+              + " , request_status_code_description_map.description as status"
+              + " , if(emsof_request_master.value > emsof_request_master.actual_value,emsof_request_master.value,emsof_request_master.actual_value) as value"
+              + " FROM emsof_request_master"
+              +   " JOIN county_dictated_appropriation on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)"
+              +   " JOIN region_dictated_appropriation on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)"
+              +   " JOIN state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+              +   " JOIN fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
+              +   " JOIN county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)"
+              +   " JOIN request_status_code_description_map on (emsof_request_master.status_code = request_status_code_description_map.code)"
+              + " WHERE service_id = " + Session["service_user_id"].ToString()
+              +   " and fiscal_year.id >= (" + p.max_fiscal_year_id_string + " - 1)"
+              + " order by fy_designator desc,county_name,emsof_request_master.id desc",
+              p.db.connection
+              )
+              .ExecuteReader();
             DataGrid.DataBind();
             ((MySqlDataReader)(DataGrid.DataSource)).Close();
             be_datagrid_empty = (p.num_dg_items == 0);

@@ -10,6 +10,78 @@ using System.Web.UI.WebControls;
 
 namespace Class_db_emsof_requests
 {
+    public enum approval_timestamp_column_type
+      {
+      NONE,
+      COUNTY,
+      REGIONAL_PLANNER,
+      REGIONAL_DIRECTOR,
+      STATE,
+      }
+
+    public class Class_db_emsof_requests_Static
+      {
+      // column 0
+      // column 1
+      // column 2
+      // column 3
+      // column 4
+      // column 5
+      // column 6
+      // column 7
+      // column 8
+      // column 9
+      // column 10
+      // column 11
+      // column 12
+      // column 13
+      public const string FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION = k.EMPTY
+      + "select emsof_request_master.id"
+      + " , service.id as service_id"
+      + " , service.affiliate_num"
+      + " , service.name as service_name"
+      + " , county_code_name_map.code as county_code"
+      + " , county_code_name_map.name as sponsor_county"
+      + " , fiscal_year.designator as fiscal_year_designator"
+      + " , if(emsof_request_master.value > emsof_request_master.actual_value,emsof_request_master.value,emsof_request_master.actual_value) as emsof_ante"
+      + " , county_dictated_appropriation.amount as appropriation"
+      + " , if((county_dictated_appropriation.amount > emsof_request_master.value),(county_dictated_appropriation.amount - emsof_request_master.value),(-emsof_request_master.shortage)) as leftover_or_shortage"
+      + " , if(has_wish_list,\"YES\",\"no\") as has_wish_list"
+      + " , password_reset_email_address"
+      + " , status_code"
+      + " , request_status_code_description_map.description as status_description"
+      + " from emsof_request_master"
+      +   " join county_dictated_appropriation on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)"
+      +   " join region_dictated_appropriation on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)"
+      +   " join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)"
+      +   " join service on (service.id=county_dictated_appropriation.service_id)"
+      +   " join service_user on (service_user.id=service.id)"
+      +   " join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+      +   " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
+      +   " join request_status_code_description_map on (request_status_code_description_map.code=status_code)";
+      public const int MAX_FULL_REQUEST_REVIEW_APPROVE_DGI_INDEX = 13;
+      public const int TCCI_ID = 0;
+      public const int TCCI_SERVICE_ID = 1;
+      public const int TCCI_AFFILIATE_NUM = 2;
+      public const int TCCI_SERVICE_NAME = 3;
+      public const int TCCI_SPONSOR_COUNTY_ID = 4;
+      public const int TCCI_SPONSOR_COUNTY_NAME = 5;
+      public const int TCCI_FISCAL_YEAR_DESIGNATOR = 6;
+      public const int TCCI_EMSOF_ANTE = 7;
+      public const int TCCI_APPROPRIATION = 8;
+      public const int TCCI_LEFTOVER_OR_SHORTAGE = 9;
+      public const int TCCI_HAS_WISH_LIST = 10;
+      public const int TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 11;
+      public const int TCCI_STATUS_CODE = 12;
+      public const int TCCI_STATUS_DESCRIPTION = 13;
+      public const int TCCI_FULL_REQUEST_PRIORITY = 0;
+      public const int TCCI_FULL_REQUEST_ALLOWABLE_COST = 1;
+      public const int TCCI_FULL_REQUEST_DETAIL = 2;
+      public const int TCCI_FULL_REQUEST_ACTUALS = 3;
+      public const int TCCI_PROOF_OF_PAYMENT_ID = 0;
+      public const int TCCI_SRR_REPLACEMENT_ROW_INDICATOR = 1;
+      }
+
     public class TClass_db_emsof_requests: TClass_db
     {
         private TClass_db_fiscal_years db_fiscal_years = null;
@@ -30,7 +102,7 @@ namespace Class_db_emsof_requests
                     where_clause = where_clause + " and " + and_parm;
                 }
             }
-            cmdText = Units.Class_db_emsof_requests.FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION + where_clause + " order by " + order_by_field_name;
+            cmdText = Class_db_emsof_requests_Static.FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION + where_clause + " order by " + order_by_field_name;
             if (be_order_ascending)
             {
                 cmdText = cmdText + " asc";
@@ -82,7 +154,7 @@ namespace Class_db_emsof_requests
         public string AffiliateNumOf(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM);
             return result;
         }
 
@@ -281,6 +353,7 @@ namespace Class_db_emsof_requests
               + " , actual_subtotal_cost"
               + " , actual_emsof_ante"
               + " , attachment_key"
+              + " , allowable_cost as second_allowable_cost"
               + " from emsof_request_detail"
               +   " join eligible_provider_equipment_list"
               +     " on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)"
@@ -657,7 +730,7 @@ namespace Class_db_emsof_requests
         public string FyDesignatorOf(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_FISCAL_YEAR_DESIGNATOR].Text, k.safe_hint_type.ALPHANUM);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_FISCAL_YEAR_DESIGNATOR].Text, k.safe_hint_type.ALPHANUM);
             return result;
         }
 
@@ -673,14 +746,14 @@ namespace Class_db_emsof_requests
         public string IdOf(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_ID].Text, k.safe_hint_type.NUM);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_ID].Text, k.safe_hint_type.NUM);
             return result;
         }
 
         public string IdOfProofOfPayment(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_PROOF_OF_PAYMENT_ID].Text, k.safe_hint_type.NUM);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_PROOF_OF_PAYMENT_ID].Text, k.safe_hint_type.NUM);
             return result;
         }
 
@@ -688,7 +761,7 @@ namespace Class_db_emsof_requests
         {
             decimal result;
             string safe_string;
-            safe_string = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_LEFTOVER_OR_SHORTAGE].Text, k.safe_hint_type.REAL_NUM_INCLUDING_NEGATIVE);
+            safe_string = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_LEFTOVER_OR_SHORTAGE].Text, k.safe_hint_type.REAL_NUM_INCLUDING_NEGATIVE);
             if (safe_string == k.EMPTY)
             {
                 result = 0;
@@ -756,7 +829,12 @@ namespace Class_db_emsof_requests
 
         public string PasswordResetEmailAddressOf(object e_item)
           {
-          return k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_PASSWORD_RESET_EMAIL_ADDRESS].Text, k.safe_hint_type.EMAIL_ADDRESS);
+          return k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_PASSWORD_RESET_EMAIL_ADDRESS].Text, k.safe_hint_type.EMAIL_ADDRESS);
+          }
+
+        public string PropertyNameOfActualEmsofAnte()
+          {
+          return "actual_emsof_ante";
           }
 
         public string PropertyNameOfAppropriation()
@@ -792,7 +870,7 @@ namespace Class_db_emsof_requests
         public string ServiceIdOf(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_SERVICE_ID].Text, k.safe_hint_type.NUM);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_SERVICE_ID].Text, k.safe_hint_type.NUM);
             return result;
         }
 
@@ -808,7 +886,7 @@ namespace Class_db_emsof_requests
         public string ServiceNameOf(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_SERVICE_NAME].Text, k.safe_hint_type.ORG_NAME);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_SERVICE_NAME].Text, k.safe_hint_type.ORG_NAME);
             return result;
         }
 
@@ -829,14 +907,14 @@ namespace Class_db_emsof_requests
         public string SponsorCountyCodeOf(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_SPONSOR_COUNTY_ID].Text, k.safe_hint_type.NUM);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_SPONSOR_COUNTY_ID].Text, k.safe_hint_type.NUM);
             return result;
         }
 
         public string SponsorCountyNameOf(object e_item)
         {
             string result;
-            result = k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_SPONSOR_COUNTY_NAME].Text, k.safe_hint_type.ALPHA);
+            result = k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_SPONSOR_COUNTY_NAME].Text, k.safe_hint_type.ALPHA);
             return result;
         }
 
@@ -852,7 +930,7 @@ namespace Class_db_emsof_requests
         public uint StatusCodeOf(object e_item)
         {
             uint result;
-            result = (uint)(Convert.ToInt16(k.Safe(((e_item) as DataGridItem).Cells[Units.Class_db_emsof_requests.TCCI_STATUS_CODE].Text, k.safe_hint_type.NUM)));
+            result = (uint)(Convert.ToInt16(k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_STATUS_CODE].Text, k.safe_hint_type.NUM)));
             return result;
         }
 
@@ -873,6 +951,28 @@ namespace Class_db_emsof_requests
             }
             return result;
         }
+
+        public decimal SumOfActualEmsofAntesOfOtherRequestItems
+          (
+          string request_id,
+          string priority
+          )
+          {
+          decimal result;
+          object sum_of_actual_emsof_antes_of_request_items_obj;
+          Open();
+          sum_of_actual_emsof_antes_of_request_items_obj = new MySqlCommand("select sum(actual_emsof_ante) from emsof_request_detail where master_id = '" + request_id + "' and priority <> '" + priority + "'", connection).ExecuteScalar();
+          Close();
+          if (sum_of_actual_emsof_antes_of_request_items_obj != DBNull.Value)
+          {
+              result = (decimal)(sum_of_actual_emsof_antes_of_request_items_obj);
+          }
+          else
+          {
+              result = 0;
+          }
+          return result;
+          }
 
         public decimal SumOfActualValues(string user_kind, string user_id, string fy_id)
         {
@@ -998,77 +1098,87 @@ namespace Class_db_emsof_requests
         public uint TcciOfAppropriation()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_APPROPRIATION;
+            result = Class_db_emsof_requests_Static.TCCI_APPROPRIATION;
             return result;
         }
 
         public uint TcciOfId()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_ID;
+            result = Class_db_emsof_requests_Static.TCCI_ID;
             return result;
         }
 
         public uint TcciOfEmsofAnte()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_EMSOF_ANTE;
+            result = Class_db_emsof_requests_Static.TCCI_EMSOF_ANTE;
             return result;
         }
 
         public uint TcciOfFullRequestActuals()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_FULL_REQUEST_ACTUALS;
+            result = Class_db_emsof_requests_Static.TCCI_FULL_REQUEST_ACTUALS;
             return result;
         }
+
+        public uint TcciOfFullRequestAllowableCost()
+          {
+          return Class_db_emsof_requests_Static.TCCI_FULL_REQUEST_ALLOWABLE_COST;
+          }
+
+        public uint TcciOfFullRequestDetail()
+          {
+          return Class_db_emsof_requests_Static.TCCI_FULL_REQUEST_DETAIL;
+          }
 
         public uint TcciOfFullRequestPriority()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_FULL_REQUEST_PRIORITY;
+            result = Class_db_emsof_requests_Static.TCCI_FULL_REQUEST_PRIORITY;
             return result;
         }
 
         public uint TcciOfPasswordResetEmailAddress()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_PASSWORD_RESET_EMAIL_ADDRESS;
+            result = Class_db_emsof_requests_Static.TCCI_PASSWORD_RESET_EMAIL_ADDRESS;
             return result;
         }
 
         public uint TcciOfServiceName()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_SERVICE_NAME;
+            result = Class_db_emsof_requests_Static.TCCI_SERVICE_NAME;
             return result;
         }
 
         public uint TcciOfLeftoverOrShortage()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_LEFTOVER_OR_SHORTAGE;
+            result = Class_db_emsof_requests_Static.TCCI_LEFTOVER_OR_SHORTAGE;
             return result;
         }
 
         public uint TcciOfSrrReplacementRowIndicator()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_SRR_REPLACEMENT_ROW_INDICATOR;
+            result = Class_db_emsof_requests_Static.TCCI_SRR_REPLACEMENT_ROW_INDICATOR;
             return result;
         }
 
         public uint TcciOfStatusCode()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_STATUS_CODE;
+            result = Class_db_emsof_requests_Static.TCCI_STATUS_CODE;
             return result;
         }
 
         public uint TcciOfStatusDescription()
         {
             uint result;
-            result = Units.Class_db_emsof_requests.TCCI_STATUS_DESCRIPTION;
+            result = Class_db_emsof_requests_Static.TCCI_STATUS_DESCRIPTION;
             return result;
         }
 
@@ -1102,57 +1212,6 @@ namespace Class_db_emsof_requests
           }
 
     } // end TClass_db_emsof_requests
-
-    public enum approval_timestamp_column_type
-    {
-        NONE,
-        COUNTY,
-        REGIONAL_PLANNER,
-        REGIONAL_DIRECTOR,
-        STATE,
-    } // end approval_timestamp_column_type
-
-}
-
-namespace Class_db_emsof_requests.Units
-{
-    public class Class_db_emsof_requests
-    {
-        // column 0
-        // column 1
-        // column 2
-        // column 3
-        // column 4
-        // column 5
-        // column 6
-        // column 7
-        // column 8
-        // column 9
-        // column 10
-        // column 11
-        // column 12
-        // column 13
-        public const string FULL_REQUEST_REVIEW_APPROVE_SELECT_FROM_EXPRESSION = "select emsof_request_master.id" + " , service.id as service_id" + " , service.affiliate_num" + " , service.name as service_name" + " , county_code_name_map.code as county_code" + " , county_code_name_map.name as sponsor_county" + " , fiscal_year.designator as fiscal_year_designator" + " , emsof_request_master.value as emsof_ante" + " , county_dictated_appropriation.amount as appropriation" + " , if((county_dictated_appropriation.amount > emsof_request_master.value),(county_dictated_appropriation.amount - emsof_request_master.value),(-emsof_request_master.shortage)) as leftover_or_shortage" + " , if(has_wish_list,\"YES\",\"no\") as has_wish_list" + " , password_reset_email_address" + " , status_code" + " , request_status_code_description_map.description as status_description" + " from emsof_request_master" + " join county_dictated_appropriation" + " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)" + " join region_dictated_appropriation" + " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)" + " join service on (service.id=county_dictated_appropriation.service_id)" + " join service_user on (service_user.id=service.id)" + " join state_dictated_appropriation" + " on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)" + " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)" + " join request_status_code_description_map on (request_status_code_description_map.code=status_code)";
-        public const int MAX_FULL_REQUEST_REVIEW_APPROVE_DGI_INDEX = 13;
-        public const int TCCI_ID = 0;
-        public const int TCCI_SERVICE_ID = 1;
-        public const int TCCI_AFFILIATE_NUM = 2;
-        public const int TCCI_SERVICE_NAME = 3;
-        public const int TCCI_SPONSOR_COUNTY_ID = 4;
-        public const int TCCI_SPONSOR_COUNTY_NAME = 5;
-        public const int TCCI_FISCAL_YEAR_DESIGNATOR = 6;
-        public const int TCCI_EMSOF_ANTE = 7;
-        public const int TCCI_APPROPRIATION = 8;
-        public const int TCCI_LEFTOVER_OR_SHORTAGE = 9;
-        public const int TCCI_HAS_WISH_LIST = 10;
-        public const int TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 11;
-        public const int TCCI_STATUS_CODE = 12;
-        public const int TCCI_STATUS_DESCRIPTION = 13;
-        public const int TCCI_FULL_REQUEST_PRIORITY = 0;
-        public const int TCCI_FULL_REQUEST_ACTUALS = 2;
-        public const int TCCI_PROOF_OF_PAYMENT_ID = 0;
-        public const int TCCI_SRR_REPLACEMENT_ROW_INDICATOR = 1;
-    } // end Class_db_emsof_requests
 
 }
 

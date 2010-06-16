@@ -130,6 +130,7 @@
                           <ASP:BoundColumn datafield="priority" sortexpression="priority" readonly="True" headertext="Priority">
                             <ItemStyle font-size="Large" font-bold="True" horizontalalign="Center" verticalalign="Top"></ItemStyle>
                           </ASP:BoundColumn>
+                          <ASP:BoundColumn datafield="second_allowable_cost" readonly="true" Visible="false"></ASP:BoundColumn>
                           <ASP:TemplateColumn headertext="Detail">
                             <ItemStyle horizontalalign="Left" verticalalign="Top"></ItemStyle>
                             <ItemTemplate>

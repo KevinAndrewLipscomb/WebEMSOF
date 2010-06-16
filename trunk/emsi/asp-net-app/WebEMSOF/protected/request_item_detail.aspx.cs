@@ -399,56 +399,27 @@ namespace request_item_detail
         }
 
         private void Recalculate()
-        {
-            decimal effective_emsof_ante;
-            decimal max_emsof_ante;
-            var quantity = new k.decimal_nonnegative();
-            decimal total_cost;
-            var unit_cost = new k.decimal_nonnegative();
-            if ((k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM) != k.EMPTY) && (k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM) != k.EMPTY))
-            {
-                unit_cost.val = decimal.Parse(k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM));
-                quantity.val = decimal.Parse(k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM));
-                if (TextBox_additional_service_ante.Text != k.EMPTY)
-                {
-                    p.additional_service_ante = decimal.Parse(k.Safe(TextBox_additional_service_ante.Text, k.safe_hint_type.REAL_NUM));
-                }
-                else
-                {
-                    p.additional_service_ante = 0;
-                }
-                total_cost = unit_cost.val * quantity.val;
-                Label_total_cost.Text = total_cost.ToString("N2");
-                // This is the zebra case where a distressed service wants an item with no specified allowable cost (initially an ambulance
-                // or squad/response vehicle).  Basically, they can have whatever they want, up to the limit of the remainder of their
-                // appropriation.  Consideration of their appropriation is not within the scope of this form, so we can indicate that the
-                // request can be fully funded.
-                // This is the case where items in an "equipment category" are always fully funded (up to the limit of a service's
-                // appropriation, which is not within the scope of this form).  This initially describes only Data Collection Software and
-                // the EMT-P Written Test.  The "Other - with external documentation" category is specifically excluded from this case.
-                if ((decimal.Equals(p.match_level,1.00) && (p.allowable_cost == decimal.MaxValue)) || ((unit_cost.val <= p.allowable_cost) && (p.funding_level == p.allowable_cost) && (p.allowable_cost < decimal.MaxValue)))
-                {
-                    max_emsof_ante = total_cost;
-                }
-                else
-                {
-                    if (unit_cost.val > p.allowable_cost)
-                    {
-                        max_emsof_ante = Math.Max(p.allowable_cost * p.match_level, p.funding_level) * quantity.val;
-                    }
-                    else
-                    {
-                        max_emsof_ante = total_cost * p.match_level;
-                    }
-                }
-                // A service may elect not to use the max_emsof_ante.  An example would be when they know that doing so, in the context of all
-                // their other request items, would draw more EMSOF funds than they were appropriated.  So account for if they want to ante up
-                // more of the cost themselves.
-                effective_emsof_ante = max_emsof_ante - p.additional_service_ante;
-                Label_emsof_ante.Text = effective_emsof_ante.ToString("N2");
-                Label_min_service_ante.Text = (total_cost - max_emsof_ante).ToString("N2");
-            }
-        }
+          {
+          var total_cost_string = k.Safe(Label_total_cost.Text,k.safe_hint_type.CURRENCY_USA);
+          var emsof_ante_string = k.Safe(Label_emsof_ante.Text,k.safe_hint_type.CURRENCY_USA);
+          var min_service_ante_string = k.Safe(Label_min_service_ante.Text,k.safe_hint_type.CURRENCY_USA);
+          p.biz_equipment.CostsAndAntes
+            (
+            k.Safe(TextBox_unit_cost.Text, k.safe_hint_type.REAL_NUM),
+            k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM),
+            k.Safe(TextBox_additional_service_ante.Text, k.safe_hint_type.REAL_NUM),
+            p.match_level,
+            p.allowable_cost,
+            p.funding_level,
+            ref p.additional_service_ante,
+            ref total_cost_string,
+            ref emsof_ante_string,
+            ref min_service_ante_string
+            );
+          Label_total_cost.Text = total_cost_string;
+          Label_emsof_ante.Text = emsof_ante_string;
+          Label_min_service_ante.Text = min_service_ante_string;
+          }
 
         private void AddItem()
         {
@@ -554,7 +525,13 @@ namespace request_item_detail
             public decimal match_level;
             public decimal saved_emsof_ante;
             public decimal saved_additional_service_ante;
-        } // end p_type
+        }
+
+        protected void CustomValidator_emsof_ante_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          var safe_emsof_ante = k.Safe(Label_emsof_ante.Text,k.safe_hint_type.REAL_NUM_INCLUDING_NEGATIVE);
+          args.IsValid = (safe_emsof_ante == k.EMPTY) || (decimal.Parse(safe_emsof_ante) >= 0);
+          }
 
     } // end TWebForm_request_item_detail
 
