@@ -5,8 +5,7 @@
 
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-	<title id="Title" runat="server"></title>
+  <head runat="server">
       <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -30,7 +29,7 @@
 <p>Are you sure you want to withdraw&nbsp;your <strong>Priority</strong>
 		<ASP:Label id="Label_priority" runat="server" font-bold="True"></ASP:Label>&nbsp;item
 		          (<ASP:Label id="Label_description" runat="server" font-bold="True"></ASP:Label>) from your request, and surrender
-		<ASP:Label id="Label_emsof_ante" runat="server" font-bold="True"></ASP:Label>&nbsp;of EMSOF funds for use by others?</p>
+		<ASP:Label id="Label_emsof_ante" runat="server" font-bold="True"></ASP:Label>&nbsp;of EMSOF funds for use on other approved items in your request (if any, subject to EMSOF rules), or else by other agencies?</p>
 <p>
 		<table cellspacing="0" cellpadding="10" border="0">
 			<tr>
