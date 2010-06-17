@@ -44,7 +44,7 @@ namespace withdraw_request_item
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - withdraw_request_item";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - withdraw_request_item";
                 p.db = new TClass_db();
                 p.db_trail = new TClass_db_trail();
                 p.saved_emsof_ante = decimal.Parse(Session["emsof_request_item_emsof_ante"].ToString());
