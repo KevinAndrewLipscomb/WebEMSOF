@@ -650,30 +650,25 @@ namespace Class_biz_emsof_requests
         }
 
         public void SetActuals(string master_id, string priority, string invoice_designator, string quantity, string subtotal_cost, string unused_allocation, string allowable_cost)
-        {
-            var county_dictum_id = CountyDictumIdOf(master_id);
-            uint item_status_code;
-            var match_factor = biz_appropriations.MatchFactorOf(county_dictum_id);
+          {
+          var county_dictum_id = CountyDictumIdOf(master_id);
+          var match_factor = biz_appropriations.MatchFactorOf(county_dictum_id);
+          var quantity_value = decimal.Parse(quantity);
+          var subtotal_cost_value = decimal.Parse(subtotal_cost);
+          var effective_emsof_ante = new k.decimal_nonnegative();
+          uint item_status_code = (int)(item_status_type.REGION_NEEDS_INVOICE);
+          if ((quantity_value > 0) && (subtotal_cost_value > 0))
+            {
             decimal match_portion_of_subtotal_cost;
-            var subtotal_cost_value = decimal.Parse(subtotal_cost);
             if (biz_equipment.BeMatchExempt(EquipmentCodeOf(master_id, priority), biz_match_level.EnumOfId(biz_appropriations.MatchLevelIdOf(county_dictum_id))))
-            {
-                match_portion_of_subtotal_cost = subtotal_cost_value;
-            }
+              {
+              match_portion_of_subtotal_cost = subtotal_cost_value;
+              }
             else
-            {
-                match_portion_of_subtotal_cost = subtotal_cost_value * match_factor;
-            }
-            if ((decimal.Parse(quantity) > 0) && (decimal.Parse(subtotal_cost) > 0))
-            {
-                item_status_code = (int)(item_status_type.REGION_NEEDS_PROOF_OF_PAYMENT);
-            }
-            else
-            {
-                item_status_code = (int)(item_status_type.REGION_NEEDS_INVOICE);
-            }
-            var effective_emsof_ante = new k.decimal_nonnegative();
-            var quantity_value = decimal.Parse(quantity);
+              {
+              match_portion_of_subtotal_cost = subtotal_cost_value * match_factor;
+              }
+            item_status_code = (int)(item_status_type.REGION_NEEDS_PROOF_OF_PAYMENT);
             var unused_allocation_value = decimal.Parse(unused_allocation);
             if (unused_allocation_value > 0)
               {
@@ -686,7 +681,7 @@ namespace Class_biz_emsof_requests
                 (
                 (subtotal_cost_value/quantity_value).ToString(),
                 quantity,
-                "0",
+                k.EMPTY,
                 match_factor,
                 allowable_cost_value,
                 biz_equipment.FundingLevel(EquipmentCodeOf(master_id,priority),match_factor,allowable_cost_value),
@@ -701,8 +696,9 @@ namespace Class_biz_emsof_requests
               {
               effective_emsof_ante.val = Math.Min(EmsofAnteOfItem(master_id, priority), match_portion_of_subtotal_cost);
               }
-            db_emsof_requests.SetActuals(master_id, priority, invoice_designator, quantity, subtotal_cost, effective_emsof_ante.val, item_status_code);
-        }
+            }
+          db_emsof_requests.SetActuals(master_id, priority, invoice_designator, quantity, subtotal_cost, effective_emsof_ante.val, item_status_code);
+          }
 
         public void SetHasWishList(string master_id, bool value)
         {
