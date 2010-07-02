@@ -400,6 +400,15 @@ namespace full_request_review_approve {
         protected global::System.Web.UI.WebControls.Label Label_distribution_list;
         
         /// <summary>
+        /// Label_sponsor_county_email_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label_sponsor_county_email_address;
+        
+        /// <summary>
         /// Table_disposition_nominal control.
         /// </summary>
         /// <remarks>

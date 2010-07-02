@@ -274,6 +274,11 @@
                 <td></td>
               </tr>
               <tr>
+                <td>Cc:</td>
+                <td>Sponsor county</td>
+                <td></td>
+              </tr>
+              <tr>
                 <td>Bcc:</td>
                 <td><ASP:Label id="Label_author_email_address" runat="server"></ASP:Label></td>
                 <td></td>
@@ -293,7 +298,12 @@
                 <td><ASP:Button id="Button_send" runat="server" text="Send" validationgroup="quick_message" onclick="Button_send_Click"></ASP:Button></td>
                 <td></td>
               </tr>
-              <tr><td valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
+              <tr>
+                <td align="right" valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"><small><font color="#c0c0c0">Cc:</small></font></td><td valign="top"><small><ASP:Label id="Label_sponsor_county_email_address" runat="server" forecolor="Silver"></ASP:Label></small></td>
                 <td></td>
               </tr>
             </table>

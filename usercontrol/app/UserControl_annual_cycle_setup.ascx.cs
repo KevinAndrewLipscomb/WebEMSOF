@@ -161,7 +161,7 @@ namespace UserControl_annual_cycle_setup
             if (Page.IsValid)
             {
                 p.biz_fiscal_years.StartNew();
-                p.biz_appropriations.SetNewStateToRegion(decimal.Parse(k.Safe(TextBox_state_dictated_appropriation.Text, k.safe_hint_type.CURRENCY_USA)));
+                p.biz_appropriations.SetNewStateToRegion(decimal.Parse(k.Safe(TextBox_state_dictated_appropriation.Text, k.safe_hint_type.REAL_NUM)));
                 Alert(k.alert_cause_type.USER, k.alert_state_type.SUCCESS, "NEWCYCINIT", "New cycle initiated", true);
             }
             else
