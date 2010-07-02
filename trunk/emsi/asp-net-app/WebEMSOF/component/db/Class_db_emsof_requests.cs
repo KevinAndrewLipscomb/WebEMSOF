@@ -42,12 +42,13 @@ namespace Class_db_emsof_requests
       + " , service.name as service_name"
       + " , county_code_name_map.code as county_code"
       + " , county_code_name_map.name as sponsor_county"
+      + " , county_user.password_reset_email_address as county_email_address"
       + " , fiscal_year.designator as fiscal_year_designator"
       + " , if(emsof_request_master.value > emsof_request_master.actual_value,emsof_request_master.value,emsof_request_master.actual_value) as emsof_ante"
       + " , county_dictated_appropriation.amount as appropriation"
       + " , if((county_dictated_appropriation.amount > emsof_request_master.value),(county_dictated_appropriation.amount - emsof_request_master.value),(-emsof_request_master.shortage)) as leftover_or_shortage"
       + " , if(has_wish_list,\"YES\",\"no\") as has_wish_list"
-      + " , password_reset_email_address"
+      + " , service_user.password_reset_email_address as password_reset_email_address"
       + " , status_code"
       + " , request_status_code_description_map.description as status_description"
       + " from emsof_request_master"
@@ -58,7 +59,8 @@ namespace Class_db_emsof_requests
       +   " join service_user on (service_user.id=service.id)"
       +   " join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
       +   " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
-      +   " join request_status_code_description_map on (request_status_code_description_map.code=status_code)";
+      +   " join request_status_code_description_map on (request_status_code_description_map.code=status_code)"
+      +   " join county_user on (county_user.id=region_dictated_appropriation.county_code)";
       public const int MAX_FULL_REQUEST_REVIEW_APPROVE_DGI_INDEX = 13;
       public const int TCCI_ID = 0;
       public const int TCCI_SERVICE_ID = 1;
@@ -66,14 +68,15 @@ namespace Class_db_emsof_requests
       public const int TCCI_SERVICE_NAME = 3;
       public const int TCCI_SPONSOR_COUNTY_ID = 4;
       public const int TCCI_SPONSOR_COUNTY_NAME = 5;
-      public const int TCCI_FISCAL_YEAR_DESIGNATOR = 6;
-      public const int TCCI_EMSOF_ANTE = 7;
-      public const int TCCI_APPROPRIATION = 8;
-      public const int TCCI_LEFTOVER_OR_SHORTAGE = 9;
-      public const int TCCI_HAS_WISH_LIST = 10;
-      public const int TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 11;
-      public const int TCCI_STATUS_CODE = 12;
-      public const int TCCI_STATUS_DESCRIPTION = 13;
+      public const int TCCI_SPONSOR_COUNTY_EMAIL_ADDRESS = 6;
+      public const int TCCI_FISCAL_YEAR_DESIGNATOR = 7;
+      public const int TCCI_EMSOF_ANTE = 8;
+      public const int TCCI_APPROPRIATION = 9;
+      public const int TCCI_LEFTOVER_OR_SHORTAGE = 10;
+      public const int TCCI_HAS_WISH_LIST = 11;
+      public const int TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 12;
+      public const int TCCI_STATUS_CODE = 13;
+      public const int TCCI_STATUS_DESCRIPTION = 14;
       public const int TCCI_FULL_REQUEST_PRIORITY = 0;
       public const int TCCI_FULL_REQUEST_ALLOWABLE_COST = 1;
       public const int TCCI_FULL_REQUEST_DETAIL = 2;
@@ -911,6 +914,11 @@ namespace Class_db_emsof_requests
             return result;
         }
 
+        public string SponsorCountyEmailAddressOf(object e_item)
+          {
+          return k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_SPONSOR_COUNTY_EMAIL_ADDRESS].Text, k.safe_hint_type.EMAIL_ADDRESS);
+          }
+
         public string SponsorCountyNameOf(object e_item)
         {
             string result;
@@ -1101,6 +1109,11 @@ namespace Class_db_emsof_requests
             result = Class_db_emsof_requests_Static.TCCI_APPROPRIATION;
             return result;
         }
+
+        public uint TcciOfCountyEmailAddress()
+          {
+          return Class_db_emsof_requests_Static.TCCI_SPONSOR_COUNTY_EMAIL_ADDRESS;
+          }
 
         public uint TcciOfId()
         {

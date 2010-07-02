@@ -157,6 +157,7 @@ namespace full_request_review_approve
                 Literal_emsof_contact_name.Text = p.biz_emsof_requests.ServiceNameOf(Session["e_item"]);
                 Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
                 Label_distribution_list.Text = p.biz_emsof_requests.PasswordResetEmailAddressOf(Session["e_item"]);
+                Label_sponsor_county_email_address.Text = p.biz_emsof_requests.SponsorCountyEmailAddressOf(Session["e_item"]);
                 // Manage Disposition (ie, current approval action) block.
                 if (p.biz_emsof_requests.BeOkToApproveEmsofRequest(p.status))
                 {

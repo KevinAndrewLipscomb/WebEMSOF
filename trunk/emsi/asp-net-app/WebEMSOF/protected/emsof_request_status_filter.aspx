@@ -43,6 +43,7 @@
 							<ASP:BoundColumn datafield="service_name" sortexpression="service_name" readonly="True" headertext="Service name"></ASP:BoundColumn>
 							<ASP:BoundColumn visible="False" datafield="county_code" sortexpression="county_code" readonly="True"></ASP:BoundColumn>
 							<ASP:BoundColumn datafield="sponsor_county" sortexpression="sponsor_county" readonly="True" headertext="Sponsor county"></ASP:BoundColumn>
+							<ASP:BoundColumn visible="False" datafield="county_email_address" readonly="True"></ASP:BoundColumn>
 							<ASP:BoundColumn datafield="fiscal_year_designator" sortexpression="fiscal_year_designator" readonly="True" headertext="Cycle"></ASP:BoundColumn>
 							<ASP:BoundColumn datafield="emsof_ante" sortexpression="emsof_ante" readonly="True" headertext="EMSOF amount" dataformatstring="{0:C}">
 							  <ItemStyle horizontalalign="Right"></ItemStyle>
@@ -96,8 +97,13 @@
 					<td><ASP:Button id="Button_send" runat="server" text="Send" onclick="Button_send_Click"></ASP:Button></td>
 					<td></td>
 				  </tr>
-				  <tr><td valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
-					<td></td>
+				  <tr>
+            <td align="right" valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
+					  <td></td>
+				  </tr>
+				  <tr>
+            <td align="right" valign="top"><small><font color="#c0c0c0">Cc:</small></font></td><td valign="top"><small><ASP:Label id="Label_cc_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
+					  <td></td>
 				  </tr>
 			  </table></td>
 		  </tr>

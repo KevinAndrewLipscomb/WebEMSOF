@@ -712,6 +712,11 @@ namespace Class_biz_emsof_requests
             return result;
         }
 
+        public string SponsorCountyEmailAddressOf(object e_item)
+          {
+          return db_emsof_requests.SponsorCountyEmailAddressOf(e_item);
+          }
+
         public string SponsorCountyNameOf(object e_item)
         {
             string result;
@@ -841,6 +846,11 @@ namespace Class_biz_emsof_requests
             result = db_emsof_requests.TcciOfAppropriation();
             return result;
         }
+
+        public uint TcciOfCountyEmailAddress()
+          {
+          return db_emsof_requests.TcciOfCountyEmailAddress();
+          }
 
         public uint TcciOfId()
         {

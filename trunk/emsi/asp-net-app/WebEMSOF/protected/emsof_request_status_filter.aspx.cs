@@ -1,21 +1,11 @@
-using System.Configuration;
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-
 using Class_biz_accounts;
 using Class_biz_emsof_requests;
 using Class_biz_user;
+using kix;
+using System;
+using System.Configuration;
+using System.Web.UI.WebControls;
+
 namespace emsof_request_status_filter
 {
     public partial class TWebForm_emsof_request_status_filter: ki_web_ui.page_class
@@ -76,6 +66,9 @@ namespace emsof_request_status_filter
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
+            //
+            p.cc_list = k.EMPTY;
+            p.distribution_list = k.EMPTY;
         }
 
         protected void Button_send_Click(object sender, System.EventArgs e)
@@ -88,7 +81,7 @@ namespace emsof_request_status_filter
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, p.cc_list, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
             TextBox_quick_message_subject.Text = k.EMPTY;
             TextBox_quick_message_body.Text = k.EMPTY;
             Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);
@@ -114,6 +107,11 @@ namespace emsof_request_status_filter
                 if (e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text != "&nbsp;")
                 {
                     p.distribution_list = p.distribution_list + e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text + k.COMMA_SPACE;
+                }
+                var county_email_address = e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfCountyEmailAddress())].Text;
+                if ((county_email_address != "&nbsp;") && (!p.cc_list.Contains(county_email_address)))
+                {
+                    p.cc_list += county_email_address + k.COMMA_SPACE;
                 }
                 p.num_qualifying_requests = p.num_qualifying_requests + 1;
             }
@@ -158,6 +156,7 @@ namespace emsof_request_status_filter
             LinkButton_retransmit_to_state.Enabled = !be_datagrid_empty;
             Table_quick_message.Visible = !be_datagrid_empty;
             Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
+            Label_cc_list.Text = (p.cc_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
             // Clear aggregation vars for next bind, if any.
             p.num_qualifying_requests = 0;
 
@@ -169,6 +168,7 @@ namespace emsof_request_status_filter
             public TClass_biz_accounts biz_accounts;
             public TClass_biz_emsof_requests biz_emsof_requests;
             public TClass_biz_user biz_user;
+            public string cc_list;
             public string distribution_list;
             public uint num_qualifying_requests;
             public string sort_order;
