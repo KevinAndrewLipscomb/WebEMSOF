@@ -449,8 +449,8 @@ namespace county_dictated_appropriations.Units
 {
     public class county_dictated_appropriations
     {
-        public const int TCCI_LINKBUTTON_EDIT = 14;
-        public const int TCCI_LINKBUTTON_DELETE = 15;
+        public const int TCCI_LINKBUTTON_EDIT = 15;
+        public const int TCCI_LINKBUTTON_DELETE = 16;
     } // end county_dictated_appropriations
 
 }

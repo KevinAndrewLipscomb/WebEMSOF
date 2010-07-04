@@ -93,8 +93,17 @@ namespace Class_biz_accounts
             k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailAddressByKindId("service", service_id) + k.COMMA + EmailAddressByKindId("county", county_code) + k.COMMA + emsof_coordinator_email_address, "Special re-opening of EMSOF request", sponsor_region_name + " has re-opened an EMSOF request from " + service_name + " for additional rework.  " + "The re-opened request is temporarily exempt from normal submission deadlines but " + sponsor_region_name + " reserves the " + "right to rescind this exemption without notice." + k.NEW_LINE + k.NEW_LINE + service_name + " can rework this EMSOF request by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + sponsor_region_name + " can be contacted as follows:" + k.NEW_LINE + k.NEW_LINE + "   " + emsof_coordinator_email_address + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, emsof_coordinator_email_address);
         }
 
-        public void IssueNoticeToProceed(string service_id, string service_name, string fy_designator, string sponsor_region_name, string sponsor_county_name, string master_id)
-        {
+        public void IssueNoticeToProceed
+          (
+          string service_id,
+          string service_name,
+          string fy_designator,
+          string sponsor_region_name,
+          string sponsor_county_name,
+          string sponsor_county_email_address,
+          string master_id
+          )
+          {
             string emsof_coord_email_address;
             string message_text;
             // Get the next approver's email address.
@@ -106,10 +115,10 @@ namespace Class_biz_accounts
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailAddressByKindId("service", service_id), "NOTICE TO PROCEED with EMSOF project", message_text, false, k.EMPTY, k.EMPTY, emsof_coord_email_address);
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailAddressByKindId("service", service_id), "NOTICE TO PROCEED with EMSOF project", message_text, false, sponsor_county_email_address, k.EMPTY, emsof_coord_email_address);
             // Send notification to region.
             k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], emsof_coord_email_address, ConfigurationManager.AppSettings["application_name"] + " has issued a Notice To Proceed", ConfigurationManager.AppSettings["application_name"] + " has issued the following Notice To Proceed message to " + service_name + ".  You should expect this service to submit invoices and proof of payment." + k.NEW_LINE + k.NEW_LINE + "... BEGIN COPY OF NOTICE TO PROCEED ..." + k.NEW_LINE + k.NEW_LINE + message_text + k.NEW_LINE + k.NEW_LINE + "... END COPY OF NOTICE TO PROCEED ...");
-        }
+          }
 
         public void IssueRegressionNotice(string service_id, string sponsor_region_name, string county_code)
         {
@@ -245,8 +254,18 @@ namespace Class_biz_accounts
             }
         }
 
-        public void MakePromotionNotification(string next_reviewer_role, string reviewer_descriptor, string new_status_description, string service_id, string service_name, string fy_designator, bool be_warning_required)
-        {
+        public void MakePromotionNotification
+          (
+          string next_reviewer_role,
+          string reviewer_descriptor,
+          string new_status_description,
+          string service_id,
+          string service_name,
+          string sponsor_county_email_address,
+          string fy_designator,
+          bool be_warning_required
+          )
+          {
             string messageText;
             string next_reviewer_email_target;
             string self_email_address;
@@ -275,7 +294,7 @@ namespace Class_biz_accounts
             // cc
             // bcc
             // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailAddressByKindId("service", service_id), "Promotion of EMSOF request", messageText, false, k.EMPTY, k.EMPTY, self_email_address);
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], EmailAddressByKindId("service", service_id), "Promotion of EMSOF request", messageText, false, sponsor_county_email_address, k.EMPTY, self_email_address);
             // Send notification to region.
             if (next_reviewer_email_target != k.EMPTY)
             {
@@ -285,12 +304,21 @@ namespace Class_biz_accounts
                 // reply_to
                 k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], next_reviewer_email_target, "Promotion of EMSOF request", reviewer_descriptor + " has promoted " + service_name + "\'s " + fy_designator + " EMSOF request." + k.NEW_LINE + k.NEW_LINE + "Your action is now required.  The status of this EMSOF request is \"" + new_status_description + "\"." + k.NEW_LINE + k.NEW_LINE + "You can review this EMSOF request by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "You can contact " + reviewer_descriptor + " at:" + k.NEW_LINE + k.NEW_LINE + "   " + self_email_address + "  (mailto:" + self_email_address + ")" + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"], false, k.EMPTY, k.EMPTY, self_email_address);
             }
-        }
+          }
 
-        public void MakePromotionNotification(string next_reviewer_role, string reviewer_descriptor, string new_status_description, string service_id, string service_name, string fy_designator)
-        {
-            MakePromotionNotification(next_reviewer_role, reviewer_descriptor, new_status_description, service_id, service_name, fy_designator, true);
-        }
+        public void MakePromotionNotification
+          (
+          string next_reviewer_role,
+          string reviewer_descriptor,
+          string new_status_description,
+          string service_id,
+          string service_name,
+          string sponsor_county_email_address,
+          string fy_designator
+          )
+          {
+          MakePromotionNotification(next_reviewer_role, reviewer_descriptor, new_status_description, service_id, service_name, sponsor_county_email_address, fy_designator, true);
+          }
 
         public void MakeUnrejectionNotification(string role, string reviewer_descriptor, string service_id, string service_name, string fy_designator, string county_code)
         {
