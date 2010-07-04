@@ -115,11 +115,11 @@ namespace Class_biz_emsof_requests
                 db_emsof_requests.Approve(IdOf(e_item), (uint)(next_status), biz_user.Kind(), approval_timestamp_column, amount_to_return_to_county);
                 if (next_status != status_type.NEEDS_INVOICE_COLLECTION)
                 {
-                    biz_accounts.MakePromotionNotification(next_approver_role, reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item));
+                    biz_accounts.MakePromotionNotification(next_approver_role, reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), SponsorCountyEmailAddressOf(e_item), FyDesignatorOf(e_item));
                 }
                 else
                 {
-                    biz_accounts.IssueNoticeToProceed(ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item), reviewer_descriptor, SponsorCountyNameOf(e_item), master_id);
+                    biz_accounts.IssueNoticeToProceed(ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item), reviewer_descriptor, SponsorCountyNameOf(e_item), SponsorCountyEmailAddressOf(e_item), master_id);
                 }
             }
 
@@ -488,18 +488,18 @@ namespace Class_biz_emsof_requests
                 case status_type.NEEDS_SENT_TO_PA_DOH_EMSO:
                     next_status = status_type.NEEDS_PA_DOH_EMSO_APPROVAL;
                     db_emsof_requests.MarkDone(IdOf(e_item), (uint)(next_status), biz_user.Kind());
-                    biz_accounts.MakePromotionNotification(k.EMPTY, reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item));
+                    biz_accounts.MakePromotionNotification(k.EMPTY, reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), SponsorCountyEmailAddressOf(e_item), FyDesignatorOf(e_item));
                     break;
                 case status_type.NEEDS_INVOICE_COLLECTION:
                     next_status = status_type.NEEDS_CANCELED_CHECK_COLLECTION;
                     db_emsof_requests.RollUpActualValue(master_id);
                     db_emsof_requests.MarkDone(master_id, (uint)(next_status), biz_user.Kind());
-                    biz_accounts.MakePromotionNotification(k.EMPTY, reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item), false);
+                    biz_accounts.MakePromotionNotification(k.EMPTY, reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), SponsorCountyEmailAddressOf(e_item), FyDesignatorOf(e_item), false);
                     break;
                 case status_type.NEEDS_CANCELED_CHECK_COLLECTION:
                     next_status = status_type.NEEDS_REIMBURSEMENT_ISSUANCE;
                     db_emsof_requests.MarkDone(master_id, (uint)(next_status), biz_user.Kind());
-                    biz_accounts.MakePromotionNotification("emsof-accountant", reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), FyDesignatorOf(e_item), false);
+                    biz_accounts.MakePromotionNotification("emsof-accountant", reviewer_descriptor, (next_status).ToString(), ServiceIdOf(e_item), ServiceNameOf(e_item), SponsorCountyEmailAddressOf(e_item), FyDesignatorOf(e_item), false);
                     break;
                 case status_type.NEEDS_REIMBURSEMENT_ISSUANCE:
                     if (biz_milestones.BeProcessed(Class_biz_milestones.milestone_type.END_OF_CYCLE_MILESTONE))
@@ -657,6 +657,7 @@ namespace Class_biz_emsof_requests
           var subtotal_cost_value = decimal.Parse(subtotal_cost);
           var effective_emsof_ante = new k.decimal_nonnegative();
           uint item_status_code = (int)(item_status_type.REGION_NEEDS_INVOICE);
+          var unused_allocation_value = decimal.Parse(unused_allocation);
           if ((quantity_value > 0) && (subtotal_cost_value > 0))
             {
             decimal match_portion_of_subtotal_cost;
@@ -669,7 +670,6 @@ namespace Class_biz_emsof_requests
               match_portion_of_subtotal_cost = subtotal_cost_value * match_factor;
               }
             item_status_code = (int)(item_status_type.REGION_NEEDS_PROOF_OF_PAYMENT);
-            var unused_allocation_value = decimal.Parse(unused_allocation);
             if (unused_allocation_value > 0)
               {
               decimal additional_service_ante = 0;
@@ -690,14 +690,14 @@ namespace Class_biz_emsof_requests
                 ref emsof_ante_string,
                 ref min_service_ante_string
                 );
-              effective_emsof_ante.val = Math.Min(unused_allocation_value,decimal.Parse(emsof_ante_string));
+              effective_emsof_ante.val = decimal.Parse(emsof_ante_string);
               }
             else
               {
               effective_emsof_ante.val = Math.Min(EmsofAnteOfItem(master_id, priority), match_portion_of_subtotal_cost);
               }
             }
-          db_emsof_requests.SetActuals(master_id, priority, invoice_designator, quantity, subtotal_cost, effective_emsof_ante.val, item_status_code);
+          db_emsof_requests.SetActuals(master_id, priority, invoice_designator, quantity, subtotal_cost, Math.Min(unused_allocation_value,effective_emsof_ante.val), item_status_code);
           }
 
         public void SetHasWishList(string master_id, bool value)

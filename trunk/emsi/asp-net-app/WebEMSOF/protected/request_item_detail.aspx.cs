@@ -282,9 +282,7 @@ namespace request_item_detail
           //
           if (Session["emsof_request_item_priority"].ToString() != k.EMPTY)
             {
-            Recalculate();
-            // Forces setting of additional_service_ante
-            if (Page.IsValid)
+            if (Page.IsValid) // Note that implicit validation runs Recalculate, which forces setting of additional_service_ante.
               {
               p.db.Open();
               // Update the detail record.
@@ -385,6 +383,7 @@ namespace request_item_detail
                 Label_min_service_ante.Text = "";
                 TextBox_additional_service_ante.Text = "";
                 Label_emsof_ante.Text = "";
+                p.attachment_key = DateTime.Now.Ticks.ToString("D19");
             }
         }
 
@@ -529,6 +528,7 @@ namespace request_item_detail
 
         protected void CustomValidator_emsof_ante_ServerValidate(object source, ServerValidateEventArgs args)
           {
+          Recalculate();
           var safe_emsof_ante = k.Safe(Label_emsof_ante.Text,k.safe_hint_type.REAL_NUM_INCLUDING_NEGATIVE);
           args.IsValid = (safe_emsof_ante == k.EMPTY) || (decimal.Parse(safe_emsof_ante) >= 0);
           }
