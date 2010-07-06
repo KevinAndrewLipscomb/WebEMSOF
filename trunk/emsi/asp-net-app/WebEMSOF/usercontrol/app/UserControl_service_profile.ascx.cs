@@ -66,6 +66,7 @@ namespace UserControl_service_profile
             TextBox_num_doh_licensed_vehicles.Text = k.EMPTY;
             TextBox_num_ambulances.Text = k.EMPTY;
             RadioButtonList_be_dera.ClearSelection();
+            TextBox_primary_response_area.Text = k.EMPTY;
             TextBox_charter_other_kind.Text = k.EMPTY;
             RadioButtonList_be_valid_profile.ClearSelection();
             TextBox_federal_tax_id.Text = k.EMPTY;
@@ -131,6 +132,7 @@ namespace UserControl_service_profile
             RadioButtonList_be_distressed.ClearSelection();
             ManageCharterControlEnablements();
             ManageEmsofControlEnablements();
+            ManageDeraControlEnablements();
             LinkButton_go_to_match_prior.Visible = false;
             LinkButton_go_to_match_next.Visible = false;
             LinkButton_go_to_match_last.Visible = false;
@@ -364,6 +366,7 @@ namespace UserControl_service_profile
             string radio_channel_4;
             string radio_channel_5;
             string radio_channel_6;
+            string primary_response_area;
             result = false;
             if
               (
@@ -479,7 +482,8 @@ namespace UserControl_service_profile
                 out radio_channel_3,
                 out radio_channel_4,
                 out radio_channel_5,
-                out radio_channel_6
+                out radio_channel_6,
+                out primary_response_area
                 )
               )
               {
@@ -529,6 +533,7 @@ namespace UserControl_service_profile
                 TextBox_num_doh_licensed_vehicles.Text = num_doh_licensed_vehicles;
                 TextBox_num_ambulances.Text = num_ambulances;
                 RadioButtonList_be_dera.SelectedValue = be_dera.ToString().ToUpper();
+                TextBox_primary_response_area.Text = primary_response_area;
                 TextBox_charter_other_kind.Text = charter_other_kind;
                 RadioButtonList_be_valid_profile.SelectedValue = be_valid_profile.ToString().ToUpper();
                 TextBox_federal_tax_id.Text = federal_tax_id;
@@ -605,6 +610,7 @@ namespace UserControl_service_profile
                 RadioButtonList_be_distressed.Enabled = p.be_authorized_to_delete_service;
                 ManageCharterControlEnablements();
                 ManageEmsofControlEnablements();
+                ManageDeraControlEnablements();
                 Button_submit.Enabled = p.be_ok_to_config_service_profiles;
                 Button_delete.Enabled = p.be_authorized_to_delete_service;
                 result = true;
@@ -840,7 +846,8 @@ namespace UserControl_service_profile
                   k.Safe(TextBox_radio_channel_3.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_radio_channel_4.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_radio_channel_5.Text, k.safe_hint_type.PUNCTUATED).Trim(),
-                  k.Safe(TextBox_radio_channel_6.Text, k.safe_hint_type.PUNCTUATED).Trim()
+                  k.Safe(TextBox_radio_channel_6.Text, k.safe_hint_type.PUNCTUATED).Trim(),
+                  k.Safe(TextBox_primary_response_area.Text, k.safe_hint_type.POSTAL_CITY_CSV).Trim()
                   );
                 if (p.be_service_user)
                 {
@@ -951,6 +958,7 @@ namespace UserControl_service_profile
             TextBox_num_doh_licensed_vehicles.Enabled = ablement;
             TextBox_num_ambulances.Enabled = ablement;
             RadioButtonList_be_dera.Enabled = ablement;
+            TextBox_primary_response_area.Enabled = ablement;
             TextBox_charter_other_kind.Enabled = ablement;
             RadioButtonList_be_valid_profile.Enabled = ablement;
             TextBox_federal_tax_id.Enabled = ablement;
@@ -1081,6 +1089,18 @@ namespace UserControl_service_profile
             }
         }
 
+        private void ManageDeraControlEnablements()
+          {
+          var be_dera = (RadioButtonList_be_dera.SelectedValue == "TRUE");
+          Label_primary_response_area.Enabled = be_dera;
+          TextBox_primary_response_area.Enabled = be_dera;
+          RequiredFieldValidator_primary_response_area.Enabled = be_dera;
+          if (!be_dera)
+            {
+            TextBox_primary_response_area.Text = k.EMPTY;
+            }
+          }
+
         private struct p_type
         {
             public string affiliate_num;
@@ -1104,6 +1124,11 @@ namespace UserControl_service_profile
         protected void CustomValidator_num_bariatric_equipped_units_ServerValidate(object source, ServerValidateEventArgs args)
           {
           args.IsValid = (uint.Parse(k.Safe(TextBox_num_bariatric_equipped_units.Text, k.safe_hint_type.NUM)) <= uint.Parse(k.Safe(TextBox_num_ambulances.Text, k.safe_hint_type.NUM)));
+          }
+
+        protected void RadioButtonList_be_dera_SelectedIndexChanged(object sender, EventArgs e)
+          {
+          ManageDeraControlEnablements();
           }
 
     } // end TWebUserControl_service_profile

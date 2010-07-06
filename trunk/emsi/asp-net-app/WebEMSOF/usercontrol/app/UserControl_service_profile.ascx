@@ -487,7 +487,7 @@
             <p><strong>Nature of service</strong></p>
           </td>
         </tr>
-        <!-- + --><tr><td><table cellspacing="0" cellpadding="5" border="0"><!-- + -->
+        <!-- + --><tr><td><asp:UpdatePanel id="UpdatePanel_be_dera" runat="server" updatemode="Conditional"><ContentTemplate><table cellspacing="0" cellpadding="5" border="0"><!-- + -->
         <tr>
           <td align="right" valign="top" nowrap>
             <p align="right">Which of these services do you provide?<br/>
@@ -505,17 +505,23 @@
           <td></td>
         </tr>
         <tr>
-          <td align="right"><font class="">Has a local government body designated you as the primary EMS response agency for a specific geographic area?*</font></td>
+          <td align="right" valign="top"><font class="">Has a local government body designated you as the primary EMS response agency for a specific geographic area?*</font></td>
           <td><font class="">
-          <asp:RadioButtonList id="RadioButtonList_be_dera" runat="server" repeatdirection="Horizontal" enabled="False">
+          <asp:RadioButtonList id="RadioButtonList_be_dera" runat="server" repeatdirection="Horizontal" enabled="False" AutoPostBack="True" onselectedindexchanged="RadioButtonList_be_dera_SelectedIndexChanged">
             <asp:ListItem value="TRUE">Yes</asp:ListItem>
             <asp:ListItem value="FALSE">No</asp:ListItem>
           </asp:RadioButtonList>
+            <asp:Label id="Label_primary_response_area" enabled="False" runat="server" text="If yes, specify area(s):" font-size="X-Small"></asp:Label><br/>
+            <asp:TextBox id="TextBox_primary_response_area" columns="50" runat="server" rows="2" textmode="MultiLine" Enabled="False"></asp:TextBox>
             </font></td>
-          <td nowrap>
-        <asp:RequiredFieldValidator id="RequiredFieldValidator_be_dera" runat="server" errormessage="Please answer the question about local government designating you to respond to a specific area." font-bold="True" controltovalidate="RadioButtonList_be_dera">!ERR!</asp:RequiredFieldValidator></td>
+          <td nowrap valign="top">
+        <asp:RequiredFieldValidator id="RequiredFieldValidator_be_dera" runat="server" errormessage="Please answer the question about local government designating you to respond to a specific area." font-bold="True" controltovalidate="RadioButtonList_be_dera">!ERR!</asp:RequiredFieldValidator>
+            <font class="">
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator_primary_response_area" runat="server" controltovalidate="TextBox_primary_response_area" Display="Dynamic" errormessage="Please specify your Primary response area." font-bold="True" 
+              Enabled="False">!ERR!</asp:RequiredFieldValidator>
+            </font></td>
         </tr>
-        <!-- - --></table></td></tr><!-- - -->
+        <!-- - --></table></ContentTemplate></asp:UpdatePanel></td></tr><!-- - -->
       </table>
     </td>
   </tr>
