@@ -886,6 +886,15 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_mail_zip_code;
         
         /// <summary>
+        /// UpdatePanel_be_dera control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel_be_dera;
+        
+        /// <summary>
         /// CheckBox_be_qrs_unrecognized control.
         /// </summary>
         /// <remarks>
@@ -976,6 +985,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RadioButtonList RadioButtonList_be_dera;
         
         /// <summary>
+        /// Label_primary_response_area control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label_primary_response_area;
+        
+        /// <summary>
+        /// TextBox_primary_response_area control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_primary_response_area;
+        
+        /// <summary>
         /// RequiredFieldValidator_be_dera control.
         /// </summary>
         /// <remarks>
@@ -983,6 +1010,15 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_be_dera;
+        
+        /// <summary>
+        /// RequiredFieldValidator_primary_response_area control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_primary_response_area;
         
         /// <summary>
         /// TextBox_num_doh_licensed_vehicles control.
@@ -2218,13 +2254,13 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.TextBox TextBox_key_cell_phone_2_assignee;
         
         /// <summary>
-        /// RegularExpressionValidator1 control.
+        /// RegularExpressionValidator_key_cell_phone_2_num control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_key_cell_phone_2_num;
         
         /// <summary>
         /// TextBox_key_cell_phone_3_num control.
@@ -2245,13 +2281,13 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.TextBox TextBox_key_cell_phone_3_assignee;
         
         /// <summary>
-        /// RegularExpressionValidator2 control.
+        /// RegularExpressionValidator_key_cell_phone_3_num control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator2;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_key_cell_phone_3_num;
         
         /// <summary>
         /// TextBox_key_cell_phone_4_num control.
@@ -2272,13 +2308,13 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.TextBox TextBox_key_cell_phone_4_assignee;
         
         /// <summary>
-        /// RegularExpressionValidator3 control.
+        /// RegularExpressionValidator_key_cell_phone_4_num control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator3;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_key_cell_phone_4_num;
         
         /// <summary>
         /// TextBox_key_cell_phone_5_num control.
@@ -2299,13 +2335,13 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.TextBox TextBox_key_cell_phone_5_assignee;
         
         /// <summary>
-        /// RegularExpressionValidator4 control.
+        /// RegularExpressionValidator_key_cell_phone_5_num control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator4;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_key_cell_phone_5_num;
         
         /// <summary>
         /// TextBox_key_cell_phone_6_num control.
@@ -2326,13 +2362,13 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.TextBox TextBox_key_cell_phone_6_assignee;
         
         /// <summary>
-        /// RegularExpressionValidator5 control.
+        /// RegularExpressionValidator_key_cell_phone_6_num control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator5;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_key_cell_phone_6_num;
         
         /// <summary>
         /// TextBox_radio_channel_1 control.
