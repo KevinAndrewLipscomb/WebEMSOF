@@ -13,6 +13,51 @@ namespace UserControl_service_profile {
     public partial class TWebUserControl_service_profile {
         
         /// <summary>
+        /// UpdatePanel_control control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel_control;
+        
+        /// <summary>
+        /// Button_submit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button_submit;
+        
+        /// <summary>
+        /// Button_delete control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button_delete;
+        
+        /// <summary>
+        /// TabContainer_control control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabContainer TabContainer_control;
+        
+        /// <summary>
+        /// TabPanel_introduction control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_introduction;
+        
+        /// <summary>
         /// RadioButtonList_be_valid_profile control.
         /// </summary>
         /// <remarks>
@@ -29,6 +74,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButtonList RadioButtonList_be_distressed;
+        
+        /// <summary>
+        /// TabPanel_basic_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_basic_id;
+        
+        /// <summary>
+        /// CustomValidator_basic_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_basic_id;
         
         /// <summary>
         /// TextBox_affiliate_num control.
@@ -310,6 +373,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_charter_kind;
         
         /// <summary>
+        /// TabPanel_corporate_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_corporate_contact;
+        
+        /// <summary>
+        /// CustomValidator_corporate_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_corporate_contact;
+        
+        /// <summary>
         /// TextBox_corpadmin_contact_name control.
         /// </summary>
         /// <remarks>
@@ -398,6 +479,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_corpadmin_email_address;
+        
+        /// <summary>
+        /// TabPanel_emsof_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_emsof_contact;
+        
+        /// <summary>
+        /// CustomValidator_emsof_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_emsof_contact;
         
         /// <summary>
         /// UpdatePanel_be_emsof_particpant control.
@@ -535,6 +634,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_emsof_contact_sms_phone_num;
         
         /// <summary>
+        /// TabPanel_ops_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_ops_contact;
+        
+        /// <summary>
+        /// CustomValidator_ops_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_ops_contact;
+        
+        /// <summary>
         /// TextBox_coo_name control.
         /// </summary>
         /// <remarks>
@@ -643,6 +760,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_coo_mobile_phone_or_pager_num;
         
         /// <summary>
+        /// TabPanel_md_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_md_contact;
+        
+        /// <summary>
+        /// CustomValidator_md_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_md_contact;
+        
+        /// <summary>
         /// TextBox_md_name control.
         /// </summary>
         /// <remarks>
@@ -742,6 +877,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_md_mobile_phone_or_pager_num;
         
         /// <summary>
+        /// TabPanel_physical_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_physical_address;
+        
+        /// <summary>
+        /// CustomValidator_physical_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_physical_address;
+        
+        /// <summary>
         /// TextBox_physical_street_address_line_1 control.
         /// </summary>
         /// <remarks>
@@ -814,6 +967,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_physical_zip_code;
         
         /// <summary>
+        /// TabPanel_mailing_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_mailing_address;
+        
+        /// <summary>
+        /// CustomValidator_mailing_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_mailing_address;
+        
+        /// <summary>
         /// TextBox_mail_address_line_1 control.
         /// </summary>
         /// <remarks>
@@ -884,6 +1055,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_mail_zip_code;
+        
+        /// <summary>
+        /// TabPanel_nature_of_service control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_nature_of_service;
+        
+        /// <summary>
+        /// CustomValidator_nature_of_service control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_nature_of_service;
         
         /// <summary>
         /// UpdatePanel_be_dera control.
@@ -1019,6 +1208,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_primary_response_area;
+        
+        /// <summary>
+        /// TabPanel_inventory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_inventory;
+        
+        /// <summary>
+        /// CustomValidator_inventory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_inventory;
         
         /// <summary>
         /// TextBox_num_doh_licensed_vehicles control.
@@ -1867,6 +2074,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.TextBox TextBox_inventory_memo;
         
         /// <summary>
+        /// TabPanel_depth control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_depth;
+        
+        /// <summary>
+        /// CustomValidator_depth_of_service control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_depth_of_service;
+        
+        /// <summary>
         /// TextBox_num_staff_typical_als_08_16 control.
         /// </summary>
         /// <remarks>
@@ -2191,6 +2416,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_num_units_typical_ls_00_08;
         
         /// <summary>
+        /// TabPanel_communications control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_communications;
+        
+        /// <summary>
+        /// CustomValidator_communications control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_communications;
+        
+        /// <summary>
         /// TextBox_key_cell_phone_1_num control.
         /// </summary>
         /// <remarks>
@@ -2434,21 +2677,21 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.TextBox TextBox_radio_channel_6;
         
         /// <summary>
-        /// Button_submit control.
+        /// TabPanel_wrap_up control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button_submit;
+        protected global::AjaxControlToolkit.TabPanel TabPanel_wrap_up;
         
         /// <summary>
-        /// Button_delete control.
+        /// CustomValidator_wrap_up control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button_delete;
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_wrap_up;
     }
 }
