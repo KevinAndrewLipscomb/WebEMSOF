@@ -133,6 +133,7 @@ namespace UserControl_service_profile
             ManageCharterControlEnablements();
             ManageEmsofControlEnablements();
             ManageDeraControlEnablements();
+            ManageTabPanelCustomValidatorEnablements();
             LinkButton_go_to_match_prior.Visible = false;
             LinkButton_go_to_match_next.Visible = false;
             LinkButton_go_to_match_last.Visible = false;
@@ -140,7 +141,6 @@ namespace UserControl_service_profile
             SetDependentFieldAblements(false);
             Button_submit.Enabled = false;
             Button_delete.Enabled = false;
-
         }
 
         private void InjectPersistentClientSideScript()
@@ -228,13 +228,19 @@ namespace UserControl_service_profile
             if (!p.be_loaded)
             {
                 if (p.be_service_user)
-                {
+                  {
                     Button_lookup.Visible = false;
                     Label_lookup_arrow.Visible = false;
                     Label_lookup_hint.Visible = false;
                     LinkButton_reset.Visible = false;
                     Button_delete.Visible = false;
-                }
+                    //
+                  }
+                else
+                  {
+                  TabContainer_control.ActiveTabIndex = 1;
+                  TextBox_name.Focus();
+                  }
                 p.biz_counties.BindDirectToListControl(DropDownList_county, "-- County --");
                 p.biz_charter_kinds.BindDirectToListControl(DropDownList_charter_kind, "-- Charter kind --");
                 LinkButton_go_to_match_first.Text = k.ExpandTildePath(LinkButton_go_to_match_first.Text);
@@ -246,11 +252,11 @@ namespace UserControl_service_profile
                 {
                     PresentRecord(p.affiliate_num);
                 }
-                Focus(TextBox_name, true);
                 p.be_loaded = true;
             }
             InjectPersistentClientSideScript();
-
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_submit);
+            ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_delete);
         }
 
         private bool PresentRecord(string affiliate_num)
@@ -611,6 +617,7 @@ namespace UserControl_service_profile
                 ManageCharterControlEnablements();
                 ManageEmsofControlEnablements();
                 ManageDeraControlEnablements();
+                ManageTabPanelCustomValidatorEnablements();
                 Button_submit.Enabled = p.be_ok_to_config_service_profiles;
                 Button_delete.Enabled = p.be_authorized_to_delete_service;
                 result = true;
@@ -626,7 +633,8 @@ namespace UserControl_service_profile
             Label_lookup_arrow.Enabled = true;
             Label_lookup_hint.Enabled = true;
             LinkButton_reset.Enabled = false;
-            Focus(TextBox_affiliate_num, true);
+            TabContainer_control.ActiveTabIndex = 1;
+            TextBox_affiliate_num.Focus();
         }
 
         protected override void OnInit(System.EventArgs e)
@@ -651,6 +659,18 @@ namespace UserControl_service_profile
                 p.be_loaded = false;
                 p.be_service_user = (p.biz_user.Kind() == "service");
                 p.be_profile_initially_valid = false;
+                p.be_visited_tab_panel_basic_id = false;
+                p.be_visited_tab_panel_communications = false;
+                p.be_visited_tab_panel_corporate_contact = false;
+                p.be_visited_tab_panel_depth = false;
+                p.be_visited_tab_panel_emsof_contact = false;
+                p.be_visited_tab_panel_inventory = false;
+                p.be_visited_tab_panel_mailing_address = false;
+                p.be_visited_tab_panel_md_contact = false;
+                p.be_visited_tab_panel_nature_of_service = false;
+                p.be_visited_tab_panel_ops_contact = false;
+                p.be_visited_tab_panel_physical_address = false;
+                p.be_visited_tab_panel_wrap_up = false;
                 if (p.be_service_user)
                 {
                     p.affiliate_num = p.biz_services.AffiliateNumOfId(p.biz_user.IdNum());
@@ -1101,6 +1121,26 @@ namespace UserControl_service_profile
             }
           }
 
+        private void ManageTabPanelCustomValidatorEnablements()
+          {
+          //
+          var be_all_tabs_visit_required = p.be_service_user && !p.be_profile_initially_valid;
+          //
+          CustomValidator_basic_id.Enabled = be_all_tabs_visit_required;
+          CustomValidator_communications.Enabled = be_all_tabs_visit_required;
+          CustomValidator_corporate_contact.Enabled = be_all_tabs_visit_required;
+          CustomValidator_depth_of_service.Enabled = be_all_tabs_visit_required;
+          CustomValidator_emsof_contact.Enabled = be_all_tabs_visit_required;
+          CustomValidator_inventory.Enabled = be_all_tabs_visit_required;
+          CustomValidator_mailing_address.Enabled = be_all_tabs_visit_required;
+          CustomValidator_md_contact.Enabled = be_all_tabs_visit_required;
+          CustomValidator_nature_of_service.Enabled = be_all_tabs_visit_required;
+          CustomValidator_ops_contact.Enabled = be_all_tabs_visit_required;
+          CustomValidator_physical_address.Enabled = be_all_tabs_visit_required;
+          CustomValidator_wrap_up.Enabled = be_all_tabs_visit_required;
+          //
+          }
+
         private struct p_type
         {
             public string affiliate_num;
@@ -1109,6 +1149,18 @@ namespace UserControl_service_profile
             public bool be_ok_to_config_service_profiles;
             public bool be_profile_initially_valid;
             public bool be_service_user;
+            public bool be_visited_tab_panel_basic_id;
+            public bool be_visited_tab_panel_communications;
+            public bool be_visited_tab_panel_corporate_contact;
+            public bool be_visited_tab_panel_depth;
+            public bool be_visited_tab_panel_emsof_contact;
+            public bool be_visited_tab_panel_inventory;
+            public bool be_visited_tab_panel_mailing_address;
+            public bool be_visited_tab_panel_md_contact;
+            public bool be_visited_tab_panel_nature_of_service;
+            public bool be_visited_tab_panel_ops_contact;
+            public bool be_visited_tab_panel_physical_address;
+            public bool be_visited_tab_panel_wrap_up;
             public TClass_biz_appropriations biz_appropriations;
             public TClass_biz_charter_kinds biz_charter_kinds;
             public TClass_biz_counties biz_counties;
@@ -1129,6 +1181,118 @@ namespace UserControl_service_profile
         protected void RadioButtonList_be_dera_SelectedIndexChanged(object sender, EventArgs e)
           {
           ManageDeraControlEnablements();
+          }
+
+        protected void CustomValidator_basic_id_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_basic_id;
+          }
+
+        protected void CustomValidator_corporate_contact_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_corporate_contact;
+          }
+
+        protected void CustomValidator_emsof_contact_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_emsof_contact;
+          }
+
+        protected void CustomValidator_ops_contact_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_ops_contact;
+          }
+
+        protected void CustomValidator_md_contact_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_md_contact;
+          }
+
+        protected void CustomValidator_physical_address_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_physical_address;
+          }
+
+        protected void CustomValidator_mailing_address_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_mailing_address;
+          }
+
+        protected void CustomValidator_nature_of_service_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_nature_of_service;
+          }
+
+        protected void CustomValidator_inventory_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_inventory;
+          }
+
+        protected void CustomValidator_depth_of_service_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_depth;
+          }
+
+        protected void CustomValidator_communications_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_communications;
+          }
+
+        protected void CustomValidator_wrap_up_ServerValidate(object source, ServerValidateEventArgs args)
+          {
+          args.IsValid = p.be_visited_tab_panel_wrap_up;
+          }
+
+        protected void TabContainer_control_ActiveTabChanged(object sender, EventArgs e)
+          {
+          if (TabContainer_control.ActiveTabIndex == 1)
+            {
+            p.be_visited_tab_panel_basic_id = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 2)
+            {
+            p.be_visited_tab_panel_corporate_contact = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 3)
+            {
+            p.be_visited_tab_panel_emsof_contact = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 4)
+            {
+            p.be_visited_tab_panel_ops_contact = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 5)
+            {
+            p.be_visited_tab_panel_md_contact = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 6)
+            {
+            p.be_visited_tab_panel_physical_address = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 7)
+            {
+            p.be_visited_tab_panel_mailing_address = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 8)
+            {
+            p.be_visited_tab_panel_nature_of_service = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 9)
+            {
+            p.be_visited_tab_panel_inventory = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 10)
+            {
+            p.be_visited_tab_panel_depth = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 11)
+            {
+            p.be_visited_tab_panel_communications = true;
+            }
+          else if (TabContainer_control.ActiveTabIndex == 12)
+            {
+            p.be_visited_tab_panel_wrap_up = true;
+            }
           }
 
     } // end TWebUserControl_service_profile
