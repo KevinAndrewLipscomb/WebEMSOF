@@ -1055,22 +1055,22 @@ namespace UserControl_service_profile
                 TextBox_affiliate_num.Text = saved_affiliate_num;
                 p.biz_services.Bind(saved_affiliate_num, DropDownList_affiliate_num);
                 num_matches = (uint)(DropDownList_affiliate_num.Items.Count);
-                if (num_matches > 0)
-                {
-                    LinkButton_go_to_match_prior.Visible = true;
-                    LinkButton_go_to_match_next.Visible = true;
-                    LinkButton_go_to_match_last.Visible = true;
-                    LinkButton_go_to_match_first.Visible = true;
-                    DropDownList_affiliate_num.Visible = true;
-                    if (num_matches == 1)
-                    {
-                        PresentRecord(k.Safe(DropDownList_affiliate_num.SelectedValue, k.safe_hint_type.NUM));
-                    }
-                    else
-                    {
-                        DropDownList_affiliate_num.Items.Insert(0, new ListItem("-- Select --", k.EMPTY));
-                    }
-                }
+        if (num_matches > 0)
+          {
+          DropDownList_affiliate_num.Visible = true;
+          if (num_matches == 1)
+            {
+            PresentRecord(k.Safe(DropDownList_affiliate_num.SelectedValue, k.safe_hint_type.NUM));
+            }
+          else
+            {
+            LinkButton_go_to_match_prior.Visible = true;
+            LinkButton_go_to_match_next.Visible = true;
+            LinkButton_go_to_match_last.Visible = true;
+            LinkButton_go_to_match_first.Visible = true;
+            DropDownList_affiliate_num.Items.Insert(0, new ListItem("-- Select --", k.EMPTY));
+            }
+          }
             }
         }
 
