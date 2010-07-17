@@ -295,22 +295,22 @@ namespace UserControl_charter_kind
                 TextBox_id.Text = saved_id;
                 p.biz_charter_kinds.Bind(saved_id, DropDownList_spec);
                 num_matches = (uint)(DropDownList_spec.Items.Count);
-                if (num_matches > 0)
-                {
-                    LinkButton_go_to_match_prior.Visible = true;
-                    LinkButton_go_to_match_next.Visible = true;
-                    LinkButton_go_to_match_last.Visible = true;
-                    LinkButton_go_to_match_first.Visible = true;
-                    DropDownList_spec.Visible = true;
-                    if (num_matches == 1)
-                    {
-                        PresentRecord(k.Safe(DropDownList_spec.SelectedValue, k.safe_hint_type.NUM));
-                    }
-                    else
-                    {
-                        DropDownList_spec.Items.Insert(0, new ListItem("-- Select --", k.EMPTY));
-                    }
-                }
+        if (num_matches > 0)
+          {
+          DropDownList_spec.Visible = true;
+          if (num_matches == 1)
+            {
+            PresentRecord(k.Safe(DropDownList_spec.SelectedValue, k.safe_hint_type.NUM));
+            }
+          else
+            {
+            LinkButton_go_to_match_prior.Visible = true;
+            LinkButton_go_to_match_next.Visible = true;
+            LinkButton_go_to_match_last.Visible = true;
+            LinkButton_go_to_match_first.Visible = true;
+            DropDownList_spec.Items.Insert(0, new ListItem("-- Select --", k.EMPTY));
+            }
+          }
             }
         }
 
