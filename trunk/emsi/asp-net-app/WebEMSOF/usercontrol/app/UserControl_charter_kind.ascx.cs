@@ -20,10 +20,13 @@ namespace UserControl_charter_kind
             DropDownList_spec.Visible = false;
             TextBox_description.Text = k.EMPTY;
             // Disable dependent fields.
-            LinkButton_go_to_match_prior.Visible = false;
-            LinkButton_go_to_match_next.Visible = false;
-            LinkButton_go_to_match_last.Visible = false;
-            LinkButton_go_to_match_first.Visible = false;
+      Literal_match_index.Text = k.EMPTY;
+      Literal_num_matches.Text = k.EMPTY;
+      Panel_match_numbers.Visible = false;
+      LinkButton_go_to_match_prior.Visible = false;
+      LinkButton_go_to_match_next.Visible = false;
+      LinkButton_go_to_match_last.Visible = false;
+      LinkButton_go_to_match_first.Visible = false;
             SetDependentFieldAblements(false);
             Button_submit.Enabled = false;
             Button_delete.Enabled = false;
@@ -129,6 +132,7 @@ namespace UserControl_charter_kind
 
         private bool PresentRecord(string id)
         {
+        Literal_match_index.Text = DropDownList_spec.SelectedIndex.ToString();
             bool result;
             string description;
             result = false;
@@ -304,6 +308,9 @@ namespace UserControl_charter_kind
             }
           else
             {
+            Literal_match_index.Text = "0";
+            Literal_num_matches.Text = num_matches.ToString();
+            Panel_match_numbers.Visible = true;
             LinkButton_go_to_match_prior.Visible = true;
             LinkButton_go_to_match_next.Visible = true;
             LinkButton_go_to_match_last.Visible = true;
