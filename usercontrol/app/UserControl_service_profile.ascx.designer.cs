@@ -571,6 +571,15 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_be_emsof_participant;
         
         /// <summary>
+        /// RegularExpressionValidator_emsof_nonparticipation_reason control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_emsof_nonparticipation_reason;
+        
+        /// <summary>
         /// TableRow_emsof_contact_name control.
         /// </summary>
         /// <remarks>
@@ -1235,6 +1244,15 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_primary_response_area;
+        
+        /// <summary>
+        /// RegularExpressionValidator_primary_response_area control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_primary_response_area;
         
         /// <summary>
         /// TabPanel_inventory control.
@@ -2099,6 +2117,15 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox_inventory_memo;
+        
+        /// <summary>
+        /// RegularExpressionValidator_inventory_memo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_inventory_memo;
         
         /// <summary>
         /// TabPanel_depth control.
