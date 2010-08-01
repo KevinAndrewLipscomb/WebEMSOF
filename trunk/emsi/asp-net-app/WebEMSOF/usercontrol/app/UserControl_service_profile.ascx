@@ -250,7 +250,9 @@
                           </p>
                         </font></td>
                       <td nowrap>
-                        <asp:RequiredFieldValidator id="RequiredFieldValidator_be_emsof_participant" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, Please answer the question about EMSOF participation." controltovalidate="RadioButtonList_be_emsof_participant">!ERR!</asp:RequiredFieldValidator></td>
+                        <asp:RequiredFieldValidator id="RequiredFieldValidator_be_emsof_participant" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, Please answer the question about EMSOF participation." controltovalidate="RadioButtonList_be_emsof_participant">!ERR!</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="RegularExpressionValidator_emsof_nonparticipation_reason" runat="server" ErrorMessage="Please restrict the EMSOF nonparticipation reason entry to 65,535 characters." ControlToValidate="TextBox_emsof_nonparticipation_reason" Display="Dynamic" Font-Bold="True" ValidationExpression="^[\s\S]{0,65535}$">!ERR!</asp:RegularExpressionValidator>
+                      </td>
                     </tr>
                     <tr id="TableRow_emsof_contact_name" runat="server">
                       <td align="right"><font class="">EMSOF contact person's name:</font></td>
@@ -567,11 +569,13 @@
                       <asp:TextBox id="TextBox_primary_response_area" columns="50" runat="server" rows="2" textmode="MultiLine" Enabled="False"></asp:TextBox>
                       </font></td>
                     <td nowrap valign="top">
-                  <asp:RequiredFieldValidator id="RequiredFieldValidator_be_dera" runat="server" errormessage="Under the Nature of service tab, please answer the question about local government designating you to respond to a specific area." font-bold="True" controltovalidate="RadioButtonList_be_dera">!ERR!</asp:RequiredFieldValidator>
                       <font class="">
+                      <asp:RequiredFieldValidator id="RequiredFieldValidator_be_dera" runat="server" errormessage="Under the Nature of service tab, please answer the question about local government designating you to respond to a specific area." font-bold="True" controltovalidate="RadioButtonList_be_dera">!ERR!</asp:RequiredFieldValidator>
                       <asp:RequiredFieldValidator ID="RequiredFieldValidator_primary_response_area" runat="server" controltovalidate="TextBox_primary_response_area" Display="Dynamic" errormessage="Under the Nature of service tab, please specify your Primary response area." font-bold="True" 
                         Enabled="False">!ERR!</asp:RequiredFieldValidator>
-                      </font></td>
+                      <asp:RegularExpressionValidator ID="RegularExpressionValidator_primary_response_area" runat="server" ErrorMessage="Please restrict the Primary response area(s) entry to 255 characters." ControlToValidate="TextBox_primary_response_area" Display="Dynamic" Font-Bold="True" ValidationExpression="^[\s\S]{0,255}$">!ERR!</asp:RegularExpressionValidator>
+                      </font>
+                    </td>
                   </tr>
                   <!-- - --></table></ContentTemplate></asp:UpdatePanel></td></tr><!-- - -->
                 </table>
@@ -842,9 +846,12 @@
                   </tr>
                   <tr><td colspan="3"><hr size="1"/></td></tr>
                   <tr>
-                    <td colspan="3">
+                    <td colspan="2">
                       <font class="">Other (as/if requested by Regional Council under separate cover)?</font>
-                      <blockquote><asp:TextBox runat="server" id="TextBox_inventory_memo" columns="60" enabled="False" Rows="4" TextMode="MultiLine"></asp:TextBox></blockquote>            
+                      <blockquote><asp:TextBox runat="server" id="TextBox_inventory_memo" columns="60" enabled="False" Rows="4" TextMode="MultiLine"></asp:TextBox></blockquote>
+                    </td>
+                    <td>
+                      <asp:RegularExpressionValidator ID="RegularExpressionValidator_inventory_memo" runat="server" ErrorMessage="Please restrict the Payment comments entry to 65,535 characters." ControlToValidate="TextBox_inventory_memo" Display="Dynamic" Font-Bold="True" ValidationExpression="^[\s\S]{0,65535}$">!ERR!</asp:RegularExpressionValidator>
                     </td>
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
