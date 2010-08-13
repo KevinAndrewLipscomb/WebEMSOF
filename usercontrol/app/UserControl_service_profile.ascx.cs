@@ -68,6 +68,7 @@ namespace UserControl_service_profile
             TextBox_num_ambulances.Text = k.EMPTY;
             RadioButtonList_be_dera.ClearSelection();
             TextBox_primary_response_area.Text = k.EMPTY;
+            CheckBoxList_extra_dependency.ClearSelection();
             TextBox_charter_other_kind.Text = k.EMPTY;
             RadioButtonList_be_valid_profile.ClearSelection();
             TextBox_federal_tax_id.Text = k.EMPTY;
@@ -269,6 +270,7 @@ namespace UserControl_service_profile
         {
         Literal_match_index.Text = DropDownList_affiliate_num.SelectedIndex.ToString();
             bool result;
+            string id;
             string name;
             string county_code;
             string business_phone_num;
@@ -386,6 +388,7 @@ namespace UserControl_service_profile
               p.biz_services.Get
                 (
                 affiliate_num,
+                out id,
                 out name,
                 out county_code,
                 out business_phone_num,
@@ -611,13 +614,14 @@ namespace UserControl_service_profile
                 TextBox_radio_channel_5.Text = radio_channel_5;
                 TextBox_radio_channel_6.Text = radio_channel_6;
                 //
-                var home_county_code = k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM);
+                p.saved_home_county_code = county_code;
+                p.service_id = id;
                 var extra_dependency_q = new Queue();
-                p.biz_emsof_extra_service_county_dependencies.Get(p.biz_user.IdNum(),extra_dependency_q);
+                p.biz_emsof_extra_service_county_dependencies.Get(p.service_id,extra_dependency_q);
                 foreach (ListItem check_box in CheckBoxList_extra_dependency.Items)
                   {
-                  check_box.Selected = (check_box.Value == home_county_code) || extra_dependency_q.Contains(check_box.Value);
-                  check_box.Enabled = (check_box.Value != home_county_code);
+                  check_box.Selected = (check_box.Value == p.saved_home_county_code) || extra_dependency_q.Contains(check_box.Value);
+                  check_box.Enabled = (check_box.Value != p.saved_home_county_code);
                   }
                 //
                 p.be_profile_initially_valid = be_valid_profile;
@@ -689,10 +693,12 @@ namespace UserControl_service_profile
                 p.be_visited_tab_panel_ops_contact = false;
                 p.be_visited_tab_panel_physical_address = false;
                 p.be_visited_tab_panel_wrap_up = false;
+                p.saved_home_county_code = k.EMPTY;
+                p.service_id = k.EMPTY;
                 if (p.be_service_user)
-                {
-                    p.affiliate_num = p.biz_services.AffiliateNumOfId(p.biz_user.IdNum());
-                }
+                  {
+                  p.affiliate_num = p.biz_services.AffiliateNumOfId(p.biz_user.IdNum());
+                  }
                 p.be_ok_to_config_service_profiles = p.be_service_user || HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator");
             }
             if ((Session["affiliate_num"] != null))
@@ -769,9 +775,16 @@ namespace UserControl_service_profile
 
         protected void DropDownList_county_SelectedIndexChanged(object sender, System.EventArgs e)
           {
-          CheckBoxList_extra_dependency.SelectedItem.Enabled = true;
-          CheckBoxList_extra_dependency.SelectedValue = k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM);
-          CheckBoxList_extra_dependency.SelectedItem.Enabled = false;
+          var new_home_county_code = k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM);
+          foreach (ListItem check_box in CheckBoxList_extra_dependency.Items)
+            {
+            if (check_box.Value == new_home_county_code)
+              {
+              check_box.Selected = true;
+              }
+            check_box.Enabled = (check_box.Value != new_home_county_code);
+            }
+          p.saved_home_county_code = new_home_county_code;
           }
 
         protected void Button_submit_Click(object sender, System.EventArgs e)
@@ -903,7 +916,7 @@ namespace UserControl_service_profile
                     dependency_q.Enqueue(k.Safe(dependency.Value,k.safe_hint_type.NUM));
                     }
                   }
-                p.biz_emsof_extra_service_county_dependencies.Update(p.biz_user.IdNum(),dependency_q,k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM));
+                p.biz_emsof_extra_service_county_dependencies.Update(p.service_id,dependency_q,k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM));
                 //
                 if (p.be_service_user)
                 {
@@ -1205,6 +1218,8 @@ namespace UserControl_service_profile
             public TClass_biz_emsof_extra_service_county_dependencies biz_emsof_extra_service_county_dependencies;
             public TClass_biz_services biz_services;
             public TClass_biz_user biz_user;
+            public string saved_home_county_code;
+            public string service_id;
         }
 
         protected void CustomValidator_num_4wd_ambulances_ServerValidate(object source, ServerValidateEventArgs args)

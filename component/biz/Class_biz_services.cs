@@ -108,6 +108,7 @@ namespace Class_biz_services
         public bool Get
           (
           string affiliate_num,
+          out string id,
           out string name,
           out string county_code,
           out string business_phone_num,
@@ -224,6 +225,7 @@ namespace Class_biz_services
           return db_services.Get
             (
             affiliate_num,
+            out id,
             out name,
             out county_code,
             out business_phone_num,

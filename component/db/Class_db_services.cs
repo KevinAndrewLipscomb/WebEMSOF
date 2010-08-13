@@ -201,6 +201,7 @@ namespace Class_db_services
         public bool Get
           (
           string affiliate_num,
+          out string id,
           out string name,
           out string county_code,
           out string business_phone_num,
@@ -314,6 +315,7 @@ namespace Class_db_services
           out string primary_response_area
           )
           {
+            id = k.EMPTY;
             name = k.EMPTY;
             county_code = k.EMPTY;
             business_phone_num = k.EMPTY;
@@ -430,7 +432,7 @@ namespace Class_db_services
             MySqlDataReader dr = new MySqlCommand("select * from service where CAST(affiliate_num AS CHAR) = '" + affiliate_num + "'", this.connection).ExecuteReader();
             if (dr.Read())
               {
-                affiliate_num = dr["affiliate_num"].ToString();
+                id = dr["id"].ToString();
                 name = dr["name"].ToString();
                 county_code = dr["county_code"].ToString();
                 business_phone_num = dr["business_phone_num"].ToString();
