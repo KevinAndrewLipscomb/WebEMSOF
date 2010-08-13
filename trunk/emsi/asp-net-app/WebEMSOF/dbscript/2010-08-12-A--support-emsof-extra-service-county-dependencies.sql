@@ -8,7 +8,7 @@ CREATE  TABLE `emsof_extra_service_county_dependency`
   PRIMARY KEY (`service_id`,`county_code`),
   INDEX `service_id` (`service_id` ASC) ,
   INDEX `county_code` (`county_code` ASC) ,
-  CONSTRAINT `emsof_extra_dependency_service_id` FOREIGN KEY (`service_id` ) REFERENCES `service` (`id` ),
+  CONSTRAINT `emsof_extra_dependency_service_id` FOREIGN KEY (`service_id` ) REFERENCES `service` (`id` ) ON DELETE CASCADE,
   CONSTRAINT `emsof_extra_dependency_county_code` FOREIGN KEY (`county_code` ) REFERENCES `county_code_name_map` (`code` )
   );
 
