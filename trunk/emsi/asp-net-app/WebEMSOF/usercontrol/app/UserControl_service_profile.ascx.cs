@@ -1,16 +1,17 @@
-using kix;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using Class_biz_appropriations;
 using Class_biz_charter_kinds;
 using Class_biz_counties;
+using Class_biz_emsof_extra_service_county_dependencies;
 using Class_biz_services;
 using Class_biz_user;
+using kix;
+using System;
+using System.Collections;
+using System.Configuration;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
 namespace UserControl_service_profile
 {
     public partial class TWebUserControl_service_profile: ki_web_ui.usercontrol_class
@@ -246,6 +247,8 @@ namespace UserControl_service_profile
                   }
                 p.biz_counties.BindDirectToListControl(DropDownList_county, "-- County --");
                 p.biz_charter_kinds.BindDirectToListControl(DropDownList_charter_kind, "-- Charter kind --");
+                Literal_application_name.Text = ConfigurationManager.AppSettings["application_name"];
+                p.biz_counties.BindDirectToListControl(CheckBoxList_extra_dependency,k.EMPTY);
                 LinkButton_go_to_match_first.Text = k.ExpandTildePath(LinkButton_go_to_match_first.Text);
                 LinkButton_go_to_match_prior.Text = k.ExpandTildePath(LinkButton_go_to_match_prior.Text);
                 LinkButton_go_to_match_next.Text = k.ExpandTildePath(LinkButton_go_to_match_next.Text);
@@ -607,6 +610,16 @@ namespace UserControl_service_profile
                 TextBox_radio_channel_4.Text = radio_channel_4;
                 TextBox_radio_channel_5.Text = radio_channel_5;
                 TextBox_radio_channel_6.Text = radio_channel_6;
+                //
+                var home_county_code = k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM);
+                var extra_dependency_q = new Queue();
+                p.biz_emsof_extra_service_county_dependencies.Get(p.biz_user.IdNum(),extra_dependency_q);
+                foreach (ListItem check_box in CheckBoxList_extra_dependency.Items)
+                  {
+                  check_box.Selected = (check_box.Value == home_county_code) || extra_dependency_q.Contains(check_box.Value);
+                  check_box.Enabled = (check_box.Value != home_county_code);
+                  }
+                //
                 p.be_profile_initially_valid = be_valid_profile;
                 TextBox_affiliate_num.Enabled = false;
                 Button_lookup.Enabled = false;
@@ -656,6 +669,7 @@ namespace UserControl_service_profile
                 p.biz_appropriations = new TClass_biz_appropriations();
                 p.biz_charter_kinds = new TClass_biz_charter_kinds();
                 p.biz_counties = new TClass_biz_counties();
+                p.biz_emsof_extra_service_county_dependencies = new TClass_biz_emsof_extra_service_county_dependencies();
                 p.biz_services = new TClass_biz_services();
                 p.biz_user = new TClass_biz_user();
                 p.affiliate_num = k.EMPTY;
@@ -752,6 +766,13 @@ namespace UserControl_service_profile
         {
             ManageCharterControlEnablements();
         }
+
+        protected void DropDownList_county_SelectedIndexChanged(object sender, System.EventArgs e)
+          {
+          CheckBoxList_extra_dependency.SelectedItem.Enabled = true;
+          CheckBoxList_extra_dependency.SelectedValue = k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM);
+          CheckBoxList_extra_dependency.SelectedItem.Enabled = false;
+          }
 
         protected void Button_submit_Click(object sender, System.EventArgs e)
         {
@@ -873,6 +894,17 @@ namespace UserControl_service_profile
                   k.Safe(TextBox_radio_channel_6.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_primary_response_area.Text, k.safe_hint_type.POSTAL_CITY_CSV).Trim()
                   );
+                //
+                var dependency_q = new Queue();
+                foreach (ListItem dependency in CheckBoxList_extra_dependency.Items)
+                  {
+                  if (dependency.Selected)
+                    {
+                    dependency_q.Enqueue(k.Safe(dependency.Value,k.safe_hint_type.NUM));
+                    }
+                  }
+                p.biz_emsof_extra_service_county_dependencies.Update(p.biz_user.IdNum(),dependency_q,k.Safe(DropDownList_county.SelectedValue,k.safe_hint_type.NUM));
+                //
                 if (p.be_service_user)
                 {
                     BackTrack();
@@ -1119,8 +1151,7 @@ namespace UserControl_service_profile
         private void ManageDeraControlEnablements()
           {
           var be_dera = (RadioButtonList_be_dera.SelectedValue == "TRUE");
-          Label_primary_response_area.Enabled = be_dera;
-          TextBox_primary_response_area.Enabled = be_dera;
+          Panel_dera_detail.Enabled = be_dera;
           RequiredFieldValidator_primary_response_area.Enabled = be_dera;
           if (!be_dera)
             {
@@ -1171,6 +1202,7 @@ namespace UserControl_service_profile
             public TClass_biz_appropriations biz_appropriations;
             public TClass_biz_charter_kinds biz_charter_kinds;
             public TClass_biz_counties biz_counties;
+            public TClass_biz_emsof_extra_service_county_dependencies biz_emsof_extra_service_county_dependencies;
             public TClass_biz_services biz_services;
             public TClass_biz_user biz_user;
         }

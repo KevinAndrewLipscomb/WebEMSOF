@@ -120,11 +120,16 @@ namespace Class_db_services
             this.Open();
             ((target) as ListControl).Items.Clear();
             ((target) as ListControl).Items.Add(new ListItem("-- Select --", ""));
-            cmdText = "SELECT id,name FROM service_user JOIN service using (id) WHERE be_active";
+            cmdText = "SELECT id,name FROM service_user JOIN service using (id)";
             if (!be_unfiltered)
-            {
-                cmdText = cmdText + " and county_code = \"" + county_user_id + "\"";
-            }
+              {
+              cmdText += " left join emsof_extra_service_county_dependency on (emsof_extra_service_county_dependency.service_id=service.id)";
+              }
+            cmdText += " WHERE be_active";
+            if (!be_unfiltered)
+              {
+              cmdText = cmdText + " and '" + county_user_id + "' in (service.county_code,emsof_extra_service_county_dependency.county_code)";
+              }
             if (!be_inclusive_of_invalids_and_nonparticipants)
             {
                 cmdText = cmdText + " and be_valid_profile and be_emsof_participant";

@@ -1210,13 +1210,13 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RadioButtonList RadioButtonList_be_dera;
         
         /// <summary>
-        /// Label_primary_response_area control.
+        /// Panel_dera_detail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label_primary_response_area;
+        protected global::System.Web.UI.WebControls.Panel Panel_dera_detail;
         
         /// <summary>
         /// TextBox_primary_response_area control.
@@ -1226,6 +1226,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox_primary_response_area;
+        
+        /// <summary>
+        /// Literal_application_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal Literal_application_name;
+        
+        /// <summary>
+        /// CheckBoxList_extra_dependency control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBoxList CheckBoxList_extra_dependency;
         
         /// <summary>
         /// RequiredFieldValidator_be_dera control.

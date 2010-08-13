@@ -116,7 +116,7 @@
                   <tr>
                     <td align="right"><font class="">County in EMSI region in which you are headquartered:</font></td>
                     <td><font class="">
-                    <asp:DropDownList id="DropDownList_county" runat="server" enabled="False"></asp:DropDownList>* </font></td>
+                    <asp:DropDownList id="DropDownList_county" runat="server" enabled="False" AutoPostBack="True" onselectedindexchanged="DropDownList_county_SelectedIndexChanged"></asp:DropDownList>* </font></td>
                     <td nowrap>
                       <asp:RequiredFieldValidator runat="server" controltovalidate="DropDownList_county" errormessage="Under the Basic ID tab, please enter County." font-bold="True" id="RequiredFieldValidator_county_code">!ERR!</asp:RequiredFieldValidator></td>
                   </tr>
@@ -565,8 +565,18 @@
                       <asp:ListItem value="TRUE">Yes</asp:ListItem>
                       <asp:ListItem value="FALSE">No</asp:ListItem>
                     </asp:RadioButtonList>
-                      <asp:Label id="Label_primary_response_area" enabled="False" runat="server" text="If yes, specify area(s):" font-size="X-Small"></asp:Label><br/>
-                      <asp:TextBox id="TextBox_primary_response_area" columns="50" runat="server" rows="2" textmode="MultiLine" Enabled="False"></asp:TextBox>
+                        <asp:Panel ID="Panel_dera_detail" runat="server" Enabled="false">
+                          <p>
+                            <small>If yes, specify area(s):</small><br/>
+                            <asp:TextBox id="TextBox_primary_response_area" columns="50" runat="server" rows="2" textmode="MultiLine" ></asp:TextBox><br />
+                          </p>
+                          <p>
+                            <small>
+                              Which counties are the above areas in?&nbsp; <asp:Literal ID="Literal_application_name" runat="server"></asp:Literal> will prompt the EMSOF coordinators at the counties you specify to consider making an allocation to your service:
+                            </small>
+                            <asp:CheckBoxList ID="CheckBoxList_extra_dependency" runat="server"></asp:CheckBoxList>
+                          </p>
+                        </asp:Panel>
                       </font></td>
                     <td nowrap valign="top">
                       <font class="">
