@@ -8,170 +8,178 @@
 </style>
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
-    <p>
-      <ASP:Button id="Button_submit" text="SUBMIT profile for Annual Survey" runat="server" enabled="False" onclick="Button_submit_Click"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False" onclick="Button_delete_Click"></ASP:Button>
-    </p>
-    <cc1:TabContainer id="TabContainer_control" runat="server" autopostback="True" cssclass="ajax__tab_ki" onactivetabchanged="TabContainer_control_ActiveTabChanged">
-      <cc1:TabPanel runat="server" headertext="Introduction" id="TabPanel_introduction">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <table cellspacing="0" cellpadding="10" border="0" width="100%">
-                  <tr>
-                    <td bgcolor="#f5f5f5"><strong>Introduction</strong></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <small>
-                        <ul>
-                          <li><p>If your profile is stale or not saved, you must visit review/update every tab on this form.</p></li>
-                          <li><p>Changes will <em>not</em> be saved until you press the Submit button at the top of the page.</p></li>
-                          <li><p>Asterisks ("*") indicate required items.</p></li>
-                          <li><p>For the Regional Annual Survey, this profile...<br/>
-                            <asp:RadioButtonList id="RadioButtonList_be_valid_profile" runat="server">
-                              <asp:ListItem value="FALSE">has NOT yet been accepted</asp:ListItem>
-                              <asp:ListItem value="TRUE">HAS been accepted</asp:ListItem>
-                            </asp:RadioButtonList><br/>...by WebEMSOF and the Regional Council.</p></li>
-                          <li><p>This service...<br/>
-                            <asp:RadioButtonList id="RadioButtonList_be_distressed" runat="server">
-                              <asp:ListItem value="FALSE">does NOT qualify</asp:ListItem>
-                              <asp:ListItem value="TRUE">DOES qualify</asp:ListItem>
-                            </asp:RadioButtonList><br/>...for DISTRESSED status under EMSOF rules.</p></li>
-                        </ul>
-                      </small>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Basic ID" id="TabPanel_basic_id">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_basic_id" runat="server" errormessage="Please review/update the Basic ID tab." font-bold="True" onservervalidate="CustomValidator_basic_id_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellspacing="0" cellpadding="10" border="0" width="100%">
-                  <tr><td bgcolor="whitesmoke"><strong>Basic identification information</strong></td></tr>
-                  <!-- + --><tr><td><table cellspacing="0" cellpadding="5" border="0"><!-- + -->
-                  <tr>
-                    <td align="right" bgcolor="gainsboro" valign="top"><font class="">Affiliate #:</font></td>
-                    <td valign="top"><font class="">
-                        <table cellspacing="0" cellpadding="0" width="100%" border="0">
-                          <tr>
-                            <td valign="middle">
-                              <table cellspacing="0" cellpadding="0" border="0">
-                                <tr>
-                                  <td>
-                        <asp:TextBox runat="server" columns="5" maxlength="5" id="TextBox_affiliate_num" enabled="false"></asp:TextBox>*<ASP:Button id="Button_lookup" runat="server" causesvalidation="False" text="LOOKUP" onclick="Button_lookup_Click"></ASP:Button>
-                                  </td>
-                                  <td nowrap><small><small><asp:Label id="Label_lookup_arrow" runat="server">&lt;--</asp:Label></small></small></td>
-                                  <td><small><small><em><asp:Label id="Label_lookup_hint" runat="server">Lookup by partial or full Affiliate # or Name</asp:Label></em></small></small></td>
-                                </tr>
-                              </table>
-                            </td>
-                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td valign="middle">
-                              <small>
-                                <ASP:LinkButton id="LinkButton_reset" runat="server" causesvalidation="False" enabled="False" onclick="LinkButton_reset_Click">New lookup</ASP:LinkButton>
-                              </small>
-                            </td>
-                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                            <td valign="middle"></td>
-                          </tr>
-                        </table>
-      <table>
-        <tr>
-          <td><asp:Panel ID="Panel_match_numbers" runat="server" Visible="False"><small>(<asp:Literal ID="Literal_match_index" runat="server"></asp:Literal>/<asp:Literal ID="Literal_num_matches" runat="server"></asp:Literal>)</small></asp:Panel></td>
-          <td>
-            <asp:LinkButton id="LinkButton_go_to_match_first" runat="server" text='<IMG src="~/protected/image/first_track_blue16_h.png" alt="First match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_first_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_prior" runat="server" text='<IMG src="~/protected/image/play_blue16_h-flipped.png" alt="Prior match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_prior_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_next" runat="server" text='<IMG src="~/protected/image/play_blue16_h.png" alt="Next match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_next_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_last" runat="server" text='<IMG src="~/protected/image/last_track_blue16_h.png" alt="Last match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_last_Click"></asp:LinkButton>
-          </td>
-          <td>
-            <div style="width:0px;white-space:nowrap;"><ASP:DropDownList id="DropDownList_affiliate_num" runat="server" visible="False" autopostback="True" onselectedindexchanged="DropDownList_affiliate_num_SelectedIndexChanged"></ASP:DropDownList></div>
-          </td>
-        </tr>
-      </table></font></td>
-                    <td nowrap valign="top">
-                      <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_affiliate_num" errormessage="Under the Basic ID tab, please enter Affiliate num." font-bold="True" id="RequiredFieldValidator_affiliate_num">!ERR!</asp:RequiredFieldValidator></td>
-                  </tr>
-                  <tr>
-                    <td align="right"><font class="">Service name:</font></td>
-                    <td><font class="">
-                        <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_name" enabled="False"></asp:TextBox>* </font></td>
-                    <td nowrap>
-                      <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_name" errormessage="Under the Basic ID tab, please enter service Name." font-bold="True" id="RequiredFieldValidator_name">!ERR!</asp:RequiredFieldValidator></td>
-                  </tr>
-                  <tr>
-                    <td align="right"><font class="">Federal Employer (tax) ID #:<br/><small>(numerals only)</small></font></td>
-                    <td><font class="">
-                        <asp:TextBox runat="server" columns="9" maxlength="9" id="TextBox_federal_tax_id" enabled="False"></asp:TextBox>* </font></td>
-                    <td nowrap>
-                      <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_federal_tax_id" errormessage="Under the Basic ID tab, please enter a Federal Employer (tax) ID #." font-bold="True" id="RequiredFieldValidator_federal_tax_id">!ERR!</asp:RequiredFieldValidator>
-                      <asp:RegularExpressionValidator id="RegularExpressionValidator_federal_tax_id" runat="server" errormessage="Under the Basic ID tab, please enter a valid Federal Employer (tax) ID # using numerals only." font-bold="True" controltovalidate="TextBox_federal_tax_id"
-                        validationexpression="\d{9}">!ERR!</asp:RegularExpressionValidator></td>
-                  </tr>
-                  <tr>
-                    <td align="right"><font class="">County in EMSI region in which you are headquartered:</font></td>
-                    <td><font class="">
-                    <asp:DropDownList id="DropDownList_county" runat="server" enabled="False" AutoPostBack="True" onselectedindexchanged="DropDownList_county_SelectedIndexChanged"></asp:DropDownList>* </font></td>
-                    <td nowrap>
-                      <asp:RequiredFieldValidator runat="server" controltovalidate="DropDownList_county" errormessage="Under the Basic ID tab, please enter County." font-bold="True" id="RequiredFieldValidator_county_code">!ERR!</asp:RequiredFieldValidator></td>
-                  </tr>
-                  <tr>
-                    <td align="right"><font class="">Business phone #:<br/><small>(numerals only)</small></font></td>
-                    <td><font class="">
-                        <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_business_phone_num" enabled="False"></asp:TextBox>
+    <asp:Panel ID="Panel_tabcontainer" runat="server">
+      <p>
+        <ASP:Button id="Button_submit" text="SUBMIT profile for Annual Survey" runat="server" enabled="False" onclick="Button_submit_Click"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False" onclick="Button_delete_Click"></ASP:Button>
+      </p>
+      <cc1:TabContainer id="TabContainer_control" runat="server" autopostback="True" cssclass="ajax__tab_ki" onactivetabchanged="TabContainer_control_ActiveTabChanged">
+        <cc1:TabPanel runat="server" headertext="Introduction" id="TabPanel_introduction">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_introduction" runat="server">
+                    <asp:Panel ID="Panel_movable_introduction" runat="server">
+                      <table cellspacing="0" cellpadding="10" border="0" width="100%">
+                    <tr>
+                      <td bgcolor="#f5f5f5"><strong>Introduction</strong></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <small>
+                          <ul>
+                            <li><p>If your profile is stale or not saved, you must review/update every tab on this form.</p></li>
+                            <li><p>Changes will <em>not</em> be saved until you press the Submit button at the top of the page.</p></li>
+                            <li><p>Asterisks ("*") indicate required items.</p></li>
+                            <li><p>For the Regional Annual Survey, this profile...<br/>
+                              <asp:RadioButtonList id="RadioButtonList_be_valid_profile" runat="server">
+                                <asp:ListItem value="FALSE">has NOT yet been accepted</asp:ListItem>
+                                <asp:ListItem value="TRUE">HAS been accepted</asp:ListItem>
+                              </asp:RadioButtonList><br/>...by WebEMSOF and the Regional Council.</p></li>
+                            <li><p>This service...<br/>
+                              <asp:RadioButtonList id="RadioButtonList_be_distressed" runat="server">
+                                <asp:ListItem value="FALSE">does NOT qualify</asp:ListItem>
+                                <asp:ListItem value="TRUE">DOES qualify</asp:ListItem>
+                              </asp:RadioButtonList><br/>...for DISTRESSED status under EMSOF rules.</p></li>
+                          </ul>
+                        </small>
+                      </td>
+                    </tr>
+                  </table>
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Basic ID" id="TabPanel_basic_id">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_basic_id" runat="server" errormessage="Please review/update the Basic ID tab." font-bold="True" onservervalidate="CustomValidator_basic_id_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_basic_id" runat="server">
+                    <asp:Panel ID="Panel_movable_basic_id" runat="server">
+                      <table cellspacing="0" cellpadding="10" border="0" width="100%">
+                    <tr><td bgcolor="whitesmoke"><strong>Basic identification information</strong></td></tr>
+                    <!-- + --><tr><td><table cellspacing="0" cellpadding="5" border="0"><!-- + -->
+                    <tr>
+                      <td align="right" bgcolor="gainsboro" valign="top"><font class="">Affiliate #:</font></td>
+                      <td valign="top"><font class="">
+                          <table cellspacing="0" cellpadding="0" width="100%" border="0">
+                            <tr>
+                              <td valign="middle">
+                                <table cellspacing="0" cellpadding="0" border="0">
+                                  <tr>
+                                    <td>
+                          <asp:TextBox runat="server" columns="5" maxlength="5" id="TextBox_affiliate_num" enabled="false"></asp:TextBox>*<ASP:Button id="Button_lookup" runat="server" causesvalidation="False" text="LOOKUP" onclick="Button_lookup_Click"></ASP:Button>
+                                    </td>
+                                    <td nowrap><small><small><asp:Label id="Label_lookup_arrow" runat="server">&lt;--</asp:Label></small></small></td>
+                                    <td><small><small><em><asp:Label id="Label_lookup_hint" runat="server">Lookup by partial or full Affiliate # or Name</asp:Label></em></small></small></td>
+                                  </tr>
+                                </table>
+                              </td>
+                              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                              <td valign="middle">
+                                <small>
+                                  <ASP:LinkButton id="LinkButton_reset" runat="server" causesvalidation="False" enabled="False" onclick="LinkButton_reset_Click">New lookup</ASP:LinkButton>
+                                </small>
+                              </td>
+                              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                              <td valign="middle"></td>
+                            </tr>
+                          </table>
+        <table>
+          <tr>
+            <td><asp:Panel ID="Panel_match_numbers" runat="server" Visible="False"><small>(<asp:Literal ID="Literal_match_index" runat="server"></asp:Literal>/<asp:Literal ID="Literal_num_matches" runat="server"></asp:Literal>)</small></asp:Panel></td>
+            <td>
+              <asp:LinkButton id="LinkButton_go_to_match_first" runat="server" text='<IMG src="~/protected/image/first_track_blue16_h.png" alt="First match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_first_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_prior" runat="server" text='<IMG src="~/protected/image/play_blue16_h-flipped.png" alt="Prior match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_prior_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_next" runat="server" text='<IMG src="~/protected/image/play_blue16_h.png" alt="Next match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_next_Click"></asp:LinkButton><asp:LinkButton id="LinkButton_go_to_match_last" runat="server" text='<IMG src="~/protected/image/last_track_blue16_h.png" alt="Last match" border="0" height="16" width="16" />' causesvalidation="False" visible="False" onclick="LinkButton_go_to_match_last_Click"></asp:LinkButton>
+            </td>
+            <td>
+              <div style="width:0px;white-space:nowrap;"><ASP:DropDownList id="DropDownList_affiliate_num" runat="server" visible="False" autopostback="True" onselectedindexchanged="DropDownList_affiliate_num_SelectedIndexChanged"></ASP:DropDownList></div>
+            </td>
+          </tr>
+        </table></font></td>
+                      <td nowrap valign="top">
+                        <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_affiliate_num" errormessage="Under the Basic ID tab, please enter Affiliate num." font-bold="True" id="RequiredFieldValidator_affiliate_num">!ERR!</asp:RequiredFieldValidator></td>
+                    </tr>
+                    <tr>
+                      <td align="right"><font class="">Service name:</font></td>
+                      <td><font class="">
+                          <asp:TextBox runat="server" columns="72" maxlength="127" id="TextBox_name" enabled="False"></asp:TextBox>* </font></td>
+                      <td nowrap>
+                        <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_name" errormessage="Under the Basic ID tab, please enter service Name." font-bold="True" id="RequiredFieldValidator_name">!ERR!</asp:RequiredFieldValidator></td>
+                    </tr>
+                    <tr>
+                      <td align="right"><font class="">Federal Employer (tax) ID #:<br/><small>(numerals only)</small></font></td>
+                      <td><font class="">
+                          <asp:TextBox runat="server" columns="9" maxlength="9" id="TextBox_federal_tax_id" enabled="False"></asp:TextBox>* </font></td>
+                      <td nowrap>
+                        <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_federal_tax_id" errormessage="Under the Basic ID tab, please enter a Federal Employer (tax) ID #." font-bold="True" id="RequiredFieldValidator_federal_tax_id">!ERR!</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator id="RegularExpressionValidator_federal_tax_id" runat="server" errormessage="Under the Basic ID tab, please enter a valid Federal Employer (tax) ID # using numerals only." font-bold="True" controltovalidate="TextBox_federal_tax_id"
+                          validationexpression="\d{9}">!ERR!</asp:RegularExpressionValidator></td>
+                    </tr>
+                    <tr>
+                      <td align="right"><font class="">County in EMSI region in which you are headquartered:</font></td>
+                      <td><font class="">
+                      <asp:DropDownList id="DropDownList_county" runat="server" enabled="False" AutoPostBack="True" onselectedindexchanged="DropDownList_county_SelectedIndexChanged"></asp:DropDownList>* </font></td>
+                      <td nowrap>
+                        <asp:RequiredFieldValidator runat="server" controltovalidate="DropDownList_county" errormessage="Under the Basic ID tab, please enter County." font-bold="True" id="RequiredFieldValidator_county_code">!ERR!</asp:RequiredFieldValidator></td>
+                    </tr>
+                    <tr>
+                      <td align="right"><font class="">Business phone #:<br/><small>(numerals only)</small></font></td>
+                      <td><font class="">
+                          <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_business_phone_num" enabled="False"></asp:TextBox>
+                        </font></td>
+                      <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_business_phone_num" runat="server" errormessage="Under the Basic ID tab, please enter a valid Business phone # using numerals only." font-bold="True" controltovalidate="TextBox_business_phone_num"
+                                                    validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
+                    </tr>
+                    <tr>
+                      <td align="right"><font class="">Business fax #: <br/><small>(numerals only)</small></font></td>
+                      <td><font class="">
+                          <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_business_fax_num" enabled="False"></asp:TextBox>
+                        </font></td>
+                      <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_business_fax_num" runat="server" errormessage="Under the Basic ID tab, please enter a valid Business fax # using numerals only." font-bold="True" controltovalidate="TextBox_business_fax_num"
+                                                    validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
+                    </tr>
+                    <tr>
+                      <td align="right"><font class="">Website address:</font></td>
+                      <td>
+                                    <tt>http://</tt><asp:TextBox runat="server" columns="40" maxlength="127" id="TextBox_website_address" enabled="False"></asp:TextBox></td>
+                      <td nowrap>
+                    <asp:RegularExpressionValidator id="RegularExpressionValidator_website_address" runat="server" errormessage="Under the Basic ID tab, please enter a valid Website address." font-bold="True" controltovalidate="TextBox_website_address" validationexpression="[0-9a-zA-Z\-_./]+">!ERR!</asp:RegularExpressionValidator>
+                    <asp:CustomValidator id="CustomValidator_website_address" runat="server" errormessage="Under the Basic ID tab, please enter a valid Website address domain name." font-bold="True" controltovalidate="TextBox_website_address" onservervalidate="CustomValidator_website_address_ServerValidate">!ERR!</asp:CustomValidator></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top"><font class="">Choose the value that best describes your organization:</font></td>
+                      <td><font class="">
+                                          <asp:DropDownList id="DropDownList_charter_kind" runat="server" autopostback="True" enabled="False" onselectedindexchanged="DropDownList_charter_kind_SelectedIndexChanged"></asp:DropDownList>*
+                                    <asp:RequiredFieldValidator id="RequiredFieldValidator_charter_other_kind" runat="server" errormessage="Under the Basic ID tab, please describe what Other kind of organization you are." font-bold="True" controltovalidate="TextBox_charter_other_kind">!ERR!</asp:RequiredFieldValidator><br/>
+                                          <asp:Label id="Label_charter_other_kind" runat="server" enabled="False" font-size="X-Small" text="If Other, specify:"></asp:Label>
+                                          <asp:TextBox id="TextBox_charter_other_kind" runat="server" enabled="false" maxlength="255" columns="56"></asp:TextBox>
                       </font></td>
-                    <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_business_phone_num" runat="server" errormessage="Under the Basic ID tab, please enter a valid Business phone # using numerals only." font-bold="True" controltovalidate="TextBox_business_phone_num"
-                                                  validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
-                  </tr>
-                  <tr>
-                    <td align="right"><font class="">Business fax #: <br/><small>(numerals only)</small></font></td>
-                    <td><font class="">
-                        <asp:TextBox runat="server" columns="10" maxlength="10" id="TextBox_business_fax_num" enabled="False"></asp:TextBox>
-                      </font></td>
-                    <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_business_fax_num" runat="server" errormessage="Under the Basic ID tab, please enter a valid Business fax # using numerals only." font-bold="True" controltovalidate="TextBox_business_fax_num"
-                                                  validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
-                  </tr>
-                  <tr>
-                    <td align="right"><font class="">Website address:</font></td>
-                    <td>
-                                  <tt>http://</tt><asp:TextBox runat="server" columns="40" maxlength="127" id="TextBox_website_address" enabled="False"></asp:TextBox></td>
-                    <td nowrap>
-                  <asp:RegularExpressionValidator id="RegularExpressionValidator_website_address" runat="server" errormessage="Under the Basic ID tab, please enter a valid Website address." font-bold="True" controltovalidate="TextBox_website_address" validationexpression="[0-9a-zA-Z\-_./]+">!ERR!</asp:RegularExpressionValidator>
-                  <asp:CustomValidator id="CustomValidator_website_address" runat="server" errormessage="Under the Basic ID tab, please enter a valid Website address domain name." font-bold="True" controltovalidate="TextBox_website_address" onservervalidate="CustomValidator_website_address_ServerValidate">!ERR!</asp:CustomValidator></td>
-                  </tr>
-                  <tr>
-                    <td align="right" valign="top"><font class="">Choose the value that best describes your organization:</font></td>
-                    <td><font class="">
-                    <asp:UpdatePanel id="UpdatePanel_charter_kind" runat="server" updatemode="Conditional">
-                                      <ContentTemplate>
-                                        <asp:DropDownList id="DropDownList_charter_kind" runat="server" autopostback="True" enabled="False" onselectedindexchanged="DropDownList_charter_kind_SelectedIndexChanged"></asp:DropDownList>*
-                                  <asp:RequiredFieldValidator id="RequiredFieldValidator_charter_other_kind" runat="server" errormessage="Under the Basic ID tab, please describe what Other kind of organization you are." font-bold="True" controltovalidate="TextBox_charter_other_kind">!ERR!</asp:RequiredFieldValidator><br/>
-                                        <asp:Label id="Label_charter_other_kind" runat="server" enabled="False" font-size="X-Small" text="If Other, specify:"></asp:Label>
-                                        <asp:TextBox id="TextBox_charter_other_kind" runat="server" enabled="false" maxlength="255" columns="56"></asp:TextBox>
-                                      </ContentTemplate>
-                    </asp:UpdatePanel></font></td>
-                    <td nowrap>
-                      <asp:RequiredFieldValidator runat="server" controltovalidate="DropDownList_charter_kind" errormessage="Under the Basic ID tab, please enter Charter kind." font-bold="True" id="RequiredFieldValidator_charter_kind">!ERR!</asp:RequiredFieldValidator></td>
-                  </tr>
-                  <!-- - --></table></td></tr><!-- - -->
-                </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Corporate/Admin contact" id="TabPanel_corporate_contact">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_corporate_contact" runat="server" errormessage="Please review/update the Corporate/Admin contact tab." font-bold="True" onservervalidate="CustomValidator_corporate_contact_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                      <td nowrap>
+                        <asp:RequiredFieldValidator runat="server" controltovalidate="DropDownList_charter_kind" errormessage="Under the Basic ID tab, please enter Charter kind." font-bold="True" id="RequiredFieldValidator_charter_kind">!ERR!</asp:RequiredFieldValidator></td>
+                    </tr>
+                    <!-- - --></table></td></tr><!-- - -->
+                  </table>
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Corporate/Admin contact" id="TabPanel_corporate_contact">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_corporate_contact" runat="server" errormessage="Please review/update the Corporate/Admin contact tab." font-bold="True" onservervalidate="CustomValidator_corporate_contact_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_corporate_contact" runat="server">
+                    <asp:Panel ID="Panel_movable_corporate_contact" runat="server">
+                                                                                                                <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Contact information for Corporate/Administrative direction</strong></p>
@@ -217,85 +225,93 @@
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="EMSOF contact" id="TabPanel_emsof_contact">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_emsof_contact" runat="server" errormessage="Please review/update the EMSOF contact tab." font-bold="True" onservervalidate="CustomValidator_emsof_contact_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
-                  <tr>
-                    <td bgcolor="whitesmoke">
-                      <p><strong>Contact information for EMSOF program</strong></p>
-                      <p><small>These questions tell EMSI which member of your service is the primary Point Of Contact for matters concerning the EMSOF grant program.</small></p>
-                    </td>
-                  </tr>
-                  <!-- + --><tr><td><asp:UpdatePanel id="UpdatePanel_be_emsof_particpant" runat="server" updatemode="Conditional"><ContentTemplate>
-                  <table cellspacing="0" cellpadding="5" border="0"><!-- + -->
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="EMSOF contact" id="TabPanel_emsof_contact">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_emsof_contact" runat="server" errormessage="Please review/update the EMSOF contact tab." font-bold="True" onservervalidate="CustomValidator_emsof_contact_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_emsof_contact" runat="server">
+                    <asp:Panel ID="Panel_movable_emsof_contact" runat="server">
+                      <table cellpadding="10" cellspacing="0" border="0" width="100%">
                     <tr>
-                      <td valign="top" align="right"><font class="">Does your service plan to participate in this year's EMSOF Provider Equipment grant program?*</font></td>
-                      <td><font class="">
-                          <asp:RadioButtonList id="RadioButtonList_be_emsof_participant" runat="server" autopostback="True" repeatdirection="Horizontal" enabled="False" onselectedindexchanged="RadioButtonList_be_emsof_participant_SelectedIndexChanged">
-                            <asp:ListItem selected="True" value="TRUE">Yes</asp:ListItem>
-                            <asp:ListItem value="FALSE">No</asp:ListItem>
-                          </asp:RadioButtonList>
-                          <p>
-                            <asp:Label id="Label_emsof_nonparticipation_reason" enabled="False" runat="server" text="If no, why not?" font-size="X-Small"></asp:Label><br/>
-                            <asp:TextBox id="TextBox_emsof_nonparticipation_reason" enabled="False" columns="50" runat="server" rows="2" textmode="MultiLine"></asp:TextBox>
-                          </p>
-                        </font></td>
-                      <td nowrap>
-                        <asp:RequiredFieldValidator id="RequiredFieldValidator_be_emsof_participant" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, Please answer the question about EMSOF participation." controltovalidate="RadioButtonList_be_emsof_participant">!ERR!</asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="RegularExpressionValidator_emsof_nonparticipation_reason" runat="server" ErrorMessage="Please restrict the EMSOF nonparticipation reason entry to 65,535 characters." ControlToValidate="TextBox_emsof_nonparticipation_reason" Display="Dynamic" Font-Bold="True" ValidationExpression="^[\s\S]{0,65535}$">!ERR!</asp:RegularExpressionValidator>
+                      <td bgcolor="whitesmoke">
+                        <p><strong>Contact information for EMSOF program</strong></p>
+                        <p><small>These questions tell EMSI which member of your service is the primary Point Of Contact for matters concerning the EMSOF grant program.</small></p>
                       </td>
                     </tr>
-                    <tr id="TableRow_emsof_contact_name" runat="server">
-                      <td align="right"><font class="">EMSOF contact person's name:</font></td>
-                      <td nowrap><font class="">
-                          <asp:TextBox id="TextBox_emsof_contact_name" maxlength="127" columns="60" runat="server" enabled="False"></asp:TextBox>*</font></td>
-                      <td nowrap>
-                        <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_name" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter an EMSOF Contact name." controltovalidate="TextBox_emsof_contact_name">!ERR!</asp:RequiredFieldValidator></td>
-                    </tr>
-                    <tr id="TableRow_emsof_contact_primary_phone_num" runat="server">
-                      <td align="right"><font class="">Primary phone #:</font></td>
-                      <td><font class="">
-                          <asp:TextBox id="TextBox_emsof_contact_primary_phone_num" maxlength="10" columns="10" runat="server" enabled="False"></asp:TextBox>*</font></td>
-                      <td nowrap>
-                        <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter an EMSOF Contact primary phone number."
-                                                    controltovalidate="TextBox_emsof_contact_primary_phone_num">!ERR!</asp:RequiredFieldValidator><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF Contact primary phone number using numerals only."
-                                                        controltovalidate="TextBox_emsof_contact_primary_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
-                    </tr>
-                    <tr id="TableRow_emsof_contact_sms_phone_num" runat="server">
-                      <td valign="bottom" align="right">
-                        <p><font class="">In the future, WebEMSOF may be able to send a text message to your cellphone when the status of your EMSOF request changes.</font>
-                        </p>
-                        <p><font class="">What is your cellphone number?</font>
-                        </p></td>
-                      <td valign="bottom"><font class="">
-                          <asp:TextBox id="TextBox_emsof_contact_sms_phone_num" maxlength="10" columns="10" runat="server" enabled="False"></asp:TextBox>
-                        </font></td>
-                      <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_sms_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF Contact cellphone number using numerals only."
-                                                        controltovalidate="TextBox_emsof_contact_sms_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
-                    </tr>
-                <!-- - --></table></ContentTemplate></asp:UpdatePanel></td></tr><!-- - -->
-                </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Ops contact" id="TabPanel_ops_contact">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_ops_contact" runat="server" errormessage="Please review/update the Ops contact tab." font-bold="True" onservervalidate="CustomValidator_ops_contact_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    <!-- + --><tr><td>
+                    <table cellspacing="0" cellpadding="5" border="0"><!-- + -->
+                      <tr>
+                        <td valign="top" align="right"><font class="">Does your service plan to participate in this year's EMSOF Provider Equipment grant program?*</font></td>
+                        <td><font class="">
+                            <asp:RadioButtonList id="RadioButtonList_be_emsof_participant" runat="server" autopostback="True" repeatdirection="Horizontal" enabled="False" onselectedindexchanged="RadioButtonList_be_emsof_participant_SelectedIndexChanged">
+                              <asp:ListItem selected="True" value="TRUE">Yes</asp:ListItem>
+                              <asp:ListItem value="FALSE">No</asp:ListItem>
+                            </asp:RadioButtonList>
+                            <p>
+                              <asp:Label id="Label_emsof_nonparticipation_reason" enabled="False" runat="server" text="If no, why not?" font-size="X-Small"></asp:Label><br/>
+                              <asp:TextBox id="TextBox_emsof_nonparticipation_reason" enabled="False" columns="50" runat="server" rows="2" textmode="MultiLine"></asp:TextBox>
+                            </p>
+                          </font></td>
+                        <td nowrap>
+                          <asp:RequiredFieldValidator id="RequiredFieldValidator_be_emsof_participant" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, Please answer the question about EMSOF participation." controltovalidate="RadioButtonList_be_emsof_participant">!ERR!</asp:RequiredFieldValidator>
+                          <asp:RegularExpressionValidator ID="RegularExpressionValidator_emsof_nonparticipation_reason" runat="server" ErrorMessage="Please restrict the EMSOF nonparticipation reason entry to 65,535 characters." ControlToValidate="TextBox_emsof_nonparticipation_reason" Display="Dynamic" Font-Bold="True" ValidationExpression="^[\s\S]{0,65535}$">!ERR!</asp:RegularExpressionValidator>
+                        </td>
+                      </tr>
+                      <tr id="TableRow_emsof_contact_name" runat="server">
+                        <td align="right"><font class="">EMSOF contact person's name:</font></td>
+                        <td nowrap><font class="">
+                            <asp:TextBox id="TextBox_emsof_contact_name" maxlength="127" columns="60" runat="server" enabled="False"></asp:TextBox>*</font></td>
+                        <td nowrap>
+                          <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_name" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter an EMSOF Contact name." controltovalidate="TextBox_emsof_contact_name">!ERR!</asp:RequiredFieldValidator></td>
+                      </tr>
+                      <tr id="TableRow_emsof_contact_primary_phone_num" runat="server">
+                        <td align="right"><font class="">Primary phone #:</font></td>
+                        <td><font class="">
+                            <asp:TextBox id="TextBox_emsof_contact_primary_phone_num" maxlength="10" columns="10" runat="server" enabled="False"></asp:TextBox>*</font></td>
+                        <td nowrap>
+                          <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter an EMSOF Contact primary phone number."
+                                                      controltovalidate="TextBox_emsof_contact_primary_phone_num">!ERR!</asp:RequiredFieldValidator><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF Contact primary phone number using numerals only."
+                                                          controltovalidate="TextBox_emsof_contact_primary_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
+                      </tr>
+                      <tr id="TableRow_emsof_contact_sms_phone_num" runat="server">
+                        <td valign="bottom" align="right">
+                          <p><font class="">In the future, WebEMSOF may be able to send a text message to your cellphone when the status of your EMSOF request changes.</font>
+                          </p>
+                          <p><font class="">What is your cellphone number?</font>
+                          </p></td>
+                        <td valign="bottom"><font class="">
+                            <asp:TextBox id="TextBox_emsof_contact_sms_phone_num" maxlength="10" columns="10" runat="server" enabled="False"></asp:TextBox>
+                          </font></td>
+                        <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_sms_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF Contact cellphone number using numerals only."
+                                                          controltovalidate="TextBox_emsof_contact_sms_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
+                      </tr>
+                  <!-- - --></table></td></tr><!-- - -->
+                  </table>
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Ops contact" id="TabPanel_ops_contact">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_ops_contact" runat="server" errormessage="Please review/update the Ops contact tab." font-bold="True" onservervalidate="CustomValidator_ops_contact_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_ops_contact" runat="server">
+                    <asp:Panel ID="Panel_movable_ops_contact" runat="server">
+                                                                                                                            <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Contact information for operations direction</strong></p>
@@ -347,18 +363,22 @@
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="MD contact" id="TabPanel_md_contact">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_md_contact" runat="server" errormessage="Please review/update the MD contact tab." font-bold="True" onservervalidate="CustomValidator_md_contact_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="MD contact" id="TabPanel_md_contact">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_md_contact" runat="server" errormessage="Please review/update the MD contact tab." font-bold="True" onservervalidate="CustomValidator_md_contact_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_md_contact" runat="server">
+                    <asp:Panel ID="Panel_movable_md_contact" runat="server">
+                                                                                                                                  <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Contact information for medical direction</strong></p>
@@ -413,18 +433,22 @@
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Physical address" id="TabPanel_physical_address">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_physical_address" runat="server" errormessage="Please review/update the Physical address tab." font-bold="True" onservervalidate="CustomValidator_physical_address_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Physical address" id="TabPanel_physical_address">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_physical_address" runat="server" errormessage="Please review/update the Physical address tab." font-bold="True" onservervalidate="CustomValidator_physical_address_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_physical_address" runat="server">
+                    <asp:Panel ID="Panel_movable_physical_address" runat="server">
+                                                                                                                <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Physical location of headquarters</strong></p>
@@ -470,18 +494,22 @@
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Mailing address" id="TabPanel_mailing_address">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_mailing_address" runat="server" errormessage="Please review/update the Mailing address tab." font-bold="True" onservervalidate="CustomValidator_mailing_address_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Mailing address" id="TabPanel_mailing_address">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_mailing_address" runat="server" errormessage="Please review/update the Mailing address tab." font-bold="True" onservervalidate="CustomValidator_mailing_address_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_mailing_address" runat="server">
+                    <asp:Panel ID="Panel_movable_mailing_address" runat="server">
+                                                                                                          <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Headquarters mailing address</strong></p>
@@ -524,83 +552,91 @@
                   <asp:RegularExpressionValidator id="RegularExpressionValidator_mail_zip_code" runat="server" errormessage="Under the Mailing address tab, please enter a valid Mailing zip code." font-bold="True" controltovalidate="TextBox_mail_zip_code" validationexpression="\d{5,9}">!ERR!</asp:RegularExpressionValidator></td>
                   </tr>
                   <!-- - --></table></td></tr><!-- - --></table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Nature of service" id="TabPanel_nature_of_service">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_nature_of_service" runat="server" errormessage="Please review/update the Nature of service tab." font-bold="True" onservervalidate="CustomValidator_nature_of_service_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
-                  <tr>
-                    <td bgcolor="whitesmoke">
-                      <p><strong>Nature of service</strong></p>
-                    </td>
-                  </tr>
-                  <!-- + --><tr><td><asp:UpdatePanel id="UpdatePanel_be_dera" runat="server" updatemode="Conditional"><ContentTemplate><table cellspacing="0" cellpadding="5" border="0"><!-- + -->
-                  <tr>
-                    <td align="right" valign="top" nowrap>
-                      <p align="right">Which of these services do you provide?<br/>
-                        <small>(Check all that apply.)</small></p></td>
-                    <td nowrap>
-                      <asp:CheckBox runat="server" text="QRS (unrecognized)" id="CheckBox_be_qrs_unrecognized" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="QRS (recognized)" id="CheckBox_be_qrs" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="BLS Ambulance" id="CheckBox_be_bls_amb" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="ALS Ambulance" id="CheckBox_be_als_amb" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="ALS squad" id="CheckBox_be_als_squad" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="Air ambulance" id="CheckBox_be_air_amb" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="Rescue (unrecognized)" id="CheckBox_be_rescue_unrecognized" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="Rescue (recognized)" id="CheckBox_be_rescue" enabled="False"></asp:CheckBox><br/>
-                      <asp:CheckBox runat="server" text="PA Turnpike contracted responses" id="CheckBox_be_pa_turnpike_contractor" enabled="False"></asp:CheckBox></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td align="right" valign="top"><font class="">Has a local government body designated you as the primary EMS response agency for a specific geographic area?*</font></td>
-                    <td><font class="">
-                    <asp:RadioButtonList id="RadioButtonList_be_dera" runat="server" repeatdirection="Horizontal" enabled="False" AutoPostBack="True" onselectedindexchanged="RadioButtonList_be_dera_SelectedIndexChanged">
-                      <asp:ListItem value="TRUE">Yes</asp:ListItem>
-                      <asp:ListItem value="FALSE">No</asp:ListItem>
-                    </asp:RadioButtonList>
-                        <asp:Panel ID="Panel_dera_detail" runat="server" Enabled="false">
-                          <p>
-                            <small>If yes, specify area(s):</small><br/>
-                            <asp:TextBox id="TextBox_primary_response_area" columns="50" runat="server" rows="2" textmode="MultiLine" ></asp:TextBox><br />
-                          </p>
-                          <p>
-                            <small>
-                              Which counties are the above areas in?&nbsp; <asp:Literal ID="Literal_application_name" runat="server"></asp:Literal> will prompt the EMSOF coordinators at the counties you specify to consider making an allocation to your service:
-                            </small>
-                            <asp:CheckBoxList ID="CheckBoxList_extra_dependency" runat="server"></asp:CheckBoxList>
-                          </p>
-                        </asp:Panel>
-                      </font></td>
-                    <td nowrap valign="top">
-                      <font class="">
-                      <asp:RequiredFieldValidator id="RequiredFieldValidator_be_dera" runat="server" errormessage="Under the Nature of service tab, please answer the question about local government designating you to respond to a specific area." font-bold="True" controltovalidate="RadioButtonList_be_dera">!ERR!</asp:RequiredFieldValidator>
-                      <asp:RequiredFieldValidator ID="RequiredFieldValidator_primary_response_area" runat="server" controltovalidate="TextBox_primary_response_area" Display="Dynamic" errormessage="Under the Nature of service tab, please specify your Primary response area." font-bold="True" 
-                        Enabled="False">!ERR!</asp:RequiredFieldValidator>
-                      <asp:RegularExpressionValidator ID="RegularExpressionValidator_primary_response_area" runat="server" ErrorMessage="Please restrict the Primary response area(s) entry to 255 characters." ControlToValidate="TextBox_primary_response_area" Display="Dynamic" Font-Bold="True" ValidationExpression="^[\s\S]{0,255}$">!ERR!</asp:RegularExpressionValidator>
-                      </font>
-                    </td>
-                  </tr>
-                  <!-- - --></table></ContentTemplate></asp:UpdatePanel></td></tr><!-- - -->
-                </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Inventory" id="TabPanel_inventory">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_inventory" runat="server" errormessage="Please review/update the Inventory tab." font-bold="True" onservervalidate="CustomValidator_inventory_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Nature of service" id="TabPanel_nature_of_service">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_nature_of_service" runat="server" errormessage="Please review/update the Nature of service tab." font-bold="True" onservervalidate="CustomValidator_nature_of_service_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_nature_of_service" runat="server">
+                    <asp:Panel ID="Panel_movable_nature_of_service" runat="server">
+                      <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <td bgcolor="whitesmoke">
+                        <p><strong>Nature of service</strong></p>
+                      </td>
+                    </tr>
+                    <!-- + --><tr><td><table cellspacing="0" cellpadding="5" border="0"><!-- + -->
+                    <tr>
+                      <td align="right" valign="top" nowrap>
+                        <p align="right">Which of these services do you provide?<br/>
+                          <small>(Check all that apply.)</small></p></td>
+                      <td nowrap>
+                        <asp:CheckBox runat="server" text="QRS (unrecognized)" id="CheckBox_be_qrs_unrecognized" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="QRS (recognized)" id="CheckBox_be_qrs" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="BLS Ambulance" id="CheckBox_be_bls_amb" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="ALS Ambulance" id="CheckBox_be_als_amb" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="ALS squad" id="CheckBox_be_als_squad" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="Air ambulance" id="CheckBox_be_air_amb" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="Rescue (unrecognized)" id="CheckBox_be_rescue_unrecognized" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="Rescue (recognized)" id="CheckBox_be_rescue" enabled="False"></asp:CheckBox><br/>
+                        <asp:CheckBox runat="server" text="PA Turnpike contracted responses" id="CheckBox_be_pa_turnpike_contractor" enabled="False"></asp:CheckBox></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td align="right" valign="top"><font class="">Has a local government body designated you as the primary EMS response agency for a specific geographic area?*</font></td>
+                      <td><font class="">
+                      <asp:RadioButtonList id="RadioButtonList_be_dera" runat="server" repeatdirection="Horizontal" enabled="False" AutoPostBack="True" onselectedindexchanged="RadioButtonList_be_dera_SelectedIndexChanged">
+                        <asp:ListItem value="TRUE">Yes</asp:ListItem>
+                        <asp:ListItem value="FALSE">No</asp:ListItem>
+                      </asp:RadioButtonList>
+                          <asp:Panel ID="Panel_dera_detail" runat="server" Enabled="false">
+                            <p>
+                              <small>If yes, specify area(s):</small><br/>
+                              <asp:TextBox id="TextBox_primary_response_area" columns="50" runat="server" rows="2" textmode="MultiLine" ></asp:TextBox><br />
+                            </p>
+                            <p>
+                              <small>
+                                Which counties are the above areas in?&nbsp; <asp:Literal ID="Literal_application_name" runat="server"></asp:Literal> will prompt the EMSOF coordinators at the counties you specify to consider making an allocation to your service:
+                              </small>
+                              <asp:CheckBoxList ID="CheckBoxList_extra_dependency" runat="server"></asp:CheckBoxList>
+                            </p>
+                          </asp:Panel>
+                        </font></td>
+                      <td nowrap valign="top">
+                        <font class="">
+                        <asp:RequiredFieldValidator id="RequiredFieldValidator_be_dera" runat="server" errormessage="Under the Nature of service tab, please answer the question about local government designating you to respond to a specific area." font-bold="True" controltovalidate="RadioButtonList_be_dera">!ERR!</asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator_primary_response_area" runat="server" controltovalidate="TextBox_primary_response_area" Display="Dynamic" errormessage="Under the Nature of service tab, please specify your Primary response area." font-bold="True" 
+                          Enabled="False">!ERR!</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="RegularExpressionValidator_primary_response_area" runat="server" ErrorMessage="Please restrict the Primary response area(s) entry to 255 characters." ControlToValidate="TextBox_primary_response_area" Display="Dynamic" Font-Bold="True" ValidationExpression="^[\s\S]{0,255}$">!ERR!</asp:RegularExpressionValidator>
+                        </font>
+                      </td>
+                    </tr>
+                    <!-- - --></table></td></tr><!-- - -->
+                  </table>
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Inventory" id="TabPanel_inventory">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_inventory" runat="server" errormessage="Please review/update the Inventory tab." font-bold="True" onservervalidate="CustomValidator_inventory_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_inventory" runat="server">
+                    <asp:Panel ID="Panel_movable_inventory" runat="server">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Inventory</strong></p>
@@ -866,18 +902,22 @@
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Depth of service" id="TabPanel_depth">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_depth_of_service" runat="server" errormessage="Please review/update the Depth of service tab." font-bold="True" onservervalidate="CustomValidator_depth_of_service_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Depth of service" id="TabPanel_depth">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_depth_of_service" runat="server" errormessage="Please review/update the Depth of service tab." font-bold="True" onservervalidate="CustomValidator_depth_of_service_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_depth" runat="server">
+                    <asp:Panel ID="Panel_movable_depth" runat="server">
+                                                                                                                                                                                                                              <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Depth of service</strong></p>
@@ -978,18 +1018,22 @@
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Communications" id="TabPanel_communications">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_communications" runat="server" errormessage="Please review/update the Communications tab." font-bold="True" onservervalidate="CustomValidator_communications_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Communications" id="TabPanel_communications">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_communications" runat="server" errormessage="Please review/update the Communications tab." font-bold="True" onservervalidate="CustomValidator_communications_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_communications" runat="server">
+                    <asp:Panel ID="Panel_movable_communications" runat="server">
+                                                                                                                                                                                                                                      <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Communications</strong></p>
@@ -1094,18 +1138,22 @@
                   </tr>
                   <!-- - --></table></td></tr><!-- - -->
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-      <cc1:TabPanel runat="server" headertext="Wrap up" id="TabPanel_wrap_up">
-        <ContentTemplate>
-          <table class="tab_panel_std" width="100%">
-            <tr>
-              <td>
-                <asp:CustomValidator id="CustomValidator_wrap_up" runat="server" errormessage="Please review/update the Wrap up tab." font-bold="True" onservervalidate="CustomValidator_wrap_up_ServerValidate">!ERR!</asp:CustomValidator>
-                <table cellpadding="10" cellspacing="0" border="0" width="100%">
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+        <cc1:TabPanel runat="server" headertext="Wrap up" id="TabPanel_wrap_up">
+          <ContentTemplate>
+            <table class="tab_panel_std" width="100%">
+              <tr>
+                <td>
+                  <asp:CustomValidator id="CustomValidator_wrap_up" runat="server" errormessage="Please review/update the Wrap up tab." font-bold="True" onservervalidate="CustomValidator_wrap_up_ServerValidate">!ERR!</asp:CustomValidator>
+                  <asp:PlaceHolder ID="PlaceHolder_tabpanel_interior_wrap_up" runat="server">
+                    <asp:Panel ID="Panel_movable_wrap_up" runat="server">
+                                                        <table cellpadding="10" cellspacing="0" border="0" width="100%">
                   <tr>
                     <td bgcolor="whitesmoke">
                       <p><strong>Wrap-up</strong></p>
@@ -1123,11 +1171,120 @@
                     </td>
                   </tr>
                 </table>
-              </td>
-            </tr>
-          </table>
-        </ContentTemplate>
-      </cc1:TabPanel>
-    </cc1:TabContainer>
+                    </asp:Panel>
+                  </asp:PlaceHolder>
+                </td>
+              </tr>
+            </table>
+          </ContentTemplate>
+        </cc1:TabPanel>
+      </cc1:TabContainer>
+    </asp:Panel>
+    <asp:Panel ID="Panel_report" runat="server" Visible="false">
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_introduction" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_basic_id" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_corporate_contact" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_emsof_contact" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_ops_contact" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_md_contact" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_physical_address" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_mailing_address" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_nature_of_service" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_inventory" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_depth" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_communications" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+      <table border="1" bordercolor="gainsboro" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td>
+            <asp:PlaceHolder ID="PlaceHolder_report_wrap_up" runat="server"></asp:PlaceHolder>
+          </td>
+        </tr>
+      </table>
+      <br />
+    </asp:Panel>
   </ContentTemplate>
 </asp:UpdatePanel>

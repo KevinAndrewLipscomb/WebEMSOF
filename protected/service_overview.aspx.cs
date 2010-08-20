@@ -70,7 +70,7 @@ namespace service_overview
                     p.db.Close();
                     DropCrumbAndTransferTo("change_password.aspx");
                 }
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - service_overview";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - service_overview";
                 // Initialize implementation-scoped vars.
                 p.biz_fiscal_years = new TClass_biz_fiscal_years();
                 p.be_before_deadline = true;
@@ -89,14 +89,15 @@ namespace service_overview
                 if (biz_get_profile_status == "0")
                 {
                     Label_profile_status.Text = "Stale or not saved.";
-                    LinkButton_profile_action.Text = "[Create/refresh profile]";
+                    LinkButton_profile_action.Text = "[Create/refresh]";
                     Table_item_requests_section.Visible = false;
                     p.db.Close();
                 }
                 else
                 {
                     Label_profile_status.Text = "Saved.";
-                    LinkButton_profile_action.Text = "[Edit profile]";
+                    LinkButton_profile_action.Text = "[Edit]";
+                    TableData_profile_printable.Visible = true;
                     // Determine current fiscal year
                     p.max_fiscal_year_id_string = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection).ExecuteScalar().ToString();
                     // //
@@ -181,6 +182,13 @@ namespace service_overview
 
         protected void LinkButton_profile_action_Click(object sender, System.EventArgs e)
         {
+            SessionSet("mode:profile-rendition","create-refresh-edit");
+            DropCrumbAndTransferTo("profile.aspx");
+        }
+
+        protected void LinkButton_profile_printable_Click(object sender, System.EventArgs e)
+        {
+            SessionSet("mode:profile-rendition","printable-report");
             DropCrumbAndTransferTo("profile.aspx");
         }
 

@@ -4,8 +4,7 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-    <title id="Title" runat="server"></title>
+  <head runat="server">
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -22,6 +21,7 @@
                   <td bgcolor="#f5f5f5"><strong>Your service's WebEMSOF profile ("ANNUAL SURVEY") is:</strong></td>
                   <td><ASP:Label id="Label_profile_status" runat="server"></ASP:Label></td>
                   <td><ASP:LinkButton id="LinkButton_profile_action" runat="server" font-size="Small" onclick="LinkButton_profile_action_Click"></ASP:LinkButton></td>
+                  <td id="TableData_profile_printable" runat="server" visible="false"><ASP:LinkButton id="LinkButton_profile_printable" runat="server" font-size="Small" onclick="LinkButton_profile_printable_Click">[View printable report]</ASP:LinkButton></td>
                 </tr>
               </table>
             </td>

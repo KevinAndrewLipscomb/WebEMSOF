@@ -259,6 +259,38 @@ namespace UserControl_service_profile
                 {
                     PresentRecord(p.affiliate_num);
                 }
+                if (Session["mode:profile-rendition"].ToString() == "printable-report")
+                  {
+                  PlaceHolder_tabpanel_interior_introduction.Controls.Remove(Panel_movable_introduction);
+                  PlaceHolder_report_introduction.Controls.Add(Panel_movable_introduction);
+                  PlaceHolder_tabpanel_interior_basic_id.Controls.Remove(Panel_movable_basic_id);
+                  PlaceHolder_report_basic_id.Controls.Add(Panel_movable_basic_id);
+                  PlaceHolder_tabpanel_interior_corporate_contact.Controls.Remove(Panel_movable_corporate_contact);
+                  PlaceHolder_report_corporate_contact.Controls.Add(Panel_movable_corporate_contact);
+                  PlaceHolder_tabpanel_interior_emsof_contact.Controls.Remove(Panel_movable_emsof_contact);
+                  PlaceHolder_report_emsof_contact.Controls.Add(Panel_movable_emsof_contact);
+                  PlaceHolder_tabpanel_interior_ops_contact.Controls.Remove(Panel_movable_ops_contact);
+                  PlaceHolder_report_ops_contact.Controls.Add(Panel_movable_ops_contact);
+                  PlaceHolder_tabpanel_interior_md_contact.Controls.Remove(Panel_movable_md_contact);
+                  PlaceHolder_report_md_contact.Controls.Add(Panel_movable_md_contact);
+                  PlaceHolder_tabpanel_interior_physical_address.Controls.Remove(Panel_movable_physical_address);
+                  PlaceHolder_report_physical_address.Controls.Add(Panel_movable_physical_address);
+                  PlaceHolder_tabpanel_interior_mailing_address.Controls.Remove(Panel_movable_mailing_address);
+                  PlaceHolder_report_mailing_address.Controls.Add(Panel_movable_mailing_address);
+                  PlaceHolder_tabpanel_interior_nature_of_service.Controls.Remove(Panel_movable_nature_of_service);
+                  PlaceHolder_report_nature_of_service.Controls.Add(Panel_movable_nature_of_service);
+                  PlaceHolder_tabpanel_interior_inventory.Controls.Remove(Panel_movable_inventory);
+                  PlaceHolder_report_inventory.Controls.Add(Panel_movable_inventory);
+                  PlaceHolder_tabpanel_interior_depth.Controls.Remove(Panel_movable_depth);
+                  PlaceHolder_report_depth.Controls.Add(Panel_movable_depth);
+                  PlaceHolder_tabpanel_interior_communications.Controls.Remove(Panel_movable_communications);
+                  PlaceHolder_report_communications.Controls.Add(Panel_movable_communications);
+                  PlaceHolder_tabpanel_interior_wrap_up.Controls.Remove(Panel_movable_wrap_up);
+                  PlaceHolder_report_wrap_up.Controls.Add(Panel_movable_wrap_up);
+                  SetDependentFieldAblements(false);
+                  Panel_tabcontainer.Visible = false;
+                  Panel_report.Visible = true;
+                  }
                 p.be_loaded = true;
             }
             InjectPersistentClientSideScript();
