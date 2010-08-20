@@ -22,6 +22,15 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.UpdatePanel UpdatePanel_control;
         
         /// <summary>
+        /// Panel_tabcontainer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_tabcontainer;
+        
+        /// <summary>
         /// Button_submit control.
         /// </summary>
         /// <remarks>
@@ -58,6 +67,24 @@ namespace UserControl_service_profile {
         protected global::AjaxControlToolkit.TabPanel TabPanel_introduction;
         
         /// <summary>
+        /// PlaceHolder_tabpanel_interior_introduction control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_introduction;
+        
+        /// <summary>
+        /// Panel_movable_introduction control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_introduction;
+        
+        /// <summary>
         /// RadioButtonList_be_valid_profile control.
         /// </summary>
         /// <remarks>
@@ -92,6 +119,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_basic_id;
+        
+        /// <summary>
+        /// PlaceHolder_tabpanel_interior_basic_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_basic_id;
+        
+        /// <summary>
+        /// Panel_movable_basic_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_basic_id;
         
         /// <summary>
         /// TextBox_affiliate_num control.
@@ -346,15 +391,6 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_website_address;
         
         /// <summary>
-        /// UpdatePanel_charter_kind control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel_charter_kind;
-        
-        /// <summary>
         /// DropDownList_charter_kind control.
         /// </summary>
         /// <remarks>
@@ -416,6 +452,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_corporate_contact;
+        
+        /// <summary>
+        /// PlaceHolder_tabpanel_interior_corporate_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_corporate_contact;
+        
+        /// <summary>
+        /// Panel_movable_corporate_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_corporate_contact;
         
         /// <summary>
         /// TextBox_corpadmin_contact_name control.
@@ -526,13 +580,22 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_emsof_contact;
         
         /// <summary>
-        /// UpdatePanel_be_emsof_particpant control.
+        /// PlaceHolder_tabpanel_interior_emsof_contact control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel_be_emsof_particpant;
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_emsof_contact;
+        
+        /// <summary>
+        /// Panel_movable_emsof_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_emsof_contact;
         
         /// <summary>
         /// RadioButtonList_be_emsof_participant control.
@@ -688,6 +751,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_ops_contact;
         
         /// <summary>
+        /// PlaceHolder_tabpanel_interior_ops_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_ops_contact;
+        
+        /// <summary>
+        /// Panel_movable_ops_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_ops_contact;
+        
+        /// <summary>
         /// TextBox_coo_name control.
         /// </summary>
         /// <remarks>
@@ -814,6 +895,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_md_contact;
         
         /// <summary>
+        /// PlaceHolder_tabpanel_interior_md_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_md_contact;
+        
+        /// <summary>
+        /// Panel_movable_md_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_md_contact;
+        
+        /// <summary>
         /// TextBox_md_name control.
         /// </summary>
         /// <remarks>
@@ -931,6 +1030,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_physical_address;
         
         /// <summary>
+        /// PlaceHolder_tabpanel_interior_physical_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_physical_address;
+        
+        /// <summary>
+        /// Panel_movable_physical_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_physical_address;
+        
+        /// <summary>
         /// TextBox_physical_street_address_line_1 control.
         /// </summary>
         /// <remarks>
@@ -1019,6 +1136,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_mailing_address;
+        
+        /// <summary>
+        /// PlaceHolder_tabpanel_interior_mailing_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_mailing_address;
+        
+        /// <summary>
+        /// Panel_movable_mailing_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_mailing_address;
         
         /// <summary>
         /// TextBox_mail_address_line_1 control.
@@ -1111,13 +1246,22 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_nature_of_service;
         
         /// <summary>
-        /// UpdatePanel_be_dera control.
+        /// PlaceHolder_tabpanel_interior_nature_of_service control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel_be_dera;
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_nature_of_service;
+        
+        /// <summary>
+        /// Panel_movable_nature_of_service control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_nature_of_service;
         
         /// <summary>
         /// CheckBox_be_qrs_unrecognized control.
@@ -1289,6 +1433,24 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_inventory;
+        
+        /// <summary>
+        /// PlaceHolder_tabpanel_interior_inventory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_inventory;
+        
+        /// <summary>
+        /// Panel_movable_inventory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_inventory;
         
         /// <summary>
         /// TextBox_num_doh_licensed_vehicles control.
@@ -2164,6 +2326,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_depth_of_service;
         
         /// <summary>
+        /// PlaceHolder_tabpanel_interior_depth control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_depth;
+        
+        /// <summary>
+        /// Panel_movable_depth control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_depth;
+        
+        /// <summary>
         /// TextBox_num_staff_typical_als_08_16 control.
         /// </summary>
         /// <remarks>
@@ -2506,6 +2686,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_communications;
         
         /// <summary>
+        /// PlaceHolder_tabpanel_interior_communications control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_communications;
+        
+        /// <summary>
+        /// Panel_movable_communications control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_communications;
+        
+        /// <summary>
         /// TextBox_key_cell_phone_1_num control.
         /// </summary>
         /// <remarks>
@@ -2765,5 +2963,149 @@ namespace UserControl_service_profile {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_wrap_up;
+        
+        /// <summary>
+        /// PlaceHolder_tabpanel_interior_wrap_up control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_tabpanel_interior_wrap_up;
+        
+        /// <summary>
+        /// Panel_movable_wrap_up control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_movable_wrap_up;
+        
+        /// <summary>
+        /// Panel_report control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel_report;
+        
+        /// <summary>
+        /// PlaceHolder_report_introduction control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_introduction;
+        
+        /// <summary>
+        /// PlaceHolder_report_basic_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_basic_id;
+        
+        /// <summary>
+        /// PlaceHolder_report_corporate_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_corporate_contact;
+        
+        /// <summary>
+        /// PlaceHolder_report_emsof_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_emsof_contact;
+        
+        /// <summary>
+        /// PlaceHolder_report_ops_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_ops_contact;
+        
+        /// <summary>
+        /// PlaceHolder_report_md_contact control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_md_contact;
+        
+        /// <summary>
+        /// PlaceHolder_report_physical_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_physical_address;
+        
+        /// <summary>
+        /// PlaceHolder_report_mailing_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_mailing_address;
+        
+        /// <summary>
+        /// PlaceHolder_report_nature_of_service control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_nature_of_service;
+        
+        /// <summary>
+        /// PlaceHolder_report_inventory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_inventory;
+        
+        /// <summary>
+        /// PlaceHolder_report_depth control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_depth;
+        
+        /// <summary>
+        /// PlaceHolder_report_communications control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_communications;
+        
+        /// <summary>
+        /// PlaceHolder_report_wrap_up control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_report_wrap_up;
     }
 }
