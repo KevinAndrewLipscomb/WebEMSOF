@@ -287,6 +287,12 @@ namespace UserControl_service_profile
                   PlaceHolder_report_communications.Controls.Add(Panel_movable_communications);
                   PlaceHolder_tabpanel_interior_wrap_up.Controls.Remove(Panel_movable_wrap_up);
                   PlaceHolder_report_wrap_up.Controls.Add(Panel_movable_wrap_up);
+                  ListItem_visit_all_tabs.Visible = false;
+                  ListItem_submit_to_save.Visible = false;
+                  Button_lookup.Visible = false;
+                  Label_lookup_arrow.Visible = false;
+                  Label_lookup_hint.Visible = false;
+                  LinkButton_reset.Visible = false;
                   SetDependentFieldAblements(false);
                   Panel_tabcontainer.Visible = false;
                   Panel_report.Visible = true;

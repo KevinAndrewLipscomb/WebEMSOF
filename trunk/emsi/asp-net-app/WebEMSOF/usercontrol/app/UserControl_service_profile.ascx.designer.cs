@@ -85,6 +85,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.Panel Panel_movable_introduction;
         
         /// <summary>
+        /// ListItem_visit_all_tabs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ListItem_visit_all_tabs;
+        
+        /// <summary>
+        /// ListItem_submit_to_save control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ListItem_submit_to_save;
+        
+        /// <summary>
         /// RadioButtonList_be_valid_profile control.
         /// </summary>
         /// <remarks>
