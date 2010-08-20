@@ -160,10 +160,18 @@ namespace UserControl_responding_services
         private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
             if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
-            {
-                SessionSet("affiliate_num", k.Safe(e.Item.Cells[Units.UserControl_responding_services.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM));
-                DropCrumbAndTransferTo("responding_services_detail.aspx");
-            }
+              {
+              if (e.CommandName == "profile-tabbed")
+                {
+                SessionSet("mode:profile-rendition","create-refresh-edit");
+                }
+              else if (e.CommandName == "profile-printable")
+                {
+                SessionSet("mode:profile-rendition","printable-report");
+                }
+              SessionSet("affiliate_num", k.Safe(e.Item.Cells[Units.UserControl_responding_services.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM));
+              DropCrumbAndTransferTo("responding_services_detail.aspx");
+              }
         }
 
         private void DataGrid_control_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
@@ -173,7 +181,10 @@ namespace UserControl_responding_services
             {
                 if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
                 {
-                    link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_SELECT].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
+                    link_button.Text = k.ExpandTildePath(link_button.Text);
+                    ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
+                    link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
                     if (e.Item.Cells[Units.UserControl_responding_services.TCI_BE_EMSOF_PARTICIPANT].Text == "YES")
@@ -188,7 +199,8 @@ namespace UserControl_responding_services
             }
             else
             {
-                e.Item.Cells[Units.UserControl_responding_services.TCI_SELECT].Visible = false;
+                e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_TABBED].Visible = false;
+                e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_PRINTABLE].Visible = false;
             }
         }
 
@@ -237,11 +249,12 @@ namespace UserControl_responding_services.Units
 {
     public class UserControl_responding_services
     {
-        public const int TCI_SELECT = 0;
-        public const int TCI_AFFILIATE_NUM = 1;
-        public const int TCI_SERVICE_NAME = 2;
-        public const int TCI_COUNTY_NAME = 3;
-        public const int TCI_BE_EMSOF_PARTICIPANT = 4;
+        public const int TCI_PROFILE_TABBED = 0;
+        public const int TCI_PROFILE_PRINTABLE = 1;
+        public const int TCI_AFFILIATE_NUM = 2;
+        public const int TCI_SERVICE_NAME = 3;
+        public const int TCI_COUNTY_NAME = 4;
+        public const int TCI_BE_EMSOF_PARTICIPANT = 5;
     } // end UserControl_responding_services
 
 }

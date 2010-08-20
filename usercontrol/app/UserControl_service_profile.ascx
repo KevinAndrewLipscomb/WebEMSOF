@@ -28,8 +28,8 @@
                       <td>
                         <small>
                           <ul>
-                            <li><p>If your profile is stale or not saved, you must review/update every tab on this form.</p></li>
-                            <li><p>Changes will <em>not</em> be saved until you press the Submit button at the top of the page.</p></li>
+                            <li id="ListItem_visit_all_tabs" runat="server"><p>If your profile is stale or not saved, you must review/update every tab on this form.</p></li>
+                            <li id="ListItem_submit_to_save" runat="server"><p>Changes will <em>not</em> be saved until you press the Submit button at the top of the page.</p></li>
                             <li><p>Asterisks ("*") indicate required items.</p></li>
                             <li><p>For the Regional Annual Survey, this profile...<br/>
                               <asp:RadioButtonList id="RadioButtonList_be_valid_profile" runat="server">
