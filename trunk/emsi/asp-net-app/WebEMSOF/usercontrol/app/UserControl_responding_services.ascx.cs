@@ -101,9 +101,9 @@ namespace UserControl_responding_services
                 {
                     DataGrid_control.AllowSorting = false;
                 }
-                Bind();
                 p.be_loaded = true;
             }
+            Bind();
             InjectPersistentClientSideScript();
 
         }
@@ -124,8 +124,10 @@ namespace UserControl_responding_services
                 p.be_interactive = !(Session["mode:report"] != null);
                 p.be_loaded = false;
                 p.be_sort_order_ascending = true;
-                p.num_participants = 0;
                 p.num_nonparticipants = 0;
+                p.num_participants = 0;
+                p.num_respondents = 0;
+                p.num_services = 0;
                 p.sort_order = "service_name%";
             }
 
@@ -183,18 +185,26 @@ namespace UserControl_responding_services
                 {
                     link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
+                    link_button.ToolTip = "Profile (tabbed)";
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
                     link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
+                    link_button.ToolTip = "Profile (printable)";
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-                    if (e.Item.Cells[Units.UserControl_responding_services.TCI_BE_EMSOF_PARTICIPANT].Text == "YES")
-                    {
+                    p.num_services++;
+                    var participation = e.Item.Cells[Units.UserControl_responding_services.TCI_BE_EMSOF_PARTICIPANT].Text;
+                    if (participation != "no response")
+                      {
+                      p.num_respondents++;
+                      if (participation == "YES")
+                        {
                         p.num_participants = p.num_participants + 1;
-                    }
-                    else
-                    {
+                        }
+                      else
+                        {
                         p.num_nonparticipants = p.num_nonparticipants + 1;
-                    }
+                        }
+                      }
                 }
             }
             else
@@ -222,11 +232,14 @@ namespace UserControl_responding_services
         private void Bind()
         {
             p.biz_services.BindAnnualRespondents(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
-            Label_num_respondents.Text = ((uint)(p.num_participants + p.num_nonparticipants)).ToString();
-            Label_num_participants.Text = p.num_participants.ToString();
             Label_num_nonparticipants.Text = p.num_nonparticipants.ToString();
-            p.num_participants = 0;
+            Label_num_participants.Text = p.num_participants.ToString();
+            Label_num_respondents.Text = p.num_respondents.ToString();
+            Label_num_services.Text = p.num_services.ToString();
             p.num_nonparticipants = 0;
+            p.num_participants = 0;
+            p.num_respondents = 0;
+            p.num_services = 0;
 
         }
 
@@ -236,8 +249,10 @@ namespace UserControl_responding_services
             public bool be_loaded;
             public bool be_sort_order_ascending;
             public TClass_biz_services biz_services;
-            public uint num_participants;
             public uint num_nonparticipants;
+            public uint num_participants;
+            public uint num_respondents;
+            public uint num_services;
             public string sort_order;
         } // end p_type
 

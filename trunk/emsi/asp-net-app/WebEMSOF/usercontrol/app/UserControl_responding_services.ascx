@@ -5,7 +5,8 @@
     <p>&nbsp;</p>
     <p>
       <small>
-        <strong><asp:Label id="Label_num_respondents" runat="server"></asp:Label>&nbsp;services:</strong>&nbsp;
+        <strong><asp:Label id="Label_num_services" runat="server"></asp:Label>&nbsp;services:</strong>&nbsp;
+        <asp:Label ID="Label_num_respondents" runat="server"></asp:Label>&nbsp;surveys submitted,
         <asp:Label id="Label_num_participants" runat="server"></asp:Label>&nbsp;planning to participate in EMSOF,
         <asp:Label id="Label_num_nonparticipants" runat="server"></asp:Label>&nbsp;not
       </small>
@@ -20,7 +21,7 @@
           <HeaderStyle horizontalalign="Center"></HeaderStyle>
           <ItemStyle horizontalalign="Center"></ItemStyle>
         </asp:BoundColumn>
-        <asp:BoundColumn datafield="be_emsof_participant" headertext="EMSOF participant" sortexpression="be_emsof_participant%,service_name">
+        <asp:BoundColumn datafield="be_emsof_participant" headertext="EMSOF participant" sortexpression="participation_pecking_order%,service_name">
           <HeaderStyle horizontalalign="Center"></HeaderStyle>
           <ItemStyle horizontalalign="Center"></ItemStyle>
         </asp:BoundColumn>

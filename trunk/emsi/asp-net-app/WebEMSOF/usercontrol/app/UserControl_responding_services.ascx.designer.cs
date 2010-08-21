@@ -22,6 +22,15 @@ namespace UserControl_responding_services {
         protected global::System.Web.UI.UpdatePanel UpdatePanel_control;
         
         /// <summary>
+        /// Label_num_services control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label_num_services;
+        
+        /// <summary>
         /// Label_num_respondents control.
         /// </summary>
         /// <remarks>
