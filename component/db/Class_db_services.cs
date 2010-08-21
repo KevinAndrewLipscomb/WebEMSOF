@@ -107,10 +107,22 @@ namespace Class_db_services
             {
                 sort_order = sort_order.Replace("%", " desc");
             }
-            this.Open();
-            ((target) as BaseDataList).DataSource = new MySqlCommand("select affiliate_num" + " , service.name as service_name" + " , county_code_name_map.name as county_name" + " , IF(be_emsof_participant,\"YES\",\"no\") as be_emsof_participant" + " from service" + " join county_code_name_map on (county_code_name_map.code=service.county_code)" + " where be_valid_profile" + " order by " + sort_order, this.connection).ExecuteReader();
+            Open();
+            ((target) as BaseDataList).DataSource = new MySqlCommand
+              (
+              "select affiliate_num"
+              + " , service.name as service_name"
+              + " , county_code_name_map.name as county_name"
+              + " , IF(be_valid_profile,IF(be_emsof_participant,'YES','No'),'no response') as be_emsof_participant"
+              + " , IF(be_valid_profile,IF(be_emsof_participant,1,0),-1) as participation_pecking_order"
+              + " from service"
+              + " join county_code_name_map on (county_code_name_map.code=service.county_code)"
+              + " order by " + sort_order,
+              connection
+              )
+              .ExecuteReader();
             ((target) as BaseDataList).DataBind();
-            this.Close();
+            Close();
         }
 
         public void BindListControl(string county_user_id, object target, bool be_unfiltered, bool be_inclusive_of_invalids_and_nonparticipants)
