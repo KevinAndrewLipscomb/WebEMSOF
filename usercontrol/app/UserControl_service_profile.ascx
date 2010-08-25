@@ -249,6 +249,14 @@
                     </tr>
                     <!-- + --><tr><td>
                     <table cellspacing="0" cellpadding="5" border="0"><!-- + -->
+                      <tr id="TableRow_emsof_contact_email_address" runat="server" visible="false">
+                        <td align="right"><p><font class="">Email address:</font></p></td>
+                        <td><font class=""><asp:TextBox runat="server" columns="72" maxlength="255" id="TextBox_emsof_contact_email_address" enabled="False"></asp:TextBox>*</font></td>
+                        <td nowrap>
+                          <asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_email_address" runat="server" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF email address" font-bold="True" controltovalidate="TextBox_emsof_contact_email_address" validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" Enabled="false">!ERR!</asp:RegularExpressionValidator>
+                          <asp:CustomValidator id="CustomValidator_emsof_contact_email_address" runat="server" errormessage='Under the EMSOF contact tab, please enter an EMSOF contact email address with a valid Domain Name (the part after the "@").' font-bold="True" controltovalidate="TextBox_emsof_contact_email_address" onservervalidate="CustomValidator_emsof_contact_email_address_ServerValidate" Enabled="false">!ERR!</asp:CustomValidator>
+                        </td>
+                      </tr>
                       <tr>
                         <td valign="top" align="right"><font class="">Does your service plan to participate in this year's EMSOF Provider Equipment grant program?*</font></td>
                         <td><font class="">
@@ -281,18 +289,6 @@
                           <asp:RequiredFieldValidator id="RequiredFieldValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter an EMSOF Contact primary phone number."
                                                       controltovalidate="TextBox_emsof_contact_primary_phone_num">!ERR!</asp:RequiredFieldValidator><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_primary_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF Contact primary phone number using numerals only."
                                                           controltovalidate="TextBox_emsof_contact_primary_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
-                      </tr>
-                      <tr id="TableRow_emsof_contact_sms_phone_num" runat="server">
-                        <td valign="bottom" align="right">
-                          <p><font class="">In the future, WebEMSOF may be able to send a text message to your cellphone when the status of your EMSOF request changes.</font>
-                          </p>
-                          <p><font class="">What is your cellphone number?</font>
-                          </p></td>
-                        <td valign="bottom"><font class="">
-                            <asp:TextBox id="TextBox_emsof_contact_sms_phone_num" maxlength="10" columns="10" runat="server" enabled="False"></asp:TextBox>
-                          </font></td>
-                        <td nowrap><asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_sms_phone_num" runat="server" font-bold="True" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF Contact cellphone number using numerals only."
-                                                          controltovalidate="TextBox_emsof_contact_sms_phone_num" validationexpression="\d{10}">!ERR!</asp:RegularExpressionValidator></td>
                       </tr>
                   <!-- - --></table></td></tr><!-- - -->
                   </table>

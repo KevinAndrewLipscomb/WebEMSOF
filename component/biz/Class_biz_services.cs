@@ -219,7 +219,8 @@ namespace Class_biz_services
           out string radio_channel_4,
           out string radio_channel_5,
           out string radio_channel_6,
-          out string primary_response_area
+          out string primary_response_area,
+          out string emsof_contact_email_address
           )
           {
           return db_services.Get
@@ -336,7 +337,8 @@ namespace Class_biz_services
             out radio_channel_4,
             out radio_channel_5,
             out radio_channel_6,
-            out primary_response_area
+            out primary_response_area,
+            out emsof_contact_email_address
             );
           }
 
@@ -466,7 +468,8 @@ namespace Class_biz_services
           string radio_channel_4,
           string radio_channel_5,
           string radio_channel_6,
-          string primary_response_area
+          string primary_response_area,
+          string emsof_contact_email_address
           )
           {
           db_services.Set
@@ -582,7 +585,8 @@ namespace Class_biz_services
             radio_channel_4,
             radio_channel_5,
             radio_channel_6,
-            primary_response_area
+            primary_response_area,
+            emsof_contact_email_address
             );
           db_appropriations.ApplyToExisting(affiliate_num, be_distressed);
           }
