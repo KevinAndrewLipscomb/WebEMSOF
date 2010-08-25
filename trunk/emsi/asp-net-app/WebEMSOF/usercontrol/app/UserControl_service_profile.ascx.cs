@@ -36,7 +36,7 @@ namespace UserControl_service_profile
             TextBox_emsof_nonparticipation_reason.Text = k.EMPTY;
             TextBox_emsof_contact_name.Text = k.EMPTY;
             TextBox_emsof_contact_primary_phone_num.Text = k.EMPTY;
-            TextBox_emsof_contact_sms_phone_num.Text = k.EMPTY;
+            TextBox_emsof_contact_email_address.Text = k.EMPTY;
             TextBox_coo_name.Text = k.EMPTY;
             TextBox_coo_work_phone_num.Text = k.EMPTY;
             TextBox_coo_home_phone_num.Text = k.EMPTY;
@@ -420,6 +420,7 @@ namespace UserControl_service_profile
             string radio_channel_5;
             string radio_channel_6;
             string primary_response_area;
+            string emsof_contact_email_address;
             result = false;
             if
               (
@@ -537,7 +538,8 @@ namespace UserControl_service_profile
                 out radio_channel_4,
                 out radio_channel_5,
                 out radio_channel_6,
-                out primary_response_area
+                out primary_response_area,
+                out emsof_contact_email_address
                 )
               )
               {
@@ -556,7 +558,7 @@ namespace UserControl_service_profile
                 TextBox_emsof_nonparticipation_reason.Text = emsof_nonparticipation_reason;
                 TextBox_emsof_contact_name.Text = emsof_contact_name;
                 TextBox_emsof_contact_primary_phone_num.Text = emsof_contact_primary_phone_num;
-                TextBox_emsof_contact_sms_phone_num.Text = emsof_contact_sms_phone_num;
+                TextBox_emsof_contact_email_address.Text = emsof_contact_email_address;
                 TextBox_coo_name.Text = coo_name;
                 TextBox_coo_work_phone_num.Text = coo_work_phone_num;
                 TextBox_coo_home_phone_num.Text = coo_home_phone_num;
@@ -718,6 +720,7 @@ namespace UserControl_service_profile
                 p.be_authorized_to_delete_service = p.biz_services.BeOkToDelete();
                 p.be_loaded = false;
                 p.be_service_user = (p.biz_user.Kind() == "service");
+                p.be_ok_to_update_emsof_contact_email_address = (k.Has(p.biz_user.Roles(),"director") || k.Has(p.biz_user.Roles(),"emsof-coordinator"));
                 p.be_profile_initially_valid = false;
                 p.be_visited_tab_panel_basic_id = false;
                 p.be_visited_tab_panel_communications = false;
@@ -796,6 +799,11 @@ namespace UserControl_service_profile
             args.IsValid = k.BeValidDomainPartOfEmailAddress(k.Safe(TextBox_coo_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS));
         }
 
+        protected void CustomValidator_emsof_contact_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+          {
+          args.IsValid = k.BeValidDomainPartOfEmailAddress(k.Safe(TextBox_emsof_contact_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS));
+          }
+
         protected void CustomValidator_website_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
             args.IsValid = k.BeValidDomainPartOfWebAddress(k.Safe(TextBox_website_address.Text, k.safe_hint_type.HTTP_TARGET));
@@ -846,7 +854,7 @@ namespace UserControl_service_profile
                   k.Safe(TextBox_emsof_nonparticipation_reason.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_emsof_contact_name.Text, k.safe_hint_type.HUMAN_NAME).Trim(),
                   k.Safe(TextBox_emsof_contact_primary_phone_num.Text, k.safe_hint_type.NUM),
-                  k.Safe(TextBox_emsof_contact_sms_phone_num.Text, k.safe_hint_type.NUM),
+                  k.EMPTY,
                   k.Safe(TextBox_coo_name.Text, k.safe_hint_type.HUMAN_NAME).Trim(),
                   k.Safe(TextBox_coo_work_phone_num.Text, k.safe_hint_type.NUM),
                   k.Safe(TextBox_coo_home_phone_num.Text, k.safe_hint_type.NUM),
@@ -943,7 +951,8 @@ namespace UserControl_service_profile
                   k.Safe(TextBox_radio_channel_4.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_radio_channel_5.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_radio_channel_6.Text, k.safe_hint_type.PUNCTUATED).Trim(),
-                  k.Safe(TextBox_primary_response_area.Text, k.safe_hint_type.POSTAL_CITY_CSV).Trim()
+                  k.Safe(TextBox_primary_response_area.Text, k.safe_hint_type.POSTAL_CITY_CSV).Trim(),
+                  k.Safe(TextBox_emsof_contact_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS)
                   );
                 //
                 var dependency_q = new Queue();
@@ -1034,7 +1043,7 @@ namespace UserControl_service_profile
             TextBox_emsof_nonparticipation_reason.Enabled = ablement;
             TextBox_emsof_contact_name.Enabled = ablement;
             TextBox_emsof_contact_primary_phone_num.Enabled = ablement;
-            TextBox_emsof_contact_sms_phone_num.Enabled = ablement;
+            TextBox_emsof_contact_email_address.Enabled = ablement;
             TextBox_coo_name.Enabled = ablement;
             TextBox_coo_work_phone_num.Enabled = ablement;
             TextBox_coo_home_phone_num.Enabled = ablement;
@@ -1173,7 +1182,9 @@ namespace UserControl_service_profile
             TextBox_emsof_nonparticipation_reason.Enabled = !be_emsof_participant;
             TableRow_emsof_contact_name.Visible = be_emsof_participant;
             TableRow_emsof_contact_primary_phone_num.Visible = be_emsof_participant;
-            TableRow_emsof_contact_sms_phone_num.Visible = be_emsof_participant;
+            TableRow_emsof_contact_email_address.Visible = p.be_ok_to_update_emsof_contact_email_address;
+            RegularExpressionValidator_emsof_contact_email_address.Enabled = p.be_ok_to_update_emsof_contact_email_address;
+            CustomValidator_emsof_contact_email_address.Enabled = p.be_ok_to_update_emsof_contact_email_address;
             if (be_emsof_participant)
             {
                 TextBox_emsof_nonparticipation_reason.Text = k.EMPTY;
@@ -1182,7 +1193,6 @@ namespace UserControl_service_profile
             {
                 TextBox_emsof_contact_name.Text = k.EMPTY;
                 TextBox_emsof_contact_primary_phone_num.Text = k.EMPTY;
-                TextBox_emsof_contact_sms_phone_num.Text = k.EMPTY;
             }
         }
 
@@ -1236,6 +1246,7 @@ namespace UserControl_service_profile
             public bool be_authorized_to_delete_service;
             public bool be_loaded;
             public bool be_ok_to_config_service_profiles;
+            public bool be_ok_to_update_emsof_contact_email_address;
             public bool be_profile_initially_valid;
             public bool be_service_user;
             public bool be_visited_tab_panel_basic_id;
