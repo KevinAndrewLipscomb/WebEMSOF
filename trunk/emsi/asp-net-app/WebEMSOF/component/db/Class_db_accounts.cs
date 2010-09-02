@@ -106,6 +106,18 @@ namespace Class_db_accounts
             return result;
         }
 
+        internal void SetPasswordResetEmailAddress
+          (
+          string kind,
+          string id,
+          string value
+          )
+          {
+          Open();
+          new MySqlCommand(db_trail.Saved("UPDATE " + kind + "_user" + " SET password_reset_email_address = '" + value + "'" + " WHERE id = '" + id  + "'"), connection).ExecuteNonQuery();
+          Close();
+          }
+
         public void SetTemporaryPassword(string user_kind, string user_id, string encoded_password)
         {
             this.Open();
