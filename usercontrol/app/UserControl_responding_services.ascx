@@ -13,6 +13,7 @@
     </p>
     <asp:DataGrid id="DataGrid_control" runat="server" allowsorting="True" autogeneratecolumns="False" cellpadding="10" gridlines="Horizontal">
       <Columns>
+        <asp:ButtonColumn commandname="update-email-address" text="(@)"></asp:ButtonColumn>
         <asp:ButtonColumn commandname="profile-tabbed" text="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Profile (tabbed)&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;"></asp:ButtonColumn>
         <asp:ButtonColumn commandname="profile-printable" text="&lt;IMG src=&quot;~/protected/image/print16_h.png&quot; alt=&quot;Profile (printable)&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;"></asp:ButtonColumn>
         <asp:BoundColumn datafield="affiliate_num" visible="False"></asp:BoundColumn>

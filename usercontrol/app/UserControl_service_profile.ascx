@@ -249,14 +249,6 @@
                     </tr>
                     <!-- + --><tr><td>
                     <table cellspacing="0" cellpadding="5" border="0"><!-- + -->
-                      <tr id="TableRow_emsof_contact_email_address" runat="server" visible="false">
-                        <td align="right"><p><font class="">Email address:</font></p></td>
-                        <td><font class=""><asp:TextBox runat="server" columns="72" maxlength="255" id="TextBox_emsof_contact_email_address" enabled="False"></asp:TextBox>*</font></td>
-                        <td nowrap>
-                          <asp:RegularExpressionValidator id="RegularExpressionValidator_emsof_contact_email_address" runat="server" errormessage="Under the EMSOF contact tab, please enter a valid EMSOF email address" font-bold="True" controltovalidate="TextBox_emsof_contact_email_address" validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" Enabled="false">!ERR!</asp:RegularExpressionValidator>
-                          <asp:CustomValidator id="CustomValidator_emsof_contact_email_address" runat="server" errormessage='Under the EMSOF contact tab, please enter an EMSOF contact email address with a valid Domain Name (the part after the "@").' font-bold="True" controltovalidate="TextBox_emsof_contact_email_address" onservervalidate="CustomValidator_emsof_contact_email_address_ServerValidate" Enabled="false">!ERR!</asp:CustomValidator>
-                        </td>
-                      </tr>
                       <tr>
                         <td valign="top" align="right"><font class="">Does your service plan to participate in this year's EMSOF Provider Equipment grant program?*</font></td>
                         <td><font class="">

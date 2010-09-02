@@ -616,42 +616,6 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.Panel Panel_movable_emsof_contact;
         
         /// <summary>
-        /// TableRow_emsof_contact_email_address control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_emsof_contact_email_address;
-        
-        /// <summary>
-        /// TextBox_emsof_contact_email_address control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_emsof_contact_email_address;
-        
-        /// <summary>
-        /// RegularExpressionValidator_emsof_contact_email_address control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_emsof_contact_email_address;
-        
-        /// <summary>
-        /// CustomValidator_emsof_contact_email_address control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_emsof_contact_email_address;
-        
-        /// <summary>
         /// RadioButtonList_be_emsof_participant control.
         /// </summary>
         /// <remarks>

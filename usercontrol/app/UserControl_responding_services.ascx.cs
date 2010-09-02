@@ -163,16 +163,21 @@ namespace UserControl_responding_services
         {
             if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
               {
-              if (e.CommandName == "profile-tabbed")
+              SessionSet("affiliate_num", k.Safe(e.Item.Cells[Units.UserControl_responding_services.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM));
+              if (e.CommandName == "update-email-address")
+                {
+                DropCrumbAndTransferTo("administer_service_email_address.aspx");
+                }
+              else if (e.CommandName == "profile-tabbed")
                 {
                 SessionSet("mode:profile-rendition","create-refresh-edit");
+                DropCrumbAndTransferTo("responding_services_detail.aspx");
                 }
               else if (e.CommandName == "profile-printable")
                 {
                 SessionSet("mode:profile-rendition","printable-report");
+                DropCrumbAndTransferTo("responding_services_detail.aspx");
                 }
-              SessionSet("affiliate_num", k.Safe(e.Item.Cells[Units.UserControl_responding_services.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM));
-              DropCrumbAndTransferTo("responding_services_detail.aspx");
               }
         }
 
@@ -183,6 +188,10 @@ namespace UserControl_responding_services
             {
                 if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
                 {
+                    link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
+                    link_button.Text = k.ExpandTildePath(link_button.Text);
+                    link_button.ToolTip = "Update email address";
+                    ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
                     link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Profile (tabbed)";
@@ -264,12 +273,13 @@ namespace UserControl_responding_services.Units
 {
     public class UserControl_responding_services
     {
-        public const int TCI_PROFILE_TABBED = 0;
-        public const int TCI_PROFILE_PRINTABLE = 1;
-        public const int TCI_AFFILIATE_NUM = 2;
-        public const int TCI_SERVICE_NAME = 3;
-        public const int TCI_COUNTY_NAME = 4;
-        public const int TCI_BE_EMSOF_PARTICIPANT = 5;
+        public const int TCI_UPDATE_EMAIL_ADDRESS = 0;
+        public const int TCI_PROFILE_TABBED = 1;
+        public const int TCI_PROFILE_PRINTABLE = 2;
+        public const int TCI_AFFILIATE_NUM = 3;
+        public const int TCI_SERVICE_NAME = 4;
+        public const int TCI_COUNTY_NAME = 5;
+        public const int TCI_BE_EMSOF_PARTICIPANT = 6;
     } // end UserControl_responding_services
 
 }

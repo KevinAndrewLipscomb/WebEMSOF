@@ -175,6 +175,13 @@
     <Compile Include="protected\add_proof_of_payment.aspx.designer.cs">
       <DependentUpon>add_proof_of_payment.aspx</DependentUpon>
     </Compile>
+    <Compile Include="protected\administer_service_email_address.aspx.cs">
+      <DependentUpon>administer_service_email_address.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="protected\administer_service_email_address.aspx.designer.cs">
+      <DependentUpon>administer_service_email_address.aspx</DependentUpon>
+    </Compile>
     <Compile Include="protected\all_emsof_requests.aspx.cs">
       <DependentUpon>all_emsof_requests.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -623,6 +630,7 @@
     <Content Include="Global.asax" />
     <Content Include="login.aspx" />
     <Content Include="new_password.aspx" />
+    <Content Include="protected\administer_service_email_address.aspx" />
     <Content Include="salogin.aspx" />
     <Content Include="serial_indicator_control_chart.aspx" />
     <Content Include="timeout.aspx" />

@@ -324,8 +324,7 @@ namespace Class_db_services
           out string radio_channel_4,
           out string radio_channel_5,
           out string radio_channel_6,
-          out string primary_response_area,
-          out string emsof_contact_email_address
+          out string primary_response_area
           )
           {
             id = k.EMPTY;
@@ -440,18 +439,9 @@ namespace Class_db_services
             radio_channel_5 = k.EMPTY;
             radio_channel_6 = k.EMPTY;
             primary_response_area = k.EMPTY;
-            emsof_contact_email_address = k.EMPTY;
             var result = false;
             Open();
-            var dr = new MySqlCommand
-              (
-              "select service.*"
-              + " , service_user.password_reset_email_address as emsof_contact_email_address"
-              + " from service join service_user using (id)"
-              + " where CAST(affiliate_num AS CHAR) = '" + affiliate_num + "'",
-              connection
-              )
-              .ExecuteReader();
+            MySqlDataReader dr = new MySqlCommand("select * from service where CAST(affiliate_num AS CHAR) = '" + affiliate_num + "'", this.connection).ExecuteReader();
             if (dr.Read())
               {
                 id = dr["id"].ToString();
@@ -566,12 +556,19 @@ namespace Class_db_services
                 radio_channel_5 = dr["radio_channel_5"].ToString();
                 radio_channel_6 = dr["radio_channel_6"].ToString();
                 primary_response_area = dr["primary_response_area"].ToString();
-                emsof_contact_email_address = dr["emsof_contact_email_address"].ToString();
                 result = true;
               }
             dr.Close();
             Close();
             return result;
+          }
+
+        internal string IdOfAffiliateNum(string affiliate_num)
+          {
+          Open();
+          var id_of_affiliate_num = new MySqlCommand("select id from service where affiliate_num = '" + affiliate_num + "'",connection).ExecuteScalar().ToString();
+          Close();
+          return id_of_affiliate_num;
           }
 
         public void MarkProfilesStale()
@@ -730,8 +727,7 @@ namespace Class_db_services
           string radio_channel_4,
           string radio_channel_5,
           string radio_channel_6,
-          string primary_response_area,
-          string emsof_contact_email_address
+          string primary_response_area
           )
           {
             var childless_field_assignments_clause = " name = NULLIF('" + name + "','')"
@@ -846,21 +842,7 @@ namespace Class_db_services
             + " , radio_channel_6 = NULLIF('" + radio_channel_6 +  "', '')"
             + " , primary_response_area = NULLIF('" + primary_response_area + "','')";
             Open();
-            new MySqlCommand
-              (
-              db_trail.Saved
-                (
-                "START TRANSACTION"
-                + ";"
-                + " insert service" + " set affiliate_num = NULLIF('" + affiliate_num + "','')" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause
-                + ";"
-                + " update service_user join service using (id) set password_reset_email_address = '" + emsof_contact_email_address + "' where affiliate_num = '" + affiliate_num + "'"
-                + ";"
-                + " COMMIT"
-                ),
-              connection
-              )
-              .ExecuteNonQuery();
+            new MySqlCommand(db_trail.Saved("insert service" + " set affiliate_num = NULLIF('" + affiliate_num + "','')" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause), connection).ExecuteNonQuery();
             Close();
           }
 

@@ -1,4 +1,5 @@
 using Class_biz_accounts;
+using Class_biz_services;
 using Class_db;
 using Class_db_trail;
 using kix;
@@ -7,9 +8,9 @@ using System;
 using System.Configuration;
 using System.Web.UI;
 
-namespace change_email_address
+namespace administer_service_email_address
 {
-    public partial class TWebForm_change_email_address: ki_web_ui.page_class
+    public partial class TWebForm_administer_service_email_address: ki_web_ui.page_class
     {
         private p_type p;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
@@ -20,7 +21,7 @@ namespace change_email_address
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebForm_change_email_address_PreRender;
+            this.PreRender += this.TWebForm_administer_service_email_address_PreRender;
             //this.Load += this.Page_Load;
         }
 
@@ -29,9 +30,9 @@ namespace change_email_address
             string email_address;
             if (IsPostBack)
             {
-                if ((Session["change_email_address.p"] != null))
+                if ((Session["administer_service_email_address.p"] != null))
                 {
-                    p = (p_type)(Session["change_email_address.p"]);
+                    p = (p_type)(Session["administer_service_email_address.p"]);
                 }
                 else
                 {
@@ -45,13 +46,18 @@ namespace change_email_address
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - change_email_address";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - administer_service_email_address";
+                //
                 p.biz_accounts = new TClass_biz_accounts();
+                p.biz_services = new TClass_biz_services();
                 p.db_trail = new TClass_db_trail();
                 p.db = new TClass_db();
+                //
+                p.service_id = p.biz_services.IdOfAffiliateNum(Session["affiliate_num"].ToString());
+                Literal_service_name.Text = p.biz_services.NameOf(p.service_id);
                 p.db.Open();
                 // Preload email address fields
-                email_address = new MySqlCommand("SELECT password_reset_email_address " + "FROM " + Session["target_user_table"].ToString() + "_user " + "WHERE id = \"" + Session[Session["target_user_table"].ToString() + "_user_id"].ToString() + "\"", p.db.connection).ExecuteScalar().ToString();
+                email_address = new MySqlCommand("SELECT password_reset_email_address " + "FROM service_user " + "WHERE id = '" + p.service_id + "'", p.db.connection).ExecuteScalar().ToString();
                 TextBox_nominal_email_address.Text = email_address;
                 TextBox_confirmation_email_address.Text = email_address;
                 p.db.Close();
@@ -75,9 +81,9 @@ namespace change_email_address
             BackTrack();
         }
 
-        private void TWebForm_change_email_address_PreRender(object sender, System.EventArgs e)
+        private void TWebForm_administer_service_email_address_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("change_email_address.p", p);
+            SessionSet("administer_service_email_address.p", p);
         }
 
         protected void CustomValidator_nominal_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
@@ -89,7 +95,7 @@ namespace change_email_address
         {
             if (Page.IsValid)
             {
-                p.biz_accounts.SetPasswordResetEmailAddress(Session["target_user_table"].ToString(),Session[Session["target_user_table"].ToString() + "_user_id"].ToString(),k.Safe(TextBox_nominal_email_address.Text.Trim(), k.safe_hint_type.EMAIL_ADDRESS));
+                p.biz_accounts.SetPasswordResetEmailAddress("service",p.service_id,k.Safe(TextBox_nominal_email_address.Text.Trim(), k.safe_hint_type.EMAIL_ADDRESS));
                 BackTrack();
             }
             else
@@ -101,10 +107,12 @@ namespace change_email_address
         private struct p_type
         {
             public TClass_biz_accounts biz_accounts;
+            public TClass_biz_services biz_services;
             public TClass_db db;
             public TClass_db_trail db_trail;
+            public string service_id;
         } // end p_type
 
-    } // end TWebForm_change_email_address
+    } // end TWebForm_administer_service_email_address
 
 }

@@ -351,6 +351,16 @@ namespace Class_biz_accounts
             return result;
         }
 
+        internal void SetPasswordResetEmailAddress
+          (
+          string kind,
+          string id,
+          string value
+          )
+          {
+          db_accounts.SetPasswordResetEmailAddress(kind,id,value);
+          }
+
         public void NotifyRegionOfServicePocAffirmation(string service_id, string service_name, string contact_person_name)
         {
             string poc_email_address;
