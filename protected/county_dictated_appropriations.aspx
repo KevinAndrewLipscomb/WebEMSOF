@@ -20,7 +20,7 @@
               <tr>
 				<td bgcolor="#f5f5f5">
                   <p align="right">
-					<strong>You were allocated:</strong>
+					          <strong><asp:Literal ID="Literal_county_name" runat="server"></asp:Literal>&nbsp;County was allocated:</strong>
                   </p>
                 </td>
                 <td>
@@ -71,11 +71,11 @@
 			</tr>
 			<tr>
 			  <td>
-				<p align="left">You must&nbsp;make service allocations by <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>.</p></td>
+				<p align="left"><asp:Literal ID="Literal_county_name_2" runat="server"></asp:Literal> County must make service allocations by <asp:label id="Label_make_appropriations_deadline" runat="server" font-bold="True" font-size="Small"></asp:label>.</p></td>
 			</tr>
 			<tr>
 			  <td>
-                <p>The last day you will accept EMSOF request submissions&nbsp;from your county's services is <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True" causesvalidation="False" onclick="LinkButton_county_dictated_deadline_Click"></ASP:LinkButton>.</p>
+                <p>The last day <asp:Literal ID="Literal_county_name_3" runat="server"></asp:Literal> County will accept EMSOF request submissions&nbsp;from its services is <ASP:LinkButton id="LinkButton_county_dictated_deadline" runat="server" font-bold="True" causesvalidation="False" onclick="LinkButton_county_dictated_deadline_Click"></ASP:LinkButton>.</p>
               </td>
             </tr>
 		</table>
@@ -187,11 +187,11 @@
                 <td>
                   <ASP:DropDownList id="DropDownList_quick_message_targets" runat="server" autopostback="True" onselectedindexchanged="DropDownList_quick_message_targets_SelectedIndexChanged">
                     <asp:ListItem selected="True" value="with_allocations">all agencies shown above</asp:ListItem>
-                    <asp:ListItem value="emsof_participants_true">all agencies in my county who said in Annual Survey they would be EMSOF participants</asp:ListItem>
-                    <asp:ListItem value="emsof_participants_false">all agencies in my county who said in Annual Survey they would *not* be EMSOF participants</asp:ListItem>
-                    <asp:ListItem value="emsof_respondents">all agencies in my county who have responded to the Annual Survey</asp:ListItem>
-                    <asp:ListItem value="emsof_nonrespondents">all agencies in my county who have *not* responded to the Annual Survey</asp:ListItem>
-                    <asp:ListItem value="in_county">all agencies in my county</asp:ListItem>
+                    <asp:ListItem value="emsof_participants_true">all agencies in this county who said in Annual Survey they would be EMSOF participants</asp:ListItem>
+                    <asp:ListItem value="emsof_participants_false">all agencies in this county who said in Annual Survey they would *not* be EMSOF participants</asp:ListItem>
+                    <asp:ListItem value="emsof_respondents">all agencies in this county who have responded to the Annual Survey</asp:ListItem>
+                    <asp:ListItem value="emsof_nonrespondents">all agencies in this county who have *not* responded to the Annual Survey</asp:ListItem>
+                    <asp:ListItem value="in_county">all agencies in this county</asp:ListItem>
                   </ASP:DropDownList>
                 </td>
                 <td></td>

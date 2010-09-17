@@ -7,10 +7,11 @@
         <td>
           <cc1:TabContainer id="TabContainer_control" runat="server" autopostback="True" cssclass="ajax__tab_ki">
             <cc1:TabPanel runat="server" headertext="Snapshot" id="TabPanel_snapshot"></cc1:TabPanel>
+            <cc1:TabPanel runat="server" headertext="Services" id="TabPanel_services"></cc1:TabPanel>
+            <cc1:TabPanel runat="server" headertext="Counties" id="TabPanel_counties"></cc1:TabPanel>
+            <cc1:TabPanel runat="server" headertext="Allocations" id="TabPanel_allocations"></cc1:TabPanel>
             <cc1:TabPanel runat="server" headertext="Workflow" id="TabPanel_workflow"></cc1:TabPanel>
             <cc1:TabPanel runat="server" headertext="Outcomes" id="TabPanel_outcomes"></cc1:TabPanel>
-            <cc1:TabPanel runat="server" headertext="Counties" id="TabPanel_counties"></cc1:TabPanel>
-            <cc1:TabPanel runat="server" headertext="Services" id="TabPanel_services"></cc1:TabPanel>
           </cc1:TabContainer>
         </td>
       </tr>

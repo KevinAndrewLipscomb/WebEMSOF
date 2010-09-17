@@ -1,6 +1,7 @@
 using UserControl_counties;
 using UserControl_financial_snapshot;
 using UserControl_outcomes;
+using UserControl_region_dictated_appropriations;
 using UserControl_responding_services;
 using UserControl_workflow;
 
@@ -9,10 +10,11 @@ namespace UserControl_regional_staffer_current_binder
     public static class UserControl_regional_staffer_current_binder_Static
     {
         public const int TSSI_SNAPSHOT = 0;
-        public const int TSSI_WORKFLOW = 1;
-        public const int TSSI_OUTCOMES = 2;
-        public const int TSSI_COUNTIES = 3;
-        public const int TSSI_SERVICES = 4;
+        public const int TSSI_SERVICES = 1;
+        public const int TSSI_COUNTIES = 2;
+        public const int TSSI_ALLOCATIONS = 3;
+        public const int TSSI_WORKFLOW = 4;
+        public const int TSSI_OUTCOMES = 5;
     }
 
     public struct p_type
@@ -61,11 +63,14 @@ namespace UserControl_regional_staffer_current_binder
                     case UserControl_regional_staffer_current_binder_Static.TSSI_OUTCOMES:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_outcomes)(LoadControl("~/usercontrol/app/UserControl_outcomes.ascx"))), "UserControl_outcomes", PlaceHolder_content);
                         break;
+                    case UserControl_regional_staffer_current_binder_Static.TSSI_SERVICES:
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))), "UserControl_responding_services", PlaceHolder_content);
+                        break;
                     case UserControl_regional_staffer_current_binder_Static.TSSI_COUNTIES:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_counties)(LoadControl("~/usercontrol/app/UserControl_counties.ascx"))), "UserControl_counties", PlaceHolder_content);
                         break;
-                    case UserControl_regional_staffer_current_binder_Static.TSSI_SERVICES:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))), "UserControl_responding_services", PlaceHolder_content);
+                    case UserControl_regional_staffer_current_binder_Static.TSSI_ALLOCATIONS:
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_region_dictated_appropriations)(LoadControl("~/usercontrol/app/UserControl_region_dictated_appropriations.ascx"))), "UserControl_region_dictated_appropriations", PlaceHolder_content);
                         break;
                 }
             }
@@ -93,11 +98,14 @@ namespace UserControl_regional_staffer_current_binder
                 case UserControl_regional_staffer_current_binder_Static.TSSI_OUTCOMES:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_outcomes)(LoadControl("~/usercontrol/app/UserControl_outcomes.ascx"))).Fresh(), "UserControl_outcomes", PlaceHolder_content);
                     break;
+                case UserControl_regional_staffer_current_binder_Static.TSSI_SERVICES:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))).Fresh(), "UserControl_responding_services", PlaceHolder_content);
+                    break;
                 case UserControl_regional_staffer_current_binder_Static.TSSI_COUNTIES:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_counties)(LoadControl("~/usercontrol/app/UserControl_counties.ascx"))).Fresh(), "UserControl_counties", PlaceHolder_content);
                     break;
-                case UserControl_regional_staffer_current_binder_Static.TSSI_SERVICES:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))).Fresh(), "UserControl_responding_services", PlaceHolder_content);
+                case UserControl_regional_staffer_current_binder_Static.TSSI_ALLOCATIONS:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_region_dictated_appropriations)(LoadControl("~/usercontrol/app/UserControl_region_dictated_appropriations.ascx"))).Fresh(), "UserControl_region_dictated_appropriations", PlaceHolder_content);
                     break;
             }
         }

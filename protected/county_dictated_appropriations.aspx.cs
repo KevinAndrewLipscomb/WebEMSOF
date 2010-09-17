@@ -70,7 +70,24 @@ namespace county_dictated_appropriations
                 p.biz_services = new TClass_biz_services();
                 p.biz_user = new TClass_biz_user();
                 p.be_before_deadline = true;
+                p.be_county_user = (p.biz_user.Kind() == "county");
                 p.be_sort_order_ascending = true;
+                if (p.be_county_user)
+                  {
+                  p.county_code = p.biz_user.IdNum();
+                  p.region_dictated_appropriation_id = Session["region_dictated_appropriation_id"].ToString();
+                  Literal_county_name.Text = Session["username"].ToString();
+                  BeginBreadCrumbTrail();
+                  }
+                else
+                  {
+                  var region_dictum_summary = Session["region_dictated_appropriation_summary"];
+                  p.county_code = p.biz_appropriations.CountyCodeOfRegionDictumSummary(region_dictum_summary);
+                  p.region_dictated_appropriation_id = p.biz_appropriations.RegionDictumIdOf(region_dictum_summary);
+                  Literal_county_name.Text = p.biz_appropriations.CountyNameOfRegionDictumSummary(region_dictum_summary);
+                  LinkButton_county_dictated_deadline.Enabled = false;
+                  LinkButton_new_appropriation.Visible = false;
+                  }
                 p.db = new TClass_db();
                 p.db_trail = new TClass_db_trail();
                 p.num_appropriations = 0;
@@ -81,8 +98,10 @@ namespace county_dictated_appropriations
                 Title = ConfigurationManager.AppSettings["application_name"] + " - county_dictated_appropriations";
                 p.db.Open();
                 // Set parent appropriation labels.
-                dr_appropriation_attribs = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = " + Session["region_dictated_appropriation_id"].ToString(), p.db.connection).ExecuteReader();
+                dr_appropriation_attribs = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = " + p.region_dictated_appropriation_id, p.db.connection).ExecuteReader();
                 dr_appropriation_attribs.Read();
+                Literal_county_name_2.Text = Literal_county_name.Text;
+                Literal_county_name_3.Text = Literal_county_name.Text;
                 Label_fiscal_year_designator.Text = dr_appropriation_attribs["designator"].ToString();
                 p.region_dictated_appropriation_amount = (decimal)(dr_appropriation_attribs["amount"]);
                 Label_parent_appropriation_amount.Text = p.region_dictated_appropriation_amount.ToString("C");
@@ -92,7 +111,7 @@ namespace county_dictated_appropriations
                 Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
                 // All further rendering is deadline-dependent.
                 make_appropriations_deadline = (DateTime)(new MySqlCommand("select value" + " from fy_calendar" + " join fiscal_year on (fiscal_year.id = fiscal_year_id)" + " join milestone_code_name_map on (code = milestone_code)" + " where designator = \"" + k.Safe(Label_fiscal_year_designator.Text, k.safe_hint_type.ALPHANUM) + "\"" + " and name = \"emsof-county-dictated-appropriation-deadline\"", p.db.connection).ExecuteScalar());
-                county_dictated_deadline = (DateTime)(new MySqlCommand("select service_to_county_submission_deadline from region_dictated_appropriation" + " where id = " + Session["region_dictated_appropriation_id"].ToString(), p.db.connection).ExecuteScalar());
+                county_dictated_deadline = (DateTime)(new MySqlCommand("select service_to_county_submission_deadline from region_dictated_appropriation" + " where id = " + p.region_dictated_appropriation_id, p.db.connection).ExecuteScalar());
                 SessionSet("county_dictated_deadline", county_dictated_deadline);
                 if (DateTime.Now > make_appropriations_deadline)
                 {
@@ -111,7 +130,6 @@ namespace county_dictated_appropriations
                 Table_warning_forced_amount.Visible = false;
                 Bind_service_appropriations();
                 // also affected by be_before_deadline
-                BeginBreadCrumbTrail();
             }
         }
 
@@ -255,8 +273,8 @@ namespace county_dictated_appropriations
         {
             decimal leftover_or_shortage;
             // Manage column visibility
-            e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_EDIT].Visible = p.be_before_deadline;
-            e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_DELETE].Visible = p.be_before_deadline;
+            e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_EDIT].Visible = p.be_county_user && p.be_before_deadline;
+            e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_DELETE].Visible = p.be_county_user && p.be_before_deadline;
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
@@ -271,7 +289,7 @@ namespace county_dictated_appropriations
                 e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfLeftoverOrShortage())].Text = k.EMPTY;
                 if (Convert.ToInt16(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusCode())].Text) > 2)
                 {
-                    ((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusDescription())].Controls[0]) as LinkButton).Enabled = true;
+                    ((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusDescription())].Controls[0]) as LinkButton).Enabled = p.be_county_user;
                     ((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusDescription())].Controls[0]) as LinkButton).ForeColor = Color.Blue;
                     if (Convert.ToInt16(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusCode())].Text) >= 3)
                     {
@@ -361,19 +379,19 @@ namespace county_dictated_appropriations
             p.distribution_list_for_services_with_allocations = k.EMPTY;
             if (p.status_filter != k.EMPTY)
             {
-                p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus(Session["region_dictated_appropriation_id"].ToString(), ((status_type)(Convert.ToInt16(p.status_filter))), p.sort_order, p.be_sort_order_ascending, DataGrid_service_appropriations);
+                p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus(p.region_dictated_appropriation_id, ((status_type)(Convert.ToInt16(p.status_filter))), p.sort_order, p.be_sort_order_ascending, DataGrid_service_appropriations);
                 DropDownList_status_filter.SelectedValue = p.status_filter;
             }
             else
             {
-                p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriation(Session["region_dictated_appropriation_id"].ToString(), p.sort_order, p.be_sort_order_ascending, DataGrid_service_appropriations);
+                p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriation(p.region_dictated_appropriation_id, p.sort_order, p.be_sort_order_ascending, DataGrid_service_appropriations);
             }
             // Manage control visibilities.
             be_datagrid_empty = (p.num_appropriations == 0);
             Label_no_appropriations.Visible = be_datagrid_empty;
             DataGrid_service_appropriations.Visible = !be_datagrid_empty;
             // Manage non-DataGrid control properties.
-            p.sum_of_service_appropriations = p.biz_appropriations.SumOfSelfDictatedAppropriations();
+            p.sum_of_service_appropriations = p.biz_appropriations.SumOfSubAppropriations("region",p.region_dictated_appropriation_id);
             Label_sum_of_service_appropriations.Text = p.sum_of_service_appropriations.ToString("C");
             p.unappropriated_amount = p.region_dictated_appropriation_amount - p.sum_of_service_appropriations;
             Label_unappropriated_amount.Text = p.unappropriated_amount.ToString("C");
@@ -396,23 +414,23 @@ namespace county_dictated_appropriations
             }
             else if (DropDownList_quick_message_targets.SelectedValue == "emsof_respondents")
             {
-                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, true);
+                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.county_code, true, true);
             }
             else if (DropDownList_quick_message_targets.SelectedValue == "emsof_participants_true")
             {
-                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, true, true, true);
+                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.county_code, true, true, true, true);
             }
             else if (DropDownList_quick_message_targets.SelectedValue == "emsof_participants_false")
             {
-                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, true, true, false);
+                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.county_code, true, true, true, false);
             }
             else if (DropDownList_quick_message_targets.SelectedValue == "emsof_nonrespondents")
             {
-                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum(), true, false);
+                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.county_code, true, false);
             }
             else if (DropDownList_quick_message_targets.SelectedValue == "in_county")
             {
-                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.biz_user.IdNum());
+                Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.county_code);
             }
             TextBox_quick_message_subject.Enabled = Label_distribution_list.Text != k.EMPTY;
             TextBox_quick_message_body.Enabled = Label_distribution_list.Text != k.EMPTY;
@@ -428,12 +446,15 @@ namespace county_dictated_appropriations
             public TClass_biz_services biz_services;
             public TClass_biz_user biz_user;
             public bool be_before_deadline;
+            public bool be_county_user;
             public bool be_sort_order_ascending;
+            public string county_code;
             public TClass_db db;
             public TClass_db_trail db_trail;
             public string distribution_list_for_services_with_allocations;
             public uint num_appropriations;
             public decimal region_dictated_appropriation_amount;
+            public string region_dictated_appropriation_id;
             public decimal saved_amount;
             public string sort_order;
             public string status_filter;

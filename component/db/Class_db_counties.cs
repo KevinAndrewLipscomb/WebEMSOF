@@ -72,16 +72,10 @@ namespace Class_db_counties
             "select code"
             + " , county_code_name_map.name as name"
             + " , password_reset_email_address as email_address"
-            + " , region_dictated_appropriation.amount as amount"
-            + " , DATE_FORMAT(service_to_county_submission_deadline,'%Y-%m-%d %H:%i:%s') as deadline"
             + " , concat(match_level.name,' (',FORMAT(factor*100,0),'%)') as match_level_description"
             + " from county_code_name_map"
             +   " join county_user on (county_user.id=county_code_name_map.code)"
-            +   " join region_dictated_appropriation on (region_dictated_appropriation.county_code=county_code_name_map.code)"
-            +   " join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
-            +   " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)"
-            +   " join match_level on (match_level.id=region_dictated_appropriation.match_level_id)"
-            + " where fiscal_year.id = '" + db_fiscal_years.IdOfCurrent() + "'"
+            +   " join match_level on (match_level.id=county_code_name_map.default_match_level_id)"
             + " order by " + sort_order,
             connection
             )
@@ -98,6 +92,11 @@ namespace Class_db_counties
             this.Close();
             return result;
         }
+
+    internal string NameOfSummary(object summary)
+      {
+      return (summary as county_summary).name;
+      }
 
     public object Summary(string code)
       {

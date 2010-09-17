@@ -44,6 +44,11 @@ namespace Class_biz_counties
             return result;
         }
 
+        internal string NameOfSummary(object summary)
+          {
+          return db_counties.NameOfSummary(summary);
+          }
+
         public object Summary(string code)
           {
           return db_counties.Summary(code);
