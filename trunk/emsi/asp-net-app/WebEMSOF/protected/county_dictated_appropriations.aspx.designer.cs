@@ -22,6 +22,15 @@ namespace county_dictated_appropriations {
         protected global::UserControl_precontent.TWebUserControl_precontent UserControl_precontent;
         
         /// <summary>
+        /// Literal_county_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal Literal_county_name;
+        
+        /// <summary>
         /// Label_parent_appropriation_amount control.
         /// </summary>
         /// <remarks>
@@ -94,6 +103,15 @@ namespace county_dictated_appropriations {
         protected global::System.Web.UI.HtmlControls.HtmlTable Table_deadlines;
         
         /// <summary>
+        /// Literal_county_name_2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal Literal_county_name_2;
+        
+        /// <summary>
         /// Label_make_appropriations_deadline control.
         /// </summary>
         /// <remarks>
@@ -101,6 +119,15 @@ namespace county_dictated_appropriations {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Label_make_appropriations_deadline;
+        
+        /// <summary>
+        /// Literal_county_name_3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal Literal_county_name_3;
         
         /// <summary>
         /// LinkButton_county_dictated_deadline control.

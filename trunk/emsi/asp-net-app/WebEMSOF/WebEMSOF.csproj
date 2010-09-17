@@ -518,6 +518,13 @@
     <Compile Include="usercontrol\app\UserControl_regional_staffer_old_binder.ascx.designer.cs">
       <DependentUpon>UserControl_regional_staffer_old_binder.ascx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrol\app\UserControl_region_dictated_appropriations.ascx.cs">
+      <DependentUpon>UserControl_region_dictated_appropriations.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_region_dictated_appropriations.ascx.designer.cs">
+      <DependentUpon>UserControl_region_dictated_appropriations.ascx</DependentUpon>
+    </Compile>
     <Compile Include="usercontrol\app\UserControl_responding_services.ascx.cs">
       <DependentUpon>UserControl_responding_services.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -704,6 +711,7 @@
     <Content Include="usercontrol\app\UserControl_regional_staffer_current_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_new_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_old_binder.ascx" />
+    <Content Include="usercontrol\app\UserControl_region_dictated_appropriations.ascx" />
     <Content Include="usercontrol\app\UserControl_responding_services.ascx" />
     <Content Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx" />
     <Content Include="usercontrol\app\UserControl_service_profile.ascx" />

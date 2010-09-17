@@ -6,9 +6,22 @@ using Class_biz_regional_staffers;
 using kix;
 using MySql.Data.MySqlClient;
 using System;
+using System.Web.UI.WebControls;
 
 namespace Class_db_appropriations
 {
+
+  public class region_dictum_summary
+    {
+    public string amount;
+    public string county_code;
+    public string county_name;
+    public string id;
+    public string match_level_id;
+    public string match_level_description;
+    public string service_to_county_submission_deadline;
+    }
+
     public class TClass_db_appropriations: TClass_db
     {
         private TClass_biz_fiscal_years biz_fiscal_years = null;
@@ -48,6 +61,45 @@ namespace Class_db_appropriations
             return result;
         }
 
+        internal void BindRegionDictums
+          (
+          string sort_order,
+          bool be_sort_order_ascending,
+          object target
+          )
+          {
+          if (be_sort_order_ascending)
+            {
+            sort_order = sort_order.Replace("%", " asc");
+            }
+          else
+            {
+            sort_order = sort_order.Replace("%", " desc");
+            }
+          Open();
+          ((target) as DataGrid).DataSource = new MySqlCommand
+            (
+            "select region_dictated_appropriation.id"
+            + " , county_code as code"
+            + " , password_reset_email_address as email_address"
+            + " , county_code_name_map.name as name"
+            + " , region_dictated_appropriation.amount"
+            + " , service_to_county_submission_deadline as deadline"
+            + " , concat(match_level.name,' (',FORMAT(factor*100,0),'%)') as match_level_description"
+            + " from region_dictated_appropriation"
+            +   " join county_user on (county_user.id=region_dictated_appropriation.county_code)"
+            +   " join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)"
+            +   " join match_level on (match_level.id=region_dictated_appropriation.match_level_id)"
+            +   " join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+            + " where fiscal_year_id = (select max(id) from fiscal_year)"
+            + " order by " + sort_order,
+            connection
+            )
+            .ExecuteReader();
+          ((target) as DataGrid).DataBind();
+          Close();
+          }
+
         public string CountyCodeOfCountyDictum(string county_dictum_id)
         {
             string result;
@@ -56,6 +108,16 @@ namespace Class_db_appropriations
             this.Close();
             return result;
         }
+
+        internal string CountyCodeOfRegionDictumSummary(object summary)
+          {
+          return (summary as region_dictum_summary).county_code;
+          }
+
+        internal string CountyNameOfRegionDictumSummary(object summary)
+          {
+          return(summary as region_dictum_summary).county_name;
+          }
 
         public uint FundingRoundsGenerated(string regional_staffer_id, string amendment_num_string)
         {
@@ -133,6 +195,45 @@ namespace Class_db_appropriations
             this.Close();
             return result;
         }
+
+        internal string RegionDictumIdOf(object summary)
+          {
+          return (summary as region_dictum_summary).id;
+          }
+
+        internal object RegionDictumSummary(string id)
+          {
+          Open();
+          var dr = new MySqlCommand
+            (
+            "select county_code"
+            + " , county_code_name_map.name as county_name"
+            + " , amount"
+            + " , service_to_county_submission_deadline"
+            + " , match_level_id"
+            + " , match_level.name as match_level_description"
+            + " from region_dictated_appropriation"
+            +   " join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)"
+            +   " join match_level on (match_level.id=region_dictated_appropriation.match_level_id)"
+            + " where region_dictated_appropriation.id = '" + id + "'",
+            connection
+            )
+            .ExecuteReader();
+          dr.Read();
+          var the_summary = new region_dictum_summary()
+            {
+            amount = dr["amount"].ToString(),
+            county_code = dr["county_code"].ToString(),
+            county_name = dr["county_name"].ToString(),
+            id = id,
+            match_level_id = dr["match_level_id"].ToString(),
+            match_level_description = dr["match_level_description"].ToString(),
+            service_to_county_submission_deadline = dr["service_to_county_submission_deadline"].ToString()
+            };
+          dr.Close();
+          Close();
+          return the_summary;
+          }
 
         public void SetNewStateToRegion(decimal amount)
         {
@@ -231,6 +332,32 @@ namespace Class_db_appropriations
 
             return result;
         }
+
+        internal decimal SumOfSubAppropriations(string parent_kind, string parent_appropriation_id)
+          {
+          var child_kind = k.EMPTY;
+          if (parent_kind == "region")
+            {
+            child_kind = "county";
+            }
+          else if (parent_kind == "state")
+            {
+            child_kind = "region";
+            }
+          Open();
+          var sum = decimal.Parse
+            (
+            new MySqlCommand
+              (
+              "select IFNULL(sum(amount),0) from " + child_kind + "_dictated_appropriation where " + child_kind + "_dictated_appropriation." + parent_kind + "_dictated_appropriation_id = '" + parent_appropriation_id + "'",
+              connection
+              )
+              .ExecuteScalar()
+              .ToString()
+            );
+          Close();
+          return sum;
+          }
 
     } // end TClass_db_appropriations
 

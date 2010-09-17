@@ -1,7 +1,7 @@
 // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.ascx.cs
 
 using Class_biz_accounts;
-using Class_biz_counties;
+using Class_biz_appropriations;
 using Class_biz_user;
 using kix;
 using System;
@@ -10,17 +10,20 @@ using System.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace UserControl_counties
+namespace UserControl_region_dictated_appropriations
   {
-  public partial class TWebUserControl_counties: ki_web_ui.usercontrol_class
+  public partial class TWebUserControl_region_dictated_appropriations: ki_web_ui.usercontrol_class
     {
-    public class UserControl_counties_Static
+    public class UserControl_region_dictated_appropriations_Static
       {
       public const int TCI_SELECT = 0;
-      public const int TCI_CODE = 1;
-      public const int TCI_NAME = 2;
+      public const int TCI_ID = 1;
+      public const int TCI_CODE = 2;
       public const int TCI_EMAIL_ADDRESS = 3;
-      public const int TCI_MATCH_LEVEL = 4;
+      public const int TCI_NAME = 4;
+      public const int TCI_AMOUNT = 5;
+      public const int TCI_DEADLINE = 6;
+      public const int TCI_MATCH_LEVEL = 7;
       }
 
     private struct p_type
@@ -29,10 +32,10 @@ namespace UserControl_counties
       public bool be_loaded;
       public bool be_sort_order_ascending;
       public TClass_biz_accounts biz_accounts;
-      public TClass_biz_counties biz_counties;
+      public TClass_biz_appropriations biz_appropriations;
       public TClass_biz_user biz_user;
       public string distribution_list;
-      public uint num_counties;
+      public uint num_region_dictated_appropriations;
       public string sort_order;
       }
 
@@ -121,11 +124,7 @@ namespace UserControl_counties
       {
       if (!p.be_loaded)
         {
-        if (p.be_interactive)
-          {
-          Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
-          }
-        else
+        if (!p.be_interactive)
           {
           DataGrid_control.AllowSorting = false;
           }
@@ -140,15 +139,15 @@ namespace UserControl_counties
       // Required for Designer support
       InitializeComponent();
       base.OnInit(e);
-      if (Session["UserControl_counties.p"] != null)
+      if (Session["UserControl_region_dictated_appropriations.p"] != null)
         {
-        p = (p_type)(Session["UserControl_counties.p"]);
-        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_counties");
+        p = (p_type)(Session["UserControl_region_dictated_appropriations.p"]);
+        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_region_dictated_appropriations");
         }
       else
         {
         p.biz_accounts = new TClass_biz_accounts();
-        p.biz_counties = new TClass_biz_counties();
+        p.biz_appropriations = new TClass_biz_appropriations();
         p.biz_user = new TClass_biz_user();
         p.be_interactive = !(Session["mode:report"] != null);
         p.be_loaded = false;
@@ -166,18 +165,18 @@ namespace UserControl_counties
       this.DataGrid_control.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_control_ItemDataBound);
       this.DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_control_SortCommand);
       this.DataGrid_control.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_control_ItemCommand);
-      this.PreRender += this.TWebUserControl_counties_PreRender;
+      this.PreRender += this.TWebUserControl_region_dictated_appropriations_PreRender;
       //this.Load += this.Page_Load;
       }
 
-    private void TWebUserControl_counties_PreRender(object sender, System.EventArgs e)
+    private void TWebUserControl_region_dictated_appropriations_PreRender(object sender, System.EventArgs e)
       {
-      SessionSet("UserControl_counties.p", p);
+      SessionSet("UserControl_region_dictated_appropriations.p", p);
       }
 
-    public TWebUserControl_counties Fresh()
+    public TWebUserControl_region_dictated_appropriations Fresh()
       {
-      Session.Remove("UserControl_counties.p");
+      Session.Remove("UserControl_region_dictated_appropriations.p");
       return this;
       }
 
@@ -185,8 +184,8 @@ namespace UserControl_counties
       {
       if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
         {
-        SessionSet("county_summary",p.biz_counties.Summary(k.Safe(e.Item.Cells[UserControl_counties_Static.TCI_CODE].Text,k.safe_hint_type.NUM)));
-        DropCrumbAndTransferTo("counties_detail.aspx");
+        SessionSet("region_dictated_appropriation_summary",p.biz_appropriations.RegionDictumSummary(k.Safe(e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_ID].Text,k.safe_hint_type.NUM)));
+        DropCrumbAndTransferTo("county_dictated_appropriations.aspx");
         }
       }
 
@@ -197,7 +196,7 @@ namespace UserControl_counties
         {
         if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
           {
-          link_button = ((e.Item.Cells[UserControl_counties_Static.TCI_SELECT].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_SELECT].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
           //
@@ -207,15 +206,20 @@ namespace UserControl_counties
             {
             cell.EnableViewState = false;
             }
-          e.Item.Cells[UserControl_counties_Static.TCI_CODE].EnableViewState = true;
+          e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_CODE].EnableViewState = true;
           //
-          p.distribution_list = p.distribution_list + e.Item.Cells[UserControl_counties_Static.TCI_EMAIL_ADDRESS].Text + k.COMMA_SPACE;
-          p.num_counties++;
+          p.distribution_list = p.distribution_list + e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_EMAIL_ADDRESS].Text + k.COMMA_SPACE;
+          p.num_region_dictated_appropriations++;
           }
         }
       else
         {
-        e.Item.Cells[UserControl_counties_Static.TCI_SELECT].Visible = false;
+        e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_SELECT].Visible = false;
+        }
+      if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+        {
+        e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_AMOUNT].Text = "<tt>" + e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_AMOUNT].Text + "</tt>";
+        e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_DEADLINE].Text = "<tt>" + e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_DEADLINE].Text + "</tt>";
         }
       }
 
@@ -236,10 +240,10 @@ namespace UserControl_counties
 
     private void BindGrid()
       {
-      p.biz_counties.BindGrid(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
+      p.biz_appropriations.BindRegionDictums(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
       Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
       p.distribution_list = k.EMPTY;
-      p.num_counties = 0;
+      p.num_region_dictated_appropriations = 0;
       }
 
     protected void Button_send_Click(object sender, EventArgs e)
@@ -250,6 +254,6 @@ namespace UserControl_counties
       Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);
       }
 
-    } // end TWebUserControl_counties
+    } // end TWebUserControl_region_dictated_appropriations
 
   }

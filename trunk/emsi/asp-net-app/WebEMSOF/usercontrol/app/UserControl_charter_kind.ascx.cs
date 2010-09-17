@@ -173,7 +173,7 @@ namespace UserControl_charter_kind
             if (Session["UserControl_charter_kind.p"] != null)
             {
                 p = (p_type)(Session["UserControl_charter_kind.p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_member_binder_PlaceHolder_content"] as string) == "UserControl_charter_kind");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_config_binder_PlaceHolder_content"] as string) == "UserControl_charter_kind");
             }
             else
             {

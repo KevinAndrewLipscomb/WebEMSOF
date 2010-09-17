@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_counties.ascx.cs" Inherits="UserControl_counties.TWebUserControl_counties"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_region_dictated_appropriations.ascx.cs" Inherits="UserControl_region_dictated_appropriations.TWebUserControl_region_dictated_appropriations"%>
 <!-- Derived from KiAspdotnetFramework/usercontrol/app/UserControl~template~datagrid~sortable.ascx-template -->
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
@@ -10,10 +10,20 @@
               <td>
                 <asp:DataGrid id="DataGrid_control" runat="server" gridlines="Horizontal" cellpadding="10" autogeneratecolumns="False" allowsorting="True">
                   <Columns>
-                    <asp:ButtonColumn text="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Detail&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" commandname="Select" Visible="False"></asp:ButtonColumn>
-                    <asp:BoundColumn datafield="code" Visible="false"></asp:BoundColumn>
+                    <asp:ButtonColumn text="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Detail&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" commandname="Select"></asp:ButtonColumn>
+                    <asp:BoundColumn datafield="id" HeaderText="RDA#" ReadOnly="True" SortExpression="id%">
+                      <HeaderStyle Font-Bold="False" Font-Italic="False" Font-Overline="False" Font-Strikeout="False" Font-Underline="False" HorizontalAlign="Center" />
+                      <ItemStyle Font-Bold="False" Font-Italic="False" Font-Overline="False" Font-Strikeout="False" Font-Underline="False" HorizontalAlign="Right" />
+                    </asp:BoundColumn>
+                    <asp:BoundColumn datafield="code" Visible="False"></asp:BoundColumn>
+                    <asp:BoundColumn datafield="email_address" Visible="False"></asp:BoundColumn>
                     <asp:BoundColumn datafield="name" headertext="Name" sortexpression="name%"></asp:BoundColumn>
-                    <asp:BoundColumn datafield="email_address" HeaderText="Email address"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="amount" DataFormatString="{0:C}" HeaderText="Allocation" SortExpression="amount%">
+                      <ItemStyle HorizontalAlign="Right" />
+                    </asp:BoundColumn>
+                    <asp:BoundColumn DataField="deadline" HeaderText="Service submission deadline" SortExpression="deadline%">
+                      <ItemStyle HorizontalAlign="Center" />
+                    </asp:BoundColumn>
                     <asp:BoundColumn DataField="match_level_description" HeaderText="Default match level" SortExpression="factor%,name"></asp:BoundColumn>
                   </Columns>
                   <HeaderStyle backcolor="WhiteSmoke"></HeaderStyle>
@@ -35,7 +45,7 @@
                 <table cellspacing="0" cellpadding="10" width="100%" border="0">
                   <tr>
                     <td>Send email to:</td>
-                    <td>EMSOF Coordinators at above counties</td>
+                    <td>EMSOF Coordinators with above allocations</td>
                     <td></td>
                   </tr>
                   <tr>

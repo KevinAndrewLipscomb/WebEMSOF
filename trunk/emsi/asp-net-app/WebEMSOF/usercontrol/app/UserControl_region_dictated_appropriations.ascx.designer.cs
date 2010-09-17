@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UserControl_regional_staffer_current_binder {
+namespace UserControl_region_dictated_appropriations {
     
     
-    public partial class TWebUserControl_regional_staffer_current_binder {
+    public partial class TWebUserControl_region_dictated_appropriations {
         
         /// <summary>
         /// UpdatePanel_control control.
@@ -22,75 +22,75 @@ namespace UserControl_regional_staffer_current_binder {
         protected global::System.Web.UI.UpdatePanel UpdatePanel_control;
         
         /// <summary>
-        /// TabContainer_control control.
+        /// DataGrid_control control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabContainer TabContainer_control;
+        protected global::System.Web.UI.WebControls.DataGrid DataGrid_control;
         
         /// <summary>
-        /// TabPanel_snapshot control.
+        /// Table_quick_message control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_snapshot;
+        protected global::System.Web.UI.HtmlControls.HtmlTable Table_quick_message;
         
         /// <summary>
-        /// TabPanel_services control.
+        /// Label_author_email_address control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_services;
+        protected global::System.Web.UI.WebControls.Label Label_author_email_address;
         
         /// <summary>
-        /// TabPanel_counties control.
+        /// TextBox_quick_message_subject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_counties;
+        protected global::System.Web.UI.WebControls.TextBox TextBox_quick_message_subject;
         
         /// <summary>
-        /// TabPanel_allocations control.
+        /// TextBox_quick_message_body control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_allocations;
+        protected global::System.Web.UI.WebControls.TextBox TextBox_quick_message_body;
         
         /// <summary>
-        /// TabPanel_workflow control.
+        /// RequiredFieldValidator_quick_message_body control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_workflow;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_quick_message_body;
         
         /// <summary>
-        /// TabPanel_outcomes control.
+        /// Button_send control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_outcomes;
+        protected global::System.Web.UI.WebControls.Button Button_send;
         
         /// <summary>
-        /// PlaceHolder_content control.
+        /// Label_distribution_list control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_content;
+        protected global::System.Web.UI.WebControls.Label Label_distribution_list;
     }
 }

@@ -26,12 +26,32 @@ namespace Class_biz_appropriations
             return result;
         }
 
+        internal void BindRegionDictums
+          (
+          string sort_order,
+          bool be_sort_order_ascending,
+          object target
+          )
+          {
+          db_appropriations.BindRegionDictums(sort_order,be_sort_order_ascending,target);
+          }
+
         public string CountyCodeOfCountyDictum(string county_dictum_id)
         {
             string result;
             result = db_appropriations.CountyCodeOfCountyDictum(county_dictum_id);
             return result;
         }
+
+        internal string CountyCodeOfRegionDictumSummary(object summary)
+          {
+          return db_appropriations.CountyCodeOfRegionDictumSummary(summary);
+          }
+
+        internal string CountyNameOfRegionDictumSummary(object region_dictum_summary)
+          {
+          return db_appropriations.CountyNameOfRegionDictumSummary(region_dictum_summary);
+          }
 
         public uint FundingRoundsGenerated(string regional_staffer_id, string amendment_num_string)
         {
@@ -91,6 +111,16 @@ namespace Class_biz_appropriations
             result = db_appropriations.RegionCodeOfCountyDictum(county_dictum_id);
             return result;
         }
+
+        internal string RegionDictumIdOf(object summary)
+          {
+          return db_appropriations.RegionDictumIdOf(summary);
+          }
+
+        internal object RegionDictumSummary(string id)
+          {
+          return db_appropriations.RegionDictumSummary(id);
+          }
 
         public void SetNewStateToRegion(decimal amount)
         {
@@ -202,16 +232,15 @@ namespace Class_biz_appropriations
             return SumOfSelfDictatedAppropriations("");
         }
 
+        internal decimal SumOfSubAppropriations
+          (
+          string parent_kind,
+          string parent_appropriation_id
+          )
+          {
+          return db_appropriations.SumOfSubAppropriations(parent_kind,parent_appropriation_id);
+          }
+
     } // end TClass_biz_appropriations
 
 }
-
-namespace Class_biz_appropriations.Units
-{
-    public class Class_biz_appropriations
-    {
-        public const string ID = "$Id: Class_biz_appropriations.pas 2648 2008-10-14 23:20:47Z kevinanlipscomb $";
-    } // end Class_biz_appropriations
-
-}
-
