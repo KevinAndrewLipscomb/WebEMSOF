@@ -1,5 +1,6 @@
 using Class_db;
 using Class_db_trail;
+using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Web.UI.WebControls;
@@ -35,6 +36,38 @@ namespace Class_db_match_level
             this.Close();
             result = ((target) as ListControl).Items.Count > 0;
             return result;
+        }
+
+        public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
+        {
+            ((target) as ListControl).Items.Clear();
+            if (unselected_literal != k.EMPTY)
+            {
+                ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
+            }
+            Open();
+            var dr = new MySqlCommand("SELECT id,concat(name,' (',FORMAT(factor*100,0),'%)') as description FROM match_level order by id", connection).ExecuteReader();
+            while (dr.Read())
+            {
+                ((target) as ListControl).Items.Add(new ListItem(dr["description"].ToString(), dr["id"].ToString()));
+            }
+            dr.Close();
+            Close();
+            if (selected_value != k.EMPTY)
+            {
+                ((target) as ListControl).SelectedValue = selected_value;
+            }
+
+        }
+
+        public void BindDirectToListControl(object target)
+        {
+            BindDirectToListControl(target, "-- match_level --");
+        }
+
+        public void BindDirectToListControl(object target, string unselected_literal)
+        {
+            BindDirectToListControl(target, unselected_literal, k.EMPTY);
         }
 
         public void Delete(string name)

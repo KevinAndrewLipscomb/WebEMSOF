@@ -1,4 +1,5 @@
 using Class_db_match_level;
+using kix;
 using System;
 
 namespace Class_biz_match_level
@@ -17,6 +18,21 @@ namespace Class_biz_match_level
             bool result;
             result = db_match_level.Bind(partial_username, target);
             return result;
+        }
+
+        public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
+        {
+            db_match_level.BindDirectToListControl(target, unselected_literal, selected_value);
+        }
+
+        public void BindDirectToListControl(object target)
+        {
+            BindDirectToListControl(target, "-- match_level --");
+        }
+
+        public void BindDirectToListControl(object target, string unselected_literal)
+        {
+            BindDirectToListControl(target, unselected_literal, k.EMPTY);
         }
 
         public void Delete(string username)
