@@ -1,5 +1,6 @@
 using Class_db;
 using Class_db_fiscal_years;
+using Class_db_trail;
 using kix;
 using MySql.Data.MySqlClient;
 using System.Web.UI.WebControls;
@@ -9,6 +10,8 @@ namespace Class_db_counties
   public class county_summary
     {
     public string code;
+    public string default_match_level_id;
+    public string email_address;
     public string name;
     }
 
@@ -16,11 +19,13 @@ namespace Class_db_counties
     {
 
         private TClass_db_fiscal_years db_fiscal_years;
+        private TClass_db_trail db_trail;
 
         //Constructor  Create()
         public TClass_db_counties() : base()
           {
           db_fiscal_years = new TClass_db_fiscal_years();
+          db_trail = new TClass_db_trail();
           }
 
         public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
@@ -84,6 +89,21 @@ namespace Class_db_counties
           Close();
           }
 
+    internal string CodeOfSummary(object summary)
+      {
+      return (summary as county_summary).code;
+      }
+
+    internal string DefaultMatchLevelIdOfSummary(object summary)
+      {
+      return (summary as county_summary).default_match_level_id;
+      }
+
+    internal string EmailAddressOfSummary(object summary)
+      {
+      return (summary as county_summary).email_address;
+      }
+
         public string NameOf(string code)
         {
             string result;
@@ -98,6 +118,23 @@ namespace Class_db_counties
       return (summary as county_summary).name;
       }
 
+    internal void Set
+      (
+      string code,
+      string email_address,
+      string default_match_level_id
+      )
+      {
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved("update county_code_name_map join county_user on (county_user.id=county_code_name_map.code) set password_reset_email_address = '" + email_address + "', default_match_level_id = '" + default_match_level_id + "' where code = '" + code + "'"),
+        connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
     public object Summary(string code)
       {
       Open();
@@ -106,7 +143,10 @@ namespace Class_db_counties
         new MySqlCommand
           (
           "select name"
+          + " , password_reset_email_address"
+          + " , default_match_level_id"
           + " from county_code_name_map"
+          +   " join county_user on (county_user.id=county_code_name_map.code)"
           + " where code = '" + code + "'",
           connection
           )
@@ -116,6 +156,8 @@ namespace Class_db_counties
       var the_summary = new county_summary()
         {
         code = code,
+        default_match_level_id = dr["default_match_level_id"].ToString(),
+        email_address = dr["password_reset_email_address"].ToString(),
         name = dr["name"].ToString()
         };
       Close();

@@ -217,6 +217,13 @@
     <Compile Include="protected\charter_kinds.aspx.designer.cs">
       <DependentUpon>charter_kinds.aspx</DependentUpon>
     </Compile>
+    <Compile Include="protected\county_detail.aspx.cs">
+      <DependentUpon>county_detail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="protected\county_detail.aspx.designer.cs">
+      <DependentUpon>county_detail.aspx</DependentUpon>
+    </Compile>
     <Compile Include="protected\county_dictated_appropriations.aspx.cs">
       <DependentUpon>county_dictated_appropriations.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -638,6 +645,7 @@
     <Content Include="login.aspx" />
     <Content Include="new_password.aspx" />
     <Content Include="protected\administer_service_email_address.aspx" />
+    <Content Include="protected\county_detail.aspx" />
     <Content Include="salogin.aspx" />
     <Content Include="serial_indicator_control_chart.aspx" />
     <Content Include="timeout.aspx" />

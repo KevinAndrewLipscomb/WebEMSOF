@@ -186,7 +186,7 @@ namespace UserControl_counties
       if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
         {
         SessionSet("county_summary",p.biz_counties.Summary(k.Safe(e.Item.Cells[UserControl_counties_Static.TCI_CODE].Text,k.safe_hint_type.NUM)));
-        DropCrumbAndTransferTo("counties_detail.aspx");
+        DropCrumbAndTransferTo("county_detail.aspx");
         }
       }
 

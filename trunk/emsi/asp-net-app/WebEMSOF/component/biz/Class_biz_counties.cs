@@ -37,6 +37,21 @@ namespace Class_biz_counties
           db_counties.BindGrid(sort_order,be_sort_order_ascending,target);
           }
 
+        internal string CodeOfSummary(object summary)
+          {
+          return db_counties.CodeOfSummary(summary);
+          }
+
+        internal string DefaultMatchLevelIdOfSummary(object summary)
+          {
+          return db_counties.DefaultMatchLevelIdOfSummary(summary);
+          }
+
+        internal string EmailAddressOfSummary(object summary)
+          {
+          return db_counties.EmailAddressOfSummary(summary);
+          }
+
         public string NameOf(string code)
         {
             string result;
@@ -47,6 +62,16 @@ namespace Class_biz_counties
         internal string NameOfSummary(object summary)
           {
           return db_counties.NameOfSummary(summary);
+          }
+
+        internal void Set
+          (
+          string code,
+          string email_address,
+          string default_match_level_id
+          )
+          {
+          db_counties.Set(code,email_address,default_match_level_id);
           }
 
         public object Summary(string code)
