@@ -12,7 +12,33 @@ namespace UserControl_responding_services
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.pas
     public partial class TWebUserControl_responding_services: ki_web_ui.usercontrol_class
     {
+        public class UserControl_responding_services_Static
+          {
+          public const int TCI_UPDATE_EMAIL_ADDRESS = 0;
+          public const int TCI_PROFILE_TABBED = 1;
+          public const int TCI_PROFILE_PRINTABLE = 2;
+          public const int TCI_AFFILIATE_NUM = 3;
+          public const int TCI_SERVICE_NAME = 4;
+          public const int TCI_COUNTY_NAME = 5;
+          public const int TCI_BE_EMSOF_PARTICIPANT = 6;
+          }
+
+        private struct p_type
+          {
+          public bool be_interactive;
+          public bool be_loaded;
+          public bool be_ok_to_update_service_email_address;
+          public bool be_sort_order_ascending;
+          public TClass_biz_services biz_services;
+          public uint num_nonparticipants;
+          public uint num_participants;
+          public uint num_respondents;
+          public uint num_services;
+          public string sort_order;
+          }
+
         private p_type p;
+
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -123,6 +149,7 @@ namespace UserControl_responding_services
                 p.biz_services = new TClass_biz_services();
                 p.be_interactive = !(Session["mode:report"] != null);
                 p.be_loaded = false;
+                p.be_ok_to_update_service_email_address = (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"));
                 p.be_sort_order_ascending = true;
                 p.num_nonparticipants = 0;
                 p.num_participants = 0;
@@ -163,7 +190,7 @@ namespace UserControl_responding_services
         {
             if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
               {
-              SessionSet("affiliate_num", k.Safe(e.Item.Cells[Units.UserControl_responding_services.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM));
+              SessionSet("affiliate_num", k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM));
               if (e.CommandName == "update-email-address")
                 {
                 DropCrumbAndTransferTo("administer_service_email_address.aspx");
@@ -188,20 +215,20 @@ namespace UserControl_responding_services
             {
                 if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
                 {
-                    link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Update email address";
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-                    link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Profile (tabbed)";
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-                    link_button = ((e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Profile (printable)";
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
                     p.num_services++;
-                    var participation = e.Item.Cells[Units.UserControl_responding_services.TCI_BE_EMSOF_PARTICIPANT].Text;
+                    var participation = e.Item.Cells[UserControl_responding_services_Static.TCI_BE_EMSOF_PARTICIPANT].Text;
                     if (participation != "no response")
                       {
                       p.num_respondents++;
@@ -218,8 +245,8 @@ namespace UserControl_responding_services
             }
             else
             {
-                e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_TABBED].Visible = false;
-                e.Item.Cells[Units.UserControl_responding_services.TCI_PROFILE_PRINTABLE].Visible = false;
+                e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_TABBED].Visible = false;
+                e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Visible = false;
             }
         }
 
@@ -240,6 +267,7 @@ namespace UserControl_responding_services
 
         private void Bind()
         {
+            DataGrid_control.Columns[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Visible = p.be_ok_to_update_service_email_address;
             p.biz_services.BindAnnualRespondents(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
             Label_num_nonparticipants.Text = p.num_nonparticipants.ToString();
             Label_num_participants.Text = p.num_participants.ToString();
@@ -252,35 +280,7 @@ namespace UserControl_responding_services
 
         }
 
-        private struct p_type
-        {
-            public bool be_interactive;
-            public bool be_loaded;
-            public bool be_sort_order_ascending;
-            public TClass_biz_services biz_services;
-            public uint num_nonparticipants;
-            public uint num_participants;
-            public uint num_respondents;
-            public uint num_services;
-            public string sort_order;
-        } // end p_type
-
     } // end TWebUserControl_responding_services
-
-}
-
-namespace UserControl_responding_services.Units
-{
-    public class UserControl_responding_services
-    {
-        public const int TCI_UPDATE_EMAIL_ADDRESS = 0;
-        public const int TCI_PROFILE_TABBED = 1;
-        public const int TCI_PROFILE_PRINTABLE = 2;
-        public const int TCI_AFFILIATE_NUM = 3;
-        public const int TCI_SERVICE_NAME = 4;
-        public const int TCI_COUNTY_NAME = 5;
-        public const int TCI_BE_EMSOF_PARTICIPANT = 6;
-    } // end UserControl_responding_services
 
 }
 

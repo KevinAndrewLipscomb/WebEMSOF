@@ -79,7 +79,8 @@ namespace Class_db_appropriations
           Open();
           ((target) as DataGrid).DataSource = new MySqlCommand
             (
-            "select region_dictated_appropriation.id"
+            "select state_dictated_appropriation.id as sda_id"
+            + " , region_dictated_appropriation.id as id"
             + " , county_code as code"
             + " , password_reset_email_address as email_address"
             + " , county_code_name_map.name as name"
@@ -91,6 +92,36 @@ namespace Class_db_appropriations
             +   " join county_code_name_map on (county_code_name_map.code=region_dictated_appropriation.county_code)"
             +   " join match_level on (match_level.id=region_dictated_appropriation.match_level_id)"
             +   " join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)"
+            + " where fiscal_year_id = (select max(id) from fiscal_year)"
+            + " order by " + sort_order,
+            connection
+            )
+            .ExecuteReader();
+          ((target) as DataGrid).DataBind();
+          Close();
+          }
+
+        internal void BindStateDictums
+          (
+          string sort_order,
+          bool be_sort_order_ascending,
+          object target
+          )
+          {
+          if (be_sort_order_ascending)
+            {
+            sort_order = sort_order.Replace("%", " asc");
+            }
+          else
+            {
+            sort_order = sort_order.Replace("%", " desc");
+            }
+          Open();
+          ((target) as DataGrid).DataSource = new MySqlCommand
+            (
+            "select id"
+            + " , amount"
+            + " from state_dictated_appropriation"
             + " where fiscal_year_id = (select max(id) from fiscal_year)"
             + " order by " + sort_order,
             connection
@@ -117,6 +148,33 @@ namespace Class_db_appropriations
         internal string CountyNameOfRegionDictumSummary(object summary)
           {
           return(summary as region_dictum_summary).county_name;
+          }
+
+        internal bool Delete
+          (
+          string dictator,
+          string id
+          )
+          {
+          var result = true;
+          Open();
+          try
+            {
+            new MySqlCommand(db_trail.Saved("delete from " + dictator + "_dictated_appropriation where id = '" + id + "'"),connection).ExecuteNonQuery();
+            }
+          catch(System.Exception e)
+            {
+            if (e.Message.StartsWith("Cannot delete or update a parent row: a foreign key constraint fails", true, null))
+              {
+              result = false;
+              }
+            else
+              {
+              throw e;
+              }
+            }
+          Close();
+          return result;
           }
 
         public uint FundingRoundsGenerated(string regional_staffer_id, string amendment_num_string)
