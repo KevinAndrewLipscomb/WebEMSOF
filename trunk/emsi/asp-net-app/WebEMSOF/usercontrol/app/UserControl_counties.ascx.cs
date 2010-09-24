@@ -7,6 +7,7 @@ using kix;
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -16,17 +17,18 @@ namespace UserControl_counties
     {
     public class UserControl_counties_Static
       {
-      public const int TCI_SELECT = 0;
-      public const int TCI_CODE = 1;
-      public const int TCI_NAME = 2;
-      public const int TCI_EMAIL_ADDRESS = 3;
-      public const int TCI_MATCH_LEVEL = 4;
+      public const int TCI_CODE = 0;
+      public const int TCI_NAME = 1;
+      public const int TCI_EMAIL_ADDRESS = 2;
+      public const int TCI_MATCH_LEVEL = 3;
+      public const int TCI_SELECT = 4;
       }
 
     private struct p_type
       {
       public bool be_interactive;
       public bool be_loaded;
+      public bool be_ok_to_change_details;
       public bool be_sort_order_ascending;
       public TClass_biz_accounts biz_accounts;
       public TClass_biz_counties biz_counties;
@@ -152,6 +154,7 @@ namespace UserControl_counties
         p.biz_user = new TClass_biz_user();
         p.be_interactive = !(Session["mode:report"] != null);
         p.be_loaded = false;
+        p.be_ok_to_change_details = (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"));
         p.be_sort_order_ascending = true;
         p.sort_order = "name%";
         }
@@ -236,6 +239,7 @@ namespace UserControl_counties
 
     private void BindGrid()
       {
+      DataGrid_control.Columns[UserControl_counties_Static.TCI_SELECT].Visible = p.be_ok_to_change_details;
       p.biz_counties.BindGrid(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
       Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
       p.distribution_list = k.EMPTY;

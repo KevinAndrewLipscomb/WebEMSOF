@@ -19,6 +19,18 @@ namespace Class_biz_appropriations
             biz_user = new TClass_biz_user();
             db_appropriations = new TClass_db_appropriations();
         }
+
+        internal void AddRegionDictum
+          (
+          string sda_id,
+          string county_code,
+          string amount,
+          string default_match_level_id
+          )
+          {
+          throw new NotImplementedException();
+          }
+
         public bool BeAnyCurrentToService(string affiliate_num)
         {
             bool result;
@@ -36,6 +48,16 @@ namespace Class_biz_appropriations
           db_appropriations.BindRegionDictums(sort_order,be_sort_order_ascending,target);
           }
 
+        internal void BindStateDictums
+          (
+          string sort_order,
+          bool be_sda_sort_order_ascending,
+          object target
+          )
+          {
+          db_appropriations.BindStateDictums(sort_order,be_sda_sort_order_ascending,target);
+          }
+
         public string CountyCodeOfCountyDictum(string county_dictum_id)
         {
             string result;
@@ -51,6 +73,15 @@ namespace Class_biz_appropriations
         internal string CountyNameOfRegionDictumSummary(object region_dictum_summary)
           {
           return db_appropriations.CountyNameOfRegionDictumSummary(region_dictum_summary);
+          }
+
+        internal bool Delete
+          (
+          string dictator,
+          string id
+          )
+          {
+          return db_appropriations.Delete(dictator,id);
           }
 
         public uint FundingRoundsGenerated(string regional_staffer_id, string amendment_num_string)

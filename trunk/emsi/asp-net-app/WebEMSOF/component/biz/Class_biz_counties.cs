@@ -42,6 +42,11 @@ namespace Class_biz_counties
           return db_counties.CodeOfSummary(summary);
           }
 
+        internal string DefaultMatchLevelIdOfCode(string code)
+          {
+          return db_counties.DefaultMatchLevelIdOfCode(code);
+          }
+
         internal string DefaultMatchLevelIdOfSummary(object summary)
           {
           return db_counties.DefaultMatchLevelIdOfSummary(summary);

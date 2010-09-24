@@ -94,6 +94,14 @@ namespace Class_db_counties
       return (summary as county_summary).code;
       }
 
+    internal string DefaultMatchLevelIdOfCode(string code)
+      {
+      Open();
+      var default_match_level_code = new MySqlCommand("select default_match_level_id from county_code_name_map where code = '" + code + "'",connection).ExecuteScalar().ToString();
+      Close();
+      return default_match_level_code;
+      }
+
     internal string DefaultMatchLevelIdOfSummary(object summary)
       {
       return (summary as county_summary).default_match_level_id;
