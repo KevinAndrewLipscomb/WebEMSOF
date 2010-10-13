@@ -1,24 +1,13 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Data.Common;
-using System.Globalization;
-
-
 using Class_biz_fiscal_years;
+using Class_biz_fy_calendar;
+using Class_biz_milestones;
 using Class_db;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+using System.Web.UI.WebControls;
+
 namespace service_overview
 {
     public partial class TWebForm_service_overview: ki_web_ui.page_class
@@ -73,6 +62,7 @@ namespace service_overview
                 Title = ConfigurationManager.AppSettings["application_name"] + " - service_overview";
                 // Initialize implementation-scoped vars.
                 p.biz_fiscal_years = new TClass_biz_fiscal_years();
+                p.biz_fy_calendar = new TClass_biz_fy_calendar();
                 p.be_before_deadline = true;
                 p.tcci_id = 0;
                 p.tcci_fy_designator = 1;
@@ -88,15 +78,27 @@ namespace service_overview
                 biz_get_profile_status = new MySqlCommand("select be_valid_profile from service where id = \"" + Session["service_user_id"].ToString() + "\"", p.db.connection).ExecuteScalar().ToString();
                 if (biz_get_profile_status == "0")
                 {
-                    Label_profile_status.Text = "Stale or not saved.";
-                    LinkButton_profile_action.Text = "[Create/refresh]";
+                    Label_profile_status.Text = "Needs review.";
+                    LinkButton_profile_action.Text = "[Review]";
+                    var service_annual_survey_submission_deadline = p.biz_fy_calendar.MilestoneDate(milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE);
+                    var service_annual_survey_submission_deadline_string = service_annual_survey_submission_deadline.ToString("yyyy-MM-dd HH:mm:ss");
+                    if (DateTime.Now <= service_annual_survey_submission_deadline)
+                      {
+                      Literal_relation_to_annual_survey.Text = "By reviewing and submitting your WebEMSOF profile by " + service_annual_survey_submission_deadline_string + ", you will be responding to the Annual Survey.";
+                      }
+                    else
+                      {
+                      Literal_relation_to_annual_survey.Text = "You can review and submit your WebEMSOF profile at any time, but because the Annual Survey submission deadline of " + service_annual_survey_submission_deadline_string + " has passed, the status of your "
+                      + "WebEMSOF profile will not change, and you will not be eligible for allocations in this cycle.";
+                      }
                     Table_item_requests_section.Visible = false;
                     p.db.Close();
                 }
                 else
                 {
-                    Label_profile_status.Text = "Saved.";
+                    Label_profile_status.Text = "Is saved.";
                     LinkButton_profile_action.Text = "[Edit]";
+                    Literal_relation_to_annual_survey.Text = "Your WebEMSOF profile has been accepted as your Annual Survey response.";
                     TableData_profile_printable.Visible = true;
                     // Determine current fiscal year
                     p.max_fiscal_year_id_string = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection).ExecuteScalar().ToString();
@@ -243,6 +245,7 @@ namespace service_overview
         {
             public bool be_before_deadline;
             public TClass_biz_fiscal_years biz_fiscal_years;
+            public TClass_biz_fy_calendar biz_fy_calendar;
             public TClass_db db;
             public uint tcci_id;
             public uint tcci_fy_designator;

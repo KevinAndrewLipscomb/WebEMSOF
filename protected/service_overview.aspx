@@ -13,16 +13,23 @@
     <form runat="server">
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
       <h3>
-        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
+        <table border="1" bordercolor="#dcdcdc" cellspacing="0">
           <tr>
             <td>
-              <table cellspacing="0" cellpadding="10" width="100%" border="0">
+              <table cellspacing="0" cellpadding="10" border="0">
                 <tr>
-                  <td bgcolor="#f5f5f5"><strong>Your service's WebEMSOF profile ("ANNUAL SURVEY") is:</strong></td>
-                  <td><ASP:Label id="Label_profile_status" runat="server"></ASP:Label></td>
-                  <td><ASP:LinkButton id="LinkButton_profile_action" runat="server" font-size="Small" onclick="LinkButton_profile_action_Click"></ASP:LinkButton></td>
-                  <td id="TableData_profile_printable" runat="server" visible="false"><ASP:LinkButton id="LinkButton_profile_printable" runat="server" font-size="Small" onclick="LinkButton_profile_printable_Click">[View printable report]</ASP:LinkButton></td>
+                  <td>
+                    <table cellspacing="0" cellpadding="10" border="0">
+                      <tr>
+                        <td bgcolor="#f5f5f5">Your service's WebEMSOF profile:</td>
+                        <td><ASP:Label id="Label_profile_status" runat="server"></ASP:Label></td>
+                        <td><ASP:LinkButton id="LinkButton_profile_action" runat="server" font-size="Small" onclick="LinkButton_profile_action_Click"></ASP:LinkButton></td>
+                        <td id="TableData_profile_printable" runat="server" visible="false"><ASP:LinkButton id="LinkButton_profile_printable" runat="server" font-size="Small" onclick="LinkButton_profile_printable_Click">[View printable report]</ASP:LinkButton></td>
+                      </tr>
+                    </table>
+                  </td>
                 </tr>
+                <tr><td><asp:Literal ID="Literal_relation_to_annual_survey" runat="server"></asp:Literal></td></tr>
               </table>
             </td>
           </tr>
