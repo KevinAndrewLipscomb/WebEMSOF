@@ -3,6 +3,8 @@ using Class_biz_appropriations;
 using Class_biz_charter_kinds;
 using Class_biz_counties;
 using Class_biz_emsof_extra_service_county_dependencies;
+using Class_biz_fy_calendar;
+using Class_biz_milestones;
 using Class_biz_services;
 using Class_biz_user;
 using kix;
@@ -712,10 +714,12 @@ namespace UserControl_service_profile
                 p.biz_charter_kinds = new TClass_biz_charter_kinds();
                 p.biz_counties = new TClass_biz_counties();
                 p.biz_emsof_extra_service_county_dependencies = new TClass_biz_emsof_extra_service_county_dependencies();
+                p.biz_fy_calendar = new TClass_biz_fy_calendar();
                 p.biz_services = new TClass_biz_services();
                 p.biz_user = new TClass_biz_user();
                 p.affiliate_num = k.EMPTY;
                 p.be_authorized_to_delete_service = p.biz_services.BeOkToDelete();
+                p.be_before_submission_deadline = (DateTime.Now <= p.biz_fy_calendar.MilestoneDate(milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE));
                 p.be_loaded = false;
                 p.be_service_user = (p.biz_user.Kind() == "service");
                 p.be_profile_initially_valid = false;
@@ -879,7 +883,7 @@ namespace UserControl_service_profile
                   (RadioButtonList_be_dera.SelectedValue == "TRUE"),
                   k.Safe(TextBox_charter_other_kind.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   (p.be_service_user && !p.be_profile_initially_valid),
-                  (p.be_service_user || (RadioButtonList_be_valid_profile.SelectedValue == "TRUE")),
+                  ((p.be_service_user && p.be_before_submission_deadline) || (RadioButtonList_be_valid_profile.SelectedValue == "TRUE")),
                   k.Safe(TextBox_federal_tax_id.Text, k.safe_hint_type.NUM),
                   CheckBox_be_qrs_unrecognized.Checked,
                   CheckBox_be_rescue_unrecognized.Checked,
@@ -1231,6 +1235,7 @@ namespace UserControl_service_profile
         {
             public string affiliate_num;
             public bool be_authorized_to_delete_service;
+            public bool be_before_submission_deadline;
             public bool be_loaded;
             public bool be_ok_to_config_service_profiles;
             public bool be_profile_initially_valid;
@@ -1252,6 +1257,7 @@ namespace UserControl_service_profile
             public TClass_biz_charter_kinds biz_charter_kinds;
             public TClass_biz_counties biz_counties;
             public TClass_biz_emsof_extra_service_county_dependencies biz_emsof_extra_service_county_dependencies;
+            public TClass_biz_fy_calendar biz_fy_calendar;
             public TClass_biz_services biz_services;
             public TClass_biz_user biz_user;
             public string saved_home_county_code;

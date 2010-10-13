@@ -20,6 +20,7 @@ namespace Class_biz_milestones
         SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE = 3,
         SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE = 4,
         END_OF_CYCLE_MILESTONE = 5,
+        SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE = 6
     } // end milestone_type
 
     public static class Class_biz_milestones_Static
@@ -37,6 +38,8 @@ namespace Class_biz_milestones
             // SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE
             new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}} , 
             // END_OF_CYCLE_MILESTONE
+            new reminder_control_record_type {num_reminders = 0} ,
+            // SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE
             new reminder_control_record_type {num_reminders = 0}
           };
     } // end Class_biz_milestones
