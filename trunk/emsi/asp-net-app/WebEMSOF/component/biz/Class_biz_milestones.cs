@@ -1,10 +1,11 @@
-using System;
-
-using System.Collections;
-using Class_db_milestones;
 using Class_biz_accounts;
 using Class_biz_emsof_requests;
 using Class_biz_services;
+using Class_db_milestones;
+using kix;
+using System;
+using System.Collections;
+
 namespace Class_biz_milestones
 {
     public struct reminder_control_record_type
@@ -40,7 +41,7 @@ namespace Class_biz_milestones
             // END_OF_CYCLE_MILESTONE
             new reminder_control_record_type {num_reminders = 0} ,
             // SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE
-            new reminder_control_record_type {num_reminders = 0}
+            new reminder_control_record_type {num_reminders = 6, relative_day_num_array = new uint[] {1, 3, 7, 14, 30, 90}}
           };
     } // end Class_biz_milestones
 
@@ -106,6 +107,9 @@ namespace Class_biz_milestones
                                 biz_emsof_requests.ArchiveMatured();
                                 biz_services.MarkProfilesStale();
                                 break;
+                            case milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE:
+                                master_id_q = new Queue();
+                                break;
                         }
                         uint master_id_q_count = (uint)(master_id_q.Count);
                         for (i = 1; i <= master_id_q_count; i ++ )
@@ -124,13 +128,28 @@ namespace Class_biz_milestones
                             relative_day_num = Class_biz_milestones_Static.REMINDER_CONTROL_TABLE[(int)(milestone) - 1].relative_day_num_array[i];
                             if (today == deadline.AddDays( -relative_day_num).Date)
                             {
+                              if (milestone == milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE)
+                                {
+                                var service_id = k.EMPTY;
+                                var service_id_q = biz_services.SusceptibleTo(milestone);
+                                uint service_id_q_count = (uint)(service_id_q.Count);
+                                for (j = 1; j <= service_id_q_count; j ++ )
+                                  {
+                                    service_id = service_id_q.Dequeue().ToString();
+                                    biz_accounts.Remind(milestone, relative_day_num, deadline, service_id);
+                                    be_handled = true;
+                                  }
+                                }
+                              else
+                                {
                                 master_id_q = biz_emsof_requests.SusceptibleTo(milestone);
                                 uint master_id_q_count = (uint)(master_id_q.Count);
                                 for (j = 1; j <= master_id_q_count; j ++ )
-                                {
+                                  {
                                     master_id = master_id_q.Dequeue().ToString();
                                     biz_accounts.Remind(milestone, relative_day_num, deadline, biz_emsof_requests.ServiceIdOfMasterId(master_id));
                                     be_handled = true;
+                                  }
                                 }
                             }
                             i = i + 1;
