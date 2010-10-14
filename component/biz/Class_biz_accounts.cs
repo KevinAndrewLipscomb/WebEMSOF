@@ -374,27 +374,44 @@ namespace Class_biz_accounts
 
         public void Remind(milestone_type milestone, uint num_days_left, DateTime deadline_date, string service_id)
         {
-            string service_email_address;
-            string service_name;
-            string task_description = k.EMPTY;
-            service_email_address = EmailAddressByKindId("service", service_id);
-            service_name = biz_services.NameOf(service_id);
-            switch(milestone)
-            {
-                case Class_biz_milestones.milestone_type.COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE:
-                    task_description = "finalize your EMSOF request and submit it to your county EMSOF coordinator";
-                    break;
-                case Class_biz_milestones.milestone_type.SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE:
-                    task_description = "purchase all the items in your EMSOF request(s)";
-                    break;
-                case Class_biz_milestones.milestone_type.SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE:
-                    task_description = "finish submitting invoices for items in your EMSOF request(s) to the regional EMS council";
-                    break;
-                case Class_biz_milestones.milestone_type.SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE:
-                    task_description = "finish submitting proof of payment for items in your EMSOF request(s) to the regional EMS council";
-                    break;
-            }
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], service_email_address, "Reminder of approaching deadline", "This is an automated reminder from WebEMSOF." + k.NEW_LINE + k.NEW_LINE + "You have " + num_days_left.ToString() + " days to " + task_description + ".  The deadline is " + deadline_date.ToString("HH:mm:ss dddd, MMMM d, yyyy") + k.PERIOD + k.NEW_LINE + k.NEW_LINE + "You can review your EMSOF requests by visiting:" + k.NEW_LINE + k.NEW_LINE + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE + k.NEW_LINE + "-- " + ConfigurationManager.AppSettings["application_name"]);
+            var task_description = k.EMPTY;
+            var service_email_address = EmailAddressByKindId("service", service_id);
+            var service_name = biz_services.NameOf(service_id);
+            if (milestone == milestone_type.COUNTY_DICTATED_APPROPRIATION_DEADLINE_MILESTONE)
+              {
+              task_description = "finalize your EMSOF request and submit it to your county EMSOF coordinator";
+              }
+            else if (milestone == milestone_type.SERVICE_PURCHASE_COMPLETION_DEADLINE_MILESTONE)
+              {
+              task_description = "purchase all the items in your EMSOF request(s)";
+              }
+            else if (milestone == milestone_type.SERVICE_INVOICE_SUBMISSION_DEADLINE_MILESTONE)
+              {
+              task_description = "finish submitting invoices for items in your EMSOF request(s) to the regional EMS council";
+              }
+            else if (milestone == milestone_type.SERVICE_CANCELED_CHECK_SUBMISSION_DEADLINE_MILESTONE)
+              {
+              task_description = "finish submitting proof of payment for items in your EMSOF request(s) to the regional EMS council";
+              }
+            else if (milestone == milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE)
+              {
+              task_description = "use WebEMSOF to submit your Annual Survey to the regional EMS council";
+              }
+            k.SmtpMailSend
+              (
+              ConfigurationManager.AppSettings["sender_email_address"],
+              service_email_address,
+              "Reminder of approaching deadline",
+              "This is an automated reminder from WebEMSOF." + k.NEW_LINE
+              + k.NEW_LINE
+              + "You have " + num_days_left.ToString() + " days to " + task_description + ".  The deadline is " + deadline_date.ToString("HH:mm:ss dddd, MMMM d, yyyy") + k.PERIOD + k.NEW_LINE
+              + k.NEW_LINE
+              + "You can access WebEMSOF by visiting:" + k.NEW_LINE
+              + k.NEW_LINE
+              + "   http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"] + k.NEW_LINE
+              + k.NEW_LINE
+              + "-- " + ConfigurationManager.AppSettings["application_name"]
+              );
         }
 
         public void SetTemporaryPassword(string user_kind, string user_id, string encoded_password)

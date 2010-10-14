@@ -1,11 +1,13 @@
-using MySql.Data.MySqlClient;
-using kix;
-using System;
-
-using System.Web.UI.WebControls;
+using Class_biz_milestones;
 using Class_biz_notifications;
 using Class_db;
 using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections;
+using System.Web.UI.WebControls;
+
 namespace Class_db_services
 {
     public class TClass_db_services: TClass_db
@@ -844,6 +846,22 @@ namespace Class_db_services
             Open();
             new MySqlCommand(db_trail.Saved("insert service" + " set affiliate_num = NULLIF('" + affiliate_num + "','')" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause), connection).ExecuteNonQuery();
             Close();
+          }
+
+        internal System.Collections.Queue SusceptibleTo(milestone_type milestone)
+          {
+          var id_q = new Queue();
+          if (milestone == milestone_type.SERVICE_ANNUAL_SURVEY_SUBMISSION_DEADLINE)
+            {
+            Open();
+            var dr = new MySqlCommand("select id from service where not be_valid_profile", connection).ExecuteReader();
+            while (dr.Read())
+              {
+              id_q.Enqueue(dr["id"]);
+              }
+            Close();
+            }
+          return id_q;
           }
 
     } // end TClass_db_services

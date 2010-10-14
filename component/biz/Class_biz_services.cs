@@ -1,9 +1,10 @@
-using System;
-
-using System.Web;
+using Class_biz_milestones;
 using Class_db_appropriations;
 using Class_db_services;
-using Class_biz_accounts;
+using System;
+using System.Collections;
+using System.Web;
+
 namespace Class_biz_services
 {
     public class TClass_biz_services
@@ -590,6 +591,11 @@ namespace Class_biz_services
             primary_response_area
             );
           db_appropriations.ApplyToExisting(affiliate_num, be_distressed);
+          }
+
+        internal Queue SusceptibleTo(milestone_type milestone)
+          {
+          return db_services.SusceptibleTo(milestone);
           }
 
     } // end TClass_biz_services
