@@ -23,8 +23,11 @@
 					  </tr>
 					  <tr>
 						<td>
-<asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
-  <ContentTemplate>
+<!--
+--
+-- NOTE:  UserControl_attachment_explorer will not work inside an UpdatePanel.
+--
+-->
 		  <table cellspacing="0" cellpadding="10" border="0">
 			  <tr>
 				<td valign="top"><p align="right">Equipment category:</p></td>
@@ -162,8 +165,6 @@
 			  <td></td>
 			</tr>
 		  </table>
-  </ContentTemplate>
-</asp:UpdatePanel>
 						</td>
 					  </tr>
 				  </table></td>
