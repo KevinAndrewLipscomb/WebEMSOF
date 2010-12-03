@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<appSettings>
-  <add key="db_connection_string" value="Server=~;Database=emsidb_;Uid=~;Pwd=~;Encrypt=true;Treat Tiny As Boolean=false;Use Compression=true;Respect Binary Flags=false;Default Command Timeout=300;" />
-  <add key="sysadmin_encoded_password" value="~" />
-</appSettings>

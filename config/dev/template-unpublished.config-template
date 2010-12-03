@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<appSettings>
+  <add key="db_connection_string" value="Server=localhost;Database=emsidb_d;Uid=ki-webemsof-d;Pwd=~ki-webemsof-d-password~;Treat Tiny As Boolean=false;Respect Binary Flags=false;Default Command Timeout=300" />
+  <add key="sysadmin_encoded_password" value="~" />
+</appSettings>

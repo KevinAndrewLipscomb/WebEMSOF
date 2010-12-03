@@ -1,0 +1,7 @@
+grant select
+ , insert
+ , update
+ , delete
+ , create
+  on emsidb_x.*
+  to 'ki-webemsof-x'@'localhost' identified by '~ki-webemsof-x-password~'
