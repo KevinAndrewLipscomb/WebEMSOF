@@ -260,7 +260,7 @@ namespace full_request_review_approve
 
         protected void Button_force_open_Click(object sender, System.EventArgs e)
         {
-            p.biz_emsof_requests.ForceOpen(p.request_id);
+            p.biz_emsof_requests.ForceOpen(p.request_id,p.status);
             BackTrack();
         }
 
