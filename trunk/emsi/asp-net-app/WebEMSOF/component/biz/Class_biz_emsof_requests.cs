@@ -435,11 +435,15 @@ namespace Class_biz_emsof_requests
             db_emsof_requests.ForceClosed(master_id);
         }
 
-        public void ForceOpen(string master_id)
-        {
-            db_emsof_requests.ForceOpen(master_id);
-            biz_accounts.IssueForcedOpenNotice(ServiceIdOfMasterId(master_id), SponsorRegionNameOf(master_id), CountyCodeOfMasterId(master_id));
-        }
+        public void ForceOpen
+          (
+          string master_id,
+          status_type status
+          )
+          {
+          db_emsof_requests.ForceOpen(master_id,(new ArrayList() {status_type.NEEDS_PA_DOH_EMSO_APPROVAL, status_type.NEEDS_INVOICE_COLLECTION, status_type.NEEDS_CANCELED_CHECK_COLLECTION, status_type.NEEDS_REIMBURSEMENT_ISSUANCE, status_type.REJECTED, status_type.FAILED_DEADLINE}).Contains(status));
+          biz_accounts.IssueForcedOpenNotice(ServiceIdOfMasterId(master_id), SponsorRegionNameOf(master_id), CountyCodeOfMasterId(master_id));
+          }
 
         public string FyDesignatorOf(object e_item)
         {

@@ -723,10 +723,14 @@ namespace Class_db_emsof_requests
             this.Close();
         }
 
-        public void ForceOpen(string master_id)
+        public void ForceOpen
+          (
+          string master_id,
+          bool be_reopened_after_going_to_state
+          )
         {
             this.Open();
-            new MySqlCommand(db_trail.Saved("START TRANSACTION;" + " update emsof_request_master" + " set status_code = 2" + " , be_deadline_exempt = TRUE" + " , be_reopened_after_going_to_state = TRUE" + " where id = " + master_id + ";" + " update emsof_request_detail" + " set status_code = 1" + " , invoice_designator = \"\"" + " , actual_quantity = 0" + " , actual_subtotal_cost = 0" + " , actual_emsof_ante = 0" + " where master_id = " + master_id + ";" + " delete from emsof_purchase_payment where master_id = " + master_id + ";" + " COMMIT"), this.connection).ExecuteNonQuery();
+            new MySqlCommand(db_trail.Saved("START TRANSACTION;" + " update emsof_request_master" + " set status_code = 2" + " , be_deadline_exempt = TRUE" + " , be_reopened_after_going_to_state = (" + be_reopened_after_going_to_state.ToString() + " or be_reopened_after_going_to_state) where id = " + master_id + ";" + " update emsof_request_detail" + " set status_code = 1" + " , invoice_designator = \"\"" + " , actual_quantity = 0" + " , actual_subtotal_cost = 0" + " , actual_emsof_ante = 0" + " where master_id = " + master_id + ";" + " delete from emsof_purchase_payment where master_id = " + master_id + ";" + " COMMIT"), this.connection).ExecuteNonQuery();
             this.Close();
         }
 
