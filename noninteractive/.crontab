@@ -2,6 +2,6 @@
 # $Id$
 #
 #mmhh DD MM d (mm=minute, hh=hour, DD=DayOfMonth, MM=MonthNum, d=DayOfWeekWhereZeroIsSunday)
-40 03  *  * * wget --output-document=/dev/null --no-check-certificate https://sslws038.alentus.com/frompaper2web/WebEMSOF/noninteractive/daily_tasks.aspx
-00 00  *  * * wget --output-document=/dev/null --no-check-certificate https://sslws038.alentus.com/frompaper2web/WebEMSOF/noninteractive/milestone_sweep.aspx
-00 01  1  6 * wget --output-document=/dev/null --no-check-certificate https://sslws038.alentus.com/frompaper2web/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx
+40 03  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/daily_tasks.aspx
+00 00  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/milestone_sweep.aspx
+00 01  1  6 * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx

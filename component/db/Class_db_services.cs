@@ -212,6 +212,14 @@ namespace Class_db_services
           return email_target.TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
           }
 
+        internal string EmsofCoordinatorNameOf(string id)
+          {
+          Open();
+          var emsof_coordinator_name_of = new MySqlCommand("select emsof_contact_name from service where id = '" + id + "'",connection).ExecuteScalar().ToString();
+          Close();
+          return emsof_coordinator_name_of;
+          }
+
         public bool Get
           (
           string affiliate_num,
