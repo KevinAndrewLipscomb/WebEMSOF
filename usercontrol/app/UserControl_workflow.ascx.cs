@@ -252,7 +252,13 @@ namespace UserControl_workflow
         {
             public bool be_loaded;
             public TClass_biz_emsof_requests biz_emsof_requests;
-        } // end p_type
+        }
+
+        protected void LinkButton_transmittal_adjustments_Click(object sender, EventArgs e)
+          {
+          SessionSet("status_of_interest", Class_biz_emsof_requests.status_type.NEEDS_SENT_TO_PA_DOH_EMSO);
+          DropCrumbAndTransferTo("emsof_request_status_filter.aspx");
+          }
 
     } // end TWebUserControl_workflow
 
