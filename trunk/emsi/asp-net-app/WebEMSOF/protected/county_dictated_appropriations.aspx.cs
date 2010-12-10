@@ -287,7 +287,7 @@ namespace county_dictated_appropriations
                 // By default, do not display the Leftover / Shortage value.  But save it off just in case.
                 leftover_or_shortage = decimal.Parse(k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfLeftoverOrShortage())].Text, k.safe_hint_type.REAL_NUM_INCLUDING_NEGATIVE));
                 e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfLeftoverOrShortage())].Text = k.EMPTY;
-                if (Convert.ToInt16(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusCode())].Text) > 2)
+                if (Convert.ToInt16(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusCode())].Text) > 1)
                 {
                     ((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusDescription())].Controls[0]) as LinkButton).Enabled = p.be_county_user;
                     ((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusDescription())].Controls[0]) as LinkButton).ForeColor = Color.Blue;
