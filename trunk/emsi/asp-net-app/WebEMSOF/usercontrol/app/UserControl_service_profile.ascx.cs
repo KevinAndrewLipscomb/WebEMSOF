@@ -1228,6 +1228,14 @@ namespace UserControl_service_profile
           CustomValidator_ops_contact.Enabled = be_all_tabs_visit_required;
           CustomValidator_physical_address.Enabled = be_all_tabs_visit_required;
           CustomValidator_wrap_up.Enabled = be_all_tabs_visit_required;
+          if (!be_all_tabs_visit_required)
+            {
+            TabContainer_control.ActiveTabChanged -= TabContainer_control_ActiveTabChanged;
+            }
+          else
+            {
+            TabContainer_control.ActiveTabChanged += TabContainer_control_ActiveTabChanged;
+            }
           //
           }
 
