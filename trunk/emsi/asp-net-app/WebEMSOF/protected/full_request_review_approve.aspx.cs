@@ -3,6 +3,7 @@ using Class_biz_appropriations;
 using Class_biz_emsof_request_return_comments;
 using Class_biz_emsof_requests;
 using Class_biz_equipment;
+using Class_biz_services;
 using Class_biz_user;
 using kix;
 using System;
@@ -73,6 +74,7 @@ namespace full_request_review_approve
                 p.biz_emsof_request_return_comments = new TClass_biz_emsof_request_return_comments();
                 p.biz_emsof_requests = new TClass_biz_emsof_requests();
                 p.biz_equipment = new TClass_biz_equipment();
+                p.biz_services = new TClass_biz_services();
                 p.biz_user = new TClass_biz_user();
                 // Initialize class private data members.
                 p.status = p.biz_emsof_requests.StatusOf(Session["e_item"]);
@@ -154,7 +156,7 @@ namespace full_request_review_approve
                     Label_unused_amount.Text = (p.parent_appropriation_amount - actual_value).ToString("C");
                 }
                 // Manage QuickMessage block.
-                Literal_emsof_contact_name.Text = p.biz_emsof_requests.ServiceNameOf(Session["e_item"]);
+                Literal_emsof_contact_name.Text = p.biz_emsof_requests.ServiceNameOf(Session["e_item"]) + " EMSOF Coordinator " + p.biz_services.EmsofCoordinatorNameOf(p.biz_emsof_requests.ServiceIdOf(Session["e_item"]));
                 Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
                 Label_distribution_list.Text = p.biz_emsof_requests.PasswordResetEmailAddressOf(Session["e_item"]);
                 Label_sponsor_county_email_address.Text = p.biz_emsof_requests.SponsorCountyEmailAddressOf(Session["e_item"]);
@@ -275,6 +277,13 @@ namespace full_request_review_approve
         {
             DropCrumbAndTransferTo("add_proof_of_payment.aspx");
         }
+
+        protected void LinkButton_profile_Click(object sender, System.EventArgs e)
+          {
+          SessionSet("affiliate_num",p.biz_emsof_requests.AffiliateNumOf(Session["e_item"]));
+          SessionSet("mode:profile-rendition","create-refresh-edit");
+          DropCrumbAndTransferTo("responding_services_detail.aspx");
+          }
 
         private void DataGrid_items_UpdateCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
           {
@@ -425,6 +434,7 @@ namespace full_request_review_approve
             public TClass_biz_emsof_request_return_comments biz_emsof_request_return_comments;
             public TClass_biz_emsof_requests biz_emsof_requests;
             public TClass_biz_equipment biz_equipment;
+            public TClass_biz_services biz_services;
             public TClass_biz_user biz_user;
             public bool display_actuals;
             public bool modify_actuals;

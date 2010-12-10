@@ -13,7 +13,10 @@
   <body bgcolor="white">
 	<form runat="server">
 	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
-	  <h3><asp:label id="Label_fiscal_year_designator" runat="server"></asp:label>&nbsp;request from <asp:label id="Label_service_name" runat="server"></asp:label>&nbsp;(# <asp:label id="Label_affiliate_num" runat="server"></asp:label>)</h3>
+	  <h3>
+      <asp:label id="Label_fiscal_year_designator" runat="server"></asp:label>&nbsp;request from <asp:label id="Label_service_name" runat="server"></asp:label>&nbsp;(# <asp:label id="Label_affiliate_num" runat="server"></asp:label>)&nbsp; 
+      <asp:LinkButton ID="LinkButton_profile" runat="server" CausesValidation="False" onclick="LinkButton_profile_Click">[Annual survey / Profile]</asp:LinkButton>
+    </h3>
 	  <p>
 		<table bordercolor="#98fb98" cellspacing="0" cellpadding="5" border="1" id="Table_disposition_sentinel" runat="server">
 			<tr>

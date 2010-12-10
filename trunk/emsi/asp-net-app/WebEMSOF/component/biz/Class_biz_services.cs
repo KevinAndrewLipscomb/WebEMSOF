@@ -106,6 +106,11 @@ namespace Class_biz_services
           return EmailTargetForCounty(county_id, false, false);
           }
 
+        internal string EmsofCoordinatorNameOf(string id)
+          {
+          return db_services.EmsofCoordinatorNameOf(id);
+          }
+
         public bool Get
           (
           string affiliate_num,

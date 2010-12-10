@@ -49,6 +49,15 @@ namespace full_request_review_approve {
         protected global::System.Web.UI.WebControls.Label Label_affiliate_num;
         
         /// <summary>
+        /// LinkButton_profile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton LinkButton_profile;
+        
+        /// <summary>
         /// Table_disposition_sentinel control.
         /// </summary>
         /// <remarks>
