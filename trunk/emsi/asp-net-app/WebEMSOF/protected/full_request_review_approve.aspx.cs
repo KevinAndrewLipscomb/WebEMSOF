@@ -235,6 +235,7 @@ namespace full_request_review_approve
             if (CheckBox_special_promotion.Checked)
             {
                 p.biz_emsof_requests.MarkDone(Session["e_item"], Session["account_descriptor"].ToString());
+                Session.Remove("e_item");
                 BackTrack();
             }
         }
@@ -244,6 +245,7 @@ namespace full_request_review_approve
             if (CheckBox_mark_failed.Checked)
             {
                 p.biz_emsof_requests.MarkFailed(Session["e_item"], Session["account_descriptor"].ToString());
+                Session.Remove("e_item");
                 BackTrack();
             }
         }
@@ -251,18 +253,21 @@ namespace full_request_review_approve
         protected void Button_force_close_Click(object sender, System.EventArgs e)
         {
             p.biz_emsof_requests.ForceClosed(p.request_id);
+            Session.Remove("e_item");
             BackTrack();
         }
 
         protected void Button_back_step_Click(object sender, System.EventArgs e)
         {
             p.biz_emsof_requests.Regress(p.request_id);
+            Session.Remove("e_item");
             BackTrack();
         }
 
         protected void Button_force_open_Click(object sender, System.EventArgs e)
         {
             p.biz_emsof_requests.ForceOpen(p.request_id,p.status);
+            Session.Remove("e_item");
             BackTrack();
         }
 
@@ -350,6 +355,7 @@ namespace full_request_review_approve
             if (CheckBox_mark_done.Checked)
               {
               p.biz_emsof_requests.MarkDone(Session["e_item"], Session["account_descriptor"].ToString());
+              Session.Remove("e_item");
               BackTrack();
               }
             }
@@ -368,6 +374,7 @@ namespace full_request_review_approve
                 disapproval_reason = k.Safe(TextArea_disapproval_reason.Value, k.safe_hint_type.PUNCTUATED);
                 p.biz_emsof_requests.Demote(Session["e_item"], Session["account_descriptor"].ToString(), disapproval_reason, k.Safe(Label_sum_of_emsof_antes.Text, k.safe_hint_type.CURRENCY_USA));
                 p.biz_emsof_request_return_comments.Log(p.biz_emsof_requests.IdOf(Session["e_item"]), Session["account_descriptor"].ToString(), disapproval_reason);
+                Session.Remove("e_item");
                 BackTrack();
             }
         }
@@ -377,6 +384,7 @@ namespace full_request_review_approve
             if (CheckBox_approve.Checked)
             {
                 p.biz_emsof_requests.Approve(Session["e_item"], Session["account_descriptor"].ToString());
+                Session.Remove("e_item");
                 BackTrack();
             }
         }
