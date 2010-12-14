@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UserControl_analyses_binder {
+namespace UserControl_fy_allocations_reimbursements_returns {
     
     
-    public partial class TWebUserControl_analyses_binder {
+    public partial class TWebUserControl_fy_allocations_reimbursements_returns {
         
         /// <summary>
         /// UpdatePanel_control control.
@@ -22,57 +22,48 @@ namespace UserControl_analyses_binder {
         protected global::System.Web.UI.UpdatePanel UpdatePanel_control;
         
         /// <summary>
-        /// TabContainer_control control.
+        /// DropDownList_cycle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabContainer TabContainer_control;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList_cycle;
         
         /// <summary>
-        /// TabPanel_allocations_reimbursements_returns control.
+        /// Literal_sum_of_allocations control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_allocations_reimbursements_returns;
+        protected global::System.Web.UI.WebControls.Literal Literal_sum_of_allocations;
         
         /// <summary>
-        /// TabPanel_equipment_procurement control.
+        /// Literal_sum_of_reimbursements control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_equipment_procurement;
+        protected global::System.Web.UI.WebControls.Literal Literal_sum_of_reimbursements;
         
         /// <summary>
-        /// TabPanel_values_to_services control.
+        /// Literal_sum_of_returns control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_values_to_services;
+        protected global::System.Web.UI.WebControls.Literal Literal_sum_of_returns;
         
         /// <summary>
-        /// TabPanel_values_to_region control.
+        /// DataGrid_control control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_values_to_region;
-        
-        /// <summary>
-        /// PlaceHolder_content control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_content;
+        protected global::System.Web.UI.WebControls.DataGrid DataGrid_control;
     }
 }

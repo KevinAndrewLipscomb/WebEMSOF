@@ -469,6 +469,13 @@
     <Compile Include="usercontrol\app\UserControl_financial_snapshot.ascx.designer.cs">
       <DependentUpon>UserControl_financial_snapshot.ascx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrol\app\UserControl_fy_allocations_reimbursements_returns.ascx.cs">
+      <DependentUpon>UserControl_fy_allocations_reimbursements_returns.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_fy_allocations_reimbursements_returns.ascx.designer.cs">
+      <DependentUpon>UserControl_fy_allocations_reimbursements_returns.ascx</DependentUpon>
+    </Compile>
     <Compile Include="usercontrol\app\UserControl_match_level.ascx.cs">
       <DependentUpon>UserControl_match_level.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -718,6 +725,7 @@
     <Content Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_equipment_procurement_overview.ascx" />
     <Content Include="usercontrol\app\UserControl_financial_snapshot.ascx" />
+    <Content Include="usercontrol\app\UserControl_fy_allocations_reimbursements_returns.ascx" />
     <Content Include="usercontrol\app\UserControl_match_level.ascx" />
     <Content Include="usercontrol\app\UserControl_new_service.ascx" />
     <Content Include="usercontrol\app\UserControl_outcomes.ascx" />

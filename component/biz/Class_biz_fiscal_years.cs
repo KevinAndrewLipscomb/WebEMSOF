@@ -19,6 +19,18 @@ namespace Class_biz_fiscal_years
             new_designator = "FY" + this_year_string.Substring(this_year_string.Length - 2) + next_year_string.Substring(next_year_string.Length - 2);
 
         }
+
+        internal void BindAllocationsReimbursementsReturns
+          (
+          string id,
+          string sort_order,
+          bool be_order_ascending,
+          object target
+          )
+          {
+          db_fiscal_years.BindAllocationsReimbursementsReturns(id,sort_order,be_order_ascending,target);
+          }
+
         public void BindListControl(object target)
         {
             db_fiscal_years.BindListControl(target);
