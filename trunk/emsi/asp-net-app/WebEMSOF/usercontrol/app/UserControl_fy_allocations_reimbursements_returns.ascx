@@ -49,7 +49,7 @@
                 <asp:DataGrid id="DataGrid_control" runat="server" gridlines="Horizontal" cellpadding="10" autogeneratecolumns="False" allowsorting="True" emptydatatext="No data available">
                   <Columns>
                     <asp:ButtonColumn text="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Detail&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" commandname="Select"></asp:ButtonColumn>
-                    <asp:BoundColumn datafield="master_id"></asp:BoundColumn>
+                    <asp:BoundColumn datafield="master_id" Visible="False"></asp:BoundColumn>
                     <asp:BoundColumn datafield="service_name" headertext="Service" sortexpression="service_name%,county_name,master_id"></asp:BoundColumn>
                     <asp:BoundColumn datafield="county_name" headertext="County" sortexpression="county_name%,service_name,master_id"></asp:BoundColumn>
                     <asp:BoundColumn datafield="allocation" dataformatstring="{0:C}" sortexpression="allocation%,service_name,county_name,master_id" HeaderText="Allocation">
@@ -65,7 +65,7 @@
                       <ItemStyle horizontalalign="Right"></ItemStyle>
                     </asp:BoundColumn>
                   </Columns>
-                  <HeaderStyle backcolor="WhiteSmoke"></HeaderStyle>
+                  <HeaderStyle backcolor="WhiteSmoke" Font-Bold="True" Font-Italic="False" Font-Overline="False" Font-Strikeout="False" Font-Underline="False"></HeaderStyle>
                 </asp:DataGrid>
               </td>
             </tr>
