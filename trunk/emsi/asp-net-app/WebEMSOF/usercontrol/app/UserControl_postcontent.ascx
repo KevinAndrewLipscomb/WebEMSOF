@@ -65,21 +65,21 @@
 									  <td valign="top">•
 </td>
 									  <td>
-										<small><a href="/frompaper2web/WebEMSOF/resource/funding-priorities-epel.pdf" target="_blank">Funding Priorities and Eligible Provider Equipment List</a></small>
+										<small><a href="/WebEMSOF/resource/funding-priorities-epel.pdf" target="_blank">Funding Priorities and Eligible Provider Equipment List</a></small>
 									  </td>
 									</tr>
 									<tr>
 									  <td valign="top">•
 </td>
 									  <td>
-										<small><a href="/frompaper2web/WebEMSOF/resource/emsi-emsof-allocations-memo.pdf" target="_blank">Regional announcement</a></small>
+										<small><a href="/WebEMSOF/resource/emsi-emsof-allocations-memo.pdf" target="_blank">Regional announcement</a></small>
 									  </td>
 									</tr>
 									<tr>
 									  <td valign="top">•
 </td>
 									  <td>
-										<small><a href="/frompaper2web/WebEMSOF/resource/terms-and-conditions.pdf" target="_blank">Terms and Conditions</a></small>
+										<small><a href="/WebEMSOF/resource/terms-and-conditions.pdf" target="_blank">Terms and Conditions</a></small>
 									  </td>
 									</tr>
 								  </table>

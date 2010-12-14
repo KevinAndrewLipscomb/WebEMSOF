@@ -1,4 +1,5 @@
 using UserControl_equipment_procurement_binder;
+using UserControl_fy_allocations_reimbursements_returns;
 using UserControl_values_to_region;
 using UserControl_values_to_services;
 
@@ -6,9 +7,10 @@ namespace UserControl_analyses_binder
 {
     public class UserControl_analyses_binder_Static
     {
-        public const int TSSI_equipment_procurement_binder = 0;
-        public const int TSSI_VALUES_TO_SERVICES = 1;
-        public const int TSSI_VALUES_TO_REGION = 2;
+        public const int TSSI_ALLOCATIONS_REIMBURSEMENTS_RETURNS = 0;
+        public const int TSSI_EQUIPMENT_PROCUREMENT_BINDER = 1;
+        public const int TSSI_VALUES_TO_SERVICES = 2;
+        public const int TSSI_VALUES_TO_REGION = 3;
     }
 
     public struct p_type
@@ -40,10 +42,13 @@ namespace UserControl_analyses_binder
             {
                 p = (p_type)(Session["UserControl_analyses_binder.p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_PlaceHolder_content"] as string) == "UserControl_analyses_binder");
+                // Dynamic controls must be re-added on each postback.
                 switch(p.tab_index)
                 {
-                    case UserControl_analyses_binder_Static.TSSI_equipment_procurement_binder:
-                        // Dynamic controls must be re-added on each postback.
+                    case UserControl_analyses_binder_Static.TSSI_ALLOCATIONS_REIMBURSEMENTS_RETURNS:
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_fy_allocations_reimbursements_returns)(LoadControl("~/usercontrol/app/UserControl_fy_allocations_reimbursements_returns.ascx"))), "UserControl_fy_allocations_reimbursements_returns", PlaceHolder_content);
+                        break;
+                    case UserControl_analyses_binder_Static.TSSI_EQUIPMENT_PROCUREMENT_BINDER:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_binder)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_binder.ascx"))), "UserControl_equipment_procurement_binder", PlaceHolder_content);
                         break;
                     case UserControl_analyses_binder_Static.TSSI_VALUES_TO_SERVICES:
@@ -57,8 +62,8 @@ namespace UserControl_analyses_binder
             else
             {
                 p.be_loaded = false;
-                p.tab_index = UserControl_analyses_binder_Static.TSSI_equipment_procurement_binder;
-                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_binder)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_binder.ascx"))).Fresh(), "UserControl_equipment_procurement_binder", PlaceHolder_content);
+                p.tab_index = UserControl_analyses_binder_Static.TSSI_ALLOCATIONS_REIMBURSEMENTS_RETURNS;
+                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_fy_allocations_reimbursements_returns)(LoadControl("~/usercontrol/app/UserControl_fy_allocations_reimbursements_returns.ascx"))).Fresh(), "UserControl_fy_allocations_reimbursements_returns", PlaceHolder_content);
             }
 
         }
@@ -69,9 +74,8 @@ namespace UserControl_analyses_binder
         // / </summary>
         private void InitializeComponent()
         {
-            this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
-            this.PreRender += this.TWebUserControl_analyses_binder_PreRender;
-            //this.Load += this.Page_Load;
+            TabContainer_control.ActiveTabChanged += TabContainer_control_ActiveTabChanged;
+            PreRender += TWebUserControl_analyses_binder_PreRender;
         }
 
         private void TWebUserControl_analyses_binder_PreRender(object sender, System.EventArgs e)
@@ -85,10 +89,8 @@ namespace UserControl_analyses_binder
 
         public TWebUserControl_analyses_binder Fresh()
         {
-            TWebUserControl_analyses_binder result;
             Session.Remove("UserControl_analyses_binder.p");
-            result = this;
-            return result;
+            return this;
         }
 
         private void TabContainer_control_ActiveTabChanged(object sender, System.EventArgs e)
@@ -97,7 +99,10 @@ namespace UserControl_analyses_binder
             PlaceHolder_content.Controls.Clear();
             switch(p.tab_index)
             {
-                case UserControl_analyses_binder_Static.TSSI_equipment_procurement_binder:
+                case UserControl_analyses_binder_Static.TSSI_ALLOCATIONS_REIMBURSEMENTS_RETURNS:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_fy_allocations_reimbursements_returns)(LoadControl("~/usercontrol/app/UserControl_fy_allocations_reimbursements_returns.ascx"))).Fresh(), "UserControl_fy_allocations_reimbursements_returns", PlaceHolder_content);
+                    break;
+                case UserControl_analyses_binder_Static.TSSI_EQUIPMENT_PROCUREMENT_BINDER:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_binder)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_binder.ascx"))).Fresh(), "UserControl_equipment_procurement_binder", PlaceHolder_content);
                     break;
                 case UserControl_analyses_binder_Static.TSSI_VALUES_TO_SERVICES:
