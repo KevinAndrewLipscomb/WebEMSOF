@@ -167,6 +167,13 @@
     <Compile Include="noninteractive\report_equipment_procurement_overview.aspx.designer.cs">
       <DependentUpon>report_equipment_procurement_overview.aspx</DependentUpon>
     </Compile>
+    <Compile Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx.cs">
+      <DependentUpon>report_fy_allocations_reimbursements_nonspends.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx.designer.cs">
+      <DependentUpon>report_fy_allocations_reimbursements_nonspends.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="protected\add_proof_of_payment.aspx.cs">
       <DependentUpon>add_proof_of_payment.aspx</DependentUpon>
@@ -658,6 +665,7 @@
     <Content Include="Global.asax" />
     <Content Include="login.aspx" />
     <Content Include="new_password.aspx" />
+    <Content Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx" />
     <Content Include="protected\administer_service_email_address.aspx" />
     <Content Include="protected\county_detail.aspx" />
     <Content Include="protected\new_regional_dictated_appropriation.aspx" />

@@ -151,7 +151,7 @@ namespace UserControl_fy_allocations_reimbursements_returns
         p.be_interactive = !(Session["mode:report"] != null);
         p.be_loaded = false;
         p.be_sort_order_ascending = true;
-        p.sort_order = "service_name%,county_name";
+        p.sort_order = "amount_returned desc,service_name,county_name,master_id";
         p.sum_of_allocations = new k.decimal_nonnegative();
         p.sum_of_reimbursements = new k.decimal_nonnegative();
         p.sum_of_returns = new k.decimal_nonnegative();
@@ -182,22 +182,20 @@ namespace UserControl_fy_allocations_reimbursements_returns
 
     private void DataGrid_control_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
       {
-      LinkButton link_button;
-      e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_ID].Visible = false;
-      if (p.be_interactive)
+      var be_item_signif = new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType);
+      if (p.be_interactive && be_item_signif)
         {
-        if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
-          {
-          link_button = ((e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_SELECT].Controls[0]) as LinkButton);
-          link_button.Text = k.ExpandTildePath(link_button.Text);
-          ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-          //
-          p.sum_of_allocations.val += decimal.Parse(k.Safe(e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_ALLOCATION].Text,k.safe_hint_type.REAL_NUM));
-          p.sum_of_reimbursements.val += decimal.Parse(k.Safe(e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_REIMBURSEMENT].Text,k.safe_hint_type.REAL_NUM));
-          p.sum_of_returns.val += decimal.Parse(k.Safe(e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_RETURN].Text,k.safe_hint_type.REAL_NUM));
-          }
+        var link_button = ((e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_SELECT].Controls[0]) as LinkButton);
+        link_button.Text = k.ExpandTildePath(link_button.Text);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
         }
-      else
+      if (be_item_signif)
+        {
+        p.sum_of_allocations.val += decimal.Parse(k.Safe(e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_ALLOCATION].Text,k.safe_hint_type.REAL_NUM));
+        p.sum_of_reimbursements.val += decimal.Parse(k.Safe(e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_REIMBURSEMENT].Text,k.safe_hint_type.REAL_NUM));
+        p.sum_of_returns.val += decimal.Parse(k.Safe(e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_RETURN].Text,k.safe_hint_type.REAL_NUM));
+        }
+      if (!p.be_interactive)
         {
         e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_SELECT].Visible = false;
         }
