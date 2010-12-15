@@ -941,9 +941,11 @@ namespace Class_db_emsof_requests
 
         public uint StatusCodeOf(object e_item)
         {
-            uint result;
-            result = (uint)(Convert.ToInt16(k.Safe(((e_item) as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_STATUS_CODE].Text, k.safe_hint_type.NUM)));
-            return result;
+            Open();
+            var status_code_of = uint.Parse
+              (new MySqlCommand("select status_code from emsof_request_master where id = '" + k.Safe((e_item as DataGridItem).Cells[Class_db_emsof_requests_Static.TCCI_ID].Text, k.safe_hint_type.NUM) + "'",connection).ExecuteScalar().ToString());
+            Close();
+            return status_code_of;
         }
 
         public decimal SumOfActualCostsOfRequestItems(string request_id)
