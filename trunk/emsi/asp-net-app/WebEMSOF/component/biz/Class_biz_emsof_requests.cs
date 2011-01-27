@@ -677,7 +677,11 @@ namespace Class_biz_emsof_requests
             if (unused_allocation_value > 0)
               {
               decimal additional_service_ante = 0;
-              var allowable_cost_value = decimal.Parse(allowable_cost);
+              var allowable_cost_value = decimal.MaxValue;
+              if (allowable_cost != k.EMPTY)
+                {
+                allowable_cost_value = decimal.Parse(allowable_cost);
+                }
               var emsof_ante_string = k.EMPTY;
               var min_service_ante_string = k.EMPTY;
               var total_cost_string = k.EMPTY;
