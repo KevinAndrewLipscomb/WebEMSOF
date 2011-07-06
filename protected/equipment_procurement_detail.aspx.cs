@@ -53,9 +53,9 @@ namespace equipment_procurement_detail
             base.OnInit(e);
             if (IsPostBack)
             {
-                if ((Session["equipment_procurement_detail.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["equipment_procurement_detail.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace equipment_procurement_detail
 
         private void TWebForm_equipment_procurement_detail_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("equipment_procurement_detail.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void Bind()

@@ -36,9 +36,9 @@ namespace UserControl_equipment_procurement_binder
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_equipment_procurement_binder.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_equipment_procurement_binder.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_equipment_procurement_binder");
                 switch(p.tab_index)
                 {
@@ -62,7 +62,7 @@ namespace UserControl_equipment_procurement_binder
             {
                 p.be_loaded = false;
                 p.tab_index = Units.UserControl_equipment_procurement_binder.TSSI_SNAPSHOT;
-                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_overview)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_overview.ascx"))).Fresh(), "UserControl_equipment_procurement_overview", PlaceHolder_content);
+                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_overview)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_overview.ascx"))),"UserControl_equipment_procurement_overview",PlaceHolder_content,InstanceId());
             }
 
         }
@@ -83,14 +83,14 @@ namespace UserControl_equipment_procurement_binder
             // Indicate to children which content control was active on this pass, so that on subsequent passes a child can detect whether or
             // not it is already loaded in the user's browser.
             SessionSet(PlaceHolder_content.ClientID, p.content_id);
-            SessionSet("UserControl_equipment_procurement_binder.p", p);
+            SessionSet(InstanceId() + ".p", p);
 
         }
 
         public TWebUserControl_equipment_procurement_binder Fresh()
         {
             TWebUserControl_equipment_procurement_binder result;
-            Session.Remove("UserControl_equipment_procurement_binder.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }
@@ -102,10 +102,10 @@ namespace UserControl_equipment_procurement_binder
             switch(p.tab_index)
             {
                 case Units.UserControl_equipment_procurement_binder.TSSI_SNAPSHOT:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_overview)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_overview.ascx"))).Fresh(), "UserControl_equipment_procurement_overview", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_equipment_procurement_overview)(LoadControl("~/usercontrol/app/UserControl_equipment_procurement_overview.ascx"))),"UserControl_equipment_procurement_overview",PlaceHolder_content,InstanceId());
                     break;
                 case Units.UserControl_equipment_procurement_binder.TSSI_SERIAL:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_serial_indicator_equipment_quantities)(LoadControl("~/usercontrol/app/UserControl_serial_indicator_equipment_quantities.ascx"))).Fresh(), "UserControl_serial_indicator_equipment_quantities", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_serial_indicator_equipment_quantities)(LoadControl("~/usercontrol/app/UserControl_serial_indicator_equipment_quantities.ascx"))),"UserControl_serial_indicator_equipment_quantities",PlaceHolder_content,InstanceId());
                     break;
             // TSSI_2:
             // p.content_id := AddIdentifiedControlToPlaceHolder

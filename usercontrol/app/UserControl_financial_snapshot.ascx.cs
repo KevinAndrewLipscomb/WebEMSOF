@@ -122,9 +122,9 @@ namespace UserControl_financial_snapshot
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_financial_snapshot.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_financial_snapshot.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_financial_snapshot");
             }
             else
@@ -150,13 +150,13 @@ namespace UserControl_financial_snapshot
 
         private void TWebUserControl_financial_snapshot_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_financial_snapshot.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_financial_snapshot Fresh()
         {
             TWebUserControl_financial_snapshot result;
-            Session.Remove("UserControl_financial_snapshot.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

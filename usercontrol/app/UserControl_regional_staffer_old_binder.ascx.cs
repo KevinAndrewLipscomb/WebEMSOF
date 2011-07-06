@@ -111,9 +111,9 @@ namespace UserControl_regional_staffer_old_binder
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_regional_staffer_old_binder.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_regional_staffer_old_binder.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_member_binder_PlaceHolder_content"] as string) == "UserControl_regional_staffer_old_binder");
             }
             else
@@ -136,13 +136,13 @@ namespace UserControl_regional_staffer_old_binder
 
         private void TWebUserControl_regional_staffer_old_binder_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_regional_staffer_old_binder.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_regional_staffer_old_binder Fresh()
         {
             TWebUserControl_regional_staffer_old_binder result;
-            Session.Remove("UserControl_regional_staffer_old_binder.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

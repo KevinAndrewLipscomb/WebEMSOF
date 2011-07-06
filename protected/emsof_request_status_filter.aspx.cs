@@ -30,9 +30,9 @@ namespace emsof_request_status_filter
         {
             if (IsPostBack)
             {
-                if ((Session["emsof_request_status_filter.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["emsof_request_status_filter.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -94,7 +94,7 @@ namespace emsof_request_status_filter
 
         private void TWebForm_emsof_request_status_filter_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("emsof_request_status_filter.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void DataGrid_requests_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)

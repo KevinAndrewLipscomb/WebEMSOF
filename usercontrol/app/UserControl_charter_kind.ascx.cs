@@ -170,9 +170,9 @@ namespace UserControl_charter_kind
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_charter_kind.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_charter_kind.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_config_binder_PlaceHolder_content"] as string) == "UserControl_charter_kind");
             }
             else
@@ -196,13 +196,13 @@ namespace UserControl_charter_kind
 
         private void TWebUserControl_charter_kind_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_charter_kind.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_charter_kind Fresh()
         {
             TWebUserControl_charter_kind result;
-            Session.Remove("UserControl_charter_kind.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

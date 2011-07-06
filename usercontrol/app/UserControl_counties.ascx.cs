@@ -142,9 +142,9 @@ namespace UserControl_counties
       // Required for Designer support
       InitializeComponent();
       base.OnInit(e);
-      if (Session["UserControl_counties.p"] != null)
+      if (Session[InstanceId() + ".p"] != null)
         {
-        p = (p_type)(Session["UserControl_counties.p"]);
+        p = (p_type)(Session[InstanceId() + ".p"]);
         p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_counties");
         }
       else
@@ -175,12 +175,12 @@ namespace UserControl_counties
 
     private void TWebUserControl_counties_PreRender(object sender, System.EventArgs e)
       {
-      SessionSet("UserControl_counties.p", p);
+      SessionSet(InstanceId() + ".p", p);
       }
 
     public TWebUserControl_counties Fresh()
       {
-      Session.Remove("UserControl_counties.p");
+      Session.Remove(InstanceId() + ".p");
       return this;
       }
 

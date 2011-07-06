@@ -48,9 +48,9 @@ namespace county_dictated_appropriations
             DateTime make_appropriations_deadline;
             if (IsPostBack)
             {
-                if ((Session["county_dictated_appropriations.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["county_dictated_appropriations.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -170,7 +170,7 @@ namespace county_dictated_appropriations
 
         private void TWebForm_county_dictated_appropriations_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("county_dictated_appropriations.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void DataGrid_service_appropriations_SortCommand(object source, System.Web.UI.WebControls.DataGridSortCommandEventArgs e)

@@ -37,9 +37,9 @@ namespace UserControl_serial_indicator_equipment_quantities
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (IsPostBack && (Session["UserControl_serial_indicator_equipment_quantities.p"] != null) && (Session["UserControl_serial_indicator_equipment_quantities.p"].GetType().Namespace == p.GetType().Namespace))
+            if (IsPostBack && (Session[InstanceId() + ".p"] != null))
             {
-                p = (p_type)(Session["UserControl_serial_indicator_equipment_quantities.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
             }
             else
             {
@@ -61,13 +61,13 @@ namespace UserControl_serial_indicator_equipment_quantities
 
         private void TWebUserControl_serial_indicator_equipment_quantities_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_serial_indicator_equipment_quantities.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_serial_indicator_equipment_quantities Fresh()
         {
             TWebUserControl_serial_indicator_equipment_quantities result;
-            Session.Remove("UserControl_serial_indicator_equipment_quantities.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

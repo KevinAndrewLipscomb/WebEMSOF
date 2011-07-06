@@ -30,9 +30,9 @@ namespace administer_service_email_address
             string email_address;
             if (IsPostBack)
             {
-                if ((Session["administer_service_email_address.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["administer_service_email_address.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -83,7 +83,7 @@ namespace administer_service_email_address
 
         private void TWebForm_administer_service_email_address_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("administer_service_email_address.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void CustomValidator_nominal_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)

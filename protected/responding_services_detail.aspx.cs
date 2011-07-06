@@ -40,12 +40,12 @@ namespace responding_services_detail
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            switch(NatureOfVisit("responding_services_detail.p"))
+            switch(NatureOfVisit(InstanceId() + ".p"))
             {
                 case nature_of_visit_type.VISIT_INITIAL:
                     break;
                 case nature_of_visit_type.VISIT_POSTBACK_STANDARD:
-                    p = (p_type)(Session["responding_services_detail.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                     break;
             }
 
@@ -53,7 +53,7 @@ namespace responding_services_detail
 
         private void TWebForm_responding_services_detail_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("responding_services_detail.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private struct p_type

@@ -36,9 +36,9 @@ namespace all_emsof_requests
         {
             if (IsPostBack)
             {
-                if ((Session["all_emsof_requests.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["all_emsof_requests.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -153,7 +153,7 @@ namespace all_emsof_requests
 
         private void TWebForm_all_emsof_requests_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("all_emsof_requests.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void Bind()

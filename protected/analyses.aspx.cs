@@ -45,9 +45,9 @@ namespace analyses
             base.OnInit(e);
             if (IsPostBack)
             {
-                if ((Session["analyses.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["analyses.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -67,7 +67,7 @@ namespace analyses
 
         private void TWebForm_analyses_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("analyses.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private struct p_type

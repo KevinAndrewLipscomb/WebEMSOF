@@ -36,9 +36,9 @@ namespace create_new_service_appropriation
         {
             if (IsPostBack)
             {
-                if ((Session["create_new_service_appropriation.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["create_new_service_appropriation.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace create_new_service_appropriation
 
         private void TWebForm_create_new_service_appropriation_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("create_new_service_appropriation.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void CustomValidator_amount_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)

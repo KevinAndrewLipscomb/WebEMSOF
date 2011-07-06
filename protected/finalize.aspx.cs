@@ -35,9 +35,9 @@ namespace finalize
             decimal max_reimbursement;
             if (IsPostBack)
             {
-                if ((Session["finalize.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["finalize.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -114,7 +114,7 @@ namespace finalize
 
         private void TWebForm_finalize_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("finalize.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void LinkButton_request_overview_bottom_Click(object sender, System.EventArgs e)

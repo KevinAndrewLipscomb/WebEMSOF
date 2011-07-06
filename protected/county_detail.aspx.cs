@@ -51,7 +51,7 @@ namespace county_detail
       // Required for Designer support
       InitializeComponent();
       base.OnInit(e);
-      var nature_of_visit = NatureOfVisit("county_detail.p");
+      var nature_of_visit = NatureOfVisit(InstanceId() + ".p");
       if (nature_of_visit == nature_of_visit_type.VISIT_INITIAL)
         {
         //
@@ -62,13 +62,13 @@ namespace county_detail
         }
       else if (nature_of_visit == nature_of_visit_type.VISIT_POSTBACK_STANDARD)
         {
-        p = (p_type)(Session["county_detail.p"]);
+        p = (p_type)(Session[InstanceId() + ".p"]);
         }
       }
 
     private void TWebForm_county_detail_PreRender(object sender, System.EventArgs e)
       {
-      SessionSet("county_detail.p", p);
+      SessionSet(InstanceId() + ".p", p);
       }
 
     protected void CustomValidator_email_address_ServerValidate(object source, ServerValidateEventArgs args)

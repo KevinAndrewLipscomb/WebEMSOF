@@ -52,9 +52,9 @@ namespace full_request_review_approve
             DateTime timestamp;
             if (IsPostBack)
             {
-                if ((Session["full_request_review_approve.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["full_request_review_approve.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -357,7 +357,7 @@ namespace full_request_review_approve
 
         private void TWebForm_full_request_review_approve_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("full_request_review_approve.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void Button_disapprove_Click(object sender, System.EventArgs e)

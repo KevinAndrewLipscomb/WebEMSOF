@@ -34,9 +34,9 @@ namespace service_overview
             // make_item_requests_deadline: system.datetime;
             if (IsPostBack)
             {
-                if ((Session["service_overview.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["service_overview.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace service_overview
 
         private void TWebForm_service_overview_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("service_overview.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void DataGrid_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)

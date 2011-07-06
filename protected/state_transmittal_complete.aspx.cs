@@ -34,9 +34,9 @@ namespace state_transmittal_complete
         {
             if (IsPostBack)
             {
-                if ((Session["state_transmittal_complete.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["state_transmittal_complete.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -69,7 +69,7 @@ namespace state_transmittal_complete
 
         private void TWebForm_state_transmittal_complete_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("state_transmittal_complete.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
     } // end TWebForm_state_transmittal_complete

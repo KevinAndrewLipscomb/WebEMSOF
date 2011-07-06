@@ -39,7 +39,7 @@ namespace exception
         protected void Page_Load(object sender, System.EventArgs e)
         {
             System.Exception the_exception;
-            switch(NatureOfVisit("exception.p"))
+            switch(NatureOfVisit(InstanceId() + ".p"))
             {
                 case nature_of_visit_type.VISIT_INITIAL:
                     Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - exception";
@@ -56,7 +56,7 @@ namespace exception
                     }
                     break;
                 case nature_of_visit_type.VISIT_POSTBACK_STANDARD:
-                    p = (p_type)(Session["exception.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                     break;
             }
             Server.ClearError();
@@ -83,7 +83,7 @@ namespace exception
 
         private void TWebForm_exception_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("exception.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
     } // end TWebForm_exception

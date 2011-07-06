@@ -49,9 +49,9 @@ namespace request_item_detail
             string cmdText;
             if (IsPostBack)
             {
-                if ((Session["request_item_detail.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["request_item_detail.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -255,7 +255,7 @@ namespace request_item_detail
         private void TWebForm_request_item_detail_PreRender(object sender, System.EventArgs e)
         {
         ManageDropDownListEquipmentCategoryEnablement();
-        SessionSet("request_item_detail.p", p);
+        SessionSet(InstanceId() + ".p", p);
         }
 
         protected void Button_withdraw_Click(object sender, System.EventArgs e)

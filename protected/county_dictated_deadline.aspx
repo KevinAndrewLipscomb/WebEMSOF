@@ -21,6 +21,7 @@
   <ASP:Label id="Label_current_deadline" runat="server" font-bold="True"></ASP:Label></blockquote>
 <p>Use the calendar to change this setting, or <ASP:LinkButton id="LinkButton_cancel" runat="server" onclick="LinkButton_cancel_Click">click here to cancel</ASP:LinkButton>.</p>
 <blockquote><ASP:Calendar id="Calendar" runat="server" font-size="8pt" backcolor="White" width="200px" daynameformat="FirstTwoLetters" forecolor="Black" height="180px" font-names="Verdana" bordercolor="Gainsboro" cellpadding="4" onselectionchanged="Calendar_SelectionChanged">
+          <DayStyle ForeColor="Blue" />
           <TodayDayStyle forecolor="Black" backcolor="#CCCCCC"></TodayDayStyle>
           <SelectorStyle backcolor="#CCCCCC"></SelectorStyle>
           <NextPrevStyle forecolor="Blue" verticalalign="Bottom"></NextPrevStyle>

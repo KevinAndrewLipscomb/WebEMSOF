@@ -41,9 +41,9 @@ namespace delete_service_appropriation
             string service_name;
             if (IsPostBack)
             {
-                if ((Session["delete_service_appropriation.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["delete_service_appropriation.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -85,7 +85,7 @@ namespace delete_service_appropriation
 
         private void TWebForm_delete_service_appropriation_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("delete_service_appropriation.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void Button_yes_Click(object sender, System.EventArgs e)

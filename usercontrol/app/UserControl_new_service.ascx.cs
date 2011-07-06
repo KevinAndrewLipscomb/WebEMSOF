@@ -109,9 +109,9 @@ namespace UserControl_new_service
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_new_service.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_new_service.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_regional_staffer_new_binder_PlaceHolder_content"] as string) == "UserControl_new_service");
             }
             else
@@ -135,13 +135,13 @@ namespace UserControl_new_service
 
         private void TWebUserControl_new_service_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_new_service.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_new_service Fresh()
         {
             TWebUserControl_new_service result;
-            Session.Remove("UserControl_new_service.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }
