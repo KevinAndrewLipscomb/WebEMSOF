@@ -29,9 +29,9 @@ namespace UserControl_config_binder
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_config_binder.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_config_binder.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_PlaceHolder_content"] as string) == "UserControl_config_binder");
                 if ((Session["UserControl_config_binder_selected_tab"] != null))
                 {
@@ -64,7 +64,7 @@ namespace UserControl_config_binder
             {
                 p.be_loaded = false;
                 p.tab_index = Units.UserControl_config_binder.TSSI_CHARTER_KINDS;
-                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))).Fresh(), "UserControl_charter_kind", PlaceHolder_content);
+                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))),"UserControl_charter_kind",PlaceHolder_content,InstanceId());
             }
 
         }
@@ -76,7 +76,7 @@ namespace UserControl_config_binder
             switch(p.tab_index)
             {
                 case Units.UserControl_config_binder.TSSI_CHARTER_KINDS:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))).Fresh(), "UserControl_charter_kind", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))),"UserControl_charter_kind",PlaceHolder_content,InstanceId());
                     break;
             // TSSI_1:
             // p.content_id := AddIdentifiedControlToPlaceHolder
@@ -111,14 +111,14 @@ namespace UserControl_config_binder
             // Indicate to children which content control was active on this pass, so that on subsequent passes a child can detect whether or
             // not it is already loaded in the user's browser.
             SessionSet(PlaceHolder_content.ClientID, p.content_id);
-            SessionSet("UserControl_config_binder.p", p);
+            SessionSet(InstanceId() + ".p", p);
 
         }
 
         public TWebUserControl_config_binder Fresh()
         {
             TWebUserControl_config_binder result;
-            Session.Remove("UserControl_config_binder.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

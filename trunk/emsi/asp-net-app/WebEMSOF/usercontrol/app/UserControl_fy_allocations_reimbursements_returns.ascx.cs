@@ -139,9 +139,9 @@ namespace UserControl_fy_allocations_reimbursements_returns
       // Required for Designer support
       InitializeComponent();
       base.OnInit(e);
-      if (Session["UserControl_fy_allocations_reimbursements_returns.p"] != null)
+      if (Session[InstanceId() + ".p"] != null)
         {
-        p = (p_type)(Session["UserControl_fy_allocations_reimbursements_returns.p"]);
+        p = (p_type)(Session[InstanceId() + ".p"]);
         p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_fy_allocations_reimbursements_returns");
         }
       else
@@ -171,12 +171,12 @@ namespace UserControl_fy_allocations_reimbursements_returns
 
     private void TWebUserControl_fy_allocations_reimbursements_returns_PreRender(object sender, System.EventArgs e)
       {
-      SessionSet("UserControl_fy_allocations_reimbursements_returns.p", p);
+      SessionSet(InstanceId() + ".p", p);
       }
 
     public TWebUserControl_fy_allocations_reimbursements_returns Fresh()
       {
-      Session.Remove("UserControl_fy_allocations_reimbursements_returns.p");
+      Session.Remove(InstanceId() + ".p");
       return this;
       }
 

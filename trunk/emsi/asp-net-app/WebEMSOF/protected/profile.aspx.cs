@@ -20,9 +20,9 @@ namespace profile
         {
             if (IsPostBack)
             {
-                if ((Session["profile.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["profile.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace profile
 
         private void TWebForm_profile_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("profile.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private struct p_type

@@ -45,9 +45,9 @@ namespace county_overview
             string max_fiscal_year_id_string;
             if (IsPostBack)
             {
-                if ((Session["county_overview.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["county_overview.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -118,7 +118,7 @@ namespace county_overview
 
         private void TWebForm_county_overview_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("county_overview.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void Button_continue_Click(object sender, System.EventArgs e)

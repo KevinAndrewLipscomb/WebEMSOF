@@ -42,9 +42,9 @@ namespace UserControl_regional_staffer_current_binder
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_regional_staffer_current_binder.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_regional_staffer_current_binder.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_PlaceHolder_content"] as string) == "UserControl_regional_staffer_current_binder");
                 if ((Session["UserControl_regional_staffer_current_binder_selected_tab"] != null))
                 {
@@ -78,7 +78,7 @@ namespace UserControl_regional_staffer_current_binder
             {
                 p.be_loaded = false;
                 p.tab_index = UserControl_regional_staffer_current_binder_Static.TSSI_SNAPSHOT;
-                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_financial_snapshot)(LoadControl("~/usercontrol/app/UserControl_financial_snapshot.ascx"))).Fresh(), "UserControl_financial_snapshot", PlaceHolder_content);
+                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_financial_snapshot)(LoadControl("~/usercontrol/app/UserControl_financial_snapshot.ascx"))),"UserControl_financial_snapshot",PlaceHolder_content,InstanceId());
             }
 
         }
@@ -90,22 +90,22 @@ namespace UserControl_regional_staffer_current_binder
             switch(p.tab_index)
             {
                 case UserControl_regional_staffer_current_binder_Static.TSSI_SNAPSHOT:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_financial_snapshot)(LoadControl("~/usercontrol/app/UserControl_financial_snapshot.ascx"))).Fresh(), "UserControl_financial_snapshot", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_financial_snapshot)(LoadControl("~/usercontrol/app/UserControl_financial_snapshot.ascx"))),"UserControl_financial_snapshot",PlaceHolder_content,InstanceId());
                     break;
                 case UserControl_regional_staffer_current_binder_Static.TSSI_WORKFLOW:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_workflow)(LoadControl("~/usercontrol/app/UserControl_workflow.ascx"))).Fresh(), "UserControl_workflow", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_workflow)(LoadControl("~/usercontrol/app/UserControl_workflow.ascx"))),"UserControl_workflow",PlaceHolder_content,InstanceId());
                     break;
                 case UserControl_regional_staffer_current_binder_Static.TSSI_OUTCOMES:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_outcomes)(LoadControl("~/usercontrol/app/UserControl_outcomes.ascx"))).Fresh(), "UserControl_outcomes", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_outcomes)(LoadControl("~/usercontrol/app/UserControl_outcomes.ascx"))),"UserControl_outcomes",PlaceHolder_content,InstanceId());
                     break;
                 case UserControl_regional_staffer_current_binder_Static.TSSI_SERVICES:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))).Fresh(), "UserControl_responding_services", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_responding_services)(LoadControl("~/usercontrol/app/UserControl_responding_services.ascx"))),"UserControl_responding_services",PlaceHolder_content,InstanceId());
                     break;
                 case UserControl_regional_staffer_current_binder_Static.TSSI_COUNTIES:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_counties)(LoadControl("~/usercontrol/app/UserControl_counties.ascx"))).Fresh(), "UserControl_counties", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_counties)(LoadControl("~/usercontrol/app/UserControl_counties.ascx"))),"UserControl_counties",PlaceHolder_content,InstanceId());
                     break;
                 case UserControl_regional_staffer_current_binder_Static.TSSI_ALLOCATIONS:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_region_dictated_appropriations)(LoadControl("~/usercontrol/app/UserControl_region_dictated_appropriations.ascx"))).Fresh(), "UserControl_region_dictated_appropriations", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_region_dictated_appropriations)(LoadControl("~/usercontrol/app/UserControl_region_dictated_appropriations.ascx"))),"UserControl_region_dictated_appropriations",PlaceHolder_content,InstanceId());
                     break;
             }
         }
@@ -126,14 +126,14 @@ namespace UserControl_regional_staffer_current_binder
             // Indicate to children which content control was active on this pass, so that on subsequent passes a child can detect whether or
             // not it is already loaded in the user's browser.
             SessionSet(PlaceHolder_content.ClientID, p.content_id);
-            SessionSet("UserControl_regional_staffer_current_binder.p", p);
+            SessionSet(InstanceId() + ".p", p);
 
         }
 
         public TWebUserControl_regional_staffer_current_binder Fresh()
         {
             TWebUserControl_regional_staffer_current_binder result;
-            Session.Remove("UserControl_regional_staffer_current_binder.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

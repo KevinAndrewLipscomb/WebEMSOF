@@ -115,9 +115,9 @@ namespace UserControl_outcomes
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_outcomes.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_outcomes.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_regional_staffer_current_binder_PlaceHolder_content_PlaceHolder_content"] as string) == "UserControl_outcomes");
             }
             else
@@ -140,13 +140,13 @@ namespace UserControl_outcomes
 
         private void TWebUserControl_outcomes_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_outcomes.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_outcomes Fresh()
         {
             TWebUserControl_outcomes result;
-            Session.Remove("UserControl_outcomes.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

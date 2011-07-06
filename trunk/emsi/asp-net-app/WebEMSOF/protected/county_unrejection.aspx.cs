@@ -43,9 +43,9 @@ namespace county_unrejection
         {
             if (IsPostBack)
             {
-                if ((Session["county_unrejection.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["county_unrejection.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace county_unrejection
 
         private void TWebForm_county_unrejection_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("county_unrejection.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void Datagrid_unrejectable_requests_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)

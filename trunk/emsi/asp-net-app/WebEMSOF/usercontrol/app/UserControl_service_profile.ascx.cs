@@ -702,9 +702,9 @@ namespace UserControl_service_profile
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_service_profile.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_service_profile.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack;
             }
             else
@@ -762,13 +762,13 @@ namespace UserControl_service_profile
 
         private void TWebUserControl_service_profile_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_service_profile.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_service_profile Fresh()
         {
             TWebUserControl_service_profile result;
-            Session.Remove("UserControl_service_profile.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

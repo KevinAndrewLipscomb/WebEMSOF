@@ -47,9 +47,9 @@ namespace charter_kinds
             base.OnInit(e);
             if (IsPostBack)
             {
-                if ((Session["charter_kinds.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["charter_kinds.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -69,7 +69,7 @@ namespace charter_kinds
 
         private void TWebForm_charter_kinds_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("charter_kinds.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
     } // end TWebForm_charter_kinds

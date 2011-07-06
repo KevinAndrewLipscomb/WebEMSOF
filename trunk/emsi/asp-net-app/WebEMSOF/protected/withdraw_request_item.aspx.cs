@@ -28,9 +28,9 @@ namespace withdraw_request_item
         {
             if (IsPostBack)
             {
-                if ((Session["withdraw_request_item.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["withdraw_request_item.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -64,7 +64,7 @@ namespace withdraw_request_item
 
         private void TWebForm_withdraw_request_item_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("withdraw_request_item.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void Button_no_Click(object sender, System.EventArgs e)

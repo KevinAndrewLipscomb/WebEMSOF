@@ -120,9 +120,9 @@ namespace UserControl_values_to_services
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_values_to_services.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_values_to_services.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_values_to_services");
             }
             else
@@ -149,13 +149,13 @@ namespace UserControl_values_to_services
 
         private void TWebUserControl_values_to_services_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("UserControl_values_to_services.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         public TWebUserControl_values_to_services Fresh()
         {
             TWebUserControl_values_to_services result;
-            Session.Remove("UserControl_values_to_services.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }

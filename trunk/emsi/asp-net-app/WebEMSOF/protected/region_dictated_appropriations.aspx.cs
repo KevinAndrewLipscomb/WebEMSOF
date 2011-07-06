@@ -43,9 +43,9 @@ namespace region_dictated_appropriations
             MySqlDataReader dr_appropriation_attribs;
             if (IsPostBack)
             {
-                if ((Session["region_dictated_appropriations.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["region_dictated_appropriations.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -106,7 +106,7 @@ namespace region_dictated_appropriations
 
         private void TWebForm_region_dictated_appropriations_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("region_dictated_appropriations.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void DataGrid_county_appropriations_UpdateCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)

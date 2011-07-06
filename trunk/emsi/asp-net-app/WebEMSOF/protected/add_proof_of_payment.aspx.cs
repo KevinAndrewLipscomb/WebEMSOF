@@ -40,9 +40,9 @@ namespace add_proof_of_payment
         {
             if (IsPostBack)
             {
-                if ((Session["add_proof_of_payment.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["add_proof_of_payment.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace add_proof_of_payment
 
         private void TWebForm_add_proof_of_payment_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("add_proof_of_payment.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
     } // end TWebForm_add_proof_of_payment

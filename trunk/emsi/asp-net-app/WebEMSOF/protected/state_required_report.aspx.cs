@@ -41,9 +41,9 @@ namespace state_required_report
             uint num_active_amendments;
             if (IsPostBack)
             {
-                if ((Session["state_required_report.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["state_required_report.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace state_required_report
 
         private void TWebForm_state_required_report_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("state_required_report.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         private void Bind()

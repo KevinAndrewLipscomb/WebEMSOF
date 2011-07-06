@@ -48,9 +48,9 @@ namespace regional_staffer_fiscal_year_selection
             string max_fiscal_year_id_string;
             if (IsPostBack)
             {
-                if ((Session["regional_staffer_fiscal_year_selection.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["regional_staffer_fiscal_year_selection.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace regional_staffer_fiscal_year_selection
 
         private void TWebForm_regional_staffer_fiscal_year_selection_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("regional_staffer_fiscal_year_selection.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void Button_continue_Click(object sender, System.EventArgs e)

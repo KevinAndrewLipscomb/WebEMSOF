@@ -43,9 +43,9 @@ namespace request_overview
             DateTime make_item_requests_deadline;
             if (IsPostBack)
             {
-                if ((Session["request_overview.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["request_overview.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -172,7 +172,7 @@ namespace request_overview
 
         private void TWebForm_request_overview_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("request_overview.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void LinkButton_finalize_Click(object sender, System.EventArgs e)

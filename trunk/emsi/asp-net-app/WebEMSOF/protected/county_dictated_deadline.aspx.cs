@@ -43,9 +43,9 @@ namespace county_dictated_deadline
         {
             if (IsPostBack)
             {
-                if ((Session["county_dictated_deadline.p"] != null))
+                if ((Session[InstanceId() + ".p"] != null))
                 {
-                    p = (p_type)(Session["county_dictated_deadline.p"]);
+                    p = (p_type)(Session[InstanceId() + ".p"]);
                 }
                 else
                 {
@@ -78,7 +78,7 @@ namespace county_dictated_deadline
 
         private void TWebForm_county_dictated_deadline_PreRender(object sender, System.EventArgs e)
         {
-            SessionSet("county_dictated_deadline.p", p);
+            SessionSet(InstanceId() + ".p", p);
         }
 
         protected void LinkButton_cancel_Click(object sender, System.EventArgs e)

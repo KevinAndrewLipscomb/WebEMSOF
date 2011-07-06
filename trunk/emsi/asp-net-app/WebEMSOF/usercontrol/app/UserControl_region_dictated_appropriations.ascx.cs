@@ -157,9 +157,9 @@ namespace UserControl_region_dictated_appropriations
       // Required for Designer support
       InitializeComponent();
       base.OnInit(e);
-      if (Session["UserControl_region_dictated_appropriations.p"] != null)
+      if (Session[InstanceId() + ".p"] != null)
         {
-        p = (p_type)(Session["UserControl_region_dictated_appropriations.p"]);
+        p = (p_type)(Session[InstanceId() + ".p"]);
         p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_region_dictated_appropriations");
         }
       else
@@ -194,12 +194,12 @@ namespace UserControl_region_dictated_appropriations
 
     private void TWebUserControl_region_dictated_appropriations_PreRender(object sender, System.EventArgs e)
       {
-      SessionSet("UserControl_region_dictated_appropriations.p", p);
+      SessionSet(InstanceId() + ".p", p);
       }
 
     public TWebUserControl_region_dictated_appropriations Fresh()
       {
-      Session.Remove("UserControl_region_dictated_appropriations.p");
+      Session.Remove(InstanceId() + ".p");
       return this;
       }
 

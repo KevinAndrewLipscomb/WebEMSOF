@@ -33,9 +33,9 @@ namespace UserControl_regional_staffer_new_binder
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-            if (Session["UserControl_regional_staffer_new_binder.p"] != null)
+            if (Session[InstanceId() + ".p"] != null)
             {
-                p = (p_type)(Session["UserControl_regional_staffer_new_binder.p"]);
+                p = (p_type)(Session[InstanceId() + ".p"]);
                 p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_PlaceHolder_content"] as string) == "UserControl_regional_staffer_new_binder");
                 if ((Session["UserControl_regional_staffer_new_binder_selected_tab"] != null))
                 {
@@ -64,7 +64,7 @@ namespace UserControl_regional_staffer_new_binder
             {
                 p.be_loaded = false;
                 p.tab_index = Units.UserControl_regional_staffer_new_binder.TSSI_ANNUAL_CYCLE;
-                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_annual_cycle_setup)(LoadControl("~/usercontrol/app/UserControl_annual_cycle_setup.ascx"))).Fresh(), "UserControl_annual_cycle_setup", PlaceHolder_content);
+                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_annual_cycle_setup)(LoadControl("~/usercontrol/app/UserControl_annual_cycle_setup.ascx"))),"UserControl_annual_cycle_setup",PlaceHolder_content,InstanceId());
             }
 
         }
@@ -76,10 +76,10 @@ namespace UserControl_regional_staffer_new_binder
             switch(p.tab_index)
             {
                 case Units.UserControl_regional_staffer_new_binder.TSSI_ANNUAL_CYCLE:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_annual_cycle_setup)(LoadControl("~/usercontrol/app/UserControl_annual_cycle_setup.ascx"))).Fresh(), "UserControl_annual_cycle_setup", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_annual_cycle_setup)(LoadControl("~/usercontrol/app/UserControl_annual_cycle_setup.ascx"))),"UserControl_annual_cycle_setup",PlaceHolder_content,InstanceId());
                     break;
                 case Units.UserControl_regional_staffer_new_binder.TSSI_SERVICE:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_new_service)(LoadControl("~/usercontrol/app/UserControl_new_service.ascx"))).Fresh(), "UserControl_new_service", PlaceHolder_content);
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_new_service)(LoadControl("~/usercontrol/app/UserControl_new_service.ascx"))),"UserControl_new_service",PlaceHolder_content,InstanceId());
                     break;
             // TSSI_2:
             // p.content_id := AddIdentifiedControlToPlaceHolder
@@ -107,14 +107,14 @@ namespace UserControl_regional_staffer_new_binder
             // Indicate to children which content control was active on this pass, so that on subsequent passes a child can detect whether or
             // not it is already loaded in the user's browser.
             SessionSet(PlaceHolder_content.ClientID, p.content_id);
-            SessionSet("UserControl_regional_staffer_new_binder.p", p);
+            SessionSet(InstanceId() + ".p", p);
 
         }
 
         public TWebUserControl_regional_staffer_new_binder Fresh()
         {
             TWebUserControl_regional_staffer_new_binder result;
-            Session.Remove("UserControl_regional_staffer_new_binder.p");
+            Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
         }
