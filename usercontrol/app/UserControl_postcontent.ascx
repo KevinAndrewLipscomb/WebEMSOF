@@ -57,7 +57,7 @@
 									  <td valign="top">•
 </td>
 									  <td>
-										<small><a href="http://www.emsi.org/">EMSI
+										<small><a href="http://www.emsi.org/" target="_blank">EMSI
 </a></small>
 									  </td>
 									</tr>
