@@ -98,7 +98,7 @@ namespace county_dictated_appropriations
                 Title = ConfigurationManager.AppSettings["application_name"] + " - county_dictated_appropriations";
                 p.db.Open();
                 // Set parent appropriation labels.
-                dr_appropriation_attribs = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = " + p.region_dictated_appropriation_id, p.db.connection).ExecuteReader();
+                dr_appropriation_attribs = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = '" + p.region_dictated_appropriation_id + "'", p.db.connection).ExecuteReader();
                 dr_appropriation_attribs.Read();
                 Literal_county_name_2.Text = Literal_county_name.Text;
                 Literal_county_name_3.Text = Literal_county_name.Text;
