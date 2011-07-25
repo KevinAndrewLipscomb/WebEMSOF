@@ -5,8 +5,7 @@
 
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-	<title id="Title" runat="server"></title>
+  <head runat="server">
 	<!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -30,7 +29,7 @@
 <p>
         <ASP:RadioButtonList id="RadioButtonList_appropriation" runat="server"></ASP:RadioButtonList></p>
 <p>
-        <ASP:Button id="Button_continue" runat="server" text="Continue" onclick="Button_continue_Click"></ASP:Button></p></td>
+        <ASP:Button id="Button_continue" runat="server" text="Continue" onclick="Button_continue_Click" Enabled="false"></ASP:Button></p></td>
                     </tr>
                 </table></td>
             </tr>

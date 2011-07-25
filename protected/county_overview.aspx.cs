@@ -61,7 +61,7 @@ namespace county_overview
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - county_overview";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - county_overview";
                 p.db = new TClass_db();
                 p.db.Open();
                 dr = new MySqlCommand("SELECT be_stale_password, password_reset_email_address FROM county_user" + " where id = " + Session["county_user_id"].ToString(), p.db.connection).ExecuteReader();
@@ -84,7 +84,7 @@ namespace county_overview
                     p.db.Close();
                     if (RadioButtonList_appropriation.Items.Count == 0)
                     {
-                        DropCrumbAndTransferTo("no_appropriation.aspx");
+                        Alert(k.alert_cause_type.APPDATA,k.alert_state_type.NORMAL,"noapprop","Sorry, the regional council has not yet made an allocation to you in this cycle.");
                     }
                     else
                     {
@@ -96,6 +96,7 @@ namespace county_overview
                             SessionSet("region_dictated_appropriation_id", RadioButtonList_appropriation.Items[0].Value);
                             DropCrumbAndTransferTo("county_dictated_appropriations.aspx");
                         }
+                        Button_continue.Enabled = true;
                     }
                 }
                 else
