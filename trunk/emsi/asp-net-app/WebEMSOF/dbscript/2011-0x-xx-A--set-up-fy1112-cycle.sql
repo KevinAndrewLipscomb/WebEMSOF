@@ -29,7 +29,7 @@ INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expecta
 ((select id from fiscal_year where designator = 'FY1112'), 'CPAP', 5, 1, 1, 1, 1, 1500.00, 750.00, 900.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'Pulse oximeter', 5, 1, 1, 1, 1, 700.00, 350.00, 420.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'Nitrous oxide delivery system', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
-((select id from fiscal_year where designator = 'FY1112'), 'IV infusion pump', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1000.00),
+((select id from fiscal_year where designator = 'FY1112'), 'IV infusion pump', 5, 1, 1, 0, 0, 2000.00, 1000.00, 1200.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'Intubation, durable', 5, 1, 1, 0, 0, 600.00, 300.00, 360.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'Transtracheal jet insufflators', 5, 1, 1, 0, 0, 200.00, 100.00, 120.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'Splinting/immobilization devices', 3, 1, 1, 1, 1, 500.00, 250.00, 300.00),
@@ -64,9 +64,9 @@ INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expecta
 ((select id from fiscal_year where designator = 'FY1112'), '12 lead EKG transmitter system', 5, 1, 1, 0, 0, 1000.00, 500.00, 600.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'IO drill/injection system', 5, 1, 1, 0, 0, 300.00, 150.00, 180.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'Narcotics security system', 5, 1, 1, 0, 0, 900.00, 450.00, 540.00),
-((select id from fiscal_year where designator = 'FY1112'), 'Refrigerator, mini', 10, 1, 1, 0, 0, 1200.00, 600.00, 480.00),
-((select id from fiscal_year where designator = 'FY1112'), 'Tourniquet, commercial', 5, 1, 1, 1, 1, 25.00, 12.50, 10.00),
-((select id from fiscal_year where designator = 'FY1112'), 'Bariatric equipment', 5, 1, 1, 1, 1, 20000.00, 10000.00, 8000.00),
+((select id from fiscal_year where designator = 'FY1112'), 'Refrigerator, mini', 10, 1, 1, 0, 0, 1200.00, 600.00, 720.00),
+((select id from fiscal_year where designator = 'FY1112'), 'Tourniquet, commercial', 5, 1, 1, 1, 1, 25.00, 12.50, 15.00),
+((select id from fiscal_year where designator = 'FY1112'), 'Bariatric equipment', 5, 1, 1, 1, 1, 20000.00, 10000.00, 12000.00),
 ((select id from fiscal_year where designator = 'FY1112'), 'Other - with attached documentation', NULL, 1, 1, 1, 1, NULL, NULL, NULL);
 
 INSERT ignore INTO `epel_special_rule_map` (epel_code,special_rule_id)
