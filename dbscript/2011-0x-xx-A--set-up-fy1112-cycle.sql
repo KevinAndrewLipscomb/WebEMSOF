@@ -8,16 +8,16 @@ insert fy_calendar (fiscal_year_id,milestone_code,`value`) VALUES
 ((select id from fiscal_year where designator = 'FY1112'),5,'2012-06-30 23:59:59');
 
 insert region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount,service_to_county_submission_deadline,match_level_id) VALUES
-((select max(id) from state_dictated_appropriation),1,101671,'2011-11-15 23:59:59',1),
-((select max(id) from state_dictated_appropriation),2,20388,'2011-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),3,26102,'2011-11-15 23:59:59',1),
-((select max(id) from state_dictated_appropriation),4,38314,'2011-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),5,31954,'2011-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),6,14196,'2011-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),7,25727,'2011-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),8,17604,'2011-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),9,38896,'2011-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),10,55147,'2011-11-15 23:59:59',1);
+((select max(id) from state_dictated_appropriation),1,97699,'2011-11-15 23:59:59',1),
+((select max(id) from state_dictated_appropriation),2,24484,'2011-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),3,24022,'2011-11-15 23:59:59',1),
+((select max(id) from state_dictated_appropriation),4,40928,'2011-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),5,31799,'2011-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),6,16503,'2011-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),7,26933,'2011-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),8,17974,'2011-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),9,36249,'2011-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),10,53409,'2011-11-15 23:59:59',1);
 
 INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expectancy_years,be_eligible_als_amb,be_eligible_als_squad,be_eligible_bls_amb,be_eligible_qrs,allowable_cost,funding_level_nonrural,funding_level_rural) VALUES
 ((select id from fiscal_year where designator = 'FY1112'), 'EKG monitor/defibrillator w/pacer', 5, 1, 1, 0, 0, 12000.00, 6000.00, 7200.00),
