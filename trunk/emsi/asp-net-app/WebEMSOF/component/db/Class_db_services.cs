@@ -134,7 +134,7 @@ namespace Class_db_services
             this.Open();
             ((target) as ListControl).Items.Clear();
             ((target) as ListControl).Items.Add(new ListItem("-- Select --", ""));
-            cmdText = "SELECT id,name FROM service_user JOIN service using (id)";
+            cmdText = "SELECT DISTINCT id,name FROM service_user JOIN service using (id)";
             if (!be_unfiltered)
               {
               cmdText += " left join emsof_extra_service_county_dependency on (emsof_extra_service_county_dependency.service_id=service.id)";
