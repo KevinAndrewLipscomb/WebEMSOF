@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Collections;
 
 using Class_biz_services;
+using System.Web.Security;
 namespace UserControl_responding_services
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.pas
@@ -17,10 +18,11 @@ namespace UserControl_responding_services
           public const int TCI_UPDATE_EMAIL_ADDRESS = 0;
           public const int TCI_PROFILE_TABBED = 1;
           public const int TCI_PROFILE_PRINTABLE = 2;
-          public const int TCI_AFFILIATE_NUM = 3;
-          public const int TCI_SERVICE_NAME = 4;
-          public const int TCI_COUNTY_NAME = 5;
-          public const int TCI_BE_EMSOF_PARTICIPANT = 6;
+          public const int TCI_IMITATE = 3;
+          public const int TCI_AFFILIATE_NUM = 4;
+          public const int TCI_SERVICE_NAME = 5;
+          public const int TCI_COUNTY_NAME = 6;
+          public const int TCI_BE_EMSOF_PARTICIPANT = 7;
           }
 
         private struct p_type
@@ -190,7 +192,8 @@ namespace UserControl_responding_services
         {
             if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
               {
-              SessionSet("affiliate_num", k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM));
+              var affiliate_num = k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM);
+              SessionSet("affiliate_num",affiliate_num);
               if (e.CommandName == "update-email-address")
                 {
                 DropCrumbAndTransferTo("administer_service_email_address.aspx");
@@ -204,6 +207,17 @@ namespace UserControl_responding_services
                 {
                 SessionSet("mode:profile-rendition","printable-report");
                 DropCrumbAndTransferTo("responding_services_detail.aspx");
+                }
+              else if (e.CommandName == "imitate")
+                {
+                var service_name = k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_SERVICE_NAME].Text, k.safe_hint_type.ORG_NAME);
+                var service_user_id = p.biz_services.IdOfAffiliateNum(affiliate_num);
+                SessionSet(name:"imitator_designator",value:HttpContext.Current.User.Identity.Name);
+                SessionSet("target_user_table","service");
+                SessionSet("service_user_id",service_user_id);
+                SessionSet("service_name",service_name);
+                SessionSet("username",service_name);
+                FormsAuthentication.RedirectFromLoginPage("service_" + service_user_id,false);
                 }
               }
         }
@@ -226,6 +240,10 @@ namespace UserControl_responding_services
                     link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Profile (printable)";
+                    ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
+                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_IMITATE].Controls[0]) as LinkButton);
+                    link_button.Text = k.ExpandTildePath(link_button.Text);
+                    link_button.ToolTip = "Imitate";
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
                     p.num_services++;
                     var participation = e.Item.Cells[UserControl_responding_services_Static.TCI_BE_EMSOF_PARTICIPANT].Text;

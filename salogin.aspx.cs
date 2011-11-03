@@ -133,6 +133,10 @@ namespace salogin
             }
         }
 
+        protected void DropDownList_region_SelectedIndexChanged(object sender, EventArgs e)
+          {
+          }
+
     } // end TWebForm_salogin
 
 }

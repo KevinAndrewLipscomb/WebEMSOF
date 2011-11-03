@@ -31,7 +31,7 @@ namespace regional_staffer_overview
         {
             if (!IsPostBack)
             {
-                if ((Session["regional_staffer_name"] == null) || (Session["regional_staffer_user_id"] == null))
+                if ((Session["regional_staffer_name"] == null) || (Session["regional_staffer_user_id"] == null) || Session["imitator_designator"] != null)
                 {
                     Session.Clear();
                     DropCrumbAndTransferTo("~/login.aspx");
