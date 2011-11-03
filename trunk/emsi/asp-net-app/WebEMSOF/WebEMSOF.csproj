@@ -16,6 +16,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -300,13 +301,6 @@
     </Compile>
     <Compile Include="protected\full_request_review_approve.aspx.designer.cs">
       <DependentUpon>full_request_review_approve.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="protected\new_regional_dictated_appropriation.aspx.cs">
-      <DependentUpon>new_regional_dictated_appropriation.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="protected\new_regional_dictated_appropriation.aspx.designer.cs">
-      <DependentUpon>new_regional_dictated_appropriation.aspx</DependentUpon>
     </Compile>
     <Compile Include="protected\profile.aspx.cs">
       <DependentUpon>profile.aspx</DependentUpon>
@@ -668,7 +662,6 @@
     <Content Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx" />
     <Content Include="protected\administer_service_email_address.aspx" />
     <Content Include="protected\county_detail.aspx" />
-    <Content Include="protected\new_regional_dictated_appropriation.aspx" />
     <Content Include="salogin.aspx" />
     <Content Include="serial_indicator_control_chart.aspx" />
     <Content Include="timeout.aspx" />

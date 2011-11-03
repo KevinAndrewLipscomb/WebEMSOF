@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Security;
 
 namespace UserControl_counties
   {
@@ -22,6 +23,7 @@ namespace UserControl_counties
       public const int TCI_EMAIL_ADDRESS = 2;
       public const int TCI_MATCH_LEVEL = 3;
       public const int TCI_SELECT = 4;
+      public const int TCI_IMITATE = 5;
       }
 
     private struct p_type
@@ -188,8 +190,22 @@ namespace UserControl_counties
       {
       if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
         {
-        SessionSet("county_summary",p.biz_counties.Summary(k.Safe(e.Item.Cells[UserControl_counties_Static.TCI_CODE].Text,k.safe_hint_type.NUM)));
-        DropCrumbAndTransferTo("county_detail.aspx");
+        var county_code = k.Safe(e.Item.Cells[UserControl_counties_Static.TCI_CODE].Text,k.safe_hint_type.NUM);
+        if (e.CommandName == "Edit")
+          {
+          SessionSet("county_summary",p.biz_counties.Summary(county_code));
+          DropCrumbAndTransferTo("county_detail.aspx");
+          }
+        else if (e.CommandName == "imitate")
+          {
+          var county_name = k.Safe(e.Item.Cells[UserControl_counties_Static.TCI_NAME].Text, k.safe_hint_type.ORG_NAME);
+          SessionSet(name:"imitator_designator",value:HttpContext.Current.User.Identity.Name);
+          SessionSet("target_user_table","county");
+          SessionSet("county_user_id",county_code);
+          SessionSet("county_name",county_name);
+          SessionSet("username",county_name);
+          FormsAuthentication.RedirectFromLoginPage("county_" + county_code,false);
+          }
         }
       }
 
@@ -202,6 +218,11 @@ namespace UserControl_counties
           {
           link_button = ((e.Item.Cells[UserControl_counties_Static.TCI_SELECT].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
+          link_button.ToolTip = "Edit";
+          ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
+          link_button = ((e.Item.Cells[UserControl_counties_Static.TCI_IMITATE].Controls[0]) as LinkButton);
+          link_button.Text = k.ExpandTildePath(link_button.Text);
+          link_button.ToolTip = "Imitate";
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
           //
           // Remove all cell controls from viewstate except for the one at TCI_CODE.
