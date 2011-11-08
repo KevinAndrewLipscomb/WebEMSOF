@@ -250,16 +250,15 @@ namespace WebEMSOF.component.ss
 	    return true;
     }
 
-    internal void MonitoredClassNumbers
-      (
-      Queue class_num_q,
-      Queue region_code_q,
-      Queue class_end_date_q
-      )
+    internal class ConedOffering
       {
-      class_num_q.Clear();
-      region_code_q.Clear();
-      class_end_date_q.Clear();
+      internal string num = k.EMPTY;
+      internal string region_code = k.EMPTY;
+      internal string end_date = k.EMPTY;
+      }
+    internal ArrayList MonitoredConedOffering()
+      {
+      var monitored_coned_offering = new ArrayList();
       //
       HttpWebResponse dummy_response;
       HttpWebResponse response;
@@ -292,19 +291,16 @@ namespace WebEMSOF.component.ss
         var hnc_region_code = html_document.DocumentNode.SelectNodes("/html/body/font[3]/table/tr/td[3]");
         var hnc_class_end_date = html_document.DocumentNode.SelectNodes("/html/body/font[3]/table/tr/td[8]");
         //
-        foreach (var html_node in hnc_class_number)
+        for (var i = new k.subtype<int>(0,hnc_class_number.Count); i.val < i.LAST; i.val++)
           {
-          class_num_q.Enqueue(html_node.InnerText.Trim());
-          }
-        foreach (var html_node in hnc_region_code)
-          {
-          region_code_q.Enqueue(html_node.InnerText.Trim());
-          }
-        foreach (var html_node in hnc_class_end_date)
-          {
-          class_end_date_q.Enqueue(html_node.InnerText.Trim());
+          var coned_offering = new ConedOffering();
+          coned_offering.num = hnc_class_number[i.val].InnerText.Trim();
+          coned_offering.region_code = hnc_region_code[i.val].InnerText.Trim();
+          coned_offering.end_date = hnc_class_end_date[i.val].InnerText.Trim();
+          monitored_coned_offering.Add(coned_offering);
           }
         }
+      return monitored_coned_offering;
       }
 
     }
