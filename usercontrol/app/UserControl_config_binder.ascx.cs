@@ -1,12 +1,6 @@
-using AjaxControlToolkit;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using UserControl_charter_kind;
+using UserControl_coned_offering;
+
 namespace UserControl_config_binder
 {
     public partial class TWebUserControl_config_binder: ki_web_ui.usercontrol_class
@@ -41,23 +35,11 @@ namespace UserControl_config_binder
                 switch(p.tab_index)
                 {
                     case Units.UserControl_config_binder.TSSI_CHARTER_KINDS:
-                        // Dynamic controls must be re-added on each postback.
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))), "UserControl_charter_kind", PlaceHolder_content);
                         break;
-                // TSSI_1:
-                // p.content_id := AddIdentifiedControlToPlaceHolder
-                // (
-                // TWebUserControl2(LoadControl('~/usercontrol/app/UserControl2.ascx')),
-                // 'UserControl2',
-                // PlaceHolder_content
-                // );
-                // TSSI_2:
-                // p.content_id := AddIdentifiedControlToPlaceHolder
-                // (
-                // TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')),
-                // 'UserControl3',
-                // PlaceHolder_content
-                // );
+                    case Units.UserControl_config_binder.TSSI_CONED_OFFERINGS:
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering)(LoadControl("~/usercontrol/app/UserControl_coned_offering.ascx"))), "UserControl_coned_offering", PlaceHolder_content);
+                        break;
                 }
             }
             else
@@ -78,20 +60,9 @@ namespace UserControl_config_binder
                 case Units.UserControl_config_binder.TSSI_CHARTER_KINDS:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))),"UserControl_charter_kind",PlaceHolder_content,InstanceId());
                     break;
-            // TSSI_1:
-            // p.content_id := AddIdentifiedControlToPlaceHolder
-            // (
-            // TWebUserControl2(LoadControl('~/usercontrol/app/UserControl2.ascx')).Fresh,
-            // 'UserControl2',
-            // PlaceHolder_content
-            // );
-            // TSSI_2:
-            // p.content_id := AddIdentifiedControlToPlaceHolder
-            // (
-            // TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')).Fresh,
-            // 'UserControl3',
-            // PlaceHolder_content
-            // );
+                case Units.UserControl_config_binder.TSSI_CONED_OFFERINGS:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering)(LoadControl("~/usercontrol/app/UserControl_coned_offering.ascx"))),"UserControl_coned_offering",PlaceHolder_content,InstanceId());
+                    break;
             }
         }
 
@@ -142,6 +113,7 @@ namespace UserControl_config_binder.Units
         // ,UserControl_1
         // ,UserControl_2
         public const int TSSI_CHARTER_KINDS = 0;
+        public const int TSSI_CONED_OFFERINGS = 1;
     } // end UserControl_config_binder
 
 }
