@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx?wsdl" docRef="http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx" xmlns:q1="https://tempurl.org/" binding="q1:EMSREGWebServicesSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx" xmlns:q2="https://tempurl.org/" binding="q2:EMSREGWebServicesSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>
