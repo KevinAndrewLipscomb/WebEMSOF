@@ -7,6 +7,7 @@
         <td>
           <cc1:TabContainer id="TabContainer_control" runat="server" autopostback="True" cssclass="ajax__tab_ki">
             <cc1:TabPanel runat="server" headertext="Charter kinds" id="TabPanel_charter_kinds"></cc1:TabPanel>
+            <cc1:TabPanel runat="server" headertext="Coned offerings" id="TabPanel_coned_offerings"></cc1:TabPanel>
           </cc1:TabContainer>
         </td>
       </tr>
