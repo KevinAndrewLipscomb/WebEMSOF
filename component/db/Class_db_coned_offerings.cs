@@ -1,0 +1,461 @@
+// Derived from KiAspdotnetFramework/component/db/Class~db~template~kicrudhelped~items.cs~template
+
+using Class_db;
+using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections;
+using System.Web.UI.WebControls;
+using UserControl_drop_down_date;
+
+namespace Class_db_coned_offerings
+  {
+  public class TClass_db_coned_offerings: TClass_db
+    {
+    private TClass_db_trail db_trail = null;
+
+    public TClass_db_coned_offerings() : base()
+      {
+      db_trail = new TClass_db_trail();
+      }
+
+    public bool Bind(string partial_spec, object target)
+      {
+      var concat_clause = "concat(IFNULL(class_id,'-'),'|',IFNULL(course_id,'-'),'|',IFNULL(class_number,'-'),'|',IFNULL(created_by,'-'),'|',IFNULL(date_created,'-'),'|',IFNULL(last_edited_by,'-'),'|',IFNULL(date_last_edited,'-'),'|',IFNULL(sponsor_id,'-'),'|',IFNULL(sponsor_number,'-'),'|',IFNULL(document_status,'-'),'|',IFNULL(class_final_status,'-'),'|',IFNULL(course_number,'-'),'|',IFNULL(location,'-'),'|',IFNULL(start_date_time,'-'),'|',IFNULL(end_date_time,'-'),'|',IFNULL(instructors,'-'),'|',IFNULL(public_contact_name,'-'),'|',IFNULL(location_address_1,'-'),'|',IFNULL(location_address_2,'-'),'|',IFNULL(location_city,'-'),'|',IFNULL(location_state,'-'),'|',IFNULL(location_zip,'-'),'|',IFNULL(location_of_registration,'-'),'|',IFNULL(primary_text,'-'),'|',IFNULL(additional_texts,'-'),'|',IFNULL(created_by_first_name,'-'),'|',IFNULL(created_by_last_name,'-'),'|',IFNULL(courses_course_number,'-'),'|',IFNULL(course_title,'-'))";
+      Open();
+      ((target) as ListControl).Items.Clear();
+      var dr = new MySqlCommand
+        (
+        "select class_id"
+        + " , CONVERT(" + concat_clause + " USING utf8) as spec"
+        + " from coned_offering"
+        + " where " + concat_clause + " like '%" + partial_spec.ToUpper() + "%'"
+        + " order by spec",
+        connection
+        )
+        .ExecuteReader();
+      while (dr.Read())
+        {
+        ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["class_id"].ToString()));
+        }
+      dr.Close();
+      Close();
+      return ((target) as ListControl).Items.Count > 0;
+      }
+
+    public void BindDirectToListControl(object target)
+      {
+      Open();
+      ((target) as ListControl).Items.Clear();
+      var dr = new MySqlCommand
+        (
+        "SELECT class_id"
+        + " , CONVERT(concat(IFNULL(class_id,'-'),'|',IFNULL(course_id,'-'),'|',IFNULL(class_number,'-'),'|',IFNULL(created_by,'-'),'|',IFNULL(date_created,'-'),'|',IFNULL(last_edited_by,'-'),'|',IFNULL(date_last_edited,'-'),'|',IFNULL(sponsor_id,'-'),'|',IFNULL(sponsor_number,'-'),'|',IFNULL(document_status,'-'),'|',IFNULL(class_final_status,'-'),'|',IFNULL(course_number,'-'),'|',IFNULL(location,'-'),'|',IFNULL(start_date_time,'-'),'|',IFNULL(end_date_time,'-'),'|',IFNULL(instructors,'-'),'|',IFNULL(public_contact_name,'-'),'|',IFNULL(location_address_1,'-'),'|',IFNULL(location_address_2,'-'),'|',IFNULL(location_city,'-'),'|',IFNULL(location_state,'-'),'|',IFNULL(location_zip,'-'),'|',IFNULL(location_of_registration,'-'),'|',IFNULL(primary_text,'-'),'|',IFNULL(additional_texts,'-'),'|',IFNULL(created_by_first_name,'-'),'|',IFNULL(created_by_last_name,'-'),'|',IFNULL(courses_course_number,'-'),'|',IFNULL(course_title,'-')) USING utf8) as spec"
+        + " FROM coned_offering"
+        + " order by spec",
+        connection
+        )
+        .ExecuteReader();
+      while (dr.Read())
+        {
+        ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["class_id"].ToString()));
+        }
+      dr.Close();
+      Close();
+      }
+
+    public bool Delete(string class_id)
+      {
+      var result = true;
+      Open();
+      try
+        {
+        new MySqlCommand(db_trail.Saved("delete from coned_offering where class_id = \"" + class_id + "\""), connection).ExecuteNonQuery();
+        }
+      catch(System.Exception e)
+        {
+        if (e.Message.StartsWith("Cannot delete or update a parent row: a foreign key constraint fails", true, null))
+          {
+          result = false;
+          }
+        else
+          {
+          throw e;
+          }
+        }
+      Close();
+      return result;
+      }
+
+    public bool Get
+      (
+      string class_id,
+      out string class_type,
+      out string course_id,
+      out string class_number,
+      out string created_by,
+      out DateTime date_created,
+      out string last_edited_by,
+      out DateTime date_last_edited,
+      out string sponsor_id,
+      out string sponsor_number,
+      out string document_status,
+      out string class_final_status,
+      out string course_number,
+      out string location,
+      out string student_cost,
+      out string tuition_includes,
+      out bool closed,
+      out string estimated_students,
+      out DateTime start_date_time,
+      out DateTime end_date_time,
+      out string start_time,
+      out string end_time,
+      out string other_dates_and_times,
+      out string instructors,
+      out string instructor_qualifications,
+      out string public_contact_name,
+      out string public_contact_phone,
+      out string public_contact_email,
+      out string public_contact_website,
+      out string public_contact_notes,
+      out DateTime date_submitted_to_region,
+      out DateTime date_received_by_region,
+      out DateTime date_sponsor_notified,
+      out DateTime date_registration_sent_to_state,
+      out DateTime date_cards_sent_to_sponsor,
+      out DateTime date_materials_to_be_returned,
+      out bool approved,
+      out string region_comments,
+      out string region_council_num,
+      out string class_county_code,
+      out string total_class_hours,
+      out string location_address_1,
+      out string location_address_2,
+      out string location_city,
+      out string location_state,
+      out string location_zip,
+      out string location_zip_plus_4,
+      out string location_phone,
+      out string location_email,
+      out string location_of_registration,
+      out string primary_text,
+      out string additional_texts,
+      out DateTime final_registration_date,
+      out bool offered_as_college_credit,
+      out DateTime practical_exam_date,
+      out DateTime written_exam_date,
+      out string disapproval_reason_id,
+      out DateTime date_final_paperwork_received,
+      out bool signed_hardcopy,
+      out string created_by_first_name,
+      out string created_by_last_name,
+      out string class_disapproval_reason_description,
+      out string class_final_status_description,
+      out string sponsor_name,
+      out string courses_course_number,
+      out string course_title
+      )
+      {
+      class_type = k.EMPTY;
+      course_id = k.EMPTY;
+      class_number = k.EMPTY;
+      created_by = k.EMPTY;
+      date_created = DateTime.MinValue;
+      last_edited_by = k.EMPTY;
+      date_last_edited = DateTime.MinValue;
+      sponsor_id = k.EMPTY;
+      sponsor_number = k.EMPTY;
+      document_status = k.EMPTY;
+      class_final_status = k.EMPTY;
+      course_number = k.EMPTY;
+      location = k.EMPTY;
+      student_cost = k.EMPTY;
+      tuition_includes = k.EMPTY;
+      closed = false;
+      estimated_students = k.EMPTY;
+      start_date_time = DateTime.MinValue;
+      end_date_time = DateTime.MinValue;
+      start_time = k.EMPTY;
+      end_time = k.EMPTY;
+      other_dates_and_times = k.EMPTY;
+      instructors = k.EMPTY;
+      instructor_qualifications = k.EMPTY;
+      public_contact_name = k.EMPTY;
+      public_contact_phone = k.EMPTY;
+      public_contact_email = k.EMPTY;
+      public_contact_website = k.EMPTY;
+      public_contact_notes = k.EMPTY;
+      date_submitted_to_region = DateTime.MinValue;
+      date_received_by_region = DateTime.MinValue;
+      date_sponsor_notified = DateTime.MinValue;
+      date_registration_sent_to_state = DateTime.MinValue;
+      date_cards_sent_to_sponsor = DateTime.MinValue;
+      date_materials_to_be_returned = DateTime.MinValue;
+      approved = false;
+      region_comments = k.EMPTY;
+      region_council_num = k.EMPTY;
+      class_county_code = k.EMPTY;
+      total_class_hours = k.EMPTY;
+      location_address_1 = k.EMPTY;
+      location_address_2 = k.EMPTY;
+      location_city = k.EMPTY;
+      location_state = k.EMPTY;
+      location_zip = k.EMPTY;
+      location_zip_plus_4 = k.EMPTY;
+      location_phone = k.EMPTY;
+      location_email = k.EMPTY;
+      location_of_registration = k.EMPTY;
+      primary_text = k.EMPTY;
+      additional_texts = k.EMPTY;
+      final_registration_date = DateTime.MinValue;
+      offered_as_college_credit = false;
+      practical_exam_date = DateTime.MinValue;
+      written_exam_date = DateTime.MinValue;
+      disapproval_reason_id = k.EMPTY;
+      date_final_paperwork_received = DateTime.MinValue;
+      signed_hardcopy = false;
+      created_by_first_name = k.EMPTY;
+      created_by_last_name = k.EMPTY;
+      class_disapproval_reason_description = k.EMPTY;
+      class_final_status_description = k.EMPTY;
+      sponsor_name = k.EMPTY;
+      courses_course_number = k.EMPTY;
+      course_title = k.EMPTY;
+      var result = false;
+      //
+      Open();
+      var dr = new MySqlCommand("select * from coned_offering where CAST(class_id AS CHAR) = \"" + class_id + "\"", connection).ExecuteReader();
+      if (dr.Read())
+        {
+        class_id = dr["class_id"].ToString();
+        class_type = dr["class_type"].ToString();
+        course_id = dr["course_id"].ToString();
+        class_number = dr["class_number"].ToString();
+        created_by = dr["created_by"].ToString();
+        date_created = DateTime.Parse(dr["date_created"].ToString());
+        last_edited_by = dr["last_edited_by"].ToString();
+        date_last_edited = DateTime.Parse(dr["date_last_edited"].ToString());
+        sponsor_id = dr["sponsor_id"].ToString();
+        sponsor_number = dr["sponsor_number"].ToString();
+        document_status = dr["document_status"].ToString();
+        class_final_status = dr["class_final_status"].ToString();
+        course_number = dr["course_number"].ToString();
+        location = dr["location"].ToString();
+        student_cost = dr["student_cost"].ToString();
+        tuition_includes = dr["tuition_includes"].ToString();
+        closed = (dr["closed"].ToString() == "1");
+        estimated_students = dr["estimated_students"].ToString();
+        start_date_time = DateTime.Parse(dr["start_date_time"].ToString());
+        end_date_time = DateTime.Parse(dr["end_date_time"].ToString());
+        start_time = dr["start_time"].ToString();
+        end_time = dr["end_time"].ToString();
+        other_dates_and_times = dr["other_dates_and_times"].ToString();
+        instructors = dr["instructors"].ToString();
+        instructor_qualifications = dr["instructor_qualifications"].ToString();
+        public_contact_name = dr["public_contact_name"].ToString();
+        public_contact_phone = dr["public_contact_phone"].ToString();
+        public_contact_email = dr["public_contact_email"].ToString();
+        public_contact_website = dr["public_contact_website"].ToString();
+        public_contact_notes = dr["public_contact_notes"].ToString();
+        date_submitted_to_region = DateTime.Parse(dr["date_submitted_to_region"].ToString());
+        date_received_by_region = DateTime.Parse(dr["date_received_by_region"].ToString());
+        date_sponsor_notified = DateTime.Parse(dr["date_sponsor_notified"].ToString());
+        date_registration_sent_to_state = DateTime.Parse(dr["date_registration_sent_to_state"].ToString());
+        date_cards_sent_to_sponsor = DateTime.Parse(dr["date_cards_sent_to_sponsor"].ToString());
+        date_materials_to_be_returned = DateTime.Parse(dr["date_materials_to_be_returned"].ToString());
+        approved = (dr["approved"].ToString() == "1");
+        region_comments = dr["region_comments"].ToString();
+        region_council_num = dr["region_council_num"].ToString();
+        class_county_code = dr["class_county_code"].ToString();
+        total_class_hours = dr["total_class_hours"].ToString();
+        location_address_1 = dr["location_address_1"].ToString();
+        location_address_2 = dr["location_address_2"].ToString();
+        location_city = dr["location_city"].ToString();
+        location_state = dr["location_state"].ToString();
+        location_zip = dr["location_zip"].ToString();
+        location_zip_plus_4 = dr["location_zip_plus_4"].ToString();
+        location_phone = dr["location_phone"].ToString();
+        location_email = dr["location_email"].ToString();
+        location_of_registration = dr["location_of_registration"].ToString();
+        primary_text = dr["primary_text"].ToString();
+        additional_texts = dr["additional_texts"].ToString();
+        final_registration_date = DateTime.Parse(dr["final_registration_date"].ToString());
+        offered_as_college_credit = (dr["offered_as_college_credit"].ToString() == "1");
+        practical_exam_date = DateTime.Parse(dr["practical_exam_date"].ToString());
+        written_exam_date = DateTime.Parse(dr["written_exam_date"].ToString());
+        disapproval_reason_id = dr["disapproval_reason_id"].ToString();
+        date_final_paperwork_received = DateTime.Parse(dr["date_final_paperwork_received"].ToString());
+        signed_hardcopy = (dr["signed_hardcopy"].ToString() == "1");
+        created_by_first_name = dr["created_by_first_name"].ToString();
+        created_by_last_name = dr["created_by_last_name"].ToString();
+        class_disapproval_reason_description = dr["class_disapproval_reason_description"].ToString();
+        class_final_status_description = dr["class_final_status_description"].ToString();
+        sponsor_name = dr["sponsor_name"].ToString();
+        courses_course_number = dr["courses_course_number"].ToString();
+        course_title = dr["course_title"].ToString();
+        result = true;
+        }
+      dr.Close();
+      Close();
+      return result;
+      }
+
+    public void Set
+      (
+      string class_id,
+      string class_type,
+      string course_id,
+      string class_number,
+      string created_by,
+      DateTime date_created,
+      string last_edited_by,
+      DateTime date_last_edited,
+      string sponsor_id,
+      string sponsor_number,
+      string document_status,
+      string class_final_status,
+      string course_number,
+      string location,
+      string student_cost,
+      string tuition_includes,
+      bool closed,
+      string estimated_students,
+      DateTime start_date_time,
+      DateTime end_date_time,
+      string start_time,
+      string end_time,
+      string other_dates_and_times,
+      string instructors,
+      string instructor_qualifications,
+      string public_contact_name,
+      string public_contact_phone,
+      string public_contact_email,
+      string public_contact_website,
+      string public_contact_notes,
+      DateTime date_submitted_to_region,
+      DateTime date_received_by_region,
+      DateTime date_sponsor_notified,
+      DateTime date_registration_sent_to_state,
+      DateTime date_cards_sent_to_sponsor,
+      DateTime date_materials_to_be_returned,
+      bool approved,
+      string region_comments,
+      string region_council_num,
+      string class_county_code,
+      string total_class_hours,
+      string location_address_1,
+      string location_address_2,
+      string location_city,
+      string location_state,
+      string location_zip,
+      string location_zip_plus_4,
+      string location_phone,
+      string location_email,
+      string location_of_registration,
+      string primary_text,
+      string additional_texts,
+      DateTime final_registration_date,
+      bool offered_as_college_credit,
+      DateTime practical_exam_date,
+      DateTime written_exam_date,
+      string disapproval_reason_id,
+      DateTime date_final_paperwork_received,
+      bool signed_hardcopy,
+      string created_by_first_name,
+      string created_by_last_name,
+      string class_disapproval_reason_description,
+      string class_final_status_description,
+      string sponsor_name,
+      string courses_course_number,
+      string course_title
+      )
+      {
+      var childless_field_assignments_clause = k.EMPTY
+      + "class_type = NULLIF('" + class_type + "','')"
+      + " , course_id = NULLIF('" + course_id + "','')"
+      + " , class_number = NULLIF('" + class_number + "','')"
+      + " , created_by = NULLIF('" + created_by + "','')"
+      + " , date_created = '" + date_created.ToString("yyyy-MM-dd") + "'"
+      + " , last_edited_by = NULLIF('" + last_edited_by + "','')"
+      + " , date_last_edited = '" + date_last_edited.ToString("yyyy-MM-dd") + "'"
+      + " , sponsor_id = NULLIF('" + sponsor_id + "','')"
+      + " , sponsor_number = NULLIF('" + sponsor_number + "','')"
+      + " , document_status = NULLIF('" + document_status + "','')"
+      + " , class_final_status = NULLIF('" + class_final_status + "','')"
+      + " , course_number = NULLIF('" + course_number + "','')"
+      + " , location = NULLIF('" + location + "','')"
+      + " , student_cost = NULLIF('" + student_cost + "','')"
+      + " , tuition_includes = NULLIF('" + tuition_includes + "','')"
+      + " , closed = NULLIF('" + closed.ToString() + "','')"
+      + " , estimated_students = NULLIF('" + estimated_students + "','')"
+      + " , start_date_time = '" + start_date_time.ToString("yyyy-MM-dd") + "'"
+      + " , end_date_time = '" + end_date_time.ToString("yyyy-MM-dd") + "'"
+      + " , start_time = NULLIF('" + start_time + "','')"
+      + " , end_time = NULLIF('" + end_time + "','')"
+      + " , other_dates_and_times = NULLIF('" + other_dates_and_times + "','')"
+      + " , instructors = NULLIF('" + instructors + "','')"
+      + " , instructor_qualifications = NULLIF('" + instructor_qualifications + "','')"
+      + " , public_contact_name = NULLIF('" + public_contact_name + "','')"
+      + " , public_contact_phone = NULLIF('" + public_contact_phone + "','')"
+      + " , public_contact_email = NULLIF('" + public_contact_email + "','')"
+      + " , public_contact_website = NULLIF('" + public_contact_website + "','')"
+      + " , public_contact_notes = NULLIF('" + public_contact_notes + "','')"
+      + " , date_submitted_to_region = '" + date_submitted_to_region.ToString("yyyy-MM-dd") + "'"
+      + " , date_received_by_region = '" + date_received_by_region.ToString("yyyy-MM-dd") + "'"
+      + " , date_sponsor_notified = '" + date_sponsor_notified.ToString("yyyy-MM-dd") + "'"
+      + " , date_registration_sent_to_state = '" + date_registration_sent_to_state.ToString("yyyy-MM-dd") + "'"
+      + " , date_cards_sent_to_sponsor = '" + date_cards_sent_to_sponsor.ToString("yyyy-MM-dd") + "'"
+      + " , date_materials_to_be_returned = '" + date_materials_to_be_returned.ToString("yyyy-MM-dd") + "'"
+      + " , approved = NULLIF('" + approved.ToString() + "','')"
+      + " , region_comments = NULLIF('" + region_comments + "','')"
+      + " , region_council_num = NULLIF('" + region_council_num + "','')"
+      + " , class_county_code = NULLIF('" + class_county_code + "','')"
+      + " , total_class_hours = NULLIF('" + total_class_hours + "','')"
+      + " , location_address_1 = NULLIF('" + location_address_1 + "','')"
+      + " , location_address_2 = NULLIF('" + location_address_2 + "','')"
+      + " , location_city = NULLIF('" + location_city + "','')"
+      + " , location_state = NULLIF('" + location_state + "','')"
+      + " , location_zip = NULLIF('" + location_zip + "','')"
+      + " , location_zip_plus_4 = NULLIF('" + location_zip_plus_4 + "','')"
+      + " , location_phone = NULLIF('" + location_phone + "','')"
+      + " , location_email = NULLIF('" + location_email + "','')"
+      + " , location_of_registration = NULLIF('" + location_of_registration + "','')"
+      + " , primary_text = NULLIF('" + primary_text + "','')"
+      + " , additional_texts = NULLIF('" + additional_texts + "','')"
+      + " , final_registration_date = '" + final_registration_date.ToString("yyyy-MM-dd") + "'"
+      + " , offered_as_college_credit = NULLIF('" + offered_as_college_credit.ToString() + "','')"
+      + " , practical_exam_date = '" + practical_exam_date.ToString("yyyy-MM-dd") + "'"
+      + " , written_exam_date = '" + written_exam_date.ToString("yyyy-MM-dd") + "'"
+      + " , disapproval_reason_id = NULLIF('" + disapproval_reason_id + "','')"
+      + " , date_final_paperwork_received = '" + date_final_paperwork_received.ToString("yyyy-MM-dd") + "'"
+      + " , signed_hardcopy = NULLIF('" + signed_hardcopy.ToString() + "','')"
+      + " , created_by_first_name = NULLIF('" + created_by_first_name + "','')"
+      + " , created_by_last_name = NULLIF('" + created_by_last_name + "','')"
+      + " , class_disapproval_reason_description = NULLIF('" + class_disapproval_reason_description + "','')"
+      + " , class_final_status_description = NULLIF('" + class_final_status_description + "','')"
+      + " , sponsor_name = NULLIF('" + sponsor_name + "','')"
+      + " , courses_course_number = NULLIF('" + courses_course_number + "','')"
+      + " , course_title = NULLIF('" + course_title + "','')"
+      + k.EMPTY;
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "insert coned_offering"
+          + " set class_id = NULLIF('" + class_id + "','')"
+          + " , " + childless_field_assignments_clause
+          + " on duplicate key update "
+          + childless_field_assignments_clause
+          ),
+          connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
+    } // end TClass_db_coned_offerings
+
+  }

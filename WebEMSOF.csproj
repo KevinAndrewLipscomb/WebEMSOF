@@ -171,6 +171,13 @@
     <Compile Include="noninteractive\milestone_sweep.aspx.designer.cs">
       <DependentUpon>milestone_sweep.aspx</DependentUpon>
     </Compile>
+    <Compile Include="noninteractive\q20m_tasks.aspx.cs">
+      <DependentUpon>q20m_tasks.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="noninteractive\q20m_tasks.aspx.designer.cs">
+      <DependentUpon>q20m_tasks.aspx</DependentUpon>
+    </Compile>
     <Compile Include="noninteractive\report_equipment_procurement_overview.aspx.cs">
       <DependentUpon>report_equipment_procurement_overview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -693,6 +700,7 @@
     <Content Include="Global.asax" />
     <Content Include="login.aspx" />
     <Content Include="new_password.aspx" />
+    <Content Include="noninteractive\q20m_tasks.aspx" />
     <Content Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx" />
     <Content Include="protected\administer_service_email_address.aspx" />
     <Content Include="protected\county_detail.aspx" />
