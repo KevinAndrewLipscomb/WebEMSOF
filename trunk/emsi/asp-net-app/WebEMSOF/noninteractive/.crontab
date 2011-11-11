@@ -1,8 +1,9 @@
 #
 # $Id$
 #
-#mmhh DD MM d (mm=minute, hh=hour, DD=DayOfMonth, MM=MonthNum, d=DayOfWeekWhereZeroIsSunday)
-40 03  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/daily_tasks.aspx
-00 00  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/milestone_sweep.aspx
-30 19 03 06 * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/report_fy_allocations_reimbursements_nonspends.aspx
-31 19 03 06 * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx
+#mm  hh DD MM d (mm=minute, hh=hour, DD=DayOfMonth, MM=MonthNum, d=DayOfWeekWhereZeroIsSunday)
+*/20  *  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/q20m_tasks.aspx
+40   03  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/daily_tasks.aspx
+00   00  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/milestone_sweep.aspx
+30   19 03 06 * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/report_fy_allocations_reimbursements_nonspends.aspx
+31   19 03 06 * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx
