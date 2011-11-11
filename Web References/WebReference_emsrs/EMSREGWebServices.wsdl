@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://tempurl.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="https://tempurl.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="https://tempurl.org/">
+      <s:element name="ProcessConed">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessConedResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessConedResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessStudentApp">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessStudentAppResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessStudentAppResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessTestResult">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessTestResultResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessTestResultResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessNR">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="strXML" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessNRResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessNRResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ProcessConedSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessConed" />
+  </wsdl:message>
+  <wsdl:message name="ProcessConedSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessConedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessStudentAppSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessStudentApp" />
+  </wsdl:message>
+  <wsdl:message name="ProcessStudentAppSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessStudentAppResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessTestResultSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessTestResult" />
+  </wsdl:message>
+  <wsdl:message name="ProcessTestResultSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessTestResultResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessNRSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessNR" />
+  </wsdl:message>
+  <wsdl:message name="ProcessNRSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessNRResponse" />
+  </wsdl:message>
+  <wsdl:portType name="EMSREGWebServicesSoap">
+    <wsdl:operation name="ProcessConed">
+      <wsdl:input message="tns:ProcessConedSoapIn" />
+      <wsdl:output message="tns:ProcessConedSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessStudentApp">
+      <wsdl:input message="tns:ProcessStudentAppSoapIn" />
+      <wsdl:output message="tns:ProcessStudentAppSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessTestResult">
+      <wsdl:input message="tns:ProcessTestResultSoapIn" />
+      <wsdl:output message="tns:ProcessTestResultSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessNR">
+      <wsdl:input message="tns:ProcessNRSoapIn" />
+      <wsdl:output message="tns:ProcessNRSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EMSREGWebServicesSoap" type="tns:EMSREGWebServicesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ProcessConed">
+      <soap:operation soapAction="https://tempurl.org/ProcessConed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessStudentApp">
+      <soap:operation soapAction="https://tempurl.org/ProcessStudentApp" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessTestResult">
+      <soap:operation soapAction="https://tempurl.org/ProcessTestResult" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessNR">
+      <soap:operation soapAction="https://tempurl.org/ProcessNR" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="EMSREGWebServicesSoap12" type="tns:EMSREGWebServicesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ProcessConed">
+      <soap12:operation soapAction="https://tempurl.org/ProcessConed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessStudentApp">
+      <soap12:operation soapAction="https://tempurl.org/ProcessStudentApp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessTestResult">
+      <soap12:operation soapAction="https://tempurl.org/ProcessTestResult" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessNR">
+      <soap12:operation soapAction="https://tempurl.org/ProcessNR" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EMSREGWebServices">
+    <wsdl:port name="EMSREGWebServicesSoap" binding="tns:EMSREGWebServicesSoap">
+      <soap:address location="http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx" />
+    </wsdl:port>
+    <wsdl:port name="EMSREGWebServicesSoap12" binding="tns:EMSREGWebServicesSoap12">
+      <soap12:address location="http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
