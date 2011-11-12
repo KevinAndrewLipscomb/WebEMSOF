@@ -40,6 +40,33 @@ namespace UserControl_config_binder {
         protected global::AjaxControlToolkit.TabPanel TabPanel_charter_kinds;
         
         /// <summary>
+        /// TabPanel_coned_offering_document_statuses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_coned_offering_document_statuses;
+        
+        /// <summary>
+        /// TabPanel_coned_offering_final_statuses control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_coned_offering_final_statuses;
+        
+        /// <summary>
+        /// TabPanel_coned_offering_final_status_descriptions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.TabPanel TabPanel_coned_offering_final_status_descriptions;
+        
+        /// <summary>
         /// TabPanel_coned_offerings control.
         /// </summary>
         /// <remarks>

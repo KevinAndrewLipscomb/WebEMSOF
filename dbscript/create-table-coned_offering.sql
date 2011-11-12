@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS coned_offering (
   courses_course_number CHAR(6) NOT NULL,
   course_title VARCHAR(63) NOT NULL,
   PRIMARY KEY(id),
-  UNIQUE (class_id)
+  UNIQUE (class_id),
+  UNIQUE (class_number)
 )
 ENGINE = InnoDB;
