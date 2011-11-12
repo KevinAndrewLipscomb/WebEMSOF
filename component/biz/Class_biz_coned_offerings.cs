@@ -37,7 +37,6 @@ namespace Class_biz_coned_offerings
     public bool Get
       (
       string class_id,
-      out string class_type,
       out string course_id,
       out string class_number,
       out string created_by,
@@ -107,7 +106,6 @@ namespace Class_biz_coned_offerings
       return db_coned_offerings.Get
         (
         class_id,
-        out class_type,
         out course_id,
         out class_number,
         out created_by,
@@ -182,7 +180,6 @@ namespace Class_biz_coned_offerings
         db_coned_offerings.Set
           (
           (rec as Class_ss_emsams.ConedOffering).class_id_1,
-          (rec as Class_ss_emsams.ConedOffering).class_type,
           (rec as Class_ss_emsams.ConedOffering).course_id,
           k.Safe((rec as Class_ss_emsams.ConedOffering).class_number,k.safe_hint_type.NUM),
           (rec as Class_ss_emsams.ConedOffering).created_by,
@@ -254,7 +251,6 @@ namespace Class_biz_coned_offerings
     public void Set
       (
       string class_id,
-      string class_type,
       string course_id,
       string class_number,
       string created_by,
@@ -324,7 +320,6 @@ namespace Class_biz_coned_offerings
       db_coned_offerings.Set
         (
         class_id,
-        class_type,
         course_id,
         class_number,
         created_by,

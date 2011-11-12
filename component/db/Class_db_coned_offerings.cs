@@ -91,7 +91,6 @@ namespace Class_db_coned_offerings
     public bool Get
       (
       string class_id,
-      out string class_type,
       out string course_id,
       out string class_number,
       out string created_by,
@@ -158,7 +157,6 @@ namespace Class_db_coned_offerings
       out string course_title
       )
       {
-      class_type = k.EMPTY;
       course_id = k.EMPTY;
       class_number = k.EMPTY;
       created_by = k.EMPTY;
@@ -230,7 +228,6 @@ namespace Class_db_coned_offerings
       if (dr.Read())
         {
         class_id = dr["class_id"].ToString();
-        class_type = dr["class_type"].ToString();
         course_id = dr["course_id"].ToString();
         class_number = dr["class_number"].ToString();
         created_by = dr["created_by"].ToString();
@@ -305,7 +302,6 @@ namespace Class_db_coned_offerings
     public void Set
       (
       string class_id,
-      string class_type,
       string course_id,
       string class_number,
       string created_by,
@@ -373,8 +369,7 @@ namespace Class_db_coned_offerings
       )
       {
       var childless_field_assignments_clause = k.EMPTY
-      + "class_type = NULLIF('" + class_type + "','')"
-      + " , course_id = NULLIF('" + course_id + "','')"
+      + "course_id = NULLIF('" + course_id + "','')"
       + " , class_number = NULLIF('" + class_number + "','')"
       + " , created_by = NULLIF('" + created_by + "','')"
       + " , date_created = '" + date_created.ToString("yyyy-MM-dd") + "'"
@@ -383,7 +378,7 @@ namespace Class_db_coned_offerings
       + " , sponsor_id = NULLIF('" + sponsor_id + "','')"
       + " , sponsor_number = NULLIF('" + sponsor_number + "','')"
       + " , document_status = NULLIF('" + document_status + "','')"
-      + " , class_final_status = NULLIF('" + class_final_status + "','')"
+      + " , class_final_status = NULLIF(IFNULL((select id from emsrs_class_final_status where description = '" + class_final_status + "'),''),'')"
       + " , course_number = NULLIF('" + course_number + "','')"
       + " , location = NULLIF('" + location + "','')"
       + " , student_cost = NULLIF('" + student_cost + "','')"
@@ -434,7 +429,7 @@ namespace Class_db_coned_offerings
       + " , created_by_first_name = NULLIF('" + created_by_first_name + "','')"
       + " , created_by_last_name = NULLIF('" + created_by_last_name + "','')"
       + " , class_disapproval_reason_description = NULLIF('" + class_disapproval_reason_description + "','')"
-      + " , class_final_status_description = NULLIF('" + class_final_status_description + "','')"
+      + " , class_final_status_description = NULLIF(IFNULL((select id from emsrs_class_final_status_description where description = '" + class_final_status_description + "'),''),'')"
       + " , sponsor_name = NULLIF('" + sponsor_name + "','')"
       + " , courses_course_number = NULLIF('" + courses_course_number + "','')"
       + " , course_title = NULLIF('" + course_title + "','')"
