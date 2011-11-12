@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS coned_offering;
 CREATE TABLE IF NOT EXISTS coned_offering (
   id SERIAL,
   class_id BIGINT UNSIGNED NOT NULL,
-  class_type BIGINT UNSIGNED NOT NULL,
   course_id BIGINT UNSIGNED NOT NULL,
   class_number CHAR(14),
   created_by BIGINT UNSIGNED NOT NULL,
