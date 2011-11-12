@@ -86,6 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="component\biz\Class_biz_coned_offerings.cs" />
+    <Compile Include="component\biz\Class_biz_coned_offering_class_final_statuses.cs" />
+    <Compile Include="component\biz\Class_biz_coned_offering_class_final_status_descriptions.cs" />
+    <Compile Include="component\biz\Class_biz_coned_offering_document_statuses.cs" />
     <Compile Include="component\biz\Class_biz_emsof_extra_service_county_dependencies.cs" />
     <Compile Include="component\biz\Class_biz_accounts.cs" />
     <Compile Include="component\biz\Class_biz_appropriations.cs" />
@@ -110,6 +113,9 @@
     <Compile Include="component\db\Class_db_appropriations.cs" />
     <Compile Include="component\db\Class_db_charter_kinds.cs" />
     <Compile Include="component\db\Class_db_coned_offerings.cs" />
+    <Compile Include="component\db\Class_db_coned_offering_class_final_statuses.cs" />
+    <Compile Include="component\db\Class_db_coned_offering_class_final_status_descriptions.cs" />
+    <Compile Include="component\db\Class_db_coned_offering_document_statuses.cs" />
     <Compile Include="component\db\Class_db_counties.cs" />
     <Compile Include="component\db\Class_db_emsof_extra_service_county_dependencies.cs" />
     <Compile Include="component\db\Class_db_emsof_requests.cs" />
@@ -464,6 +470,27 @@
     <Compile Include="usercontrol\app\UserControl_coned_offering.ascx.designer.cs">
       <DependentUpon>UserControl_coned_offering.ascx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx.cs">
+      <DependentUpon>UserControl_coned_offering_class_final_status.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx.designer.cs">
+      <DependentUpon>UserControl_coned_offering_class_final_status.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status_description.ascx.cs">
+      <DependentUpon>UserControl_coned_offering_class_final_status_description.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status_description.ascx.designer.cs">
+      <DependentUpon>UserControl_coned_offering_class_final_status_description.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_offering_document_status.ascx.cs">
+      <DependentUpon>UserControl_coned_offering_document_status.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_offering_document_status.ascx.designer.cs">
+      <DependentUpon>UserControl_coned_offering_document_status.ascx</DependentUpon>
+    </Compile>
     <Compile Include="usercontrol\app\UserControl_config_binder.ascx.cs">
       <DependentUpon>UserControl_config_binder.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -764,6 +791,9 @@
     <Content Include="usercontrol\app\UserControl_charter_kind.ascx" />
     <Content Include="usercontrol\app\UserControl_common_header_bar.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_offering.ascx" />
+    <Content Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx" />
+    <Content Include="usercontrol\app\UserControl_coned_offering_class_final_status_description.ascx" />
+    <Content Include="usercontrol\app\UserControl_coned_offering_document_status.ascx" />
     <Content Include="usercontrol\app\UserControl_config_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_counties.ascx" />
     <Content Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx" />
