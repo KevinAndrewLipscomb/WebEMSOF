@@ -173,79 +173,9 @@ namespace Class_biz_coned_offerings
         );
       }
 
-    internal void RetreiveLatestMasterRecords()
+    internal void ImportLatestMasterRecords()
       {
-      foreach (var rec in ss_emsams.ClassSearchUnlimited())
-        {
-        db_coned_offerings.Set
-          (
-          (rec as Class_ss_emsams.ConedOffering).class_id_1,
-          (rec as Class_ss_emsams.ConedOffering).course_id,
-          k.Safe((rec as Class_ss_emsams.ConedOffering).class_number,k.safe_hint_type.NUM),
-          (rec as Class_ss_emsams.ConedOffering).created_by,
-          DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_created),
-          (rec as Class_ss_emsams.ConedOffering).last_edited_by,
-          DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_last_edited),
-          (rec as Class_ss_emsams.ConedOffering).sponsor_id,
-          (rec as Class_ss_emsams.ConedOffering).sponsor_number,
-          (rec as Class_ss_emsams.ConedOffering).document_status,
-          (rec as Class_ss_emsams.ConedOffering).class_final_status,
-          (rec as Class_ss_emsams.ConedOffering).course_number,
-          (rec as Class_ss_emsams.ConedOffering).location,
-          (rec as Class_ss_emsams.ConedOffering).student_cost,
-          (rec as Class_ss_emsams.ConedOffering).tuition_includes,
-          bool.Parse((rec as Class_ss_emsams.ConedOffering).closed),
-          (rec as Class_ss_emsams.ConedOffering).estimated_students,
-          DateTime.Parse((rec as Class_ss_emsams.ConedOffering).start_date_time),
-          DateTime.Parse((rec as Class_ss_emsams.ConedOffering).end_date_time),
-          (rec as Class_ss_emsams.ConedOffering).start_time,
-          (rec as Class_ss_emsams.ConedOffering).end_time,
-          (rec as Class_ss_emsams.ConedOffering).other_dates_and_times,
-          (rec as Class_ss_emsams.ConedOffering).instructors,
-          (rec as Class_ss_emsams.ConedOffering).instructor_qualifications,
-          (rec as Class_ss_emsams.ConedOffering).public_contact_name,
-          (rec as Class_ss_emsams.ConedOffering).public_contact_phone,
-          (rec as Class_ss_emsams.ConedOffering).public_contact_email,
-          (rec as Class_ss_emsams.ConedOffering).public_contact_website,
-          (rec as Class_ss_emsams.ConedOffering).public_contact_notes,
-          ((rec as Class_ss_emsams.ConedOffering).date_submitted_to_region.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_submitted_to_region) : DateTime.MaxValue),
-          ((rec as Class_ss_emsams.ConedOffering).date_received_by_region.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_received_by_region) : DateTime.MaxValue),
-          ((rec as Class_ss_emsams.ConedOffering).date_sponsor_notified.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_sponsor_notified) : DateTime.MaxValue),
-          ((rec as Class_ss_emsams.ConedOffering).date_registration_sent_to_state.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_registration_sent_to_state) : DateTime.MaxValue),
-          ((rec as Class_ss_emsams.ConedOffering).date_cards_sent_to_sponsor.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_cards_sent_to_sponsor) : DateTime.MaxValue),
-          ((rec as Class_ss_emsams.ConedOffering).date_materials_to_be_returned.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_materials_to_be_returned) : DateTime.MaxValue),
-          (rec as Class_ss_emsams.ConedOffering).approved == "1",
-          (rec as Class_ss_emsams.ConedOffering).region_comments,
-          (rec as Class_ss_emsams.ConedOffering).region_council_num,
-          (rec as Class_ss_emsams.ConedOffering).class_county_code,
-          (rec as Class_ss_emsams.ConedOffering).total_class_hours,
-          (rec as Class_ss_emsams.ConedOffering).location_address_1,
-          (rec as Class_ss_emsams.ConedOffering).location_address_2,
-          (rec as Class_ss_emsams.ConedOffering).location_city,
-          (rec as Class_ss_emsams.ConedOffering).location_state,
-          (rec as Class_ss_emsams.ConedOffering).location_zip,
-          (rec as Class_ss_emsams.ConedOffering).location_zip_plus_4,
-          (rec as Class_ss_emsams.ConedOffering).location_phone,
-          (rec as Class_ss_emsams.ConedOffering).location_email,
-          (rec as Class_ss_emsams.ConedOffering).location_of_registration,
-          (rec as Class_ss_emsams.ConedOffering).primary_text,
-          (rec as Class_ss_emsams.ConedOffering).additional_texts,
-          ((rec as Class_ss_emsams.ConedOffering).final_registration_date.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).final_registration_date) : DateTime.MaxValue),
-          bool.Parse((rec as Class_ss_emsams.ConedOffering).offered_as_college_credit),
-          ((rec as Class_ss_emsams.ConedOffering).practical_exam_date.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).practical_exam_date) : DateTime.MaxValue),
-          ((rec as Class_ss_emsams.ConedOffering).written_exam_date.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).written_exam_date) : DateTime.MaxValue),
-          (rec as Class_ss_emsams.ConedOffering).disapproval_reason_id,
-          ((rec as Class_ss_emsams.ConedOffering).date_final_paperwork_received.Length > 0 ? DateTime.Parse((rec as Class_ss_emsams.ConedOffering).date_final_paperwork_received) : DateTime.MaxValue),
-          bool.Parse((rec as Class_ss_emsams.ConedOffering).signed_hard_copy),
-          (rec as Class_ss_emsams.ConedOffering).created_by_first_name,
-          (rec as Class_ss_emsams.ConedOffering).created_by_last_name,
-          (rec as Class_ss_emsams.ConedOffering).class_disapproval_reason_description,
-          (rec as Class_ss_emsams.ConedOffering).class_final_status_description,
-          (rec as Class_ss_emsams.ConedOffering).sponsor_name,
-          (rec as Class_ss_emsams.ConedOffering).courses_course_number,
-          (rec as Class_ss_emsams.ConedOffering).course_title
-          );
-        }
+      db_coned_offerings.ImportLatestMasterRecs(ss_emsams.ClassSearchUnlimited());
       }
 
     public void Set

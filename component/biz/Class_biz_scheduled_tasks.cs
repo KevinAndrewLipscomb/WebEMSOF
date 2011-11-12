@@ -22,7 +22,7 @@ namespace Class_biz_scheduled_tasks
 
     public void DoQ20mChores()
       {
-      biz_coned_offerings.RetreiveLatestMasterRecords();
+      biz_coned_offerings.ImportLatestMasterRecords();
       }
 
     } // end TClass_biz_scheduled_tasks
