@@ -22,7 +22,7 @@ namespace Class_db_coned_offering_class_final_statuses
             MySqlDataReader dr;
             this.Open();
             ((target) as ListControl).Items.Clear();
-            dr = new MySqlCommand("SELECT lpad(id,4,\"0\") as id" + " , description" + " FROM emsrs_class_final_status" + " WHERE concat(lpad(id,4,\"0\"),\" -- \",description) like \"%" + partial_spec + "%\"" + " order by description", this.connection).ExecuteReader();
+            dr = new MySqlCommand("SELECT lpad(id,4,\"0\") as id" + " , description" + " FROM coned_offering_class_final_status" + " WHERE concat(lpad(id,4,\"0\"),\" -- \",description) like \"%" + partial_spec + "%\"" + " order by description", this.connection).ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["id"].ToString() + k.SPACE_HYPHENS_SPACE + dr["description"].ToString(), dr["id"].ToString()));
@@ -42,7 +42,7 @@ namespace Class_db_coned_offering_class_final_statuses
                 ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
             this.Open();
-            dr = new MySqlCommand("SELECT id,description FROM emsrs_class_final_status where description <> \"(none specified)\" order by id", this.connection).ExecuteReader();
+            dr = new MySqlCommand("SELECT id,description FROM coned_offering_class_final_status where description <> \"(none specified)\" order by id", this.connection).ExecuteReader();
             while (dr.Read())
             {
                 ((target) as ListControl).Items.Add(new ListItem(dr["description"].ToString(), dr["id"].ToString()));
@@ -72,7 +72,7 @@ namespace Class_db_coned_offering_class_final_statuses
             result = true;
             this.Open();
             try {
-                new MySqlCommand(db_trail.Saved("delete from emsrs_class_final_status where id = " + id), this.connection).ExecuteNonQuery();
+                new MySqlCommand(db_trail.Saved("delete from coned_offering_class_final_status where id = " + id), this.connection).ExecuteNonQuery();
             }
             catch(System.Exception e) {
                 if (e.Message.StartsWith("Cannot delete or update a parent row: a foreign key constraint fails", true, null))
@@ -96,7 +96,7 @@ namespace Class_db_coned_offering_class_final_statuses
             description = k.EMPTY;
             result = false;
             this.Open();
-            dr = new MySqlCommand("select description from emsrs_class_final_status where id = \"" + id + "\"", this.connection).ExecuteReader();
+            dr = new MySqlCommand("select description from coned_offering_class_final_status where id = \"" + id + "\"", this.connection).ExecuteReader();
             if (dr.Read())
             {
                 description = dr["description"].ToString();
@@ -112,7 +112,7 @@ namespace Class_db_coned_offering_class_final_statuses
             string childless_field_assignments_clause;
             childless_field_assignments_clause = "description = \"" + description + "\"";
             this.Open();
-            new MySqlCommand(db_trail.Saved("insert emsrs_class_final_status" + " set id = NULLIF(\"" + id + "\",\"\")" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause), this.connection).ExecuteNonQuery();
+            new MySqlCommand(db_trail.Saved("insert coned_offering_class_final_status" + " set id = NULLIF(\"" + id + "\",\"\")" + " , " + childless_field_assignments_clause + " on duplicate key update " + childless_field_assignments_clause), this.connection).ExecuteNonQuery();
             this.Close();
 
         }

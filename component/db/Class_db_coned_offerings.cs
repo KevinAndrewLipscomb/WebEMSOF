@@ -231,9 +231,9 @@ namespace Class_db_coned_offerings
         course_id = dr["course_id"].ToString();
         class_number = dr["class_number"].ToString();
         created_by = dr["created_by"].ToString();
-        date_created = DateTime.Parse(dr["date_created"].ToString());
+        if (dr["date_created"] != DBNull.Value) {date_created = DateTime.Parse(dr["date_created"].ToString());}
         last_edited_by = dr["last_edited_by"].ToString();
-        date_last_edited = DateTime.Parse(dr["date_last_edited"].ToString());
+        if (dr["date_last_edited"] != DBNull.Value) {date_last_edited = DateTime.Parse(dr["date_last_edited"].ToString());}
         sponsor_id = dr["sponsor_id"].ToString();
         sponsor_number = dr["sponsor_number"].ToString();
         document_status = dr["document_status"].ToString();
@@ -244,8 +244,8 @@ namespace Class_db_coned_offerings
         tuition_includes = dr["tuition_includes"].ToString();
         closed = (dr["closed"].ToString() == "1");
         estimated_students = dr["estimated_students"].ToString();
-        start_date_time = DateTime.Parse(dr["start_date_time"].ToString());
-        end_date_time = DateTime.Parse(dr["end_date_time"].ToString());
+        if (dr["start_date_time"] != DBNull.Value) {start_date_time = DateTime.Parse(dr["start_date_time"].ToString());}
+        if (dr["end_date_time"] != DBNull.Value) {end_date_time = DateTime.Parse(dr["end_date_time"].ToString());}
         start_time = dr["start_time"].ToString();
         end_time = dr["end_time"].ToString();
         other_dates_and_times = dr["other_dates_and_times"].ToString();
@@ -256,12 +256,12 @@ namespace Class_db_coned_offerings
         public_contact_email = dr["public_contact_email"].ToString();
         public_contact_website = dr["public_contact_website"].ToString();
         public_contact_notes = dr["public_contact_notes"].ToString();
-        date_submitted_to_region = DateTime.Parse(dr["date_submitted_to_region"].ToString());
-        date_received_by_region = DateTime.Parse(dr["date_received_by_region"].ToString());
-        date_sponsor_notified = DateTime.Parse(dr["date_sponsor_notified"].ToString());
-        date_registration_sent_to_state = DateTime.Parse(dr["date_registration_sent_to_state"].ToString());
-        date_cards_sent_to_sponsor = DateTime.Parse(dr["date_cards_sent_to_sponsor"].ToString());
-        date_materials_to_be_returned = DateTime.Parse(dr["date_materials_to_be_returned"].ToString());
+        if (dr["date_submitted_to_region"] != DBNull.Value) {date_submitted_to_region = DateTime.Parse(dr["date_submitted_to_region"].ToString());}
+        if (dr["date_received_by_region"] != DBNull.Value) {date_received_by_region = DateTime.Parse(dr["date_received_by_region"].ToString());}
+        if (dr["date_sponsor_notified"] != DBNull.Value) {date_sponsor_notified = DateTime.Parse(dr["date_sponsor_notified"].ToString());}
+        if (dr["date_registration_sent_to_state"] != DBNull.Value) {date_registration_sent_to_state = DateTime.Parse(dr["date_registration_sent_to_state"].ToString());}
+        if (dr["date_cards_sent_to_sponsor"] != DBNull.Value) {date_cards_sent_to_sponsor = DateTime.Parse(dr["date_cards_sent_to_sponsor"].ToString());}
+        if (dr["date_materials_to_be_returned"] != DBNull.Value) {date_materials_to_be_returned = DateTime.Parse(dr["date_materials_to_be_returned"].ToString());}
         approved = (dr["approved"].ToString() == "1");
         region_comments = dr["region_comments"].ToString();
         region_council_num = dr["region_council_num"].ToString();
@@ -278,12 +278,12 @@ namespace Class_db_coned_offerings
         location_of_registration = dr["location_of_registration"].ToString();
         primary_text = dr["primary_text"].ToString();
         additional_texts = dr["additional_texts"].ToString();
-        final_registration_date = DateTime.Parse(dr["final_registration_date"].ToString());
+        if (dr["final_registration_date"] != DBNull.Value) {final_registration_date = DateTime.Parse(dr["final_registration_date"].ToString());}
         offered_as_college_credit = (dr["offered_as_college_credit"].ToString() == "1");
-        practical_exam_date = DateTime.Parse(dr["practical_exam_date"].ToString());
-        written_exam_date = DateTime.Parse(dr["written_exam_date"].ToString());
+        if (dr["practical_exam_date"] != DBNull.Value) {practical_exam_date = DateTime.Parse(dr["practical_exam_date"].ToString());}
+        if (dr["written_exam_date"] != DBNull.Value) {written_exam_date = DateTime.Parse(dr["written_exam_date"].ToString());}
         disapproval_reason_id = dr["disapproval_reason_id"].ToString();
-        date_final_paperwork_received = DateTime.Parse(dr["date_final_paperwork_received"].ToString());
+        if (dr["date_final_paperwork_received"] != DBNull.Value) {date_final_paperwork_received = DateTime.Parse(dr["date_final_paperwork_received"].ToString());}
         signed_hardcopy = (dr["signed_hardcopy"].ToString() == "1");
         created_by_first_name = dr["created_by_first_name"].ToString();
         created_by_last_name = dr["created_by_last_name"].ToString();
@@ -464,7 +464,7 @@ namespace Class_db_coned_offerings
       + " , sponsor_id = NULLIF('" + sponsor_id + "','')"
       + " , sponsor_number = NULLIF('" + sponsor_number + "','')"
       + " , document_status = NULLIF('" + document_status + "','')"
-      + " , class_final_status = NULLIF(IFNULL((select id from emsrs_class_final_status where description = '" + class_final_status + "'),''),'')"
+      + " , class_final_status = NULLIF(IFNULL((select id from coned_offering_class_final_status where description = '" + class_final_status + "'),''),'')"
       + " , course_number = NULLIF('" + course_number + "','')"
       + " , location = NULLIF('" + location + "','')"
       + " , student_cost = NULLIF('" + student_cost + "','')"
@@ -515,7 +515,7 @@ namespace Class_db_coned_offerings
       + " , created_by_first_name = NULLIF('" + created_by_first_name + "','')"
       + " , created_by_last_name = NULLIF('" + created_by_last_name + "','')"
       + " , class_disapproval_reason_description = NULLIF('" + class_disapproval_reason_description + "','')"
-      + " , class_final_status_description = NULLIF(IFNULL((select id from emsrs_class_final_status_description where description = '" + class_final_status_description + "'),''),'')"
+      + " , class_final_status_description = NULLIF(IFNULL((select id from coned_offering_class_final_status_description where description = '" + class_final_status_description + "'),''),'')"
       + " , sponsor_name = NULLIF('" + sponsor_name + "','')"
       + " , courses_course_number = NULLIF('" + courses_course_number + "','')"
       + " , course_title = NULLIF('" + course_title + "','')"
