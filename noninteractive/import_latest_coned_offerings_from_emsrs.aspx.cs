@@ -2,9 +2,9 @@ using Class_biz_scheduled_tasks;
 using System;
 using System.Web;
 
-namespace q20m_tasks
+namespace import_latest_coned_offerings_from_emsrs
 {
-    public partial class TWebForm_q20m_tasks: System.Web.UI.Page
+    public partial class TWebForm_import_latest_coned_offerings_from_emsrs: System.Web.UI.Page
     {
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -16,7 +16,7 @@ namespace q20m_tasks
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            new TClass_biz_scheduled_tasks().DoQ20mChores();
+            new TClass_biz_scheduled_tasks().ImportLatestConedOfferingsFromEmsrs();
         }
 
         protected override void OnInit(EventArgs e)

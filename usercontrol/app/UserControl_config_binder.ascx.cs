@@ -1,15 +1,19 @@
-using UserControl_charter_kind;
-using UserControl_coned_offering;
-using UserControl_coned_offering_class_final_status_description;
-using UserControl_coned_offering_class_final_status;
-using UserControl_coned_offering_document_status;
+using AjaxControlToolkit;
+using System;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using System.Collections;
 
+using UserControl_charter_kind;
 namespace UserControl_config_binder
 {
     public partial class TWebUserControl_config_binder: ki_web_ui.usercontrol_class
     {
         private p_type p;
-
+        // TSSI_1 = 1;
+        // TSSI_2 = 2;
         protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
@@ -37,20 +41,23 @@ namespace UserControl_config_binder
                 switch(p.tab_index)
                 {
                     case Units.UserControl_config_binder.TSSI_CHARTER_KINDS:
+                        // Dynamic controls must be re-added on each postback.
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))), "UserControl_charter_kind", PlaceHolder_content);
                         break;
-                    case Units.UserControl_config_binder.TSSI_CONED_OFFERING_DOCUMENT_STATUSES:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering_document_status)(LoadControl("~/usercontrol/app/UserControl_coned_offering_document_status.ascx"))), "UserControl_coned_offering_document_status", PlaceHolder_content);
-                        break;
-                    case Units.UserControl_config_binder.TSSI_CONED_OFFERING_FINAL_STATUSES:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering_class_final_status)(LoadControl("~/usercontrol/app/UserControl_coned_offering_class_final_status.ascx"))), "UserControl_coned_offering_class_final_status", PlaceHolder_content);
-                        break;
-                    case Units.UserControl_config_binder.TSSI_CONED_OFFERING_FINAL_STATUS_DESCRIPTIONS:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering_class_final_status_description)(LoadControl("~/usercontrol/app/UserControl_coned_offering_class_final_status_description.ascx"))), "UserControl_coned_offering_class_final_status_description", PlaceHolder_content);
-                        break;
-                    case Units.UserControl_config_binder.TSSI_CONED_OFFERINGS:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering)(LoadControl("~/usercontrol/app/UserControl_coned_offering.ascx"))), "UserControl_coned_offering", PlaceHolder_content);
-                        break;
+                // TSSI_1:
+                // p.content_id := AddIdentifiedControlToPlaceHolder
+                // (
+                // TWebUserControl2(LoadControl('~/usercontrol/app/UserControl2.ascx')),
+                // 'UserControl2',
+                // PlaceHolder_content
+                // );
+                // TSSI_2:
+                // p.content_id := AddIdentifiedControlToPlaceHolder
+                // (
+                // TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')),
+                // 'UserControl3',
+                // PlaceHolder_content
+                // );
                 }
             }
             else
@@ -71,18 +78,20 @@ namespace UserControl_config_binder
                 case Units.UserControl_config_binder.TSSI_CHARTER_KINDS:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_charter_kind)(LoadControl("~/usercontrol/app/UserControl_charter_kind.ascx"))),"UserControl_charter_kind",PlaceHolder_content,InstanceId());
                     break;
-                case Units.UserControl_config_binder.TSSI_CONED_OFFERING_DOCUMENT_STATUSES:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering_document_status)(LoadControl("~/usercontrol/app/UserControl_coned_offering_document_status.ascx"))),"UserControl_coned_offering_document_status",PlaceHolder_content,InstanceId());
-                    break;
-                case Units.UserControl_config_binder.TSSI_CONED_OFFERING_FINAL_STATUSES:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering_class_final_status)(LoadControl("~/usercontrol/app/UserControl_coned_offering_class_final_status.ascx"))),"UserControl_coned_offering_class_final_status",PlaceHolder_content,InstanceId());
-                    break;
-                case Units.UserControl_config_binder.TSSI_CONED_OFFERING_FINAL_STATUS_DESCRIPTIONS:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering_class_final_status_description)(LoadControl("~/usercontrol/app/UserControl_coned_offering_class_final_status_description.ascx"))),"UserControl_coned_offering_class_final_status_description",PlaceHolder_content,InstanceId());
-                    break;
-                case Units.UserControl_config_binder.TSSI_CONED_OFFERINGS:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_coned_offering)(LoadControl("~/usercontrol/app/UserControl_coned_offering.ascx"))),"UserControl_coned_offering",PlaceHolder_content,InstanceId());
-                    break;
+            // TSSI_1:
+            // p.content_id := AddIdentifiedControlToPlaceHolder
+            // (
+            // TWebUserControl2(LoadControl('~/usercontrol/app/UserControl2.ascx')).Fresh,
+            // 'UserControl2',
+            // PlaceHolder_content
+            // );
+            // TSSI_2:
+            // p.content_id := AddIdentifiedControlToPlaceHolder
+            // (
+            // TWebUserControl3(LoadControl('~/usercontrol/app/UserControl3.ascx')).Fresh,
+            // 'UserControl3',
+            // PlaceHolder_content
+            // );
             }
         }
 
@@ -133,10 +142,6 @@ namespace UserControl_config_binder.Units
         // ,UserControl_1
         // ,UserControl_2
         public const int TSSI_CHARTER_KINDS = 0;
-        public const int TSSI_CONED_OFFERING_DOCUMENT_STATUSES = 1;
-        public const int TSSI_CONED_OFFERING_FINAL_STATUSES = 2;
-        public const int TSSI_CONED_OFFERING_FINAL_STATUS_DESCRIPTIONS = 3;
-        public const int TSSI_CONED_OFFERINGS = 4;
     } // end UserControl_config_binder
 
 }

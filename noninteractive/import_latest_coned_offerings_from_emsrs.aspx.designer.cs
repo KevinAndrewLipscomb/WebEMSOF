@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace q20m_tasks {
+namespace import_latest_coned_offerings_from_emsrs {
     
     
-    public partial class TWebForm_q20m_tasks {
+    public partial class TWebForm_import_latest_coned_offerings_from_emsrs {
     }
 }

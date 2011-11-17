@@ -299,11 +299,11 @@ namespace Class_db_coned_offerings
       return result;
       }
 
-    internal void ImportLatestMasterRecs(ArrayList latest_master_recs)
+    internal void ImportLatestFromEmsrs(ArrayList recs)
       {
       var childless_field_assignments_clause = k.EMPTY;
       Open();
-      foreach (var rec in latest_master_recs)
+      foreach (var rec in recs)
         {
         childless_field_assignments_clause = k.EMPTY
         + "course_id = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).course_id + "','')"
