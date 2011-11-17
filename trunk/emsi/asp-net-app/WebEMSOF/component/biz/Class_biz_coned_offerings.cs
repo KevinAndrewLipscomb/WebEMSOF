@@ -173,9 +173,9 @@ namespace Class_biz_coned_offerings
         );
       }
 
-    internal void ImportLatestMasterRecords()
+    internal void ImportLatestFromEmsrs()
       {
-      db_coned_offerings.ImportLatestMasterRecs(ss_emsams.ClassSearchUnlimited());
+      db_coned_offerings.ImportLatestFromEmsrs(ss_emsams.ClassSearchUnlimited());
       }
 
     public void Set

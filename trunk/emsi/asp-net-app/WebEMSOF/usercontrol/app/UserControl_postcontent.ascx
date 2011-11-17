@@ -82,6 +82,13 @@
 										<small><a href="/WebEMSOF/resource/terms-and-conditions.pdf" target="_blank">Terms and Conditions</a></small>
 									  </td>
 									</tr>
+									<tr>
+									  <td valign="top">•
+</td>
+									  <td>
+										<small><a href="/WebEMSOF/resource/Email Whitelist Generator Instructions.htm" target="_blank">Receiving email notifications</a></small>
+									  </td>
+									</tr>
 								  </table>
 								</td>
 							  </tr>

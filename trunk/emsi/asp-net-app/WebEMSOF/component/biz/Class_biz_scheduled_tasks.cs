@@ -1,4 +1,5 @@
 using Class_biz_coned_offerings;
+using Class_biz_practitioners;
 using WebEMSOF.component.os;
 
 namespace Class_biz_scheduled_tasks
@@ -6,12 +7,14 @@ namespace Class_biz_scheduled_tasks
   public class TClass_biz_scheduled_tasks
     {
     private TClass_biz_coned_offerings biz_coned_offerings;
+    private TClass_biz_practitioners biz_practitioners;
     private Class_fs fs;
 
     //Constructor  Create()
     public TClass_biz_scheduled_tasks() : base()
       {
       biz_coned_offerings = new TClass_biz_coned_offerings();
+      biz_practitioners = new TClass_biz_practitioners();
       fs = new Class_fs();
       }
 
@@ -20,9 +23,14 @@ namespace Class_biz_scheduled_tasks
       fs.DeleteCondemnedFolders(current_working_directory_spec + "/../protected/attachment");
       }
 
-    public void DoQ20mChores()
+    public void ImportLatestConedOfferingsFromEmsrs()
       {
-      biz_coned_offerings.ImportLatestMasterRecords();
+      biz_coned_offerings.ImportLatestFromEmsrs();
+      }
+
+    public void ImportLatestPractitionersFromEmsrs()
+      {
+      biz_practitioners.ImportLatestFromEmsrs();
       }
 
     } // end TClass_biz_scheduled_tasks
