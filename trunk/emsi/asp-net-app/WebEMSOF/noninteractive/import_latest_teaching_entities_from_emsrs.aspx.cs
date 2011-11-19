@@ -16,7 +16,7 @@ namespace import_latest_teaching_entities_from_emsrs
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            new TClass_biz_scheduled_tasks().ImportLatestConedSponsorsFromEmsrs();
+            new TClass_biz_scheduled_tasks().ImportLatestTeachingEntitiesFromEmsrs();
         }
 
         protected override void OnInit(EventArgs e)

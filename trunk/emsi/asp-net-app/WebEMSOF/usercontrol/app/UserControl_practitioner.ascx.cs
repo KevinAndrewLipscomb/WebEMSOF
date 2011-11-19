@@ -22,13 +22,10 @@ namespace UserControl_practitioner
       DropDownList_id.Visible = false;
       TextBox_last_name.Text = k.EMPTY;
       TextBox_first_name.Text = k.EMPTY;
-      TextBox_middle_name.Text = k.EMPTY;
-      TextBox_email_address.Text = k.EMPTY;
-      TextBox_new_emso_user_id.Text = k.EMPTY;
-      TextBox_county_code.Text = k.EMPTY;
-      TextBox_street_address.Text = k.EMPTY;
-      TextBox_city.Text = k.EMPTY;
-      TextBox_zip.Text = k.EMPTY;
+      TextBox_middle_initial.Text = k.EMPTY;
+      TextBox_certification_number.Text = k.EMPTY;
+      TextBox_level_id.Text = k.EMPTY;
+      TextBox_regional_council_code.Text = k.EMPTY;
       UserControl_drop_down_date_birth_date.Clear();
       Literal_match_index.Text = k.EMPTY;
       Literal_num_matches.Text = k.EMPTY;
@@ -147,13 +144,10 @@ namespace UserControl_practitioner
       bool result;
       string last_name;
       string first_name;
-      string middle_name;
-      string email_address;
-      string new_emso_user_id;
-      string county_code;
-      string street_address;
-      string city;
-      string zip;
+      string middle_initial;
+      string certification_number;
+      string level_id;
+      string regional_council_code;
       DateTime birth_date;
       result = false;
       if
@@ -163,13 +157,10 @@ namespace UserControl_practitioner
           id,
           out last_name,
           out first_name,
-          out middle_name,
-          out email_address,
-          out new_emso_user_id,
-          out county_code,
-          out street_address,
-          out city,
-          out zip,
+          out middle_initial,
+          out certification_number,
+          out level_id,
+          out regional_council_code,
           out birth_date
           )
         )
@@ -178,13 +169,10 @@ namespace UserControl_practitioner
         TextBox_id.Enabled = false;
         TextBox_last_name.Text = last_name;
         TextBox_first_name.Text = first_name;
-        TextBox_middle_name.Text = middle_name;
-        TextBox_email_address.Text = email_address;
-        TextBox_new_emso_user_id.Text = new_emso_user_id;
-        TextBox_county_code.Text = county_code;
-        TextBox_street_address.Text = street_address;
-        TextBox_city.Text = city;
-        TextBox_zip.Text = zip;
+        TextBox_middle_initial.Text = middle_initial;
+        TextBox_certification_number.Text = certification_number;
+        TextBox_level_id.Text = level_id;
+        TextBox_regional_council_code.Text = regional_council_code;
         UserControl_drop_down_date_birth_date.selectedvalue = birth_date;
         Button_lookup.Enabled = false;
         Label_lookup_arrow.Enabled = false;
@@ -234,7 +222,8 @@ namespace UserControl_practitioner
       if (Session[InstanceId() + ".p"] != null)
         {
         p = (p_type)(Session[InstanceId() + ".p"]);
-        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_config_binder_PlaceHolder_content"] as string) == "UserControl_practitioner");
+#warning Revise the following line if the usercontrol will not be a direct child of the member binder.
+        p.be_loaded = IsPostBack && ((Session["UserControl_member_binder_PlaceHolder_content"] as string) == "UserControl_practitioner");
         }
       else
         {
@@ -275,13 +264,10 @@ namespace UserControl_practitioner
           k.Safe(TextBox_id.Text,k.safe_hint_type.NUM),
           k.Safe(TextBox_last_name.Text,k.safe_hint_type.HUMAN_NAME).Trim(),
           k.Safe(TextBox_first_name.Text,k.safe_hint_type.HUMAN_NAME).Trim(),
-          k.Safe(TextBox_middle_name.Text,k.safe_hint_type.HUMAN_NAME).Trim(),
-          k.Safe(TextBox_email_address.Text,k.safe_hint_type.EMAIL_ADDRESS).Trim(),
-          k.Safe(TextBox_new_emso_user_id.Text,k.safe_hint_type.NUM).Trim(),
-          k.Safe(TextBox_county_code.Text,k.safe_hint_type.NUM).Trim(),
-          k.Safe(TextBox_street_address.Text,k.safe_hint_type.POSTAL_STREET_ADDRESS).Trim(),
-          k.Safe(TextBox_city.Text,k.safe_hint_type.POSTAL_CITY).Trim(),
-          k.Safe(TextBox_zip.Text,k.safe_hint_type.NUM).Trim(),
+          k.Safe(TextBox_middle_initial.Text,k.safe_hint_type.ALPHA).Trim(),
+          k.Safe(TextBox_certification_number.Text,k.safe_hint_type.NUM).Trim(),
+          k.Safe(TextBox_level_id.Text,k.safe_hint_type.NUM).Trim(),
+          k.Safe(TextBox_regional_council_code.Text,k.safe_hint_type.NUM).Trim(),
           UserControl_drop_down_date_birth_date.selectedvalue
           );
         Alert(k.alert_cause_type.USER, k.alert_state_type.SUCCESS, "recsaved", "Record saved.", true);
@@ -348,13 +334,10 @@ namespace UserControl_practitioner
       {
       TextBox_last_name.Enabled = ablement;
       TextBox_first_name.Enabled = ablement;
-      TextBox_middle_name.Enabled = ablement;
-      TextBox_email_address.Enabled = ablement;
-      TextBox_new_emso_user_id.Enabled = ablement;
-      TextBox_county_code.Enabled = ablement;
-      TextBox_street_address.Enabled = ablement;
-      TextBox_city.Enabled = ablement;
-      TextBox_zip.Enabled = ablement;
+      TextBox_middle_initial.Enabled = ablement;
+      TextBox_certification_number.Enabled = ablement;
+      TextBox_level_id.Enabled = ablement;
+      TextBox_regional_council_code.Enabled = ablement;
       UserControl_drop_down_date_birth_date.enabled = ablement;
       }
 

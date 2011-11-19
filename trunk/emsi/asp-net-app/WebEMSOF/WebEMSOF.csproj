@@ -104,6 +104,7 @@
     <Compile Include="component\biz\Class_biz_notifications.cs" />
     <Compile Include="component\biz\Class_biz_payment_proof_methods.cs" />
     <Compile Include="component\biz\Class_biz_practitioners.cs" />
+    <Compile Include="component\biz\Class_biz_practitioner_levels.cs" />
     <Compile Include="component\biz\Class_biz_regional_staffers.cs" />
     <Compile Include="component\biz\Class_biz_scheduled_tasks.cs" />
     <Compile Include="component\biz\Class_biz_services.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="component\db\Class_db_milestones.cs" />
     <Compile Include="component\db\Class_db_payment_proof_methods.cs" />
     <Compile Include="component\db\Class_db_practitioners.cs" />
+    <Compile Include="component\db\Class_db_practitioner_levels.cs" />
     <Compile Include="component\db\Class_db_regional_staffers.cs" />
     <Compile Include="component\db\Class_db_services.cs" />
     <Compile Include="component\db\Class_db_teaching_entities.cs" />
@@ -588,6 +590,12 @@
     <Compile Include="usercontrol\app\UserControl_practitioner.ascx.designer.cs">
       <DependentUpon>UserControl_practitioner.ascx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrol\app\UserControl_practitioner_level.ascx.cs">
+      <DependentUpon>UserControl_practitioner_level.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_practitioner_level.ascx.designer.cs">
+      <DependentUpon>UserControl_practitioner_level.ascx</DependentUpon>
+    </Compile>
     <Compile Include="usercontrol\app\UserControl_precontent.ascx.cs">
       <DependentUpon>UserControl_precontent.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -862,6 +870,7 @@
     <Content Include="usercontrol\app\UserControl_outcomes.ascx" />
     <Content Include="usercontrol\app\UserControl_postcontent.ascx" />
     <Content Include="usercontrol\app\UserControl_practitioner.ascx" />
+    <Content Include="usercontrol\app\UserControl_practitioner_level.ascx" />
     <Content Include="usercontrol\app\UserControl_precontent.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_current_binder.ascx" />

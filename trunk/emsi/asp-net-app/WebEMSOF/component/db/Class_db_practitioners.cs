@@ -23,7 +23,7 @@ namespace Class_db_practitioners
 
     public bool Bind(string partial_spec, object target)
       {
-      var concat_clause = "concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(middle_name,'-'),'|',IFNULL(email_address,'-'),'|',IFNULL(county_code,'-'),'|',IFNULL(street_address,'-'),'|',IFNULL(city,'-'),'|',IFNULL(zip,'-'),'|',IFNULL(birth_date,'-'))";
+      var concat_clause = "concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(certification_number,'-'),'|',IFNULL(level_id,'-'),'|',IFNULL(regional_council_code,'-'),'|',IFNULL(birth_date,'-'))";
       Open();
       ((target) as ListControl).Items.Clear();
       var dr = new MySqlCommand
@@ -52,7 +52,7 @@ namespace Class_db_practitioners
       var dr = new MySqlCommand
         (
         "SELECT id"
-        + " , CONVERT(concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(middle_name,'-'),'|',IFNULL(email_address,'-'),'|',IFNULL(county_code,'-'),'|',IFNULL(street_address,'-'),'|',IFNULL(city,'-'),'|',IFNULL(zip,'-'),'|',IFNULL(birth_date,'-')) USING utf8) as spec"
+        + " , CONVERT(concat(IFNULL(last_name,'-'),'|',IFNULL(first_name,'-'),'|',IFNULL(certification_number,'-'),'|',IFNULL(level_id,'-'),'|',IFNULL(regional_council_code,'-'),'|',IFNULL(birth_date,'-')) USING utf8) as spec"
         + " FROM practitioner"
         + " order by spec",
         connection
@@ -94,25 +94,19 @@ namespace Class_db_practitioners
       string id,
       out string last_name,
       out string first_name,
-      out string middle_name,
-      out string email_address,
-      out string new_emso_user_id,
-      out string county_code,
-      out string street_address,
-      out string city,
-      out string zip,
+      out string middle_initial,
+      out string certification_number,
+      out string level_id,
+      out string regional_council_code,
       out DateTime birth_date
       )
       {
       last_name = k.EMPTY;
       first_name = k.EMPTY;
-      middle_name = k.EMPTY;
-      email_address = k.EMPTY;
-      new_emso_user_id = k.EMPTY;
-      county_code = k.EMPTY;
-      street_address = k.EMPTY;
-      city = k.EMPTY;
-      zip = k.EMPTY;
+      middle_initial = k.EMPTY;
+      certification_number = k.EMPTY;
+      level_id = k.EMPTY;
+      regional_council_code = k.EMPTY;
       birth_date = DateTime.MinValue;
       var result = false;
       //
@@ -122,13 +116,10 @@ namespace Class_db_practitioners
         {
         last_name = dr["last_name"].ToString();
         first_name = dr["first_name"].ToString();
-        middle_name = dr["middle_name"].ToString();
-        email_address = dr["email_address"].ToString();
-        new_emso_user_id = dr["new_emso_user_id"].ToString();
-        county_code = dr["county_code"].ToString();
-        street_address = dr["street_address"].ToString();
-        city = dr["city"].ToString();
-        zip = dr["zip"].ToString();
+        middle_initial = dr["middle_initial"].ToString();
+        certification_number = dr["certification_number"].ToString();
+        level_id = dr["level_id"].ToString();
+        regional_council_code = dr["regional_council_code"].ToString();
         birth_date = DateTime.Parse(dr["birth_date"].ToString());
         result = true;
         }
@@ -139,28 +130,18 @@ namespace Class_db_practitioners
 
     internal void ImportLatestFromEmsrs(ArrayList recs)
       {
-      var childless_field_assignments_clause = k.EMPTY;
       Open();
       foreach (var rec in recs)
         {
-        childless_field_assignments_clause = k.EMPTY
-        + "last_name = NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
-        + " , first_name = NULLIF('" + (rec as Class_ss_emsams.Practitioner).first_name + "','')"
-        + " , middle_name = NULLIF('" + (rec as Class_ss_emsams.Practitioner).middle_name + "','')"
-        + " , email_address = NULLIF('" + (rec as Class_ss_emsams.Practitioner).email_address + "','')"
-        + " , county_code = NULLIF(IFNULL((select code from county_code_name_map where name = '" + (rec as Class_ss_emsams.Practitioner).county + "'),''),'')"
-        + " , street_address = NULLIF('" + (rec as Class_ss_emsams.Practitioner).street_address + "','')"
-        + " , city = NULLIF('" + (rec as Class_ss_emsams.Practitioner).city + "','')"
-        + " , zip = NULLIF('" + (rec as Class_ss_emsams.Practitioner).zip + "','')"
-        + " , birth_date = STR_TO_DATE(NULLIF('" + (rec as Class_ss_emsams.Practitioner).birth_date + "',''),'%m/%d/%Y')"
-        + k.EMPTY;
         new MySqlCommand
           (
-          "insert practitioner"
-          + " set new_emso_user_id = NULLIF('" + (rec as Class_ss_emsams.Practitioner).new_emso_user_id + "','')"
-          + " , " + childless_field_assignments_clause
-          + " on duplicate key update "
-          + childless_field_assignments_clause,
+          "insert ignore practitioner"
+          + " set last_name = NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
+          + " , first_name = NULLIF('" + (rec as Class_ss_emsams.Practitioner).first_name + "','')"
+          + " , middle_initial = NULLIF('" + (rec as Class_ss_emsams.Practitioner).middle_initial + "','')"
+          + " , certification_number = NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
+          + " , level_id = NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
+          + " , regional_council_code = NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')",
           connection
           )
           .ExecuteNonQuery();
@@ -173,26 +154,20 @@ namespace Class_db_practitioners
       string id,
       string last_name,
       string first_name,
-      string middle_name,
-      string email_address,
-      string new_emso_user_id,
-      string county_code,
-      string street_address,
-      string city,
-      string zip,
+      string middle_initial,
+      string certification_number,
+      string level_id,
+      string regional_council_code,
       DateTime birth_date
       )
       {
       var childless_field_assignments_clause = k.EMPTY
       + "last_name = NULLIF('" + last_name + "','')"
       + " , first_name = NULLIF('" + first_name + "','')"
-      + " , middle_name = NULLIF('" + middle_name + "','')"
-      + " , email_address = NULLIF('" + email_address + "','')"
-      + " , new_emso_user_id = NULLIF('" + new_emso_user_id + "','')"
-      + " , county_code = NULLIF('" + county_code + "','')"
-      + " , street_address = NULLIF('" + street_address + "','')"
-      + " , city = NULLIF('" + city + "','')"
-      + " , zip = NULLIF('" + zip + "','')"
+      + " , middle_initial = NULLIF('" + middle_initial + "','')"
+      + " , certification_number = NULLIF('" + certification_number + "','')"
+      + " , level_id = NULLIF('" + level_id + "','')"
+      + " , regional_council_code = NULLIF('" + regional_council_code + "','')"
       + " , birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
       + k.EMPTY;
       Open();
