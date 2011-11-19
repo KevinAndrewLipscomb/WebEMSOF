@@ -4,7 +4,8 @@ DROP TABLE IF EXISTS coned_offering_document_status;
 CREATE TABLE IF NOT EXISTS coned_offering_document_status (
   id SERIAL,
   description CHAR(1) NOT NULL,
-  PRIMARY KEY(id)
+  PRIMARY KEY(id),
+  UNIQUE(description)
 )
 ENGINE = InnoDB
 ;

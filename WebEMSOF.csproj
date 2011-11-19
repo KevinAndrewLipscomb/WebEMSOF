@@ -87,8 +87,8 @@
   <ItemGroup>
     <Compile Include="component\biz\Class_biz_coned_offerings.cs" />
     <Compile Include="component\biz\Class_biz_coned_offering_class_final_statuses.cs" />
-    <Compile Include="component\biz\Class_biz_coned_offering_class_final_status_descriptions.cs" />
     <Compile Include="component\biz\Class_biz_coned_offering_document_statuses.cs" />
+    <Compile Include="component\biz\Class_biz_coned_sponsor_statuses.cs" />
     <Compile Include="component\biz\Class_biz_emsof_extra_service_county_dependencies.cs" />
     <Compile Include="component\biz\Class_biz_accounts.cs" />
     <Compile Include="component\biz\Class_biz_appropriations.cs" />
@@ -107,7 +107,11 @@
     <Compile Include="component\biz\Class_biz_regional_staffers.cs" />
     <Compile Include="component\biz\Class_biz_scheduled_tasks.cs" />
     <Compile Include="component\biz\Class_biz_services.cs" />
+    <Compile Include="component\biz\Class_biz_teaching_entities.cs" />
+    <Compile Include="component\biz\Class_biz_teaching_entity_business_types.cs" />
+    <Compile Include="component\biz\Class_biz_teaching_entity_levels.cs" />
     <Compile Include="component\biz\Class_biz_test.cs" />
+    <Compile Include="component\biz\Class_biz_training_institute_statuses.cs" />
     <Compile Include="component\biz\Class_biz_user.cs" />
     <Compile Include="component\db\Class_db.cs" />
     <Compile Include="component\db\Class_db_accounts.cs" />
@@ -115,8 +119,8 @@
     <Compile Include="component\db\Class_db_charter_kinds.cs" />
     <Compile Include="component\db\Class_db_coned_offerings.cs" />
     <Compile Include="component\db\Class_db_coned_offering_class_final_statuses.cs" />
-    <Compile Include="component\db\Class_db_coned_offering_class_final_status_descriptions.cs" />
     <Compile Include="component\db\Class_db_coned_offering_document_statuses.cs" />
+    <Compile Include="component\db\Class_db_coned_sponsor_statuses.cs" />
     <Compile Include="component\db\Class_db_counties.cs" />
     <Compile Include="component\db\Class_db_emsof_extra_service_county_dependencies.cs" />
     <Compile Include="component\db\Class_db_emsof_requests.cs" />
@@ -130,7 +134,11 @@
     <Compile Include="component\db\Class_db_practitioners.cs" />
     <Compile Include="component\db\Class_db_regional_staffers.cs" />
     <Compile Include="component\db\Class_db_services.cs" />
+    <Compile Include="component\db\Class_db_teaching_entities.cs" />
+    <Compile Include="component\db\Class_db_teaching_entity_business_types.cs" />
+    <Compile Include="component\db\Class_db_teaching_entity_levels.cs" />
     <Compile Include="component\db\Class_db_trail.cs" />
+    <Compile Include="component\db\Class_db_training_institute_statuses.cs" />
     <Compile Include="component\db\Class_db_user.cs" />
     <Compile Include="component\fs\Class_fs.cs" />
     <Compile Include="component\ss\Class_ss_emsams.cs" />
@@ -171,6 +179,13 @@
     </Compile>
     <Compile Include="noninteractive\daily_tasks.aspx.designer.cs">
       <DependentUpon>daily_tasks.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="noninteractive\import_latest_teaching_entities_from_emsrs.aspx.cs">
+      <DependentUpon>import_latest_teaching_entities_from_emsrs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="noninteractive\import_latest_teaching_entities_from_emsrs.aspx.designer.cs">
+      <DependentUpon>import_latest_teaching_entities_from_emsrs.aspx</DependentUpon>
     </Compile>
     <Compile Include="noninteractive\import_latest_practitioners_from_emsrs.aspx.cs">
       <DependentUpon>import_latest_practitioners_from_emsrs.aspx</DependentUpon>
@@ -486,19 +501,15 @@
     <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx.designer.cs">
       <DependentUpon>UserControl_coned_offering_class_final_status.ascx</DependentUpon>
     </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status_description.ascx.cs">
-      <DependentUpon>UserControl_coned_offering_class_final_status_description.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status_description.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_offering_class_final_status_description.ascx</DependentUpon>
-    </Compile>
     <Compile Include="usercontrol\app\UserControl_coned_offering_document_status.ascx.cs">
       <DependentUpon>UserControl_coned_offering_document_status.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_coned_offering_document_status.ascx.designer.cs">
       <DependentUpon>UserControl_coned_offering_document_status.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_sponsor_status.ascx.designer.cs">
+      <DependentUpon>UserControl_coned_sponsor_status.ascx</DependentUpon>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_config_binder.ascx.cs">
       <DependentUpon>UserControl_config_binder.ascx</DependentUpon>
@@ -640,6 +651,34 @@
     <Compile Include="usercontrol\app\UserControl_service_profile.ascx.designer.cs">
       <DependentUpon>UserControl_service_profile.ascx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrol\app\UserControl_teaching_entity.ascx.cs">
+      <DependentUpon>UserControl_teaching_entity.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_teaching_entity.ascx.designer.cs">
+      <DependentUpon>UserControl_teaching_entity.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_teaching_entity_business_type.ascx.cs">
+      <DependentUpon>UserControl_teaching_entity_business_type.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_teaching_entity_business_type.ascx.designer.cs">
+      <DependentUpon>UserControl_teaching_entity_business_type.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_teaching_entity_level.ascx.cs">
+      <DependentUpon>UserControl_teaching_entity_level.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_teaching_entity_level.ascx.designer.cs">
+      <DependentUpon>UserControl_teaching_entity_level.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_training_institute_status.ascx.cs">
+      <DependentUpon>UserControl_training_institute_status.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_training_institute_status.ascx.designer.cs">
+      <DependentUpon>UserControl_training_institute_status.ascx</DependentUpon>
+    </Compile>
     <Compile Include="usercontrol\app\UserControl_update_progress_blocker.ascx.cs">
       <DependentUpon>UserControl_update_progress_blocker.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -744,6 +783,7 @@
     <Content Include="login.aspx" />
     <Content Include="new_password.aspx" />
     <Content Include="noninteractive\import_latest_coned_offerings_from_emsrs.aspx" />
+    <Content Include="noninteractive\import_latest_teaching_entities_from_emsrs.aspx" />
     <Content Include="noninteractive\import_latest_practitioners_from_emsrs.aspx" />
     <Content Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx" />
     <Content Include="protected\administer_service_email_address.aspx" />
@@ -809,8 +849,8 @@
     <Content Include="usercontrol\app\UserControl_common_header_bar.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_offering.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_offering_class_final_status_description.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_offering_document_status.ascx" />
+    <Content Include="usercontrol\app\UserControl_coned_sponsor_status.ascx" />
     <Content Include="usercontrol\app\UserControl_config_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_counties.ascx" />
     <Content Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx" />
@@ -831,6 +871,10 @@
     <Content Include="usercontrol\app\UserControl_responding_services.ascx" />
     <Content Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx" />
     <Content Include="usercontrol\app\UserControl_service_profile.ascx" />
+    <Content Include="usercontrol\app\UserControl_teaching_entity.ascx" />
+    <Content Include="usercontrol\app\UserControl_teaching_entity_business_type.ascx" />
+    <Content Include="usercontrol\app\UserControl_teaching_entity_level.ascx" />
+    <Content Include="usercontrol\app\UserControl_training_institute_status.ascx" />
     <Content Include="usercontrol\app\UserControl_update_progress_blocker.ascx" />
     <Content Include="usercontrol\app\UserControl_values_to_region.ascx" />
     <Content Include="usercontrol\app\UserControl_values_to_services.ascx" />

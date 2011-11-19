@@ -148,18 +148,18 @@
     </td>
     <td nowrap="nowrap">
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_document_status" runat="server" errormessage="Please enter Document status." font-bold="True" controltovalidate="TextBox_document_status">!ERR!</ASP:RequiredFieldValidator>
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_document_status" runat="server" errormessage="Please enter a valid Document status." font-bold="True" controltovalidate="TextBox_document_status" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
+      <ASP:RegularExpressionValidator id="RegularExpressionValidator_document_status" runat="server" errormessage="Please enter a valid Document status." font-bold="True" controltovalidate="TextBox_document_status" validationexpression="[A-Z]">!ERR!</ASP:RegularExpressionValidator>
     </td>
   </tr>
   <tr>
-    <td><font class="">Class final status:</font></td>
+    <td><font class="">Class final status id:</font></td>
     <td>
       <font class="">
-        <ASP:TextBox id="TextBox_class_final_status" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+        <ASP:TextBox id="TextBox_class_final_status_id" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
     <td nowrap="nowrap">
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_class_final_status" runat="server" errormessage="Please enter a valid Class final status." font-bold="True" controltovalidate="TextBox_class_final_status" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
+      <ASP:RegularExpressionValidator id="RegularExpressionValidator_class_final_status_id" runat="server" errormessage="Please enter a valid Class final status id." font-bold="True" controltovalidate="TextBox_class_final_status_id" validationexpression="\d+">!ERR!</ASP:RegularExpressionValidator>
     </td>
   </tr>
   <tr>
@@ -671,17 +671,6 @@
       </font>
     </td>
     <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Class final status description:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_class_final_status_description" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_class_final_status_description" runat="server" errormessage="Please enter a valid Class final status description." font-bold="True" controltovalidate="TextBox_class_final_status_description" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
     </td>
   </tr>
   <tr>

@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UserControl_coned_offering_class_final_status_description {
+namespace UserControl_coned_sponsor_status {
     
     
-    public partial class TWebUserControl_coned_offering_class_final_status_description {
+    public partial class TWebUserControl_coned_sponsor_status {
         
         /// <summary>
         /// TextBox_id control.

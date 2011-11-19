@@ -213,6 +213,43 @@ namespace WebEMSOF.component.ss
 
 	    return true;
     }
+
+    private bool Request_ems_health_state_pa_us_ConedExportSponsorsearchtxt
+      (
+      CookieContainer cookie_container,
+      out HttpWebResponse response
+      )
+    {
+	    response = null;
+
+	    try
+	    {
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/Export/SponsorSearch_345.txt");
+        request.CookieContainer = cookie_container;
+
+		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
+		    request.Referer = "https://ems.health.state.pa.us/ConEd/SponsorSearch.asp";
+		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
+		    request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)";
+		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=jcydtlzcjxtbyawd4zjsbg3w; ConEd_EMSOUserID=345; ASPSESSIONIDQCBBQCCR=HCGDCOMCLNEJMAGGPPNHCAFM");
+
+		    response = (HttpWebResponse)request.GetResponse();
+	    }
+	    catch (WebException e)
+	    {
+		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
+		    else return false;
+	    }
+	    catch (Exception)
+	    {
+		    if(response != null) response.Close();
+		    return false;
+	    }
+
+	    return true;
+    }
+
     private bool Request_ems_health_state_pa_us_ConedListclassnumbers
       (
       CookieContainer cookie_container,
@@ -315,6 +352,89 @@ namespace WebEMSOF.component.ss
 		    request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)";
 		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
 		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=5rk44se5bzjgtspmizipbpwp; ConEd_EMSOUserID=345; ASPSESSIONIDQCCATACQ=IPDLADIDOFONKEFNONAJIAEK");
+
+		    response = (HttpWebResponse)request.GetResponse();
+	    }
+	    catch (WebException e)
+	    {
+		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
+		    else return false;
+	    }
+	    catch (Exception)
+	    {
+		    if(response != null) response.Close();
+		    return false;
+	    }
+
+	    return true;
+    }
+
+    private bool Request_ems_health_state_pa_us_ConedSponsorsearch
+      (
+      CookieContainer cookie_container,
+      out HttpWebResponse response
+      )
+    {
+	    response = null;
+
+	    try
+	    {
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/SponsorSearch.asp");
+        request.CookieContainer = cookie_container;
+
+		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
+		    request.Referer = "https://ems.health.state.pa.us/ConEd/MainMenu.asp";
+		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
+		    request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)";
+		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=jcydtlzcjxtbyawd4zjsbg3w; ConEd_EMSOUserID=345; ASPSESSIONIDQCBBQCCR=HCGDCOMCLNEJMAGGPPNHCAFM");
+
+		    response = (HttpWebResponse)request.GetResponse();
+	    }
+	    catch (WebException e)
+	    {
+		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
+		    else return false;
+	    }
+	    catch (Exception)
+	    {
+		    if(response != null) response.Close();
+		    return false;
+	    }
+
+	    return true;
+    }    
+
+    private bool Request_ems_health_state_pa_us_ConedSponsorsearch_Filedelimited_Searchnow
+      (
+      CookieContainer cookie_container,
+      out HttpWebResponse response
+      )
+    {
+	    response = null;
+
+	    try
+	    {
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/SponsorSearch.asp");
+        request.CookieContainer = cookie_container;
+
+		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
+		    request.Referer = "https://ems.health.state.pa.us/ConEd/SponsorSearch.asp";
+		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
+		    request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)";
+		    request.ContentType = "application/x-www-form-urlencoded";
+		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+		    request.Headers.Set(HttpRequestHeader.CacheControl, "no-cache");
+		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=jcydtlzcjxtbyawd4zjsbg3w; ConEd_EMSOUserID=345; ASPSESSIONIDQCBBQCCR=HCGDCOMCLNEJMAGGPPNHCAFM");
+
+		    request.Method = "POST";
+
+		    string postString = @"cmdMove=Search+Now&name=&number=&Region=&CountyCode=&ExpirationDate_Low=&ExpirationDate_High=&Status=&ApplicationDate_Low=&ApplicationDate_High=&ProcessDate_Low=&ProcessDate_High=&OutputFormat=FileDelimited";
+		    byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(postString);
+		    request.ContentLength = postBytes.Length;
+		    Stream stream = request.GetRequestStream();
+		    stream.Write(postBytes, 0, postBytes.Length);
+		    stream.Close();
 
 		    response = (HttpWebResponse)request.GetResponse();
 	    }
@@ -504,21 +624,14 @@ namespace WebEMSOF.component.ss
       {
       var class_search_unlimited = new ArrayList();
       //
-      HttpWebResponse dummy_response;
       HttpWebResponse response;
       var cookie_container = new CookieContainer();
       if(
-          Request_ems_health_state_pa_us_Emsportal_Login(cookie_container,out response)
-        &&
-          Request_ems_health_state_pa_us_EmsportalApplicationtransfersTransfertoconed(cookie_container,out response)
-        &&
           Request_ems_health_state_pa_us_ConedClasssearch(cookie_container,out response)
         &&
           Request_ems_health_state_pa_us_ConedClasssearch_Coned_Filedelimited_Searchnow(cookie_container,out response)
         &&
           Request_ems_health_state_pa_us_ConedExportClasssearchtxt(cookie_container,out response)
-        &&
-          Request_ems_health_state_pa_us_Coned_Mainmenu_Logout(cookie_container,out dummy_response)
         )
         {
         var stream_reader = new StreamReader(response.GetResponseStream());
@@ -667,6 +780,162 @@ namespace WebEMSOF.component.ss
     //    }
     //  return monitored_coned_offering;
     //  }
+
+    internal class TeachingEntity
+      {
+      internal string id = k.EMPTY;
+      internal string date_created = k.EMPTY;
+      internal string date_last_edited = k.EMPTY;
+      internal string sponsor_number = k.EMPTY;
+      internal string training_ins_accred_num = k.EMPTY;
+      internal string name = k.EMPTY;
+      internal string short_name = k.EMPTY;
+      internal string address_1 = k.EMPTY;
+      internal string address_2 = k.EMPTY;
+      internal string city = k.EMPTY;
+      internal string state = k.EMPTY;
+      internal string zip = k.EMPTY;
+      internal string county_code = k.EMPTY;
+      internal string region = k.EMPTY;
+      internal string email = k.EMPTY;
+      internal string website = k.EMPTY;
+      internal string daytime_phone = k.EMPTY;
+      internal string evening_phone = k.EMPTY;
+      internal string fax = k.EMPTY;
+      internal string business_type_id = k.EMPTY;
+      internal string con_ed_level = k.EMPTY;
+      internal string certification_level = k.EMPTY;
+      internal string contact_prefix = k.EMPTY;
+      internal string contact_first_name = k.EMPTY;
+      internal string contact_last_name = k.EMPTY;
+      internal string contact_suffix = k.EMPTY;
+      internal string contact_title = k.EMPTY;
+      internal string contact_address_1 = k.EMPTY;
+      internal string contact_address_2 = k.EMPTY;
+      internal string contact_city = k.EMPTY;
+      internal string contact_state = k.EMPTY;
+      internal string contact_zip = k.EMPTY;
+      internal string contact_daytime_phone = k.EMPTY;
+      internal string contact_evening_phone = k.EMPTY;
+      internal string contact_fax = k.EMPTY;
+      internal string contact_email = k.EMPTY;
+      internal string public_contact_name = k.EMPTY;
+      internal string public_contact_phone = k.EMPTY;
+      internal string public_contact_email = k.EMPTY;
+      internal string public_contact_website = k.EMPTY;
+      internal string public_contact_notes = k.EMPTY;
+      internal string application_date = k.EMPTY;
+      internal string application_received = k.EMPTY;
+      internal string sponsor_status = k.EMPTY;
+      internal string sponsor_status_description = k.EMPTY;
+      internal string training_inst_status = k.EMPTY;
+      internal string training_inst_status_description = k.EMPTY;
+      internal string issue_date = k.EMPTY;
+      internal string prev_expiration_date = k.EMPTY;
+      internal string expiration_date_sponsor = k.EMPTY;
+      internal string expiration_date_training_inst = k.EMPTY;
+      internal string process_date = k.EMPTY;
+      internal string corrective_action = k.EMPTY;
+      internal string compliance_by_date = k.EMPTY;
+      internal string initial_accred_date = k.EMPTY;
+      internal string accepted_provisional_date = k.EMPTY;
+      internal string completed_provisional_date = k.EMPTY;
+      internal string withdrawal_challenge_due_date = k.EMPTY;
+      internal string letter_for_expiration = k.EMPTY;
+      internal string letter_f_for_ppwk_non_compliance = k.EMPTY;
+      internal string other_letter = k.EMPTY;
+      internal string history = k.EMPTY;
+      internal string business_type_description = k.EMPTY;
+      }
+    internal ArrayList TeachingEntitySearchUnlimited()
+      {
+      var teaching_entity_search_unlimited = new ArrayList();
+      //
+      HttpWebResponse response;
+      var cookie_container = new CookieContainer();
+      if(
+          Request_ems_health_state_pa_us_ConedSponsorsearch(cookie_container,out response)
+        &&
+          Request_ems_health_state_pa_us_ConedSponsorsearch_Filedelimited_Searchnow(cookie_container,out response)
+        &&
+          Request_ems_health_state_pa_us_ConedExportSponsorsearchtxt(cookie_container,out response)
+        )
+        {
+        var stream_reader = new StreamReader(response.GetResponseStream());
+        stream_reader.ReadLine();  //Discard the first line.  It only contains column headings.
+        while (!stream_reader.EndOfStream)
+          {
+          var field_array = stream_reader.ReadLine().Split(new string[] {k.TAB},StringSplitOptions.None);
+          var teaching_entity = new TeachingEntity();
+          teaching_entity.id = k.Safe(field_array[0],k.safe_hint_type.NUM);
+          teaching_entity.date_created = k.Safe(field_array[1],k.safe_hint_type.DATE_TIME);
+          teaching_entity.date_last_edited = k.Safe(field_array[2],k.safe_hint_type.DATE_TIME);
+          teaching_entity.sponsor_number = k.Safe(field_array[3],k.safe_hint_type.HYPHENATED_NUM);
+          teaching_entity.training_ins_accred_num = k.Safe(field_array[4],k.safe_hint_type.HYPHENATED_NUM);
+          teaching_entity.name = k.Safe(field_array[5],k.safe_hint_type.ORG_NAME);
+          teaching_entity.short_name = k.Safe(field_array[6],k.safe_hint_type.ORG_NAME);
+          teaching_entity.address_1 = k.Safe(field_array[7],k.safe_hint_type.POSTAL_STREET_ADDRESS);
+          teaching_entity.address_2 = k.Safe(field_array[8],k.safe_hint_type.POSTAL_STREET_ADDRESS);
+          teaching_entity.city = k.Safe(field_array[9],k.safe_hint_type.POSTAL_CITY);
+          teaching_entity.state = k.Safe(field_array[10],k.safe_hint_type.ALPHA);
+          teaching_entity.zip = k.Safe(field_array[11],k.safe_hint_type.HYPHENATED_NUM);
+          teaching_entity.county_code = k.Safe(field_array[12],k.safe_hint_type.NUM);
+          teaching_entity.region = k.Safe(field_array[13],k.safe_hint_type. NUM);
+          teaching_entity.email = k.Safe(field_array[14],k.safe_hint_type.EMAIL_ADDRESS);
+          teaching_entity.website = k.Safe(field_array[15],k.safe_hint_type.HTTP_TARGET);
+          teaching_entity.daytime_phone = k.Safe(field_array[16],k.safe_hint_type.PHONE_NUM);
+          teaching_entity.evening_phone = k.Safe(field_array[17],k.safe_hint_type.PHONE_NUM);
+          teaching_entity.fax = k.Safe(field_array[18],k.safe_hint_type.PHONE_NUM);
+          teaching_entity.business_type_id = k.Safe(field_array[19],k.safe_hint_type.NUM);
+          teaching_entity.con_ed_level = k.Safe(field_array[20],k.safe_hint_type.PUNCTUATED);
+          teaching_entity.certification_level = k.Safe(field_array[21],k.safe_hint_type.PUNCTUATED);
+          teaching_entity.contact_prefix = k.Safe(field_array[22],k.safe_hint_type.HUMAN_NAME);
+          teaching_entity.contact_first_name = k.Safe(field_array[23],k.safe_hint_type.HUMAN_NAME);
+          teaching_entity.contact_last_name = k.Safe(field_array[24],k.safe_hint_type.HUMAN_NAME);
+          teaching_entity.contact_suffix = k.Safe(field_array[25],k.safe_hint_type.HUMAN_NAME);
+          teaching_entity.contact_title = k.Safe(field_array[26],k.safe_hint_type.MAKE_MODEL);
+          teaching_entity.contact_address_1 = k.Safe(field_array[27],k.safe_hint_type.POSTAL_STREET_ADDRESS);
+          teaching_entity.contact_address_2 = k.Safe(field_array[28],k.safe_hint_type.POSTAL_STREET_ADDRESS);
+          teaching_entity.contact_city = k.Safe(field_array[29],k.safe_hint_type.POSTAL_CITY);
+          teaching_entity.contact_state = k.Safe(field_array[30],k.safe_hint_type.ALPHA);
+          teaching_entity.contact_zip = k.Safe(field_array[31],k.safe_hint_type.HYPHENATED_NUM);
+          teaching_entity.contact_daytime_phone = k.Safe(field_array[32],k.safe_hint_type.PHONE_NUM);
+          teaching_entity.contact_evening_phone = k.Safe(field_array[33],k.safe_hint_type.PHONE_NUM);
+          teaching_entity.contact_fax = k.Safe(field_array[34],k.safe_hint_type.PHONE_NUM);
+          teaching_entity.contact_email = k.Safe(field_array[35],k.safe_hint_type.EMAIL_ADDRESS);
+          teaching_entity.public_contact_name = k.Safe(field_array[36],k.safe_hint_type.HUMAN_NAME);
+          teaching_entity.public_contact_phone = k.Safe(field_array[37],k.safe_hint_type.PHONE_NUM);
+          teaching_entity.public_contact_email = k.Safe(field_array[38],k.safe_hint_type.EMAIL_ADDRESS);
+          teaching_entity.public_contact_website = k.Safe(field_array[39],k.safe_hint_type.HTTP_TARGET);
+          teaching_entity.public_contact_notes = k.Safe(field_array[40],k.safe_hint_type.PUNCTUATED);
+          teaching_entity.application_date = k.Safe(field_array[41],k.safe_hint_type.DATE_TIME);
+          teaching_entity.application_received = k.Safe(field_array[42],k.safe_hint_type.DATE_TIME);
+          teaching_entity.sponsor_status = k.Safe(field_array[43],k.safe_hint_type.NUM);
+          teaching_entity.sponsor_status_description = k.Safe(field_array[44],k.safe_hint_type.ALPHA_WORDS);
+          teaching_entity.training_inst_status = k.Safe(field_array[45],k.safe_hint_type.NUM);
+          teaching_entity.training_inst_status_description = k.Safe(field_array[46],k.safe_hint_type.ALPHA_WORDS);
+          teaching_entity.issue_date = k.Safe(field_array[47],k.safe_hint_type.DATE_TIME);
+          teaching_entity.prev_expiration_date = k.Safe(field_array[48],k.safe_hint_type.DATE_TIME);
+          teaching_entity.expiration_date_sponsor = k.Safe(field_array[49],k.safe_hint_type.DATE_TIME);
+          teaching_entity.expiration_date_training_inst = k.Safe(field_array[50],k.safe_hint_type.DATE_TIME);
+          teaching_entity.process_date = k.Safe(field_array[51],k.safe_hint_type.DATE_TIME);
+          teaching_entity.corrective_action = k.Safe(field_array[52],k.safe_hint_type.PUNCTUATED);
+          teaching_entity.compliance_by_date = k.Safe(field_array[53],k.safe_hint_type.DATE_TIME);
+          teaching_entity.initial_accred_date = k.Safe(field_array[54],k.safe_hint_type.DATE_TIME);
+          teaching_entity.accepted_provisional_date = k.Safe(field_array[55],k.safe_hint_type.DATE_TIME);
+          teaching_entity.completed_provisional_date = k.Safe(field_array[56],k.safe_hint_type.DATE_TIME);
+          teaching_entity.withdrawal_challenge_due_date = k.Safe(field_array[57],k.safe_hint_type.DATE_TIME);
+          teaching_entity.letter_for_expiration = k.Safe(field_array[58],k.safe_hint_type.ALPHA);
+          teaching_entity.letter_f_for_ppwk_non_compliance = k.Safe(field_array[59],k.safe_hint_type.ALPHA);
+          teaching_entity.other_letter = k.Safe(field_array[60],k.safe_hint_type.ALPHA);
+          teaching_entity.history = k.Safe(field_array[61],k.safe_hint_type.MEMO);
+          teaching_entity.business_type_description = k.Safe(field_array[62],k.safe_hint_type.MAKE_MODEL);
+          teaching_entity_search_unlimited.Add(teaching_entity);
+          }
+        stream_reader.Close();
+        }
+      return teaching_entity_search_unlimited;
+      }
 
     internal class Practitioner
       {

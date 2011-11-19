@@ -7,9 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace import_latest_coned_offerings_from_emsrs {
+namespace import_latest_teaching_entities_from_emsrs {
     
     
-    public partial class TWebForm_import_latest_coned_offerings_from_emsrs {
+    public partial class TWebForm_import_latest_teaching_entities_from_emsrs {
     }
 }

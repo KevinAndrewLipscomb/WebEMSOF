@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_coned_offering_class_final_status_description.ascx.cs" Inherits="UserControl_coned_offering_class_final_status_description.TWebUserControl_coned_offering_class_final_status_description"%>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_training_institute_status.ascx.cs" Inherits="UserControl_training_institute_status.TWebUserControl_training_institute_status"%>
 <!-- Derived from KiAspdotnetFramework/usercontrol/app/UserControl~template~trivial~item.ascx-template -->
 <table cellspacing="0" cellpadding="5" width="100%" border="0">
   <tr>
