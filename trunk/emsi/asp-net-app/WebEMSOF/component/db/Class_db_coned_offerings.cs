@@ -100,7 +100,7 @@ namespace Class_db_coned_offerings
       out string sponsor_id,
       out string sponsor_number,
       out string document_status,
-      out string class_final_status,
+      out string class_final_status_id,
       out string course_number,
       out string location,
       out string student_cost,
@@ -151,7 +151,6 @@ namespace Class_db_coned_offerings
       out string created_by_first_name,
       out string created_by_last_name,
       out string class_disapproval_reason_description,
-      out string class_final_status_description,
       out string sponsor_name,
       out string courses_course_number,
       out string course_title
@@ -166,7 +165,7 @@ namespace Class_db_coned_offerings
       sponsor_id = k.EMPTY;
       sponsor_number = k.EMPTY;
       document_status = k.EMPTY;
-      class_final_status = k.EMPTY;
+      class_final_status_id = k.EMPTY;
       course_number = k.EMPTY;
       location = k.EMPTY;
       student_cost = k.EMPTY;
@@ -217,7 +216,6 @@ namespace Class_db_coned_offerings
       created_by_first_name = k.EMPTY;
       created_by_last_name = k.EMPTY;
       class_disapproval_reason_description = k.EMPTY;
-      class_final_status_description = k.EMPTY;
       sponsor_name = k.EMPTY;
       courses_course_number = k.EMPTY;
       course_title = k.EMPTY;
@@ -237,7 +235,7 @@ namespace Class_db_coned_offerings
         sponsor_id = dr["sponsor_id"].ToString();
         sponsor_number = dr["sponsor_number"].ToString();
         document_status = dr["document_status"].ToString();
-        class_final_status = dr["class_final_status"].ToString();
+        class_final_status_id = dr["class_final_status_id"].ToString();
         course_number = dr["course_number"].ToString();
         location = dr["location"].ToString();
         student_cost = dr["student_cost"].ToString();
@@ -287,8 +285,6 @@ namespace Class_db_coned_offerings
         signed_hardcopy = (dr["signed_hardcopy"].ToString() == "1");
         created_by_first_name = dr["created_by_first_name"].ToString();
         created_by_last_name = dr["created_by_last_name"].ToString();
-        class_disapproval_reason_description = dr["class_disapproval_reason_description"].ToString();
-        class_final_status_description = dr["class_final_status_description"].ToString();
         sponsor_name = dr["sponsor_name"].ToString();
         courses_course_number = dr["courses_course_number"].ToString();
         course_title = dr["course_title"].ToString();
@@ -315,7 +311,7 @@ namespace Class_db_coned_offerings
         + " , sponsor_id = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).sponsor_id + "','')"
         + " , sponsor_number = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).sponsor_number + "','')"
         + " , document_status = NULLIF(IFNULL((select id from coned_offering_document_status where description = '" + (rec as Class_ss_emsams.ConedOffering).document_status + "'),''),'')"
-        + " , class_final_status = NULLIF(IFNULL((select id from coned_offering_class_final_status where description = '" + (rec as Class_ss_emsams.ConedOffering).class_final_status + "'),''),'')"
+        + " , class_final_status_id = NULLIF(IFNULL((select id from coned_offering_class_final_status where short_description = '" + (rec as Class_ss_emsams.ConedOffering).class_final_status + "'),''),'')"
         + " , course_number = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).course_number + "','')"
         + " , location = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).location + "','')"
         + " , student_cost = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).student_cost + "','')"
@@ -366,7 +362,6 @@ namespace Class_db_coned_offerings
         + " , created_by_first_name = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).created_by_first_name + "','')"
         + " , created_by_last_name = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).created_by_last_name + "','')"
         + " , class_disapproval_reason_description = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).class_disapproval_reason_description + "','')"
-        + " , class_final_status_description = NULLIF(IFNULL((select id from coned_offering_class_final_status_description where description = '" + (rec as Class_ss_emsams.ConedOffering).class_final_status_description + "'),''),'')"
         + " , sponsor_name = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).sponsor_name + "','')"
         + " , courses_course_number = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).courses_course_number + "','')"
         + " , course_title = NULLIF('" + (rec as Class_ss_emsams.ConedOffering).course_title + "','')"
@@ -397,7 +392,7 @@ namespace Class_db_coned_offerings
       string sponsor_id,
       string sponsor_number,
       string document_status,
-      string class_final_status,
+      string class_final_status_id,
       string course_number,
       string location,
       string student_cost,
@@ -448,7 +443,6 @@ namespace Class_db_coned_offerings
       string created_by_first_name,
       string created_by_last_name,
       string class_disapproval_reason_description,
-      string class_final_status_description,
       string sponsor_name,
       string courses_course_number,
       string course_title
@@ -464,7 +458,7 @@ namespace Class_db_coned_offerings
       + " , sponsor_id = NULLIF('" + sponsor_id + "','')"
       + " , sponsor_number = NULLIF('" + sponsor_number + "','')"
       + " , document_status = NULLIF('" + document_status + "','')"
-      + " , class_final_status = NULLIF(IFNULL((select id from coned_offering_class_final_status where description = '" + class_final_status + "'),''),'')"
+      + " , class_final_status_id = NULLIF(IFNULL((select id from coned_offering_class_final_status where short_description = '" + class_final_status_id + "'),''),'')"
       + " , course_number = NULLIF('" + course_number + "','')"
       + " , location = NULLIF('" + location + "','')"
       + " , student_cost = NULLIF('" + student_cost + "','')"
@@ -515,7 +509,6 @@ namespace Class_db_coned_offerings
       + " , created_by_first_name = NULLIF('" + created_by_first_name + "','')"
       + " , created_by_last_name = NULLIF('" + created_by_last_name + "','')"
       + " , class_disapproval_reason_description = NULLIF('" + class_disapproval_reason_description + "','')"
-      + " , class_final_status_description = NULLIF(IFNULL((select id from coned_offering_class_final_status_description where description = '" + class_final_status_description + "'),''),'')"
       + " , sponsor_name = NULLIF('" + sponsor_name + "','')"
       + " , courses_course_number = NULLIF('" + courses_course_number + "','')"
       + " , course_title = NULLIF('" + course_title + "','')"

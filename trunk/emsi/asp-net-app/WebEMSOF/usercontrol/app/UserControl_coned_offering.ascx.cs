@@ -29,7 +29,7 @@ namespace UserControl_coned_offering
       TextBox_sponsor_id.Text = k.EMPTY;
       TextBox_sponsor_number.Text = k.EMPTY;
       TextBox_document_status.Text = k.EMPTY;
-      TextBox_class_final_status.Text = k.EMPTY;
+      TextBox_class_final_status_id.Text = k.EMPTY;
       TextBox_course_number.Text = k.EMPTY;
       TextBox_location.Text = k.EMPTY;
       TextBox_student_cost.Text = k.EMPTY;
@@ -80,7 +80,6 @@ namespace UserControl_coned_offering
       TextBox_created_by_first_name.Text = k.EMPTY;
       TextBox_created_by_last_name.Text = k.EMPTY;
       TextBox_class_disapproval_reason_description.Text = k.EMPTY;
-      TextBox_class_final_status_description.Text = k.EMPTY;
       TextBox_sponsor_name.Text = k.EMPTY;
       TextBox_courses_course_number.Text = k.EMPTY;
       TextBox_course_title.Text = k.EMPTY;
@@ -208,7 +207,7 @@ namespace UserControl_coned_offering
       string sponsor_id;
       string sponsor_number;
       string document_status;
-      string class_final_status;
+      string class_final_status_id;
       string course_number;
       string location;
       string student_cost;
@@ -259,7 +258,6 @@ namespace UserControl_coned_offering
       string created_by_first_name;
       string created_by_last_name;
       string class_disapproval_reason_description;
-      string class_final_status_description;
       string sponsor_name;
       string courses_course_number;
       string course_title;
@@ -278,7 +276,7 @@ namespace UserControl_coned_offering
           out sponsor_id,
           out sponsor_number,
           out document_status,
-          out class_final_status,
+          out class_final_status_id,
           out course_number,
           out location,
           out student_cost,
@@ -329,7 +327,6 @@ namespace UserControl_coned_offering
           out created_by_first_name,
           out created_by_last_name,
           out class_disapproval_reason_description,
-          out class_final_status_description,
           out sponsor_name,
           out courses_course_number,
           out course_title
@@ -347,7 +344,7 @@ namespace UserControl_coned_offering
         TextBox_sponsor_id.Text = sponsor_id;
         TextBox_sponsor_number.Text = sponsor_number;
         TextBox_document_status.Text = document_status;
-        TextBox_class_final_status.Text = class_final_status;
+        TextBox_class_final_status_id.Text = class_final_status_id;
         TextBox_course_number.Text = course_number;
         TextBox_location.Text = location;
         TextBox_student_cost.Text = student_cost;
@@ -398,7 +395,6 @@ namespace UserControl_coned_offering
         TextBox_created_by_first_name.Text = created_by_first_name;
         TextBox_created_by_last_name.Text = created_by_last_name;
         TextBox_class_disapproval_reason_description.Text = class_disapproval_reason_description;
-        TextBox_class_final_status_description.Text = class_final_status_description;
         TextBox_sponsor_name.Text = sponsor_name;
         TextBox_courses_course_number.Text = courses_course_number;
         TextBox_course_title.Text = course_title;
@@ -510,7 +506,7 @@ namespace UserControl_coned_offering
           k.Safe(TextBox_sponsor_id.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_sponsor_number.Text,k.safe_hint_type.HYPHENATED_NUM).Trim(),
           k.Safe(TextBox_document_status.Text,k.safe_hint_type.ALPHA).Trim(),
-          k.Safe(TextBox_class_final_status.Text,k.safe_hint_type.PUNCTUATED).Trim(),
+          k.Safe(TextBox_class_final_status_id.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_course_number.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_location.Text,k.safe_hint_type.POSTAL_STREET_ADDRESS).Trim(),
           k.Safe(TextBox_student_cost.Text,k.safe_hint_type.CURRENCY_USA).Trim(),
@@ -561,7 +557,6 @@ namespace UserControl_coned_offering
           k.Safe(TextBox_created_by_first_name.Text,k.safe_hint_type.HUMAN_NAME).Trim(),
           k.Safe(TextBox_created_by_last_name.Text,k.safe_hint_type.HUMAN_NAME).Trim(),
           k.Safe(TextBox_class_disapproval_reason_description.Text,k.safe_hint_type.PUNCTUATED).Trim(),
-          k.Safe(TextBox_class_final_status_description.Text,k.safe_hint_type.ALPHA_WORDS).Trim(),
           k.Safe(TextBox_sponsor_name.Text,k.safe_hint_type.ORG_NAME).Trim(),
           k.Safe(TextBox_courses_course_number.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_course_title.Text,k.safe_hint_type.PUNCTUATED).Trim()

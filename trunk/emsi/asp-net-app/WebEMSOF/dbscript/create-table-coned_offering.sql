@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS coned_offering (
   sponsor_id BIGINT UNSIGNED,
   sponsor_number CHAR(7),
   document_status BIGINT UNSIGNED NOT NULL,
-  class_final_status BIGINT UNSIGNED,
+  class_final_status_id BIGINT UNSIGNED,
   course_number CHAR(6) NOT NULL,
   location VARCHAR(127),
   student_cost DECIMAL(10,2) UNSIGNED,
@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS coned_offering (
   created_by_first_name VARCHAR(31) NOT NULL,
   created_by_last_name VARCHAR(31) NOT NULL,
   class_disapproval_reason_description VARCHAR(63),
-  class_final_status_description BIGINT UNSIGNED,
   sponsor_name VARCHAR(127),
   courses_course_number CHAR(6) NOT NULL,
   course_title VARCHAR(63) NOT NULL,
@@ -71,3 +70,8 @@ CREATE TABLE IF NOT EXISTS coned_offering (
   UNIQUE (class_number)
 )
 ENGINE = InnoDB;
+ALTER TABLE `coned_offering`
+  ADD INDEX `coned_offering_document_status` (`document_status` ASC),
+  ADD INDEX `coned_offering_class_final_status` (`class_final_status_id` ASC),
+  ADD CONSTRAINT `coned_offering_class_final_status` FOREIGN KEY (`class_final_status_id` ) REFERENCES `coned_offering_class_final_status` (`id` ),
+  ADD CONSTRAINT `coned_offering_document_status` FOREIGN KEY (`document_status` ) REFERENCES `coned_offering_document_status` (`id` );

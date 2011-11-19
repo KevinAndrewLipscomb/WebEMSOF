@@ -6,12 +6,12 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Collections;
 
-using Class_biz_coned_offering_class_final_status_descriptions;
+using Class_biz_coned_sponsor_statuses;
 using UserControl_drop_down_date;
-namespace UserControl_coned_offering_class_final_status_description
+namespace UserControl_coned_sponsor_status
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~trivial~item.pas
-    public partial class TWebUserControl_coned_offering_class_final_status_description: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_coned_sponsor_status: ki_web_ui.usercontrol_class
     {
         private p_type p;
         protected System.Web.UI.WebControls.Label Label_application_name = null;
@@ -117,7 +117,7 @@ namespace UserControl_coned_offering_class_final_status_description
         {
             if (!p.be_loaded)
             {
-                LinkButton_new_record.Visible = p.be_ok_to_config_coned_offering_class_final_status_descriptions;
+                LinkButton_new_record.Visible = p.be_ok_to_config_coned_sponsor_statuses;
                 LinkButton_go_to_match_first.Text = k.ExpandTildePath(LinkButton_go_to_match_first.Text);
                 LinkButton_go_to_match_prior.Text = k.ExpandTildePath(LinkButton_go_to_match_prior.Text);
                 LinkButton_go_to_match_next.Text = k.ExpandTildePath(LinkButton_go_to_match_next.Text);
@@ -136,7 +136,7 @@ namespace UserControl_coned_offering_class_final_status_description
             bool result;
             string description;
             result = false;
-            if (p.biz_coned_offering_class_final_status_descriptions.Get(id, out description))
+            if (p.biz_coned_sponsor_statuses.Get(id, out description))
             {
                 TextBox_id.Text = id;
                 TextBox_description.Text = description;
@@ -145,9 +145,9 @@ namespace UserControl_coned_offering_class_final_status_description
                 Label_lookup_hint.Enabled = false;
                 LinkButton_reset.Enabled = true;
                 TextBox_id.Enabled = false;
-                SetDependentFieldAblements(p.be_ok_to_config_coned_offering_class_final_status_descriptions);
-                Button_submit.Enabled = p.be_ok_to_config_coned_offering_class_final_status_descriptions;
-                Button_delete.Enabled = p.be_ok_to_config_coned_offering_class_final_status_descriptions;
+                SetDependentFieldAblements(p.be_ok_to_config_coned_sponsor_statuses);
+                Button_submit.Enabled = p.be_ok_to_config_coned_sponsor_statuses;
+                Button_delete.Enabled = p.be_ok_to_config_coned_sponsor_statuses;
                 result = true;
             }
             return result;
@@ -163,8 +163,8 @@ namespace UserControl_coned_offering_class_final_status_description
             Label_lookup_hint.Enabled = false;
             LinkButton_reset.Enabled = true;
             LinkButton_new_record.Enabled = false;
-            SetDependentFieldAblements(p.be_ok_to_config_coned_offering_class_final_status_descriptions);
-            Button_submit.Enabled = p.be_ok_to_config_coned_offering_class_final_status_descriptions;
+            SetDependentFieldAblements(p.be_ok_to_config_coned_sponsor_statuses);
+            Button_submit.Enabled = p.be_ok_to_config_coned_sponsor_statuses;
             Button_delete.Enabled = false;
             Focus(TextBox_id, true);
         }
@@ -177,7 +177,7 @@ namespace UserControl_coned_offering_class_final_status_description
             Label_lookup_arrow.Enabled = true;
             Label_lookup_hint.Enabled = true;
             LinkButton_reset.Enabled = false;
-            LinkButton_new_record.Enabled = p.be_ok_to_config_coned_offering_class_final_status_descriptions;
+            LinkButton_new_record.Enabled = p.be_ok_to_config_coned_sponsor_statuses;
             Focus(TextBox_id, true);
         }
 
@@ -189,13 +189,13 @@ namespace UserControl_coned_offering_class_final_status_description
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_member_binder_UserControl_config_UserControl_business_objects_binder_PlaceHolder_content"] as string) == "UserControl_coned_offering_class_final_status_description");
+                p.be_loaded = IsPostBack && ((Session["UserControl_member_binder_UserControl_config_UserControl_business_objects_binder_PlaceHolder_content"] as string) == "UserControl_coned_sponsor_status");
             }
             else
             {
                 p.be_loaded = false;
-                p.biz_coned_offering_class_final_status_descriptions = new TClass_biz_coned_offering_class_final_status_descriptions();
-                p.be_ok_to_config_coned_offering_class_final_status_descriptions = k.Has((string[])(Session["privilege_array"]), "config-court-kinds");
+                p.biz_coned_sponsor_statuses = new TClass_biz_coned_sponsor_statuses();
+                p.be_ok_to_config_coned_sponsor_statuses = k.Has((string[])(Session["privilege_array"]), "config-court-kinds");
             }
 
         }
@@ -206,18 +206,18 @@ namespace UserControl_coned_offering_class_final_status_description
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_coned_offering_class_final_status_description_PreRender;
+            this.PreRender += this.TWebUserControl_coned_sponsor_status_PreRender;
             //this.Load += this.Page_Load;
         }
 
-        private void TWebUserControl_coned_offering_class_final_status_description_PreRender(object sender, System.EventArgs e)
+        private void TWebUserControl_coned_sponsor_status_PreRender(object sender, System.EventArgs e)
         {
             SessionSet(InstanceId() + ".p", p);
         }
 
-        public TWebUserControl_coned_offering_class_final_status_description Fresh()
+        public TWebUserControl_coned_sponsor_status Fresh()
         {
-            TWebUserControl_coned_offering_class_final_status_description result;
+            TWebUserControl_coned_sponsor_status result;
             Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
@@ -227,7 +227,7 @@ namespace UserControl_coned_offering_class_final_status_description
         {
             if (Page.IsValid)
             {
-                p.biz_coned_offering_class_final_status_descriptions.Set(k.Safe(TextBox_id.Text, k.safe_hint_type.NUM), k.Safe(TextBox_description.Text, k.safe_hint_type.PUNCTUATED));
+                p.biz_coned_sponsor_statuses.Set(k.Safe(TextBox_id.Text, k.safe_hint_type.NUM), k.Safe(TextBox_description.Text, k.safe_hint_type.PUNCTUATED));
                 Alert(k.alert_cause_type.USER, k.alert_state_type.SUCCESS, "recsaved", "Record saved.", true);
                 SetLookupMode();
             }
@@ -268,7 +268,7 @@ namespace UserControl_coned_offering_class_final_status_description
 
         protected void Button_delete_Click(object sender, System.EventArgs e)
         {
-            if (p.biz_coned_offering_class_final_status_descriptions.Delete(k.Safe(TextBox_id.Text, k.safe_hint_type.ALPHANUM)))
+            if (p.biz_coned_sponsor_statuses.Delete(k.Safe(TextBox_id.Text, k.safe_hint_type.ALPHANUM)))
             {
                 SetLookupMode();
             }
@@ -302,7 +302,7 @@ namespace UserControl_coned_offering_class_final_status_description
             if (!PresentRecord(saved_id))
             {
                 TextBox_id.Text = saved_id;
-                p.biz_coned_offering_class_final_status_descriptions.Bind(saved_id, DropDownList_code);
+                p.biz_coned_sponsor_statuses.Bind(saved_id, DropDownList_code);
                 num_matches = (uint)(DropDownList_code.Items.Count);
         if (num_matches > 0)
           {
@@ -329,10 +329,10 @@ namespace UserControl_coned_offering_class_final_status_description
         private struct p_type
         {
             public bool be_loaded;
-            public bool be_ok_to_config_coned_offering_class_final_status_descriptions;
-            public TClass_biz_coned_offering_class_final_status_descriptions biz_coned_offering_class_final_status_descriptions;
+            public bool be_ok_to_config_coned_sponsor_statuses;
+            public TClass_biz_coned_sponsor_statuses biz_coned_sponsor_statuses;
         } // end p_type
 
-    } // end TWebUserControl_coned_offering_class_final_status_description
+    } // end TWebUserControl_coned_sponsor_status
 
 }

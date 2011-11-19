@@ -310,22 +310,22 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_document_status;
         
         /// <summary>
-        /// TextBox_class_final_status control.
+        /// TextBox_class_final_status_id control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_class_final_status;
+        protected global::System.Web.UI.WebControls.TextBox TextBox_class_final_status_id;
         
         /// <summary>
-        /// RegularExpressionValidator_class_final_status control.
+        /// RegularExpressionValidator_class_final_status_id control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_class_final_status;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_class_final_status_id;
         
         /// <summary>
         /// TextBox_course_number control.
@@ -875,24 +875,6 @@ namespace UserControl_coned_offering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox_class_disapproval_reason_description;
-        
-        /// <summary>
-        /// TextBox_class_final_status_description control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_class_final_status_description;
-        
-        /// <summary>
-        /// RegularExpressionValidator_class_final_status_description control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_class_final_status_description;
         
         /// <summary>
         /// TextBox_sponsor_name control.

@@ -1,4 +1,5 @@
 using Class_biz_coned_offerings;
+using Class_biz_teaching_entities;
 using Class_biz_practitioners;
 using WebEMSOF.component.os;
 
@@ -8,12 +9,14 @@ namespace Class_biz_scheduled_tasks
     {
     private TClass_biz_coned_offerings biz_coned_offerings;
     private TClass_biz_practitioners biz_practitioners;
+    private TClass_biz_teaching_entities biz_teaching_entities;
     private Class_fs fs;
 
     //Constructor  Create()
     public TClass_biz_scheduled_tasks() : base()
       {
       biz_coned_offerings = new TClass_biz_coned_offerings();
+      biz_teaching_entities = new TClass_biz_teaching_entities();
       biz_practitioners = new TClass_biz_practitioners();
       fs = new Class_fs();
       }
@@ -26,6 +29,11 @@ namespace Class_biz_scheduled_tasks
     public void ImportLatestConedOfferingsFromEmsrs()
       {
       biz_coned_offerings.ImportLatestFromEmsrs();
+      }
+
+    public void ImportLatestConedSponsorsFromEmsrs()
+      {
+      biz_teaching_entities.ImportLatestFromEmsrs();
       }
 
     public void ImportLatestPractitionersFromEmsrs()
