@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Net;
+using System.Web;
 
 namespace WebEMSOF.component.ss
   {
@@ -536,6 +537,53 @@ namespace WebEMSOF.component.ss
 	    return true;
     }
 
+    private bool Request_ems_health_state_pa_us_EmsregActivepractitioners_3000_Refresh
+      (
+      CookieContainer cookie_container,
+      out HttpWebResponse response
+      )
+    {
+	    response = null;
+
+	    try
+	    {
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/emsreg/ActivePractitioners.aspx");
+        request.CookieContainer = cookie_container;
+
+		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
+		    request.Referer = "https://ems.health.state.pa.us/emsreg/ActivePractitioners.aspx";
+		    request.Headers.Set(HttpRequestHeader.AcceptLanguage, "en-US");
+		    request.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E)";
+		    request.ContentType = "application/x-www-form-urlencoded";
+		    request.Headers.Set(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+		    request.Headers.Set(HttpRequestHeader.CacheControl, "no-cache");
+		    //request.Headers.Set(HttpRequestHeader.Cookie, @"ASP.NET_SessionId=2l0x3eidkit2jetl4uovsqsv");
+
+		    request.Method = "POST";
+
+        string postString = @"__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTExNzg2MTQwMjgPZBYCZg9kFgJmD2QWAgIDD2QWAgIDD2QWAgIBD2QWBAI3DxBkDxYcZgIBAgICAwIEAgUCBgIHAggCCQIKAgsCDAINAg4CDwIQAhECEgITAhQCFQIWAhcCGAIZAhoCGxYcEAUCMjAFAjIwZxAFAjUwBQI1MGcQBQMxMDAFAzEwMGcQBQMxNTAFAzE1MGcQBQMyMDAFAzIwMGcQBQMyNTAFAzI1MGcQBQMzMDAFAzMwMGcQBQMzNTAFAzM1MGcQBQM0MDAFAzQwMGcQBQM0NTAFAzQ1MGcQBQM1MDAFAzUwMGcQBQQxMDAwBQQxMDAwZxAFBDIwMDAFBDIwMDBnEAUEMzAwMAUEMzAwMGcQBQIyMAUCMjBnEAUCNTAFAjUwZxAFAzEwMAUDMTAwZxAFAzE1MAUDMTUwZxAFAzIwMAUDMjAwZxAFAzI1MAUDMjUwZxAFAzMwMAUDMzAwZxAFAzM1MAUDMzUwZxAFAzQwMAUDNDAwZxAFAzQ1MAUDNDUwZxAFAzUwMAUDNTAwZxAFBDEwMDAFBDEwMDBnEAUEMjAwMAUEMjAwMGcQBQQzMDAwBQQzMDAwZxYBZmQCOw88KwALAGRkflhPy3DO1KyAOuVq7j2fy08BLfct%2FA4DaRV%2BZ10SDrg%3D&__EVENTVALIDATION=%2FwEWOQL2roqwCQKk3e29BwKsi5ORBwKsi4%2BRBwKsi4uRBwKsi4eRBwKsi4ORBwKsi%2F%2BQBwKsi%2FuQBwKsi%2FeQBwKsi%2FOQBwKsi%2B%2BQBwKsi%2BuQBwKsi%2BeQBwKsi%2BOQBwKsi9%2BQBwKsi9uQBwKsi9eQBwKsi9OQBwKsi8%2BQBwKsi8uQBwKsi8eQBwKsi8OQBwKsi7%2BQBwKsi7uQBwKsi7eQBwKsi7OQBwKsi6%2BQBwK%2Fo8WnCwK6o8WnCwKY4qLwDAKY4tbzDAKZ4qLwDAKZ4tbzDAKW4qLwDAKW4tbzDAKX4qLwDAKX4tbzDAKU4qLwDAKY4uLNBwKZ4uLNBwKW4uLNBwK%2Fo8WnCwK6o8WnCwKY4qLwDAKY4tbzDAKZ4qLwDAKZ4tbzDAKW4qLwDAKW4tbzDAKX4qLwDAKX4tbzDAKU4qLwDAKY4uLNBwKZ4uLNBwKW4uLNBwL3s5yCAi0RI9bHVc5IIgopVoH3qN57cnRRN0Kzps20Bmm2p%2BcT&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddPageSize=3000&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AbtnRefresh=Refresh";
+		    byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(postString);
+		    request.ContentLength = postBytes.Length;
+		    Stream stream = request.GetRequestStream();
+		    stream.Write(postBytes, 0, postBytes.Length);
+		    stream.Close();
+
+		    response = (HttpWebResponse)request.GetResponse();
+	    }
+	    catch (WebException e)
+	    {
+		    if (e.Status == WebExceptionStatus.ProtocolError) response = (HttpWebResponse)e.Response;
+		    else return false;
+	    }
+	    catch (Exception)
+	    {
+		    if(response != null) response.Close();
+		    return false;
+	    }
+
+	    return true;
+    }
+
     internal class ConedOffering
       {
       internal string class_id_1 = k.EMPTY;
@@ -941,34 +989,19 @@ namespace WebEMSOF.component.ss
       {
       internal string last_name = k.EMPTY;
       internal string first_name = k.EMPTY;
-      internal string middle_name = k.EMPTY;
-      internal string email_address = k.EMPTY;
-      internal string new_emso_user_id = k.EMPTY;
-      internal string county = k.EMPTY;
-      internal string street_address = k.EMPTY;
-      internal string city = k.EMPTY;
-      internal string zip = k.EMPTY;
-      internal string birth_date = k.EMPTY;
+      internal string middle_initial = k.EMPTY;
+      internal string certification_number = k.EMPTY;
+      internal string level = k.EMPTY;
+      internal string regional_council = k.EMPTY;
       }
-    internal ArrayList UserSearchLimitedToRegion(string regional_council_id)
+    internal ArrayList ActivePractitioners()
       {
-      var user_search_limited_to_region = new ArrayList();
+      var active_practitioners = new ArrayList();
       //
-      HttpWebResponse dummy_response;
       HttpWebResponse response;
       var cookie_container = new CookieContainer();
       var stream = k.EMPTY;
-      if(
-          Request_ems_health_state_pa_us_Emsportal_Login(cookie_container,out response)
-        &&
-          Request_ems_health_state_pa_us_EmsportalApplicationtransfersTransfertoconed(cookie_container,out response)
-        &&
-          Request_ems_health_state_pa_us_ConedUsersearch(cookie_container,out response)
-        &&
-          Request_ems_health_state_pa_us_ConedUsersearch_RegionalCouncilId_SearchNow(cookie_container,regional_council_id,out response)
-        &&
-          Request_ems_health_state_pa_us_Coned_Mainmenu_Logout(cookie_container,out dummy_response)
-        )
+      if(Request_ems_health_state_pa_us_EmsregActivepractitioners_3000_Refresh(cookie_container,out response))
         {
         var stream_reader = new StreamReader(response.GetResponseStream());
         stream = stream_reader.ReadToEnd(); 
@@ -977,47 +1010,30 @@ namespace WebEMSOF.component.ss
         var html_document = new HtmlDocument(); 
         html_document.LoadHtml(stream);
         //
-        // The initial XPaths are determined by visiting the page in IE9, selecting "F12 developer tools", setting Document Mode to IE9 Standards, navigating to the node of interest, and disregarding any tbody tags.
+        // The initial XPaths are determined by visiting the page in IE9, selecting "F12 developer tools", setting Document Mode to IE9 Standards, navigating to the node of interest, and disregarding any form or tbody tags.
         //
-        var hnc_target_row = html_document.DocumentNode.SelectNodes("/html/body/font/center[3]/table/tr");
-        foreach (var row in hnc_target_row)
+        var hn_target_table = html_document.GetElementbyId("_ctl0__ctl0_SessionLinkBar_Content_dgActivePractitioners"); 
+        //
+        var hnc_last_name = hn_target_table.SelectNodes("tr/td[1]/span");
+        var hnc_first_name = hn_target_table.SelectNodes("tr/td[2]/span");
+        var hnc_middle_initial = hn_target_table.SelectNodes("tr/td[3]/span");
+        var hnc_certification_number = hn_target_table.SelectNodes("tr/td[4]/span");
+        var hnc_level = hn_target_table.SelectNodes("tr/td[5]/span");
+        var hnc_regional_council = hn_target_table.SelectNodes("tr/td[6]/span");
+        //
+        for (var i = new k.subtype<int>(1,hnc_last_name.Count); i.val < i.LAST - 1; i.val++)  //limits take into account non-data header & page index rows
           {
-          var hnc_name_etc = row.SelectNodes("td[2]");
-          if (hnc_name_etc != null)
-            {
-            var hnc_name_etc_br1 = row.SelectNodes("td[2]/br[1]");
-            var hnc_email_address = row.SelectNodes("td[2]/a");
-            var hnc_view_credits_link = row.SelectNodes("td[4]/a");
-            var hnc_county = row.SelectNodes("td[5]");
-            if((hnc_name_etc_br1 != null) && (hnc_email_address != null) && (hnc_view_credits_link != null) && (hnc_county != null))
-              {
-              var hn_name_etc_br1 = hnc_name_etc_br1[0];
-              var hn_email_address = hnc_email_address[0];
-              var hn_view_credits_link = hnc_view_credits_link[0];
-              var hn_county = hnc_county[0];
-              //
-              if (hn_view_credits_link.Attributes["href"] != null)
-                {
-                var practitioner = new Practitioner();
-                var name_array = hn_name_etc_br1.PreviousSibling.InnerText.Trim().Split(new string[] {k.SPACE},StringSplitOptions.RemoveEmptyEntries);
-                practitioner.first_name = k.Safe(name_array[0],k.safe_hint_type.HUMAN_NAME);
-                practitioner.last_name = k.Safe(name_array[name_array.Length - 1],k.safe_hint_type.HUMAN_NAME);
-                practitioner.middle_name = (name_array.Length > 2 ? k.Safe(name_array[1],k.safe_hint_type.HUMAN_NAME) : k.EMPTY);
-                practitioner.email_address = k.Safe(hn_email_address.InnerText.Trim(),k.safe_hint_type.EMAIL_ADDRESS);
-                var link_value_array = hn_view_credits_link.Attributes["href"].Value.Trim().Split(new string[] {"="},StringSplitOptions.None);
-                practitioner.new_emso_user_id = k.Safe(link_value_array[link_value_array.Length - 1],k.safe_hint_type.NUM);
-                //var certification_array = hnc_certification_etc[i.val].InnerText.Trim().Split(new string[] {":",k.SPACE},StringSplitOptions.RemoveEmptyEntries);
-                practitioner.county = k.Safe(hn_county.InnerText.Trim(),k.safe_hint_type.POSTAL_CITY);
-                if (practitioner.last_name.Length > 0) // Guards against bad data in EMSRS such as "Alcoa Medic 141", wherein the Safe HUMAN_NAME transformation of 141 is z zero-length string that later gets treated as a NULL.
-                  {
-                  user_search_limited_to_region.Add(practitioner);
-                  }
-                }
-              }
-            }
+          var practitioner = new Practitioner();
+          practitioner.last_name = k.Safe(hnc_last_name[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
+          practitioner.first_name = k.Safe(hnc_first_name[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
+          practitioner.middle_initial = k.Safe(hnc_middle_initial[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
+          practitioner.certification_number = k.Safe(hnc_certification_number[i.val].InnerText.Trim(),k.safe_hint_type.NUM);
+          practitioner.level = k.Safe(hnc_level[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
+          practitioner.regional_council = k.Safe(hnc_regional_council[i.val].InnerText.Trim(),k.safe_hint_type.ORG_NAME);
+          active_practitioners.Add(practitioner);
           }
         }
-      return user_search_limited_to_region;
+      return active_practitioners;
       }
 
     }

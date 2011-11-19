@@ -31,7 +31,7 @@ namespace Class_biz_scheduled_tasks
       biz_coned_offerings.ImportLatestFromEmsrs();
       }
 
-    public void ImportLatestConedSponsorsFromEmsrs()
+    public void ImportLatestTeachingEntitiesFromEmsrs()
       {
       biz_teaching_entities.ImportLatestFromEmsrs();
       }

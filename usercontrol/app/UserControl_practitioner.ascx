@@ -75,76 +75,48 @@
     </td>
   </tr>
   <tr>
-    <td><font class="">Middle&nbsp;name:</font></td>
+    <td><font class="">Middle&nbsp;initial:</font></td>
     <td>
       <font class="">
-        <ASP:TextBox id="TextBox_middle_name" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
+        <ASP:TextBox id="TextBox_middle_initial" runat="server" columns="1" maxlength="1" cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
     <td nowrap="True">
     </td>
   </tr>
   <tr>
-    <td><font class="">Email&nbsp;address:</font></td>
+    <td><font class="">Certification&nbsp;number:</font></td>
     <td>
       <font class="">
-        <ASP:TextBox id="TextBox_email_address" runat="server" columns="72" maxlength="127" cssclass="" enabled="False"></ASP:TextBox>
+        <ASP:TextBox id="TextBox_certification_number" runat="server" columns="6" maxlength="6" cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
     <td nowrap="True">
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_certification_number" runat="server" errormessage="Please enter Certification&nbsp;number." font-bold="True" controltovalidate="TextBox_certification_number">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
   <tr>
-    <td><font class="">New&nbsp;emso&nbsp;user&nbsp;id:</font></td>
+    <td><font class="">Level&nbsp;id:</font></td>
     <td>
       <font class="">
-        <ASP:TextBox id="TextBox_new_emso_user_id" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+        <ASP:TextBox id="TextBox_level_id" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
     <td nowrap="True">
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_new_emso_user_id" runat="server" errormessage="Please enter a valid New&nbsp;emso&nbsp;user&nbsp;id." font-bold="True" controltovalidate="TextBox_new_emso_user_id" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_level_id" runat="server" errormessage="Please enter Level&nbsp;id." font-bold="True" controltovalidate="TextBox_level_id">!ERR!</ASP:RequiredFieldValidator>
+      <ASP:RegularExpressionValidator id="RegularExpressionValidator_level_id" runat="server" errormessage="Please enter a valid Level&nbsp;id." font-bold="True" controltovalidate="TextBox_level_id" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
     </td>
   </tr>
   <tr>
-    <td><font class="">County&nbsp;code:</font></td>
+    <td><font class="">Regional&nbsp;council&nbsp;code:</font></td>
     <td>
       <font class="">
-        <ASP:TextBox id="TextBox_county_code" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+        <ASP:TextBox id="TextBox_regional_council_code" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
     <td nowrap="True">
-      <ASP:RequiredFieldValidator id="RequiredFieldValidator_county_code" runat="server" errormessage="Please enter County&nbsp;code." font-bold="True" controltovalidate="TextBox_county_code">!ERR!</ASP:RequiredFieldValidator>
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_county_code" runat="server" errormessage="Please enter a valid County&nbsp;code." font-bold="True" controltovalidate="TextBox_county_code" validationexpression="\d*">!ERR!</ASP:RegularExpressionValidator>
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Street&nbsp;address:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_street_address" runat="server" columns="72" maxlength="127" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="True">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">City:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_city" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="True">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Zip:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_zip" runat="server" columns="5" maxlength="5" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="True">
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_regional_council_code" runat="server" errormessage="Please enter Regional&nbsp;council&nbsp;code." font-bold="True" controltovalidate="TextBox_regional_council_code">!ERR!</ASP:RequiredFieldValidator>
+      <ASP:RegularExpressionValidator id="RegularExpressionValidator_regional_council_code" runat="server" errormessage="Please enter a valid Regional&nbsp;council&nbsp;code." font-bold="True" controltovalidate="TextBox_regional_council_code" validationexpression="\d*">!ERR!</ASP:RegularExpressionValidator>
     </td>
   </tr>
   <tr>

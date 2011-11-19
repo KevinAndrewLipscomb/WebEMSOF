@@ -3,15 +3,18 @@ CREATE TABLE IF NOT EXISTS practitioner (
   id SERIAL,
   last_name VARCHAR(31) NOT NULL,
   first_name VARCHAR(31) NOT NULL,
-  middle_name VARCHAR(31),
-  email_address VARCHAR(127),
-  new_emso_user_id BIGINT UNSIGNED,
-  county_code TINYINT UNSIGNED NOT NULL,
-  street_address VARCHAR(127),
-  city VARCHAR(31),
-  zip CHAR(5),
+  middle_initial CHAR(1),
+  certification_number CHAR(6) NOT NULL,
+  level_id BIGINT UNSIGNED NOT NULL,
+  regional_council_code TINYINT UNSIGNED NOT NULL,
   birth_date DATE,
   PRIMARY KEY(id),
-  UNIQUE (new_emso_user_id)
+  UNIQUE (certification_number,last_name,first_name,middle_initial,level_id,regional_council_code),
+  INDEX (last_name,first_name,middle_initial,certification_number),
+  INDEX (level_id,last_name,first_name,middle_initial,certification_number),
+  INDEX (regional_council_code)
 )
 ENGINE = InnoDB;
+ALTER TABLE `practitioner`
+  ADD CONSTRAINT `practitioner_level_id` FOREIGN KEY (`level_id` ) REFERENCES `practitioner_level` (`id` ),
+  ADD CONSTRAINT `practitioner_regional_council_code` FOREIGN KEY (`regional_council_code` ) REFERENCES `region_code_name_map` (`code` );

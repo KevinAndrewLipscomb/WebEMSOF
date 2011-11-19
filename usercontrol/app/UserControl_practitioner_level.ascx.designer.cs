@@ -8,12 +8,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~kicrudhelped~item.ascx.designer.cs~template
-
-namespace UserControl_practitioner {
+namespace UserControl_practitioner_level {
     
     
-    public partial class TWebUserControl_practitioner {
+    public partial class TWebUserControl_practitioner_level {
+        
+        /// <summary>
+        /// TextBox_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_id;
         
         /// <summary>
         /// Button_lookup control.
@@ -124,6 +131,33 @@ namespace UserControl_practitioner {
         protected global::System.Web.UI.WebControls.LinkButton LinkButton_go_to_match_last;
         
         /// <summary>
+        /// DropDownList_code control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList_code;
+        
+        /// <summary>
+        /// TextBox_description control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_description;
+        
+        /// <summary>
+        /// RequiredFieldValidator_description control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_description;
+        
+        /// <summary>
         /// Button_submit control.
         /// </summary>
         /// <remarks>
@@ -140,16 +174,5 @@ namespace UserControl_practitioner {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button_delete;
-        
-        protected global::System.Web.UI.WebControls.TextBox TextBox_id;
-        protected global::System.Web.UI.WebControls.DropDownList DropDownList_id;
-        protected global::System.Web.UI.WebControls.TextBox TextBox_last_name;
-        protected global::System.Web.UI.WebControls.TextBox TextBox_first_name;
-        protected global::System.Web.UI.WebControls.TextBox TextBox_middle_initial;
-        protected global::System.Web.UI.WebControls.TextBox TextBox_certification_number;
-        protected global::System.Web.UI.WebControls.TextBox TextBox_level_id;
-        protected global::System.Web.UI.WebControls.TextBox TextBox_regional_council_code;
-        protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_birth_date;
-
     }
 }

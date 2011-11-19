@@ -39,13 +39,10 @@ namespace Class_biz_practitioners
       string id,
       out string last_name,
       out string first_name,
-      out string middle_name,
-      out string email_address,
-      out string new_emso_user_id,
-      out string county_code,
-      out string street_address,
-      out string city,
-      out string zip,
+      out string middle_initial,
+      out string certification_number,
+      out string level_id,
+      out string regional_council_code,
       out DateTime birth_date
       )
       {
@@ -54,20 +51,17 @@ namespace Class_biz_practitioners
         id,
         out last_name,
         out first_name,
-        out middle_name,
-        out email_address,
-        out new_emso_user_id,
-        out county_code,
-        out street_address,
-        out city,
-        out zip,
+        out middle_initial,
+        out certification_number,
+        out level_id,
+        out regional_council_code,
         out birth_date
         );
       }
 
     internal void ImportLatestFromEmsrs()
       {
-      db_practitioners.ImportLatestFromEmsrs(ss_emsams.UserSearchLimitedToRegion("04"));
+      db_practitioners.ImportLatestFromEmsrs(ss_emsams.ActivePractitioners());
       }
 
     public void Set
@@ -75,13 +69,10 @@ namespace Class_biz_practitioners
       string id,
       string last_name,
       string first_name,
-      string middle_name,
-      string email_address,
-      string new_emso_user_id,
-      string county_code,
-      string street_address,
-      string city,
-      string zip,
+      string middle_initial,
+      string certification_number,
+      string level_id,
+      string regional_council_code,
       DateTime birth_date
       )
       {
@@ -90,13 +81,10 @@ namespace Class_biz_practitioners
         id,
         last_name,
         first_name,
-        middle_name,
-        email_address,
-        new_emso_user_id,
-        county_code,
-        street_address,
-        city,
-        zip,
+        middle_initial,
+        certification_number,
+        level_id,
+        regional_council_code,
         birth_date
         );
       }
