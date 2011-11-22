@@ -27,6 +27,7 @@ namespace UserControl_practitioner
       TextBox_level_id.Text = k.EMPTY;
       TextBox_regional_council_code.Text = k.EMPTY;
       UserControl_drop_down_date_birth_date.Clear();
+      CheckBox_be_stale.Checked = false;
       Literal_match_index.Text = k.EMPTY;
       Literal_num_matches.Text = k.EMPTY;
       Panel_match_numbers.Visible = false;
@@ -149,6 +150,7 @@ namespace UserControl_practitioner
       string level_id;
       string regional_council_code;
       DateTime birth_date;
+      bool be_stale;
       result = false;
       if
         (
@@ -161,7 +163,8 @@ namespace UserControl_practitioner
           out certification_number,
           out level_id,
           out regional_council_code,
-          out birth_date
+          out birth_date,
+          out be_stale
           )
         )
         {
@@ -174,6 +177,7 @@ namespace UserControl_practitioner
         TextBox_level_id.Text = level_id;
         TextBox_regional_council_code.Text = regional_council_code;
         UserControl_drop_down_date_birth_date.selectedvalue = birth_date;
+        CheckBox_be_stale.Checked = be_stale;
         Button_lookup.Enabled = false;
         Label_lookup_arrow.Enabled = false;
         Label_lookup_hint.Enabled = false;
@@ -222,8 +226,7 @@ namespace UserControl_practitioner
       if (Session[InstanceId() + ".p"] != null)
         {
         p = (p_type)(Session[InstanceId() + ".p"]);
-#warning Revise the following line if the usercontrol will not be a direct child of the member binder.
-        p.be_loaded = IsPostBack && ((Session["UserControl_member_binder_PlaceHolder_content"] as string) == "UserControl_practitioner");
+        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_config_binder_PlaceHolder_content"] as string) == "UserControl_practitioner");
         }
       else
         {
@@ -268,7 +271,8 @@ namespace UserControl_practitioner
           k.Safe(TextBox_certification_number.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_level_id.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_regional_council_code.Text,k.safe_hint_type.NUM).Trim(),
-          UserControl_drop_down_date_birth_date.selectedvalue
+          UserControl_drop_down_date_birth_date.selectedvalue,
+          CheckBox_be_stale.Checked
           );
         Alert(k.alert_cause_type.USER, k.alert_state_type.SUCCESS, "recsaved", "Record saved.", true);
         SetLookupMode();
@@ -339,6 +343,7 @@ namespace UserControl_practitioner
       TextBox_level_id.Enabled = ablement;
       TextBox_regional_council_code.Enabled = ablement;
       UserControl_drop_down_date_birth_date.enabled = ablement;
+      CheckBox_be_stale.Enabled = ablement;
       }
 
     protected void Button_lookup_Click(object sender, System.EventArgs e)
