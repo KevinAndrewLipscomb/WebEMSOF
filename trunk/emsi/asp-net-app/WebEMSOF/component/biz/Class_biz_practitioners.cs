@@ -43,7 +43,8 @@ namespace Class_biz_practitioners
       out string certification_number,
       out string level_id,
       out string regional_council_code,
-      out DateTime birth_date
+      out DateTime birth_date,
+      out bool be_stale
       )
       {
       return db_practitioners.Get
@@ -55,18 +56,23 @@ namespace Class_biz_practitioners
         out certification_number,
         out level_id,
         out regional_council_code,
-        out birth_date
+        out birth_date,
+        out be_stale
         );
       }
 
     internal void ImportLatestFromEmsrs()
       {
+      db_practitioners.MarkAllStale();
+      //
       var context = new Class_ss_emsams.ActivePractitionersContext();
       var be_done = false;
       while (!be_done)
         {
         db_practitioners.ImportLatestFromEmsrs(ss_emsams.ActivePractitioners(context,out be_done));
         }
+      //
+      db_practitioners.RemoveStale();
       }
 
     public void Set
@@ -78,7 +84,8 @@ namespace Class_biz_practitioners
       string certification_number,
       string level_id,
       string regional_council_code,
-      DateTime birth_date
+      DateTime birth_date,
+      bool be_stale
       )
       {
       db_practitioners.Set
@@ -90,7 +97,8 @@ namespace Class_biz_practitioners
         certification_number,
         level_id,
         regional_council_code,
-        birth_date
+        birth_date,
+        be_stale
         );
       }
 

@@ -59,7 +59,7 @@
         <ASP:TextBox id="TextBox_last_name" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
-    <td nowrap="True">
+    <td nowrap="nowrap">
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_last_name" runat="server" errormessage="Please enter Last&nbsp;name." font-bold="True" controltovalidate="TextBox_last_name">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
@@ -70,7 +70,7 @@
         <ASP:TextBox id="TextBox_first_name" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
-    <td nowrap="True">
+    <td nowrap="nowrap">
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_first_name" runat="server" errormessage="Please enter First&nbsp;name." font-bold="True" controltovalidate="TextBox_first_name">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
@@ -81,7 +81,7 @@
         <ASP:TextBox id="TextBox_middle_initial" runat="server" columns="1" maxlength="1" cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
-    <td nowrap="True">
+    <td nowrap="nowrap">
     </td>
   </tr>
   <tr>
@@ -91,7 +91,7 @@
         <ASP:TextBox id="TextBox_certification_number" runat="server" columns="6" maxlength="6" cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
-    <td nowrap="True">
+    <td nowrap="nowrap">
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_certification_number" runat="server" errormessage="Please enter Certification&nbsp;number." font-bold="True" controltovalidate="TextBox_certification_number">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
@@ -102,7 +102,7 @@
         <ASP:TextBox id="TextBox_level_id" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
-    <td nowrap="True">
+    <td nowrap="nowrap">
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_level_id" runat="server" errormessage="Please enter Level&nbsp;id." font-bold="True" controltovalidate="TextBox_level_id">!ERR!</ASP:RequiredFieldValidator>
       <ASP:RegularExpressionValidator id="RegularExpressionValidator_level_id" runat="server" errormessage="Please enter a valid Level&nbsp;id." font-bold="True" controltovalidate="TextBox_level_id" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
     </td>
@@ -114,7 +114,7 @@
         <ASP:TextBox id="TextBox_regional_council_code" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
       </font>
     </td>
-    <td nowrap="True">
+    <td nowrap="nowrap">
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_regional_council_code" runat="server" errormessage="Please enter Regional&nbsp;council&nbsp;code." font-bold="True" controltovalidate="TextBox_regional_council_code">!ERR!</ASP:RequiredFieldValidator>
       <ASP:RegularExpressionValidator id="RegularExpressionValidator_regional_council_code" runat="server" errormessage="Please enter a valid Regional&nbsp;council&nbsp;code." font-bold="True" controltovalidate="TextBox_regional_council_code" validationexpression="\d*">!ERR!</ASP:RegularExpressionValidator>
     </td>
@@ -126,7 +126,15 @@
         <uc1:UserControl_drop_down_date id="UserControl_drop_down_date_birth_date" runat="server"  cssclass=""></uc1:UserControl_drop_down_date>
       </font>
     </td>
-    <td nowrap="True">
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Be stale:</font></td>
+    <td>
+      <asp:CheckBox ID="CheckBox_be_stale" runat="server" />
+    </td>
+    <td nowrap="nowrap">
     </td>
   </tr>
       </table>

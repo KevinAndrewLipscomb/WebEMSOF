@@ -98,7 +98,8 @@ namespace Class_db_practitioners
       out string certification_number,
       out string level_id,
       out string regional_council_code,
-      out DateTime birth_date
+      out DateTime birth_date,
+      out bool be_stale
       )
       {
       last_name = k.EMPTY;
@@ -108,6 +109,7 @@ namespace Class_db_practitioners
       level_id = k.EMPTY;
       regional_council_code = k.EMPTY;
       birth_date = DateTime.MinValue;
+      be_stale = true;
       var result = false;
       //
       Open();
@@ -121,6 +123,7 @@ namespace Class_db_practitioners
         level_id = dr["level_id"].ToString();
         regional_council_code = dr["regional_council_code"].ToString();
         birth_date = DateTime.Parse(dr["birth_date"].ToString());
+        be_stale = (dr["be_stale"].ToString() == "1");
         result = true;
         }
       dr.Close();
@@ -130,7 +133,7 @@ namespace Class_db_practitioners
 
     internal void ImportLatestFromEmsrs(ArrayList recs)
       {
-      var sb = new StringBuilder("insert ignore practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code) values ");
+      var sb = new StringBuilder("insert ignore practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code,be_stale) values ");
       Open();
       foreach (var rec in recs)
         {
@@ -143,10 +146,25 @@ namespace Class_db_practitioners
           + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
           + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
           + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')"
+          + ",FALSE"
           + "),"
           );
         }
       new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)),connection).ExecuteNonQuery();
+      Close();
+      }
+
+    internal void MarkAllStale()
+      {
+      Open();
+      new MySqlCommand("update practitioner set be_stale = TRUE",connection).ExecuteNonQuery();
+      Close();
+      }
+
+    internal void RemoveStale()
+      {
+      Open();
+      new MySqlCommand("delete from practitioner where be_stale",connection).ExecuteNonQuery();
       Close();
       }
 
@@ -159,7 +177,8 @@ namespace Class_db_practitioners
       string certification_number,
       string level_id,
       string regional_council_code,
-      DateTime birth_date
+      DateTime birth_date,
+      bool be_stale
       )
       {
       var childless_field_assignments_clause = k.EMPTY
@@ -170,6 +189,7 @@ namespace Class_db_practitioners
       + " , level_id = NULLIF('" + level_id + "','')"
       + " , regional_council_code = NULLIF('" + regional_council_code + "','')"
       + " , birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
+      + " , be_stale = " + be_stale.ToString()
       + k.EMPTY;
       Open();
       new MySqlCommand

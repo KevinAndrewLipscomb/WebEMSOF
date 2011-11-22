@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS practitioner (
   level_id BIGINT UNSIGNED NOT NULL,
   regional_council_code TINYINT UNSIGNED NOT NULL,
   birth_date DATE,
+  be_stale BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY(id),
   UNIQUE (certification_number,last_name,first_name,middle_initial,level_id,regional_council_code),
   INDEX (last_name,first_name,middle_initial,certification_number),
