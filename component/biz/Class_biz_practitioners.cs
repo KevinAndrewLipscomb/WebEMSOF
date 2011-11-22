@@ -61,7 +61,12 @@ namespace Class_biz_practitioners
 
     internal void ImportLatestFromEmsrs()
       {
-      db_practitioners.ImportLatestFromEmsrs(ss_emsams.ActivePractitioners());
+      var context = new Class_ss_emsams.ActivePractitionersContext();
+      var be_done = false;
+      while (!be_done)
+        {
+        db_practitioners.ImportLatestFromEmsrs(ss_emsams.ActivePractitioners(context,out be_done));
+        }
       }
 
     public void Set

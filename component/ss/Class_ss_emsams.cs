@@ -948,25 +948,33 @@ namespace WebEMSOF.component.ss
       internal string level = k.EMPTY;
       internal string regional_council = k.EMPTY;
       }
-    internal ArrayList ActivePractitioners()
+    internal class ActivePractitionersContext
+      {
+      internal CookieContainer cookie_container = null;
+      internal string view_state = k.EMPTY;
+      internal string event_validation = k.EMPTY;
+      internal string next_page_ctl_num = k.EMPTY;
+      }
+    internal ArrayList ActivePractitioners
+      (
+      ActivePractitionersContext context,
+      out bool be_done
+      )
       {
       var active_practitioners = new ArrayList();
+      be_done = true;
       //
       HttpWebResponse response;
-      //
-      var be_done = false;
-      var cookie_container = new CookieContainer();
-      var event_validation = k.EMPTY;
-      var next_page_ctl_num = k.EMPTY;
-      var stream = k.EMPTY;
-      var view_state = k.EMPTY;
-      //
-      while (Request_ems_health_state_pa_us_EmsregActivepractitioners_3000(cookie_container,view_state,event_validation,next_page_ctl_num,out response) && !be_done)
+      if (context.cookie_container == null)
+        {
+        context.cookie_container = new CookieContainer();
+        }
+      if (Request_ems_health_state_pa_us_EmsregActivepractitioners_3000(context.cookie_container,context.view_state,context.event_validation,context.next_page_ctl_num,out response))
         {
         var stream_reader = new StreamReader(response.GetResponseStream());
+        var stream = k.EMPTY;
         stream = stream_reader.ReadToEnd(); 
         stream_reader.Close();
-        //
         var html_document = new HtmlDocument(); 
         html_document.LoadHtml(stream);
         //
@@ -993,19 +1001,16 @@ namespace WebEMSOF.component.ss
           active_practitioners.Add(practitioner);
           }
         //
-        view_state = html_document.GetElementbyId("__VIEWSTATE").Attributes["value"].Value;
-        event_validation = html_document.GetElementbyId("__EVENTVALIDATION").Attributes["value"].Value;
+        context.view_state = html_document.GetElementbyId("__VIEWSTATE").Attributes["value"].Value;
+        context.event_validation = html_document.GetElementbyId("__EVENTVALIDATION").Attributes["value"].Value;
         //
         var hn_current_page_num_node_next_sibling = hnc_last_name[hnc_last_name.Count - 1].NextSibling;
-        if (hn_current_page_num_node_next_sibling == null)
+        if (hn_current_page_num_node_next_sibling != null)
           {
-          be_done = true;
-          }
-        else
-          {
-          next_page_ctl_num = hn_current_page_num_node_next_sibling.NextSibling.Attributes["href"].Value
+          context.next_page_ctl_num = hn_current_page_num_node_next_sibling.NextSibling.Attributes["href"].Value
             .Replace("javascript:__doPostBack(&#39;_ctl0$_ctl0$SessionLinkBar$Content$dgActivePractitioners$_ctl3004$_ctl",k.EMPTY)
             .Replace("&#39;,&#39;&#39;)",k.EMPTY);
+          be_done = false;
           }
         }
       return active_practitioners;
