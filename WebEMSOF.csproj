@@ -111,7 +111,6 @@
     <Compile Include="component\biz\Class_biz_teaching_entities.cs" />
     <Compile Include="component\biz\Class_biz_teaching_entity_business_types.cs" />
     <Compile Include="component\biz\Class_biz_teaching_entity_levels.cs" />
-    <Compile Include="component\biz\Class_biz_test.cs" />
     <Compile Include="component\biz\Class_biz_training_institute_statuses.cs" />
     <Compile Include="component\biz\Class_biz_user.cs" />
     <Compile Include="component\db\Class_db.cs" />
@@ -592,6 +591,7 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_practitioner_level.ascx.cs">
       <DependentUpon>UserControl_practitioner_level.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_practitioner_level.ascx.designer.cs">
       <DependentUpon>UserControl_practitioner_level.ascx</DependentUpon>
@@ -776,13 +776,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
@@ -912,7 +905,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="work.bat" />
-    <Content Include="WebForm1.aspx" />
     <Content Include="x-files\alentus.com\Web-new.config" />
   </ItemGroup>
   <ItemGroup>
