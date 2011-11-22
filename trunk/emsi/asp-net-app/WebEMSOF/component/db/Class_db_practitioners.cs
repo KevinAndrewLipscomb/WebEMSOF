@@ -6,8 +6,8 @@ using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
+using System.Text;
 using System.Web.UI.WebControls;
-using UserControl_drop_down_date;
 using WebEMSOF.component.ss;
 
 namespace Class_db_practitioners
@@ -130,22 +130,23 @@ namespace Class_db_practitioners
 
     internal void ImportLatestFromEmsrs(ArrayList recs)
       {
+      var sb = new StringBuilder("insert ignore practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code) values ");
       Open();
       foreach (var rec in recs)
         {
-        new MySqlCommand
+        sb.Append
           (
-          "insert ignore practitioner"
-          + " set last_name = NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
-          + " , first_name = NULLIF('" + (rec as Class_ss_emsams.Practitioner).first_name + "','')"
-          + " , middle_initial = NULLIF('" + (rec as Class_ss_emsams.Practitioner).middle_initial + "','')"
-          + " , certification_number = NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
-          + " , level_id = NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
-          + " , regional_council_code = NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')",
-          connection
-          )
-          .ExecuteNonQuery();
+          "("
+          + "NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
+          + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).first_name + "','')"
+          + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).middle_initial + "','')"
+          + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
+          + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
+          + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')"
+          + "),"
+          );
         }
+      new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)),connection).ExecuteNonQuery();
       Close();
       }
 

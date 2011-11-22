@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS practitioner (
   id SERIAL,
   last_name VARCHAR(31) NOT NULL,
   first_name VARCHAR(31) NOT NULL,
-  middle_initial CHAR(1),
+  middle_initial CHAR(1) NOT NULL,
   certification_number CHAR(6) NOT NULL,
   level_id BIGINT UNSIGNED NOT NULL,
   regional_council_code TINYINT UNSIGNED NOT NULL,
