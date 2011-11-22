@@ -537,9 +537,12 @@ namespace WebEMSOF.component.ss
 	    return true;
     }
 
-    private bool Request_ems_health_state_pa_us_EmsregActivepractitioners_3000_Refresh
+    private bool Request_ems_health_state_pa_us_EmsregActivepractitioners_3000
       (
       CookieContainer cookie_container,
+      string view_state,
+      string event_validation,
+      string next_page_ctl_num,
       out HttpWebResponse response
       )
     {
@@ -561,7 +564,11 @@ namespace WebEMSOF.component.ss
 
 		    request.Method = "POST";
 
-        string postString = @"__EVENTTARGET=&__EVENTARGUMENT=&__VIEWSTATE=%2FwEPDwULLTExNzg2MTQwMjgPZBYCZg9kFgJmD2QWAgIDD2QWAgIDD2QWAgIBD2QWBAI3DxBkDxYcZgIBAgICAwIEAgUCBgIHAggCCQIKAgsCDAINAg4CDwIQAhECEgITAhQCFQIWAhcCGAIZAhoCGxYcEAUCMjAFAjIwZxAFAjUwBQI1MGcQBQMxMDAFAzEwMGcQBQMxNTAFAzE1MGcQBQMyMDAFAzIwMGcQBQMyNTAFAzI1MGcQBQMzMDAFAzMwMGcQBQMzNTAFAzM1MGcQBQM0MDAFAzQwMGcQBQM0NTAFAzQ1MGcQBQM1MDAFAzUwMGcQBQQxMDAwBQQxMDAwZxAFBDIwMDAFBDIwMDBnEAUEMzAwMAUEMzAwMGcQBQIyMAUCMjBnEAUCNTAFAjUwZxAFAzEwMAUDMTAwZxAFAzE1MAUDMTUwZxAFAzIwMAUDMjAwZxAFAzI1MAUDMjUwZxAFAzMwMAUDMzAwZxAFAzM1MAUDMzUwZxAFAzQwMAUDNDAwZxAFAzQ1MAUDNDUwZxAFAzUwMAUDNTAwZxAFBDEwMDAFBDEwMDBnEAUEMjAwMAUEMjAwMGcQBQQzMDAwBQQzMDAwZxYBZmQCOw88KwALAGRkflhPy3DO1KyAOuVq7j2fy08BLfct%2FA4DaRV%2BZ10SDrg%3D&__EVENTVALIDATION=%2FwEWOQL2roqwCQKk3e29BwKsi5ORBwKsi4%2BRBwKsi4uRBwKsi4eRBwKsi4ORBwKsi%2F%2BQBwKsi%2FuQBwKsi%2FeQBwKsi%2FOQBwKsi%2B%2BQBwKsi%2BuQBwKsi%2BeQBwKsi%2BOQBwKsi9%2BQBwKsi9uQBwKsi9eQBwKsi9OQBwKsi8%2BQBwKsi8uQBwKsi8eQBwKsi8OQBwKsi7%2BQBwKsi7uQBwKsi7eQBwKsi7OQBwKsi6%2BQBwK%2Fo8WnCwK6o8WnCwKY4qLwDAKY4tbzDAKZ4qLwDAKZ4tbzDAKW4qLwDAKW4tbzDAKX4qLwDAKX4tbzDAKU4qLwDAKY4uLNBwKZ4uLNBwKW4uLNBwK%2Fo8WnCwK6o8WnCwKY4qLwDAKY4tbzDAKZ4qLwDAKZ4tbzDAKW4qLwDAKW4tbzDAKX4qLwDAKX4tbzDAKU4qLwDAKY4uLNBwKZ4uLNBwKW4uLNBwL3s5yCAi0RI9bHVc5IIgopVoH3qN57cnRRN0Kzps20Bmm2p%2BcT&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddPageSize=3000&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AbtnRefresh=Refresh";
+        string postString = @"__EVENTTARGET=" + (view_state.Length == 0 ? k.EMPTY : "_ctl0%24_ctl0%24SessionLinkBar%24Content%24dgActivePractitioners%24_ctl3004%24_ctl" + next_page_ctl_num)
+        + "&__EVENTARGUMENT=&__VIEWSTATE=" + (view_state.Length > 0 ? HttpUtility.UrlEncode(view_state) : "%2FwEPDwULLTExNzg2MTQwMjgPZBYCZg9kFgJmD2QWAgIDD2QWAgIDD2QWAgIBD2QWBAI3DxBkDxYcZgIBAgICAwIEAgUCBgIHAggCCQIKAgsCDAINAg4CDwIQAhECEgITAhQCFQIWAhcCGAIZAhoCGxYcEAUCMjAFAjIwZxAFAjUwBQI1MGcQBQMxMDAFAzEwMGcQBQMxNTAFAzE1MGcQBQMyMDAFAzIwMGcQBQMyNTAFAzI1MGcQBQMzMDAFAzMwMGcQBQMzNTAFAzM1MGcQBQM0MDAFAzQwMGcQBQM0NTAFAzQ1MGcQBQM1MDAFAzUwMGcQBQQxMDAwBQQxMDAwZxAFBDIwMDAFBDIwMDBnEAUEMzAwMAUEMzAwMGcQBQIyMAUCMjBnEAUCNTAFAjUwZxAFAzEwMAUDMTAwZxAFAzE1MAUDMTUwZxAFAzIwMAUDMjAwZxAFAzI1MAUDMjUwZxAFAzMwMAUDMzAwZxAFAzM1MAUDMzUwZxAFAzQwMAUDNDAwZxAFAzQ1MAUDNDUwZxAFAzUwMAUDNTAwZxAFBDEwMDAFBDEwMDBnEAUEMjAwMAUEMjAwMGcQBQQzMDAwBQQzMDAwZxYBZmQCOw88KwALAGRkflhPy3DO1KyAOuVq7j2fy08BLfct%2FA4DaRV%2BZ10SDrg%3D")
+        + "&__EVENTVALIDATION=" + (event_validation.Length > 0 ? HttpUtility.UrlEncode(event_validation) : "%2FwEWOQL2roqwCQKk3e29BwKsi5ORBwKsi4%2BRBwKsi4uRBwKsi4eRBwKsi4ORBwKsi%2F%2BQBwKsi%2FuQBwKsi%2FeQBwKsi%2FOQBwKsi%2B%2BQBwKsi%2BuQBwKsi%2BeQBwKsi%2BOQBwKsi9%2BQBwKsi9uQBwKsi9eQBwKsi9OQBwKsi8%2BQBwKsi8uQBwKsi8eQBwKsi8OQBwKsi7%2BQBwKsi7uQBwKsi7eQBwKsi7OQBwKsi6%2BQBwK%2Fo8WnCwK6o8WnCwKY4qLwDAKY4tbzDAKZ4qLwDAKZ4tbzDAKW4qLwDAKW4tbzDAKX4qLwDAKX4tbzDAKU4qLwDAKY4uLNBwKZ4uLNBwKW4uLNBwK%2Fo8WnCwK6o8WnCwKY4qLwDAKY4tbzDAKZ4qLwDAKZ4tbzDAKW4qLwDAKW4tbzDAKX4qLwDAKX4tbzDAKU4qLwDAKY4uLNBwKZ4uLNBwKW4uLNBwL3s5yCAi0RI9bHVc5IIgopVoH3qN57cnRRN0Kzps20Bmm2p%2BcT")
+        + "&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AddPageSize=3000"
+        + (view_state.Length == 0 ? "&_ctl0%3A_ctl0%3ASessionLinkBar%3AContent%3AbtnRefresh=Refresh" : k.EMPTY);
 		    byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(postString);
 		    request.ContentLength = postBytes.Length;
 		    Stream stream = request.GetRequestStream();
@@ -776,59 +783,6 @@ namespace WebEMSOF.component.ss
       return class_search_unlimited;
       }
 
-    //internal class ConedOffering
-    //  {
-    //  internal string num = k.EMPTY;
-    //  internal string region_code = k.EMPTY;
-    //  internal string end_date = k.EMPTY;
-    //  }
-    //internal ArrayList MonitoredConedOffering()
-    //  {
-    //  var monitored_coned_offering = new ArrayList();
-    //  //
-    //  HttpWebResponse dummy_response;
-    //  HttpWebResponse response;
-    //  var cookie_container = new CookieContainer();
-    //  var stream = k.EMPTY;
-    //  if(
-    //      Request_ems_health_state_pa_us_Emsportal_Login(cookie_container,out response)
-    //    &&
-    //      Request_ems_health_state_pa_us_EmsportalApplicationtransfersTransfertoconed(cookie_container,out response)
-    //    &&
-    //      Request_ems_health_state_pa_us_ConedClasssearch(cookie_container,out response)
-    //    &&
-    //      Request_ems_health_state_pa_us_ConedListclassnumbers(cookie_container,out response)
-    //    &&
-    //      Request_ems_health_state_pa_us_ConedListClassNumbers_Coned_2011_999999_ShowNumbers(cookie_container,out response)
-    //    &&
-    //      Request_ems_health_state_pa_us_Coned_Mainmenu_Logout(cookie_container,out dummy_response)
-    //    )
-    //    {
-    //    var stream_reader = new StreamReader(response.GetResponseStream());
-    //    stream = stream_reader.ReadToEnd(); 
-    //    stream_reader.Close();
-    //    //
-    //    var html_document = new HtmlDocument(); 
-    //    html_document.LoadHtml(stream);
-    //    //
-    //    // The initial XPaths are determined by visiting the page in IE9, selecting "F12 developer tools", setting Document Mode to IE9 Standards, navigating to the node of interest, and disregarding any tbody tags.
-    //    //
-    //    var hnc_class_number = html_document.DocumentNode.SelectNodes("/html/body/font[3]/table/tr/td[1]");
-    //    var hnc_region_code = html_document.DocumentNode.SelectNodes("/html/body/font[3]/table/tr/td[3]");
-    //    var hnc_class_end_date = html_document.DocumentNode.SelectNodes("/html/body/font[3]/table/tr/td[8]");
-    //    //
-    //    for (var i = new k.subtype<int>(0,hnc_class_number.Count); i.val < i.LAST; i.val++)
-    //      {
-    //      var coned_offering = new ConedOffering();
-    //      coned_offering.num = hnc_class_number[i.val].InnerText.Trim();
-    //      coned_offering.region_code = hnc_region_code[i.val].InnerText.Trim();
-    //      coned_offering.end_date = hnc_class_end_date[i.val].InnerText.Trim();
-    //      monitored_coned_offering.Add(coned_offering);
-    //      }
-    //    }
-    //  return monitored_coned_offering;
-    //  }
-
     internal class TeachingEntity
       {
       internal string id = k.EMPTY;
@@ -999,9 +953,15 @@ namespace WebEMSOF.component.ss
       var active_practitioners = new ArrayList();
       //
       HttpWebResponse response;
+      //
+      var be_done = false;
       var cookie_container = new CookieContainer();
+      var event_validation = k.EMPTY;
+      var next_page_ctl_num = k.EMPTY;
       var stream = k.EMPTY;
-      if(Request_ems_health_state_pa_us_EmsregActivepractitioners_3000_Refresh(cookie_container,out response))
+      var view_state = k.EMPTY;
+      //
+      while (Request_ems_health_state_pa_us_EmsregActivepractitioners_3000(cookie_container,view_state,event_validation,next_page_ctl_num,out response) && !be_done)
         {
         var stream_reader = new StreamReader(response.GetResponseStream());
         stream = stream_reader.ReadToEnd(); 
@@ -1021,7 +981,7 @@ namespace WebEMSOF.component.ss
         var hnc_level = hn_target_table.SelectNodes("tr/td[5]/span");
         var hnc_regional_council = hn_target_table.SelectNodes("tr/td[6]/span");
         //
-        for (var i = new k.subtype<int>(1,hnc_last_name.Count); i.val < i.LAST - 1; i.val++)  //limits take into account non-data header & page index rows
+        for (var i = new k.subtype<int>(1,hnc_last_name.Count - 1); i.val < i.LAST; i.val++)  //limits take into account non-data header & page index rows
           {
           var practitioner = new Practitioner();
           practitioner.last_name = k.Safe(hnc_last_name[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
@@ -1031,6 +991,21 @@ namespace WebEMSOF.component.ss
           practitioner.level = k.Safe(hnc_level[i.val].InnerText.Trim(),k.safe_hint_type.HUMAN_NAME);
           practitioner.regional_council = k.Safe(hnc_regional_council[i.val].InnerText.Trim(),k.safe_hint_type.ORG_NAME);
           active_practitioners.Add(practitioner);
+          }
+        //
+        view_state = html_document.GetElementbyId("__VIEWSTATE").Attributes["value"].Value;
+        event_validation = html_document.GetElementbyId("__EVENTVALIDATION").Attributes["value"].Value;
+        //
+        var hn_current_page_num_node_next_sibling = hnc_last_name[hnc_last_name.Count - 1].NextSibling;
+        if (hn_current_page_num_node_next_sibling == null)
+          {
+          be_done = true;
+          }
+        else
+          {
+          next_page_ctl_num = hn_current_page_num_node_next_sibling.NextSibling.Attributes["href"].Value
+            .Replace("javascript:__doPostBack(&#39;_ctl0$_ctl0$SessionLinkBar$Content$dgActivePractitioners$_ctl3004$_ctl",k.EMPTY)
+            .Replace("&#39;,&#39;&#39;)",k.EMPTY);
           }
         }
       return active_practitioners;
