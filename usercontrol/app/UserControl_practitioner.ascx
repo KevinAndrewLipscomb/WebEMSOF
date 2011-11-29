@@ -130,6 +130,18 @@
     </td>
   </tr>
   <tr>
+    <td><font class="">Email&nbsp;address:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_email_address" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <asp:RegularExpressionValidator id="RegularExpressionValidator_email_address" runat="server" errormessage="Please enter a valid Email address." font-bold="True" controltovalidate="TextBox_email_address" validationexpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*">!ERR!</asp:RegularExpressionValidator>
+      <asp:CustomValidator id="CustomValidator_email_address" runat="server" errormessage='Please enter an Email address with a valid Domain Name (the part after the "@").' font-bold="True" controltovalidate="TextBox_email_address" onservervalidate="CustomValidator_email_address_ServerValidate">!ERR!</asp:CustomValidator>
+    </td>
+  </tr>
+  <tr>
     <td><font class="">Be stale:</font></td>
     <td>
       <asp:CheckBox ID="CheckBox_be_stale" runat="server" />

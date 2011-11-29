@@ -8,7 +8,7 @@ using System.Web;
 
 namespace WebEMSOF.component.ss
   {
-  public static class Class_ss_Static
+  public static class Class_ss_emsams_Static
     {
     }
 
