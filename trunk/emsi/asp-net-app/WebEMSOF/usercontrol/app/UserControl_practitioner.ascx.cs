@@ -27,6 +27,7 @@ namespace UserControl_practitioner
       TextBox_level_id.Text = k.EMPTY;
       TextBox_regional_council_code.Text = k.EMPTY;
       UserControl_drop_down_date_birth_date.Clear();
+      TextBox_email_address.Text = k.EMPTY;
       CheckBox_be_stale.Checked = false;
       Literal_match_index.Text = k.EMPTY;
       Literal_num_matches.Text = k.EMPTY;
@@ -150,6 +151,7 @@ namespace UserControl_practitioner
       string level_id;
       string regional_council_code;
       DateTime birth_date;
+      string email_address;
       bool be_stale;
       result = false;
       if
@@ -164,6 +166,7 @@ namespace UserControl_practitioner
           out level_id,
           out regional_council_code,
           out birth_date,
+          out email_address,
           out be_stale
           )
         )
@@ -177,6 +180,7 @@ namespace UserControl_practitioner
         TextBox_level_id.Text = level_id;
         TextBox_regional_council_code.Text = regional_council_code;
         UserControl_drop_down_date_birth_date.selectedvalue = birth_date;
+        TextBox_email_address.Text = email_address;
         CheckBox_be_stale.Checked = be_stale;
         Button_lookup.Enabled = false;
         Label_lookup_arrow.Enabled = false;
@@ -272,6 +276,7 @@ namespace UserControl_practitioner
           k.Safe(TextBox_level_id.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_regional_council_code.Text,k.safe_hint_type.NUM).Trim(),
           UserControl_drop_down_date_birth_date.selectedvalue,
+          k.Safe(TextBox_email_address.Text,k.safe_hint_type.EMAIL_ADDRESS),
           CheckBox_be_stale.Checked
           );
         Alert(k.alert_cause_type.USER, k.alert_state_type.SUCCESS, "recsaved", "Record saved.", true);
@@ -343,6 +348,7 @@ namespace UserControl_practitioner
       TextBox_level_id.Enabled = ablement;
       TextBox_regional_council_code.Enabled = ablement;
       UserControl_drop_down_date_birth_date.enabled = ablement;
+      TextBox_email_address.Enabled = ablement;
       CheckBox_be_stale.Enabled = ablement;
       }
 
@@ -377,6 +383,11 @@ namespace UserControl_practitioner
             }
           }
         }
+      }
+
+    protected void CustomValidator_email_address_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
+      {
+      args.IsValid = k.BeValidDomainPartOfEmailAddress(k.Safe(TextBox_email_address.Text, k.safe_hint_type.EMAIL_ADDRESS));
       }
 
     private struct p_type

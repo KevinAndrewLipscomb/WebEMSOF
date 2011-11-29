@@ -2,10 +2,19 @@
 # $Id$
 #
 #mmhh DD MM d (mm=minute, hh=hour, DD=DayOfMonth, MM=MonthNum, d=DayOfWeekWhereZeroIsSunday)
-00 00  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/milestone_sweep.aspx
-40 03  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/daily_tasks.aspx
-20 05  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/import_latest_coned_offerings_from_emsrs.aspx
-25 05  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/import_latest_teaching_entities_from_emsrs.aspx
-30 05  *  * * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/import_latest_practitioners_from_emsrs.aspx
-30 19 03 06 * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/report_fy_allocations_reimbursements_nonspends.aspx
-31 19 03 06 * wget --output-document=/dev/null http://localhost/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx
+#
+# Daily
+#
+00 00  *  * * wget --output-document=/dev/null --no-check-certificate https://localhost/WebEMSOF/noninteractive/milestone_sweep.aspx
+40 03  *  * * wget --output-document=/dev/null --no-check-certificate https://localhost/WebEMSOF/noninteractive/daily_tasks.aspx
+20 05  *  * * wget --output-document=/dev/null --no-check-certificate https://localhost/WebEMSOF/noninteractive/import_latest_coned_offerings_from_emsrs.aspx
+25 05  *  * * wget --output-document=/dev/null --no-check-certificate https://localhost/WebEMSOF/noninteractive/import_latest_teaching_entities_from_emsrs.aspx
+#
+# Weekly
+#
+30 05  *  * 1 wget --output-document=/dev/null --no-check-certificate https://localhost/WebEMSOF/noninteractive/import_latest_practitioners_from_emsrs.aspx
+#
+# Yearly
+#
+30 19 03 06 * wget --output-document=/dev/null --no-check-certificate https://localhost/WebEMSOF/noninteractive/report_fy_allocations_reimbursements_nonspends.aspx
+31 19 03 06 * wget --output-document=/dev/null --no-check-certificate https://localhost/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx

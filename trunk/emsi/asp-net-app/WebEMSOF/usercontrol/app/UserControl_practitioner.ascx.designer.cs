@@ -274,6 +274,33 @@ namespace UserControl_practitioner {
         protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_birth_date;
         
         /// <summary>
+        /// TextBox_email_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_email_address;
+        
+        /// <summary>
+        /// RegularExpressionValidator_email_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_email_address;
+        
+        /// <summary>
+        /// CustomValidator_email_address control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_email_address;
+        
+        /// <summary>
         /// CheckBox_be_stale control.
         /// </summary>
         /// <remarks>
