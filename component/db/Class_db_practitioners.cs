@@ -99,6 +99,7 @@ namespace Class_db_practitioners
       out string level_id,
       out string regional_council_code,
       out DateTime birth_date,
+      out string email_address,
       out bool be_stale
       )
       {
@@ -109,6 +110,7 @@ namespace Class_db_practitioners
       level_id = k.EMPTY;
       regional_council_code = k.EMPTY;
       birth_date = DateTime.MinValue;
+      email_address = k.EMPTY;
       be_stale = true;
       var result = false;
       //
@@ -123,6 +125,7 @@ namespace Class_db_practitioners
         level_id = dr["level_id"].ToString();
         regional_council_code = dr["regional_council_code"].ToString();
         birth_date = DateTime.Parse(dr["birth_date"].ToString());
+        email_address = dr["birth_date"].ToString();
         be_stale = (dr["be_stale"].ToString() == "1");
         result = true;
         }
@@ -133,25 +136,27 @@ namespace Class_db_practitioners
 
     internal void ImportLatestFromEmsrs(ArrayList recs)
       {
-      var sb = new StringBuilder("insert ignore practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code,be_stale) values ");
-      Open();
-      foreach (var rec in recs)
+      if (recs.Count > 0)
         {
-        sb.Append
-          (
-          "("
-          + "NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
-          + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).first_name + "','')"
-          + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).middle_initial + "','')"
-          + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
-          + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
-          + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')"
-          + ",FALSE"
-          + "),"
-          );
+        var sb = new StringBuilder("insert ignore practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code) values ");
+        Open();
+        foreach (var rec in recs)
+          {
+          sb.Append
+            (
+            "("
+            + "NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
+            + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).first_name + "','')"
+            + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).middle_initial + "','')"
+            + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
+            + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
+            + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')"
+            + "),"
+            );
+          }
+        new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + " on duplicate key update be_stale = false",connection).ExecuteNonQuery();
+        Close();
         }
-      new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)),connection).ExecuteNonQuery();
-      Close();
       }
 
     internal void MarkAllStale()
@@ -178,6 +183,7 @@ namespace Class_db_practitioners
       string level_id,
       string regional_council_code,
       DateTime birth_date,
+      string email_address,
       bool be_stale
       )
       {
@@ -189,6 +195,7 @@ namespace Class_db_practitioners
       + " , level_id = NULLIF('" + level_id + "','')"
       + " , regional_council_code = NULLIF('" + regional_council_code + "','')"
       + " , birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
+      + " , email_address = NULLIF('" + email_address + "','')"
       + " , be_stale = " + be_stale.ToString()
       + k.EMPTY;
       Open();

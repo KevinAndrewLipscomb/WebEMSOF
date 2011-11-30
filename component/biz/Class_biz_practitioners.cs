@@ -44,6 +44,7 @@ namespace Class_biz_practitioners
       out string level_id,
       out string regional_council_code,
       out DateTime birth_date,
+      out string email_address,
       out bool be_stale
       )
       {
@@ -57,6 +58,7 @@ namespace Class_biz_practitioners
         out level_id,
         out regional_council_code,
         out birth_date,
+        out email_address,
         out be_stale
         );
       }
@@ -66,13 +68,16 @@ namespace Class_biz_practitioners
       db_practitioners.MarkAllStale();
       //
       var context = new Class_ss_emsams.ActivePractitionersContext();
-      var be_done = false;
-      while (!be_done)
+      do
         {
-        db_practitioners.ImportLatestFromEmsrs(ss_emsams.ActivePractitioners(context,out be_done));
+        db_practitioners.ImportLatestFromEmsrs(ss_emsams.ActivePractitioners(context));
         }
+      while (context.disposition.val == 0);
       //
-      db_practitioners.RemoveStale();
+      if (context.disposition.val == 1)
+        {
+        db_practitioners.RemoveStale();
+        }
       }
 
     public void Set
@@ -85,6 +90,7 @@ namespace Class_biz_practitioners
       string level_id,
       string regional_council_code,
       DateTime birth_date,
+      string email_address,
       bool be_stale
       )
       {
@@ -98,6 +104,7 @@ namespace Class_biz_practitioners
         level_id,
         regional_council_code,
         birth_date,
+        email_address,
         be_stale
         );
       }
