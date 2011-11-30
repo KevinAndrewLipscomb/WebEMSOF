@@ -954,20 +954,20 @@ namespace WebEMSOF.component.ss
       internal string view_state = k.EMPTY;
       internal string event_validation = k.EMPTY;
       internal string next_page_ctl_num = k.EMPTY;
+      internal k.int_sign_range disposition = null;
       }
     internal ArrayList ActivePractitioners
       (
-      ActivePractitionersContext context,
-      out bool be_done
+      ActivePractitionersContext context
       )
       {
       var active_practitioners = new ArrayList();
-      be_done = true;
       //
       HttpWebResponse response;
       if (context.cookie_container == null)
         {
         context.cookie_container = new CookieContainer();
+        context.disposition = new k.int_sign_range();
         }
       if (Request_ems_health_state_pa_us_EmsregActivepractitioners_3000(context.cookie_container,context.view_state,context.event_validation,context.next_page_ctl_num,out response))
         {
@@ -1005,12 +1005,16 @@ namespace WebEMSOF.component.ss
         context.event_validation = html_document.GetElementbyId("__EVENTVALIDATION").Attributes["value"].Value;
         //
         var hn_current_page_num_node_next_sibling = hnc_last_name[hnc_last_name.Count - 1].NextSibling;
-        if (hn_current_page_num_node_next_sibling != null)
+        if (hn_current_page_num_node_next_sibling == null)
+          {
+          context.disposition.val = 1;
+          }
+        else
           {
           context.next_page_ctl_num = hn_current_page_num_node_next_sibling.NextSibling.Attributes["href"].Value
             .Replace("javascript:__doPostBack(&#39;_ctl0$_ctl0$SessionLinkBar$Content$dgActivePractitioners$_ctl3004$_ctl",k.EMPTY)
             .Replace("&#39;,&#39;&#39;)",k.EMPTY);
-          be_done = false;
+          context.disposition.val = 0;
           }
         }
       return active_practitioners;
