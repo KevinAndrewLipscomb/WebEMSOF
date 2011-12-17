@@ -428,24 +428,33 @@ namespace Class_db_emsof_requests
             BindOverview(order_by_field_name, be_order_ascending, target, "region_dictated_appropriation_id = " + region_dictated_appropriation_id, "status_code = " + status.ToString());
         }
 
-        public void BindOverviewByStatus(uint status, string order_by_field_name, bool be_order_ascending, object target, bool show_all_cycles)
-        {
-            string and_parm;
-            if (show_all_cycles)
+        public void BindOverviewByStatus
+          (
+          uint status,
+          string order_by_field_name,
+          bool be_order_ascending,
+          object target,
+          k.int_sign_range scope
+            // -1 for current cycle only
+            //  0 for all cycles
+            //  1 for past cycles only
+          )
+          {
+          var and_parm = k.EMPTY;
+          if (scope.val == -1)
             {
-                and_parm = k.EMPTY;
+            and_parm = "fiscal_year.id = '" + db_fiscal_years.IdOfCurrent() + "'";
             }
-            else
+          else if (scope.val == 1)
             {
-                and_parm = "fiscal_year.id = \"" + db_fiscal_years.IdOfCurrent() + "\"";
+            and_parm = "fiscal_year.id < '" + db_fiscal_years.IdOfCurrent() + "'";
             }
-            BindOverview(order_by_field_name, be_order_ascending, target, "status_code = " + status.ToString(), and_parm);
-        }
-
+          BindOverview(order_by_field_name, be_order_ascending, target, "status_code = " + status.ToString(), and_parm);
+          }
         public void BindOverviewByStatus(uint status, string order_by_field_name, bool be_order_ascending, object target)
-        {
-            BindOverviewByStatus(status, order_by_field_name, be_order_ascending, target, false);
-        }
+          {
+          BindOverviewByStatus(status, order_by_field_name, be_order_ascending, target, scope:new k.int_sign_range());
+          }
 
         public void BindProofsOfPayment(string request_id, object target)
         {
@@ -1093,21 +1102,35 @@ namespace Class_db_emsof_requests
             return result;
         }
 
-        public uint TallyByStatus(uint status)
-        {
-            uint result;
-            string sql;
-            sql = "select count(*) as count" + " from emsof_request_master" + " join county_dictated_appropriation" + " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)" + " join region_dictated_appropriation" + " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " join state_dictated_appropriation" + " on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)" + " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)" + " where status_code = " + status.ToString();
-            if (!(new ArrayList(new uint[] {14, 15}).Contains(status)))
+        public uint TallyByStatus
+          (
+          uint status,
+          bool be_for_prior_cycles
+          )
+          {
+          uint result;
+          var sql = "select count(*) as count" + " from emsof_request_master" + " join county_dictated_appropriation" + " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)" + " join region_dictated_appropriation" + " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " join state_dictated_appropriation" + " on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)" + " join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)" + " where status_code = " + status.ToString();
+          if (!be_for_prior_cycles)
             {
-                // Unless tallying DEPLOYED or ARCHIVED statuses, limit tally to requests belonging to the current cycle.
-                sql = sql + " and fiscal_year.id = (select max(id) from fiscal_year)";
+            if (!(new ArrayList(new uint[] {14, 15}).Contains(status)))
+              {
+              // Unless tallying DEPLOYED or ARCHIVED statuses, limit tally to requests belonging to the current cycle.
+              sql += " and fiscal_year.id = (select max(id) from fiscal_year)";
+              }
             }
-            this.Open();
-            result = (uint)(new MySqlCommand(sql, this.connection).ExecuteScalar().GetHashCode());
-            this.Close();
-            return result;
-        }
+          else
+            {
+            sql += " and fiscal_year.id < (select max(id) from fiscal_year)";
+            }
+          Open();
+          result = (uint)(new MySqlCommand(sql,connection).ExecuteScalar().GetHashCode());
+          Close();
+          return result;
+          }
+        public uint TallyByStatus(uint status)
+          {
+          return TallyByStatus(status,be_for_prior_cycles:false);
+          }
 
         public uint TcciOfAppropriation()
         {

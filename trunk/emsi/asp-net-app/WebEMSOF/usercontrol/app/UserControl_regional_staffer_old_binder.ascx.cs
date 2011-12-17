@@ -11,7 +11,14 @@ namespace UserControl_regional_staffer_old_binder
 {
     public partial class TWebUserControl_regional_staffer_old_binder: ki_web_ui.usercontrol_class
     {
+        private struct p_type
+        {
+            public bool be_loaded;
+            public TClass_biz_emsof_requests biz_emsof_requests;
+        }
+
         private p_type p;
+
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -98,8 +105,14 @@ namespace UserControl_regional_staffer_old_binder
             {
                 LinkButton_deployed.Text = p.biz_emsof_requests.TallyOfStatus(Class_biz_emsof_requests.status_type.DEPLOYED) + LinkButton_deployed.Text;
                 LinkButton_archived.Text = p.biz_emsof_requests.TallyOfStatus(Class_biz_emsof_requests.status_type.ARCHIVED) + LinkButton_archived.Text;
+                LinkButton_failed_deadline.Text = p.biz_emsof_requests.TallyOfStatus(Class_biz_emsof_requests.status_type.FAILED_DEADLINE,true) + LinkButton_failed_deadline.Text;
+                LinkButton_withdrawn.Text = p.biz_emsof_requests.TallyOfStatus(Class_biz_emsof_requests.status_type.WITHDRAWN,true) + LinkButton_withdrawn.Text;
+                LinkButton_rejected.Text = p.biz_emsof_requests.TallyOfStatus(Class_biz_emsof_requests.status_type.REJECTED,true) + LinkButton_rejected.Text;
                 ScriptManager.GetCurrent(Page).RegisterPostBackControl(LinkButton_deployed);
                 ScriptManager.GetCurrent(Page).RegisterPostBackControl(LinkButton_archived);
+                ScriptManager.GetCurrent(Page).RegisterPostBackControl(LinkButton_failed_deadline);
+                ScriptManager.GetCurrent(Page).RegisterPostBackControl(LinkButton_withdrawn);
+                ScriptManager.GetCurrent(Page).RegisterPostBackControl(LinkButton_rejected);
                 p.be_loaded = true;
             }
             InjectPersistentClientSideScript();
@@ -150,20 +163,37 @@ namespace UserControl_regional_staffer_old_binder
         protected void LinkButton_archived_Click(object sender, System.EventArgs e)
         {
             SessionSet("status_of_interest", Class_biz_emsof_requests.status_type.ARCHIVED);
+            SessionSet("mode:be_for_prior_cycles",true);
             DropCrumbAndTransferTo("emsof_request_status_filter.aspx");
         }
 
         protected void LinkButton_deployed_Click(object sender, System.EventArgs e)
         {
             SessionSet("status_of_interest", Class_biz_emsof_requests.status_type.DEPLOYED);
+            SessionSet("mode:be_for_prior_cycles",true);
             DropCrumbAndTransferTo("emsof_request_status_filter.aspx");
         }
 
-        private struct p_type
-        {
-            public bool be_loaded;
-            public TClass_biz_emsof_requests biz_emsof_requests;
-        } // end p_type
+        protected void LinkButton_failed_deadline_Click(object sender, EventArgs e)
+          {
+            SessionSet("status_of_interest", Class_biz_emsof_requests.status_type.FAILED_DEADLINE);
+            SessionSet("mode:be_for_prior_cycles",true);
+            DropCrumbAndTransferTo("emsof_request_status_filter.aspx");
+          }
+
+        protected void LinkButton_withdrawn_Click(object sender, EventArgs e)
+          {
+            SessionSet("status_of_interest", Class_biz_emsof_requests.status_type.WITHDRAWN);
+            SessionSet("mode:be_for_prior_cycles",true);
+            DropCrumbAndTransferTo("emsof_request_status_filter.aspx");
+          }
+
+        protected void LinkButton_rejected_Click(object sender, EventArgs e)
+          {
+            SessionSet("status_of_interest", Class_biz_emsof_requests.status_type.REJECTED);
+            SessionSet("mode:be_for_prior_cycles",true);
+            DropCrumbAndTransferTo("emsof_request_status_filter.aspx");
+          }
 
     } // end TWebUserControl_regional_staffer_old_binder
 

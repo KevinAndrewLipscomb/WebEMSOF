@@ -147,10 +147,15 @@ namespace emsof_request_status_filter
 
         private void BindOverview()
         {
-            bool be_datagrid_empty;
-            p.biz_emsof_requests.BindOverviewByStatus((status_type)(Session["status_of_interest"]), p.sort_order, p.be_sort_order_ascending, DataGrid_requests);
+            var scope = new k.int_sign_range();
+            if (Session["mode:be_for_prior_cycles"] != null)
+              {
+              scope.val = 1;
+              Session.Remove("mode:be_for_prior_cycles");
+              }
+            p.biz_emsof_requests.BindOverviewByStatus((status_type)(Session["status_of_interest"]), p.sort_order, p.be_sort_order_ascending, DataGrid_requests, scope);
             // Manage control visibilities.
-            be_datagrid_empty = (p.num_qualifying_requests == 0);
+            var be_datagrid_empty = (p.num_qualifying_requests == 0);
             TableRow_none.Visible = be_datagrid_empty;
             TableRow_data.Visible = !be_datagrid_empty;
             LinkButton_retransmit_to_state.Enabled = !be_datagrid_empty;
