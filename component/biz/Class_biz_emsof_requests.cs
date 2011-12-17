@@ -300,10 +300,20 @@ namespace Class_biz_emsof_requests
             db_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus(region_dictated_appropriation_id, (uint)(status), order_by_field_name, be_order_ascending, target);
         }
 
-        public void BindOverviewByStatus(status_type status, string order_by_field_name, bool be_order_ascending, object target)
-        {
-            db_emsof_requests.BindOverviewByStatus((uint)(status), order_by_field_name, be_order_ascending, target, (new ArrayList(new status_type[] {status_type.DEPLOYED, status_type.ARCHIVED}).Contains(status)));
-        }
+        public void BindOverviewByStatus
+          (
+          status_type status,
+          string order_by_field_name,
+          bool be_order_ascending,
+          object target,
+          k.int_sign_range scope
+            // -1 for current cycle only
+            //  0 for all cycles
+            //  1 for past cycles only
+          )
+          {
+          db_emsof_requests.BindOverviewByStatus((uint)(status), order_by_field_name, be_order_ascending, target, scope);
+          }
 
         public DateTime CountyApprovalTimestampOf(string master_id)
         {
@@ -841,12 +851,18 @@ namespace Class_biz_emsof_requests
             return SumOfRequestValues("");
         }
 
+        public string TallyOfStatus
+          (
+          status_type status,
+          bool be_for_prior_cycles
+          )
+          {
+          return db_emsof_requests.TallyByStatus((uint)(status),be_for_prior_cycles).ToString();
+          }
         public string TallyOfStatus(status_type status)
-        {
-            string result;
-            result = db_emsof_requests.TallyByStatus((uint)(status)).ToString();
-            return result;
-        }
+          {
+          return TallyOfStatus(status,be_for_prior_cycles:false);
+          }
 
         public uint TcciOfAppropriation()
         {
