@@ -69,6 +69,12 @@ namespace emsof_request_status_filter
             //
             p.cc_list = k.EMPTY;
             p.distribution_list = k.EMPTY;
+            p.scope = new k.int_sign_range();
+            if (Session["mode:be_for_prior_cycles"] != null)
+              {
+              p.scope.val = 1;
+              Session.Remove("mode:be_for_prior_cycles");
+              }
         }
 
         protected void Button_send_Click(object sender, System.EventArgs e)
@@ -147,13 +153,7 @@ namespace emsof_request_status_filter
 
         private void BindOverview()
         {
-            var scope = new k.int_sign_range();
-            if (Session["mode:be_for_prior_cycles"] != null)
-              {
-              scope.val = 1;
-              Session.Remove("mode:be_for_prior_cycles");
-              }
-            p.biz_emsof_requests.BindOverviewByStatus((status_type)(Session["status_of_interest"]), p.sort_order, p.be_sort_order_ascending, DataGrid_requests, scope);
+            p.biz_emsof_requests.BindOverviewByStatus((status_type)(Session["status_of_interest"]), p.sort_order, p.be_sort_order_ascending, DataGrid_requests, p.scope);
             // Manage control visibilities.
             var be_datagrid_empty = (p.num_qualifying_requests == 0);
             TableRow_none.Visible = be_datagrid_empty;
@@ -176,6 +176,7 @@ namespace emsof_request_status_filter
             public string cc_list;
             public string distribution_list;
             public uint num_qualifying_requests;
+            public k.int_sign_range scope;
             public string sort_order;
         } // end p_type
 
