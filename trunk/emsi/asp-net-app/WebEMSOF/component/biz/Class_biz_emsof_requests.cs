@@ -22,8 +22,9 @@ namespace Class_biz_emsof_requests
         private TClass_db_appropriations db_appropriations = null;
         private TClass_db_emsof_requests db_emsof_requests = null;
         private TClass_biz_accounts biz_accounts = null;
-        private TClass_biz_equipment biz_equipment = null;
         private TClass_biz_appropriations biz_appropriations = null;
+        private TClass_biz_equipment biz_equipment = null;
+        private TClass_biz_fiscal_years biz_fiscal_years = null;
         private TClass_biz_match_level biz_match_level = null;
         private TClass_biz_milestones biz_milestones = null;
         private TClass_biz_regional_staffers biz_regional_staffers = null;
@@ -37,6 +38,7 @@ namespace Class_biz_emsof_requests
             biz_accounts = new TClass_biz_accounts();
             biz_appropriations = new TClass_biz_appropriations();
             biz_equipment = new TClass_biz_equipment();
+            biz_fiscal_years = new TClass_biz_fiscal_years();
             biz_match_level = new TClass_biz_match_level();
             biz_milestones = new TClass_biz_milestones();
             biz_regional_staffers = new TClass_biz_regional_staffers();
@@ -183,7 +185,10 @@ namespace Class_biz_emsof_requests
         public bool BeOkToForceOpen(object e_item)
         {
             bool result;
-            result = ((!db_emsof_requests.BeDeadlineExempt(db_emsof_requests.IdOf(e_item))) && (new ArrayList(new status_type[] {status_type.NEEDS_COUNTY_APPROVAL, status_type.NEEDS_SENT_TO_PA_DOH_EMSO, status_type.NEEDS_PA_DOH_EMSO_APPROVAL, status_type.NEEDS_INVOICE_COLLECTION, status_type.NEEDS_CANCELED_CHECK_COLLECTION, status_type.NEEDS_REIMBURSEMENT_ISSUANCE, status_type.REJECTED, status_type.FAILED_DEADLINE}).Contains(StatusOf(e_item))) && (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator")));
+            result = (!db_emsof_requests.BeDeadlineExempt(db_emsof_requests.IdOf(e_item)))
+            && (new ArrayList(new status_type[] {status_type.NEEDS_COUNTY_APPROVAL, status_type.NEEDS_SENT_TO_PA_DOH_EMSO, status_type.NEEDS_PA_DOH_EMSO_APPROVAL, status_type.NEEDS_INVOICE_COLLECTION, status_type.NEEDS_CANCELED_CHECK_COLLECTION, status_type.NEEDS_REIMBURSEMENT_ISSUANCE, status_type.REJECTED, status_type.FAILED_DEADLINE}).Contains(StatusOf(e_item)))
+            && (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"))
+            && (FyDesignatorOf(e_item) == biz_fiscal_years.DesignatorOfCurrent());
             return result;
         }
 
@@ -254,7 +259,7 @@ namespace Class_biz_emsof_requests
         public bool BeOkToViewInvoices(status_type status)
         {
             bool result;
-            result = new ArrayList(new status_type[] {status_type.NEEDS_INVOICE_COLLECTION, status_type.NEEDS_CANCELED_CHECK_COLLECTION, status_type.NEEDS_REIMBURSEMENT_ISSUANCE, status_type.REIMBURSEMENT_ISSUED, status_type.DEPLOYED, status_type.ARCHIVED}).Contains(status);
+            result = new ArrayList(new status_type[] {status_type.NEEDS_INVOICE_COLLECTION, status_type.NEEDS_CANCELED_CHECK_COLLECTION, status_type.NEEDS_REIMBURSEMENT_ISSUANCE, status_type.REIMBURSEMENT_ISSUED, status_type.DEPLOYED, status_type.ARCHIVED, status_type.FAILED_DEADLINE, status_type.REJECTED, status_type.WITHDRAWN}).Contains(status);
             return result;
         }
 

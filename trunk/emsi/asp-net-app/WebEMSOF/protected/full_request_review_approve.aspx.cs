@@ -140,7 +140,7 @@ namespace full_request_review_approve
                 Label_unused_amount.Text = (p.parent_appropriation_amount - p.total_emsof_ante).ToString("C");
                 Label_num_items.Text = p.num_items.ToString();
                 // Manage Proof of payment and Emphasized totals blocks.
-                be_beyond_invoice_collection = (new ArrayList(new status_type[] {Class_biz_emsof_requests.status_type.NEEDS_CANCELED_CHECK_COLLECTION, Class_biz_emsof_requests.status_type.NEEDS_REIMBURSEMENT_ISSUANCE, Class_biz_emsof_requests.status_type.REIMBURSEMENT_ISSUED}).Contains(p.status));
+                be_beyond_invoice_collection = (new ArrayList(new status_type[] {Class_biz_emsof_requests.status_type.NEEDS_CANCELED_CHECK_COLLECTION, Class_biz_emsof_requests.status_type.NEEDS_REIMBURSEMENT_ISSUANCE, Class_biz_emsof_requests.status_type.REIMBURSEMENT_ISSUED, Class_biz_emsof_requests.status_type.FAILED_DEADLINE, Class_biz_emsof_requests.status_type.DEPLOYED, Class_biz_emsof_requests.status_type.ARCHIVED, Class_biz_emsof_requests.status_type.WITHDRAWN}).Contains(p.status));
                 Table_proofs_of_payment.Visible = be_beyond_invoice_collection;
                 Table_emphasized_totals.Visible = be_beyond_invoice_collection;
                 if (be_beyond_invoice_collection)
