@@ -36,7 +36,7 @@ namespace UserControl_regional_staffer_new_binder
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_PlaceHolder_content"] as string) == "UserControl_regional_staffer_new_binder");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_PlaceHolder_content"] as string) == "UserControl_regional_staffer_new_binder");
                 if ((Session["UserControl_regional_staffer_new_binder_selected_tab"] != null))
                 {
                     p.tab_index = (uint)(Session["UserControl_regional_staffer_new_binder_selected_tab"].GetHashCode());

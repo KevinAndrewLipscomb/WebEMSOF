@@ -13,6 +13,15 @@ namespace UserControl_coned_offering {
     public partial class TWebUserControl_coned_offering {
         
         /// <summary>
+        /// TableRow_class_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_class_id;
+        
+        /// <summary>
         /// TextBox_class_id control.
         /// </summary>
         /// <remarks>
@@ -148,6 +157,168 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_class_id;
         
         /// <summary>
+        /// TextBox_class_number control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_class_number;
+        
+        /// <summary>
+        /// TextBox_course_title control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_course_title;
+        
+        /// <summary>
+        /// RequiredFieldValidator_course_title control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_course_title;
+        
+        /// <summary>
+        /// TextBox_location control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location;
+        
+        /// <summary>
+        /// TextBox_location_address_1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_address_1;
+        
+        /// <summary>
+        /// TextBox_location_address_2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_address_2;
+        
+        /// <summary>
+        /// TextBox_location_city control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_city;
+        
+        /// <summary>
+        /// TextBox_location_state control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_state;
+        
+        /// <summary>
+        /// TextBox_location_zip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_zip;
+        
+        /// <summary>
+        /// TextBox_location_zip_plus_4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_zip_plus_4;
+        
+        /// <summary>
+        /// TextBox_location_phone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_phone;
+        
+        /// <summary>
+        /// TextBox_location_email control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_location_email;
+        
+        /// <summary>
+        /// UserControl_drop_down_date_start_date_time control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_start_date_time;
+        
+        /// <summary>
+        /// TextBox_start_time control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_start_time;
+        
+        /// <summary>
+        /// UserControl_drop_down_date_end_date_time control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_end_date_time;
+        
+        /// <summary>
+        /// TextBox_end_time control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_end_time;
+        
+        /// <summary>
+        /// TextBox_other_dates_and_times control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_other_dates_and_times;
+        
+        /// <summary>
+        /// TableRow_course_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_course_id;
+        
+        /// <summary>
         /// TextBox_course_id control.
         /// </summary>
         /// <remarks>
@@ -175,13 +346,13 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_course_id;
         
         /// <summary>
-        /// TextBox_class_number control.
+        /// TableRow_created_by control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_class_number;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_created_by;
         
         /// <summary>
         /// TextBox_created_by control.
@@ -211,6 +382,42 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_created_by;
         
         /// <summary>
+        /// TextBox_created_by_first_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_created_by_first_name;
+        
+        /// <summary>
+        /// RequiredFieldValidator_created_by_first_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_created_by_first_name;
+        
+        /// <summary>
+        /// TextBox_created_by_last_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_created_by_last_name;
+        
+        /// <summary>
+        /// RequiredFieldValidator_created_by_last_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_created_by_last_name;
+        
+        /// <summary>
         /// UserControl_drop_down_date_date_created control.
         /// </summary>
         /// <remarks>
@@ -218,6 +425,15 @@ namespace UserControl_coned_offering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_date_created;
+        
+        /// <summary>
+        /// TableRow_last_edited_by control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_last_edited_by;
         
         /// <summary>
         /// TextBox_last_edited_by control.
@@ -256,6 +472,15 @@ namespace UserControl_coned_offering {
         protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_date_last_edited;
         
         /// <summary>
+        /// TableRow_sponsor_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_sponsor_id;
+        
+        /// <summary>
         /// TextBox_sponsor_id control.
         /// </summary>
         /// <remarks>
@@ -274,6 +499,15 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_sponsor_id;
         
         /// <summary>
+        /// TableRow_sponsor_number control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_sponsor_number;
+        
+        /// <summary>
         /// TextBox_sponsor_number control.
         /// </summary>
         /// <remarks>
@@ -283,13 +517,13 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.TextBox TextBox_sponsor_number;
         
         /// <summary>
-        /// TextBox_document_status control.
+        /// DropDownList_document_status control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_document_status;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList_document_status;
         
         /// <summary>
         /// RequiredFieldValidator_document_status control.
@@ -301,31 +535,22 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_document_status;
         
         /// <summary>
-        /// RegularExpressionValidator_document_status control.
+        /// DropDownList_class_final_status control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_document_status;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList_class_final_status;
         
         /// <summary>
-        /// TextBox_class_final_status_id control.
+        /// TableRow_course_number control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_class_final_status_id;
-        
-        /// <summary>
-        /// RegularExpressionValidator_class_final_status_id control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_class_final_status_id;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_course_number;
         
         /// <summary>
         /// TextBox_course_number control.
@@ -344,15 +569,6 @@ namespace UserControl_coned_offering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_course_number;
-        
-        /// <summary>
-        /// TextBox_location control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location;
         
         /// <summary>
         /// TextBox_student_cost control.
@@ -407,51 +623,6 @@ namespace UserControl_coned_offering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_estimated_students;
-        
-        /// <summary>
-        /// UserControl_drop_down_date_start_date_time control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_start_date_time;
-        
-        /// <summary>
-        /// UserControl_drop_down_date_end_date_time control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_end_date_time;
-        
-        /// <summary>
-        /// TextBox_start_time control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_start_time;
-        
-        /// <summary>
-        /// TextBox_end_time control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_end_time;
-        
-        /// <summary>
-        /// TextBox_other_dates_and_times control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_other_dates_and_times;
         
         /// <summary>
         /// TextBox_instructors control.
@@ -589,13 +760,13 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.TextBox TextBox_region_comments;
         
         /// <summary>
-        /// TextBox_region_council_num control.
+        /// DropDownList_region_council control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_region_council_num;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList_region_council;
         
         /// <summary>
         /// RequiredFieldValidator_region_council_num control.
@@ -607,22 +778,13 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_region_council_num;
         
         /// <summary>
-        /// RegularExpressionValidator_region_council_num control.
+        /// DropDownList_class_county control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_region_council_num;
-        
-        /// <summary>
-        /// TextBox_class_county_code control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_class_county_code;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList_class_county;
         
         /// <summary>
         /// RequiredFieldValidator_class_county_code control.
@@ -632,15 +794,6 @@ namespace UserControl_coned_offering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_class_county_code;
-        
-        /// <summary>
-        /// RegularExpressionValidator_class_county_code control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_class_county_code;
         
         /// <summary>
         /// TextBox_total_class_hours control.
@@ -659,78 +812,6 @@ namespace UserControl_coned_offering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_total_class_hours;
-        
-        /// <summary>
-        /// TextBox_location_address_1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_address_1;
-        
-        /// <summary>
-        /// TextBox_location_address_2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_address_2;
-        
-        /// <summary>
-        /// TextBox_location_city control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_city;
-        
-        /// <summary>
-        /// TextBox_location_state control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_state;
-        
-        /// <summary>
-        /// TextBox_location_zip control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_zip;
-        
-        /// <summary>
-        /// TextBox_location_zip_plus_4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_zip_plus_4;
-        
-        /// <summary>
-        /// TextBox_location_phone control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_phone;
-        
-        /// <summary>
-        /// TextBox_location_email control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_location_email;
         
         /// <summary>
         /// TextBox_location_of_registration control.
@@ -796,6 +877,15 @@ namespace UserControl_coned_offering {
         protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_written_exam_date;
         
         /// <summary>
+        /// TableRow_disapproval_reason_id control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_disapproval_reason_id;
+        
+        /// <summary>
         /// TextBox_disapproval_reason_id control.
         /// </summary>
         /// <remarks>
@@ -832,42 +922,6 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.CheckBox CheckBox_signed_hardcopy;
         
         /// <summary>
-        /// TextBox_created_by_first_name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_created_by_first_name;
-        
-        /// <summary>
-        /// RequiredFieldValidator_created_by_first_name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_created_by_first_name;
-        
-        /// <summary>
-        /// TextBox_created_by_last_name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_created_by_last_name;
-        
-        /// <summary>
-        /// RequiredFieldValidator_created_by_last_name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_created_by_last_name;
-        
-        /// <summary>
         /// TextBox_class_disapproval_reason_description control.
         /// </summary>
         /// <remarks>
@@ -877,6 +931,15 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.TextBox TextBox_class_disapproval_reason_description;
         
         /// <summary>
+        /// TableRow_sponsor_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_sponsor_name;
+        
+        /// <summary>
         /// TextBox_sponsor_name control.
         /// </summary>
         /// <remarks>
@@ -884,6 +947,15 @@ namespace UserControl_coned_offering {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox_sponsor_name;
+        
+        /// <summary>
+        /// TableRow_courses_course_number control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_courses_course_number;
         
         /// <summary>
         /// TextBox_courses_course_number control.
@@ -904,22 +976,31 @@ namespace UserControl_coned_offering {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_courses_course_number;
         
         /// <summary>
-        /// TextBox_course_title control.
+        /// TableRow_status control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox_course_title;
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_status;
         
         /// <summary>
-        /// RequiredFieldValidator_course_title control.
+        /// DropDownList_status control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_course_title;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownList_status;
+        
+        /// <summary>
+        /// RequiredFieldValidator_status control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_status;
         
         /// <summary>
         /// Button_submit control.

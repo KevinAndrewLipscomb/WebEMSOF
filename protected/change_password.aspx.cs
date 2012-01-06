@@ -1,23 +1,11 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-using System.Web.UI;
 using Class_db;
 using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+using System.Web.UI;
+
 namespace change_password
 {
     public struct p_type
@@ -41,6 +29,20 @@ namespace change_password
             //this.Load += this.Page_Load;
         }
 
+    private void InjectPersistentClientSideScript()
+      {
+      EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
+      EstablishClientSideFunction
+        (
+        "SecurePassword()",
+        k.EMPTY
+        + " if (El('" + TextBox_nominal_password.ClientID + "').value != '') El('" + TextBox_nominal_password.ClientID + "').value = new jsSHA(El('" + TextBox_nominal_password.ClientID + "').value,'ASCII').getHash('HEX');"
+        + " if (El('" + TextBox_confirmation_password.ClientID + "').value != '') El('" + TextBox_confirmation_password.ClientID + "').value = new jsSHA(El('" + TextBox_confirmation_password.ClientID + "').value,'ASCII').getHash('HEX');"
+        );
+      //
+      Form_control.Attributes.Add("onsubmit","SecurePassword()");
+      }
+
         protected void Page_Load(object sender, System.EventArgs e)
         {
             if (IsPostBack)
@@ -61,10 +63,11 @@ namespace change_password
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - change_password";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - change_password";
                 p.db = new TClass_db();
                 p.db_trail = new TClass_db_trail();
             }
+            InjectPersistentClientSideScript();
         }
 
         protected override void OnInit(EventArgs e)
@@ -95,7 +98,7 @@ namespace change_password
             {
                 // Commit the data to the database.
                 p.db.Open();
-                new MySqlCommand(p.db_trail.Saved("UPDATE " + Session["target_user_table"].ToString() + "_user" + " SET encoded_password = \"" + k.Digest(k.Safe(TextBox_nominal_password.Text.Trim(), k.safe_hint_type.ALPHANUM)) + "\"," + " be_stale_password = FALSE" + " WHERE id = \"" + Session[Session["target_user_table"].ToString() + "_user_id"].ToString() + "\""), p.db.connection).ExecuteNonQuery();
+                new MySqlCommand(p.db_trail.Saved("UPDATE " + Session["target_user_table"].ToString() + "_user" + " SET encoded_password_hash = SHA1('" + k.Safe(TextBox_nominal_password.Text.Trim(), k.safe_hint_type.HEX) + "')," + " be_stale_password = FALSE" + " WHERE id = \"" + Session[Session["target_user_table"].ToString() + "_user_id"].ToString() + "\""), p.db.connection).ExecuteNonQuery();
                 p.db.Close();
                 BackTrack();
             }

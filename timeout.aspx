@@ -5,13 +5,11 @@
 <%@ Register TagPrefix="uc2" TagName="UserControl_session_interrupted" Src="~/usercontrol/ki/UserControl_session_interrupted.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-    <title id="Title" runat="server"></title>
+  <head runat="server">
+    <title></title>
     <!-- $Id$ -->
-    <link href="../css/standard.css" rel="stylesheet" type="text/css" />
-    <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
-    <link href="../css/standard.css" rel="stylesheet" type="text/css" />
-    <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
+    <link href="css/standard.css" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 7]> <style type="text/css">@import "css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
   <body bgcolor="white">
     <form runat="server">

@@ -142,7 +142,7 @@ namespace UserControl_fy_allocations_reimbursements_returns
       if (Session[InstanceId() + ".p"] != null)
         {
         p = (p_type)(Session[InstanceId() + ".p"]);
-        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_fy_allocations_reimbursements_returns");
+        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_fy_allocations_reimbursements_returns");
         }
       else
         {
@@ -182,7 +182,7 @@ namespace UserControl_fy_allocations_reimbursements_returns
 
     private void DataGrid_control_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
       {
-      var be_item_signif = new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType);
+      var be_item_signif = new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType);
       if (p.be_interactive && be_item_signif)
         {
         var link_button = ((e.Item.Cells[UserControl_fy_allocations_reimbursements_returns_Static.TCI_SELECT].Controls[0]) as LinkButton);

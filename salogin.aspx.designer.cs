@@ -13,6 +13,15 @@ namespace salogin {
     public partial class TWebForm_salogin {
         
         /// <summary>
+        /// Form_control control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm Form_control;
+        
+        /// <summary>
         /// UserControl_precontent control.
         /// </summary>
         /// <remarks>
@@ -130,15 +139,6 @@ namespace salogin {
         protected global::System.Web.UI.WebControls.TextBox TextBox_password;
         
         /// <summary>
-        /// RegularExpressionValidator_password control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_password;
-        
-        /// <summary>
         /// CheckBox_keep_me_logged_in control.
         /// </summary>
         /// <remarks>
@@ -164,6 +164,15 @@ namespace salogin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button_new_password;
+        
+        /// <summary>
+        /// Hidden_client_timezone_offset control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden Hidden_client_timezone_offset;
         
         /// <summary>
         /// UserControl_postcontent control.

@@ -116,7 +116,7 @@ namespace UserControl_values_to_region
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_values_to_region");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_values_to_region");
             }
             else
             {

@@ -131,7 +131,7 @@ namespace UserControl_equipment_procurement_overview
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_analyses_binder_UserControl_equipment_procurement_binder_PlaceHolder_content"] as string) == "UserControl_equipment_procurement_overview");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_analyses_binder_UserControl_equipment_procurement_binder_PlaceHolder_content"] as string) == "UserControl_equipment_procurement_overview");
             }
             else
             {
@@ -173,7 +173,7 @@ namespace UserControl_equipment_procurement_overview
 
         private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
-            if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+            if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
             {
                 SessionSet("equipment_procurement_cycle", p.cycle);
                 SessionSet("equipment_procurement_code", k.Safe(e.Item.Cells[Units.UserControl_equipment_procurement_overview.TCI_CODE].Text, k.safe_hint_type.NUM));
@@ -187,7 +187,7 @@ namespace UserControl_equipment_procurement_overview
             e.Item.Cells[Units.UserControl_equipment_procurement_overview.TCI_CODE].Visible = false;
             if (p.be_interactive)
             {
-                if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+                if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
                 {
                     link_button = ((e.Item.Cells[Units.UserControl_equipment_procurement_overview.TCI_SELECT].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);

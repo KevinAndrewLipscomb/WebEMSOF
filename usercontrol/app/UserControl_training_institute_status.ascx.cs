@@ -1,13 +1,9 @@
+using Class_biz_training_institute_statuses;
 using kix;
 using System;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Collections;
 
-using Class_biz_training_institute_statuses;
-using UserControl_drop_down_date;
 namespace UserControl_training_institute_status
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~trivial~item.pas
@@ -195,7 +191,7 @@ namespace UserControl_training_institute_status
             {
                 p.be_loaded = false;
                 p.biz_training_institute_statuses = new TClass_biz_training_institute_statuses();
-                p.be_ok_to_config_training_institute_statuses = k.Has((string[])(Session["privilege_array"]), "config-court-kinds");
+                p.be_ok_to_config_training_institute_statuses = k.Has((string[])(Session["privilege_array"]), "config-training-institute-statuses");
             }
 
         }

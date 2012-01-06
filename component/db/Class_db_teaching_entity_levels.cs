@@ -1,10 +1,9 @@
-using MySql.Data.MySqlClient;
-using kix;
-using System;
-
-using System.Web.UI.WebControls;
 using Class_db;
 using Class_db_trail;
+using kix;
+using MySql.Data.MySqlClient;
+using System.Web.UI.WebControls;
+
 namespace Class_db_teaching_entity_levels
 {
     public class TClass_db_teaching_entity_levels: TClass_db
@@ -58,7 +57,7 @@ namespace Class_db_teaching_entity_levels
 
         public void BindDirectToListControl(object target)
         {
-            BindDirectToListControl(target, "-- court kind --");
+            BindDirectToListControl(target, "-- teaching entity level --");
         }
 
         public void BindDirectToListControl(object target, string unselected_literal)

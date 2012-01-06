@@ -12,19 +12,31 @@ namespace Class_biz_counties
             // TODO: Add any constructor code here
             db_counties = new TClass_db_counties();
         }
+
         public void BindDirectToListControl(object target, string unselected_literal, string selected_value)
         {
             db_counties.BindDirectToListControl(target, unselected_literal, selected_value);
         }
-
+        public void BindDirectToListControl(object target, string unselected_literal)
+        {
+            BindDirectToListControl(target, unselected_literal, k.EMPTY);
+        }
         public void BindDirectToListControl(object target)
         {
             BindDirectToListControl(target, "-- County --");
         }
 
-        public void BindDirectToListControl(object target, string unselected_literal)
+        public void BindEmsrsToListControl(object target, string unselected_literal, string selected_value)
         {
-            BindDirectToListControl(target, unselected_literal, k.EMPTY);
+            db_counties.BindEmsrsToListControl(target, unselected_literal, selected_value);
+        }
+        public void BindEmsrsToListControl(object target, string unselected_literal)
+        {
+            BindEmsrsToListControl(target, unselected_literal, k.EMPTY);
+        }
+        public void BindEmsrsToListControl(object target)
+        {
+            BindEmsrsToListControl(target, "-- County --");
         }
 
         public void BindGrid

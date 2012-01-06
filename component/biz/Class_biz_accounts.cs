@@ -44,20 +44,41 @@ namespace Class_biz_accounts
             return result;
         }
 
-        public void BindCounties(object target)
-        {
-            db_accounts.BindCounties(target);
-        }
+        internal void BindConedSponsorsInRegion
+          (
+          string region_code,
+          object target
+          )
+          {
+          db_accounts.BindConedSponsorsInRegion(region_code,target);
+          }
 
-        public void BindRegionalStaffers(object target)
-        {
-            db_accounts.BindRegionalStaffers(target);
-        }
+        public void BindCountiesInRegion
+          (
+          string region_code,
+          object target
+          )
+          {
+          db_accounts.BindCountiesInRegion(region_code,target);
+          }
 
-        public void BindServices(object target)
-        {
-            db_accounts.BindServices(target);
-        }
+        public void BindRegionalStaffersInRegion
+          (
+          string region_code,
+          object target
+          )
+          {
+          db_accounts.BindRegionalStaffersInRegion(region_code,target);
+          }
+
+        public void BindServicesInRegion
+          (
+          string region_code,
+          object target
+          )
+          {
+          db_accounts.BindServicesInRegion(region_code,target);
+          }
 
         public string EmailAddressByKindId(string user_kind, string user_id)
         {

@@ -1,10 +1,8 @@
 using System.Web;
 using UserControl_about;
-using UserControl_analyses_binder;
 using UserControl_config_binder;
-using UserControl_regional_staffer_current_binder;
-using UserControl_regional_staffer_new_binder;
-using UserControl_regional_staffer_old_binder;
+using UserControl_regional_staffer_cat4pe_binder;
+using UserControl_regional_staffer_emsrs_gateway_binder;
 
 namespace UserControl_regional_staffer_binder
 {
@@ -16,7 +14,8 @@ namespace UserControl_regional_staffer_binder
             if (!p.be_loaded)
             {
                 TabContainer_control.ActiveTabIndex = (int)(p.tab_index);
-                TabPanel_new.Enabled = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator");
+                TabPanel_cat4pe.Enabled = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator");
+                TabPanel_emsrs_gateway.Enabled = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("education-coordinator")|| HttpContext.Current.User.IsInRole("education-specialist");
                 TabPanel_config.Enabled = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator");
                 p.be_loaded = true;
             }
@@ -39,18 +38,12 @@ namespace UserControl_regional_staffer_binder
                 }
                 switch(p.tab_index)
                 {
-                    case Units.UserControl_regional_staffer_binder.TSSI_CURRENT:
+                    case Units.UserControl_regional_staffer_binder.TSSI_CAT4PE:
                         // Dynamic controls must be re-added on each postback.
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_current_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_current_binder.ascx"))), "UserControl_regional_staffer_current_binder", PlaceHolder_content);
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_cat4pe_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_cat4pe_binder.ascx"))), "UserControl_regional_staffer_cat4pe_binder", PlaceHolder_content);
                         break;
-                    case Units.UserControl_regional_staffer_binder.TSSI_OLD:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_old_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_old_binder.ascx"))), "UserControl_regional_staffer_old_binder", PlaceHolder_content);
-                        break;
-                    case Units.UserControl_regional_staffer_binder.TSSI_NEW:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_new_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_new_binder.ascx"))), "UserControl_regional_staffer_new_binder", PlaceHolder_content);
-                        break;
-                    case Units.UserControl_regional_staffer_binder.TSSI_ANALYSES:
-                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_analyses_binder)(LoadControl("~/usercontrol/app/UserControl_analyses_binder.ascx"))), "UserControl_analyses_binder", PlaceHolder_content);
+                    case Units.UserControl_regional_staffer_binder.TSSI_EMSRS_GATEWAY:
+                        p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_emsrs_gateway_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_emsrs_gateway_binder.ascx"))), "UserControl_regional_staffer_emsrs_gateway_binder", PlaceHolder_content);
                         break;
                     case Units.UserControl_regional_staffer_binder.TSSI_CONFIG:
                         p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_config_binder)(LoadControl("~/usercontrol/app/UserControl_config_binder.ascx"))), "UserControl_config_binder", PlaceHolder_content);
@@ -63,8 +56,16 @@ namespace UserControl_regional_staffer_binder
             else
             {
                 p.be_loaded = false;
-                p.tab_index = Units.UserControl_regional_staffer_binder.TSSI_CURRENT;
-                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_current_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_current_binder.ascx"))),"UserControl_regional_staffer_current_binder",PlaceHolder_content,InstanceId());
+                if (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"))
+                  {
+                  p.tab_index = Units.UserControl_regional_staffer_binder.TSSI_CAT4PE;
+                  p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_cat4pe_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_cat4pe_binder.ascx"))),"UserControl_regional_staffer_cat4pe_binder",PlaceHolder_content,InstanceId());
+                  }
+                else if (HttpContext.Current.User.IsInRole("education-coordinator")|| HttpContext.Current.User.IsInRole("education-specialist"))
+                  {
+                  p.tab_index = Units.UserControl_regional_staffer_binder.TSSI_EMSRS_GATEWAY;
+                  p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_emsrs_gateway_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_emsrs_gateway_binder.ascx"))),"UserControl_regional_staffer_emsrs_gateway_binder",PlaceHolder_content,InstanceId());
+                  }
             }
 
         }
@@ -75,17 +76,11 @@ namespace UserControl_regional_staffer_binder
             PlaceHolder_content.Controls.Clear();
             switch(p.tab_index)
             {
-                case Units.UserControl_regional_staffer_binder.TSSI_CURRENT:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_current_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_current_binder.ascx"))),"UserControl_regional_staffer_current_binder",PlaceHolder_content,InstanceId());
+                case Units.UserControl_regional_staffer_binder.TSSI_CAT4PE:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_cat4pe_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_cat4pe_binder.ascx"))),"UserControl_regional_staffer_cat4pe_binder",PlaceHolder_content,InstanceId());
                     break;
-                case Units.UserControl_regional_staffer_binder.TSSI_OLD:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_old_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_old_binder.ascx"))),"UserControl_regional_staffer_old_binder",PlaceHolder_content,InstanceId());
-                    break;
-                case Units.UserControl_regional_staffer_binder.TSSI_NEW:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_new_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_new_binder.ascx"))),"UserControl_regional_staffer_new_binder",PlaceHolder_content,InstanceId());
-                    break;
-                case Units.UserControl_regional_staffer_binder.TSSI_ANALYSES:
-                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_analyses_binder)(LoadControl("~/usercontrol/app/UserControl_analyses_binder.ascx"))),"UserControl_analyses_binder",PlaceHolder_content,InstanceId());
+                case Units.UserControl_regional_staffer_binder.TSSI_EMSRS_GATEWAY:
+                    p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_emsrs_gateway_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_emsrs_gateway_binder.ascx"))),"UserControl_regional_staffer_emsrs_gateway_binder",PlaceHolder_content,InstanceId());
                     break;
                 case Units.UserControl_regional_staffer_binder.TSSI_CONFIG:
                     p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_config_binder)(LoadControl("~/usercontrol/app/UserControl_config_binder.ascx"))),"UserControl_config_binder",PlaceHolder_content,InstanceId());
@@ -139,13 +134,10 @@ namespace UserControl_regional_staffer_binder.Units
 {
     public class UserControl_regional_staffer_binder
     {
-        public const int TSSI_NEW = 0;
-        public const int TSSI_CURRENT = 1;
-        public const int TSSI_OLD = 2;
-        public const int TSSI_ANALYSES = 3;
-        public const int TSSI_CONFIG = 4;
-        public const int TSSI_ABOUT = 5;
+        public const int TSSI_CAT4PE = 0;
+        public const int TSSI_EMSRS_GATEWAY = 1;
+        public const int TSSI_CONFIG = 2;
+        public const int TSSI_ABOUT = 3;
     } // end UserControl_regional_staffer_binder
 
 }
-

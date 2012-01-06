@@ -1,13 +1,9 @@
+using Class_biz_teaching_entity_levels;
 using kix;
 using System;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Collections;
 
-using Class_biz_teaching_entity_levels;
-using UserControl_drop_down_date;
 namespace UserControl_teaching_entity_level
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~trivial~item.pas
@@ -195,7 +191,7 @@ namespace UserControl_teaching_entity_level
             {
                 p.be_loaded = false;
                 p.biz_teaching_entity_levels = new TClass_biz_teaching_entity_levels();
-                p.be_ok_to_config_teaching_entity_levels = k.Has((string[])(Session["privilege_array"]), "config-court-kinds");
+                p.be_ok_to_config_teaching_entity_levels = k.Has((string[])(Session["privilege_array"]), "config-teaching-entity-levels");
             }
 
         }

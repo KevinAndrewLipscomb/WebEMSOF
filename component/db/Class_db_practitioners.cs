@@ -66,6 +66,35 @@ namespace Class_db_practitioners
       Close();
       }
 
+    internal void BindDirectToListControlForRoster
+      (
+      object target,
+      string region_code,
+      string starting_with
+      )
+      {
+      Open();
+      ((target) as ListControl).Items.Clear();
+      var dr = new MySqlCommand
+        (
+        "SELECT id"
+        + " , CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',certification_number,', ',IFNULL(DATE_FORMAT(birth_date,'%m/%d/%Y'),'-')) USING utf8) as spec"
+        + " FROM practitioner"
+        + " where not be_stale"
+        +   " and" + (region_code.Length > 0 ? " regional_council_code = '" + region_code + "'" : " 1=1")
+        +   " and" + (starting_with.Length > 0 ? " CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',certification_number,', ',IFNULL(birth_date,'-')) USING utf8) like '" + starting_with + "%'" : " 1=1")
+        + " order by spec",
+        connection
+        )
+        .ExecuteReader();
+      while (dr.Read())
+        {
+        ((target) as ListControl).Items.Add(new ListItem(dr["spec"].ToString(), dr["id"].ToString()));
+        }
+      dr.Close();
+      Close();
+      }
+
     public bool Delete(string id)
       {
       var result = true;
@@ -166,10 +195,33 @@ namespace Class_db_practitioners
       Close();
       }
 
+    internal k.int_nonnegative MaxSpecLength
+      (
+      string region_code,
+      string starting_with
+      )
+      {
+      var max_spec_length = new k.int_nonnegative();
+      Open();
+      max_spec_length.val = int.Parse
+        (
+        new MySqlCommand
+          (
+          "SELECT IFNULL(max(length(CONVERT(concat(last_name,', ',first_name,' ',middle_initial,', ',certification_number,', ',IFNULL(birth_date,'-')) USING utf8))),0)"
+          + " FROM practitioner"
+          + (region_code.Length > 0 ? " where regional_council_code = '" + region_code + "'" : k.EMPTY),
+          connection
+          )
+          .ExecuteScalar().ToString()
+        );
+      Close();
+      return max_spec_length;
+      }
+
     internal void RemoveStale()
       {
       Open();
-      new MySqlCommand("delete from practitioner where be_stale",connection).ExecuteNonQuery();
+      new MySqlCommand("delete from practitioner where be_stale and (select count(*) from coned_offering_roster where practitioner_id = practitioner.id) = 0",connection).ExecuteNonQuery();
       Close();
       }
 
@@ -208,6 +260,30 @@ namespace Class_db_practitioners
           + " , " + childless_field_assignments_clause
           + " on duplicate key update "
           + childless_field_assignments_clause
+          ),
+          connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
+    internal void SetFieldsNotImportedFromState
+      (
+      string id,
+      DateTime birth_date,
+      string county_code,
+      string email_address
+      )
+      {
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "update practitioner set birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
+          + " , residence_county_code = NULLIF('" + county_code + "','')"
+          + " , email_address = NULLIF('" + email_address + "','')"
+          + " where id = '" + id + "'"
           ),
           connection
         )

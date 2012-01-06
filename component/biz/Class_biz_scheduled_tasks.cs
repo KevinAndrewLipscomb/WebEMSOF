@@ -34,6 +34,7 @@ namespace Class_biz_scheduled_tasks
     public void ImportLatestTeachingEntitiesFromEmsrs()
       {
       biz_teaching_entities.ImportLatestFromEmsrs();
+      biz_teaching_entities.SyncConedSponsorAccounts();
       }
 
     public void ImportLatestPractitionersFromEmsrs()

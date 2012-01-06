@@ -144,7 +144,7 @@ namespace UserControl_responding_services
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_responding_services");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_responding_services");
             }
             else
             {
@@ -190,7 +190,7 @@ namespace UserControl_responding_services
 
         private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
-            if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+            if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
               {
               var affiliate_num = k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM);
               SessionSet("affiliate_num",affiliate_num);
@@ -227,7 +227,7 @@ namespace UserControl_responding_services
             LinkButton link_button;
             if (p.be_interactive)
             {
-                if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+                if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
                 {
                     link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);

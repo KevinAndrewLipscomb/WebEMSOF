@@ -36,7 +36,7 @@
 </td>
                   <td valign="middle">
                     <small>
-                      <ASP:LinkButton id="LinkButton_new_record" runat="server" causesvalidation="False" visible="False" onclick="LinkButton_new_record_Click">Enter brand new court kind
+                      <ASP:LinkButton id="LinkButton_new_record" runat="server" causesvalidation="False" visible="False" onclick="LinkButton_new_record_Click">Enter brand new coned offering document status
 </ASP:LinkButton>
                     </small>
                   </td>

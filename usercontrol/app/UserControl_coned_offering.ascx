@@ -5,7 +5,7 @@
   <tr>
     <td valign="top">
       <table cellspacing="0" cellpadding="5" border="0">
-  <tr>
+  <tr runat="server" id="TableRow_class_id" visible="false">
     <td bgcolor="gainsboro" valign="top"><font class="">class_id:</font></td>
     <td valign="top"><font class="">
       <table cellspacing="0" cellpadding="0" border="0">
@@ -53,6 +53,167 @@
     </td>
   </tr>
   <tr>
+    <td><font class="">Class number:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_class_number" runat="server" columns="14" maxlength="14" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Course title:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_course_title" runat="server" columns="63" maxlength="63" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_course_title" runat="server" errormessage="Please enter Course title." font-bold="True" controltovalidate="TextBox_course_title">!ERR!</ASP:RequiredFieldValidator>
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location" runat="server" columns="72" maxlength="127" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location address 1:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_address_1" runat="server" columns="63" maxlength="63" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location address 2:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_address_2" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location city:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_city" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location state:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_state" runat="server" columns="2" maxlength="2" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location zip:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_zip" runat="server" columns="5" maxlength="5" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location zip plus 4:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_zip_plus_4" runat="server" columns="4" maxlength="4" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location phone:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_phone" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Location email:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_location_email" runat="server" columns="63" maxlength="63" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Start date time:</font></td>
+    <td>
+      <font class="">
+        <uc1:UserControl_drop_down_date id="UserControl_drop_down_date_start_date_time" runat="server"></uc1:UserControl_drop_down_date>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Start time:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_start_time" runat="server" columns="15" maxlength="15" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">End date time:</font></td>
+    <td>
+      <font class="">
+        <uc1:UserControl_drop_down_date id="UserControl_drop_down_date_end_date_time" runat="server"></uc1:UserControl_drop_down_date>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">End time:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_end_time" runat="server" columns="15" maxlength="15" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Other dates and times:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_other_dates_and_times" runat="server" columns="72" maxlength="510" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr runat="server" id="TableRow_course_id" visible="false">
     <td><font class="">Course id:</font></td>
     <td>
       <font class="">
@@ -64,17 +225,7 @@
       <ASP:RegularExpressionValidator id="RegularExpressionValidator_course_id" runat="server" errormessage="Please enter a valid Course id." font-bold="True" controltovalidate="TextBox_course_id" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
     </td>
   </tr>
-  <tr>
-    <td><font class="">Class number:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_class_number" runat="server" columns="14" maxlength="14" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
+  <tr runat="server" id="TableRow_created_by" visible="false">
     <td><font class="">Created by:</font></td>
     <td>
       <font class="">
@@ -87,6 +238,28 @@
     </td>
   </tr>
   <tr>
+    <td><font class="">Created by first name:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_created_by_first_name" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_created_by_first_name" runat="server" errormessage="Please enter Created by first name." font-bold="True" controltovalidate="TextBox_created_by_first_name">!ERR!</ASP:RequiredFieldValidator>
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Created by last name:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_created_by_last_name" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_created_by_last_name" runat="server" errormessage="Please enter Created by last name." font-bold="True" controltovalidate="TextBox_created_by_last_name">!ERR!</ASP:RequiredFieldValidator>
+    </td>
+  </tr>
+  <tr>
     <td><font class="">Date created:</font></td>
     <td>
       <font class="">
@@ -96,7 +269,7 @@
     <td nowrap="nowrap">
     </td>
   </tr>
-  <tr>
+  <tr runat="server" id="TableRow_last_edited_by" visible="false">
     <td><font class="">Last edited by:</font></td>
     <td>
       <font class="">
@@ -118,7 +291,7 @@
     <td nowrap="nowrap">
     </td>
   </tr>
-  <tr>
+  <tr runat="server" id="TableRow_sponsor_id" visible="false">
     <td><font class="">Sponsor id:</font></td>
     <td>
       <font class="">
@@ -129,7 +302,7 @@
       <ASP:RegularExpressionValidator id="RegularExpressionValidator_sponsor_id" runat="server" errormessage="Please enter a valid Sponsor id." font-bold="True" controltovalidate="TextBox_sponsor_id" validationexpression="-?\d+">!ERR!</ASP:RegularExpressionValidator>
     </td>
   </tr>
-  <tr>
+  <tr runat="server" id="TableRow_sponsor_number" visible="false">
     <td><font class="">Sponsor number:</font></td>
     <td>
       <font class="">
@@ -142,27 +315,23 @@
   <tr>
     <td><font class="">Document status:</font></td>
     <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_document_status" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
-      </font>
+      <asp:DropDownList ID="DropDownList_document_status" runat="server">
+      </asp:DropDownList>
     </td>
     <td nowrap="nowrap">
-      <ASP:RequiredFieldValidator id="RequiredFieldValidator_document_status" runat="server" errormessage="Please enter Document status." font-bold="True" controltovalidate="TextBox_document_status">!ERR!</ASP:RequiredFieldValidator>
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_document_status" runat="server" errormessage="Please enter a valid Document status." font-bold="True" controltovalidate="TextBox_document_status" validationexpression="[A-Z]">!ERR!</ASP:RegularExpressionValidator>
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_document_status" runat="server" errormessage="Please select a Document status." font-bold="True" controltovalidate="DropDownList_document_status">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
   <tr>
-    <td><font class="">Class final status id:</font></td>
+    <td><font class="">Class final status:</font></td>
     <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_class_final_status_id" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
-      </font>
+      <asp:DropDownList ID="DropDownList_class_final_status" runat="server">
+      </asp:DropDownList>
     </td>
     <td nowrap="nowrap">
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_class_final_status_id" runat="server" errormessage="Please enter a valid Class final status id." font-bold="True" controltovalidate="TextBox_class_final_status_id" validationexpression="\d+">!ERR!</ASP:RegularExpressionValidator>
-    </td>
+      &nbsp;</td>
   </tr>
-  <tr>
+  <tr runat="server" id="TableRow_course_number" visible="false">
     <td><font class="">Course number:</font></td>
     <td>
       <font class="">
@@ -171,16 +340,6 @@
     </td>
     <td nowrap="nowrap">
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_course_number" runat="server" errormessage="Please enter Course number." font-bold="True" controltovalidate="TextBox_course_number">!ERR!</ASP:RequiredFieldValidator>
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location" runat="server" columns="72" maxlength="127" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
     </td>
   </tr>
   <tr>
@@ -223,56 +382,6 @@
     </td>
     <td nowrap="nowrap">
       <ASP:RegularExpressionValidator id="RegularExpressionValidator_estimated_students" runat="server" errormessage="Please enter a valid Estimated students." font-bold="True" controltovalidate="TextBox_estimated_students" validationexpression="\d*">!ERR!</ASP:RegularExpressionValidator>
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Start date time:</font></td>
-    <td>
-      <font class="">
-        <uc1:UserControl_drop_down_date id="UserControl_drop_down_date_start_date_time" runat="server"></uc1:UserControl_drop_down_date>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">End date time:</font></td>
-    <td>
-      <font class="">
-        <uc1:UserControl_drop_down_date id="UserControl_drop_down_date_end_date_time" runat="server"></uc1:UserControl_drop_down_date>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Start time:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_start_time" runat="server" columns="15" maxlength="15" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">End time:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_end_time" runat="server" columns="15" maxlength="15" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Other dates and times:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_other_dates_and_times" runat="server" columns="72" maxlength="510" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
     </td>
   </tr>
   <tr>
@@ -426,27 +535,23 @@
     </td>
   </tr>
   <tr>
-    <td><font class="">Region council num:</font></td>
+    <td><font class="">Region council:</font></td>
     <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_region_council_num" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
-      </font>
+      <asp:DropDownList ID="DropDownList_region_council" runat="server">
+      </asp:DropDownList>
     </td>
     <td nowrap="nowrap">
-      <ASP:RequiredFieldValidator id="RequiredFieldValidator_region_council_num" runat="server" errormessage="Please enter Region council num." font-bold="True" controltovalidate="TextBox_region_council_num">!ERR!</ASP:RequiredFieldValidator>
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_region_council_num" runat="server" errormessage="Please enter a valid Region council num." font-bold="True" controltovalidate="TextBox_region_council_num" validationexpression="\d*">!ERR!</ASP:RegularExpressionValidator>
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_region_council_num" runat="server" errormessage="Please select a Region council." font-bold="True" controltovalidate="DropDownList_region_council">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
   <tr>
-    <td><font class="">Class county code:</font></td>
+    <td><font class="">Class county:</font></td>
     <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_class_county_code" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
-      </font>
+      <asp:DropDownList ID="DropDownList_class_county" runat="server">
+      </asp:DropDownList>
     </td>
     <td nowrap="nowrap">
-      <ASP:RequiredFieldValidator id="RequiredFieldValidator_class_county_code" runat="server" errormessage="Please enter Class county code." font-bold="True" controltovalidate="TextBox_class_county_code">!ERR!</ASP:RequiredFieldValidator>
-      <ASP:RegularExpressionValidator id="RegularExpressionValidator_class_county_code" runat="server" errormessage="Please enter a valid Class county code." font-bold="True" controltovalidate="TextBox_class_county_code" validationexpression="\d*">!ERR!</ASP:RegularExpressionValidator>
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_class_county_code" runat="server" errormessage="Please select a Class county." font-bold="True" controltovalidate="DropDownList_class_county">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
   <tr>
@@ -458,86 +563,6 @@
     </td>
     <td nowrap="nowrap">
       <ASP:RegularExpressionValidator id="RegularExpressionValidator_total_class_hours" runat="server" errormessage="Please enter a valid Total class hours." font-bold="True" controltovalidate="TextBox_total_class_hours" validationexpression="\d*\.?\d*">!ERR!</ASP:RegularExpressionValidator>
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location address 1:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_address_1" runat="server" columns="63" maxlength="63" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location address 2:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_address_2" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location city:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_city" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location state:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_state" runat="server" columns="2" maxlength="2" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location zip:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_zip" runat="server" columns="5" maxlength="5" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location zip plus 4:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_zip_plus_4" runat="server" columns="4" maxlength="4" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location phone:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_phone" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Location email:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_location_email" runat="server" columns="63" maxlength="63" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
     </td>
   </tr>
   <tr>
@@ -610,7 +635,7 @@
     <td nowrap="nowrap">
     </td>
   </tr>
-  <tr>
+  <tr runat="server" id="TableRow_disapproval_reason_id" visible="false">
     <td><font class="">Disapproval reason id:</font></td>
     <td>
       <font class="">
@@ -642,28 +667,6 @@
     </td>
   </tr>
   <tr>
-    <td><font class="">Created by first name:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_created_by_first_name" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-      <ASP:RequiredFieldValidator id="RequiredFieldValidator_created_by_first_name" runat="server" errormessage="Please enter Created by first name." font-bold="True" controltovalidate="TextBox_created_by_first_name">!ERR!</ASP:RequiredFieldValidator>
-    </td>
-  </tr>
-  <tr>
-    <td><font class="">Created by last name:</font></td>
-    <td>
-      <font class="">
-        <ASP:TextBox id="TextBox_created_by_last_name" runat="server" columns="31" maxlength="31" cssclass="" enabled="False"></ASP:TextBox>
-      </font>
-    </td>
-    <td nowrap="nowrap">
-      <ASP:RequiredFieldValidator id="RequiredFieldValidator_created_by_last_name" runat="server" errormessage="Please enter Created by last name." font-bold="True" controltovalidate="TextBox_created_by_last_name">!ERR!</ASP:RequiredFieldValidator>
-    </td>
-  </tr>
-  <tr>
     <td><font class="">Class disapproval reason description:</font></td>
     <td>
       <font class="">
@@ -673,7 +676,7 @@
     <td nowrap="nowrap">
     </td>
   </tr>
-  <tr>
+  <tr runat="server" id="TableRow_sponsor_name" visible="false">
     <td><font class="">Sponsor name:</font></td>
     <td>
       <font class="">
@@ -683,7 +686,7 @@
     <td nowrap="nowrap">
     </td>
   </tr>
-  <tr>
+  <tr runat="server" id="TableRow_courses_course_number" visible="false">
     <td><font class="">Courses course number:</font></td>
     <td>
       <font class="">
@@ -694,20 +697,20 @@
       <ASP:RequiredFieldValidator id="RequiredFieldValidator_courses_course_number" runat="server" errormessage="Please enter Courses course number." font-bold="True" controltovalidate="TextBox_courses_course_number">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
-  <tr>
-    <td><font class="">Course title:</font></td>
+  <tr runat="server" id="TableRow_status">
+    <td><font class="">Status:</font></td>
     <td>
       <font class="">
-        <ASP:TextBox id="TextBox_course_title" runat="server" columns="63" maxlength="63" cssclass="" enabled="False"></ASP:TextBox>
+        <asp:DropDownList ID="DropDownList_status" runat="server" Enabled="false"></asp:DropDownList>
       </font>
     </td>
     <td nowrap="nowrap">
-      <ASP:RequiredFieldValidator id="RequiredFieldValidator_course_title" runat="server" errormessage="Please enter Course title." font-bold="True" controltovalidate="TextBox_course_title">!ERR!</ASP:RequiredFieldValidator>
+      <ASP:RequiredFieldValidator id="RequiredFieldValidator_status" runat="server" errormessage="Please select a Status." font-bold="True" controltovalidate="DropDownList_status">!ERR!</ASP:RequiredFieldValidator>
     </td>
   </tr>
       </table>
     </td>
   </tr>
 </table>
-<ASP:Button id="Button_submit" text="Submit" runat="server" enabled="False" onclick="Button_submit_Click"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False" onclick="Button_delete_Click"></ASP:Button>
+<ASP:Button id="Button_submit" text="Submit" runat="server" enabled="False" onclick="Button_submit_Click" visible="false"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False" onclick="Button_delete_Click" visible="false"></ASP:Button>
 

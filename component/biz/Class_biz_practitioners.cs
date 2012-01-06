@@ -29,6 +29,16 @@ namespace Class_biz_practitioners
       db_practitioners.BindDirectToListControl(target);
       }
 
+    internal void BindDirectToListControlForRoster
+      (
+      object target,
+      string region_code,
+      string starting_with
+      )
+      {
+      db_practitioners.BindDirectToListControlForRoster(target,region_code,starting_with);
+      }
+
     public bool Delete(string id)
       {
       return db_practitioners.Delete(id);
@@ -80,6 +90,15 @@ namespace Class_biz_practitioners
         }
       }
 
+    internal k.int_nonnegative MaxSpecLength
+      (
+      string region_code,
+      string starting_with
+      )
+      {
+      return db_practitioners.MaxSpecLength(region_code,starting_with);
+      }
+
     public void Set
       (
       string id,
@@ -106,6 +125,23 @@ namespace Class_biz_practitioners
         birth_date,
         email_address,
         be_stale
+        );
+      }
+
+    public void SetFieldsNotImportedFromState
+      (
+      string id,
+      DateTime birth_date,
+      string county_code,
+      string email_address
+      )
+      {
+      db_practitioners.SetFieldsNotImportedFromState
+        (
+        id,
+        birth_date,
+        county_code,
+        email_address
         );
       }
 

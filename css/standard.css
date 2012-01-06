@@ -101,3 +101,11 @@
   background-color:white;
   font-weight:bold;
   }
+
+/*
+** textbox_watermark
+*/
+.textbox_watermark
+  {
+  color:LightGrey;
+  }
