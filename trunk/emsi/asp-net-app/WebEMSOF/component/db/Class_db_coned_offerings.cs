@@ -1,6 +1,7 @@
 // Derived from KiAspdotnetFramework/component/db/Class~db~template~kicrudhelped~items.cs~template
 
 using Class_db;
+using Class_db_coned_offering_statuses;
 using Class_db_trail;
 using kix;
 using MySql.Data.MySqlClient;
@@ -11,13 +12,33 @@ using WebEMSOF.component.ss;
 
 namespace Class_db_coned_offerings
   {
+
   public class TClass_db_coned_offerings: TClass_db
     {
+
+    private class coned_offering_summary
+      {
+      public string class_id;
+      public string class_number;
+      public string course_title;
+      public string location;
+      public string start;
+      public string end;
+      public string total_class_hours;
+      public string approved;
+      public Class_db_coned_offering_statuses.coned_offering_status_enumeration status;
+      }
+
     private TClass_db_trail db_trail = null;
 
     public TClass_db_coned_offerings() : base()
       {
       db_trail = new TClass_db_trail();
+      }
+
+    internal string ApprovedOf(object summary)
+      {
+      return (summary as coned_offering_summary).approved;
       }
 
     public bool Bind(string partial_spec, object target)
@@ -44,6 +65,75 @@ namespace Class_db_coned_offerings
       return ((target) as ListControl).Items.Count > 0;
       }
 
+    internal void BindClassCatalog
+      (
+      string region_code,
+      string coned_sponsor_user_id,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select coned_offering.class_id as class_id"
+        + " , class_number"
+        + " , course_title"
+        + " , location"
+        + " , IFNULL(ADDTIME(start_date_time,start_time),DATE_FORMAT(start_date_time,'%Y-%m-%d --:--')) as start"
+        + " , IFNULL(ADDTIME(end_date_time,end_time),DATE_FORMAT(end_date_time,'%Y-%m-%d --:--')) as end"
+        + " from coned_offering"
+        +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
+        +   " join county_code_name_map on (county_code_name_map.emsrs_code=coned_offering.class_county_code)"
+        +   " join county_region_map on (county_region_map.county_code=county_code_name_map.code)"
+        +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
+        + " where region_code_name_map.code = '" + region_code + "'"
+        +   " and county_region_map.region_code = '" + region_code + "'"
+        +   (coned_sponsor_user_id.Length > 0 ? " and teaching_entity.id = '" + coned_sponsor_user_id + "'" : k.EMPTY)
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
+    internal void BindReadyRosters
+      (
+      string region_code,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select coned_offering.class_id as class_id"
+        + " , class_number"
+        + " , IFNULL(teaching_entity.short_name,teaching_entity.name) as sponsor"
+        + " , course_title"
+        + " , location"
+        + " , IFNULL(ADDTIME(start_date_time,start_time),DATE_FORMAT(start_date_time,'%Y-%m-%d --:--')) as start"
+        + " , IFNULL(ADDTIME(end_date_time,end_time),DATE_FORMAT(end_date_time,'%Y-%m-%d --:--')) as end"
+        + " from coned_offering"
+        +   " join region_code_name_map on (region_code_name_map.emsrs_code=coned_offering.region_council_num)"
+        +   " join county_code_name_map on (county_code_name_map.emsrs_code=coned_offering.class_county_code)"
+        +   " join county_region_map on (county_region_map.county_code=county_code_name_map.code)"
+        +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
+        +   " join coned_offering_status on (coned_offering_status.id=coned_offering.status_id)"
+        + " where region_code_name_map.code = '" + region_code + "'"
+        +   " and county_region_map.region_code = '" + region_code + "'"
+        +   " and coned_offering_status.description = 'NEEDS_REGIONAL_PROCESSING'"
+        + " order by " + sort_order.Replace("%",(be_sort_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
     public void BindDirectToListControl(object target)
       {
       Open();
@@ -63,6 +153,21 @@ namespace Class_db_coned_offerings
         }
       dr.Close();
       Close();
+      }
+
+    internal string ClassIdOf(object summary)
+      {
+      return (summary as coned_offering_summary).class_id;
+      }
+
+    internal string ClassNumberOf(object summary)
+      {
+      return (summary as coned_offering_summary).class_number;
+      }
+
+    internal string CourseTitleOf(object summary)
+      {
+      return (summary as coned_offering_summary).course_title;
       }
 
     public bool Delete(string class_id)
@@ -86,6 +191,11 @@ namespace Class_db_coned_offerings
         }
       Close();
       return result;
+      }
+
+    internal string EndOf(object summary)
+      {
+      return (summary as coned_offering_summary).end;
       }
 
     public bool Get
@@ -153,7 +263,8 @@ namespace Class_db_coned_offerings
       out string class_disapproval_reason_description,
       out string sponsor_name,
       out string courses_course_number,
-      out string course_title
+      out string course_title,
+      out string status_id
       )
       {
       course_id = k.EMPTY;
@@ -219,6 +330,7 @@ namespace Class_db_coned_offerings
       sponsor_name = k.EMPTY;
       courses_course_number = k.EMPTY;
       course_title = k.EMPTY;
+      status_id = k.EMPTY;
       var result = false;
       //
       Open();
@@ -288,6 +400,7 @@ namespace Class_db_coned_offerings
         sponsor_name = dr["sponsor_name"].ToString();
         courses_course_number = dr["courses_course_number"].ToString();
         course_title = dr["course_title"].ToString();
+        status_id = dr["status_id"].ToString();
         result = true;
         }
       dr.Close();
@@ -380,6 +493,11 @@ namespace Class_db_coned_offerings
       Close();
       }
 
+    internal string LocationOf(object summary)
+      {
+      return (summary as coned_offering_summary).location;
+      }
+
     public void Set
       (
       string class_id,
@@ -445,7 +563,8 @@ namespace Class_db_coned_offerings
       string class_disapproval_reason_description,
       string sponsor_name,
       string courses_course_number,
-      string course_title
+      string course_title,
+      string status_id
       )
       {
       var childless_field_assignments_clause = k.EMPTY
@@ -512,6 +631,7 @@ namespace Class_db_coned_offerings
       + " , sponsor_name = NULLIF('" + sponsor_name + "','')"
       + " , courses_course_number = NULLIF('" + courses_course_number + "','')"
       + " , course_title = NULLIF('" + course_title + "','')"
+      + " , status_id = NULLIF('" + status_id + "','')"
       + k.EMPTY;
       Open();
       new MySqlCommand
@@ -528,6 +648,70 @@ namespace Class_db_coned_offerings
         )
         .ExecuteNonQuery();
       Close();
+      }
+
+    internal void SetStatus
+      (
+      string class_id,
+      coned_offering_status_enumeration status
+      )
+      {
+      Open();
+      new MySqlCommand(db_trail.Saved("update coned_offering set status_id = NULLIF('" + status.ToString("D") + "','') where class_id = '" + class_id + "'"),connection).ExecuteNonQuery();
+      Close();
+      }
+
+    internal string StartOf(object summary)
+      {
+      return (summary as coned_offering_summary).start;
+      }
+
+    internal coned_offering_status_enumeration StatusOf(object summary)
+      {
+      return (summary as coned_offering_summary).status;
+      }
+
+    public object Summary(string class_id)
+      {
+      Open();
+      var dr =
+        (
+        new MySqlCommand
+          (
+          "SELECT class_number"
+          + " , course_title"
+          + " , location"
+          + " , IFNULL(ADDTIME(start_date_time,start_time),DATE_FORMAT(start_date_time,'%Y-%m-%d --:--')) as start"
+          + " , IFNULL(ADDTIME(end_date_time,end_time),DATE_FORMAT(end_date_time,'%Y-%m-%d --:--')) as end"
+          + " , IFNULL(total_class_hours,'') as total_class_hours"
+          + " , approved"
+          + " , status_id"
+          + " FROM coned_offering"
+          + " where class_id = '" + class_id + "'",
+          connection
+          )
+          .ExecuteReader()
+        );
+      dr.Read();
+      var the_summary = new coned_offering_summary()
+        {
+        class_id = class_id,
+        class_number = dr["class_number"].ToString(),
+        course_title = dr["course_title"].ToString(),
+        location = dr["location"].ToString(),
+        start = dr["start"].ToString(),
+        end = dr["end"].ToString(),
+        total_class_hours = dr["total_class_hours"].ToString(),
+        approved = dr["approved"].ToString(),
+        status = (coned_offering_status_enumeration)Enum.Parse(typeof(coned_offering_status_enumeration),dr["status_id"].ToString())
+        };
+      Close();
+      return the_summary;
+      }
+
+    internal string TotalClassHoursOf(object summary)
+      {
+      return (summary as coned_offering_summary).total_class_hours;
       }
 
     } // end TClass_db_coned_offerings

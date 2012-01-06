@@ -1,13 +1,9 @@
+using Class_biz_teaching_entity_business_types;
 using kix;
 using System;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Collections;
 
-using Class_biz_teaching_entity_business_types;
-using UserControl_drop_down_date;
 namespace UserControl_teaching_entity_business_type
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~trivial~item.pas
@@ -195,7 +191,7 @@ namespace UserControl_teaching_entity_business_type
             {
                 p.be_loaded = false;
                 p.biz_teaching_entity_business_types = new TClass_biz_teaching_entity_business_types();
-                p.be_ok_to_config_teaching_entity_business_types = k.Has((string[])(Session["privilege_array"]), "config-court-kinds");
+                p.be_ok_to_config_teaching_entity_business_types = k.Has((string[])(Session["privilege_array"]), "config-teaching-entity-business-types");
             }
 
         }

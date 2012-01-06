@@ -9,6 +9,7 @@ using System.Web.SessionState;
 
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using AjaxControlToolkit;
 
 
 
@@ -36,7 +37,7 @@ namespace regional_staffer_overview
                     Session.Clear();
                     DropCrumbAndTransferTo("~/login.aspx");
                 }
-                Title.Text = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - regional_staffer_overview";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - regional_staffer_overview";
                 BeginBreadCrumbTrail();
             }
         }
@@ -46,6 +47,9 @@ namespace regional_staffer_overview
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
+//
+//ToolkitScriptManager.GetCurrent(Page).EnablePartialRendering = false;
+//
         }
 
     } // end TWebForm_regional_staffer_overview

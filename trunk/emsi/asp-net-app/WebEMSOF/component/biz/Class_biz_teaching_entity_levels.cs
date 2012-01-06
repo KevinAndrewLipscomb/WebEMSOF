@@ -1,6 +1,6 @@
-using kix;
-using System;
 using Class_db_teaching_entity_levels;
+using kix;
+
 namespace Class_biz_teaching_entity_levels
 {
     public class TClass_biz_teaching_entity_levels
@@ -26,7 +26,7 @@ namespace Class_biz_teaching_entity_levels
 
         public void BindDirectToListControl(object target)
         {
-            BindDirectToListControl(target, "-- court kind --");
+            BindDirectToListControl(target, "-- teaching entity level --");
         }
 
         public void BindDirectToListControl(object target, string unselected_literal)

@@ -42,7 +42,7 @@ namespace exception
             switch(NatureOfVisit(InstanceId() + ".p"))
             {
                 case nature_of_visit_type.VISIT_INITIAL:
-                    Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - exception";
+                    Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - exception";
                     the_exception = Server.GetLastError().GetBaseException();
                     if (Regex.IsMatch(the_exception.Message, "Connection.*to MySQL server", RegexOptions.IgnoreCase) || (the_exception.Message == "Connection open failed. Too many connections"))
                     {

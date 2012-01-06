@@ -160,7 +160,7 @@ namespace UserControl_region_dictated_appropriations
       if (Session[InstanceId() + ".p"] != null)
         {
         p = (p_type)(Session[InstanceId() + ".p"]);
-        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_region_dictated_appropriations");
+        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_region_dictated_appropriations");
         }
       else
         {
@@ -205,7 +205,7 @@ namespace UserControl_region_dictated_appropriations
 
     private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
       {
-      if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+      if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
         var id = k.Safe(e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_ID].Text,k.safe_hint_type.NUM);
         if (e.CommandName == "Select")
@@ -237,7 +237,7 @@ namespace UserControl_region_dictated_appropriations
       LinkButton link_button;
       if (p.be_interactive)
         {
-        if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+        if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
           {
           link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_SELECT].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
@@ -270,7 +270,7 @@ namespace UserControl_region_dictated_appropriations
         e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_ADJUST].Visible = false;
         e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_DELETE].Visible = false;
         }
-      if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+      if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
         e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_AMOUNT].Text = "<tt>" + e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_AMOUNT].Text + "</tt>";
         }
@@ -281,7 +281,7 @@ namespace UserControl_region_dictated_appropriations
       LinkButton link_button;
       if (p.be_interactive)
         {
-        if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+        if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
           {
           link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ADJUST].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
@@ -309,7 +309,7 @@ namespace UserControl_region_dictated_appropriations
         e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_DELETE].Visible = false;
         e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ATTACH_RDA].Visible = false;
         }
-      if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+      if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
         e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_AMOUNT].Text = "<tt>" + e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_AMOUNT].Text + "</tt>";
         }
@@ -370,7 +370,7 @@ namespace UserControl_region_dictated_appropriations
 
     protected void DataGrid_sdas_ItemCommand(object source, DataGridCommandEventArgs e)
       {
-      if (new ArrayList(new object[] {ListItemType.AlternatingItem, ListItemType.Item, ListItemType.EditItem, ListItemType.SelectedItem}).Contains(e.Item.ItemType))
+      if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
         var sda_id = k.Safe(e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ID].Text,k.safe_hint_type.NUM);
         if (e.CommandName == "Adjust")

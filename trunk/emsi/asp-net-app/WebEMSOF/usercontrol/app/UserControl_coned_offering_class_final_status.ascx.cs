@@ -1,13 +1,9 @@
+using Class_biz_coned_offering_class_final_statuses;
 using kix;
 using System;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Collections;
 
-using Class_biz_coned_offering_class_final_statuses;
-using UserControl_drop_down_date;
 namespace UserControl_coned_offering_class_final_status
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~trivial~item.pas
@@ -195,7 +191,7 @@ namespace UserControl_coned_offering_class_final_status
             {
                 p.be_loaded = false;
                 p.biz_coned_offering_class_final_statuses = new TClass_biz_coned_offering_class_final_statuses();
-                p.be_ok_to_config_coned_offering_class_final_statuses = k.Has((string[])(Session["privilege_array"]), "config-court-kinds");
+                p.be_ok_to_config_coned_offering_class_final_statuses = k.Has((string[])(Session["privilege_array"]), "config-coned-offering-class-final-statuses");
             }
 
         }

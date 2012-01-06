@@ -1,4 +1,4 @@
-﻿Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+if (Sys.WebForms) Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
 
 function EndRequestHandler(sender, args)
   {

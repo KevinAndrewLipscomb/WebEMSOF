@@ -121,7 +121,7 @@ namespace UserControl_annual_cycle_setup
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_member_binder_UserControl_regional_staffer_new_binder_PlaceHolder_content"] as string) == "UserControl_annual_cycle_setup");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_regional_staffer_new_binder_PlaceHolder_content"] as string) == "UserControl_annual_cycle_setup");
             }
             else
             {

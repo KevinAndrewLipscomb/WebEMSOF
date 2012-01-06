@@ -39,7 +39,7 @@ namespace UserControl_equipment_procurement_binder
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_equipment_procurement_binder");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_analyses_binder_PlaceHolder_content"] as string) == "UserControl_equipment_procurement_binder");
                 switch(p.tab_index)
                 {
                     case Units.UserControl_equipment_procurement_binder.TSSI_SNAPSHOT:

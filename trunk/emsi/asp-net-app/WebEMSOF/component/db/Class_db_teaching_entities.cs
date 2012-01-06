@@ -217,8 +217,8 @@ namespace Class_db_teaching_entities
       if (dr.Read())
         {
         emsrs_id = dr["emsrs_id"].ToString();
-        date_created = DateTime.Parse(dr["date_created"].ToString());
-        date_last_edited = DateTime.Parse(dr["date_last_edited"].ToString());
+        DateTime.TryParse(dr["date_created"].ToString(),out date_created);
+        DateTime.TryParse(dr["date_last_edited"].ToString(),out date_last_edited);
         sponsor_number = dr["sponsor_number"].ToString();
         training_ins_accred_num = dr["training_ins_accred_num"].ToString();
         name = dr["name"].ToString();
@@ -255,21 +255,21 @@ namespace Class_db_teaching_entities
         public_contact_email = dr["public_contact_email"].ToString();
         public_contact_website = dr["public_contact_website"].ToString();
         public_contact_notes = dr["public_contact_notes"].ToString();
-        application_date = DateTime.Parse(dr["application_date"].ToString());
-        application_received = DateTime.Parse(dr["application_received"].ToString());
+        DateTime.TryParse(dr["application_date"].ToString(),out application_date);
+        DateTime.TryParse(dr["application_received"].ToString(),out application_received);
         coned_sponsor_status_id = dr["coned_sponsor_status_id"].ToString();
         training_inst_status_id = dr["training_inst_status_id"].ToString();
-        issue_date = DateTime.Parse(dr["issue_date"].ToString());
-        prev_expiration_date = DateTime.Parse(dr["prev_expiration_date"].ToString());
-        expiration_date_sponsor = DateTime.Parse(dr["expiration_date_sponsor"].ToString());
-        expiration_date_training_inst = DateTime.Parse(dr["expiration_date_training_inst"].ToString());
-        process_date = DateTime.Parse(dr["process_date"].ToString());
+        DateTime.TryParse(dr["issue_date"].ToString(),out issue_date);
+        DateTime.TryParse(dr["prev_expiration_date"].ToString(),out prev_expiration_date);
+        DateTime.TryParse(dr["expiration_date_sponsor"].ToString(),out expiration_date_sponsor);
+        DateTime.TryParse(dr["expiration_date_training_inst"].ToString(),out expiration_date_training_inst);
+        DateTime.TryParse(dr["process_date"].ToString(),out process_date);
         corrective_action = dr["corrective_action"].ToString();
-        compliance_by_date = DateTime.Parse(dr["compliance_by_date"].ToString());
-        initial_accred_date = DateTime.Parse(dr["initial_accred_date"].ToString());
-        accepted_provisional_date = DateTime.Parse(dr["accepted_provisional_date"].ToString());
-        completed_provisional_date = DateTime.Parse(dr["completed_provisional_date"].ToString());
-        withdrawal_challenge_due_date = DateTime.Parse(dr["withdrawal_challenge_due_date"].ToString());
+        DateTime.TryParse(dr["compliance_by_date"].ToString(),out compliance_by_date);
+        DateTime.TryParse(dr["initial_accred_date"].ToString(),out initial_accred_date);
+        DateTime.TryParse(dr["accepted_provisional_date"].ToString(),out accepted_provisional_date);
+        DateTime.TryParse(dr["completed_provisional_date"].ToString(),out completed_provisional_date);
+        DateTime.TryParse(dr["withdrawal_challenge_due_date"].ToString(),out withdrawal_challenge_due_date);
         letter_for_expiration = (dr["letter_for_expiration"].ToString() == "1");
         letter_f_for_ppwk_non_compliance = (dr["letter_f_for_ppwk_non_compliance"].ToString() == "1");
         other_letter = (dr["other_letter"].ToString() == "1");
@@ -495,6 +495,24 @@ namespace Class_db_teaching_entities
           + childless_field_assignments_clause
           ),
           connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
+    internal void SyncConedSponsorAccounts()
+      {
+      Open();
+      new MySqlCommand
+        (
+        "insert coned_sponsor_user (id,password_reset_email_address)"
+        + " select id"
+        + " , IFNULL(email,IFNULL(contact_email,public_contact_email)) as password_reset_email_address"
+        + " from teaching_entity left outer join coned_sponsor_user using (id)"
+        + " where coned_sponsor_user.id is null"
+        +   " and sponsor_number is not null"
+        +   " and IFNULL(email,IFNULL(contact_email,public_contact_email)) is not null",
+        connection
         )
         .ExecuteNonQuery();
       Close();

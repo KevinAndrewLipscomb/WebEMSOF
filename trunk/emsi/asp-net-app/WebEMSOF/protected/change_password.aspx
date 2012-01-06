@@ -4,21 +4,22 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head>
-    <title id="Title" runat="server"></title>
+  <head runat="server">
     <!-- $Id$ -->
+    <title></title>
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
+    <script type="text/javascript" src="../js/sha1.js"></script>
   </head>
   <body bgcolor="white">
-    <form runat="server">
+    <form id="Form_control" runat="server">
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
       <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
         <tr>
           <td>
             <table cellspacing="0" cellpadding="5" border="0">
               <tr><td bgcolor="#f5f5f5"><strong>Change password</strong></td></tr>
-              <tr><td>If you logged in using a temporary password, you must change your password before proceeding.<br></td></tr>
+              <tr><td>If you logged in using a temporary password, you must change your password before proceeding.<br /></td></tr>
               <tr>
                 <td>
                   <table cellspacing="0" cellpadding="5" width="%" border="0">
@@ -27,7 +28,6 @@
                       <td><ASP:TextBox id="TextBox_nominal_password" runat="server" textmode="Password"></ASP:TextBox></td>
                       <td>
                         <ASP:RequiredFieldValidator id="RequiredFieldValidator_nominal_password" runat="server" font-bold="True" errormessage="Please enter a nominal password." controltovalidate="TextBox_nominal_password">!ERR!</ASP:RequiredFieldValidator>
-                        <ASP:RegularExpressionValidator id="RegularExpressionValidator_password" runat="server" errormessage='Please use only letters, numbers, and the underscore ("_") character (or local equivalents) in your password.' font-bold="True" controltovalidate="TextBox_nominal_password" validationexpression="\w+">!ERR!</ASP:RegularExpressionValidator>
                       </td>
                     </tr>
                     <tr>

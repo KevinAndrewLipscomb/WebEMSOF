@@ -42,10 +42,10 @@ namespace Class_db_coned_offering_class_final_statuses
                 ((target) as ListControl).Items.Add(new ListItem(unselected_literal, k.EMPTY));
             }
             this.Open();
-            dr = new MySqlCommand("SELECT id,description FROM coned_offering_class_final_status where description <> \"(none specified)\" order by id", this.connection).ExecuteReader();
+            dr = new MySqlCommand("SELECT id,long_description FROM coned_offering_class_final_status where long_description <> \"(none specified)\" order by id", this.connection).ExecuteReader();
             while (dr.Read())
             {
-                ((target) as ListControl).Items.Add(new ListItem(dr["description"].ToString(), dr["id"].ToString()));
+                ((target) as ListControl).Items.Add(new ListItem(dr["long_description"].ToString(), dr["id"].ToString()));
             }
             dr.Close();
             this.Close();
@@ -58,7 +58,7 @@ namespace Class_db_coned_offering_class_final_statuses
 
         public void BindDirectToListControl(object target)
         {
-            BindDirectToListControl(target, "-- court kind --");
+            BindDirectToListControl(target, "-- coned offering class final status --");
         }
 
         public void BindDirectToListControl(object target, string unselected_literal)

@@ -1,6 +1,6 @@
-using kix;
-using System;
 using Class_db_practitioner_levels;
+using kix;
+
 namespace Class_biz_practitioner_levels
 {
     public class TClass_biz_practitioner_levels
@@ -26,7 +26,7 @@ namespace Class_biz_practitioner_levels
 
         public void BindDirectToListControl(object target)
         {
-            BindDirectToListControl(target, "-- court kind --");
+            BindDirectToListControl(target, "-- practitioner level --");
         }
 
         public void BindDirectToListControl(object target, string unselected_literal)

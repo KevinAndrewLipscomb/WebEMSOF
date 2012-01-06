@@ -5,21 +5,22 @@
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
   <head runat="server">
+    <!-- $Id$ -->
     <title></title>
-	  <!-- $Id$ -->
     <link href="css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "css/standard-overrides-for-ie6.css";</style><![endif]-->
+    <script type="text/javascript" src="js/sha1.js"></script>
   </head>
 
   <body bgcolor="white">
-  <form runat="server">
+  <form id="Form_control" runat="server">
 		  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
 		  <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
 			  <tr>
 				<td>
 				  <table cellspacing="0" cellpadding="5" border="0">
 					  <tr>
-						<td bgcolor="#f5f5f5"><strong>
+						<td bgcolor="#f5f5f5">
 						<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
 							  <td><strong>Log in</strong></td>
@@ -28,7 +29,7 @@
 							  <ASP:CustomValidator id="CustomValidator_account_exists" runat="server" errormessage="Invalid user/password combination. Please try again." font-bold="True" onservervalidate="CustomValidator_account_exists_ServerValidate">!ERR!</ASP:CustomValidator>
 								</div></td>
 							</tr>
-						</table></strong></td>
+						</table></td>
 					  </tr>
 					  <tr>
 						<td>
@@ -52,6 +53,7 @@
 									  <ASP:DropDownList id="DropDownList_user_kind" runat="server" autopostback="True" onselectedindexchanged="DropDownList_user_kind_SelectedIndexChanged">
 								<ASP:ListItem value="0">-- Select --</ASP:ListItem>
 								<ASP:ListItem value="service">Service (Ambulance, QRS, ALS Squad, etc)</ASP:ListItem>
+								<ASP:ListItem value="coned_sponsor">Continuing Education Sponsor</ASP:ListItem>
 								<ASP:ListItem value="county">County Coordinator</ASP:ListItem>
 								<ASP:ListItem value="regional_staffer">Regional staffer</ASP:ListItem></ASP:DropDownList><ASP:RegularExpressionValidator id="RegularExpressionValidator_user_kind" runat="server" errormessage="Please select a user kind." font-bold="True" controltovalidate="DropDownList_user_kind" validationexpression="[a-z_]+">!ERR!</ASP:RegularExpressionValidator>
 									</td>
@@ -72,7 +74,8 @@
 				  </td>
 				  <td>
 					<asp:textbox id="TextBox_noop_ie_behavior_workaround" runat="server" style="DISPLAY: none; VISIBILITY: hidden" /><!-- To work around an IE bug that otherwise prevents Enter in a textbox from submitting a form. -->
-					<asp:textbox id="TextBox_password" runat="server" textmode="Password"></asp:textbox><ASP:RegularExpressionValidator id="RegularExpressionValidator_password" runat="server" errormessage='Please use only letters, numbers, and the underscore ("_") character (or local equivalents) in your password.' font-bold="True" controltovalidate="TextBox_password" validationexpression="\w+">!ERR!</ASP:RegularExpressionValidator>
+					<asp:textbox id="TextBox_password" runat="server" textmode="Password"></asp:textbox>
+            <asp:HiddenField ID="HiddenField_hashed_password" runat="server" />
 				  </td>
 				</tr>
 				<tr>
@@ -111,6 +114,7 @@
 				</td>
 			  </tr>
 		  </table>
+    <input id="Hidden_client_timezone_offset" runat="server" type="hidden" />
   <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
       <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>
     </form>

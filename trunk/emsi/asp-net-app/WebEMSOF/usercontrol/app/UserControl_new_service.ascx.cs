@@ -112,7 +112,7 @@ namespace UserControl_new_service
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_UserControl_regional_staffer_new_binder_PlaceHolder_content"] as string) == "UserControl_new_service");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_regional_staffer_new_binder_PlaceHolder_content"] as string) == "UserControl_new_service");
             }
             else
             {
@@ -170,7 +170,7 @@ namespace UserControl_new_service
                 ValidationAlert(true);
             }
         }
-
+      
         private void Clear()
         {
             TextBox_service_name.Text = k.EMPTY;

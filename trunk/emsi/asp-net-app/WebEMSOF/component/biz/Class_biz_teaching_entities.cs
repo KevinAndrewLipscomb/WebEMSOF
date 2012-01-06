@@ -293,6 +293,11 @@ namespace Class_biz_teaching_entities
         );
       }
 
+    internal void SyncConedSponsorAccounts()
+      {
+      db_teaching_entities.SyncConedSponsorAccounts();
+      }
+
     } // end TClass_biz_teaching_entitys
 
   }

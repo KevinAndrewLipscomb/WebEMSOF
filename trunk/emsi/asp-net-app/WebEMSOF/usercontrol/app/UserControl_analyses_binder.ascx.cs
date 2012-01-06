@@ -41,7 +41,7 @@ namespace UserControl_analyses_binder
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_control_PlaceHolder_content"] as string) == "UserControl_analyses_binder");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_PlaceHolder_content"] as string) == "UserControl_analyses_binder");
                 // Dynamic controls must be re-added on each postback.
                 switch(p.tab_index)
                 {

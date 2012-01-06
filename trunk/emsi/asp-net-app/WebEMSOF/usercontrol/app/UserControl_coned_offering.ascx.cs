@@ -1,6 +1,11 @@
 // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~kicrudhelped~item.ascx.cs~template
 
+using Class_biz_coned_offering_class_final_statuses;
+using Class_biz_coned_offering_document_statuses;
+using Class_biz_coned_offering_statuses;
 using Class_biz_coned_offerings;
+using Class_biz_counties;
+using Class_biz_regions;
 using kix;
 using System;
 using System.Web;
@@ -14,6 +19,18 @@ namespace UserControl_coned_offering
   {
   public partial class TWebUserControl_coned_offering: ki_web_ui.usercontrol_class
     {
+    private struct p_type
+      {
+      public bool be_loaded;
+      public TClass_biz_coned_offering_class_final_statuses biz_coned_offering_class_final_statuses;
+      public TClass_biz_coned_offering_document_statuses biz_coned_offering_document_statuses;
+      public TClass_biz_coned_offering_statuses biz_coned_offering_statuses;
+      public TClass_biz_coned_offerings biz_coned_offerings;
+      public TClass_biz_counties biz_counties;
+      public TClass_biz_regions biz_regions;
+      public bool be_ok_to_config_coned_offerings;
+      }
+
     private p_type p;
 
     private void Clear()
@@ -28,8 +45,8 @@ namespace UserControl_coned_offering
       UserControl_drop_down_date_date_last_edited.Clear();
       TextBox_sponsor_id.Text = k.EMPTY;
       TextBox_sponsor_number.Text = k.EMPTY;
-      TextBox_document_status.Text = k.EMPTY;
-      TextBox_class_final_status_id.Text = k.EMPTY;
+      DropDownList_document_status.ClearSelection();
+      DropDownList_class_final_status.ClearSelection();
       TextBox_course_number.Text = k.EMPTY;
       TextBox_location.Text = k.EMPTY;
       TextBox_student_cost.Text = k.EMPTY;
@@ -56,8 +73,8 @@ namespace UserControl_coned_offering
       UserControl_drop_down_date_date_materials_to_be_returned.Clear();
       CheckBox_approved.Checked = false;
       TextBox_region_comments.Text = k.EMPTY;
-      TextBox_region_council_num.Text = k.EMPTY;
-      TextBox_class_county_code.Text = k.EMPTY;
+      DropDownList_region_council.ClearSelection();
+      DropDownList_class_county.ClearSelection();
       TextBox_total_class_hours.Text = k.EMPTY;
       TextBox_location_address_1.Text = k.EMPTY;
       TextBox_location_address_2.Text = k.EMPTY;
@@ -83,6 +100,7 @@ namespace UserControl_coned_offering
       TextBox_sponsor_name.Text = k.EMPTY;
       TextBox_courses_course_number.Text = k.EMPTY;
       TextBox_course_title.Text = k.EMPTY;
+      DropDownList_status.ClearSelection();
       Literal_match_index.Text = k.EMPTY;
       Literal_num_matches.Text = k.EMPTY;
       Panel_match_numbers.Visible = false;
@@ -178,6 +196,12 @@ namespace UserControl_coned_offering
       {
       if (!p.be_loaded)
         {
+        TableRow_class_id.Visible = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("education-coordinator")|| HttpContext.Current.User.IsInRole("education-specialist");
+        p.biz_coned_offering_document_statuses.BindDirectToListControl(DropDownList_document_status);
+        p.biz_coned_offering_class_final_statuses.BindDirectToListControl(DropDownList_class_final_status,"- - -");
+        p.biz_regions.BindEmsrsToListControl(DropDownList_region_council);
+        p.biz_counties.BindEmsrsToListControl(DropDownList_class_county);
+        p.biz_coned_offering_statuses.BindDirectToListControl(DropDownList_status);
         LinkButton_new_record.Visible = p.be_ok_to_config_coned_offerings;
         LinkButton_go_to_match_first.Text = k.ExpandTildePath(LinkButton_go_to_match_first.Text);
         LinkButton_go_to_match_prior.Text = k.ExpandTildePath(LinkButton_go_to_match_prior.Text);
@@ -261,6 +285,7 @@ namespace UserControl_coned_offering
       string sponsor_name;
       string courses_course_number;
       string course_title;
+      string status_id;
       result = false;
       if
         (
@@ -329,7 +354,8 @@ namespace UserControl_coned_offering
           out class_disapproval_reason_description,
           out sponsor_name,
           out courses_course_number,
-          out course_title
+          out course_title,
+          out status_id
           )
         )
         {
@@ -343,8 +369,8 @@ namespace UserControl_coned_offering
         UserControl_drop_down_date_date_last_edited.selectedvalue = date_last_edited;
         TextBox_sponsor_id.Text = sponsor_id;
         TextBox_sponsor_number.Text = sponsor_number;
-        TextBox_document_status.Text = document_status;
-        TextBox_class_final_status_id.Text = class_final_status_id;
+        DropDownList_document_status.SelectedValue = document_status;
+        DropDownList_class_final_status.SelectedValue = class_final_status_id;
         TextBox_course_number.Text = course_number;
         TextBox_location.Text = location;
         TextBox_student_cost.Text = student_cost;
@@ -371,8 +397,8 @@ namespace UserControl_coned_offering
         UserControl_drop_down_date_date_materials_to_be_returned.selectedvalue = date_materials_to_be_returned;
         CheckBox_approved.Checked = approved;
         TextBox_region_comments.Text = region_comments;
-        TextBox_region_council_num.Text = region_council_num;
-        TextBox_class_county_code.Text = class_county_code;
+        DropDownList_region_council.SelectedValue = region_council_num;
+        DropDownList_class_county.SelectedValue = class_county_code;
         TextBox_total_class_hours.Text = total_class_hours;
         TextBox_location_address_1.Text = location_address_1;
         TextBox_location_address_2.Text = location_address_2;
@@ -398,6 +424,7 @@ namespace UserControl_coned_offering
         TextBox_sponsor_name.Text = sponsor_name;
         TextBox_courses_course_number.Text = courses_course_number;
         TextBox_course_title.Text = course_title;
+        DropDownList_status.SelectedValue = status_id;
         Button_lookup.Enabled = false;
         Label_lookup_arrow.Enabled = false;
         Label_lookup_hint.Enabled = false;
@@ -445,12 +472,18 @@ namespace UserControl_coned_offering
       if (Session[InstanceId() + ".p"] != null)
         {
         p = (p_type)(Session[InstanceId() + ".p"]);
-        p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_config_binder_PlaceHolder_content"] as string) == "UserControl_coned_offering");
+        p.be_loaded = IsPostBack;
         }
       else
         {
-        p.be_loaded = false;
+        p.biz_coned_offering_class_final_statuses = new TClass_biz_coned_offering_class_final_statuses();
+        p.biz_coned_offering_document_statuses = new TClass_biz_coned_offering_document_statuses();
+        p.biz_coned_offering_statuses = new TClass_biz_coned_offering_statuses();
         p.biz_coned_offerings = new TClass_biz_coned_offerings();
+        p.biz_counties = new TClass_biz_counties();
+        p.biz_regions = new TClass_biz_regions();
+        //
+        p.be_loaded = false;
         p.be_ok_to_config_coned_offerings = k.Has((string[])(Session["privilege_array"]), "config-coned_offerings");
         }
       }
@@ -505,8 +538,8 @@ namespace UserControl_coned_offering
           UserControl_drop_down_date_date_last_edited.selectedvalue,
           k.Safe(TextBox_sponsor_id.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_sponsor_number.Text,k.safe_hint_type.HYPHENATED_NUM).Trim(),
-          k.Safe(TextBox_document_status.Text,k.safe_hint_type.ALPHA).Trim(),
-          k.Safe(TextBox_class_final_status_id.Text,k.safe_hint_type.NUM).Trim(),
+          k.Safe(DropDownList_document_status.SelectedValue,k.safe_hint_type.ALPHA).Trim(),
+          k.Safe(DropDownList_class_final_status.SelectedValue,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_course_number.Text,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_location.Text,k.safe_hint_type.POSTAL_STREET_ADDRESS).Trim(),
           k.Safe(TextBox_student_cost.Text,k.safe_hint_type.CURRENCY_USA).Trim(),
@@ -533,8 +566,8 @@ namespace UserControl_coned_offering
           UserControl_drop_down_date_date_materials_to_be_returned.selectedvalue,
           CheckBox_approved.Checked,
           k.Safe(TextBox_region_comments.Text,k.safe_hint_type.PUNCTUATED).Trim(),
-          k.Safe(TextBox_region_council_num.Text,k.safe_hint_type.NUM).Trim(),
-          k.Safe(TextBox_class_county_code.Text,k.safe_hint_type.NUM).Trim(),
+          k.Safe(DropDownList_region_council.SelectedValue,k.safe_hint_type.NUM).Trim(),
+          k.Safe(DropDownList_class_county.SelectedValue,k.safe_hint_type.NUM).Trim(),
           k.Safe(TextBox_total_class_hours.Text,k.safe_hint_type.REAL_NUM).Trim(),
           k.Safe(TextBox_location_address_1.Text,k.safe_hint_type.POSTAL_STREET_ADDRESS).Trim(),
           k.Safe(TextBox_location_address_2.Text,k.safe_hint_type.POSTAL_STREET_ADDRESS).Trim(),
@@ -559,7 +592,8 @@ namespace UserControl_coned_offering
           k.Safe(TextBox_class_disapproval_reason_description.Text,k.safe_hint_type.PUNCTUATED).Trim(),
           k.Safe(TextBox_sponsor_name.Text,k.safe_hint_type.ORG_NAME).Trim(),
           k.Safe(TextBox_courses_course_number.Text,k.safe_hint_type.NUM).Trim(),
-          k.Safe(TextBox_course_title.Text,k.safe_hint_type.PUNCTUATED).Trim()
+          k.Safe(TextBox_course_title.Text,k.safe_hint_type.PUNCTUATED).Trim(),
+          k.Safe(DropDownList_status.SelectedValue,k.safe_hint_type.NUM)
           );
         Alert(k.alert_cause_type.USER, k.alert_state_type.SUCCESS, "recsaved", "Record saved.", true);
         SetLookupMode();
@@ -623,7 +657,70 @@ namespace UserControl_coned_offering
 
     private void SetDependentFieldAblements(bool ablement)
       {
-//<KiCrudHelper:DependentFieldAblements/>
+      TextBox_course_id.Enabled = ablement;
+      TextBox_class_number.Enabled = ablement;
+      TextBox_created_by.Enabled = ablement;
+      UserControl_drop_down_date_date_created.enabled = ablement;
+      TextBox_last_edited_by.Enabled = ablement;
+      UserControl_drop_down_date_date_last_edited.enabled = ablement;
+      TextBox_sponsor_id.Enabled = ablement;
+      TextBox_sponsor_number.Enabled = ablement;
+      DropDownList_document_status.Enabled = ablement;
+      DropDownList_class_final_status.Enabled = ablement;
+      TextBox_course_number.Enabled = ablement;
+      TextBox_location.Enabled = ablement;
+      TextBox_student_cost.Enabled = ablement;
+      TextBox_tuition_includes.Enabled = ablement;
+      CheckBox_closed.Enabled = ablement;
+      TextBox_estimated_students.Enabled = ablement;
+      UserControl_drop_down_date_start_date_time.enabled = ablement;
+      UserControl_drop_down_date_end_date_time.enabled = ablement;
+      TextBox_start_time.Enabled = ablement;
+      TextBox_end_time.Enabled = ablement;
+      TextBox_other_dates_and_times.Enabled = ablement;
+      TextBox_instructors.Enabled = ablement;
+      TextBox_instructor_qualifications.Enabled = ablement;
+      TextBox_public_contact_name.Enabled = ablement;
+      TextBox_public_contact_phone.Enabled = ablement;
+      TextBox_public_contact_email.Enabled = ablement;
+      TextBox_public_contact_website.Enabled = ablement;
+      TextBox_public_contact_notes.Enabled = ablement;
+      UserControl_drop_down_date_date_submitted_to_region.enabled = ablement;
+      UserControl_drop_down_date_date_received_by_region.enabled = ablement;
+      UserControl_drop_down_date_date_sponsor_notified.enabled = ablement;
+      UserControl_drop_down_date_date_registration_sent_to_state.enabled = ablement;
+      UserControl_drop_down_date_date_cards_sent_to_sponsor.enabled = ablement;
+      UserControl_drop_down_date_date_materials_to_be_returned.enabled = ablement;
+      CheckBox_approved.Enabled = ablement;
+      TextBox_region_comments.Enabled = ablement;
+      DropDownList_region_council.Enabled = ablement;
+      DropDownList_class_county.Enabled = ablement;
+      TextBox_total_class_hours.Enabled = ablement;
+      TextBox_location_address_1.Enabled = ablement;
+      TextBox_location_address_2.Enabled = ablement;
+      TextBox_location_city.Enabled = ablement;
+      TextBox_location_state.Enabled = ablement;
+      TextBox_location_zip.Enabled = ablement;
+      TextBox_location_zip_plus_4.Enabled = ablement;
+      TextBox_location_phone.Enabled = ablement;
+      TextBox_location_email.Enabled = ablement;
+      TextBox_location_of_registration.Enabled = ablement;
+      TextBox_primary_text.Enabled = ablement;
+      TextBox_additional_texts.Enabled = ablement;
+      UserControl_drop_down_date_final_registration_date.enabled = ablement;
+      CheckBox_offered_as_college_credit.Enabled = ablement;
+      UserControl_drop_down_date_practical_exam_date.enabled = ablement;
+      UserControl_drop_down_date_written_exam_date.enabled = ablement;
+      TextBox_disapproval_reason_id.Enabled = ablement;
+      UserControl_drop_down_date_date_final_paperwork_received.enabled = ablement;
+      CheckBox_signed_hardcopy.Enabled = ablement;
+      TextBox_created_by_first_name.Enabled = ablement;
+      TextBox_created_by_last_name.Enabled = ablement;
+      TextBox_class_disapproval_reason_description.Enabled = ablement;
+      TextBox_sponsor_name.Enabled = ablement;
+      TextBox_courses_course_number.Enabled = ablement;
+      TextBox_course_title.Enabled = ablement;
+      DropDownList_status.Enabled = ablement;
       }
 
     protected void Button_lookup_Click(object sender, System.EventArgs e)
@@ -659,12 +756,10 @@ namespace UserControl_coned_offering
         }
       }
 
-    private struct p_type
+    internal void SetFilter(object summary)
       {
-      public bool be_loaded;
-      public TClass_biz_coned_offerings biz_coned_offerings;
-      public bool be_ok_to_config_coned_offerings;
-      } // end p_type
+      SessionSet("mode:goto","/coned_offering/" + p.biz_coned_offerings.ClassIdOf(summary));
+      }
 
     } // end TWebUserControl_coned_offering
 

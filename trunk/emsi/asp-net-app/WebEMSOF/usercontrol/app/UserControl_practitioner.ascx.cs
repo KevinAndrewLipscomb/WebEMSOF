@@ -124,6 +124,7 @@ namespace UserControl_practitioner
       {
       if (!p.be_loaded)
         {
+        TableRow_id.Visible = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("education-coordinator")|| HttpContext.Current.User.IsInRole("education-specialist");
         LinkButton_new_record.Visible = p.be_ok_to_config_practitioners;
         LinkButton_go_to_match_first.Text = k.ExpandTildePath(LinkButton_go_to_match_first.Text);
         LinkButton_go_to_match_prior.Text = k.ExpandTildePath(LinkButton_go_to_match_prior.Text);

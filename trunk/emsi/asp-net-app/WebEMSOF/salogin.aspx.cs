@@ -1,30 +1,18 @@
-using System.Configuration;
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Globalization;
-using System.Data.SqlClient;
-using System.Data.Common;
-
-
-
-
-using System.Web.UI;
-using System.Web.Security;
 using Class_biz_accounts;
+using Class_biz_regions;
+using kix;
+using System;
+using System.Configuration;
+using System.Web.Security;
+using System.Web.UI;
+
 namespace salogin
 {
     public struct p_type
     {
         public TClass_biz_accounts biz_accounts;
+        public TClass_biz_regions biz_regions;
+        public string region_code;
     } // end p_type
 
     public partial class TWebForm_salogin: ki_web_ui.page_class
@@ -41,6 +29,13 @@ namespace salogin
             //this.Load += this.Page_Load;
             this.PreRender += this.TWebForm_salogin_PreRender;
         }
+
+    private void InjectPersistentClientSideScript()
+      {
+      EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
+      EstablishClientSideFunction("SetClientTimezoneOffset()","El('" + Hidden_client_timezone_offset.ClientID + "').value = (new Date()).getTimezoneOffset();");
+      Button_log_in.Attributes.Add("onclick","SetClientTimezoneOffset();");
+      }
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
@@ -60,7 +55,9 @@ namespace salogin
                 Title = ConfigurationManager.AppSettings["application_name"] + " - salogin";
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 p.biz_accounts = new TClass_biz_accounts();
+                p.biz_regions = new TClass_biz_regions();
             }
+            InjectPersistentClientSideScript();
             ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_new_password);
             ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_log_in);
         }
@@ -70,6 +67,7 @@ namespace salogin
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
+            p.region_code = "1";
         }
 
         private void TWebForm_salogin_PreRender(object sender, System.EventArgs e)
@@ -79,7 +77,7 @@ namespace salogin
 
         protected void CustomValidator_account_exists_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
-            args.IsValid = p.biz_accounts.BeValidSysAdminCredentials(k.Digest(k.Safe(TextBox_password.Text.Trim(), k.safe_hint_type.ALPHANUM)));
+            args.IsValid = p.biz_accounts.BeValidSysAdminCredentials(k.Digest(k.Safe(TextBox_password.Text.Trim(),k.safe_hint_type.ALPHANUM)));
         }
 
         protected void DropDownList_user_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -97,17 +95,22 @@ namespace salogin
             if (DropDownList_user_kind.SelectedValue == "service")
             {
                 Label_user.Text = "Service";
-                p.biz_accounts.BindServices(DropDownList_user);
+                p.biz_accounts.BindServicesInRegion(p.region_code,DropDownList_user);
+            }
+            else if (DropDownList_user_kind.SelectedValue == "coned_sponsor")
+            {
+                Label_user.Text = "Con Ed Sponsor";
+                p.biz_accounts.BindConedSponsorsInRegion(p.region_code,DropDownList_user);
             }
             else if (DropDownList_user_kind.SelectedValue == "county")
             {
                 Label_user.Text = "County";
-                p.biz_accounts.BindCounties(DropDownList_user);
+                p.biz_accounts.BindCountiesInRegion(p.region_code,DropDownList_user);
             }
             else if (DropDownList_user_kind.SelectedValue == "regional_staffer")
             {
                 Label_user.Text = "Regional staffer";
-                p.biz_accounts.BindRegionalStaffers(DropDownList_user);
+                p.biz_accounts.BindRegionalStaffersInRegion(p.region_code,DropDownList_user);
             }
             else
             {
@@ -127,6 +130,7 @@ namespace salogin
         {
             if (Page.IsValid)
             {
+                SessionSet("region_code",p.region_code);
                 // Set username in session for the benefit of the TableRow_account_control in UserControl_precontent.
                 SessionSet("username", k.Safe(DropDownList_user.SelectedItem.Text, k.safe_hint_type.ORG_NAME));
                 FormsAuthentication.RedirectFromLoginPage(k.Safe(DropDownList_user.SelectedValue, k.safe_hint_type.HYPHENATED_UNDERSCORED_ALPHANUM), CheckBox_keep_me_logged_in.Checked);
@@ -135,6 +139,7 @@ namespace salogin
 
         protected void DropDownList_region_SelectedIndexChanged(object sender, EventArgs e)
           {
+          p.region_code = k.Safe(DropDownList_region.SelectedValue,k.safe_hint_type.NUM);
           }
 
     } // end TWebForm_salogin

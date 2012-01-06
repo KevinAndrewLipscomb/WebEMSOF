@@ -123,7 +123,7 @@ namespace UserControl_charter_kind
                 LinkButton_go_to_match_next.Text = k.ExpandTildePath(LinkButton_go_to_match_next.Text);
                 LinkButton_go_to_match_last.Text = k.ExpandTildePath(LinkButton_go_to_match_last.Text);
                 RequireConfirmation(Button_delete, "Are you sure you want to delete this record?");
-                Focus(TextBox_id, true);
+                TextBox_id.Focus();
                 p.be_loaded = true;
             }
             InjectPersistentClientSideScript();
@@ -173,7 +173,7 @@ namespace UserControl_charter_kind
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_config_binder_PlaceHolder_content"] as string) == "UserControl_charter_kind");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_config_binder_PlaceHolder_content"] as string) == "UserControl_charter_kind");
             }
             else
             {

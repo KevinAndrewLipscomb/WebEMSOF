@@ -6,7 +6,7 @@
 <%@ Register TagPrefix="uc3" TagName="UserControl_regional_staffer_binder" Src="~/usercontrol/app/UserControl_regional_staffer_binder.ascx" %>
 <html>
   <head runat="server">
-    <title id="Title" runat="server"></title>
+    <title></title>
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -14,7 +14,7 @@
   <body bgcolor="white">
     <form runat="server">
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
-      <uc3:UserControl_regional_staffer_binder id="UserControl_regional_staffer_binder_control" runat="server"></uc3:UserControl_regional_staffer_binder>
+      <uc3:UserControl_regional_staffer_binder id="UserControl_regional_staffer_binder" runat="server"></uc3:UserControl_regional_staffer_binder>
       <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
       <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>
     </form>

@@ -1,6 +1,6 @@
-using kix;
-using System;
 using Class_db_training_institute_statuses;
+using kix;
+
 namespace Class_biz_training_institute_statuses
 {
     public class TClass_biz_training_institute_statuses
@@ -26,7 +26,7 @@ namespace Class_biz_training_institute_statuses
 
         public void BindDirectToListControl(object target)
         {
-            BindDirectToListControl(target, "-- court kind --");
+            BindDirectToListControl(target, "-- training institute status --");
         }
 
         public void BindDirectToListControl(object target, string unselected_literal)

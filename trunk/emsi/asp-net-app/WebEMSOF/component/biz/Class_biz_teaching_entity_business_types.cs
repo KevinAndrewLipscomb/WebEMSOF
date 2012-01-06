@@ -1,6 +1,6 @@
-using kix;
-using System;
 using Class_db_teaching_entity_business_types;
+using kix;
+
 namespace Class_biz_teaching_entity_business_types
 {
     public class TClass_biz_teaching_entity_business_types
@@ -26,7 +26,7 @@ namespace Class_biz_teaching_entity_business_types
 
         public void BindDirectToListControl(object target)
         {
-            BindDirectToListControl(target, "-- court kind --");
+            BindDirectToListControl(target, "-- teaching entity business type --");
         }
 
         public void BindDirectToListControl(object target, string unselected_literal)

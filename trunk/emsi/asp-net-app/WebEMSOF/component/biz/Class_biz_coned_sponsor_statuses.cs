@@ -1,6 +1,6 @@
-using kix;
-using System;
 using Class_db_coned_sponsor_statuses;
+using kix;
+
 namespace Class_biz_coned_sponsor_statuses
 {
     public class TClass_biz_coned_sponsor_statuses
@@ -26,7 +26,7 @@ namespace Class_biz_coned_sponsor_statuses
 
         public void BindDirectToListControl(object target)
         {
-            BindDirectToListControl(target, "-- court kind --");
+            BindDirectToListControl(target, "-- coned sponsor status --");
         }
 
         public void BindDirectToListControl(object target, string unselected_literal)

@@ -1,6 +1,7 @@
 // Derived from KiAspdotnetFramework/component/biz/Class~biz~~template~kicrudhelped~item.cs~template
 
 using Class_db_coned_offerings;
+using Class_db_coned_offering_statuses;
 using kix;
 using System;
 using System.Collections;
@@ -19,9 +20,63 @@ namespace Class_biz_coned_offerings
       ss_emsams = new Class_ss_emsams();
       }
 
+    internal void Archive(object summary)
+      {
+      if (db_coned_offerings.StatusOf(summary) == coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING)
+        {
+        db_coned_offerings.SetStatus(db_coned_offerings.ClassIdOf(summary),coned_offering_status_enumeration.ARCHIVED);
+        }
+      }
+
+    internal bool BeApprovedOf(object summary)
+      {
+      return (db_coned_offerings.ApprovedOf(summary) == "1");
+      }
+
+    internal bool BeOkToCloseClassAndSubmitForCredit
+      (
+      object summary,
+      k.int_nonnegative num_attendees,
+      k.int_nonnegative num_attendees_with_known_birth_dates
+      )
+      {
+      return BeApprovedOf(summary)
+      && (DateTime.Now > DateTime.Parse(db_coned_offerings.StartOf(summary).Replace(" --:--",k.EMPTY)).AddHours(double.Parse(db_coned_offerings.TotalClassHoursOf(summary))))
+      && (num_attendees.val > 0)
+      && (num_attendees_with_known_birth_dates.val == num_attendees.val);
+      }
+
+    internal bool BeOkToEditRoster(object summary)
+      {
+      return (db_coned_offerings.StatusOf(summary) == coned_offering_status_enumeration.NEEDS_CONED_SPONSOR_FINALIZATION);
+      }
+
     public bool Bind(string partial_spec, object target)
       {
       return db_coned_offerings.Bind(partial_spec, target);
+      }
+
+    internal void BindClassCatalog
+      (
+      string region_code,
+      string coned_sponsor_user_id,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      db_coned_offerings.BindClassCatalog(region_code,coned_sponsor_user_id,sort_order,be_sort_order_ascending,target);
+      }
+
+    internal void BindReadyRosters
+      (
+      string region_code,
+      string sort_order,
+      bool be_sort_order_ascending,
+      object target
+      )
+      {
+      db_coned_offerings.BindReadyRosters(region_code,sort_order,be_sort_order_ascending,target);
       }
 
     public void BindDirectToListControl(object target)
@@ -29,9 +84,37 @@ namespace Class_biz_coned_offerings
       db_coned_offerings.BindDirectToListControl(target);
       }
 
+    internal string ClassIdOf(object summary)
+      {
+      return db_coned_offerings.ClassIdOf(summary);
+      }
+
+    internal string ClassNumberOf(object summary)
+      {
+      return db_coned_offerings.ClassNumberOf(summary);
+      }
+
+    internal void CloseAndSubmit(object summary)
+      {
+      if (db_coned_offerings.StatusOf(summary) == coned_offering_status_enumeration.NEEDS_CONED_SPONSOR_FINALIZATION)
+        {
+        db_coned_offerings.SetStatus(db_coned_offerings.ClassIdOf(summary),coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING);
+        }
+      }
+
+    internal string CourseTitleOf(object summary)
+      {
+      return db_coned_offerings.CourseTitleOf(summary);
+      }
+
     public bool Delete(string id)
       {
       return db_coned_offerings.Delete(id);
+      }
+
+    internal string EndOf(object summary)
+      {
+      return db_coned_offerings.EndOf(summary);
       }
 
     public bool Get
@@ -99,7 +182,8 @@ namespace Class_biz_coned_offerings
       out string class_disapproval_reason_description,
       out string sponsor_name,
       out string courses_course_number,
-      out string course_title
+      out string course_title,
+      out string status_id
       )
       {
       return db_coned_offerings.Get
@@ -167,13 +251,19 @@ namespace Class_biz_coned_offerings
         out class_disapproval_reason_description,
         out sponsor_name,
         out courses_course_number,
-        out course_title
+        out course_title,
+        out status_id
         );
       }
 
     internal void ImportLatestFromEmsrs()
       {
       db_coned_offerings.ImportLatestFromEmsrs(ss_emsams.ClassSearchUnlimited());
+      }
+
+    internal string LocationOf(object summary)
+      {
+      return db_coned_offerings.LocationOf(summary);
       }
 
     public void Set
@@ -241,7 +331,8 @@ namespace Class_biz_coned_offerings
       string class_disapproval_reason_description,
       string sponsor_name,
       string courses_course_number,
-      string course_title
+      string course_title,
+      string status_id
       )
       {
       db_coned_offerings.Set
@@ -309,8 +400,27 @@ namespace Class_biz_coned_offerings
         class_disapproval_reason_description,
         sponsor_name,
         courses_course_number,
-        course_title
+        course_title,
+        status_id
         );
+      }
+
+    internal string StartOf(object summary)
+      {
+      return db_coned_offerings.StartOf(summary);
+      }
+
+    public object Summary(string class_id)
+      {
+      return db_coned_offerings.Summary(class_id);
+      }
+
+    internal k.decimal_nonnegative TotalClassHoursOf(object summary)
+      {
+      var total_class_hours = new k.decimal_nonnegative();
+      var total_class_hours_string = db_coned_offerings.TotalClassHoursOf(summary);
+      total_class_hours.val = (total_class_hours_string.Length > 0 ? decimal.Parse(total_class_hours_string) : 0);
+      return total_class_hours;
       }
 
     } // end TClass_biz_coned_offerings
