@@ -1,15 +1,5 @@
-using System.Configuration;
-
-
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
+using System.Configuration;
 
 namespace timeout
 {
@@ -35,7 +25,7 @@ namespace timeout
                     // sequence of login -> timeout -> login may have been allowing IsPostBack to stay TRUE through, which I had not anticipated.
                     Response.Redirect("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - timeout";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - timeout";
             }
         }
 
