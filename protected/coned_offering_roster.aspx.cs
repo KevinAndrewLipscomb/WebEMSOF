@@ -159,7 +159,7 @@ namespace coned_offering_roster
       {
       if (IsValid)
         {
-        p.biz_coned_offerings.CloseAndSubmit(p.incoming.summary);
+        p.biz_coned_offerings.CloseAndSubmit(p.incoming.summary,p.num_attendees);
         p.be_ok_to_edit_roster = false;
         Bind();
         SetCloseAndSubmitAblements(false);
@@ -415,6 +415,13 @@ namespace coned_offering_roster
         Literal_be_approved.Text = k.YesNoOf(p.biz_coned_offerings.BeApprovedOf(p.incoming.summary));
         Bind();
         SetCloseAndSubmitAblements(p.be_ok_to_edit_roster);
+        RequireConfirmation
+          (
+          Button_close_and_submit,
+          "Closing this class will prevent you from adding or removing practitioners from the roster, and from editing any birth dates or instructor hours." + k.NEW_LINE
+          + k.NEW_LINE
+          + "To proceed, click OK:"
+          );
         }
       InjectPersistentClientSideScript();
       }

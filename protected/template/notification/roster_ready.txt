@@ -1,0 +1,32 @@
+Roster ready for con-ed class <class_number/>
+This is an automatic notification from <application_name/>.
+
+Continuing Education Sponsor <sponsor_number/>, <sponsor_name/>, has completed a roster in <application_name/> for the following class.  Its status in <application_name/> is now <status_description/>:
+
+   Class #:
+      <class_number/>
+   Course title:
+      <course_title/>
+   Start:
+      <start/>
+   End:
+      <end/>
+   Hours:
+      <total_class_hours/>
+   Number of attendees:
+      <num_attendees/>
+   Location:
+      <location/>
+
+You can reach <sponsor_name/> at:
+
+   Class public contact:
+      <coned_offering_public_contact_email/> (mailto:<coned_offering_public_contact_email/>)
+   Sponsor:
+      <sponsor_email/> (mailto:<sponsor_email/>)
+   Sponsor contact:
+      <sponsor_contact_email/> (mailto:<sponsor_contact_email/>)
+   Sponsor public contact:
+      <sponsor_public_contact_email/> (mailto:<sponsor_public_contact_email/>)
+
+-- <application_name/> (http://<host_domain_name/>/<application_name/>)
