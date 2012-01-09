@@ -889,6 +889,7 @@
     <Content Include="protected\image\edit-undo-8.png" />
     <Content Include="protected\image\search_16x16.gif" />
     <Content Include="protected\ready_roster_detail.aspx" />
+    <Content Include="protected\template\notification\roster_ready.txt" />
     <Content Include="salogin.aspx" />
     <Content Include="serial_indicator_control_chart.aspx" />
     <Content Include="timeout.aspx" />

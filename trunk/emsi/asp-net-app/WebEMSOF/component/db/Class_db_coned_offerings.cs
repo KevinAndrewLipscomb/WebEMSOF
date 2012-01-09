@@ -26,7 +26,14 @@ namespace Class_db_coned_offerings
       public string end;
       public string total_class_hours;
       public string approved;
-      public Class_db_coned_offering_statuses.coned_offering_status_enumeration status;
+      public coned_offering_status_enumeration status;
+      public string public_contact_email;
+      public string sponsor_id;
+      public string sponsor_number;
+      public string sponsor_name;
+      public string sponsor_email;
+      public string sponsor_contact_email;
+      public string sponsor_public_contact_email;
       }
 
     private TClass_db_trail db_trail = null;
@@ -498,6 +505,11 @@ namespace Class_db_coned_offerings
       return (summary as coned_offering_summary).location;
       }
 
+    internal string PublicContactEmailOf(object summary)
+      {
+      return (summary as coned_offering_summary).public_contact_email;
+      }
+
     public void Set
       (
       string class_id,
@@ -661,6 +673,36 @@ namespace Class_db_coned_offerings
       Close();
       }
 
+    internal string SponsorContactEmailOf(object summary)
+      {
+      return (summary as coned_offering_summary).sponsor_contact_email;
+      }
+
+    internal string SponsorEmailOf(object summary)
+      {
+      return (summary as coned_offering_summary).sponsor_email;
+      }
+
+    internal string SponsorIdOf(object summary)
+      {
+      return (summary as coned_offering_summary).sponsor_id;
+      }
+
+    internal string SponsorNameOf(object summary)
+      {
+      return (summary as coned_offering_summary).sponsor_name;
+      }
+
+    internal string SponsorNumberOf(object summary)
+      {
+      return (summary as coned_offering_summary).sponsor_number;
+      }
+
+    internal string SponsorPublicContactEmailOf(object summary)
+      {
+      return (summary as coned_offering_summary).sponsor_public_contact_email;
+      }
+
     internal string StartOf(object summary)
       {
       return (summary as coned_offering_summary).start;
@@ -686,7 +728,15 @@ namespace Class_db_coned_offerings
           + " , IFNULL(total_class_hours,'') as total_class_hours"
           + " , approved"
           + " , status_id"
+          + " , sponsor_id"
+          + " , coned_offering.sponsor_number as sponsor_number"
+          + " , IFNULL(name,IFNULL(short_name,'')) as sponsor_name"
+          + " , IFNULL(email,'') as sponsor_email"
+          + " , IFNULL(contact_email,'') as sponsor_contact_email"
+          + " , IFNULL(teaching_entity.public_contact_email,'') as sponsor_public_contact_email"
+          + " , IFNULL(coned_offering.public_contact_email,'') as public_contact_email"
           + " FROM coned_offering"
+          +   " join teaching_entity on (teaching_entity.emsrs_id=coned_offering.sponsor_id)"
           + " where class_id = '" + class_id + "'",
           connection
           )
@@ -703,7 +753,14 @@ namespace Class_db_coned_offerings
         end = dr["end"].ToString(),
         total_class_hours = dr["total_class_hours"].ToString(),
         approved = dr["approved"].ToString(),
-        status = (coned_offering_status_enumeration)Enum.Parse(typeof(coned_offering_status_enumeration),dr["status_id"].ToString())
+        status = (coned_offering_status_enumeration)Enum.Parse(typeof(coned_offering_status_enumeration),dr["status_id"].ToString()),
+        sponsor_id = dr["sponsor_id"].ToString(),
+        sponsor_number = dr["sponsor_number"].ToString(),
+        sponsor_name = dr["sponsor_name"].ToString(),
+        sponsor_email = dr["sponsor_email"].ToString(),
+        sponsor_contact_email = dr["sponsor_contact_email"].ToString(),
+        sponsor_public_contact_email = dr["sponsor_public_contact_email"].ToString(),
+        public_contact_email = dr["public_contact_email"].ToString()
         };
       Close();
       return the_summary;

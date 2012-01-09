@@ -1,5 +1,6 @@
 // Derived from KiAspdotnetFramework/component/biz/Class~biz~~template~kicrudhelped~item.cs~template
 
+using Class_biz_notifications;
 using Class_db_coned_offerings;
 using Class_db_coned_offering_statuses;
 using kix;
@@ -11,11 +12,13 @@ namespace Class_biz_coned_offerings
   {
   public class TClass_biz_coned_offerings
     {
+    private TClass_biz_notifications biz_notifications = null;
     private TClass_db_coned_offerings db_coned_offerings = null;
     private Class_ss_emsams ss_emsams = null;
 
     public TClass_biz_coned_offerings() : base()
       {
+      biz_notifications = new TClass_biz_notifications();
       db_coned_offerings = new TClass_db_coned_offerings();
       ss_emsams = new Class_ss_emsams();
       }
@@ -94,11 +97,33 @@ namespace Class_biz_coned_offerings
       return db_coned_offerings.ClassNumberOf(summary);
       }
 
-    internal void CloseAndSubmit(object summary)
+    internal void CloseAndSubmit
+      (
+      object summary,
+      k.int_nonnegative num_attendees
+      )
       {
       if (db_coned_offerings.StatusOf(summary) == coned_offering_status_enumeration.NEEDS_CONED_SPONSOR_FINALIZATION)
         {
         db_coned_offerings.SetStatus(db_coned_offerings.ClassIdOf(summary),coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING);
+        biz_notifications.IssueForClassClosed
+          (
+          sponsor_id:db_coned_offerings.SponsorIdOf(summary),
+          sponsor_number:db_coned_offerings.SponsorNumberOf(summary),
+          sponsor_name:db_coned_offerings.SponsorNameOf(summary),
+          sponsor_email:db_coned_offerings.SponsorEmailOf(summary),
+          sponsor_contact_email:db_coned_offerings.SponsorContactEmailOf(summary),
+          sponsor_public_contact_email:db_coned_offerings.SponsorPublicContactEmailOf(summary),
+          coned_offering_public_contact_email:db_coned_offerings.PublicContactEmailOf(summary),
+          class_number:db_coned_offerings.ClassNumberOf(summary),
+          course_title:db_coned_offerings.CourseTitleOf(summary),
+          start:db_coned_offerings.StartOf(summary),
+          end:db_coned_offerings.EndOf(summary),
+          total_class_hours:db_coned_offerings.TotalClassHoursOf(summary),
+          location:db_coned_offerings.LocationOf(summary),
+          num_attendees:num_attendees,
+          status_description:coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING.ToString()
+          );
         }
       }
 
