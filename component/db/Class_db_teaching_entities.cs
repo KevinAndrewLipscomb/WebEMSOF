@@ -45,6 +45,33 @@ namespace Class_db_teaching_entities
       return ((target) as ListControl).Items.Count > 0;
       }
 
+    public void BindConedSponsorsBaseDataList
+      (
+      string region_code,
+      string sort_order,
+      bool be_order_ascending,
+      object target
+      )
+      {
+      Open();
+      ((target) as BaseDataList).DataSource = new MySqlCommand
+        (
+        "select id"
+        + " , sponsor_number"
+        + " , IFNULL(teaching_entity.name,IFNULL(teaching_entity.short_name,'')) as name"
+        + " from teaching_entity"
+        +   " join region_code_name_map on (region_code_name_map.emsrs_code=teaching_entity.region)"
+        + " where sponsor_number is not null"
+        +   " and IFNULL(email,IFNULL(contact_email,public_contact_email)) is not null"
+        +   " and code = '" + region_code + "'"
+        + " order by " + sort_order.Replace("%",(be_order_ascending ? " asc" : " desc")),
+        connection
+        )
+        .ExecuteReader();
+      ((target) as BaseDataList).DataBind();
+      Close();
+      }
+
     public void BindDirectToListControl(object target)
       {
       Open();

@@ -1,41 +1,34 @@
+using Class_biz_teaching_entities;
+using Class_msg_protected;
 using kix;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using System.Collections;
-
-using Class_biz_services;
+using System.Web;
 using System.Web.Security;
-namespace UserControl_responding_services
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace UserControl_coned_sponsors
 {
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.pas
-    public partial class TWebUserControl_responding_services: ki_web_ui.usercontrol_class
+    public partial class TWebUserControl_coned_sponsors: ki_web_ui.usercontrol_class
     {
-        public class UserControl_responding_services_Static
+        public class UserControl_coned_sponsors_Static
           {
-          public const int TCI_UPDATE_EMAIL_ADDRESS = 0;
-          public const int TCI_PROFILE_TABBED = 1;
-          public const int TCI_PROFILE_PRINTABLE = 2;
-          public const int TCI_IMITATE = 3;
-          public const int TCI_AFFILIATE_NUM = 4;
-          public const int TCI_SERVICE_NAME = 5;
-          public const int TCI_COUNTY_NAME = 6;
-          public const int TCI_BE_EMSOF_PARTICIPANT = 7;
+          public const int TCI_SELECT = 0;
+          public const int TCI_ID = 1;
+          public const int TCI_SPONSOR_NUMBER = 2;
+          public const int TCI_NAME = 3;
+          public const int TCI_IMITATE = 4;
           }
 
         private struct p_type
           {
           public bool be_interactive;
           public bool be_loaded;
-          public bool be_ok_to_update_service_email_address;
           public bool be_sort_order_ascending;
-          public TClass_biz_services biz_services;
-          public uint num_nonparticipants;
-          public uint num_participants;
-          public uint num_respondents;
-          public uint num_services;
+          public TClass_biz_teaching_entities biz_teaching_entities;
+          public TClass_msg_protected.coned_sponsor_detail msg_protected_coned_sponsor_detail;
+          public uint num_teaching_entities;
           public string sort_order;
           }
 
@@ -144,20 +137,17 @@ namespace UserControl_responding_services
             if (Session[InstanceId() + ".p"] != null)
             {
                 p = (p_type)(Session[InstanceId() + ".p"]);
-                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_cat4pe_binder_UserControl_regional_staffer_current_binder_PlaceHolder_content"] as string) == "UserControl_responding_services");
+                p.be_loaded = IsPostBack && ((Session["UserControl_regional_staffer_binder_UserControl_regional_staffer_emsrs_gateway_binder_UserControl_coned_binder_PlaceHolder_content"] as string) == "UserControl_coned_sponsors");
             }
             else
             {
-                p.biz_services = new TClass_biz_services();
+                p.biz_teaching_entities = new TClass_biz_teaching_entities();
+                p.msg_protected_coned_sponsor_detail = new TClass_msg_protected.coned_sponsor_detail();
                 p.be_interactive = !(Session["mode:report"] != null);
                 p.be_loaded = false;
-                p.be_ok_to_update_service_email_address = (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"));
                 p.be_sort_order_ascending = true;
-                p.num_nonparticipants = 0;
-                p.num_participants = 0;
-                p.num_respondents = 0;
-                p.num_services = 0;
-                p.sort_order = "service_name%";
+                p.num_teaching_entities = 0;
+                p.sort_order = "name%";
             }
 
         }
@@ -171,18 +161,18 @@ namespace UserControl_responding_services
             this.DataGrid_control.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_control_ItemDataBound);
             this.DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_control_SortCommand);
             this.DataGrid_control.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_control_ItemCommand);
-            this.PreRender += this.TWebUserControl_responding_services_PreRender;
+            this.PreRender += this.TWebUserControl_coned_sponsors_PreRender;
             //this.Load += this.Page_Load;
         }
 
-        private void TWebUserControl_responding_services_PreRender(object sender, System.EventArgs e)
+        private void TWebUserControl_coned_sponsors_PreRender(object sender, System.EventArgs e)
         {
             SessionSet(InstanceId() + ".p", p);
         }
 
-        public TWebUserControl_responding_services Fresh()
+        public TWebUserControl_coned_sponsors Fresh()
         {
-            TWebUserControl_responding_services result;
+            TWebUserControl_coned_sponsors result;
             Session.Remove(InstanceId() + ".p");
             result = this;
             return result;
@@ -192,32 +182,23 @@ namespace UserControl_responding_services
         {
             if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
               {
-              var affiliate_num = k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM);
-              SessionSet("affiliate_num",affiliate_num);
-              if (e.CommandName == "update-email-address")
+              var sponsor_number = k.Safe(e.Item.Cells[UserControl_coned_sponsors_Static.TCI_SPONSOR_NUMBER].Text, k.safe_hint_type.NUM);
+              SessionSet("sponsor_number",sponsor_number);
+              if (e.CommandName == "select")
                 {
-                DropCrumbAndTransferTo("administer_service_email_address.aspx");
-                }
-              else if (e.CommandName == "profile-tabbed")
-                {
-                SessionSet("mode:profile-rendition","create-refresh-edit");
-                DropCrumbAndTransferTo("responding_services_detail.aspx");
-                }
-              else if (e.CommandName == "profile-printable")
-                {
-                SessionSet("mode:profile-rendition","printable-report");
-                DropCrumbAndTransferTo("responding_services_detail.aspx");
+                p.msg_protected_coned_sponsor_detail.id = k.Safe(e.Item.Cells[UserControl_coned_sponsors_Static.TCI_ID].Text, k.safe_hint_type.NUM);
+                MessageDropCrumbAndTransferTo(p.msg_protected_coned_sponsor_detail,"protected","coned_sponsor_detail");
                 }
               else if (e.CommandName == "imitate")
                 {
-                var service_name = k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_SERVICE_NAME].Text, k.safe_hint_type.ORG_NAME);
-                var service_user_id = p.biz_services.IdOfAffiliateNum(affiliate_num);
+                var coned_sponsor_name = k.Safe(e.Item.Cells[UserControl_coned_sponsors_Static.TCI_NAME].Text, k.safe_hint_type.ORG_NAME);
+                var coned_sponsor_user_id = k.Safe(e.Item.Cells[UserControl_coned_sponsors_Static.TCI_ID].Text, k.safe_hint_type.NUM);
                 SessionSet(name:"imitator_designator",value:HttpContext.Current.User.Identity.Name);
-                SessionSet("target_user_table","service");
-                SessionSet("service_user_id",service_user_id);
-                SessionSet("service_name",service_name);
-                SessionSet("username",service_name);
-                FormsAuthentication.RedirectFromLoginPage("service_" + service_user_id,false);
+                SessionSet("target_user_table","coned_sponsor");
+                SessionSet("coned_sponsor_user_id",coned_sponsor_user_id);
+                SessionSet("coned_sponsor_name",coned_sponsor_name);
+                SessionSet("username",coned_sponsor_name);
+                FormsAuthentication.RedirectFromLoginPage("coned_sponsor_" + coned_sponsor_user_id,false);
                 }
               }
         }
@@ -229,43 +210,22 @@ namespace UserControl_responding_services
             {
                 if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
                 {
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
-                    link_button.Text = k.ExpandTildePath(link_button.Text);
-                    link_button.ToolTip = "Update email address";
-                    ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[UserControl_coned_sponsors_Static.TCI_SELECT].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Profile (tabbed)";
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
-                    link_button.Text = k.ExpandTildePath(link_button.Text);
-                    link_button.ToolTip = "Profile (printable)";
-                    ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_IMITATE].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[UserControl_coned_sponsors_Static.TCI_IMITATE].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Imitate";
                     RequireConfirmation(link_button,"The application will now allow you to imitate a subordinate user.  When you are done imitating the subordinate user, you must log out and log back in as yourself.");
                     ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-                    p.num_services++;
-                    var participation = e.Item.Cells[UserControl_responding_services_Static.TCI_BE_EMSOF_PARTICIPANT].Text;
-                    if (participation != "no response")
-                      {
-                      p.num_respondents++;
-                      if (participation == "YES")
-                        {
-                        p.num_participants = p.num_participants + 1;
-                        }
-                      else
-                        {
-                        p.num_nonparticipants = p.num_nonparticipants + 1;
-                        }
-                      }
+                    p.num_teaching_entities++;
                 }
             }
             else
             {
-                e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_TABBED].Visible = false;
-                e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Visible = false;
+                e.Item.Cells[UserControl_coned_sponsors_Static.TCI_SELECT].Visible = false;
+                e.Item.Cells[UserControl_coned_sponsors_Static.TCI_IMITATE].Visible = false;
             }
         }
 
@@ -286,20 +246,13 @@ namespace UserControl_responding_services
 
         private void Bind()
         {
-            DataGrid_control.Columns[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Visible = p.be_ok_to_update_service_email_address;
-            p.biz_services.BindAnnualRespondents(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
-            Label_num_nonparticipants.Text = p.num_nonparticipants.ToString();
-            Label_num_participants.Text = p.num_participants.ToString();
-            Label_num_respondents.Text = p.num_respondents.ToString();
-            Label_num_services.Text = p.num_services.ToString();
-            p.num_nonparticipants = 0;
-            p.num_participants = 0;
-            p.num_respondents = 0;
-            p.num_services = 0;
+            p.biz_teaching_entities.BindConedSponsorsBaseDataList(Session["region_code"].ToString(),p.sort_order,p.be_sort_order_ascending,DataGrid_control);
+            Label_num_coned_sponsors.Text = p.num_teaching_entities.ToString();
+            p.num_teaching_entities = 0;
 
         }
 
-    } // end TWebUserControl_responding_services
+    } // end TWebUserControl_coned_sponsors
 
 }
 

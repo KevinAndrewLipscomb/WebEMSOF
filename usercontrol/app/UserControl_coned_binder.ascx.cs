@@ -8,7 +8,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using UserControl_coned_offering;
-using UserControl_coned_sponsor;
+using UserControl_coned_sponsors;
 using UserControl_practitioner;
 using UserControl_ready_rosters;
 
@@ -17,8 +17,8 @@ namespace UserControl_coned_binder
   public class UserControl_coned_binder_Static
     {
     public const int TSSI_READY_ROSTERS = 0;
-    public const int TSSI_CLASSES = 1;
-    public const int TSSI_SPONSORS = 2;
+    public const int TSSI_SPONSORS = 1;
+    public const int TSSI_CLASSES = 2;
     public const int TSSI_PRACTITIONERS = 3;
     }
 
@@ -107,16 +107,15 @@ namespace UserControl_coned_binder
         var c = ((TWebUserControl_ready_rosters)(LoadControl("~/usercontrol/app/UserControl_ready_rosters.ascx")));
         p.content_id = AddIdentifiedControlToPlaceHolder(c,"UserControl_ready_rosters",PlaceHolder_content,(be_fresh_control_required ? InstanceId() : k.EMPTY));
         }
+      else if (p.tab_index == UserControl_coned_binder_Static.TSSI_SPONSORS)
+        {
+        var c = ((TWebUserControl_coned_sponsors)(LoadControl("~/usercontrol/app/UserControl_coned_sponsors.ascx")));
+        p.content_id = AddIdentifiedControlToPlaceHolder(c,"UserControl_coned_sponsors",PlaceHolder_content,(be_fresh_control_required ? InstanceId() : k.EMPTY));
+        }
       else if (p.tab_index == UserControl_coned_binder_Static.TSSI_PRACTITIONERS)
         {
         var c = ((TWebUserControl_practitioner)(LoadControl("~/usercontrol/app/UserControl_practitioner.ascx")));
         p.content_id = AddIdentifiedControlToPlaceHolder(c,"UserControl_practitioner",PlaceHolder_content,(be_fresh_control_required ? InstanceId() : k.EMPTY));
-        }
-      else if (p.tab_index == UserControl_coned_binder_Static.TSSI_SPONSORS)
-        {
-        var c = ((TWebUserControl_coned_sponsor)(LoadControl("~/usercontrol/app/UserControl_coned_sponsor.ascx")));
-        p.content_id = AddIdentifiedControlToPlaceHolder(c,"UserControl_coned_sponsor",PlaceHolder_content,(be_fresh_control_required ? InstanceId() : k.EMPTY));
-        c.SetTarget(target);
         }
       else if (p.tab_index == UserControl_coned_binder_Static.TSSI_CLASSES)
         {
@@ -141,7 +140,7 @@ namespace UserControl_coned_binder
           {
           p.tab_index = UserControl_coned_binder_Static.TSSI_CLASSES;
           }
-        else if (target.ToLower().Contains("/sponsor/"))
+        else if (target.ToLower().Contains("/sponsors/"))
           {
           p.tab_index = UserControl_coned_binder_Static.TSSI_SPONSORS;
           }

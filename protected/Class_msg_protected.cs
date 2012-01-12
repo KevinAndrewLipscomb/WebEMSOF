@@ -13,6 +13,10 @@ namespace Class_msg_protected
       {
       internal object summary = null;
       }
+    public class coned_sponsor_detail
+      {
+      internal string id = k.EMPTY;
+      }
     public class ready_roster_detail
       {
       internal object summary = null;

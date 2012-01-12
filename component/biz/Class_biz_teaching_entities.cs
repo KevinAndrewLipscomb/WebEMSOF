@@ -24,6 +24,17 @@ namespace Class_biz_teaching_entities
       return db_teaching_entities.Bind(partial_spec, target);
       }
 
+    public void BindConedSponsorsBaseDataList
+      (
+      string region_code,
+      string sort_order,
+      bool be_order_ascending,
+      object target
+      )
+      {
+      db_teaching_entities.BindConedSponsorsBaseDataList(region_code,sort_order,be_order_ascending,target);
+      }
+
     public void BindDirectToListControl(object target)
       {
       db_teaching_entities.BindDirectToListControl(target);

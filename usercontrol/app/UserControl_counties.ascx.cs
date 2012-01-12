@@ -223,6 +223,7 @@ namespace UserControl_counties
           link_button = ((e.Item.Cells[UserControl_counties_Static.TCI_IMITATE].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Imitate";
+          RequireConfirmation(link_button,"The application will now allow you to imitate a subordinate user.  When you are done imitating the subordinate user, you must log out and log back in as yourself.");
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
           //
           // Remove all cell controls from viewstate except for the one at TCI_CODE.

@@ -14,7 +14,7 @@ namespace coned_sponsor_overview
         {
             if (!IsPostBack)
             {
-                if ((Session["coned_sponsor_name"] == null) || (Session["coned_sponsor_user_id"] == null) || Session["imitator_designator"] != null)
+                if ((Session["coned_sponsor_name"] == null) || (Session["coned_sponsor_user_id"] == null))
                 {
                     Session.Clear();
                     DropCrumbAndTransferTo("~/login.aspx");

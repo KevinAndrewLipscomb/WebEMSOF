@@ -299,6 +299,13 @@
     <Compile Include="protected\coned_offering_roster.aspx.designer.cs">
       <DependentUpon>coned_offering_roster.aspx</DependentUpon>
     </Compile>
+    <Compile Include="protected\coned_sponsor_detail.aspx.cs">
+      <DependentUpon>coned_sponsor_detail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="protected\coned_sponsor_detail.aspx.designer.cs">
+      <DependentUpon>coned_sponsor_detail.aspx</DependentUpon>
+    </Compile>
     <Compile Include="protected\coned_sponsor_overview.aspx.cs">
       <DependentUpon>coned_sponsor_overview.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -571,6 +578,13 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_coned_sponsor.ascx.designer.cs">
       <DependentUpon>UserControl_coned_sponsor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_sponsors.ascx.cs">
+      <DependentUpon>UserControl_coned_sponsors.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_coned_sponsors.ascx.designer.cs">
+      <DependentUpon>UserControl_coned_sponsors.ascx</DependentUpon>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_coned_sponsor_binder.ascx.cs">
       <DependentUpon>UserControl_coned_sponsor_binder.ascx</DependentUpon>
@@ -882,6 +896,7 @@
     <Content Include="protected\administer_service_email_address.aspx" />
     <Content Include="protected\coned_offering_detail.aspx" />
     <Content Include="protected\coned_offering_roster.aspx" />
+    <Content Include="protected\coned_sponsor_detail.aspx" />
     <Content Include="protected\coned_sponsor_overview.aspx" />
     <Content Include="protected\county_detail.aspx" />
     <Content Include="protected\image\delete_x16_h.png" />
@@ -956,6 +971,7 @@
     <Content Include="usercontrol\app\UserControl_coned_offering_document_status.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_offering_status.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_sponsor.ascx" />
+    <Content Include="usercontrol\app\UserControl_coned_sponsors.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_sponsor_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_coned_sponsor_status.ascx" />
     <Content Include="usercontrol\app\UserControl_config_binder.ascx" />
