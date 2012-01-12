@@ -186,7 +186,6 @@ namespace UserControl_coned_sponsor
       {
       if (!p.be_loaded)
         {
-        TableRow_id.Visible = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("education-coordinator")|| HttpContext.Current.User.IsInRole("education-specialist");
         p.biz_coned_sponsor_statuses.BindDirectToListControl(DropDownList_coned_sponsor_status);
         p.biz_counties.BindEmsrsToListControl(DropDownList_county);
         p.biz_regions.BindEmsrsToListControl(DropDownList_region);
