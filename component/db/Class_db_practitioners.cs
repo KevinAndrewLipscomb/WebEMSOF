@@ -167,23 +167,88 @@ namespace Class_db_practitioners
       {
       if (recs.Count > 0)
         {
-        var sb = new StringBuilder("insert ignore practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code) values ");
+        //
+        // The following is the code I really wanted to use, but MySQL implements it in a way that causes the auto_increment id field to advance when the "on duplicate key update" clause gets applied, which should be the
+        // dominant case, and which exhausts id numbers faster than I think is prudent.
+        //
+        //var sb = new StringBuilder("insert practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code) values ");
+        //Open();
+        //foreach (var rec in recs)
+        //  {
+        //  sb.Append
+        //    (
+        //    "("
+        //    + "NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
+        //    + ",'" + (rec as Class_ss_emsams.Practitioner).first_name + "'"
+        //    + ",'" + (rec as Class_ss_emsams.Practitioner).middle_initial + "'"
+        //    + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
+        //    + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
+        //    + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')"
+        //    + "),"
+        //    );
+        //  }
+        //new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + " on duplicate key update be_stale = false",connection).ExecuteNonQuery();
+        //Close();
+        //
+        var built_insert_values_string = new StringBuilder();
+        var built_fresh_ids_string = new StringBuilder();
+        var id_obj = new object();
         Open();
         foreach (var rec in recs)
           {
-          sb.Append
+          id_obj = new MySqlCommand
             (
-            "("
-            + "NULLIF('" + (rec as Class_ss_emsams.Practitioner).last_name + "','')"
-            + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).first_name + "','')"
-            + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).middle_initial + "','')"
-            + ",NULLIF('" + (rec as Class_ss_emsams.Practitioner).certification_number + "','')"
-            + ",NULLIF(IFNULL((select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "'),''),'')"
-            + ",NULLIF(IFNULL((select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "'),''),'')"
-            + "),"
-            );
+            "select id"
+            + " from practitioner"
+            + " where certification_number = '" + (rec as Class_ss_emsams.Practitioner).certification_number + "'"
+            +   " and last_name = '" + (rec as Class_ss_emsams.Practitioner).last_name + "'"
+            +   " and first_name = '" + (rec as Class_ss_emsams.Practitioner).first_name + "'"
+            +   " and middle_initial = '" + (rec as Class_ss_emsams.Practitioner).middle_initial + "'"
+            +   " and level_id = (select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "')"
+            +   " and regional_council_code = (select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "')",
+            connection
+            )
+            .ExecuteScalar();
+          if (id_obj == null)
+            {
+            built_insert_values_string.Append
+              (
+              "("
+              + "'" + (rec as Class_ss_emsams.Practitioner).last_name + "'"
+              + ",'" + (rec as Class_ss_emsams.Practitioner).first_name + "'"
+              + ",'" + (rec as Class_ss_emsams.Practitioner).middle_initial + "'"
+              + ",'" + (rec as Class_ss_emsams.Practitioner).certification_number + "'"
+              + ",(select id from practitioner_level where emsrs_practitioner_level_description = '" + (rec as Class_ss_emsams.Practitioner).level + "')"
+              + ",(select code from region_code_name_map where emsrs_active_practitioners_name = '" + (rec as Class_ss_emsams.Practitioner).regional_council + "')"
+              + "),"
+              );
+            }
+          else
+            {
+            built_fresh_ids_string.Append(id_obj.ToString()).Append(k.COMMA);
+            }
           }
-        new MySqlCommand(sb.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + " on duplicate key update be_stale = false",connection).ExecuteNonQuery();
+        if (built_fresh_ids_string.Length > 0)
+          {
+          new MySqlCommand
+            (
+            "update practitioner"
+            + " set be_stale = false"
+            + " where id in (" + built_fresh_ids_string.ToString().TrimEnd(Convert.ToChar(k.COMMA)) + ")",
+            connection
+            )
+            .ExecuteNonQuery();
+          }
+        if (built_insert_values_string.Length > 0)
+          {
+          new MySqlCommand
+            (
+            "insert practitioner (last_name,first_name,middle_initial,certification_number,level_id,regional_council_code) values "
+            + built_insert_values_string.ToString().TrimEnd(Convert.ToChar(k.COMMA)),
+            connection
+            )
+            .ExecuteNonQuery();
+          }
         Close();
         }
       }
