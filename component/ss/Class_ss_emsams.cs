@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Net;
+using System.Net.Cache;
 using System.Web;
 
 namespace WebEMSOF.component.ss
@@ -26,6 +27,7 @@ namespace WebEMSOF.component.ss
 	      {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/emsportal/");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
         //
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/emsportal/";
@@ -72,6 +74,7 @@ namespace WebEMSOF.component.ss
 	      {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/EMSPortal/ApplicationTransfers/TransferToConEd.aspx");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/EMSPortal/ApplicationList.aspx";
@@ -108,6 +111,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/ClassSearch.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/MainMenu.asp";
@@ -144,6 +148,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/ClassSearch.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/ClassSearch.asp";
@@ -191,6 +196,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/Export/ClassSearch_345.txt");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "text/html, application/xhtml+xml, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/ClassSearch.asp";
@@ -227,6 +233,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/Export/SponsorSearch_345.txt");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/SponsorSearch.asp";
@@ -263,6 +270,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/ListClassNumbers.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "*/*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/ClassSearch.asp";
@@ -299,6 +307,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/ListClassNumbers.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/ListClassNumbers.asp";
@@ -346,6 +355,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/MainMenu.asp?cmdMove=logout");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/MainMenu.asp";
@@ -382,6 +392,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/SponsorSearch.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/MainMenu.asp";
@@ -418,6 +429,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/SponsorSearch.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/SponsorSearch.asp";
@@ -465,6 +477,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/UserSearch.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/MainMenu.asp";
@@ -502,6 +515,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/ConEd/UserSearch.asp");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/ConEd/UserSearch.asp";
@@ -552,6 +566,7 @@ namespace WebEMSOF.component.ss
 	    {
 		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ems.health.state.pa.us/emsreg/ActivePractitioners.aspx");
         request.CookieContainer = cookie_container;
+        request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
 
 		    request.Accept = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, */*";
 		    request.Referer = "https://ems.health.state.pa.us/emsreg/ActivePractitioners.aspx";
