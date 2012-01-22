@@ -79,7 +79,7 @@
                           </Columns>
                           <HeaderStyle backcolor="WhiteSmoke"></HeaderStyle>
                         </asp:DataGrid>
-                        <asp:DataGrid id="DataGrid_lcds" runat="server" autogeneratecolumns="False" onitemdatabound="DataGrid_control_ItemDataBound" enabledviewstate="false" style="display:none">
+                        <asp:DataGrid id="DataGrid_lcds" runat="server" autogeneratecolumns="False" onitemdatabound="DataGrid_lcds_ItemDataBound" enabledviewstate="false" style="display:none">
                           <Columns>
                             <asp:BoundColumn datafield="first_name" headertext="ID" ReadOnly="True"></asp:BoundColumn>
                             <asp:BoundColumn datafield="last_name" headertext="HEADER" ReadOnly="True"></asp:BoundColumn>

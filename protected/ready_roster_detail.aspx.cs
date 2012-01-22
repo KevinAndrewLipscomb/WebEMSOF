@@ -1,6 +1,5 @@
 // Derived from template~protected~nonlanding.aspx.cs~template
 
-using AjaxControlToolkit;
 using Class_biz_coned_offering_rosters;
 using Class_biz_coned_offerings;
 using Class_biz_counties;
@@ -11,7 +10,9 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Drawing;
+using System.IO;
 using System.Web.UI.WebControls;
+using WebEMSOF.WebReference_emsrs;
 
 namespace ready_roster_detail
   {
@@ -24,6 +25,7 @@ namespace ready_roster_detail
     public TClass_biz_practitioners biz_practitioners;
     public string class_id;
     public TClass_msg_protected.ready_roster_detail incoming;
+    public string lcds_content_xml;
     public k.int_nonnegative num_attendees;
     public string sort_order;
     public k.decimal_nonnegative total_class_hours;
@@ -41,6 +43,26 @@ namespace ready_roster_detail
       public const int TCI_DOB = 5;
       public const int TCI_COUNTY = 6;
       public const int TCI_INSTRUCTOR_HOURS = 7;
+      //
+      internal const int TCI_LCDS_ID = 0;
+      internal const int TCI_LCDS_HEADER = 1;
+      internal const int TCI_LCDS_DOB = 2;
+      internal const int TCI_LCDS_VALID = 3;
+      internal const int TCI_LCDS_OLDCERT = 4;
+      internal const int TCI_LCDS_LEVEL1 = 5;
+      internal const int TCI_LCDS_REGION = 6;
+      internal const int TCI_LCDS_COURSE = 7;
+      internal const int TCI_LCDS_OUTOFSTATE = 8;
+      internal const int TCI_LCDS_CLASS = 9;
+      internal const int TCI_LCDS_HOURS = 10;
+      internal const int TCI_LCDS_DATEFINAL = 11;
+      internal const int TCI_LCDS_SSN = 12;
+      internal const int TCI_LCDS_REMED = 13;
+      internal const int TCI_LCDS_COUNTY = 14;
+      internal const int TCI_LCDS_SEND = 15;
+      internal const int TCI_LCDS_SPONSORID = 16;
+      internal const int TCI_LCDS_DATETIMESTAMP = 17;
+      internal const int TCI_LCDS_FORM_TYPE_ID = 18;
       }
 
     private p_type p;
@@ -87,7 +109,7 @@ namespace ready_roster_detail
 
     protected void Button_submit_to_emsrs_Click(object sender, EventArgs e)
       {
-
+      var s = new EMSREGWebServices().ProcessConed("<lcds><table1>" + p.lcds_content_xml + "</table1></lcds>");
       }
 
     protected void DataGrid_control_ItemDataBound(object sender, DataGridItemEventArgs e)
@@ -103,6 +125,36 @@ namespace ready_roster_detail
         // This datagrid's viewstate is entirely disabled.
         //
         p.num_attendees.val++;
+        }
+      }
+
+    protected void DataGrid_lcds_ItemDataBound(object sender, DataGridItemEventArgs e)
+      {
+      if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
+        {
+        p.lcds_content_xml +=
+          "<row>"
+        +   "<SecurityString>2216CC72-55A7-47ED-A693-2343BCEB5BA</SecurityString>"
+        +   "<ID>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_ID].Text + "</ID>"
+        +   "<HEADER>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_HEADER].Text + "</HEADER>"
+        +   "<DOB>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_DOB].Text + "</DOB>"
+        +   "<VALID>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_VALID].Text + "</VALID>"
+        +   "<OLDCERT>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_OLDCERT].Text + "</OLDCERT>"
+        +   "<LEVEL1>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_LEVEL1].Text + "</LEVEL1>"
+        +   "<REGION>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_REGION].Text + "</REGION>"
+        +   "<COURSE>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_COURSE].Text + "</COURSE>"
+        +   "<OUTOFSTATE>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_OUTOFSTATE].Text + "</OUTOFSTATE>"
+        +   "<CLASS>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_CLASS].Text + "</CLASS>"
+        +   "<HOURS>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_HOURS].Text + "</HOURS>"
+        +   "<DATEFINAL>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_DATEFINAL].Text + "</DATEFINAL>"
+        +   "<SSN>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_SSN].Text + "</SSN>"
+        +   "<REMED>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_REMED].Text + "</REMED>"
+        +   "<COUNTY>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_COUNTY].Text + "</COUNTY>"
+        +   "<SEND>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_SEND].Text + "</SEND>"
+        +   "<SPONSORID>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_SPONSORID].Text + "</SPONSORID>"
+        +   "<DATETIMESTAMP>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_DATETIMESTAMP].Text + "</DATETIMESTAMP>"
+        +   "<FORM_TYPE_ID>" + e.Item.Cells[ready_roster_detail_Static.TCI_LCDS_FORM_TYPE_ID].Text + "</FORM_TYPE_ID>"
+        + "</row>";
         }
       }
 
@@ -143,6 +195,7 @@ namespace ready_roster_detail
         //
         p.be_sort_order_ascending = true;
         p.incoming = Message<TClass_msg_protected.ready_roster_detail>(folder_name:"protected",aspx_name:"ready_roster_detail");
+        p.lcds_content_xml = k.EMPTY;
         p.num_attendees = new k.int_nonnegative();
         p.sort_order = "last_name%,first_name,middle_initial,certification_number,birth_date";
         //
