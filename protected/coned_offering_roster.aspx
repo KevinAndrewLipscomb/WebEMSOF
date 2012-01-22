@@ -106,7 +106,7 @@
                                         <asp:BoundColumn datafield="id" Visible="False" ReadOnly="True"></asp:BoundColumn>
                                         <asp:BoundColumn datafield="practitioner_id" Visible="False" ReadOnly="True"></asp:BoundColumn>
                                         <asp:BoundColumn datafield="last_name" headertext="Last name" sortexpression="last_name%,first_name,middle_initial,practitioner_level.pecking_order,certification_number,birth_date desc" ReadOnly="True"></asp:BoundColumn>
-                                        <asp:BoundColumn datafield="first_name" headertext="First_name" sortexpression="first_name%,last_name,middle_initial,practitioner_level.pecking_order,certification_number,birth_date desc" ReadOnly="True"></asp:BoundColumn>
+                                        <asp:BoundColumn datafield="first_name" headertext="First name" sortexpression="first_name%,last_name,middle_initial,practitioner_level.pecking_order,certification_number,birth_date desc" ReadOnly="True"></asp:BoundColumn>
                                         <asp:BoundColumn datafield="middle_initial" ReadOnly="True"></asp:BoundColumn>
                                         <asp:BoundColumn DataField="level" HeaderText="Level" ReadOnly="True" SortExpression="practitioner_level.pecking_order%,last_name,first_name,middle_initial,certification_number,birth_date desc">
                                           <ItemStyle Wrap="False" />
