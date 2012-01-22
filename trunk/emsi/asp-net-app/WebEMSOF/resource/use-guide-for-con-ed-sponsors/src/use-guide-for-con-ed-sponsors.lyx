@@ -1,0 +1,1175 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\date{}
+
+\providecommand{\LyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family sfdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 0
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\headheight 0cm
+\headsep 0.25cm
+\footskip 0.25cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Using the 
+\series bold
+EMSRS Gateway
+\series default
+ features in WebEMSOF
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\size larger
+for Con-Ed Sponsors
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+pagenumbering{roman}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+thispagestyle{empty}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="1" columns="2">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="50line%">
+<column alignment="left" valignment="top" width="50line%">
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Description
+
+\size footnotesize
+Prepared
+\begin_inset space ~
+\end_inset
+
+by 
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+FromPaper2Web.com, Kalips'o Infogistics LLC, 4325 Hudgins Drive, Virginia
+ Beach VA 23455-6512
+\end_layout
+
+\begin_layout Description
+
+\size footnotesize
+Prepared
+\begin_inset space ~
+\end_inset
+
+for 
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The Regional EMS Councils of the Pennsylvania state EMS system
+\end_layout
+
+\begin_layout Description
+
+\size footnotesize
+18
+\begin_inset space ~
+\end_inset
+
+January
+\begin_inset space ~
+\end_inset
+
+2012
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename C:/Documents and Settings/KevinAndrewLipscomb/My Documents/SANDBOX/vocational/kalipso-infogistics/logo/png_transparent/FromPaper2Web.png
+	width 40col%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+WebEMSOF, a web application used since 2006 by stakeholders in the EMSI
+ region to process EMSOF Category IV Provider Equipment grants, now interfaces
+ with the state's EMS Registry System (EMSRS) to support the creation, validatio
+n, and processing of attendance rosters for Continuing Education (Con-Ed)
+ classes.
+ This document describes how Con-Ed Sponsors can use the new interface,
+ known in WebEMSOF as the 
+\series bold
+EMSRS Gateway
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+
+\begin_inset Newpage clearpage
+\end_inset
+
+
+\lang english
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+pagenumbering{arabic}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Subsection
+Motivation for the EMSRS Gateway
+\end_layout
+
+\begin_layout Standard
+The state's existing 
+\begin_inset CommandInset href
+LatexCommand href
+name "EMS Registry System (EMSRS)"
+target "https://ems.health.state.pa.us/emsportal"
+
+\end_inset
+
+ provides online tools to let Continuing Education (Con-Ed) Sponsors get
+ approval to conduct credit-bearing Con-Ed classes, and for stakeholders
+ to review a practitioner's Con-Ed credits, 
+\emph on
+but not to record and submit practitioner attendance records
+\emph default
+.
+ In the past, this gap was filled by error-prone paper-based technology
+ and spreadsheets, or by complex and expensive third-party computer products.
+ WebEMSOF's 
+\series bold
+EMSRS Gateway
+\series default
+ provides a straightforward, efficient, and cost-effective web-based solution
+ instead.
+\end_layout
+
+\begin_layout Subsection
+Interface to the state's EMSRS
+\end_layout
+
+\begin_layout Standard
+WebEMSOF's 
+\series bold
+EMSRS Gateway
+\series default
+ is an adjunct to EMSRS.
+ The 
+\series bold
+EMSRS Gateway
+\series default
+ does not replace any of the functions of EMSRS.
+ EMSRS remains the system of record for tracking Con-Ed Sponsors, classes,
+ practitioners, and Con-Ed credits.
+ EMSRS is the source of all the lists (of Con-Ed Sponsors, classes, and
+ practitioners) that show up in the 
+\series bold
+EMSRS Gateway
+\series default
+.
+ To get approval to conduct a Con-Ed class, or to change the status or attribute
+s of a Con-Ed Sponsor, a class, or a practitioner, you must use 
+\begin_inset CommandInset href
+LatexCommand href
+name "EMSRS"
+target "https://ems.health.state.pa.us/emsportal"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Use WebEMSOF's 
+\series bold
+EMSRS Gateway
+\series default
+ to generate class rosters, and to submit those rosters for credit.
+\end_layout
+
+\begin_layout Subsection
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Staying-in-the-loop"
+
+\end_inset
+
+Staying in the loop
+\end_layout
+
+\begin_layout Standard
+It is critical that a Con-Ed Sponsor's current email address(es) be recorded
+ accurately in the state's existing 
+\begin_inset CommandInset href
+LatexCommand href
+name "EMSRS"
+target "https://ems.health.state.pa.us/emsportal"
+
+\end_inset
+
+.
+ Otherwise, WebEMSOF will be unable to send new passwords or notifications
+ to a Con-Ed Sponsor when appropriate.
+ When a Con-Ed Sponsor's email address changes, be sure to update 
+\begin_inset CommandInset href
+LatexCommand href
+name "EMSRS"
+target "https://ems.health.state.pa.us/emsportal"
+
+\end_inset
+
+.
+ The change will automatically be reflected in WebEMSOF within one calendar
+ day.
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Getting-a-password"
+
+\end_inset
+
+Getting a password
+\end_layout
+
+\begin_layout Standard
+A WebEMSOF account has already been established for each approved or provisional
+ Con-Ed Sponsor.
+ To get a password to your account, do the following:
+\end_layout
+
+\begin_layout Enumerate
+In your web browser, visit 
+\begin_inset CommandInset href
+LatexCommand href
+name "frompaper2web.com/WebEMSOF"
+target "http://frompaper2web.com/WebEMSOF"
+
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You'll see something like this:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename getting-a-password-1.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Set the 
+\emph on
+Regional council:
+\emph default
+ drop-down to your home regional council.
+ (Only councils who subscribe to this service will appear in the list.)
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Set the 
+\emph on
+What kind of WebEMSOF user are you?
+\emph default
+ drop-down to 
+\emph on
+Continuing Education Sponsor
+\emph default
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The 
+\emph on
+User:
+\emph default
+ field will now be labeled 
+\emph on
+Con Ed Sponsor:
+\emph default
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Set the 
+\emph on
+Con Ed Sponsor:
+\emph default
+ drop-down to your official Con-Ed Sponsor name as recorded in EMSRS.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You'll see something like the following.
+ 
+\emph on
+EMSI
+\emph default
+ and 
+\emph on
+Jefferson Regional Medical Center
+\emph default
+ are used as examples:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename getting-a-password-2.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Click the 
+\begin_inset Graphics
+	filename email-new-password-button.png
+
+\end_inset
+
+ button.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+You'll see a page saying that 
+\emph on
+A temporary WebEMSOF password has been sent to 
+\emph default
+{your email address}
+\emph on
+.
+ Please log in again after you receive it.
+ You will receive further instructions at that time.
+\emph default
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+If the wrong email address is shown, refer to section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Staying-in-the-loop"
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+Staying in the loop
+\begin_inset Quotes erd
+\end_inset
+
+) of this document.
+\end_layout
+
+\begin_layout Section
+Logging on
+\end_layout
+
+\begin_layout Standard
+To log into WebEMSOF, follow steps 1-2 of section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Getting-a-password"
+
+\end_inset
+
+ (
+\begin_inset Quotes eld
+\end_inset
+
+Getting a password
+\begin_inset Quotes erd
+\end_inset
+
+), but enter your password in the 
+\emph on
+Password:
+\emph default
+ field, then press 
+\emph on
+Enter
+\emph default
+ or click the 
+\begin_inset Graphics
+	filename login-button.png
+
+\end_inset
+
+ button.
+\end_layout
+
+\begin_layout Standard
+If you use a temporary password, WebEMSOF will prompt you to choose a preferred
+ password.
+ You will use your preferred password for all subsequent logins.
+\end_layout
+
+\begin_layout Standard
+Once you are fully logged in, you'll see the 
+\emph on
+coned_sponsor_overview
+\emph default
+ page, which looks something like the following.
+ 
+\emph on
+Allegheny General Hospital
+\emph default
+ is used as an example.
+ If you have no current classes registered, you will simply see the indication,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+NONE
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename logging-on.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that when you are logged in, an 
+\bar under
+account control line
+\bar default
+ appears near the top left corner of the window.
+ The account control line contains your username and the 
+\emph on
+logout
+\emph default
+ and 
+\emph on
+password
+\emph default
+ links.
+ To log out of WebEMSOF, click 
+\emph on
+logout
+\emph default
+.
+ To change the preferred password to your account, click 
+\emph on
+password
+\emph default
+.
+\end_layout
+
+\begin_layout Standard
+Also note that three tabs are available: 
+\emph on
+My profile
+\emph default
+, 
+\emph on
+Classes
+\emph default
+, and 
+\emph on
+About
+\emph default
+.
+ This document only describes the use of the 
+\emph on
+Classes
+\emph default
+ tab, but feel free to explore the others.
+\end_layout
+
+\begin_layout Section
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Managing-class-rosters"
+
+\end_inset
+
+Managing class rosters
+\end_layout
+
+\begin_layout Standard
+Under the 
+\emph on
+Classes
+\emph default
+ tab, click the 
+\emph on
+Roster
+\emph default
+ link to the right of the class whose roster you wish to manage.
+ You'll see something like this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename managing-class-rosters.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that once you have navigated away from the 
+\emph on
+coned_sponsor_overview
+\emph default
+ page, a 
+\bar under
+breadcrumb trail
+\bar default
+ appears under the account control line.
+ Use the links in the breadcrumb trail to get back to previous pages.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+
+\bar under
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "75text%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
+\bar under
+NOTE
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+Avoid using your browser's 
+\emph on
+Back
+\emph default
+ button to get back to previous WebEMSOF pages.
+ Use the 
+\bar under
+breadcrumb trail
+\bar default
+ instead.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Searching for practitioners
+\end_layout
+
+\begin_layout Standard
+To search for a practitioner to add to a roster, just start typing in the
+ 
+\emph on
+Search>
+\emph default
+ field.
+ Whenever you stop typing for at least one second, WebEMSOF will retrieve
+ and display a list of possible matches, as shown here:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename search-as-you-type.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Adding a practitioner to a roster
+\end_layout
+
+\begin_layout Standard
+Once a class attendee appears on the list below the 
+\emph on
+Search>
+\emph default
+ field, there are two ways to add the attendee to the roster:
+\end_layout
+
+\begin_layout Enumerate
+If multiple practitioners are shown under the 
+\emph on
+Search>
+\emph default
+ field, click the practitioner who you want to add to the roster.
+\end_layout
+
+\begin_layout Enumerate
+If just one practitioner is shown under the 
+\emph on
+Search>
+\emph default
+ field, either click the practitioner 
+\bar under
+or just press Enter
+\bar default
+.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Box Shadowbox
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "75col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
+\bar under
+HINT
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+If you are a decent typist, a very efficient way to add attendees to a roster
+ is to type enough of the attendee's particulars to uniquely identify the
+ attendee, then press Enter, then repeat this process for other attendees.
+ Using this technique, you can minimize the need to use the mouse.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After using either of these methods, the practitioner will appear as a registere
+d attendee, like this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename practitioner-added-to-roster.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When multiple attendees are on a class roster, you can click the heading
+ fields to sort by particular columns.
+ By default, attendees are listed in order of their last names.
+\end_layout
+
+\begin_layout Subsection
+Removing a practitioner from a roster
+\end_layout
+
+\begin_layout Standard
+To remove a practitioner from a roster, click the red X (
+\begin_inset Graphics
+	filename red-x.png
+
+\end_inset
+
+) to the left of the practitoner's name.
+\end_layout
+
+\begin_layout Standard
+You cannot remove a practitioner from a roster after you have clicked the
+ 
+\begin_inset Graphics
+	filename close-class-button.png
+
+\end_inset
+
+ button.
+\end_layout
+
+\begin_layout Subsection
+Editing attendee data
+\end_layout
+
+\begin_layout Standard
+Several attributes are associated with each practitioner, as shown here:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename assorted-practitioners-on-roster.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The following attributes are taken from the state's existing EMSRS
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Practitioner attributes are currently imported from EMSRS into WebEMSOF
+ on a weekly basis.
+\end_layout
+
+\end_inset
+
+, and cannot be edited in WebEMSOF.
+ Changes to these attributes must be made in EMSRS:
+\end_layout
+
+\begin_layout Itemize
+Last name
+\end_layout
+
+\begin_layout Itemize
+First name
+\end_layout
+
+\begin_layout Itemize
+Middle initial
+\end_layout
+
+\begin_layout Itemize
+Level
+\end_layout
+
+\begin_layout Itemize
+Cert#
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+DOB
+\emph default
+ (Date Of Birth) attribute is required for all attendees before a class
+ roster can be closed and submitted for credit.
+ If missing, it must be supplied.
+ You can also correct it if it has been recorded incorrectly, as long as
+ you do so before you click the 
+\begin_inset Graphics
+	filename close-class-button.png
+
+\end_inset
+
+ button.
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+County
+\emph default
+ attribute should be set to the attendee's county of residence.
+ WebEMSOF will default this attribute to the county in which the class is
+ being given, as registered in EMSRS.
+ You can correct it if it has been recorded incorrectly.
+ You can change an attendee's county attribute at any time.
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+Email address
+\emph default
+ attribute is desired, but not required.
+ If supplied correctly, WebEMSOF can email course completion documentation
+ to the attendee after the class has been closed and submitted for credit
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+At the time of this writing, the capability of emailing course completion
+ documentation to attendees is planned, but not yet implemented.
+\end_layout
+
+\end_inset
+
+, and email-based communications between practitioners and the regional
+ council may be facilitated.
+ You can supply or change an attendee's email address at any time.
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+InstrHrs
+\emph default
+ (INSTRuctor HouRS) attribute defaults to 
+\begin_inset Quotes eld
+\end_inset
+
+none
+\begin_inset Quotes erd
+\end_inset
+
+.
+ You should change it if the attendee should receive Instructor Hours credit
+ for the class.
+ This attribute cannot be changed after you have clicked the 
+\begin_inset Graphics
+	filename close-class-button.png
+
+\end_inset
+
+ button.
+\end_layout
+
+\begin_layout Standard
+If data associated with an attendee is missing or incorrect, click the pencil
+ icon (
+\begin_inset Graphics
+	filename pencil-icon.png
+
+\end_inset
+
+) on the right side of the attendee's row.
+ WebEMSOF will put the row in 
+\bar under
+edit mode
+\bar default
+, and you'll see something like this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename editing-attendee-data.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When a row is put into edit mode, the format for missing data is shown in
+ grey type until you put the cursor in the corresponding field.
+ Supply missing data and/or correct erroneous data, then click the 
+\bar under
+save
+\bar default
+ icon (
+\begin_inset Graphics
+	filename save-icon.png
+
+\end_inset
+
+).
+ To take the row out of edit mode without saving any changes, click the
+ 
+\bar under
+cancel
+\bar default
+ icon (
+\begin_inset Graphics
+	filename cancel-icon.png
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Closing a class and submitting for credit
+\end_layout
+
+\begin_layout Standard
+When you are satisfied that a class roster is correct and complete, simply
+ click the
+\end_layout
+
+\begin_layout Quote
+\begin_inset Graphics
+	filename close-class-button.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+button.
+ The regional council will be notified by email that the roster is ready
+ for processing.
+\end_layout
+
+\begin_layout Standard
+Remember to use the 
+\bar under
+breadcrumb trail
+\bar default
+ (see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Managing-class-rosters"
+
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+Managing class rosters
+\begin_inset Quotes erd
+\end_inset
+
+) to get back to the 
+\emph on
+coned_sponsor_overview
+\emph default
+ page.
+\end_layout
+
+\end_body
+\end_document
