@@ -19,7 +19,7 @@ namespace coned_sponsor_overview
                     Session.Clear();
                     DropCrumbAndTransferTo("~/login.aspx");
                 }
-                Title.Text = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - coned_sponsor_overview";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - coned_sponsor_overview";
                 BeginBreadCrumbTrail();
             }
         }

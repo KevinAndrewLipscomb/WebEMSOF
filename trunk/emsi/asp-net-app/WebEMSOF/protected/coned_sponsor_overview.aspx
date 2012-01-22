@@ -6,7 +6,7 @@
 <%@ Register TagPrefix="uc3" TagName="UserControl_coned_sponsor_binder" Src="~/usercontrol/app/UserControl_coned_sponsor_binder.ascx" %>
 <html>
   <head runat="server">
-    <title id="Title" runat="server"></title>
+    <title></title>
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
