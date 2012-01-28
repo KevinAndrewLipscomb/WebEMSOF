@@ -3,6 +3,7 @@
 using Class_biz_notifications;
 using Class_db_coned_offerings;
 using Class_db_coned_offering_statuses;
+using Class_db_practitioners;
 using kix;
 using System;
 using System.Collections;
@@ -14,12 +15,14 @@ namespace Class_biz_coned_offerings
     {
     private TClass_biz_notifications biz_notifications = null;
     private TClass_db_coned_offerings db_coned_offerings = null;
+    private TClass_db_practitioners db_practitioners = null;
     private Class_ss_emsams ss_emsams = null;
 
     public TClass_biz_coned_offerings() : base()
       {
       biz_notifications = new TClass_biz_notifications();
       db_coned_offerings = new TClass_db_coned_offerings();
+      db_practitioners = new TClass_db_practitioners();
       ss_emsams = new Class_ss_emsams();
       }
 
@@ -27,7 +30,9 @@ namespace Class_biz_coned_offerings
       {
       if (db_coned_offerings.StatusOf(summary) == coned_offering_status_enumeration.NEEDS_REGIONAL_PROCESSING)
         {
-        db_coned_offerings.SetStatus(db_coned_offerings.ClassIdOf(summary),coned_offering_status_enumeration.ARCHIVED);
+        var class_id = db_coned_offerings.ClassIdOf(summary);
+        db_practitioners.MarkDobsConfirmed(class_id);
+        db_coned_offerings.SetStatus(class_id,coned_offering_status_enumeration.ARCHIVED);
         }
       }
 

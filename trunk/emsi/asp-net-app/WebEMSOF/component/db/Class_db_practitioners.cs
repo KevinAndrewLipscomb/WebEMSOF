@@ -260,6 +260,24 @@ namespace Class_db_practitioners
       Close();
       }
 
+    internal void MarkDobsConfirmed(string class_id)
+      {
+      Open();
+      new MySqlCommand
+        (
+        db_trail.Saved
+          (
+          "update practitioner"
+          + " join coned_offering_roster on (coned_offering_roster.practitioner_id=practitioner.id)"
+          + " set be_birth_date_confirmed = TRUE"
+          + "  where class_id = '" + class_id + "'"
+          ),
+        connection
+        )
+        .ExecuteNonQuery();
+      Close();
+      }
+
     internal k.int_nonnegative MaxSpecLength
       (
       string region_code,

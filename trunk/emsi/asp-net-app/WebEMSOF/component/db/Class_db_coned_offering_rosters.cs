@@ -84,6 +84,7 @@ namespace Class_db_coned_offering_rosters
         + " , practitioner_level.short_description as level"
         + " , certification_number"
         + " , IFNULL(DATE_FORMAT(birth_date,'%m/%d/%Y'),'REQUIRED') as birth_date"
+        + " , be_birth_date_confirmed"
         + " , IFNULL(practitioner_county_code_name_map.code,coned_offering_county_code_name_map.code) as county_code"
         + " , IFNULL(practitioner_county_code_name_map.name,coned_offering_county_code_name_map.name) as county_name"
         + " , IFNULL(email_address,'DESIRED') as email_address"

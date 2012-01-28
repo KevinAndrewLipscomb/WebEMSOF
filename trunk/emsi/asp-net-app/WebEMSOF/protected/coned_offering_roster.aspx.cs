@@ -43,12 +43,13 @@ namespace coned_offering_roster
       public const int TCI_MIDDLE_INITIAL = 5;
       public const int TCI_LEVEL = 6;
       public const int TCI_CERT_NUM = 7;
-      public const int TCI_DOB = 8;
-      public const int TCI_COUNTY_CODE = 9;
-      public const int TCI_COUNTY_NAME = 10;
-      public const int TCI_EMAIL_ADDRESS = 11;
-      public const int TCI_INSTRUCTOR_HOURS = 12;
-      public const int TCI_EDIT_UPDATE_CANCEL = 13;
+      public const int TCI_BE_DOB_CONFIRMED = 8;
+      public const int TCI_DOB = 9;
+      public const int TCI_COUNTY_CODE = 10;
+      public const int TCI_COUNTY_NAME = 11;
+      public const int TCI_EMAIL_ADDRESS = 12;
+      public const int TCI_INSTRUCTOR_HOURS = 13;
+      public const int TCI_EDIT_UPDATE_CANCEL = 14;
       }
 
     private p_type p;
@@ -268,10 +269,13 @@ namespace coned_offering_roster
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Cancel edit";
           //
-          var text_box_dob = (e.Item.Cells[coned_offering_roster_Static.TCI_DOB].FindControl("TextBox_dob") as TextBox);
-          if (text_box_dob.Text == "REQUIRED")
+          if (e.Item.Cells[coned_offering_roster_Static.TCI_BE_DOB_CONFIRMED].Text == "0")
             {
-            text_box_dob.Text = k.EMPTY;
+            var label_dob = (e.Item.Cells[coned_offering_roster_Static.TCI_DOB].FindControl("Label_dob") as Label);
+            label_dob.Visible = false;
+            var text_box_dob = (e.Item.Cells[coned_offering_roster_Static.TCI_DOB].FindControl("TextBox_dob") as TextBox);
+            text_box_dob.Visible = true;
+            text_box_dob.Text = (label_dob.Text == "REQUIRED" ? k.EMPTY : label_dob.Text);
             text_box_dob.Enabled = p.be_ok_to_edit_roster;
             }
           //
