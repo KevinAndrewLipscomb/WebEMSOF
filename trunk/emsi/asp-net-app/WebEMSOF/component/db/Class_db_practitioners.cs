@@ -270,7 +270,7 @@ namespace Class_db_practitioners
           "update practitioner"
           + " join coned_offering_roster on (coned_offering_roster.practitioner_id=practitioner.id)"
           + " set be_birth_date_confirmed = TRUE"
-          + "  where class_id = '" + class_id + "'"
+          + "  where coned_offering_class_id = '" + class_id + "'"
           ),
         connection
         )

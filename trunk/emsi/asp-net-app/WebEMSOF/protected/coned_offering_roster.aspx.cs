@@ -269,15 +269,12 @@ namespace coned_offering_roster
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Cancel edit";
           //
-          if (e.Item.Cells[coned_offering_roster_Static.TCI_BE_DOB_CONFIRMED].Text == "0")
+          var text_box_dob = (e.Item.Cells[coned_offering_roster_Static.TCI_DOB].FindControl("TextBox_dob") as TextBox);
+          if (text_box_dob.Text == "REQUIRED")
             {
-            var label_dob = (e.Item.Cells[coned_offering_roster_Static.TCI_DOB].FindControl("Label_dob") as Label);
-            label_dob.Visible = false;
-            var text_box_dob = (e.Item.Cells[coned_offering_roster_Static.TCI_DOB].FindControl("TextBox_dob") as TextBox);
-            text_box_dob.Visible = true;
-            text_box_dob.Text = (label_dob.Text == "REQUIRED" ? k.EMPTY : label_dob.Text);
-            text_box_dob.Enabled = p.be_ok_to_edit_roster;
+            text_box_dob.Text = k.EMPTY;
             }
+          text_box_dob.Enabled = p.be_ok_to_edit_roster && (e.Item.Cells[coned_offering_roster_Static.TCI_BE_DOB_CONFIRMED].Text == "0");
           //
           var drop_down_list_county = e.Item.Cells[coned_offering_roster_Static.TCI_COUNTY_NAME].FindControl("DropDownList_county") as DropDownList;
           p.biz_counties.BindDirectToListControl(drop_down_list_county);
