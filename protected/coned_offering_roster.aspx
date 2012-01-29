@@ -139,12 +139,13 @@
                                             <asp:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender_email_address" runat="server" TargetControlID="TextBox_email_address" WatermarkText="user@domain.tld" WatermarkCssClass="textbox_watermark"></asp:TextBoxWatermarkExtender>
                                           </EditItemTemplate>
                                         </asp:TemplateColumn>
+                                        <asp:BoundColumn DataField="be_instructor" ReadOnly="True" Visible="False"></asp:BoundColumn>
                                         <asp:TemplateColumn headertext="InstHrs" sortexpression="instructor_hours%,last_name,first_name,middle_initial,practitioner_level.pecking_order,certification_number,birth_date desc">
                                           <HeaderStyle HorizontalAlign="Center" />
-                                          <ItemTemplate><asp:Label ID="Label_instructor_hours" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.instructor_hours") %>'></asp:Label></ItemTemplate>
+                                          <ItemTemplate><asp:Label ID="Label_instructor_hours" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.instructor_hours") %>' Visible="false"></asp:Label></ItemTemplate>
                                           <ItemStyle HorizontalAlign="Right" Wrap="False" />
                                           <EditItemTemplate>
-                                            <asp:TextBox ID="TextBox_instructor_hours" runat="server" Columns="3" MaxLength="5" Text='<%# DataBinder.Eval(Container, "DataItem.instructor_hours") %>' Enabled="False"></asp:TextBox>
+                                            <asp:TextBox ID="TextBox_instructor_hours" runat="server" Columns="3" MaxLength="5" Text='<%# DataBinder.Eval(Container, "DataItem.instructor_hours") %>' visible="False"></asp:TextBox>
                                             <asp:CustomValidator ID="CustomValidator_instructor_hours" runat="server" ControlToValidate="TextBox_instructor_hours" Display="Dynamic" ErrorMessage='Please enter a valid Instructor hours value that does not exceed the Total class hours value.' Font-Bold="True" onservervalidate="CustomValidator_instructor_hours_ServerValidate">!ERR!</asp:CustomValidator>
                                             <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender_instructor_hours" runat="server" TargetControlID="TextBox_instructor_hours" FilterType="Numbers,Custom" ValidChars="."></asp:FilteredTextBoxExtender>
                                             <asp:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender_instructor_hours" runat="server" TargetControlID="TextBox_instructor_hours" WatermarkText="#.#" WatermarkCssClass="textbox_watermark"></asp:TextBoxWatermarkExtender>

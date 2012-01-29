@@ -93,6 +93,7 @@ namespace Class_db_coned_offering_rosters
         + " , coned_offering.region_council_num as region_emsrs_code"
         + " , coned_offering.course_number as course_number"
         + " , RIGHT(coned_offering.class_number,6) as class"
+        + " , be_instructor"
         + " , IFNULL(instructor_hours*10,0) as lcds_instructor_hours"
         + " , DATE_FORMAT(end_date_time,'%m/%d/%Y') as end_date"
         + " , practitioner_county_code_name_map.emsrs_code as practitioner_county_emsrs_code"
