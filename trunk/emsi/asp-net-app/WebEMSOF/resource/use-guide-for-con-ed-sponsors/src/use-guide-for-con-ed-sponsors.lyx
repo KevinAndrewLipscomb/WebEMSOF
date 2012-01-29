@@ -251,12 +251,9 @@ LatexCommand tableofcontents
 \end_inset
 
 
-
 \begin_inset Newpage clearpage
 \end_inset
 
-
-\lang english
 
 \begin_inset ERT
 status open
@@ -996,14 +993,6 @@ DOB
  (Date Of Birth) attribute is required for all attendees before a class
  roster can be closed and submitted for credit.
  If missing, it must be supplied.
- You can also correct it if it has been recorded incorrectly, as long as
- you do so before you click the 
-\begin_inset Graphics
-	filename close-class-button.png
-
-\end_inset
-
- button.
 \end_layout
 
 \begin_layout Standard
