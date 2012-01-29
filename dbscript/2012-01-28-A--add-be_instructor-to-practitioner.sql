@@ -1,0 +1,6 @@
+START TRANSACTION
+;
+ALTER TABLE `practitioner`
+  ADD COLUMN `be_instructor` TINYINT(1) NOT NULL DEFAULT '0'
+;
+COMMIT
