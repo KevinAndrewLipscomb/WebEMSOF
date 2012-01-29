@@ -48,8 +48,9 @@ namespace coned_offering_roster
       public const int TCI_COUNTY_CODE = 10;
       public const int TCI_COUNTY_NAME = 11;
       public const int TCI_EMAIL_ADDRESS = 12;
-      public const int TCI_INSTRUCTOR_HOURS = 13;
-      public const int TCI_EDIT_UPDATE_CANCEL = 14;
+      public const int TCI_BE_INSTRUCTOR = 13;
+      public const int TCI_INSTRUCTOR_HOURS = 14;
+      public const int TCI_EDIT_UPDATE_CANCEL = 15;
       }
 
     private p_type p;
@@ -229,8 +230,8 @@ namespace coned_offering_roster
         link_button.Text = k.ExpandTildePath(link_button.Text);
         link_button.ToolTip = "Delete";
         //
-        var comment_edit_update_cancel_controls = e.Item.Cells[coned_offering_roster_Static.TCI_EDIT_UPDATE_CANCEL].Controls;
-        if (comment_edit_update_cancel_controls.Count == 1)
+        var edit_update_cancel_controls = e.Item.Cells[coned_offering_roster_Static.TCI_EDIT_UPDATE_CANCEL].Controls;
+        if (edit_update_cancel_controls.Count == 1)
           {
           var label_dob = (e.Item.Cells[coned_offering_roster_Static.TCI_DOB].FindControl("Label_dob") as Label);
           if (label_dob.Text == "REQUIRED")
@@ -249,23 +250,27 @@ namespace coned_offering_roster
             label_email_address.ForeColor = Color.DarkOrange;
             }
           //
-          var label_instructor_hours = (e.Item.Cells[coned_offering_roster_Static.TCI_INSTRUCTOR_HOURS].FindControl("Label_instructor_hours") as Label);
-          if (label_instructor_hours.Text == "none")
+          if (e.Item.Cells[coned_offering_roster_Static.TCI_BE_INSTRUCTOR].Text == "1")
             {
-            label_instructor_hours.ForeColor = Color.LightGray;
+            var label_instructor_hours = (e.Item.Cells[coned_offering_roster_Static.TCI_INSTRUCTOR_HOURS].FindControl("Label_instructor_hours") as Label);
+            label_instructor_hours.Visible = true;
+            if (label_instructor_hours.Text == "none")
+              {
+              label_instructor_hours.ForeColor = Color.LightGray;
+              }
             }
           //
-          link_button = (comment_edit_update_cancel_controls[0] as LinkButton);
+          link_button = (edit_update_cancel_controls[0] as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Edit";
           }
         else
           {
-          link_button = (comment_edit_update_cancel_controls[0] as LinkButton);
+          link_button = (edit_update_cancel_controls[0] as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Save edit";
           // Skip comment_edit_update_cancel_controls[1].  It's a literal spacer.
-          link_button = (comment_edit_update_cancel_controls[2] as LinkButton);
+          link_button = (edit_update_cancel_controls[2] as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Cancel edit";
           //
@@ -286,15 +291,16 @@ namespace coned_offering_roster
             text_box_email_address.Text = k.EMPTY;
             }
           //
-          var text_box_instructor_hours = (e.Item.Cells[coned_offering_roster_Static.TCI_INSTRUCTOR_HOURS].FindControl("TextBox_instructor_hours") as TextBox);
-          if (text_box_instructor_hours.Text == "none")
+          if (e.Item.Cells[coned_offering_roster_Static.TCI_BE_INSTRUCTOR].Text == "1")
             {
-            text_box_instructor_hours.Text = k.EMPTY;
+            var text_box_instructor_hours = (e.Item.Cells[coned_offering_roster_Static.TCI_INSTRUCTOR_HOURS].FindControl("TextBox_instructor_hours") as TextBox);
+            text_box_instructor_hours.Visible = true;
+            if (text_box_instructor_hours.Text == "none")
+              {
+              text_box_instructor_hours.Text = k.EMPTY;
+              }
+            text_box_instructor_hours.Enabled = p.be_ok_to_edit_roster;
             }
-          text_box_instructor_hours.Enabled = p.be_ok_to_edit_roster;
-          //
-          //((e.Item.Cells[coned_offering_roster_Static.TCI_COMMENT].Controls[0]) as TextBox).Attributes.Add
-          //  ("onkeydown","if (event.keyCode == 13) El('" + e.Item.Cells[coned_offering_roster_Static.TCI_COMMENT_EDIT_UPDATE_CANCEL].Controls[0].ClientID + "').click();");
           }
         //--
         // DON'T disable viewstate here since thes server needs it to repopulate bound controls when an update is made to an UpdatePanel other than the one that isolates the DataGrid_control.
