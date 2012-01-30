@@ -120,11 +120,30 @@
     </td>
   </tr>
   <tr>
+    <td><font class="">Residence&nbsp;county&nbsp;code:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_residence_county_code" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <ASP:RegularExpressionValidator id="RegularExpressionValidator_residence_county_code" runat="server" errormessage="Please enter a valid Residence&nbsp;county&nbsp;code." font-bold="True" controltovalidate="TextBox_residence_county_code" validationexpression="\d*">!ERR!</ASP:RegularExpressionValidator>
+    </td>
+  </tr>
+  <tr>
     <td><font class="">Birth&nbsp;date:</font></td>
     <td>
       <font class="">
         <uc1:UserControl_drop_down_date id="UserControl_drop_down_date_birth_date" runat="server"  cssclass=""></uc1:UserControl_drop_down_date>
       </font>
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Be&nbsp;birth&nbsp;date&nbsp;confirmed:</font></td>
+    <td>
+      <asp:CheckBox ID="CheckBox_be_birth_date_confirmed" runat="server" />
     </td>
     <td nowrap="nowrap">
     </td>
@@ -142,7 +161,48 @@
     </td>
   </tr>
   <tr>
-    <td><font class="">Be stale:</font></td>
+    <td><font class="">Street&nbsp;address&nbsp;1:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_street_address_1" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <asp:RegularExpressionValidator id="RegularExpressionValidator_street_address_1" runat="server" errormessage="Please enter a valid Street address 1." font-bold="True" controltovalidate="TextBox_street_address_1" validationexpression="[0-9a-zA-Z#\-,(). ]+">!ERR!</asp:RegularExpressionValidator>
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Street&nbsp;address&nbsp;2:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_street_address_2" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <asp:RegularExpressionValidator id="RegularExpressionValidator_street_address_2" runat="server" errormessage="Please enter a valid Street address 2." font-bold="True" controltovalidate="TextBox_street_address_2" validationexpression="[0-9a-zA-Z#\-,(). ]+">!ERR!</asp:RegularExpressionValidator>
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">City&nbsp;state&nbsp;zip:</font></td>
+    <td>
+      <font class="">
+        <ASP:TextBox id="TextBox_city_state_zip" runat="server"  cssclass="" enabled="False"></ASP:TextBox>
+      </font>
+    </td>
+    <td nowrap="nowrap">
+      <asp:RegularExpressionValidator id="RegularExpressionValidator_city_state_zip" runat="server" errormessage="Please enter a valid City state zip." font-bold="True" controltovalidate="TextBox_city_state_zip" validationexpression="[a-zA-Z\-. ]+">!ERR!</asp:RegularExpressionValidator>
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Be&nbsp;instructor:</font></td>
+    <td>
+      <asp:CheckBox ID="CheckBox_be_instructor" runat="server" />
+    </td>
+    <td nowrap="nowrap">
+    </td>
+  </tr>
+  <tr>
+    <td><font class="">Be&nbsp;stale:</font></td>
     <td>
       <asp:CheckBox ID="CheckBox_be_stale" runat="server" />
     </td>
