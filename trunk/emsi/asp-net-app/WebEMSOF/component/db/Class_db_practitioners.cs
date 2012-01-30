@@ -129,7 +129,13 @@ namespace Class_db_practitioners
       out string regional_council_code,
       out DateTime birth_date,
       out string email_address,
-      out bool be_stale
+      out bool be_stale,
+      out string residence_county_code,
+      out bool be_birth_date_confirmed,
+      out string street_address_1,
+      out string street_address_2,
+      out string city_state_zip,
+      out bool be_instructor
       )
       {
       last_name = k.EMPTY;
@@ -141,10 +147,16 @@ namespace Class_db_practitioners
       birth_date = DateTime.MinValue;
       email_address = k.EMPTY;
       be_stale = true;
+      residence_county_code = k.EMPTY;
+      be_birth_date_confirmed = true;
+      street_address_1 = k.EMPTY;
+      street_address_2 = k.EMPTY;
+      city_state_zip = k.EMPTY;
+      be_instructor = false;
       var result = false;
       //
       Open();
-      var dr = new MySqlCommand("select * from practitioner where CAST(id AS CHAR) = \"" + id + "\"", connection).ExecuteReader();
+      var dr = new MySqlCommand("select * from practitioner where CAST(id AS CHAR) = '" + id + "'", connection).ExecuteReader();
       if (dr.Read())
         {
         last_name = dr["last_name"].ToString();
@@ -156,6 +168,12 @@ namespace Class_db_practitioners
         birth_date = DateTime.Parse(dr["birth_date"].ToString());
         email_address = dr["birth_date"].ToString();
         be_stale = (dr["be_stale"].ToString() == "1");
+        residence_county_code = dr["residence_county_code"].ToString();
+        be_birth_date_confirmed = (dr["be_birth_date_confirmed"].ToString() == "1");
+        street_address_1 = dr["street_address_1"].ToString();
+        street_address_2 = dr["street_address_2"].ToString();
+        city_state_zip = dr["city_state_zip"].ToString();
+        be_instructor = (dr["be_instructor"].ToString() == "1");
         result = true;
         }
       dr.Close();
@@ -319,7 +337,13 @@ namespace Class_db_practitioners
       string regional_council_code,
       DateTime birth_date,
       string email_address,
-      bool be_stale
+      bool be_stale,
+      string residence_county_code,
+      bool be_birth_date_confirmed,
+      string street_address_1,
+      string street_address_2,
+      string city_state_zip,
+      bool be_instructor
       )
       {
       var childless_field_assignments_clause = k.EMPTY
@@ -332,6 +356,12 @@ namespace Class_db_practitioners
       + " , birth_date = '" + birth_date.ToString("yyyy-MM-dd") + "'"
       + " , email_address = NULLIF('" + email_address + "','')"
       + " , be_stale = " + be_stale.ToString()
+      + " , residence_county_code = NULLIF('" + residence_county_code + "','')"
+      + " , be_birth_date_confirmed = " + be_birth_date_confirmed.ToString()
+      + " , street_address_1 = NULLIF('" + street_address_1 + "','')"
+      + " , street_address_2 = NULLIF('" + street_address_2 + "','')"
+      + " , city_state_zip = NULLIF('" + city_state_zip + "','')"
+      + " , be_instructor = " + be_instructor.ToString()
       + k.EMPTY;
       Open();
       new MySqlCommand

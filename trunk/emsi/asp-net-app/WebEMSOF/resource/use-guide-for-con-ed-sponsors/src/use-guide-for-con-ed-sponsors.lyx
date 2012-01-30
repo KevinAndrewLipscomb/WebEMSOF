@@ -1035,7 +1035,8 @@ The
 \emph on
 InstrHrs
 \emph default
- (INSTRuctor HouRS) attribute defaults to 
+ (INSTRuctor HouRS) attribute is only enabled for certified EMS Instructors,
+ and defaults to 
 \begin_inset Quotes eld
 \end_inset
 

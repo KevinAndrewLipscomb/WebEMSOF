@@ -55,7 +55,13 @@ namespace Class_biz_practitioners
       out string regional_council_code,
       out DateTime birth_date,
       out string email_address,
-      out bool be_stale
+      out bool be_stale,
+      out string residence_county_code,
+      out bool be_birth_date_confirmed,
+      out string street_address_1,
+      out string street_address_2,
+      out string city_state_zip,
+      out bool be_instructor
       )
       {
       return db_practitioners.Get
@@ -69,7 +75,13 @@ namespace Class_biz_practitioners
         out regional_council_code,
         out birth_date,
         out email_address,
-        out be_stale
+        out be_stale,
+        out residence_county_code,
+        out be_birth_date_confirmed,
+        out street_address_1,
+        out street_address_2,
+        out city_state_zip,
+        out be_instructor
         );
       }
 
@@ -110,7 +122,13 @@ namespace Class_biz_practitioners
       string regional_council_code,
       DateTime birth_date,
       string email_address,
-      bool be_stale
+      bool be_stale,
+      string residence_county_code,
+      bool be_birth_date_confirmed,
+      string street_address_1,
+      string street_address_2,
+      string city_state_zip,
+      bool be_instructor
       )
       {
       db_practitioners.Set
@@ -124,7 +142,13 @@ namespace Class_biz_practitioners
         regional_council_code,
         birth_date,
         email_address,
-        be_stale
+        be_stale,
+        residence_county_code,
+        be_birth_date_confirmed,
+        street_address_1,
+        street_address_2,
+        city_state_zip,
+        be_instructor
         );
       }
 

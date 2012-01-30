@@ -29,6 +29,12 @@ namespace UserControl_practitioner
       UserControl_drop_down_date_birth_date.Clear();
       TextBox_email_address.Text = k.EMPTY;
       CheckBox_be_stale.Checked = false;
+      TextBox_residence_county_code.Text = k.EMPTY;
+      CheckBox_be_birth_date_confirmed.Checked = false;
+      TextBox_street_address_1.Text = k.EMPTY;
+      TextBox_street_address_2.Text = k.EMPTY;
+      TextBox_city_state_zip.Text = k.EMPTY;
+      CheckBox_be_instructor.Checked = false;
       Literal_match_index.Text = k.EMPTY;
       Literal_num_matches.Text = k.EMPTY;
       Panel_match_numbers.Visible = false;
@@ -154,6 +160,12 @@ namespace UserControl_practitioner
       DateTime birth_date;
       string email_address;
       bool be_stale;
+      string residence_county_code;
+      bool be_birth_date_confirmed;
+      string street_address_1;
+      string street_address_2;
+      string city_state_zip;
+      bool be_instructor;
       result = false;
       if
         (
@@ -168,7 +180,13 @@ namespace UserControl_practitioner
           out regional_council_code,
           out birth_date,
           out email_address,
-          out be_stale
+          out be_stale,
+          out residence_county_code,
+          out be_birth_date_confirmed,
+          out street_address_1,
+          out street_address_2,
+          out city_state_zip,
+          out be_instructor
           )
         )
         {
@@ -183,6 +201,12 @@ namespace UserControl_practitioner
         UserControl_drop_down_date_birth_date.selectedvalue = birth_date;
         TextBox_email_address.Text = email_address;
         CheckBox_be_stale.Checked = be_stale;
+        TextBox_residence_county_code.Text = residence_county_code;
+        CheckBox_be_birth_date_confirmed.Checked = be_birth_date_confirmed;
+        TextBox_street_address_1.Text = street_address_1;
+        TextBox_street_address_2.Text = street_address_2;
+        TextBox_city_state_zip.Text = city_state_zip;
+        CheckBox_be_instructor.Checked = be_instructor;
         Button_lookup.Enabled = false;
         Label_lookup_arrow.Enabled = false;
         Label_lookup_hint.Enabled = false;
@@ -278,7 +302,13 @@ namespace UserControl_practitioner
           k.Safe(TextBox_regional_council_code.Text,k.safe_hint_type.NUM).Trim(),
           UserControl_drop_down_date_birth_date.selectedvalue,
           k.Safe(TextBox_email_address.Text,k.safe_hint_type.EMAIL_ADDRESS),
-          CheckBox_be_stale.Checked
+          CheckBox_be_stale.Checked,
+          k.Safe(TextBox_residence_county_code.Text,k.safe_hint_type.EMAIL_ADDRESS),
+          CheckBox_be_birth_date_confirmed.Checked,
+          k.Safe(TextBox_street_address_1.Text,k.safe_hint_type.POSTAL_STREET_ADDRESS),
+          k.Safe(TextBox_street_address_2.Text,k.safe_hint_type.POSTAL_STREET_ADDRESS),
+          k.Safe(TextBox_city_state_zip.Text,k.safe_hint_type.POSTAL_CITY),
+          CheckBox_be_instructor.Checked
           );
         Alert(k.alert_cause_type.USER, k.alert_state_type.SUCCESS, "recsaved", "Record saved.", true);
         SetLookupMode();
@@ -351,6 +381,12 @@ namespace UserControl_practitioner
       UserControl_drop_down_date_birth_date.enabled = ablement;
       TextBox_email_address.Enabled = ablement;
       CheckBox_be_stale.Enabled = ablement;
+      TextBox_residence_county_code.Enabled = ablement;
+      CheckBox_be_birth_date_confirmed.Enabled = ablement;
+      TextBox_street_address_1.Enabled = ablement;
+      TextBox_street_address_2.Enabled = ablement;
+      TextBox_city_state_zip.Enabled = ablement;
+      CheckBox_be_instructor.Enabled = ablement;
       }
 
     protected void Button_lookup_Click(object sender, System.EventArgs e)

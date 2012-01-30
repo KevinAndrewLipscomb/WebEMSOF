@@ -274,6 +274,24 @@ namespace UserControl_practitioner {
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_regional_council_code;
         
         /// <summary>
+        /// TextBox_residence_county_code control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_residence_county_code;
+        
+        /// <summary>
+        /// RegularExpressionValidator_residence_county_code control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_residence_county_code;
+        
+        /// <summary>
         /// UserControl_drop_down_date_birth_date control.
         /// </summary>
         /// <remarks>
@@ -281,6 +299,15 @@ namespace UserControl_practitioner {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::UserControl_drop_down_date.TWebUserControl_drop_down_date UserControl_drop_down_date_birth_date;
+        
+        /// <summary>
+        /// CheckBox_be_birth_date_confirmed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBox_be_birth_date_confirmed;
         
         /// <summary>
         /// TextBox_email_address control.
@@ -308,6 +335,69 @@ namespace UserControl_practitioner {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CustomValidator CustomValidator_email_address;
+        
+        /// <summary>
+        /// TextBox_street_address_1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_street_address_1;
+        
+        /// <summary>
+        /// RegularExpressionValidator_street_address_1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_street_address_1;
+        
+        /// <summary>
+        /// TextBox_street_address_2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_street_address_2;
+        
+        /// <summary>
+        /// RegularExpressionValidator_street_address_2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_street_address_2;
+        
+        /// <summary>
+        /// TextBox_city_state_zip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_city_state_zip;
+        
+        /// <summary>
+        /// RegularExpressionValidator_city_state_zip control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator_city_state_zip;
+        
+        /// <summary>
+        /// CheckBox_be_instructor control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox CheckBox_be_instructor;
         
         /// <summary>
         /// CheckBox_be_stale control.
