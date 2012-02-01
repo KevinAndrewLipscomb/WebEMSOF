@@ -14,7 +14,6 @@
   <body bgcolor="white">
     <form runat="server">
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
-      <h3 style="text-align: center">--&nbsp;EMSRS&nbsp;Gateway&nbsp;--</h3>
       <uc3:UserControl_coned_sponsor_binder id="UserControl_coned_sponsor_binder_control" runat="server"></uc3:UserControl_coned_sponsor_binder>
       <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
       <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>
