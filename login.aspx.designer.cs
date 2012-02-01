@@ -67,15 +67,6 @@ namespace login {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_region;
         
         /// <summary>
-        /// Label_application_name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label_application_name;
-        
-        /// <summary>
         /// DropDownList_user_kind control.
         /// </summary>
         /// <remarks>

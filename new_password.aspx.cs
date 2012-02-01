@@ -40,14 +40,13 @@ namespace new_password
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - new_password";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - new_password";
                 biz_accounts = new TClass_biz_accounts();
                 Label_user_name.Text = Session[Session["target_user_table"].ToString() + "_name"].ToString();
                 if (Session["target_user_table"].ToString() == "county")
                 {
                     Label_user_name.Text = Label_user_name.Text + " County";
                 }
-                Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 // Build a suitably-random password string.
                 temporary_password = System.Guid.NewGuid().ToString().Substring(0, 8);
                 // Make the password string the service's new temporary password, and set the stale flag to force an immediate password change.
