@@ -40,13 +40,13 @@ namespace UserControl_coned_sponsor_binder {
         protected global::AjaxControlToolkit.TabPanel TabPanel_my_profile;
         
         /// <summary>
-        /// TabPanel_current_class control.
+        /// TabPanel_classes control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.TabPanel TabPanel_current_class;
+        protected global::AjaxControlToolkit.TabPanel TabPanel_classes;
         
         /// <summary>
         /// TabPanel_about control.
