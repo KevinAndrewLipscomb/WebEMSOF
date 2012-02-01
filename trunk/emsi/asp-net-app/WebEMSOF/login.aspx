@@ -33,9 +33,6 @@
 					  </tr>
 					  <tr>
 						<td>
-    <table>
-      <tr>
-        <td>
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
 			    <table cellspacing="0" cellpadding="5">
@@ -110,24 +107,6 @@
 			    </table>
   </ContentTemplate>
 </asp:UpdatePanel>
-        </td>
-        <td>
-          <table cellpadding="20" cellspacing="0">
-            <tr>
-              <td align="center" valign="middle">
-                Home of the<br />
-                <br />
-                <strong><span style="font-size: larger">Cat4PE Process</span></strong><br />                
-                <br />
-                and the<br />
-                <br />
-                <strong><span style="font-size: larger">EMSRS Gateway</span></strong>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
 						</td>
 					  </tr>
 				  </table>
