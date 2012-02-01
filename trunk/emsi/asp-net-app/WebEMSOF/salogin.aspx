@@ -47,8 +47,7 @@
 				  </td>
 				</tr>
 				<tr>
-				  <td>Mimic what kind of
-							  <ASP:Label id="Label_application_name" runat="server"></ASP:Label>&nbsp;user?</td>
+				  <td align="right">Mimic what kind of user?</td>
 				  <td>
 									  <ASP:DropDownList id="DropDownList_user_kind" runat="server" autopostback="True" onselectedindexchanged="DropDownList_user_kind_SelectedIndexChanged">
 								<ASP:ListItem value="0">-- Select --</ASP:ListItem>

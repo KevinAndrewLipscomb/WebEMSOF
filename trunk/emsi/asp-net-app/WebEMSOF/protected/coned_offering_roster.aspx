@@ -15,6 +15,7 @@
   <body id="Body_control" runat="server" bgcolor="white">
     <form runat="server" defaultfocus="TextBox_practitioner">
       <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
+      <h3 style="text-align: center">--&nbsp;EMSRS&nbsp;Gateway&nbsp;--</h3>
         <table cellpadding="0" cellspacing="0">
           <tr>
             <td>
