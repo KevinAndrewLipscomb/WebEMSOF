@@ -12,10 +12,9 @@
             <cc1:TabPanel runat="server" headertext="About" id="TabPanel_about"></cc1:TabPanel>
           </cc1:TabContainer>
         </td>
-        <td><b>--&nbsp;EMSRS&nbsp;Gateway&nbsp;--</b></td>
       </tr>
       <tr>
-        <td colspan="2" style="PADDING:8px; BORDER-BOTTOM:thin solid silver; BORDER-LEFT:thin solid silver; BORDER-RIGHT:thin solid silver;">
+        <td style="PADDING:8px; BORDER-BOTTOM:thin solid silver; BORDER-LEFT:thin solid silver; BORDER-RIGHT:thin solid silver;">
           <ASP:PlaceHolder id="PlaceHolder_content" runat="server"></ASP:PlaceHolder>
         </td>
       </tr>
