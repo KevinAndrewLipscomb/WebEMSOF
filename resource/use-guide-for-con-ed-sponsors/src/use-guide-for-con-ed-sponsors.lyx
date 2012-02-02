@@ -82,9 +82,9 @@
 \begin_body
 
 \begin_layout Title
-Using the 
+Using 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
 
 \begin_inset Newline newline
@@ -223,20 +223,20 @@ February
 \end_layout
 
 \begin_layout Abstract
-The 
+
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  is an interface to the state's existing EMS Registry System (EMSRS).
- The 
+ 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  supports the creation, validation, and processing of attendance rosters
  for Continuing Education (Con-Ed) classes.
- This document describes how Con-Ed Sponsors can use the 
+ This document describes how Con-Ed Sponsors can use 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
 .
 \end_layout
@@ -280,7 +280,7 @@ Introduction
 \end_layout
 
 \begin_layout Subsection
-Motivation for the EMSRS Gateway
+Motivation for WebEMSOF Con-Ed
 \end_layout
 
 \begin_layout Standard
@@ -301,9 +301,9 @@ but not to record and submit practitioner attendance records
 .
  In the past, this gap was filled by error-prone paper-based technology
  and spreadsheets, or by complex and expensive third-party computer products.
- The 
+ 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  provides a straightforward, efficient, and cost-effective web-based solution
  instead.
@@ -314,22 +314,22 @@ Interface to the state's EMSRS
 \end_layout
 
 \begin_layout Standard
-The 
+
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  is an adjunct to EMSRS.
- The 
+ 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  does not replace any of the functions of EMSRS.
  EMSRS remains the system of record for tracking Con-Ed Sponsors, classes,
  practitioners, and Con-Ed credits.
  EMSRS is the source of all the lists (of Con-Ed Sponsors, classes, and
- practitioners) that show up in the 
+ practitioners) that show up in 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
 .
  To get approval to conduct a Con-Ed class, or to change the status or attribute
@@ -345,9 +345,9 @@ target "https://ems.health.state.pa.us/emsportal"
 \end_layout
 
 \begin_layout Standard
-Use the 
+Use 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  to generate class rosters, and to submit those rosters for credit.
 \end_layout
@@ -373,9 +373,9 @@ target "https://ems.health.state.pa.us/emsportal"
 \end_inset
 
 .
- Otherwise, the 
+ Otherwise, 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  will be unable to send new passwords or notifications to a Con-Ed Sponsor
  when appropriate.
@@ -388,9 +388,9 @@ target "https://ems.health.state.pa.us/emsportal"
 \end_inset
 
 .
- The change will automatically be reflected in the 
+ The change will automatically be reflected in 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  within one calendar day.
 \end_layout
@@ -406,9 +406,9 @@ Getting a password
 \end_layout
 
 \begin_layout Standard
-An 
+A 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  account has already been established for each approved or provisional Con-Ed
  Sponsor.
@@ -459,29 +459,21 @@ NOTE
 \begin_layout Plain Layout
 \noindent
 \align center
-The 
+
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  is built upon the successful WebEMSOF application that has powered the
  Category IV Provider Equipment (Cat4PE) grant process for the EMSI region
  since 2006.
  The various features of the application are partitioned according to how
  a user logs in.
- A user logging in as a Con-Ed Sponsor will only see the 
-\series bold
-EMSRS Gateway
-\series default
- features.
+ A user logging in as a Con-Ed Sponsor will only see Con-Ed features.
  Users logging in as a Service or a County Coordinator will only see the
  Cat4PE features.
  If you have dual responsibilities (that is, if you are both a Con-Ed Sponsor
  and either a Service or a County Coordinator), you must log in as a Con-Ed
- Sponsor to see the 
-\series bold
-EMSRS Gateway
-\series default
- features.
+ Sponsor to see the Con-Ed features.
 \end_layout
 
 \end_inset
@@ -655,9 +647,9 @@ Logging on
 \end_layout
 
 \begin_layout Standard
-To log into the 
+To log into 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
 , follow steps 1-2 of section 
 \begin_inset CommandInset ref
@@ -692,9 +684,9 @@ Enter
 \end_layout
 
 \begin_layout Standard
-If you use a temporary password, the 
+If you use a temporary password, 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  will prompt you to choose a preferred password.
  You will use your preferred password for all subsequent logins.
@@ -752,9 +744,9 @@ logout
 password
 \emph default
  links.
- To log out of the 
+ To log out of 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
 , click 
 \emph on
@@ -870,7 +862,7 @@ Back
 \emph default
  button to get back to previous 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  pages.
  Use the 
@@ -896,9 +888,9 @@ To search for a practitioner to add to a roster, just start typing in the
 Search>
 \emph default
  field.
- Whenever you stop typing for at least one second, the 
+ Whenever you stop typing for at least one second, 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  will retrieve and display a list of possible matches, as shown here:
 \end_layout
@@ -1059,9 +1051,9 @@ Practitioner attributes are currently imported from EMSRS into WebEMSOF
 
 \end_inset
 
-, and cannot be edited in the 
+, and cannot be edited in 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
 .
  Changes to these attributes must be made in EMSRS:
@@ -1103,9 +1095,9 @@ The
 County
 \emph default
  attribute should be set to the attendee's county of residence.
- The 
+ 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  will default this attribute to the county in which the class is being given,
  as registered in EMSRS.
@@ -1119,9 +1111,9 @@ The
 Email address
 \emph default
  attribute is desired, but not required.
- If supplied correctly, the 
+ If supplied correctly, 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  can email course completion documentation to the attendee after the class
  has been closed and submitted for credit
@@ -1175,9 +1167,9 @@ If data associated with an attendee is missing or incorrect, click the pencil
 \end_inset
 
 ) on the right side of the attendee's row.
- The 
+ 
 \series bold
-EMSRS Gateway
+WebEMSOF Con-Ed
 \series default
  will put the row in 
 \bar under
