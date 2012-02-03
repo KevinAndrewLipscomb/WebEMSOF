@@ -94,9 +94,13 @@ namespace Class_db_accounts
           ((target) as ListControl).Items.Add(new ListItem("-- Select --", "0"));
           var dr = new MySqlCommand
             (
-            "SELECT id,last_name,first_name"
+            "SELECT distinct regional_staffer_user.id,last_name,first_name"
             + " FROM regional_staffer_user JOIN regional_staffer using (id)"
-            + " WHERE region_code = '" + region_code + "' and be_active"
+            +   " join regional_staffer_role on (regional_staffer_role.user_id=regional_staffer_user.id)"
+            +   " join regional_staffer_group on (regional_staffer_group.id=regional_staffer_role.group_id)"
+            + " WHERE region_code = '" + region_code + "'"
+            +   " and be_active"
+            +   " and regional_staffer_group.name in ('director','emsof-coordinator','emsof-planner','emsof-accountant')"
             + " ORDER BY last_name,first_name",
             connection
             )

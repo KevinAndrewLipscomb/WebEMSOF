@@ -22,15 +22,5 @@ namespace WebEMSOF.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx")]
-        public string WebEMSOF_WebReference_emsrs_EMSREGWebServices {
-            get {
-                return ((string)(this["WebEMSOF_WebReference_emsrs_EMSREGWebServices"]));
-            }
-        }
     }
 }
