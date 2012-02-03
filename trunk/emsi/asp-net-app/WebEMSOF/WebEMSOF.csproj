@@ -85,12 +85,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="component\biz\Class_biz_coned_offerings.cs" />
-    <Compile Include="component\biz\Class_biz_coned_offering_class_final_statuses.cs" />
-    <Compile Include="component\biz\Class_biz_coned_offering_document_statuses.cs" />
-    <Compile Include="component\biz\Class_biz_coned_offering_rosters.cs" />
-    <Compile Include="component\biz\Class_biz_coned_offering_statuses.cs" />
-    <Compile Include="component\biz\Class_biz_coned_sponsor_statuses.cs" />
     <Compile Include="component\biz\Class_biz_emsof_extra_service_county_dependencies.cs" />
     <Compile Include="component\biz\Class_biz_accounts.cs" />
     <Compile Include="component\biz\Class_biz_appropriations.cs" />
@@ -111,21 +105,11 @@
     <Compile Include="component\biz\Class_biz_regions.cs" />
     <Compile Include="component\biz\Class_biz_scheduled_tasks.cs" />
     <Compile Include="component\biz\Class_biz_services.cs" />
-    <Compile Include="component\biz\Class_biz_teaching_entities.cs" />
-    <Compile Include="component\biz\Class_biz_teaching_entity_business_types.cs" />
-    <Compile Include="component\biz\Class_biz_teaching_entity_levels.cs" />
-    <Compile Include="component\biz\Class_biz_training_institute_statuses.cs" />
     <Compile Include="component\biz\Class_biz_user.cs" />
     <Compile Include="component\db\Class_db.cs" />
     <Compile Include="component\db\Class_db_accounts.cs" />
     <Compile Include="component\db\Class_db_appropriations.cs" />
     <Compile Include="component\db\Class_db_charter_kinds.cs" />
-    <Compile Include="component\db\Class_db_coned_offerings.cs" />
-    <Compile Include="component\db\Class_db_coned_offering_class_final_statuses.cs" />
-    <Compile Include="component\db\Class_db_coned_offering_document_statuses.cs" />
-    <Compile Include="component\db\Class_db_coned_offering_rosters.cs" />
-    <Compile Include="component\db\Class_db_coned_offering_statuses.cs" />
-    <Compile Include="component\db\Class_db_coned_sponsor_statuses.cs" />
     <Compile Include="component\db\Class_db_counties.cs" />
     <Compile Include="component\db\Class_db_emsof_extra_service_county_dependencies.cs" />
     <Compile Include="component\db\Class_db_emsof_requests.cs" />
@@ -141,11 +125,7 @@
     <Compile Include="component\db\Class_db_regional_staffers.cs" />
     <Compile Include="component\db\Class_db_regions.cs" />
     <Compile Include="component\db\Class_db_services.cs" />
-    <Compile Include="component\db\Class_db_teaching_entities.cs" />
-    <Compile Include="component\db\Class_db_teaching_entity_business_types.cs" />
-    <Compile Include="component\db\Class_db_teaching_entity_levels.cs" />
     <Compile Include="component\db\Class_db_trail.cs" />
-    <Compile Include="component\db\Class_db_training_institute_statuses.cs" />
     <Compile Include="component\db\Class_db_user.cs" />
     <Compile Include="component\fs\Class_fs.cs" />
     <Compile Include="component\ss\Class_ss.cs" />
@@ -188,33 +168,12 @@
     <Compile Include="noninteractive\daily_tasks.aspx.designer.cs">
       <DependentUpon>daily_tasks.aspx</DependentUpon>
     </Compile>
-    <Compile Include="noninteractive\import_latest_teaching_entities_from_emsrs.aspx.cs">
-      <DependentUpon>import_latest_teaching_entities_from_emsrs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="noninteractive\import_latest_teaching_entities_from_emsrs.aspx.designer.cs">
-      <DependentUpon>import_latest_teaching_entities_from_emsrs.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="noninteractive\import_latest_practitioners_from_emsrs.aspx.cs">
-      <DependentUpon>import_latest_practitioners_from_emsrs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="noninteractive\import_latest_practitioners_from_emsrs.aspx.designer.cs">
-      <DependentUpon>import_latest_practitioners_from_emsrs.aspx</DependentUpon>
-    </Compile>
     <Compile Include="noninteractive\milestone_sweep.aspx.cs">
       <DependentUpon>milestone_sweep.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="noninteractive\milestone_sweep.aspx.designer.cs">
       <DependentUpon>milestone_sweep.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="noninteractive\import_latest_coned_offerings_from_emsrs.aspx.cs">
-      <DependentUpon>import_latest_coned_offerings_from_emsrs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="noninteractive\import_latest_coned_offerings_from_emsrs.aspx.designer.cs">
-      <DependentUpon>import_latest_coned_offerings_from_emsrs.aspx</DependentUpon>
     </Compile>
     <Compile Include="noninteractive\report_equipment_procurement_overview.aspx.cs">
       <DependentUpon>report_equipment_procurement_overview.aspx</DependentUpon>
@@ -286,34 +245,6 @@
       <DependentUpon>charter_kinds.aspx</DependentUpon>
     </Compile>
     <Compile Include="protected\Class_msg_protected.cs" />
-    <Compile Include="protected\coned_offering_detail.aspx.cs">
-      <DependentUpon>coned_offering_detail.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="protected\coned_offering_detail.aspx.designer.cs">
-      <DependentUpon>coned_offering_detail.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="protected\coned_offering_roster.aspx.cs">
-      <DependentUpon>coned_offering_roster.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="protected\coned_offering_roster.aspx.designer.cs">
-      <DependentUpon>coned_offering_roster.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="protected\coned_sponsor_detail.aspx.cs">
-      <DependentUpon>coned_sponsor_detail.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="protected\coned_sponsor_detail.aspx.designer.cs">
-      <DependentUpon>coned_sponsor_detail.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="protected\coned_sponsor_overview.aspx.cs">
-      <DependentUpon>coned_sponsor_overview.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="protected\coned_sponsor_overview.aspx.designer.cs">
-      <DependentUpon>coned_sponsor_overview.aspx</DependentUpon>
-    </Compile>
     <Compile Include="protected\county_detail.aspx.cs">
       <DependentUpon>county_detail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -397,13 +328,6 @@
     </Compile>
     <Compile Include="protected\profile.aspx.designer.cs">
       <DependentUpon>profile.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="protected\ready_roster_detail.aspx.cs">
-      <DependentUpon>ready_roster_detail.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="protected\ready_roster_detail.aspx.designer.cs">
-      <DependentUpon>ready_roster_detail.aspx</DependentUpon>
     </Compile>
     <Compile Include="protected\regional_staffer_fiscal_year_selection.aspx.cs">
       <DependentUpon>regional_staffer_fiscal_year_selection.aspx</DependentUpon>
@@ -524,78 +448,12 @@
     <Compile Include="usercontrol\app\UserControl_charter_kind.ascx.designer.cs">
       <DependentUpon>UserControl_charter_kind.ascx</DependentUpon>
     </Compile>
-    <Compile Include="usercontrol\app\UserControl_class_catalog.ascx.cs">
-      <DependentUpon>UserControl_class_catalog.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_class_catalog.ascx.designer.cs">
-      <DependentUpon>UserControl_class_catalog.ascx</DependentUpon>
-    </Compile>
     <Compile Include="usercontrol\app\UserControl_common_header_bar.ascx.cs">
       <DependentUpon>UserControl_common_header_bar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_common_header_bar.ascx.designer.cs">
       <DependentUpon>UserControl_common_header_bar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_binder.ascx.cs">
-      <DependentUpon>UserControl_coned_binder.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_binder.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_binder.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering.ascx.cs">
-      <DependentUpon>UserControl_coned_offering.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_offering.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx.cs">
-      <DependentUpon>UserControl_coned_offering_class_final_status.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_offering_class_final_status.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_document_status.ascx.cs">
-      <DependentUpon>UserControl_coned_offering_document_status.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_document_status.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_offering_document_status.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_status.ascx.cs">
-      <DependentUpon>UserControl_coned_offering_status.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_offering_status.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_offering_status.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_sponsor.ascx.cs">
-      <DependentUpon>UserControl_coned_sponsor.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_sponsor.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_sponsor.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_sponsors.ascx.cs">
-      <DependentUpon>UserControl_coned_sponsors.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_sponsors.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_sponsors.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_sponsor_binder.ascx.cs">
-      <DependentUpon>UserControl_coned_sponsor_binder.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_sponsor_binder.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_sponsor_binder.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_coned_sponsor_status.ascx.designer.cs">
-      <DependentUpon>UserControl_coned_sponsor_status.ascx</DependentUpon>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_config_binder.ascx.cs">
       <DependentUpon>UserControl_config_binder.ascx</DependentUpon>
@@ -688,13 +546,6 @@
     <Compile Include="usercontrol\app\UserControl_precontent.ascx.designer.cs">
       <DependentUpon>UserControl_precontent.ascx</DependentUpon>
     </Compile>
-    <Compile Include="usercontrol\app\UserControl_ready_rosters.ascx.cs">
-      <DependentUpon>UserControl_ready_rosters.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_ready_rosters.ascx.designer.cs">
-      <DependentUpon>UserControl_ready_rosters.ascx</DependentUpon>
-    </Compile>
     <Compile Include="usercontrol\app\UserControl_regional_staffer_binder.ascx.cs">
       <DependentUpon>UserControl_regional_staffer_binder.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -715,13 +566,6 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_regional_staffer_current_binder.ascx.designer.cs">
       <DependentUpon>UserControl_regional_staffer_current_binder.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_regional_staffer_emsrs_gateway_binder.ascx.cs">
-      <DependentUpon>UserControl_regional_staffer_emsrs_gateway_binder.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_regional_staffer_emsrs_gateway_binder.ascx.designer.cs">
-      <DependentUpon>UserControl_regional_staffer_emsrs_gateway_binder.ascx</DependentUpon>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_regional_staffer_new_binder.ascx.cs">
       <DependentUpon>UserControl_regional_staffer_new_binder.ascx</DependentUpon>
@@ -764,34 +608,6 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_service_profile.ascx.designer.cs">
       <DependentUpon>UserControl_service_profile.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_teaching_entity.ascx.cs">
-      <DependentUpon>UserControl_teaching_entity.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_teaching_entity.ascx.designer.cs">
-      <DependentUpon>UserControl_teaching_entity.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_teaching_entity_business_type.ascx.cs">
-      <DependentUpon>UserControl_teaching_entity_business_type.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_teaching_entity_business_type.ascx.designer.cs">
-      <DependentUpon>UserControl_teaching_entity_business_type.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_teaching_entity_level.ascx.cs">
-      <DependentUpon>UserControl_teaching_entity_level.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_teaching_entity_level.ascx.designer.cs">
-      <DependentUpon>UserControl_teaching_entity_level.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_training_institute_status.ascx.cs">
-      <DependentUpon>UserControl_training_institute_status.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="usercontrol\app\UserControl_training_institute_status.ascx.designer.cs">
-      <DependentUpon>UserControl_training_institute_status.ascx</DependentUpon>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_update_progress_blocker.ascx.cs">
       <DependentUpon>UserControl_update_progress_blocker.ascx</DependentUpon>
@@ -877,11 +693,6 @@
     <Compile Include="usercontrol\ki\UserControl_session_interrupted.ascx.designer.cs">
       <DependentUpon>UserControl_session_interrupted.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Web References\WebReference_emsrs\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
@@ -890,22 +701,13 @@
     <Content Include="js\sha1.js" />
     <Content Include="login.aspx" />
     <Content Include="new_password.aspx" />
-    <Content Include="noninteractive\import_latest_coned_offerings_from_emsrs.aspx" />
-    <Content Include="noninteractive\import_latest_teaching_entities_from_emsrs.aspx" />
-    <Content Include="noninteractive\import_latest_practitioners_from_emsrs.aspx" />
     <Content Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx" />
     <Content Include="protected\administer_service_email_address.aspx" />
-    <Content Include="protected\coned_offering_detail.aspx" />
-    <Content Include="protected\coned_offering_roster.aspx" />
-    <Content Include="protected\coned_sponsor_detail.aspx" />
-    <Content Include="protected\coned_sponsor_overview.aspx" />
     <Content Include="protected\county_detail.aspx" />
     <Content Include="protected\image\delete_x16_h.png" />
     <Content Include="protected\image\document-save-5.png" />
     <Content Include="protected\image\edit-undo-8.png" />
     <Content Include="protected\image\search_16x16.gif" />
-    <Content Include="protected\ready_roster_detail.aspx" />
-    <Content Include="protected\template\notification\roster_ready.txt" />
     <Content Include="salogin.aspx" />
     <Content Include="serial_indicator_control_chart.aspx" />
     <Content Include="timeout.aspx" />
@@ -964,17 +766,7 @@
     <Content Include="usercontrol\app\UserControl_analyses_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_annual_cycle_setup.ascx" />
     <Content Include="usercontrol\app\UserControl_charter_kind.ascx" />
-    <Content Include="usercontrol\app\UserControl_class_catalog.ascx" />
     <Content Include="usercontrol\app\UserControl_common_header_bar.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_binder.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_offering.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_offering_class_final_status.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_offering_document_status.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_offering_status.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_sponsor.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_sponsors.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_sponsor_binder.ascx" />
-    <Content Include="usercontrol\app\UserControl_coned_sponsor_status.ascx" />
     <Content Include="usercontrol\app\UserControl_config_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_counties.ascx" />
     <Content Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx" />
@@ -988,21 +780,15 @@
     <Content Include="usercontrol\app\UserControl_practitioner.ascx" />
     <Content Include="usercontrol\app\UserControl_practitioner_level.ascx" />
     <Content Include="usercontrol\app\UserControl_precontent.ascx" />
-    <Content Include="usercontrol\app\UserControl_ready_rosters.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_cat4pe_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_current_binder.ascx" />
-    <Content Include="usercontrol\app\UserControl_regional_staffer_emsrs_gateway_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_new_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_regional_staffer_old_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_region_dictated_appropriations.ascx" />
     <Content Include="usercontrol\app\UserControl_responding_services.ascx" />
     <Content Include="usercontrol\app\UserControl_serial_indicator_equipment_quantities.ascx" />
     <Content Include="usercontrol\app\UserControl_service_profile.ascx" />
-    <Content Include="usercontrol\app\UserControl_teaching_entity.ascx" />
-    <Content Include="usercontrol\app\UserControl_teaching_entity_business_type.ascx" />
-    <Content Include="usercontrol\app\UserControl_teaching_entity_level.ascx" />
-    <Content Include="usercontrol\app\UserControl_training_institute_status.ascx" />
     <Content Include="usercontrol\app\UserControl_update_progress_blocker.ascx" />
     <Content Include="usercontrol\app\UserControl_values_to_region.ascx" />
     <Content Include="usercontrol\app\UserControl_values_to_services.ascx" />
@@ -1022,39 +808,14 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\WebReference_emsrs\EMSREGWebServices.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Web References\WebReference_emsrs\EMSREGWebServices.wsdl" />
-    <None Include="Web References\WebReference_emsrs\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="work.bat" />
     <Content Include="x-files\alentus.com\Web-new.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\WebReference_emsrs\</RelPath>
-      <UpdateFromURL>http://ems.health.state.pa.us/emsregwebservices/EMSREGWebServices.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>WebEMSOF_WebReference_emsrs_EMSREGWebServices</CachedSettingsPropName>
-    </WebReferenceUrl>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -109,11 +109,6 @@ namespace login
                 Label_user.Text = "Service";
                 p.biz_accounts.BindServicesInRegion(p.region_code,DropDownList_user);
             }
-            else if (DropDownList_user_kind.SelectedValue == "coned_sponsor")
-            {
-                Label_user.Text = "Con Ed Sponsor";
-                p.biz_accounts.BindConedSponsorsInRegion(p.region_code,DropDownList_user);
-            }
             else if (DropDownList_user_kind.SelectedValue == "county")
             {
                 Label_user.Text = "County";

@@ -1,5 +1,4 @@
 using Class_biz_accounts;
-using Class_biz_teaching_entities;
 using kix;
 using System;
 using System.Configuration;
