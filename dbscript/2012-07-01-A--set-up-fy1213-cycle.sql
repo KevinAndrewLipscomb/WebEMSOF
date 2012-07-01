@@ -61,7 +61,7 @@ INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expecta
 ((select id from fiscal_year where designator = 'FY1213'), 'SCBA (up to 2/licensed vehicle)', 10, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
 ((select id from fiscal_year where designator = 'FY1213'), 'EMT-P/PHRN Written Test', NULL, 1, 1, 1, 1, 300.00, 300.00, 300.00),
 ((select id from fiscal_year where designator = 'FY1213'), 'EMT Written Test', NULL, 1, 1, 1, 1, 140.00, 140.00, 140.00),
-((select id from fiscal_year where designator = 'FY1213'), 'EMR Written Test', NULL, 1, 1, 1, 1, 130.00, 130.00, 130.00),
+((select id from fiscal_year where designator = 'FY1213'), 'FR/EMR Written Test', NULL, 1, 1, 1, 1, 130.00, 130.00, 130.00),
 ((select id from fiscal_year where designator = 'FY1213'), 'CO detector/monitor', 5, 1, 1, 1, 1, 200.00, 100.00, 120.00),
 ((select id from fiscal_year where designator = 'FY1213'), '12 lead EKG transmitter system', 5, 1, 1, 0, 0, 1000.00, 500.00, 600.00),
 ((select id from fiscal_year where designator = 'FY1213'), 'IO drill/injection system', 5, 1, 1, 0, 0, 300.00, 150.00, 180.00),
