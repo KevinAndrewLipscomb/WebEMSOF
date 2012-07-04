@@ -13,7 +13,6 @@ namespace UserControl_regional_staffer_binder
             if (!p.be_loaded)
             {
                 TabContainer_control.ActiveTabIndex = (int)(p.tab_index);
-                TabPanel_cat4pe.Enabled = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator");
                 TabPanel_config.Enabled = HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator");
                 p.be_loaded = true;
             }
@@ -51,11 +50,8 @@ namespace UserControl_regional_staffer_binder
             else
             {
                 p.be_loaded = false;
-                if (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"))
-                  {
-                  p.tab_index = Units.UserControl_regional_staffer_binder.TSSI_CAT4PE;
-                  p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_cat4pe_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_cat4pe_binder.ascx"))),"UserControl_regional_staffer_cat4pe_binder",PlaceHolder_content,InstanceId());
-                  }
+                p.tab_index = Units.UserControl_regional_staffer_binder.TSSI_CAT4PE;
+                p.content_id = AddIdentifiedControlToPlaceHolder(((TWebUserControl_regional_staffer_cat4pe_binder)(LoadControl("~/usercontrol/app/UserControl_regional_staffer_cat4pe_binder.ascx"))),"UserControl_regional_staffer_cat4pe_binder",PlaceHolder_content,InstanceId());
             }
 
         }
