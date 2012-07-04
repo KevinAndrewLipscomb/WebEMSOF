@@ -1,7 +1,5 @@
-<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_postcontent.ascx.cs" Inherits="UserControl_postcontent.TWebUserControl_postcontent"%><html>
-  <head></td></tr></table>
-  </head>
-  <body>
+<%@ Control Language="c#" AutoEventWireup="True" Codebehind="UserControl_postcontent.ascx.cs" Inherits="UserControl_postcontent.TWebUserControl_postcontent"%>
+  </td></tr></table>
 <p></p>
 	<table>
       <tr>
@@ -164,4 +162,3 @@
         </td>
       </tr>
 	</table>
-  </body>
