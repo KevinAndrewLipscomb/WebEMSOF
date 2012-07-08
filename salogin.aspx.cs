@@ -109,7 +109,7 @@ namespace salogin
             else if (DropDownList_user_kind.SelectedValue == "regional_staffer")
             {
                 Label_user.Text = "Regional staffer";
-                p.biz_accounts.BindRegionalStaffersInRegion(p.region_code,DropDownList_user);
+                p.biz_accounts.BindRegionalStaffersInRegionForWebEMSOF(p.region_code,DropDownList_user);
             }
             else
             {

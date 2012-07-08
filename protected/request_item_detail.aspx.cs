@@ -7,7 +7,6 @@ using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
-using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;

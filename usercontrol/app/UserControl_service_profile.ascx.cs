@@ -248,10 +248,10 @@ namespace UserControl_service_profile
                   TabContainer_control.ActiveTabIndex = 1;
                   TextBox_name.Focus();
                   }
-                p.biz_counties.BindDirectToListControl(DropDownList_county, "-- County --");
+                p.biz_counties.BindDirectToListControl(DropDownList_county, "-- County --",k.EMPTY,p.region_code);
                 p.biz_charter_kinds.BindDirectToListControl(DropDownList_charter_kind, "-- Charter kind --");
                 Literal_application_name.Text = ConfigurationManager.AppSettings["application_name"];
-                p.biz_counties.BindDirectToListControl(CheckBoxList_extra_dependency,k.EMPTY);
+                p.biz_counties.BindDirectToListControl(CheckBoxList_extra_dependency,k.EMPTY,k.EMPTY,p.region_code);
                 LinkButton_go_to_match_first.Text = k.ExpandTildePath(LinkButton_go_to_match_first.Text);
                 LinkButton_go_to_match_prior.Text = k.ExpandTildePath(LinkButton_go_to_match_prior.Text);
                 LinkButton_go_to_match_next.Text = k.ExpandTildePath(LinkButton_go_to_match_next.Text);
@@ -735,6 +735,7 @@ namespace UserControl_service_profile
                 p.be_visited_tab_panel_ops_contact = false;
                 p.be_visited_tab_panel_physical_address = false;
                 p.be_visited_tab_panel_wrap_up = false;
+                p.region_code = Session["region_code"].ToString();
                 p.saved_home_county_code = k.EMPTY;
                 p.service_id = k.EMPTY;
                 if (p.be_service_user)
@@ -1260,6 +1261,7 @@ namespace UserControl_service_profile
             public TClass_biz_fy_calendar biz_fy_calendar;
             public TClass_biz_services biz_services;
             public TClass_biz_user biz_user;
+            public string region_code;
             public string saved_home_county_code;
             public string service_id;
         }
