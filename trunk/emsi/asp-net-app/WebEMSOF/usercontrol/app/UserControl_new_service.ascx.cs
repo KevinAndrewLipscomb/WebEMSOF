@@ -1,13 +1,8 @@
-using kix;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using Class_biz_counties;
 using Class_biz_services;
+using kix;
+using System.Web.UI;
+
 namespace UserControl_new_service
 {
     public partial class TWebUserControl_new_service: ki_web_ui.usercontrol_class
@@ -97,7 +92,7 @@ namespace UserControl_new_service
         {
             if (!p.be_loaded)
             {
-                p.biz_counties.BindDirectToListControl(DropDownList_county);
+                p.biz_counties.BindDirectToListControl(DropDownList_county,"-- County --",k.EMPTY,Session["region_code"].ToString());
                 p.be_loaded = true;
             }
             InjectPersistentClientSideScript();
