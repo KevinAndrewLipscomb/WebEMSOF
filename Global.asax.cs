@@ -1,15 +1,9 @@
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-
-
-using System.Threading;
-using System.Web.Security;
-using System.Security.Principal;
 using Class_biz_user;
+using System;
+using System.Threading;
+using System.Web;
+using System.Web.Security;
+
 namespace Global
 {
     public class TGlobal: System.Web.HttpApplication

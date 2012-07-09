@@ -1,15 +1,5 @@
-using System.Configuration;
-
-
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
+using System.Configuration;
 
 namespace Default
 {
@@ -35,7 +25,7 @@ namespace Default
                 if (Session["target_user_table"] == null)
                   {
                   Session.Clear();
-                  Server.Transfer("~/login.aspx");
+                  Response.Redirect("~/login.aspx");
                   }
                 else
                 {
