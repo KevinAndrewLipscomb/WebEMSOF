@@ -71,7 +71,8 @@ namespace report_fy_allocations_reimbursements_nonspends
             // subject
             // body
             // be_html
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], p.biz_accounts.EmailTargetByRole("director") + k.COMMA_SPACE + p.biz_accounts.EmailTargetByRole("emsof-planner"), "Report: Allocations-Reimbursements-Nonspends, " + p.biz_fiscal_years.DesignatorOfCurrent(), body, true);
+            var region_code = k.Safe(Request["region_code"],k.safe_hint_type.NUM);
+            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], p.biz_accounts.EmailTargetByRegionAndRole(region_code,"director") + k.COMMA_SPACE + p.biz_accounts.EmailTargetByRegionAndRole(region_code,"emsof-planner"), "Report: Allocations-Reimbursements-Nonspends, " + p.biz_fiscal_years.DesignatorOfCurrent(), body, true);
             Session.Abandon();
 
         }
