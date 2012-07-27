@@ -13,5 +13,5 @@
 #
 # Yearly
 #
-30 19 03 06 * wget --output-document=/dev/null --no-check-certificate --timeout=14400 --tries=1 https://localhost/WebEMSOF/noninteractive/report_fy_allocations_reimbursements_nonspends.aspx
-31 19 03 06 * wget --output-document=/dev/null --no-check-certificate --timeout=14400 --tries=1 https://localhost/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx
+30 19 03 06 * wget --output-document=/dev/null --no-check-certificate --timeout=14400 --tries=1 https://localhost/WebEMSOF/noninteractive/report_fy_allocations_reimbursements_nonspends.aspx?region_code=1
+31 19 03 06 * wget --output-document=/dev/null --no-check-certificate --timeout=14400 --tries=1 https://localhost/WebEMSOF/noninteractive/report_equipment_procurement_overview.aspx?region_code=1
