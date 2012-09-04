@@ -31,6 +31,24 @@ namespace exception {
         protected global::System.Web.UI.HtmlControls.HtmlTable Table_db_down;
         
         /// <summary>
+        /// Table_deadlock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTable Table_deadlock;
+        
+        /// <summary>
+        /// Image_deadlock control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image Image_deadlock;
+        
+        /// <summary>
         /// Table_oops control.
         /// </summary>
         /// <remarks>
@@ -65,14 +83,5 @@ namespace exception {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::UserControl_postcontent.TWebUserControl_postcontent UserControl_postcontent;
-        
-        /// <summary>
-        /// UserControl_update_progress_blocker_control control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::UserControl_update_progress_blocker.TWebUserControl_update_progress_blocker UserControl_update_progress_blocker_control;
     }
 }
