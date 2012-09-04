@@ -3,5 +3,15 @@ grant select
  , update
  , delete
  , create
+ , create routine
+ , alter routine
   on emsidb_d.*
   to 'ki-webemsof-d'@'localhost' identified by '~ki-webemsof-d-password~'
+;
+--
+-- Must grant PROCESS priv to primary user to include SHOW ENGINE INNODB
+-- STATUS output in MySQL-related exception reports.
+--
+grant process
+  on *.*
+  to 'ki-webemsof-d'@'localhost'
