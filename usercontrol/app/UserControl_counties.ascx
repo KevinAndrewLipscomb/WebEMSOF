@@ -11,6 +11,16 @@
                 <asp:DataGrid id="DataGrid_control" runat="server" gridlines="Horizontal" cellpadding="10" autogeneratecolumns="False" allowsorting="True">
                   <Columns>
                     <asp:BoundColumn datafield="code" Visible="false"></asp:BoundColumn>
+                    <asp:TemplateColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                      <HeaderTemplate>
+                        <asp:CheckBox ID="CheckBox_force_all" runat="server" AutoPostBack="True" oncheckedchanged="CheckBox_force_all_CheckedChanged" style="outline:2px solid SlateGray" ToolTip="Select/Unselect all for QuickMessage" Checked="True" />
+                      </HeaderTemplate>
+                      <ItemTemplate>
+                        <asp:CheckBox ID="CheckBox_selected" runat="server" Checked="True" AutoPostBack="True" oncheckedchanged="CheckBox_selected_CheckedChanged" ToolTip="Select/Unselect for QuickMessage" />
+                      </ItemTemplate>
+                      <HeaderStyle HorizontalAlign="Center" />
+                      <ItemStyle HorizontalAlign="Center" />
+                    </asp:TemplateColumn>
                     <asp:BoundColumn datafield="name" headertext="Name" sortexpression="name%"></asp:BoundColumn>
                     <asp:BoundColumn datafield="email_address" HeaderText="Email address"></asp:BoundColumn>
                     <asp:BoundColumn DataField="match_level_description" HeaderText="Default match level" SortExpression="factor%,name"></asp:BoundColumn>
