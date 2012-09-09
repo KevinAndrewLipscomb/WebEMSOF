@@ -135,10 +135,13 @@ namespace UserControl_responding_services
       {
       if (!p.be_loaded)
         {
-        Literal_author_email_address.Text = p.user_email_address;
-        if (!p.be_interactive)
+        if (p.be_interactive)
           {
-            DataGrid_control.AllowSorting = false;
+          Literal_author_email_address.Text = p.user_email_address;
+          }
+        else
+          {
+          DataGrid_control.AllowSorting = false;
           }
         Bind();
         p.be_loaded = true;
@@ -206,7 +209,6 @@ namespace UserControl_responding_services
       {
       if (p.distribution_list.Length > 0)
         {
-        var email_address_by_kind_id = p.biz_accounts.EmailAddressByKindId(user_kind:p.biz_user.Kind(),user_id:p.biz_user.IdNum());
         k.SmtpMailSend
           (
           from:ConfigurationManager.AppSettings["sender_email_address"],
@@ -217,8 +219,8 @@ namespace UserControl_responding_services
             + k.Safe(TextBox_quick_message_body.Text,k.safe_hint_type.MEMO),
           be_html:false,
           cc:k.EMPTY,
-          bcc:email_address_by_kind_id,
-          reply_to:email_address_by_kind_id
+          bcc:p.user_email_address,
+          reply_to:p.user_email_address
           );
         TextBox_quick_message_subject.Text = k.EMPTY;
         TextBox_quick_message_body.Text = k.EMPTY;
@@ -247,18 +249,11 @@ namespace UserControl_responding_services
 
     protected void CheckBox_force_all_CheckedChanged(object sender, EventArgs e)
       {
-      p.distribution_list = k.EMPTY;
-      DataGridItem dgi;
       for (var i = new k.subtype<int>(0,DataGrid_control.Items.Count); i.val < i.LAST; i.val++)
         {
-        dgi = DataGrid_control.Items[i.val];
-        (dgi.Cells[UserControl_responding_services_Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
-        p.distribution_list += k.EMPTY
-        + ((sender as CheckBox).Checked && CheckBox_use_password_reset_email_address.Checked ? dgi.Cells[UserControl_responding_services_Static.TCI_PASSWORD_RESET_EMAIL_ADDRESS].Text + k.COMMA_SPACE: k.EMPTY)
-        + ((sender as CheckBox).Checked && CheckBox_use_corpadmin_email_address.Checked ? dgi.Cells[UserControl_responding_services_Static.TCI_CORPADMIN_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY)
-        + ((sender as CheckBox).Checked && CheckBox_use_coo_email_address.Checked ? dgi.Cells[UserControl_responding_services_Static.TCI_COO_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY);
+        (DataGrid_control.Items[i.val].Cells[UserControl_responding_services_Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
         }
-      Label_distribution_list.Text = p.distribution_list;
+      BuildDistributionListAndRegisterPostBackControls();
       }
 
     protected void CheckBox_selected_CheckedChanged(object sender, EventArgs e)
@@ -285,8 +280,7 @@ namespace UserControl_responding_services
         ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
         ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_IMITATE].Controls[0]) as LinkButton);
         }
-      p.distribution_list = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
-      Label_distribution_list.Text = p.distribution_list;
+      Label_distribution_list.Text = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});;
       }
 
         private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
@@ -357,6 +351,9 @@ namespace UserControl_responding_services
                         p.num_nonparticipants = p.num_nonparticipants + 1;
                         }
                       }
+                    //--
+                    // DON'T disable viewstate here since thes server needs it to repopulate bound controls when an update is made as a result of a QuickMessage checkbox change.
+                    //--
                 }
             }
             else

@@ -59,6 +59,16 @@
 							<ASP:ButtonColumn text="Select" commandname="Select">
 							  <ItemStyle font-bold="True" horizontalalign="Center"></ItemStyle>
 							</ASP:ButtonColumn>
+              <asp:TemplateColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                <HeaderTemplate>
+                  <asp:CheckBox ID="CheckBox_force_all" runat="server" AutoPostBack="True" oncheckedchanged="CheckBox_force_all_CheckedChanged" style="outline:2px solid SlateGray" ToolTip="Select/Unselect all for QuickMessage" Checked="True" />
+                </HeaderTemplate>
+                <ItemTemplate>
+                  <asp:CheckBox ID="CheckBox_selected" runat="server" Checked="True" AutoPostBack="True" oncheckedchanged="CheckBox_selected_CheckedChanged" ToolTip="Select/Unselect for QuickMessage" />
+                </ItemTemplate>
+                <HeaderStyle HorizontalAlign="Center" />
+                <ItemStyle HorizontalAlign="Center" />
+              </asp:TemplateColumn>
 						  </Columns></ASP:DataGrid>
 						</p>
 					  </td>
