@@ -15,11 +15,45 @@ using System.Web.UI.WebControls;
 
 namespace county_dictated_appropriations
 {
-    public partial class TWebForm_county_dictated_appropriations: ki_web_ui.page_class
+  public static class county_dictated_appropriations_Static
     {
+    //
+    // TCCI values for columns prior to these are defined in Class_db_emsof_requests because they are common to other pages and/or UserControls.
+    //
+    public const int TCCI_LINKBUTTON_EDIT = 15;
+    public const int TCCI_LINKBUTTON_DELETE = 16;
+    public const int TCCI_SELECT_FOR_QUICKMESSAGE = 17;
+    }
+
+  public partial class TWebForm_county_dictated_appropriations: ki_web_ui.page_class
+    {
+        private struct p_type
+          {
+          public TClass_biz_accounts biz_accounts;
+          public TClass_biz_appropriations biz_appropriations;
+          public TClass_biz_emsof_requests biz_emsof_requests;
+          public TClass_biz_services biz_services;
+          public TClass_biz_user biz_user;
+          public bool be_before_deadline;
+          public bool be_county_user;
+          public bool be_sort_order_ascending;
+          public string county_code;
+          public TClass_db db;
+          public TClass_db_trail db_trail;
+          public string distribution_list_for_services_with_allocations;
+          public uint num_appropriations;
+          public decimal region_dictated_appropriation_amount;
+          public string region_dictated_appropriation_id;
+          public decimal saved_amount;
+          public string sort_order;
+          public string status_filter;
+          public decimal sum_of_service_appropriations;
+          public decimal unappropriated_amount;
+          public string user_email_address;
+          }
+
         private p_type p;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -60,14 +94,6 @@ namespace county_dictated_appropriations
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                p.biz_accounts = new TClass_biz_accounts();
-                p.biz_appropriations = new TClass_biz_appropriations();
-                p.biz_emsof_requests = new TClass_biz_emsof_requests();
-                p.biz_services = new TClass_biz_services();
-                p.biz_user = new TClass_biz_user();
-                p.be_before_deadline = true;
-                p.be_county_user = (p.biz_user.Kind() == "county");
-                p.be_sort_order_ascending = true;
                 if (p.be_county_user)
                   {
                   p.county_code = p.biz_user.IdNum();
@@ -84,13 +110,6 @@ namespace county_dictated_appropriations
                   LinkButton_county_dictated_deadline.Enabled = false;
                   LinkButton_new_appropriation.Visible = false;
                   }
-                p.db = new TClass_db();
-                p.db_trail = new TClass_db_trail();
-                p.num_appropriations = 0;
-                p.sort_order = "service_name";
-                p.status_filter = k.EMPTY;
-                p.sum_of_service_appropriations = 0;
-                p.unappropriated_amount = 0;
                 Title = ConfigurationManager.AppSettings["application_name"] + " - county_dictated_appropriations";
                 p.db.Open();
                 // Set parent appropriation labels.
@@ -104,7 +123,7 @@ namespace county_dictated_appropriations
                 Label_region_name.Text = dr_appropriation_attribs["name"].ToString();
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 dr_appropriation_attribs.Close();
-                Label_author_email_address.Text = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
+                Label_author_email_address.Text = p.user_email_address;
                 // All further rendering is deadline-dependent.
                 make_appropriations_deadline = (DateTime)(new MySqlCommand("select value" + " from fy_calendar" + " join fiscal_year on (fiscal_year.id = fiscal_year_id)" + " join milestone_code_name_map on (code = milestone_code)" + " where designator = \"" + k.Safe(Label_fiscal_year_designator.Text, k.safe_hint_type.ALPHANUM) + "\"" + " and name = \"emsof-county-dictated-appropriation-deadline\"", p.db.connection).ExecuteScalar());
                 county_dictated_deadline = (DateTime)(new MySqlCommand("select service_to_county_submission_deadline from region_dictated_appropriation" + " where id = " + p.region_dictated_appropriation_id, p.db.connection).ExecuteScalar());
@@ -134,7 +153,25 @@ namespace county_dictated_appropriations
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-
+            //
+            p.biz_accounts = new TClass_biz_accounts();
+            p.biz_appropriations = new TClass_biz_appropriations();
+            p.biz_emsof_requests = new TClass_biz_emsof_requests();
+            p.biz_services = new TClass_biz_services();
+            p.biz_user = new TClass_biz_user();
+            //
+            p.be_before_deadline = true;
+            p.be_county_user = (p.biz_user.Kind() == "county");
+            p.be_sort_order_ascending = true;
+            p.db = new TClass_db();
+            p.db_trail = new TClass_db_trail();
+            p.distribution_list_for_services_with_allocations = k.EMPTY;
+            p.num_appropriations = 0;
+            p.sort_order = "service_name";
+            p.status_filter = k.EMPTY;
+            p.sum_of_service_appropriations = 0;
+            p.unappropriated_amount = 0;
+            p.user_email_address = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
         }
 
         protected void DropDownList_status_filter_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -149,20 +186,46 @@ namespace county_dictated_appropriations
         }
 
         protected void Button_send_Click(object sender, System.EventArgs e)
-        {
-            // from
-            // to
-            // subject
-            // body
-            // be_html
-            // cc
-            // bcc
-            // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From the " + Session[p.biz_user.Kind() + "_name"].ToString() + " County EMSOF Coordinator (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
+          {
+          if (p.distribution_list_for_services_with_allocations.Length > 0)
+            {
+            k.SmtpMailSend
+              (
+              from:ConfigurationManager.AppSettings["sender_email_address"],
+              to:k.Safe(Label_distribution_list.Text,k.safe_hint_type.EMAIL_ADDRESS_CSV),
+              subject:k.Safe(TextBox_quick_message_subject.Text,k.safe_hint_type.PUNCTUATED),
+              message_string:"-- From the " + Session[p.biz_user.Kind() + "_name"].ToString() + " County EMSOF Coordinator (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE
+              + k.NEW_LINE
+              + k.Safe(TextBox_quick_message_body.Text,k.safe_hint_type.MEMO),
+              be_html:false,
+              cc:k.EMPTY,
+              bcc:p.user_email_address,
+              reply_to:p.user_email_address
+              );
             TextBox_quick_message_subject.Text = k.EMPTY;
             TextBox_quick_message_body.Text = k.EMPTY;
-            Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);
-        }
+            Alert
+              (
+              cause:k.alert_cause_type.LOGIC,
+              state:k.alert_state_type.NORMAL,
+              key:"messagsnt",
+              value:"Message sent",
+              be_using_scriptmanager:true
+              );
+            }
+          else
+            {
+            Alert
+              (
+              cause:k.alert_cause_type.USER,
+              state:k.alert_state_type.FAILURE,
+              key:"noqmrecips",
+              value:"Message *NOT* sent.  No recipients are selected.",
+              be_using_scriptmanager:true
+              );
+            }
+          BuildDistributionListAndRegisterPostBackControls();
+          }
 
         private void TWebForm_county_dictated_appropriations_PreRender(object sender, System.EventArgs e)
         {
@@ -269,8 +332,8 @@ namespace county_dictated_appropriations
         {
             decimal leftover_or_shortage;
             // Manage column visibility
-            e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_EDIT].Visible = p.be_county_user && p.be_before_deadline;
-            e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_DELETE].Visible = p.be_county_user && p.be_before_deadline;
+            e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_EDIT].Visible = p.be_county_user && p.be_before_deadline;
+            e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_DELETE].Visible = p.be_county_user && p.be_before_deadline;
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
@@ -305,8 +368,8 @@ namespace county_dictated_appropriations
                                 }
                             }
                         }
-                        ((e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_EDIT].Controls[0]) as LinkButton).Visible = false;
-                        ((e.Item.Cells[Units.county_dictated_appropriations.TCCI_LINKBUTTON_DELETE].Controls[0]) as LinkButton).Visible = false;
+                        ((e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_EDIT].Controls[0]) as LinkButton).Visible = false;
+                        ((e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_DELETE].Controls[0]) as LinkButton).Visible = false;
                     }
                 }
                 else
@@ -317,6 +380,9 @@ namespace county_dictated_appropriations
                 {
                     p.distribution_list_for_services_with_allocations = p.distribution_list_for_services_with_allocations + e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text + k.COMMA_SPACE;
                 }
+                //--
+                // DON'T disable viewstate here since thes server needs it to repopulate bound controls when an update is made as a result of a QuickMessage checkbox change.
+                //--
             }
         }
 
@@ -351,6 +417,35 @@ namespace county_dictated_appropriations
                 Bind_service_appropriations();
             }
         }
+
+    protected void CheckBox_force_all_CheckedChanged(object sender, EventArgs e)
+      {
+      for (var i = new k.subtype<int>(0,DataGrid_service_appropriations.Items.Count); i.val < i.LAST; i.val++)
+        {
+        (DataGrid_service_appropriations.Items[i.val].Cells[county_dictated_appropriations_Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
+        }
+      BuildDistributionListAndRegisterPostBackControls();
+      }
+
+    protected void CheckBox_selected_CheckedChanged(object sender, EventArgs e)
+      {
+      BuildDistributionListAndRegisterPostBackControls();
+      }
+
+    private void BuildDistributionListAndRegisterPostBackControls()
+      {
+      p.distribution_list_for_services_with_allocations = k.EMPTY;
+      TableCellCollection tcc;
+      for (var i = new k.subtype<int>(0, DataGrid_service_appropriations.Items.Count); i.val < i.LAST; i.val++)
+        {
+        tcc = DataGrid_service_appropriations.Items[i.val].Cells;
+        if ((tcc[county_dictated_appropriations_Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked)
+          {
+          p.distribution_list_for_services_with_allocations += tcc[(int)p.biz_emsof_requests.TcciOfPasswordResetEmailAddress()].Text + k.COMMA_SPACE;
+          }
+        }
+      Label_distribution_list.Text = p.distribution_list_for_services_with_allocations.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
+      }
 
         private void DataGrid_service_appropriations_CancelCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
@@ -400,6 +495,7 @@ namespace county_dictated_appropriations
             // Clear aggregation vars for next bind, if any.
             p.num_appropriations = 0;
             p.sum_of_service_appropriations = 0;
+            BuildDistributionListAndRegisterPostBackControls();
         }
 
         private void Bind_distribution_target()
@@ -434,41 +530,7 @@ namespace county_dictated_appropriations
 
         }
 
-        private struct p_type
-        {
-            public TClass_biz_accounts biz_accounts;
-            public TClass_biz_appropriations biz_appropriations;
-            public TClass_biz_emsof_requests biz_emsof_requests;
-            public TClass_biz_services biz_services;
-            public TClass_biz_user biz_user;
-            public bool be_before_deadline;
-            public bool be_county_user;
-            public bool be_sort_order_ascending;
-            public string county_code;
-            public TClass_db db;
-            public TClass_db_trail db_trail;
-            public string distribution_list_for_services_with_allocations;
-            public uint num_appropriations;
-            public decimal region_dictated_appropriation_amount;
-            public string region_dictated_appropriation_id;
-            public decimal saved_amount;
-            public string sort_order;
-            public string status_filter;
-            public decimal sum_of_service_appropriations;
-            public decimal unappropriated_amount;
-        } // end p_type
-
     } // end TWebForm_county_dictated_appropriations
-
-}
-
-namespace county_dictated_appropriations.Units
-{
-    public class county_dictated_appropriations
-    {
-        public const int TCCI_LINKBUTTON_EDIT = 15;
-        public const int TCCI_LINKBUTTON_DELETE = 16;
-    } // end county_dictated_appropriations
 
 }
 
