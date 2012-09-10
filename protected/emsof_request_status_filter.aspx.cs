@@ -10,28 +10,13 @@ using System.Web.UI.WebControls;
 namespace emsof_request_status_filter
 {
 
-  public class emsof_request_status_filter_Static
+  public static class emsof_request_status_filter_Static
     {
     //
-    // Keep these values in sync with the values declared in Class_db_emsof_requests.cs.
+    // TCCI values for columns prior to these are defined in Class_db_emsof_requests because they are common to other pages and/or UserControls.
     //
-    public static int TCCI_ID = 0;
-    public static int TCCI_SERVICE_ID = 1;
-    public static int TCCI_AFFILIATE_NUM = 2;
-    public static int TCCI_SERVICE_NAME = 3;
-    public static int TCCI_COUNTY_CODE = 4;
-    public static int TCCI_SPONSOR_COUNTY = 5;
-    public static int TCCI_COUNTY_EMAIL_ADDRESS = 6;
-    public static int TCCI_FISCAL_YEAR_DESIGNATOR = 7;
-    public static int TCCI_EMSOF_ANTE = 8;
-    public static int TCCI_APPROPRIATION = 9;
-    public static int TCCI_LEFTOVER_OR_SHORTAGE = 10;
-    public static int TCCI_HAS_WISH_LIST = 11;
-    public static int TCCI_PASSWORD_RESET_EMAIL_ADDRESS = 12;
-    public static int TCCI_STATUS_CODE = 13;
-    public static int TCCI_STATUS_DESCRIPTION = 14;
-    public static int TCCI_LINKBUTTON_SELECT = 15;
-    public static int TCCI_SELECT_FOR_QUICKMESSAGE = 16;
+    public const int TCCI_LINKBUTTON_SELECT = 15;
+    public const int TCCI_SELECT_FOR_QUICKMESSAGE = 16;
     }
 
     public partial class TWebForm_emsof_request_status_filter: ki_web_ui.page_class
@@ -187,14 +172,14 @@ namespace emsof_request_status_filter
         tcc = DataGrid_requests.Items[i.val].Cells;
         if ((tcc[emsof_request_status_filter_Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked)
           {
-          p.distribution_list += tcc[emsof_request_status_filter_Static.TCCI_PASSWORD_RESET_EMAIL_ADDRESS].Text + k.COMMA_SPACE;
+          p.distribution_list += tcc[(int)p.biz_emsof_requests.TcciOfPasswordResetEmailAddress()].Text + k.COMMA_SPACE;
           var county_email_address = tcc[(int)(p.biz_emsof_requests.TcciOfCountyEmailAddress())].Text;
           if ((county_email_address != "&nbsp;") && (!p.cc_list.Contains(county_email_address)))
             {
             p.cc_list += county_email_address + k.COMMA_SPACE;
             }
           }
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[emsof_request_status_filter_Static.TCCI_STATUS_DESCRIPTION].Controls[0]) as LinkButton);
+        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[(int)p.biz_emsof_requests.TcciOfStatusDescription()].Controls[0]) as LinkButton);
         }
       Label_distribution_list.Text = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
       Label_cc_list.Text = p.cc_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
@@ -213,7 +198,7 @@ namespace emsof_request_status_filter
         private void DataGrid_requests_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
         {
             // Manage column visibility
-            e.Item.Cells[emsof_request_status_filter_Static.TCCI_STATUS_DESCRIPTION].Visible = p.biz_emsof_requests.BeOkToDrillDown((status_type)(Session["status_of_interest"]));
+            e.Item.Cells[(int)p.biz_emsof_requests.TcciOfStatusDescription()].Visible = p.biz_emsof_requests.BeOkToDrillDown((status_type)(Session["status_of_interest"]));
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.

@@ -6,6 +6,7 @@
 <html>
   <head runat="server">
     <!-- $Id$ -->
+    <title></title>
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
@@ -164,6 +165,16 @@
                           <ASP:ButtonColumn text="Delete" commandname="Delete">
                             <ItemStyle forecolor="Blue"></ItemStyle>
                           </ASP:ButtonColumn>
+                          <asp:TemplateColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
+                            <HeaderTemplate>
+                              <asp:CheckBox ID="CheckBox_force_all" runat="server" AutoPostBack="True" oncheckedchanged="CheckBox_force_all_CheckedChanged" style="outline:2px solid SlateGray" ToolTip="Select/Unselect all for QuickMessage" Checked="True" />
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                              <asp:CheckBox ID="CheckBox_selected" runat="server" Checked="True" AutoPostBack="True" oncheckedchanged="CheckBox_selected_CheckedChanged" ToolTip="Select/Unselect for QuickMessage" />
+                            </ItemTemplate>
+                            <HeaderStyle HorizontalAlign="Center" />
+                            <ItemStyle HorizontalAlign="Center" />
+                          </asp:TemplateColumn>
                         </Columns>
                         <PagerStyle horizontalalign="Right" forecolor="Black" backcolor="White"></PagerStyle>
 		</asp:datagrid>
@@ -186,7 +197,7 @@
                 <td>Send email to:</td>
                 <td>
                   <ASP:DropDownList id="DropDownList_quick_message_targets" runat="server" autopostback="True" onselectedindexchanged="DropDownList_quick_message_targets_SelectedIndexChanged">
-                    <asp:ListItem selected="True" value="with_allocations">all agencies shown above</asp:ListItem>
+                    <asp:ListItem selected="True" value="with_allocations">all agencies selected above</asp:ListItem>
                     <asp:ListItem value="emsof_participants_true">all agencies in this county who said in Annual Survey they would be EMSOF participants</asp:ListItem>
                     <asp:ListItem value="emsof_participants_false">all agencies in this county who said in Annual Survey they would *not* be EMSOF participants</asp:ListItem>
                     <asp:ListItem value="emsof_respondents">all agencies in this county who have responded to the Annual Survey</asp:ListItem>
@@ -210,14 +221,14 @@
               <tr>
                 <td valign="top">Body:</td>
                 <td><ASP:TextBox id="TextBox_quick_message_body" runat="server" columns="72" rows="18" textmode="MultiLine"></ASP:TextBox></td>
-                <td nowrap="true" valign="top"><ASP:RequiredFieldValidator id="RequiredFieldValidator_quick_message_body" runat="server" errormessage="Please enter a message body." font-bold="True" controltovalidate="TextBox_quick_message_body" validationgroup="quick_message">!ERR!</ASP:RequiredFieldValidator></td>
+                <td nowrap="nowrap" valign="top"><ASP:RequiredFieldValidator id="RequiredFieldValidator_quick_message_body" runat="server" errormessage="Please enter a message body." font-bold="True" controltovalidate="TextBox_quick_message_body" validationgroup="quick_message">!ERR!</ASP:RequiredFieldValidator></td>
               </tr>
               <tr>
                 <td></td>
                 <td><ASP:Button id="Button_send" runat="server" text="Send" validationgroup="quick_message" onclick="Button_send_Click"></ASP:Button></td>
                 <td></td>
               </tr>
-              <tr><td valign="top"><small><font color="#c0c0c0">Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
+              <tr><td valign="top"><font color="#c0c0c0"><small>Resolves to:</small></font></td><td valign="top"><small><ASP:Label id="Label_distribution_list" runat="server" forecolor="Silver"></ASP:Label></small></td>
                 <td></td>
               </tr>
             </table>

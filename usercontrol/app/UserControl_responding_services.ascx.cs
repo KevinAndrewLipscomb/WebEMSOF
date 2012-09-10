@@ -15,7 +15,7 @@ namespace UserControl_responding_services
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.pas
     public partial class TWebUserControl_responding_services: ki_web_ui.usercontrol_class
     {
-        public class UserControl_responding_services_Static
+        public static class UserControl_responding_services_Static
           {
           public const int TCI_UPDATE_EMAIL_ADDRESS = 0;
           public const int TCI_PROFILE_TABBED = 1;
@@ -280,7 +280,7 @@ namespace UserControl_responding_services
         ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
         ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_IMITATE].Controls[0]) as LinkButton);
         }
-      Label_distribution_list.Text = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});;
+      Label_distribution_list.Text = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
       }
 
         private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
