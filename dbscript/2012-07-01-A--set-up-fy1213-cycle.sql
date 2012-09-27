@@ -9,21 +9,21 @@ START TRANSACTION
 insert fy_calendar (fiscal_year_id,milestone_code,`value`) VALUES
 ((select id from fiscal_year where designator = 'FY1213'),1,'2012-11-30 23:59:59'),
 ((select id from fiscal_year where designator = 'FY1213'),2,'2013-01-31 23:59:59'),
-((select id from fiscal_year where designator = 'FY1213'),3,'2013-02-29 23:59:59'),
+((select id from fiscal_year where designator = 'FY1213'),3,'2013-02-28 23:59:59'),
 ((select id from fiscal_year where designator = 'FY1213'),4,'2013-05-31 23:59:59'),
 ((select id from fiscal_year where designator = 'FY1213'),5,'2013-06-30 23:59:59')
 ;
 insert region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount,service_to_county_submission_deadline,match_level_id) VALUES
-((select max(id) from state_dictated_appropriation),1,97699,'2012-11-15 23:59:59',1),
-((select max(id) from state_dictated_appropriation),2,24484,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),3,24022,'2012-11-15 23:59:59',1),
-((select max(id) from state_dictated_appropriation),4,40928,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),5,31799,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),6,16503,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),7,26933,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),8,17974,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),9,36249,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),10,53409,'2012-11-15 23:59:59',1)
+((select max(id) from state_dictated_appropriation),1,103044,'2012-11-15 23:59:59',1),
+((select max(id) from state_dictated_appropriation),2,20094,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),3,24308,'2012-11-15 23:59:59',1),
+((select max(id) from state_dictated_appropriation),4,40770,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),5,28151,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),6,13645,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),7,25791,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),8,19421,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),9,37465,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),10,57310,'2012-11-15 23:59:59',1)
 ;
 INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expectancy_years,be_eligible_als_amb,be_eligible_als_squad,be_eligible_bls_amb,be_eligible_qrs,allowable_cost,funding_level_nonrural,funding_level_rural) VALUES
 ((select id from fiscal_year where designator = 'FY1213'), 'Medical Director', 1, 1, 1, 1, 1, 10000.00, 10000.00, 10000.00),
