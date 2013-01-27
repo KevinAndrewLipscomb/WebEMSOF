@@ -42,7 +42,7 @@ namespace exception
           }
         else if (!last_error.ToString().Contains("The client disconnected."))
           {
-          if (base_exception.Message == "ERROR 1213 (40001): Deadlock found when trying to get lock; try restarting transaction")
+          if (base_exception.Message == "Deadlock found when trying to get lock; try restarting transaction")
             {
             Table_deadlock.Visible = true;
             Table_oops.Visible = false;

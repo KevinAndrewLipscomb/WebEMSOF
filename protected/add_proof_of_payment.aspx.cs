@@ -86,19 +86,33 @@ namespace add_proof_of_payment
             }
             else
             {
+              try
+                {
                 p.amount = decimal.Parse(amount_string);
                 args.IsValid = (p.amount > 0);
+                }
+              catch
+                {
+                args.IsValid = false;
+                }
             }
         }
 
         protected void Button_submit_Click(object sender, System.EventArgs e)
         {
+          if (Page.IsValid)
+            {
             DateTime timestamp;
             if (p.biz_emsof_requests.BeValidStateApprovalTimestampOf(p.biz_emsof_requests.IdOf(Session["e_item"]), out timestamp) && (Calendar_date_of_payment.SelectedDate >= timestamp.Date) && (Calendar_date_of_payment.SelectedDate < DateTime.Now))
-            {
-                p.biz_emsof_requests.AddProofOfPayment(p.biz_emsof_requests.IdOf(Session["e_item"]), Calendar_date_of_payment.SelectedDate, k.Safe(DropDownList_methods.SelectedValue, k.safe_hint_type.NUM), p.amount, k.Safe(TextBox_note.Text, k.safe_hint_type.PUNCTUATED));
-            }
+              {
+              p.biz_emsof_requests.AddProofOfPayment(p.biz_emsof_requests.IdOf(Session["e_item"]), Calendar_date_of_payment.SelectedDate, k.Safe(DropDownList_methods.SelectedValue, k.safe_hint_type.NUM), p.amount, k.Safe(TextBox_note.Text, k.safe_hint_type.PUNCTUATED));
+              }
             BackTrack();
+            }
+          else
+            {
+            ValidationAlert(be_using_scriptmanager:true);
+            }
         }
 
         protected void Button_cancel_Click(object sender, System.EventArgs e)
