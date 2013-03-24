@@ -55,6 +55,7 @@ namespace salogin
                 Title = ConfigurationManager.AppSettings["application_name"] + " - salogin";
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_regions = new TClass_biz_regions();
+                RequireConfirmation(Button_new_password,"Are you sure you want a new password?");
             }
             InjectPersistentClientSideScript();
             ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_new_password);
