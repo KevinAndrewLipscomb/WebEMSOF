@@ -12,6 +12,7 @@ grant select
 -- Must grant PROCESS priv to primary user to include SHOW ENGINE INNODB
 -- STATUS output in MySQL-related exception reports.
 --
+;
 grant process
   on *.*
   to 'ki-webemsof-x'@'localhost'
