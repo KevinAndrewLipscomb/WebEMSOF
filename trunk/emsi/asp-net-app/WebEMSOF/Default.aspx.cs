@@ -29,7 +29,7 @@ namespace Default
                   }
                 else
                 {
-                    Response.Redirect("protected/" + Session["target_user_table"].ToString() + "_overview.aspx");
+                    Response.Redirect("~/protected/" + Session["target_user_table"].ToString() + "_overview.aspx");
                 }
             }
         }
