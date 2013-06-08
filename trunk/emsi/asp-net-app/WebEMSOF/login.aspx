@@ -112,6 +112,20 @@
 				</td>
 			  </tr>
 		  </table>
+      <br />
+      <table cellspacing="0" cellpadding="10" border="0">
+        <tr>
+          <td style="border-top:2px dashed sandybrown; border-bottom:2px dashed sandybrown;" valign="top">
+            <small>
+              <strong><asp:Literal ID="Literal_application_name" runat="server"></asp:Literal></strong> is
+              <asp:HyperLink ID="HyperLink_open_source_software_definition" runat="server" NavigateUrl="http://en.wikipedia.org/wiki/Open_source_software" Target="_blank">open source software</asp:HyperLink>.&nbsp;
+              Its <asp:HyperLink ID="HyperLink_software_repository_definition" runat="server" NavigateUrl="http://en.wikipedia.org/wiki/Software_repository" Target="_blank">repository</asp:HyperLink> is
+              <asp:HyperLink ID="HyperLink_repository_here" runat="server" NavigateUrl="http://sourceforge.net/p/kveo-it-project/code/HEAD/tree/trunk/emsi/asp-net-app/WebEMSOF/" Target="_blank">HERE</asp:HyperLink>.&nbsp;
+              <asp:HyperLink ID="HyperLink_Frompaper2webDotCom" runat="server" NavigateUrl="http://frompaper2web.com" Target="_blank">FromPaper2Web.com</asp:HyperLink> provides development, hosting, and maintenance.
+            </small>
+          </td>
+        </tr>
+      </table>
     <input id="Hidden_client_timezone_offset" runat="server" type="hidden" />
   <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
       <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>

@@ -66,6 +66,7 @@ namespace login
             else
             {
                 Title = ConfigurationManager.AppSettings["application_name"] + " - login";
+                Literal_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_regions = new TClass_biz_regions();
                 RequireConfirmation(Button_new_password,"Are you sure you want a new password?");
