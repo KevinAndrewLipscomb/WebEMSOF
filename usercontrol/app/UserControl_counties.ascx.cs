@@ -23,8 +23,9 @@ namespace UserControl_counties
       public const int TCI_NAME = 2;
       public const int TCI_EMAIL_ADDRESS = 3;
       public const int TCI_MATCH_LEVEL = 4;
-      public const int TCI_SELECT = 5;
-      public const int TCI_IMITATE = 6;
+      public const int TCI_UNALLOCATED = 5;
+      public const int TCI_SELECT = 6;
+      public const int TCI_IMITATE = 7;
       }
 
     private struct p_type
