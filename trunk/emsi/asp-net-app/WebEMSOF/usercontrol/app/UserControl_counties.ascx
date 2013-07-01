@@ -24,6 +24,9 @@
                     <asp:BoundColumn datafield="name" headertext="Name" sortexpression="name%"></asp:BoundColumn>
                     <asp:BoundColumn datafield="email_address" HeaderText="Email address"></asp:BoundColumn>
                     <asp:BoundColumn DataField="match_level_description" HeaderText="Default match level" SortExpression="factor%,name"></asp:BoundColumn>
+                    <asp:BoundColumn DataField="unallocated" DataFormatString="{0:C}" HeaderText="Unallocated" ReadOnly="True" SortExpression="unallocated%,name">
+                      <ItemStyle Font-Bold="False" Font-Italic="False" Font-Overline="False" Font-Strikeout="False" Font-Underline="False" HorizontalAlign="Right" />
+                    </asp:BoundColumn>
                     <asp:ButtonColumn text="&lt;IMG src=&quot;~/protected/image/draw_freehand_16_h.png&quot; alt=&quot;Edit&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" commandname="Edit"></asp:ButtonColumn>
                     <asp:ButtonColumn CommandName="imitate" Text="&lt;IMG src=&quot;~/protected/image/mask-16-16.png&quot; alt=&quot;Imitate&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;"></asp:ButtonColumn>
                   </Columns>
