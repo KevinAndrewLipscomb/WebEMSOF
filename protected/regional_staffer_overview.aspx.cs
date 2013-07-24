@@ -1,17 +1,5 @@
-using System.Configuration;
-
-
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using AjaxControlToolkit;
-
-
+using System.Configuration;
 
 namespace regional_staffer_overview
 {
@@ -32,14 +20,12 @@ namespace regional_staffer_overview
         {
             if (!IsPostBack)
             {
-                if ((Session["regional_staffer_name"] == null) || (Session["regional_staffer_user_id"] == null) || Session["imitator_designator"] != null)
-                {
-                    Session.Clear();
-                    DropCrumbAndTransferTo("~/login.aspx");
-                }
                 Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - regional_staffer_overview";
                 BeginBreadCrumbTrail();
             }
+//
+//ToolkitScriptManager.GetCurrent(Page).EnablePartialRendering = false;
+//
         }
 
         protected override void OnInit(EventArgs e)
@@ -47,9 +33,14 @@ namespace regional_staffer_overview
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
-//
-//ToolkitScriptManager.GetCurrent(Page).EnablePartialRendering = false;
-//
+            //
+            // When NullReferenceException happens during a Page_Load and the Session is empty, it's because this kind of logic is being checked too late, in the Page_Load, rather than in the OnInit.
+            //
+            if ((Session["regional_staffer_name"] == null) || (Session["regional_staffer_user_id"] == null) || Session["imitator_designator"] != null)
+              {
+              Session.Clear();
+              DropCrumbAndTransferTo("~/login.aspx");
+              }
         }
 
     } // end TWebForm_regional_staffer_overview
