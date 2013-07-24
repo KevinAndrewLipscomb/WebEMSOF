@@ -1,21 +1,10 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
+using Class_db;
 using kix;
-
+using MySql.Data.MySqlClient;
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
+using System.Configuration;
 using System.Web.UI.WebControls;
 
-
-using Class_db;
 namespace county_overview
 {
     public struct p_type
@@ -56,11 +45,6 @@ namespace county_overview
             }
             else
             {
-                if ((Session["county_user_id"] == null) || (Session["county_name"] == null))
-                {
-                    Session.Clear();
-                    Server.Transfer("~/login.aspx");
-                }
                 Title = ConfigurationManager.AppSettings["application_name"] + " - county_overview";
                 p.db = new TClass_db();
                 p.db.Open();
@@ -113,6 +97,14 @@ namespace county_overview
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
+            //
+            // When NullReferenceException happens during a Page_Load and the Session is empty, it's because this kind of logic is being checked too late, in the Page_Load, rather than in the OnInit.
+            //
+            if ((Session["county_user_id"] == null) || (Session["county_name"] == null))
+              {
+              Session.Clear();
+              Server.Transfer("~/login.aspx");
+              }
             BeginBreadCrumbTrail();
 
         }
