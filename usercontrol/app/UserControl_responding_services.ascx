@@ -2,6 +2,7 @@
 <!-- Derived from KiAspdotnetFramework/usercontrol/app/UserControl~template~datagrid~sortable.ascx-template -->
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
+    <asp:ValidationSummary ID="ValidationSummary_quick_message" runat="server" ValidationGroup="QuickMessage"/>
     <p>&nbsp;</p>
     <p>
       <small>

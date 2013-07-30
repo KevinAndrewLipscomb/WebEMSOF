@@ -22,6 +22,15 @@ namespace UserControl_responding_services {
         protected global::System.Web.UI.UpdatePanel UpdatePanel_control;
         
         /// <summary>
+        /// ValidationSummary_quick_message control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary_quick_message;
+        
+        /// <summary>
         /// Label_num_services control.
         /// </summary>
         /// <remarks>

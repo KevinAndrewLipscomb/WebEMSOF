@@ -22,6 +22,15 @@ namespace UserControl_region_dictated_appropriations {
         protected global::System.Web.UI.UpdatePanel UpdatePanel_sda;
         
         /// <summary>
+        /// ValidationSummary_quick_message control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary_quick_message;
+        
+        /// <summary>
         /// LinkButton_new_sda control.
         /// </summary>
         /// <remarks>
