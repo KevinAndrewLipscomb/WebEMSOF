@@ -13,6 +13,7 @@
   <body bgcolor="white">
 	<form runat="server">
 	  <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
+      <asp:ValidationSummary ID="ValidationSummary_quick_message" runat="server" ValidationGroup="quick_message"/>
 	  <h3>
       <asp:label id="Label_fiscal_year_designator" runat="server"></asp:label>&nbsp;request from <asp:label id="Label_service_name" runat="server"></asp:label>&nbsp;(# <asp:label id="Label_affiliate_num" runat="server"></asp:label>)&nbsp; 
       <asp:LinkButton ID="LinkButton_profile" runat="server" CausesValidation="False" onclick="LinkButton_profile_Click">[Annual survey / Profile]</asp:LinkButton>
