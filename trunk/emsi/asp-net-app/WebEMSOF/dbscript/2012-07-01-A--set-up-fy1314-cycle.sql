@@ -21,11 +21,9 @@ INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expecta
 ((select id from fiscal_year where designator = 'FY1314'), 'Intubation, durable', 5, 1, 1, 0, 0, 600.00, 300.00, 360.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Transtracheal jet insufflators', 5, 1, 1, 0, 0, 200.00, 100.00, 120.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Splinting/immobilization devices', 3, 1, 1, 1, 1, 500.00, 250.00, 300.00),
-((select id from fiscal_year where designator = 'FY1314'), 'Stairchair 300 lb capacity', 3, 1, 0, 1, 0, 2000.00, 1000.00, 1200.00),
-((select id from fiscal_year where designator = 'FY1314'), 'Stairchair 500 lb capacity', 5, 1, 0, 1, 0, 2650.00, 1325.00, 1590.00),
-((select id from fiscal_year where designator = 'FY1314'), 'Stretcher 300 lb capacity', 5, 1, 0, 1, 0, 4000.00, 2000.00, 2400.00),
-((select id from fiscal_year where designator = 'FY1314'), 'Stretcher 700 lb capacity', 5, 1, 0, 1, 0, 13500.00, 6750.00, 8100.00),
-((select id from fiscal_year where designator = 'FY1314'), 'Stretcher/chair combination', 5, 1, 0, 1, 0, 700.00, 350.00, 420.00),
+((select id from fiscal_year where designator = 'FY1314'), 'Stairchair', 5, 1, 0, 1, 0, 5000.00, 1325.00, 1590.00),
+((select id from fiscal_year where designator = 'FY1314'), 'Stretcher', 5, 1, 0, 1, 0, 10000.00, 5000.00, 6400.00),
+((select id from fiscal_year where designator = 'FY1314'), 'Stair stretcher 500 lb capacity', 5, 1, 0, 1, 0, 2700.00, 1350.00, 1620.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Suction, portable', 3, 1, 1, 1, 1, 900.00, 450.00, 540.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Ventilator, automatic', 5, 1, 1, 1, 1, 3000.00, 1500.00, 1800.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Ambulance w/chevron FOR URBAN SERVICES ONLY', NULL, 1, 0, 1, 0, 30000.00, 15000.00, 0.00),
@@ -54,7 +52,8 @@ INSERT eligible_provider_equipment_list (fiscal_year_id,description,life_expecta
 ((select id from fiscal_year where designator = 'FY1314'), 'IO drill/injection system', 5, 1, 1, 0, 0, 300.00, 150.00, 180.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Narcotics security system', 5, 1, 1, 0, 0, 900.00, 450.00, 540.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Refrigerator, mini', 10, 1, 1, 0, 0, 1200.00, 600.00, 720.00),
-((select id from fiscal_year where designator = 'FY1314'), 'Tourniquet, commercial', 5, 1, 1, 1, 1, 25.00, 12.50, 15.00),
+((select id from fiscal_year where designator = 'FY1314'), 'Pediatric safe transport device', 10, 1, 0, 1, 0, 400.00, 200.00, 240.00),
+((select id from fiscal_year where designator = 'FY1314'), 'Tourniquet, tactical', 5, 1, 1, 1, 1, 25.00, 12.50, 15.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Bariatric equipment', 5, 1, 1, 1, 1, 27000.00, 13500.00, 16200.00),
 ((select id from fiscal_year where designator = 'FY1314'), 'Other - with attached documentation', NULL, 1, 1, 1, 1, NULL, NULL, NULL)
 ;
@@ -95,11 +94,11 @@ INSERT ignore INTO `epel_special_rule_map` (epel_code,special_rule_id)
     and name = "UpTo1PerAmbulance"
 ;
 insert fy_calendar (fiscal_year_id,milestone_code,`value`) VALUES
-((select id from fiscal_year where designator = 'FY1314'),1,'2012-11-30 23:59:59'),
-((select id from fiscal_year where designator = 'FY1314'),2,'2013-01-31 23:59:59'),
-((select id from fiscal_year where designator = 'FY1314'),3,'2013-02-28 23:59:59'),
-((select id from fiscal_year where designator = 'FY1314'),4,'2013-05-31 23:59:59'),
-((select id from fiscal_year where designator = 'FY1314'),5,'2013-06-30 23:59:59')
+((select id from fiscal_year where designator = 'FY1314'),1,'2013-11-29 23:59:59'),
+((select id from fiscal_year where designator = 'FY1314'),2,'2014-01-31 23:59:59'),
+((select id from fiscal_year where designator = 'FY1314'),3,'2014-02-28 23:59:59'),
+((select id from fiscal_year where designator = 'FY1314'),4,'2014-05-30 23:59:59'),
+((select id from fiscal_year where designator = 'FY1314'),5,'2014-06-30 23:59:59')
 ;
 insert region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount,service_to_county_submission_deadline,match_level_id) VALUES
 ((select max(id) from state_dictated_appropriation),1,103044,'2012-11-15 23:59:59',1),
