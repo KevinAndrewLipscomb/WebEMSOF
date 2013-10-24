@@ -101,15 +101,15 @@ insert fy_calendar (fiscal_year_id,milestone_code,`value`) VALUES
 ((select id from fiscal_year where designator = 'FY1314'),5,'2014-06-30 23:59:59')
 ;
 insert region_dictated_appropriation (state_dictated_appropriation_id,county_code,amount,service_to_county_submission_deadline,match_level_id) VALUES
-((select max(id) from state_dictated_appropriation),1,103044,'2012-11-15 23:59:59',1),
-((select max(id) from state_dictated_appropriation),2,20094,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),3,24308,'2012-11-15 23:59:59',1),
-((select max(id) from state_dictated_appropriation),4,40770,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),5,28151,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),6,13645,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),7,25791,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),8,19421,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),9,37465,'2012-11-15 23:59:59',2),
-((select max(id) from state_dictated_appropriation),10,57310,'2012-11-15 23:59:59',1)
+((select max(id) from state_dictated_appropriation),1,47456.48,'2012-11-15 23:59:59',1),
+((select max(id) from state_dictated_appropriation),2,9226.39,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),3,11177.66,'2012-11-15 23:59:59',1),
+((select max(id) from state_dictated_appropriation),4,18772.01,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),5,12921.66,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),6,6228.26,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),7,11761.90,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),8,8874.71,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),9,17263.60,'2012-11-15 23:59:59',2),
+((select max(id) from state_dictated_appropriation),10,26317.33,'2012-11-15 23:59:59',1)
 ;
 COMMIT
