@@ -9,6 +9,7 @@ namespace UserControl_postcontent
         {
             if (!IsPostBack)
             {
+            TableRow_bounty_program.Visible = (Session["username"] != null);
             }
 
         }
