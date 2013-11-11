@@ -193,6 +193,12 @@
     <Compile Include="protected\analyses.aspx.designer.cs">
       <DependentUpon>analyses.aspx</DependentUpon>
     </Compile>
+    <Compile Include="protected\bounty_program.aspx.cs">
+      <DependentUpon>bounty_program.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="protected\bounty_program.aspx.designer.cs">
+      <DependentUpon>bounty_program.aspx</DependentUpon>
+    </Compile>
     <Compile Include="protected\change_email_address.aspx.cs">
       <DependentUpon>change_email_address.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -667,6 +673,7 @@
     <Content Include="new_password.aspx" />
     <Content Include="noninteractive\report_fy_allocations_reimbursements_nonspends.aspx" />
     <Content Include="protected\administer_service_email_address.aspx" />
+    <Content Include="protected\bounty_program.aspx" />
     <Content Include="protected\county_detail.aspx" />
     <Content Include="protected\image\delete_x16_h.png" />
     <Content Include="protected\image\document-save-5.png" />
