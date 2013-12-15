@@ -1,29 +1,22 @@
-using System.Configuration;
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-using System.Web.UI;
 using Class_biz_appropriations;
 using Class_biz_emsof_requests;
+using kix;
+using System;
+using System.Configuration;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
 namespace state_required_report
 {
     public partial class TWebForm_state_required_report: ki_web_ui.page_class
     {
         private p_type p;
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         protected System.Web.UI.WebControls.Label Label_amount_available = null;
         protected System.Web.UI.WebControls.LinkButton LinkButton_back = null;
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -84,9 +77,9 @@ namespace state_required_report
                     }
                     Label_num_filtered_requests.Text = p.biz_emsof_requests.NumRequestsInStateExportBatch(((status_type)(Session["status_of_interest"])), p.amendment_num_string, Session["regional_staffer_user_id"].ToString()).ToString();
                 }
-                Label_funding_round.Text = ((uint)p.biz_appropriations.FundingRoundsGenerated(Session["regional_staffer_user_id"].ToString()) + 1).ToString();
+                Label_funding_round_everything.Text = ((uint)p.biz_appropriations.FundingRoundsGenerated(Session["regional_staffer_user_id"].ToString()) + 1).ToString();
+                Label_funding_round_some.Text = Label_funding_round_everything.Text;
                 Bind();
-                Label_submission_date.Text = DateTime.Today.ToString("d MMM yyyy");
             }
         }
 
@@ -106,7 +99,8 @@ namespace state_required_report
         {
             p.amendment_num_string = k.Safe(DropDownList_amendment.SelectedValue, k.safe_hint_type.NUM);
             Label_num_filtered_requests.Text = p.biz_emsof_requests.NumRequestsInStateExportBatch(((status_type)(Session["status_of_interest"])), p.amendment_num_string, Session["regional_staffer_user_id"].ToString()).ToString();
-            Label_funding_round.Text = ((uint)1 + p.biz_appropriations.FundingRoundsGenerated(Session["regional_staffer_user_id"].ToString(), p.amendment_num_string)).ToString();
+            Label_funding_round_everything.Text = ((uint)1 + p.biz_appropriations.FundingRoundsGenerated(Session["regional_staffer_user_id"].ToString(), p.amendment_num_string)).ToString();
+            Label_funding_round_some.Text = Label_funding_round_everything.Text;
             Bind();
         }
 
@@ -130,10 +124,10 @@ namespace state_required_report
             }
             else if ((e.Item.ItemType == ListItemType.Footer))
             {
-                e.Item.Cells[7].Text = "TOTALS:";
-                e.Item.Cells[8].Text = p.grand_total_cost.ToString("C");
-                e.Item.Cells[9].Text = p.total_emsof_ante.ToString("C");
-                e.Item.Cells[10].Text = p.total_provider_match.ToString("C");
+                e.Item.Cells[0].Text = "Total This Request:";
+                e.Item.Cells[6].Text = p.grand_total_cost.ToString();
+                e.Item.Cells[9].Text = p.total_provider_match.ToString();
+                e.Item.Cells[10].Text = p.total_emsof_ante.ToString();
             }
         }
 
