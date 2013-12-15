@@ -195,6 +195,7 @@
     </Compile>
     <Compile Include="protected\bounty_program.aspx.cs">
       <DependentUpon>bounty_program.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="protected\bounty_program.aspx.designer.cs">
       <DependentUpon>bounty_program.aspx</DependentUpon>

@@ -4,7 +4,8 @@
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
-  <head runat="server"></title>
+  <head runat="server">
+    <title></title>
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
@@ -39,127 +40,74 @@
                     </tr>
                     <tr id="TableRow_this_is_everything" runat="server" visible="False">
                       <td colspan="3">
-                        <small>This report includes request items from all&nbsp;<ASP:Label id="Label_total_num_requests_2" runat="server" font-bold="True"></ASP:Label> requests.</small>
+                        <small>
+                          This report includes request items from all&nbsp;<ASP:Label id="Label_total_num_requests_2" runat="server" font-bold="True"></ASP:Label> requests made in funding round
+                          #<asp:label id="Label_funding_round_everything" runat="server"></asp:label>.
+                        </small>
                       </td>
                     </tr>
                     <tr id="TableRow_this_is_just_some" runat="server" visible="False">
                       <td colspan="3">
-                        <small>This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against <ASP:DropDownList id="DropDownList_amendment" runat="server" autopostback="True" onselectedindexchanged="DropDownList_amendment_SelectedIndexChanged"></ASP:DropDownList>.</small>
+                        <small>
+                          This report only includes items from the&nbsp;<ASP:Label id="Label_num_filtered_requests" runat="server" font-bold="True"></ASP:Label>&nbsp;requests made against
+                          <ASP:DropDownList id="DropDownList_amendment" runat="server" autopostback="True" onselectedindexchanged="DropDownList_amendment_SelectedIndexChanged"></ASP:DropDownList> in funding round
+                          #<asp:label id="Label_funding_round_some" runat="server"></asp:label>.
+                        </small>
                       </td>
                     </tr>
+                    <tr><td><small>Do not copy/paste cells marked <strong>PROTECTED</strong> into state spreadsheet.</small></td></tr>
                   </table>
                 </td>
               </tr>
               <tr>
                 <td>
                   <table cellspacing="0" cellpadding="5" border="0" id="Table_report" runat="server">
-                    <tr><td>Regional EMS council name: <strong>EMERGENCY MEDICAL SERVICE INSTITUTE</strong></td></tr>
                     <tr id="TableRow_none" runat="server"><td><em>-- NONE --</em></td></tr>
                     <tr>
                       <td>
-                        <asp:datagrid id="DataGrid_state_export_batch" runat="server" autogeneratecolumns="False" visible="False" font-size="X-Small" showfooter="True" bordercolor="Gainsboro">
+                        <asp:datagrid id="DataGrid_state_export_batch" runat="server" autogeneratecolumns="False" visible="False" font-size="X-Small" bordercolor="Gainsboro">
                           <FooterStyle font-bold="True" backcolor="LightGray"></FooterStyle>
                           <AlternatingItemStyle backcolor="WhiteSmoke"></AlternatingItemStyle>
                           <HeaderStyle backcolor="LightGray"></HeaderStyle>
                           <Columns>
-                            <ASP:BoundColumn datafield="w_num" readonly="True" headertext="W#">
-                              <HeaderStyle font-italic="True"></HeaderStyle>
-                              <ItemStyle font-italic="True"></ItemStyle>
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="be_reopened_after_going_to_state" readonly="True" headertext="*">
-                              <HeaderStyle horizontalalign="Center"></HeaderStyle>
-                              <ItemStyle font-bold="True" horizontalalign="Center"></ItemStyle>
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="service_name" readonly="True" headertext="Organization Name"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="life_support_level" readonly="True" headertext="Type of Organization"></ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="equipment_description" readonly="True" headertext="Equipment/Program">
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="make_model" readonly="True" headertext="Make/Model">
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="quantity" readonly="True" headertext="# Units">
+                            <ASP:BoundColumn datafield="service_name" readonly="True" headertext="Service"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="life_support_level" readonly="True" headertext="Org Type"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="match_level" readonly="True" headertext="Rural"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="equipment_description" readonly="True" headertext="Equipment"></ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="quantity" readonly="True" headertext="QTY">
                               <ItemStyle horizontalalign="Right"></ItemStyle>
                             </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="unit_cost" readonly="True" headertext="Unit Cost" dataformatstring="{0:C}">
+                            <ASP:BoundColumn datafield="unit_cost" readonly="True" headertext="Unit Price">
                               <ItemStyle horizontalalign="Right"></ItemStyle>
                               <FooterStyle horizontalalign="Right"></FooterStyle>
                             </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="total_cost" readonly="True" headertext="Total Cost Amount" dataformatstring="{0:C}">
-                              <HeaderStyle horizontalalign="Center"></HeaderStyle>
-                              <ItemStyle horizontalalign="Right"></ItemStyle>
-                              <FooterStyle horizontalalign="Right"></FooterStyle>
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF Amount" dataformatstring="{0:C}">
-                              <HeaderStyle horizontalalign="Center"></HeaderStyle>
-                              <ItemStyle horizontalalign="Right"></ItemStyle>
-                              <FooterStyle horizontalalign="Right"></FooterStyle>
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="provider_match" readonly="True" headertext="Provider Match" dataformatstring="{0:C}">
-                              <HeaderStyle horizontalalign="Center"></HeaderStyle>
-                              <ItemStyle horizontalalign="Right"></ItemStyle>
-                              <FooterStyle horizontalalign="Right"></FooterStyle>
-                            </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="recommendation" readonly="True" headertext="Recomm">
+                            <asp:TemplateColumn HeaderText="Total Cost"><ItemTemplate><strong>PROTECTED</strong></ItemTemplate></asp:TemplateColumn>
+                            <ASP:BoundColumn datafield="recommendation" readonly="True" headertext="Recom">
                               <HeaderStyle horizontalalign="Center"></HeaderStyle>
                               <ItemStyle horizontalalign="Center"></ItemStyle>
                             </ASP:BoundColumn>
-                            <ASP:BoundColumn datafield="discouragement_code" readonly="True" headertext="Not Recomm">
+                            <ASP:BoundColumn datafield="discouragement_code" readonly="True" headertext="Not Recom">
                               <HeaderStyle horizontalalign="Center"></HeaderStyle>
                               <ItemStyle horizontalalign="Center"></ItemStyle>
                             </ASP:BoundColumn>
-                            <ASP:BoundColumn readonly="True" headertext="EMSOF Approved"></ASP:BoundColumn>
-                            <ASP:BoundColumn readonly="True" headertext="Actual Total Cost" dataformatstring="{0:C}">
+                            <ASP:BoundColumn datafield="provider_match" readonly="True" headertext="Provider Match">
                               <HeaderStyle horizontalalign="Center"></HeaderStyle>
                               <ItemStyle horizontalalign="Right"></ItemStyle>
                               <FooterStyle horizontalalign="Right"></FooterStyle>
                             </ASP:BoundColumn>
+                            <ASP:BoundColumn datafield="emsof_ante" readonly="True" headertext="EMSOF Funds Requested">
+                              <HeaderStyle horizontalalign="Center"></HeaderStyle>
+                              <ItemStyle horizontalalign="Right"></ItemStyle>
+                              <FooterStyle horizontalalign="Right"></FooterStyle>
+                            </ASP:BoundColumn>
+                            <asp:TemplateColumn HeaderText="Errors"><ItemTemplate><strong>PROTECTED</strong></ItemTemplate></asp:TemplateColumn>
+                            <ASP:BoundColumn datafield="note" readonly="True" headertext="Notes"></ASP:BoundColumn>
                           </Columns>
                         </asp:datagrid>
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <table cellspacing="0" cellpadding="5" border="0">
-                          <tr>
-                            <td align="right" valign="top">Reviewed and Recommended by Regional EMS Council (name):</td>
-                            <td></td>
-                            <td valign="top"><strong>William E. Groft</strong><br>President</td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td valign="top"><strong>Thomas J. McElree</strong><br>Regional EMS Council Director</td>
-                          </tr>
-                          <tr>
-                            <td align="right">Funding Round:</td>
-                            <td></td>
-                            <td><asp:label id="Label_funding_round" runat="server"></asp:label></td>
-                          </tr>
-                          <tr>
-                            <td align="right">Submission Date:</td>
-                            <td></td>
-                            <td><asp:label id="Label_submission_date" runat="server"></asp:label></td>
-                          </tr>
-                          <tr>
-                            <td align="right">Review Date:</td>
-                            <td></td>
-                            <td>__________________________________</td>
-                          </tr>
-                          <tr>
-                            <td align="right">Approval Date:</td>
-                            <td></td>
-                            <td>__________________________________</td>
-                          </tr>
-                          <tr>
-                            <td align="right">DOH Approval:</td>
-                            <td></td>
-                            <td>__________________________________</td>
-                          </tr>
-                          <tr>
-                            <td align="right">Date:</td>
-                            <td></td>
-                            <td>__________________________________</td>
-                          </tr>
-                        </table>
                         <p>
                           <table cellspacing="0" cellpadding="5" border="0" id="Table_replacement_note" runat="server">
                             <tr>
