@@ -112,6 +112,15 @@ namespace state_required_report {
         protected global::System.Web.UI.WebControls.Label Label_funding_round_some;
         
         /// <summary>
+        /// TableRow_replacement_note control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow TableRow_replacement_note;
+        
+        /// <summary>
         /// Table_report control.
         /// </summary>
         /// <remarks>
@@ -137,15 +146,6 @@ namespace state_required_report {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DataGrid DataGrid_state_export_batch;
-        
-        /// <summary>
-        /// Table_replacement_note control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTable Table_replacement_note;
         
         /// <summary>
         /// UserControl_postcontent control.

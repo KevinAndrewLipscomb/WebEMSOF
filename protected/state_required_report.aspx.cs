@@ -92,7 +92,7 @@ namespace state_required_report
 
         protected void LinkButton_export_scratch_copy_Click(object sender, System.EventArgs e)
         {
-            ExportToExcel(Page, "WebEmsof-UNOFFICIAL-" + DateTime.Now.ToString("yyyyMMddHHmmssf"), StringOfControl(Table_report));
+            ExportToExcel(Page, "WebEmsof-UNOFFICIAL-" + DateTime.Now.ToString("yyyyMMddHHmmssf"), StringOfControl(DataGrid_state_export_batch));
         }
 
         protected void DropDownList_amendment_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -106,7 +106,7 @@ namespace state_required_report
 
         protected void LinkButton_transmit_to_state_Click(object sender, System.EventArgs e)
         {
-            p.biz_emsof_requests.SubmitToState(Table_report, Request.PhysicalPath, ((status_type)(Session["status_of_interest"])), Session["regional_staffer_user_id"].ToString(), p.amendment_num_string);
+            p.biz_emsof_requests.SubmitToState(DataGrid_state_export_batch, Request.PhysicalPath, ((status_type)(Session["status_of_interest"])), Session["regional_staffer_user_id"].ToString(), p.amendment_num_string);
             DropCrumbAndTransferTo("state_transmittal_complete.aspx");
         }
 
@@ -117,7 +117,7 @@ namespace state_required_report
             {
                 // We are dealing with a data row, not a header or footer row.
                 p.num_datagrid_rows = p.num_datagrid_rows + 1;
-                p.be_replacement_rows_present = p.be_replacement_rows_present || (e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfSrrReplacementRowIndicator())].Text != "&nbsp;");
+                p.be_replacement_rows_present = p.be_replacement_rows_present || (e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfSrrReplacementRowIndicator())].Text.EndsWith("*"));
                 p.grand_total_cost = p.grand_total_cost + Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "total_cost"));
                 p.total_emsof_ante = p.total_emsof_ante + Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "emsof_ante"));
                 p.total_provider_match = p.total_provider_match + Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "provider_match"));
@@ -145,7 +145,7 @@ namespace state_required_report
             DataGrid_state_export_batch.Visible = !p.be_datagrid_empty;
             LinkButton_transmit_to_state.Enabled = !p.be_datagrid_empty;
             LinkButton_export_scratch_copy.Enabled = !p.be_datagrid_empty;
-            Table_replacement_note.Visible = p.be_replacement_rows_present;
+            TableRow_replacement_note.Visible = p.be_replacement_rows_present;
             // Clear aggregation vars for next bind, if any.
             p.num_datagrid_rows = 0;
 
