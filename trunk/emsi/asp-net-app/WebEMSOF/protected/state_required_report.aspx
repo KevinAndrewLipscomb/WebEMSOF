@@ -56,6 +56,14 @@
                       </td>
                     </tr>
                     <tr><td><small>Do not copy/paste cells marked <strong>PROTECTED</strong> into state spreadsheet.</small></td></tr>
+                    <tr id="TableRow_replacement_note" runat="server" visible="false">
+                      <td>
+                        <small>
+                          Rows marked with a star in the <i>Notes</i> field are <u>replacements</u> for rows that were reported in a previous funding round in this fiscal year.&nbsp; PA DOH EMSB should <u>delete</u> the
+                          associated batch of rows from its previous records and use the items in this batch instead.&nbsp; The "W#" can be used to positively determine associated batches.
+                        </small>
+                      </td>
+                    </tr>
                   </table>
                 </td>
               </tr>
@@ -104,18 +112,6 @@
                             <ASP:BoundColumn datafield="note" readonly="True" headertext="Notes"></ASP:BoundColumn>
                           </Columns>
                         </asp:datagrid>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>
-                          <table cellspacing="0" cellpadding="5" border="0" id="Table_replacement_note" runat="server">
-                            <tr>
-                              <td valign="top">*</td>
-                              <td>Rows marked with a star in this column are <u>replacements</u> for rows that were reported in a previous funding round in this fiscal year.&nbsp; PA DOH EMSO should <u>delete</u> the associated batch of rows from its previous records and use the items in this batch instead.&nbsp; The "W#" can be used to positively determine associated batches.</td>
-                            </tr>
-                          </table>
-                        </p>
                       </td>
                     </tr>
                   </table>
