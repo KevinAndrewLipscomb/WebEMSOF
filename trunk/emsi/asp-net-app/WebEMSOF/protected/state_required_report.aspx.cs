@@ -107,7 +107,7 @@ namespace state_required_report
         protected void LinkButton_transmit_to_state_Click(object sender, System.EventArgs e)
         {
             p.biz_emsof_requests.SubmitToState(DataGrid_state_export_batch, Request.PhysicalPath, ((status_type)(Session["status_of_interest"])), Session["regional_staffer_user_id"].ToString(), p.amendment_num_string);
-            DropCrumbAndTransferTo("state_transmittal_complete.aspx");
+            BackTrack();  //DropCrumbAndTransferTo("state_transmittal_complete.aspx");            
         }
 
         private void DataGrid_state_export_batch_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
