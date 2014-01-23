@@ -142,7 +142,8 @@ namespace login
                 SessionSet("region_code",p.region_code);
                 // Set username in session for the benefit of the TableRow_account_control in UserControl_precontent.
                 SessionSet("username", k.Safe(DropDownList_user.SelectedItem.Text, k.safe_hint_type.ORG_NAME));
-                FormsAuthentication.RedirectFromLoginPage(k.Safe(DropDownList_user.SelectedValue, k.safe_hint_type.HYPHENATED_UNDERSCORED_ALPHANUM), CheckBox_keep_me_logged_in.Checked);
+                FormsAuthentication.SetAuthCookie(k.Safe(DropDownList_user.SelectedValue, k.safe_hint_type.HYPHENATED_UNDERSCORED_ALPHANUM), CheckBox_keep_me_logged_in.Checked);
+                Response.Redirect("~/protected/" + Session["target_user_table"].ToString() + "_overview.aspx");
             }
         }
 
