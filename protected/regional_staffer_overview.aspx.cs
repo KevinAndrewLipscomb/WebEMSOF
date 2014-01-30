@@ -1,3 +1,4 @@
+using Class_biz_accounts;
 using System;
 using System.Configuration;
 
@@ -22,6 +23,10 @@ namespace regional_staffer_overview
             {
                 Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - regional_staffer_overview";
                 BeginBreadCrumbTrail();
+                if (new TClass_biz_accounts().BeStalePassword(user_kind:"regional_staffer",user_id:Session["regional_staffer_user_id"].ToString()))
+                  {
+                  DropCrumbAndTransferTo("change_password.aspx");
+                  }
             }
 //
 //ToolkitScriptManager.GetCurrent(Page).EnablePartialRendering = false;
