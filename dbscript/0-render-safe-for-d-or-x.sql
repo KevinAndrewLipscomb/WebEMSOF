@@ -30,6 +30,6 @@ update practitioner
 set email_address = concat("Practitioner",id,"@frompaper2web.com")
 ;
 update sms_gateway
-set hostname = concat(hostname,".frompaper2web.com")
+set hostname = concat("Host",id,".frompaper2web.com")
 ;
 COMMIT
