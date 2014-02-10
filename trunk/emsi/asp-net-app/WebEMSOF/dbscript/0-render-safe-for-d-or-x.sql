@@ -9,6 +9,9 @@ set password_reset_email_address = concat("RegionalStaffer",id,"@frompaper2web.c
 update service_user
 set password_reset_email_address = concat("Service",id,"@frompaper2web.com")
 ;
+update user
+set password_reset_email_address = concat(username,"@frompaper2web.com");
+;
 update service
 set corpadmin_email_address = concat("Service",id,"_Corpadmin@frompaper2web.com")
 , coo_email_address = concat("Service",id,"_Coo@frompaper2web.com")
