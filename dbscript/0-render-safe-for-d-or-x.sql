@@ -29,4 +29,7 @@ set public_contact_email = concat("ConedOffering",id,"_PublicContactEmail@frompa
 update practitioner
 set email_address = concat("Practitioner",id,"@frompaper2web.com")
 ;
+update sms_gateway
+set hostname = concat(hostname,".frompaper2web.com")
+;
 COMMIT
