@@ -116,6 +116,7 @@
                       <td><font class=""><asp:TextBox runat="server" columns="31" maxlength="31" id="TextBox_short_name" enabled="False"></asp:TextBox>*</font></td>
                       <td nowrap="nowrap">
                         <asp:RequiredFieldValidator runat="server" controltovalidate="TextBox_short_name" errormessage="Under the Basic ID tab, please enter Service short name." font-bold="True" id="RequiredFieldValidator_short_name">!ERR!</asp:RequiredFieldValidator>
+                        <asp:CustomValidator ID="CustomValidator_short_name" runat="server" font-bold="True" ErrorMessage="The specified Service short name is already in use by " onservervalidate="CustomValidator_short_name_ServerValidate">!ERR!</asp:CustomValidator>
                       </td>
                     </tr>
                     <tr>
