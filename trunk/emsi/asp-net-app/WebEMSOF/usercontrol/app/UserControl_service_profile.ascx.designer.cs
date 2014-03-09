@@ -301,6 +301,24 @@ namespace UserControl_service_profile {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_name;
         
         /// <summary>
+        /// TextBox_short_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TextBox_short_name;
+        
+        /// <summary>
+        /// RequiredFieldValidator_short_name control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator_short_name;
+        
+        /// <summary>
         /// TextBox_federal_tax_id control.
         /// </summary>
         /// <remarks>
