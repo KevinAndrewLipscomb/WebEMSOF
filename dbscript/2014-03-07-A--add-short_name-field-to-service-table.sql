@@ -5,7 +5,7 @@ ALTER TABLE `service`
 ;
 update ignore service set short_name = SUBSTRING_INDEX(name,' ',1)
 ;
-update ignore service set short_name = 'ACES OST' where name = 'Allegheny County EMS Council Operations Support Team'
+update ignore service set short_name = 'ACES' where name = 'Allegheny County EMS Council Operations Support Team'
 ;
 update ignore service set short_name = 'Ambulance & Chair' where name = 'Ambulance & Chair Service'
 ;
@@ -37,7 +37,7 @@ update ignore service set short_name = 'Elizabeth Fire' where name = 'Elizabeth 
 ;
 update ignore service set short_name = 'Elizabeth Twp' where name = 'Elizabeth Twp Area EMS'
 ;
-update ignore service set short_name = 'EMSI' where name = 'Emergency Medical Services Institute'
+update ignore service set short_name = 'EMSI/Region 4' where name = 'Emergency Medical Services Institute'
 ;
 update ignore service set short_name = 'EMS Southwest' where name = 'EMS Southwest Inc.'
 ;

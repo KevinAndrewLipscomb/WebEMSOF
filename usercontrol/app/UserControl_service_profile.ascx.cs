@@ -133,6 +133,7 @@ namespace UserControl_service_profile
             TextBox_radio_channel_4.Text = k.EMPTY;
             TextBox_radio_channel_5.Text = k.EMPTY;
             TextBox_radio_channel_6.Text = k.EMPTY;
+            TextBox_short_name.Text = k.EMPTY;
             RadioButtonList_be_distressed.ClearSelection();
             ManageCharterControlEnablements();
             ManageEmsofControlEnablements();
@@ -422,6 +423,7 @@ namespace UserControl_service_profile
             string radio_channel_5;
             string radio_channel_6;
             string primary_response_area;
+            string short_name;
             result = false;
             if
               (
@@ -539,7 +541,8 @@ namespace UserControl_service_profile
                 out radio_channel_4,
                 out radio_channel_5,
                 out radio_channel_6,
-                out primary_response_area
+                out primary_response_area,
+                out short_name
                 )
               )
               {
@@ -652,6 +655,7 @@ namespace UserControl_service_profile
                 TextBox_radio_channel_4.Text = radio_channel_4;
                 TextBox_radio_channel_5.Text = radio_channel_5;
                 TextBox_radio_channel_6.Text = radio_channel_6;
+                TextBox_short_name.Text = short_name;
                 //
                 p.saved_home_county_code = county_code;
                 p.service_id = id;
@@ -948,7 +952,8 @@ namespace UserControl_service_profile
                   k.Safe(TextBox_radio_channel_4.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_radio_channel_5.Text, k.safe_hint_type.PUNCTUATED).Trim(),
                   k.Safe(TextBox_radio_channel_6.Text, k.safe_hint_type.PUNCTUATED).Trim(),
-                  k.Safe(TextBox_primary_response_area.Text, k.safe_hint_type.POSTAL_CITY_CSV).Trim()
+                  k.Safe(TextBox_primary_response_area.Text, k.safe_hint_type.POSTAL_CITY_CSV).Trim(),
+                  k.Safe(TextBox_short_name.Text, k.safe_hint_type.MAKE_MODEL).Trim()
                   );
                 //
                 var dependency_q = new Queue();
@@ -1133,6 +1138,7 @@ namespace UserControl_service_profile
             TextBox_radio_channel_4.Enabled = ablement;
             TextBox_radio_channel_5.Enabled = ablement;
             TextBox_radio_channel_6.Enabled = ablement;
+            TextBox_short_name.Enabled = ablement;
         }
 
         protected void Button_lookup_Click(object sender, System.EventArgs e)
