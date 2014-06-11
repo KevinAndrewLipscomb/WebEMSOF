@@ -381,7 +381,7 @@ namespace UserControl_responding_services
         private void Bind()
         {
             DataGrid_control.Columns[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Visible = p.be_ok_to_update_service_email_address;
-            p.biz_services.BindAnnualRespondents(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
+            p.biz_services.BindAnnualRespondents(p.sort_order, p.be_sort_order_ascending, DataGrid_control, Session["region_code"].ToString());
             Label_num_nonparticipants.Text = p.num_nonparticipants.ToString();
             Label_num_participants.Text = p.num_participants.ToString();
             Label_num_respondents.Text = p.num_respondents.ToString();
