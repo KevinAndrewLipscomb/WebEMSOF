@@ -1,10 +1,5 @@
 START TRANSACTION
 ;
-ALTER TABLE `service`
-  ADD COLUMN `short_name` VARCHAR(31) AFTER `name`
-;
-update ignore service set short_name = SUBSTRING_INDEX(name,' ',1) -- DANGER!!!  RESETS ALL PRE-EXISTING SERVICE NAMES IN TABLE!!!
-;
 update ignore service set short_name = 'ACES' where name = 'Allegheny County EMS Council Operations Support Team'
 ;
 update ignore service set short_name = 'Ambulance & Chair' where name = 'Ambulance & Chair Service'
