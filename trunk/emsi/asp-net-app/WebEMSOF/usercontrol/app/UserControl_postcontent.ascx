@@ -29,10 +29,6 @@
                                 </tr>
                                 <tr>
                                   <td valign="top">&bull;</td>
-                                  <td><small><a runat="server" href="~/resource/emsi-emsof-allocations-memo.pdf" target="_blank">Regional announcement</a></small></td>
-                                </tr>
-                                <tr>
-                                  <td valign="top">&bull;</td>
                                   <td><small><a runat="server" href="~/resource/terms-and-conditions.pdf" target="_blank">Terms and Conditions</a></small></td>
                                 </tr>
                                 <tr>
