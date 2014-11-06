@@ -187,7 +187,7 @@ namespace county_dictated_appropriations
 
         protected void Button_send_Click(object sender, System.EventArgs e)
           {
-          if (p.distribution_list_for_services_with_allocations.Length > 0)
+          if (Label_distribution_list.Text.Length > 0)
             {
             k.SmtpMailSend
               (
