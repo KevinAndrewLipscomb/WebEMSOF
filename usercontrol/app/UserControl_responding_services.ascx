@@ -3,7 +3,6 @@
 <asp:UpdatePanel id="UpdatePanel_control" runat="server" updatemode="Conditional">
   <ContentTemplate>
     <asp:ValidationSummary ID="ValidationSummary_quick_message" runat="server" ValidationGroup="QuickMessage"/>
-    <p>&nbsp;</p>
     <p>
       <small>
         <strong><asp:Label id="Label_num_services" runat="server"></asp:Label>&nbsp;services:</strong>&nbsp;
@@ -14,10 +13,10 @@
     </p>
     <asp:DataGrid id="DataGrid_control" runat="server" allowsorting="True" autogeneratecolumns="False" cellpadding="10" gridlines="Horizontal">
       <Columns>
-        <asp:ButtonColumn commandname="update-email-address" text="&lt;IMG src=&quot;~/protected/image/address-book--pencil--16-16.png&quot; alt=&quot;Imitate&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;"></asp:ButtonColumn>
+        <asp:ButtonColumn commandname="update-email-address" text="&lt;IMG src=&quot;~/protected/image/address-book--pencil--16-16.png&quot; alt=&quot;Imitate&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" Visible="False"></asp:ButtonColumn>
         <asp:ButtonColumn commandname="profile-tabbed" text="&lt;IMG src=&quot;~/protected/image/open_document16_h.png&quot; alt=&quot;Profile (tabbed)&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;"></asp:ButtonColumn>
         <asp:ButtonColumn commandname="profile-printable" text="&lt;IMG src=&quot;~/protected/image/print16_h.png&quot; alt=&quot;Profile (printable)&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;"></asp:ButtonColumn>
-        <asp:ButtonColumn CommandName="imitate" Text="&lt;IMG src=&quot;~/protected/image/mask-16-16.png&quot; alt=&quot;Imitate&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;"></asp:ButtonColumn>
+        <asp:ButtonColumn CommandName="imitate" Text="&lt;IMG src=&quot;~/protected/image/mask-16-16.png&quot; alt=&quot;Imitate&quot; border=&quot;0&quot; height=&quot;16&quot; width=&quot;16&quot; /&gt;" Visible="False"></asp:ButtonColumn>
         <asp:BoundColumn datafield="affiliate_num" visible="False"></asp:BoundColumn>
         <asp:TemplateColumn HeaderStyle-HorizontalAlign="Center" ItemStyle-HorizontalAlign="Center">
           <HeaderTemplate>

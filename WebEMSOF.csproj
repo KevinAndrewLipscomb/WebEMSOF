@@ -418,6 +418,13 @@
     <Compile Include="usercontrol\app\UserControl_annual_cycle_setup.ascx.designer.cs">
       <DependentUpon>UserControl_annual_cycle_setup.ascx</DependentUpon>
     </Compile>
+    <Compile Include="usercontrol\app\UserControl_appropriations_available_to_county.ascx.cs">
+      <DependentUpon>UserControl_appropriations_available_to_county.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_appropriations_available_to_county.ascx.designer.cs">
+      <DependentUpon>UserControl_appropriations_available_to_county.ascx</DependentUpon>
+    </Compile>
     <Compile Include="usercontrol\app\UserControl_charter_kind.ascx.cs">
       <DependentUpon>UserControl_charter_kind.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -445,6 +452,13 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_counties.ascx.designer.cs">
       <DependentUpon>UserControl_counties.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_county_binder.ascx.cs">
+      <DependentUpon>UserControl_county_binder.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usercontrol\app\UserControl_county_binder.ascx.designer.cs">
+      <DependentUpon>UserControl_county_binder.ascx</DependentUpon>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx.cs">
       <DependentUpon>UserControl_equipment_procurement_binder.ascx</DependentUpon>
@@ -737,10 +751,12 @@
     <Content Include="usercontrol\app\UserControl_about.ascx" />
     <Content Include="usercontrol\app\UserControl_analyses_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_annual_cycle_setup.ascx" />
+    <Content Include="usercontrol\app\UserControl_appropriations_available_to_county.ascx" />
     <Content Include="usercontrol\app\UserControl_charter_kind.ascx" />
     <Content Include="usercontrol\app\UserControl_common_header_bar.ascx" />
     <Content Include="usercontrol\app\UserControl_config_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_counties.ascx" />
+    <Content Include="usercontrol\app\UserControl_county_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_equipment_procurement_binder.ascx" />
     <Content Include="usercontrol\app\UserControl_equipment_procurement_overview.ascx" />
     <Content Include="usercontrol\app\UserControl_financial_snapshot.ascx" />

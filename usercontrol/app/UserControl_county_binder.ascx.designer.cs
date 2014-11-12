@@ -7,45 +7,54 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace county_overview {
+namespace UserControl_county_binder {
     
     
-    public partial class TWebForm_county_overview {
+    public partial class TWebUserControl_county_binder {
         
         /// <summary>
-        /// UserControl_precontent control.
+        /// UpdatePanel_control control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::UserControl_precontent.TWebUserControl_precontent UserControl_precontent;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel_control;
         
         /// <summary>
-        /// UserControl_county_binder_control control.
+        /// TabContainer_control control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::UserControl_county_binder.TWebUserControl_county_binder UserControl_county_binder_control;
+        protected global::AjaxControlToolkit.TabContainer TabContainer_control;
         
         /// <summary>
-        /// UserControl_postcontent control.
+        /// TabPanel_services control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::UserControl_postcontent.TWebUserControl_postcontent UserControl_postcontent;
+        protected global::AjaxControlToolkit.TabPanel TabPanel_services;
         
         /// <summary>
-        /// UserControl_update_progress_blocker_control control.
+        /// TabPanel_available_allocations control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::UserControl_update_progress_blocker.TWebUserControl_update_progress_blocker UserControl_update_progress_blocker_control;
+        protected global::AjaxControlToolkit.TabPanel TabPanel_available_allocations;
+        
+        /// <summary>
+        /// PlaceHolder_content control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder_content;
     }
 }

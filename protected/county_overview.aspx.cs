@@ -31,7 +31,6 @@ namespace county_overview
         {
             MySqlDataReader dr;
             string county_user_email_address;
-            string max_fiscal_year_id_string;
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -56,32 +55,9 @@ namespace county_overview
                     // time.
                     county_user_email_address = dr["password_reset_email_address"].ToString();
                     dr.Close();
-                    // Where we go next depends on how many appropriations have been made to this county.
-                    // Determine current fiscal year
-                    max_fiscal_year_id_string = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection).ExecuteScalar().ToString();
-                    dr = new MySqlCommand("SELECT region_dictated_appropriation.id," + " concat(\"$\",format(region_dictated_appropriation.amount,2),\" from the \",name,\" \",designator,\" contract (amendment \",amendment_num,\")\")" + " as appropriation_description" + " FROM region_dictated_appropriation" + " JOIN state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id)" + " JOIN region_code_name_map on (region_code_name_map.code=region_code)" + " JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)" + " WHERE county_code = " + Session["county_user_id"].ToString() + " and fiscal_year_id = " + max_fiscal_year_id_string, p.db.connection).ExecuteReader();
-                    while (dr.Read())
-                    {
-                        RadioButtonList_appropriation.Items.Add(new ListItem(dr["appropriation_description"].ToString(), dr["id"].ToString()));
-                    }
-                    dr.Close();
-                    p.db.Close();
-                    if (RadioButtonList_appropriation.Items.Count == 0)
-                    {
-                        Alert(k.alert_cause_type.APPDATA,k.alert_state_type.NORMAL,"noapprop","Sorry, the regional council has not yet made an allocation to you in this cycle.");
-                    }
-                    else
-                    {
-                        // Add the county's email address to the session, as it will be needed by county_dictated_appropriations however we
-                        // get there.
-                        SessionSet("county_user_password_reset_email_address", county_user_email_address);
-                        if (RadioButtonList_appropriation.Items.Count == 1)
-                        {
-                            SessionSet("region_dictated_appropriation_id", RadioButtonList_appropriation.Items[0].Value);
-                            DropCrumbAndTransferTo("county_dictated_appropriations.aspx");
-                        }
-                        Button_continue.Enabled = true;
-                    }
+                    // Add the county's email address to the session, as it will be needed by county_dictated_appropriations however we
+                    // get there.
+                    SessionSet("county_user_password_reset_email_address", county_user_email_address);
                 }
                 else
                 {
@@ -114,22 +90,6 @@ namespace county_overview
             SessionSet(InstanceId() + ".p", p);
         }
 
-        protected void Button_continue_Click(object sender, System.EventArgs e)
-        {
-            SessionSet("region_dictated_appropriation_id", k.Safe(RadioButtonList_appropriation.SelectedValue, k.safe_hint_type.NUM));
-            DropCrumbAndTransferTo("county_dictated_appropriations.aspx");
-        }
-
     } // end TWebForm_county_overview
 
 }
-
-namespace county_overview.Units
-{
-    public class county_overview
-    {
-        public const string ID = "$Id: county_overview.pas 2492 2008-08-13 00:23:10Z kevinanlipscomb $";
-    } // end county_overview
-
-}
-

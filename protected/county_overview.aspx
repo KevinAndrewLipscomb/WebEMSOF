@@ -1,40 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <%@ Page language="c#" Debug="true" Codebehind="county_overview.aspx.cs" AutoEventWireup="True" Inherits="county_overview.TWebForm_county_overview" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
+<%@ Register src="../usercontrol/app/UserControl_county_binder.ascx" tagname="UserControl_county_binder" tagprefix="uc3" %>
 <html>
   <head runat="server">
-	<!-- $Id$ -->
+    <title></title>
+	  <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
   </head>
-
   <body bgcolor="white">
      <form runat="server">
-      <p>
-      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent></p>
-<p>
-        <table bordercolor="#dcdcdc" cellspacing="0" cellpadding="0" border="1">
-            <tr>
-              <td>
-                <table cellspacing="0" cellpadding="10" border="0">
-                    <tr>
-                      <td bgcolor="#f5f5f5"><strong>Available allocations</strong></td>
-                    </tr>
-                    <tr>
-                      <td>
-<p>Which allocation do you want to work with?&nbsp; <ASP:RequiredFieldValidator id="RequiredFieldValidator_appropriation" runat="server" errormessage="Please choose an allocation." font-bold="True" controltovalidate="RadioButtonList_appropriation">!ERR!</ASP:RequiredFieldValidator></p>
-<p>
-        <ASP:RadioButtonList id="RadioButtonList_appropriation" runat="server"></ASP:RadioButtonList></p>
-<p>
-        <ASP:Button id="Button_continue" runat="server" text="Continue" onclick="Button_continue_Click" Enabled="false"></ASP:Button></p></td>
-                    </tr>
-                </table></td>
-            </tr>
-        </table></p>
-    <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
+      <uc1:UserControl_precontent id="UserControl_precontent" runat="server"></uc1:UserControl_precontent>
+      <uc3:UserControl_county_binder ID="UserControl_county_binder_control" runat="server" />
+      <uc1:UserControl_postcontent id="UserControl_postcontent" runat="server"></uc1:UserControl_postcontent>
       <uc2:UserControl_update_progress_blocker id="UserControl_update_progress_blocker_control" runat="server"></uc2:UserControl_update_progress_blocker>
     </form>
   </body>
