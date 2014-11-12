@@ -15,7 +15,7 @@ namespace UserControl_responding_services
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.pas
     public partial class TWebUserControl_responding_services: ki_web_ui.usercontrol_class
     {
-        public static class UserControl_responding_services_Static
+        private static class Static
           {
           public const int TCI_UPDATE_EMAIL_ADDRESS = 0;
           public const int TCI_PROFILE_TABBED = 1;
@@ -35,11 +35,13 @@ namespace UserControl_responding_services
           {
           public bool be_interactive;
           public bool be_loaded;
+          public bool be_ok_to_imitate_service;
           public bool be_ok_to_update_service_email_address;
           public bool be_sort_order_ascending;
           public TClass_biz_accounts biz_accounts;
           public TClass_biz_services biz_services;
           public TClass_biz_user biz_user;
+          public string county_code;
           public string distribution_list;
           public uint num_nonparticipants;
           public uint num_participants;
@@ -137,6 +139,8 @@ namespace UserControl_responding_services
         {
         if (p.be_interactive)
           {
+          DataGrid_control.Columns[Static.TCI_UPDATE_EMAIL_ADDRESS].Visible = p.be_ok_to_update_service_email_address;
+          DataGrid_control.Columns[Static.TCI_IMITATE].Visible = p.be_ok_to_imitate_service;
           Literal_author_email_address.Text = p.user_email_address;
           }
         else
@@ -167,8 +171,10 @@ namespace UserControl_responding_services
         //
         p.be_interactive = !(Session["mode:report"] != null);
         p.be_loaded = false;
+        p.be_ok_to_imitate_service = (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"));
         p.be_ok_to_update_service_email_address = (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"));
         p.be_sort_order_ascending = true;
+        p.county_code = (Session["county_user_id"] == null ? k.EMPTY : Session["county_user_id"].ToString());
         p.distribution_list = k.EMPTY;
         p.num_nonparticipants = 0;
         p.num_participants = 0;
@@ -251,7 +257,7 @@ namespace UserControl_responding_services
       {
       for (var i = new k.subtype<int>(0,DataGrid_control.Items.Count); i.val < i.LAST; i.val++)
         {
-        (DataGrid_control.Items[i.val].Cells[UserControl_responding_services_Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
+        (DataGrid_control.Items[i.val].Cells[Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
         }
       BuildDistributionListAndRegisterPostBackControls();
       }
@@ -268,17 +274,17 @@ namespace UserControl_responding_services
       for (var i = new k.subtype<int>(0, DataGrid_control.Items.Count); i.val < i.LAST; i.val++)
         {
         tcc = DataGrid_control.Items[i.val].Cells;
-        if ((tcc[UserControl_responding_services_Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked)
+        if ((tcc[Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked)
           {
           p.distribution_list += k.EMPTY
-          + (CheckBox_use_password_reset_email_address.Checked ? tcc[UserControl_responding_services_Static.TCI_PASSWORD_RESET_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY)
-          + (CheckBox_use_corpadmin_email_address.Checked ? tcc[UserControl_responding_services_Static.TCI_CORPADMIN_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY)
-          + (CheckBox_use_coo_email_address.Checked ? tcc[UserControl_responding_services_Static.TCI_COO_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY);
+          + (CheckBox_use_password_reset_email_address.Checked ? tcc[Static.TCI_PASSWORD_RESET_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY)
+          + (CheckBox_use_corpadmin_email_address.Checked ? tcc[Static.TCI_CORPADMIN_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY)
+          + (CheckBox_use_coo_email_address.Checked ? tcc[Static.TCI_COO_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY);
           }
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_responding_services_Static.TCI_IMITATE].Controls[0]) as LinkButton);
+        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
+        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
+        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
+        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_IMITATE].Controls[0]) as LinkButton);
         }
       Label_distribution_list.Text = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
       }
@@ -287,7 +293,7 @@ namespace UserControl_responding_services
         {
             if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
               {
-              var affiliate_num = k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM);
+              var affiliate_num = k.Safe(e.Item.Cells[Static.TCI_AFFILIATE_NUM].Text, k.safe_hint_type.NUM);
               SessionSet("affiliate_num",affiliate_num);
               if (e.CommandName == "update-email-address")
                 {
@@ -305,7 +311,7 @@ namespace UserControl_responding_services
                 }
               else if (e.CommandName == "imitate")
                 {
-                var service_name = k.Safe(e.Item.Cells[UserControl_responding_services_Static.TCI_SERVICE_NAME].Text, k.safe_hint_type.ORG_NAME);
+                var service_name = k.Safe(e.Item.Cells[Static.TCI_SERVICE_NAME].Text, k.safe_hint_type.ORG_NAME);
                 var service_user_id = p.biz_services.IdOfAffiliateNum(affiliate_num);
                 SessionSet(name:"imitator_designator",value:HttpContext.Current.User.Identity.Name);
                 SessionSet("target_user_table","service");
@@ -324,21 +330,21 @@ namespace UserControl_responding_services
             {
                 if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
                 {
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Update email address";
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Profile (tabbed)";
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Profile (printable)";
-                    link_button = ((e.Item.Cells[UserControl_responding_services_Static.TCI_IMITATE].Controls[0]) as LinkButton);
+                    link_button = ((e.Item.Cells[Static.TCI_IMITATE].Controls[0]) as LinkButton);
                     link_button.Text = k.ExpandTildePath(link_button.Text);
                     link_button.ToolTip = "Imitate";
                     RequireConfirmation(link_button,"The application will now allow you to imitate a subordinate user.  When you are done imitating the subordinate user, you must log out and log back in as yourself.");
                     p.num_services++;
-                    var participation = e.Item.Cells[UserControl_responding_services_Static.TCI_BE_EMSOF_PARTICIPANT].Text;
+                    var participation = e.Item.Cells[Static.TCI_BE_EMSOF_PARTICIPANT].Text;
                     if (participation != "no response")
                       {
                       p.num_respondents++;
@@ -358,8 +364,8 @@ namespace UserControl_responding_services
             }
             else
             {
-                e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_TABBED].Visible = false;
-                e.Item.Cells[UserControl_responding_services_Static.TCI_PROFILE_PRINTABLE].Visible = false;
+                e.Item.Cells[Static.TCI_PROFILE_TABBED].Visible = false;
+                e.Item.Cells[Static.TCI_PROFILE_PRINTABLE].Visible = false;
             }
         }
 
@@ -380,8 +386,15 @@ namespace UserControl_responding_services
 
         private void Bind()
         {
-            DataGrid_control.Columns[UserControl_responding_services_Static.TCI_UPDATE_EMAIL_ADDRESS].Visible = p.be_ok_to_update_service_email_address;
-            p.biz_services.BindAnnualRespondents(p.sort_order, p.be_sort_order_ascending, DataGrid_control, Session["region_code"].ToString());
+            DataGrid_control.Columns[Static.TCI_UPDATE_EMAIL_ADDRESS].Visible = p.be_ok_to_update_service_email_address;
+            p.biz_services.BindAnnualRespondents
+              (
+              sort_order:p.sort_order,
+              be_order_ascending:p.be_sort_order_ascending,
+              target:DataGrid_control,
+              region_code:Session["region_code"].ToString(),
+              county_code:p.county_code
+              );
             Label_num_nonparticipants.Text = p.num_nonparticipants.ToString();
             Label_num_participants.Text = p.num_participants.ToString();
             Label_num_respondents.Text = p.num_respondents.ToString();

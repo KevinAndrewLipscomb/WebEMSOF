@@ -99,7 +99,6 @@ namespace county_dictated_appropriations
                   p.county_code = p.biz_user.IdNum();
                   p.region_dictated_appropriation_id = Session["region_dictated_appropriation_id"].ToString();
                   Literal_county_name.Text = Session["username"].ToString();
-                  BeginBreadCrumbTrail();
                   }
                 else
                   {
