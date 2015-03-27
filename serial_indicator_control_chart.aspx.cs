@@ -1,20 +1,14 @@
-using Class_db_equipment;
 using Class_biz_equipment;
+using Class_db_equipment;
 using com.quinncurtis.chart2dnet;
 using com.quinncurtis.spcchartnet;
 using kix;
 using System;
-using System.Collections;
-using System.ComponentModel;
+using System.Configuration;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Drawing.Imaging;
+using System.Drawing.Text;
 using System.Threading;
-using System.Web;
-using System.Web.SessionState;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 
 namespace serial_indicator_control_chart
 {
@@ -38,8 +32,16 @@ namespace serial_indicator_control_chart
             // One data point per time period
             // time periods wide
             // time distance between data points
-            int width_in_years = 10;
-            var chart = new SPCTimeVariableControlChart(SPCControlChartData.INDIVIDUAL_RANGE_CHART, 1, width_in_years, AVERAGE_NUM_MINUTES_PER_YEAR);
+            var width_in_years = new k.int_positive(27);
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["serial_indicator_control_chart_width_in_years"]))
+              {
+              width_in_years.val = int.Parse(ConfigurationManager.AppSettings["serial_indicator_control_chart_width_in_years"]);
+              }
+            if (!string.IsNullOrEmpty(Request["width_in_years"]))
+              {
+              width_in_years.val = int.Parse(k.Safe(Request["width_in_years"],k.safe_hint_type.NUM));
+              }
+            var chart = new SPCTimeVariableControlChart(SPCControlChartData.INDIVIDUAL_RANGE_CHART, 1, width_in_years.val, AVERAGE_NUM_MINUTES_PER_YEAR);
             chart.Bounds = new Rectangle(0, 0, 781, 417);
             SPCControlChartData.DefaultSampleValueString = k.EMPTY;
             chart.ChartAlarmEmphasisMode = SPCChartBase.ALARM_HIGHLIGHT_SYMBOL;
@@ -75,7 +77,7 @@ namespace serial_indicator_control_chart
             chart.AutoScalePrimaryChartYRange();
             chart.ChartData.SetSampleRowHeaderString(0, k.EMPTY);
             chart.HScrollBar1.Maximum = (int)(history_count);
-            chart.HScrollBar1.LargeChange = width_in_years;
+            chart.HScrollBar1.LargeChange = width_in_years.val;
             int potential_scrollbar_value = chart.HScrollBar1.Maximum - chart.HScrollBar1.LargeChange;
             if (potential_scrollbar_value < chart.HScrollBar1.Minimum)
               {

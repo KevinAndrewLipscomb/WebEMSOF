@@ -4,8 +4,25 @@
     <td>
       <table cellspacing="0" cellpadding="10" border="0">
         <tr>
-          <td bgcolor="#f5f5f5"><strong>Equipment:</strong>
-            <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True" onselectedindexchanged="DropDownList_equipment_SelectedIndexChanged"></asp:DropDownList>
+          <td bgcolor="#f5f5f5">
+            <table width="100%">
+              <tr>
+                <td><strong>Equipment:</strong>
+                  <asp:DropDownList id="DropDownList_equipment" runat="server" autopostback="True" onselectedindexchanged="DropDownList_equipment_SelectedIndexChanged"></asp:DropDownList>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td nowrap="nowrap" align="right">
+                  <b>Width in years:</b>
+                  <asp:TextBox ID="TextBox_width_in_years" runat="server" Columns="3" Text="27"></asp:TextBox>
+                  <asp:Button ID="Button_go" runat="server" Text="Go" OnClick="Button_go_Click"/>
+                  <asp:Button ID="Button_max" runat="server" CausesValidation="False" OnClick="Button_max_Click" Text="Max" UseSubmitBehavior="False" />
+                  <asp:Button ID="Button_default" runat="server" CausesValidation="False" OnClick="Button_default_Click" Text="Default" UseSubmitBehavior="False" />
+                  <asp:RequiredFieldValidator ID="RequiredFieldValidator_width_in_years" runat="server" ControlToValidate="TextBox_width_in_years" ErrorMessage="Please specify a Width in years." Font-Bold="True">&lt;ERR!</asp:RequiredFieldValidator>
+                  <asp:RegularExpressionValidator ID="RegularExpressionValidator_width_in_years" runat="server" ControlToValidate="TextBox_width_in_years" ErrorMessage="Please enter numeric values only for Width in years." Font-Bold="True" ValidationExpression="\d+">&lt;ERR!</asp:RegularExpressionValidator>
+                  <asp:RangeValidator ID="RangeValidator_width_in_years" runat="server" ControlToValidate="TextBox_width_in_years" ErrorMessage="The Width in years must currently be between 2 and #." Font-Bold="True" MinimumValue="2" MaximumValue="27" Type="Integer">&lt;ERR!</asp:RangeValidator>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr>
