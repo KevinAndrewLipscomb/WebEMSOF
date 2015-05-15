@@ -24,9 +24,10 @@ from emsof_request_master
   join county_dictated_appropriation on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)
   join region_dictated_appropriation on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)
   join state_dictated_appropriation on (state_dictated_appropriation.id=region_dictated_appropriation.state_dictated_appropriation_id)
+  join fiscal_year on (fiscal_year.id=state_dictated_appropriation.fiscal_year_id)
   left join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)
   right join service on (service.id=county_dictated_appropriation.service_id)
   left join match_level on (match_level.id=county_dictated_appropriation.match_level_id)
-where state_dictated_appropriation.fiscal_year_id = '10'
+where fiscal_year.designator = 'FY1415'
     and region_code = '1'
-order by service_name, priority
+order by service_name, master_id, priority
