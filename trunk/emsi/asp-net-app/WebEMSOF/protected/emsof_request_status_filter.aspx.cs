@@ -113,7 +113,7 @@ namespace emsof_request_status_filter
             k.SmtpMailSend
               (
               from:ConfigurationManager.AppSettings["sender_email_address"],
-              to:k.Safe(Label_distribution_list.Text,k.safe_hint_type.EMAIL_ADDRESS_CSV),
+              to:p.distribution_list,
               subject:k.Safe(TextBox_quick_message_subject.Text,k.safe_hint_type.PUNCTUATED),
               message_string:"-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE
               + k.NEW_LINE
@@ -181,8 +181,10 @@ namespace emsof_request_status_filter
           }
         ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[(int)p.biz_emsof_requests.TcciOfStatusDescription()].Controls[0]) as LinkButton);
         }
-      Label_distribution_list.Text = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
-      Label_cc_list.Text = p.cc_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
+      p.distribution_list = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
+      Label_distribution_list.Text = p.distribution_list;
+      p.cc_list = p.cc_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
+      Label_cc_list.Text = p.cc_list;
       }
 
         protected void LinkButton_retransmit_to_state_Click(object sender, System.EventArgs e)

@@ -286,7 +286,8 @@ namespace UserControl_responding_services
         ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
         ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_IMITATE].Controls[0]) as LinkButton);
         }
-      Label_distribution_list.Text = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
+      p.distribution_list = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
+      Label_distribution_list.Text = p.distribution_list;
       }
 
         private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
