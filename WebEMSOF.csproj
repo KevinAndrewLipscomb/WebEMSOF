@@ -24,6 +24,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,9 +48,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxControlToolkit, Version=3.5.40412.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\AjaxControlToolkit.dll</HintPath>
+    <Reference Include="AjaxControlToolkit, Version=15.1.2.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>packages\AjaxControlToolkit.15.1.2.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -227,7 +228,6 @@
     </Compile>
     <Compile Include="protected\county_dictated_appropriations.aspx.cs">
       <DependentUpon>county_dictated_appropriations.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="protected\county_dictated_appropriations.aspx.designer.cs">
       <DependentUpon>county_dictated_appropriations.aspx</DependentUpon>
@@ -269,7 +269,6 @@
     </Compile>
     <Compile Include="protected\emsof_request_status_filter.aspx.cs">
       <DependentUpon>emsof_request_status_filter.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="protected\emsof_request_status_filter.aspx.designer.cs">
       <DependentUpon>emsof_request_status_filter.aspx</DependentUpon>
@@ -290,7 +289,6 @@
     </Compile>
     <Compile Include="protected\full_request_review_approve.aspx.cs">
       <DependentUpon>full_request_review_approve.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="protected\full_request_review_approve.aspx.designer.cs">
       <DependentUpon>full_request_review_approve.aspx</DependentUpon>
@@ -402,7 +400,6 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_analyses_binder.ascx.cs">
       <DependentUpon>UserControl_analyses_binder.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_analyses_binder.ascx.designer.cs">
       <DependentUpon>UserControl_analyses_binder.ascx</DependentUpon>
@@ -479,7 +476,6 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_fy_allocations_reimbursements_returns.ascx.cs">
       <DependentUpon>UserControl_fy_allocations_reimbursements_returns.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_fy_allocations_reimbursements_returns.ascx.designer.cs">
       <DependentUpon>UserControl_fy_allocations_reimbursements_returns.ascx</DependentUpon>
@@ -542,7 +538,6 @@
     </Compile>
     <Compile Include="usercontrol\app\UserControl_regional_staffer_current_binder.ascx.cs">
       <DependentUpon>UserControl_regional_staffer_current_binder.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\app\UserControl_regional_staffer_current_binder.ascx.designer.cs">
       <DependentUpon>UserControl_regional_staffer_current_binder.ascx</DependentUpon>
@@ -633,7 +628,6 @@
     </Compile>
     <Compile Include="usercontrol\ki\UserControl_attachment_explorer.ascx.cs">
       <DependentUpon>UserControl_attachment_explorer.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\ki\UserControl_attachment_explorer.ascx.designer.cs">
       <DependentUpon>UserControl_attachment_explorer.ascx</DependentUpon>
@@ -654,7 +648,6 @@
     </Compile>
     <Compile Include="usercontrol\ki\UserControl_drop_down_date.ascx.cs">
       <DependentUpon>UserControl_drop_down_date.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="usercontrol\ki\UserControl_drop_down_date.ascx.designer.cs">
       <DependentUpon>UserControl_drop_down_date.ascx</DependentUpon>

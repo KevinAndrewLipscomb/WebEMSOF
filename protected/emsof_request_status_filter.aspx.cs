@@ -5,6 +5,7 @@ using Class_biz_user;
 using kix;
 using System;
 using System.Configuration;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace emsof_request_status_filter
@@ -179,7 +180,7 @@ namespace emsof_request_status_filter
             p.cc_list += county_email_address + k.COMMA_SPACE;
             }
           }
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[(int)p.biz_emsof_requests.TcciOfStatusDescription()].Controls[0]) as LinkButton);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[(int)p.biz_emsof_requests.TcciOfStatusDescription()].Controls[0]) as LinkButton);
         }
       p.distribution_list = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
       Label_distribution_list.Text = p.distribution_list;

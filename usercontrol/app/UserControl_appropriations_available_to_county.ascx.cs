@@ -2,6 +2,7 @@ using AjaxControlToolkit;
 using Class_db;
 using kix;
 using MySql.Data.MySqlClient;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace UserControl_appropriations_available_to_county
@@ -63,7 +64,7 @@ namespace UserControl_appropriations_available_to_county
           Button_continue.Enabled = true;
           }
         //
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_continue);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl(Button_continue);
         p.be_loaded = true;
         }
       }

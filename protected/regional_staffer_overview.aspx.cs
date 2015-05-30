@@ -29,7 +29,7 @@ namespace regional_staffer_overview
                   }
             }
 //
-//ToolkitScriptManager.GetCurrent(Page).EnablePartialRendering = false;
+//ScriptManager.GetCurrent(Page).EnablePartialRendering = false;
 //
         }
 
