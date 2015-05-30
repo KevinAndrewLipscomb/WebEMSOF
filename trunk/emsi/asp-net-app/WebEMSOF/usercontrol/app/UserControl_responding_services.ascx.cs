@@ -8,6 +8,7 @@ using System.Collections;
 using System.Configuration;
 using System.Web;
 using System.Web.Security;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace UserControl_responding_services
@@ -281,10 +282,10 @@ namespace UserControl_responding_services
           + (CheckBox_use_corpadmin_email_address.Checked ? tcc[Static.TCI_CORPADMIN_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY)
           + (CheckBox_use_coo_email_address.Checked ? tcc[Static.TCI_COO_EMAIL_ADDRESS].Text + k.COMMA_SPACE : k.EMPTY);
           }
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
-        ToolkitScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_IMITATE].Controls[0]) as LinkButton);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_UPDATE_EMAIL_ADDRESS].Controls[0]) as LinkButton);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_PROFILE_TABBED].Controls[0]) as LinkButton);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_PROFILE_PRINTABLE].Controls[0]) as LinkButton);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_IMITATE].Controls[0]) as LinkButton);
         }
       p.distribution_list = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
       Label_distribution_list.Text = p.distribution_list;
