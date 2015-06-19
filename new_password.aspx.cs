@@ -38,7 +38,7 @@ namespace new_password
                     Label_user_name.Text = Label_user_name.Text + " County";
                 }
                 // Build a suitably-random password string.
-                temporary_password = System.Guid.NewGuid().ToString().Substring(0, 8);
+                temporary_password = k.UnambiguousPseudorandomLimitedAlphanumericString(length:8);
                 // Make the password string the service's new temporary password, and set the stale flag to force an immediate password change.
                 biz_accounts.SetTemporaryPassword(Session["target_user_table"].ToString(), Session[Session["target_user_table"].ToString() + "_user_id"].ToString(), k.Digest(temporary_password));
                 // Send the new password to the service's email address of record.
