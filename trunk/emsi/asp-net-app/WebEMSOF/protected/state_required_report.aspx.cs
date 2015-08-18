@@ -60,6 +60,13 @@ namespace state_required_report
                 p.num_datagrid_rows = 0;
                 p.total_emsof_ante = 0;
                 p.total_provider_match = 0;
+                RequireConfirmation
+                  (
+                  c:LinkButton_export_scratch_copy,
+                  prompt:"We will send you HTML-formatted data masquerading as an XLS file so that it will open up in your spreadsheet program.  The discrepancy is intentional.  The file is not corrupt or untrustworthy." + k.NEW_LINE
+                  + k.NEW_LINE
+                  + "If your spreadsheet program mentions these things and asks if you want to open the file, click 'Yes'."
+                  );
                 Label_total_num_requests.Text = p.biz_emsof_requests.TallyOfStatus(Class_biz_emsof_requests.status_type.NEEDS_SENT_TO_PA_DOH_EMSO);
                 num_active_amendments = p.biz_appropriations.NumActiveAmendments(Session["regional_staffer_user_id"].ToString());
                 if (num_active_amendments == 0)
