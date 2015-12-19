@@ -1,4 +1,5 @@
-grant select
+create user if not exists 'ki-webemsof'@'localhost' identified by '~ki-webemsof-password~';
+grant  select
  , insert
  , update
  , delete
@@ -6,7 +7,7 @@ grant select
  , create routine
  , alter routine
   on emsidb.*
-  to 'ki-webemsof'@'localhost' identified by '~ki-webemsof-password~'
+  to 'ki-webemsof'@'localhost'
 ;
 --
 -- Must grant PROCESS priv to primary user to include SHOW ENGINE INNODB
