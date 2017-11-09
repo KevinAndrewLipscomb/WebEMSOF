@@ -12,7 +12,7 @@
       <p>
         <ASP:Button id="Button_submit" text="SUBMIT" runat="server" enabled="False" onclick="Button_submit_Click"></ASP:Button>&nbsp;&nbsp;<ASP:Button id="Button_delete" text="Delete" runat="server" enabled="False" onclick="Button_delete_Click"></ASP:Button>
       </p>
-      <cc1:TabContainer id="TabContainer_control" runat="server" autopostback="True" cssclass="ajax__tab_ki" onactivetabchanged="TabContainer_control_ActiveTabChanged">
+      <cc1:TabContainer id="TabContainer_control" runat="server" autopostback="True" cssclass="ajax__tab_ki" CssTheme="None" onactivetabchanged="TabContainer_control_ActiveTabChanged">
         <cc1:TabPanel runat="server" headertext="Introduction" id="TabPanel_introduction">
           <ContentTemplate>
             <table class="tab_panel_std" width="100%">
