@@ -5,7 +5,7 @@
     <table cellspacing="0" cellpadding="0" border="0">
       <tr>
         <td>
-          <cc1:TabContainer id="TabContainer_control" runat="server" cssclass="ajax__tab_ki" autopostback="True">
+          <cc1:TabContainer id="TabContainer_control" runat="server" cssclass="ajax__tab_ki" CssTheme="None" autopostback="True">
             <cc1:TabPanel runat="server" headertext="Snapshot" id="TabPanel_snapshot"></cc1:TabPanel>
             <cc1:TabPanel runat="server" headertext="Serial" id="TabPanel_serial"></cc1:TabPanel>
           </cc1:TabContainer>
