@@ -1,7 +1,7 @@
 <%@ Page language="c#" Debug="true" Codebehind="analyses.aspx.cs" AutoEventWireup="True" Inherits="analyses.TWebForm_analyses"%>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <%@ Register TagPrefix="uc3" TagName="UserControl_analyses_binder" Src="~/usercontrol/app/UserControl_analyses_binder.ascx" %><html>
   <head runat="server"><title id="Title"></title>

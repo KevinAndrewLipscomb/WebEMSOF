@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <%@ Page language="c#" Debug="true" Codebehind="regional_staffer_overview.aspx.cs" AutoEventWireup="True" Inherits="regional_staffer_overview.TWebForm_regional_staffer_overview" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriations.aspx.cs" AutoEventWireup="True" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
