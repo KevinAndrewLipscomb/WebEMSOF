@@ -1,6 +1,6 @@
 <%@ Page language="c#" Debug="true" Codebehind="report_fy_allocations_reimbursements_nonspends.aspx.cs" AutoEventWireup="True" Inherits="report_fy_allocations_reimbursements_nonspends.TWebForm_report_fy_allocations_reimbursements_nonspends" EnableViewState="false" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_common_header_bar" Src="~/usercontrol/app/UserControl_common_header_bar.ascx" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
   <head runat="server">
