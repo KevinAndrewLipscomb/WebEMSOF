@@ -1,5 +1,5 @@
 <%@ Page language="c#" Debug="true" Codebehind="milestone_sweep.aspx.cs" AutoEventWireup="True" Inherits="milestone_sweep.TWebForm_milestone_sweep" %>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>

@@ -1,7 +1,7 @@
 <%@ Page language="c#" Debug="true" Codebehind="state_transmittal_complete.aspx.cs" AutoEventWireup="True" Inherits="state_transmittal_complete.TWebForm_state_transmittal_complete" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <html>
