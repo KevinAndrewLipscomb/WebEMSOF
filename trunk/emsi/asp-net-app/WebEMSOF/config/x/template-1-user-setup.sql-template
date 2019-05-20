@@ -1,4 +1,4 @@
-create user if not exists 'ki-webemsof-x'@'::1' identified by '~ki-webemsof-x-password~';
+create user if not exists 'ki-webemsof-x'@'127.0.0.1' identified by '~ki-webemsof-x-password~';
 grant select
  , insert
  , update
@@ -7,7 +7,7 @@ grant select
  , create routine
  , alter routine
   on emsidb_x.*
-  to 'ki-webemsof-x'@'::1'
+  to 'ki-webemsof-x'@'127.0.0.1'
 ;
 --
 -- Must grant PROCESS priv to primary user to include SHOW ENGINE INNODB
@@ -16,4 +16,4 @@ grant select
 ;
 grant process
   on *.*
-  to 'ki-webemsof-x'@'::1'
+  to 'ki-webemsof-x'@'127.0.0.1'

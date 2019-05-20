@@ -1,12 +1,12 @@
+<!DOCTYPE html>
 <%@ Page language="c#" Debug="true" Codebehind="charter_kinds.aspx.cs" AutoEventWireup="True" Inherits="charter_kinds.TWebForm_charter_kinds"%>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
-<!DOCTYPE html>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <%@ Register TagPrefix="uc3" TagName="UserControl_charter_kind" Src="~/usercontrol/app/UserControl_charter_kind.ascx" %>
 <html>
   <head runat="server">
-    <title id="Title" runat="server"></title>
+    <title></title>
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->

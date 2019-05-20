@@ -14,15 +14,6 @@ namespace delete_service_appropriation {
     public partial class TWebForm_delete_service_appropriation {
         
         /// <summary>
-        /// Title control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected new global::System.Web.UI.HtmlControls.HtmlGenericControl Title;
-        
-        /// <summary>
         /// UserControl_precontent control.
         /// </summary>
         /// <remarks>

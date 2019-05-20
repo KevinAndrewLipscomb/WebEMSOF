@@ -59,7 +59,7 @@ namespace add_proof_of_payment
                 }
                 else
                 {
-                    Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - add_proof_of_payment";
+                    Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - add_proof_of_payment";
                     p.biz_emsof_requests = new TClass_biz_emsof_requests();
                     p.biz_payment_proof_methods = new TClass_biz_payment_proof_methods();
                     Label_service_name.Text = p.biz_emsof_requests.ServiceNameOf(Session["e_item"]);

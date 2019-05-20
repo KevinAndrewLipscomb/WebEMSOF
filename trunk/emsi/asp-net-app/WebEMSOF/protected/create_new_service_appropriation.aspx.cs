@@ -2,22 +2,16 @@ using Class_biz_appropriations;
 using Class_biz_services;
 using Class_db;
 using Class_db_trail;
-using MySql.Data.MySqlClient;
 using kix;
+using MySql.Data.MySqlClient;
 using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
-using System.Web;
-using System.Web.SessionState;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 
 namespace create_new_service_appropriation
-{
-    public partial class TWebForm_create_new_service_appropriation: ki_web_ui.page_class
+  {
+  public partial class TWebForm_create_new_service_appropriation: ki_web_ui.page_class
     {
         private p_type p;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
@@ -52,7 +46,7 @@ namespace create_new_service_appropriation
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.Text = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - create_new_service_appropriation";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - create_new_service_appropriation";
                 // Initialize implementation-scoped variables.
                 p.amount = 0;
                 p.db = new TClass_db();

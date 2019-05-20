@@ -45,7 +45,7 @@ namespace change_email_address
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - change_email_address";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - change_email_address";
                 p.biz_accounts = new TClass_biz_accounts();
                 p.db_trail = new TClass_db_trail();
                 p.db = new TClass_db();

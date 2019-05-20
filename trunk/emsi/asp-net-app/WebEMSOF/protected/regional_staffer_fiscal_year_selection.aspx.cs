@@ -64,7 +64,7 @@ namespace regional_staffer_fiscal_year_selection
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - account_overview";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - account_overview";
                 Label_regional_staffer_name.Text = Session["regional_staffer_name"].ToString();
                 p.db = new TClass_db();
                 p.db.Open();

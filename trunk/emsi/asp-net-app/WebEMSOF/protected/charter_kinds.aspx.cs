@@ -1,21 +1,9 @@
+using System;
 using System.Configuration;
 
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Data.Common;
-using System.Globalization;
-
-
 namespace charter_kinds
-{
-    public struct p_type
+  {
+  public struct p_type
     {
     } // end p_type
 
@@ -36,7 +24,7 @@ namespace charter_kinds
         {
             if (!IsPostBack)
             {
-                Title.Text = ConfigurationManager.AppSettings["application_name"] + " - charter_kinds";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - charter_kinds";
             }
         }
 

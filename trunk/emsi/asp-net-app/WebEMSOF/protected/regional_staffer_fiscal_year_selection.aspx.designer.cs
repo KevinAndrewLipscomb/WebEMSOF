@@ -14,15 +14,6 @@ namespace regional_staffer_fiscal_year_selection {
     public partial class TWebForm_regional_staffer_fiscal_year_selection {
         
         /// <summary>
-        /// Title control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected new global::System.Web.UI.HtmlControls.HtmlGenericControl Title;
-        
-        /// <summary>
         /// UserControl_precontent control.
         /// </summary>
         /// <remarks>
