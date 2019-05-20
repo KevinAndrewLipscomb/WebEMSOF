@@ -1,20 +1,10 @@
+using System;
 using System.Configuration;
 
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
 namespace responding_services_detail
-{
-    // Derived from KiAspdotnetFramework/protected/template~protected~nonlanding.pas~template
-    public partial class TWebForm_responding_services_detail: ki_web_ui.page_class
+  {
+  // Derived from KiAspdotnetFramework/protected/template~protected~nonlanding.pas~template
+  public partial class TWebForm_responding_services_detail: ki_web_ui.page_class
     {
         private p_type p;
         // / <summary>
@@ -31,7 +21,7 @@ namespace responding_services_detail
         {
             if (!IsPostBack)
             {
-                Title.Text = ConfigurationManager.AppSettings["application_name"] + " - responding_services_detail";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - responding_services_detail";
             }
         }
 

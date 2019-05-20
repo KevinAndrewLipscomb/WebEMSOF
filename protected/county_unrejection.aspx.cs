@@ -62,7 +62,7 @@ namespace county_unrejection
                 }
                 else
                 {
-                    Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_unrejection";
+                    Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_unrejection";
                     // Initialize implementation-wide vars.
                     p.be_sort_order_ascending = true;
                     p.biz_emsof_requests = new TClass_biz_emsof_requests();

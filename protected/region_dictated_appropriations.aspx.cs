@@ -76,7 +76,7 @@ namespace region_dictated_appropriations
                 p.tcci_amount = 4;
                 p.tcci_linkbutton_edit = 5;
                 p.tcci_linkbutton_delete = 6;
-                Title.InnerText = ConfigurationManager.AppSettings["application_name"] + " - region_dictated_appropriations";
+                Title = ConfigurationManager.AppSettings["application_name"] + " - region_dictated_appropriations";
                 Label_account_descriptor.Text = Session["regional_staffer_name"].ToString();
                 p.db.Open();
                 // Disable Table_appropriations for now.

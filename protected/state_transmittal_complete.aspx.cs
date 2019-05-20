@@ -50,7 +50,7 @@ namespace state_transmittal_complete
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_transmittal_complete";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_transmittal_complete";
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
             }
         }

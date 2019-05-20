@@ -59,7 +59,7 @@ namespace county_dictated_deadline
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_dictated_deadline";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_dictated_deadline";
                 p.biz_appropriations = new TClass_biz_appropriations();
                 p.biz_emsof_requests = new TClass_biz_emsof_requests();
                 p.db = new TClass_db();

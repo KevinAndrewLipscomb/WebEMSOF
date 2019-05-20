@@ -4,7 +4,8 @@
 <!DOCTYPE html>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>
 <%@ Register TagPrefix="uc3" TagName="UserControl_analyses_binder" Src="~/usercontrol/app/UserControl_analyses_binder.ascx" %><html>
-  <head runat="server"><title id="Title"></title>
+  <head runat="server">
+    <title></title>
     <!-- $Id$ -->
     <link href="../css/standard.css" rel="stylesheet" type="text/css" />
     <!--[if lt IE 7]> <style type="text/css">@import "../css/standard-overrides-for-ie6.css";</style><![endif]-->
