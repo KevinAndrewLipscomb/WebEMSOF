@@ -13,21 +13,22 @@ using System.Web.UI.WebControls;
 
 namespace state_transmittal_complete
 {
-    public struct p_type
+  public partial class TWebForm_state_transmittal_complete: ki_web_ui.page_class
     {
-    } // end p_type
 
-    public partial class TWebForm_state_transmittal_complete: ki_web_ui.page_class
-    {
-        private p_type p;
+    private struct p_type
+      {
+        }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_state_transmittal_complete_PreRender;
+            PreRender += TWebForm_state_transmittal_complete_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

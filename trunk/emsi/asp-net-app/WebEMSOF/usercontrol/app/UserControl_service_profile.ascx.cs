@@ -19,7 +19,8 @@ namespace UserControl_service_profile
 {
     public partial class TWebUserControl_service_profile: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.CustomValidator CustomValidator_emsof_contact_name = null;
         private void Clear()
         {
@@ -258,7 +259,7 @@ namespace UserControl_service_profile
                 LinkButton_go_to_match_next.Text = k.ExpandTildePath(LinkButton_go_to_match_next.Text);
                 LinkButton_go_to_match_last.Text = k.ExpandTildePath(LinkButton_go_to_match_last.Text);
                 RequireConfirmation(Button_delete, "Are you sure you want to delete this record?");
-                if (p.affiliate_num != k.EMPTY)
+                if (p.affiliate_num.Length > 0)
                 {
                     PresentRecord(p.affiliate_num);
                 }
@@ -761,8 +762,7 @@ namespace UserControl_service_profile
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_service_profile_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_service_profile_PreRender;
         }
 
         private void TWebUserControl_service_profile_PreRender(object sender, System.EventArgs e)
@@ -796,7 +796,7 @@ namespace UserControl_service_profile
 
         protected void CustomValidator_be_als_medical_director_name_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
         {
-            args.IsValid = !((CheckBox_be_als_amb.Checked || CheckBox_be_als_squad.Checked || CheckBox_be_air_amb.Checked) && (TextBox_md_name.Text == k.EMPTY));
+            args.IsValid = !((CheckBox_be_als_amb.Checked || CheckBox_be_als_squad.Checked || CheckBox_be_air_amb.Checked) && (TextBox_md_name.Text.Length == 0));
 
         }
 
@@ -1296,7 +1296,7 @@ namespace UserControl_service_profile
       {
       var designator_with_competing_short_name = p.biz_services.DesignatorCompetingShortName(k.Safe(TextBox_affiliate_num.Text,k.safe_hint_type.NUM),k.Safe(TextBox_short_name.Text,k.safe_hint_type.MAKE_MODEL));
       CustomValidator_short_name.ErrorMessage += designator_with_competing_short_name;
-      args.IsValid = (designator_with_competing_short_name == k.EMPTY);
+      args.IsValid = (designator_with_competing_short_name.Length == 0);
       }
 
         protected void CustomValidator_corporate_contact_ServerValidate(object source, ServerValidateEventArgs args)

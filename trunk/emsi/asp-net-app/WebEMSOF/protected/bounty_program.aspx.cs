@@ -20,7 +20,7 @@ namespace bounty_program
       {
       }
 
-    private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
     // / <summary>
     // / Required method for Designer support -- do not modify
@@ -28,8 +28,7 @@ namespace bounty_program
     // / </summary>
     private void InitializeComponent()
       {
-      //this.Load += this.Page_Load;
-      this.PreRender += this.TWebForm_bounty_program_PreRender;
+      PreRender += TWebForm_bounty_program_PreRender;
       }
 
     protected void Page_Load(object sender, System.EventArgs e)

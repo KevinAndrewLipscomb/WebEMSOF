@@ -9,15 +9,16 @@ using System.Web.UI.WebControls;
 
 namespace county_detail
   {
-  public struct p_type
-    {
-    public TClass_biz_counties biz_counties;
-    public TClass_biz_match_level biz_match_level;
-    }
-
   public partial class TWebForm_county_detail: ki_web_ui.page_class
     {
-    private p_type p;
+
+    private struct p_type
+      {
+      public TClass_biz_counties biz_counties;
+    public TClass_biz_match_level biz_match_level;
+      }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
     // / <summary>
     // / Required method for Designer support -- do not modify
@@ -25,8 +26,7 @@ namespace county_detail
     // / </summary>
     private void InitializeComponent()
       {
-      //this.Load += this.Page_Load;
-      this.PreRender += this.TWebForm_county_detail_PreRender;
+      PreRender += TWebForm_county_detail_PreRender;
       }
 
     protected void Page_Load(object sender, System.EventArgs e)

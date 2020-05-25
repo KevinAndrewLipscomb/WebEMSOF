@@ -2,19 +2,21 @@ using Class_biz_emsof_requests;
 
 namespace UserControl_values_to_region
 {
-    public struct p_type
+  public partial class TWebUserControl_values_to_region: ki_web_ui.usercontrol_class
     {
-        public bool be_interactive;
+
+    private struct p_type
+      {
+      public bool be_interactive;
         public bool be_loaded;
         public bool be_sort_order_ascending;
         public TClass_biz_emsof_requests biz_emsof_requests;
         public string filter;
         public string sort_order;
-    } // end p_type
+      }
 
-    public partial class TWebUserControl_values_to_region: ki_web_ui.usercontrol_class
-    {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.DropDownList DropDownList_filter = null;
         private void InjectPersistentClientSideScript()
         {
@@ -135,9 +137,8 @@ namespace UserControl_values_to_region
         // / </summary>
         private void InitializeComponent()
         {
-            this.GridView_control.Sorting += new System.Web.UI.WebControls.GridViewSortEventHandler(this.GridView_control_Sorting);
-            this.PreRender += this.TWebUserControl_values_to_region_PreRender;
-            //this.Load += this.Page_Load;
+            GridView_control.Sorting += new System.Web.UI.WebControls.GridViewSortEventHandler(GridView_control_Sorting);
+            PreRender += TWebUserControl_values_to_region_PreRender;
         }
 
         private void TWebUserControl_values_to_region_PreRender(object sender, System.EventArgs e)

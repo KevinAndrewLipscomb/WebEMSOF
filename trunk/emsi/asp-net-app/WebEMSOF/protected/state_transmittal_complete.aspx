@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="state_transmittal_complete.aspx.cs" AutoEventWireup="True" Inherits="state_transmittal_complete.TWebForm_state_transmittal_complete" %>
+<%@ Page language="c#" codebehind="state_transmittal_complete.aspx.cs" AutoEventWireup="True" Inherits="state_transmittal_complete.TWebForm_state_transmittal_complete" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>

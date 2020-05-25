@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ Page language="c#" Debug="true" Codebehind="county_dictated_appropriations.aspx.cs" AutoEventWireup="True" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" %>
+<%@ Page language="c#" codebehind="county_dictated_appropriations.aspx.cs" AutoEventWireup="True" Inherits="county_dictated_appropriations.TWebForm_county_dictated_appropriations" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>

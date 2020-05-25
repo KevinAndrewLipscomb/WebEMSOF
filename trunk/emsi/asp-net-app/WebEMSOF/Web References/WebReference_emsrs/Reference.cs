@@ -41,13 +41,13 @@ namespace WebEMSOF.WebReference_emsrs {
         
         /// <remarks/>
         public EMSREGWebServices() {
-            this.Url = global::WebEMSOF.Properties.Settings.Default.WebEMSOF_WebReference_emsrs_EMSREGWebServices;
-            if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
-                this.UseDefaultCredentials = true;
-                this.useDefaultCredentialsSetExplicitly = false;
+            Url = global::WebEMSOF.Properties.Settings.Default.WebEMSOF_WebReference_emsrs_EMSREGWebServices;
+            if ((IsLocalFileSystemWebService(Url) == true)) {
+                UseDefaultCredentials = true;
+                useDefaultCredentialsSetExplicitly = false;
             }
             else {
-                this.useDefaultCredentialsSetExplicitly = true;
+                useDefaultCredentialsSetExplicitly = true;
             }
         }
         
@@ -56,9 +56,9 @@ namespace WebEMSOF.WebReference_emsrs {
                 return base.Url;
             }
             set {
-                if ((((this.IsLocalFileSystemWebService(base.Url) == true) 
-                            && (this.useDefaultCredentialsSetExplicitly == false)) 
-                            && (this.IsLocalFileSystemWebService(value) == false))) {
+                if ((((IsLocalFileSystemWebService(base.Url) == true) 
+                            && (useDefaultCredentialsSetExplicitly == false)) 
+                            && (IsLocalFileSystemWebService(value) == false))) {
                     base.UseDefaultCredentials = false;
                 }
                 base.Url = value;
@@ -71,7 +71,7 @@ namespace WebEMSOF.WebReference_emsrs {
             }
             set {
                 base.UseDefaultCredentials = value;
-                this.useDefaultCredentialsSetExplicitly = true;
+                useDefaultCredentialsSetExplicitly = true;
             }
         }
         
@@ -90,116 +90,116 @@ namespace WebEMSOF.WebReference_emsrs {
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("https://tempurl.org/ProcessConed", RequestNamespace="https://tempurl.org/", ResponseNamespace="https://tempurl.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public string ProcessConed(string strXML) {
-            object[] results = this.Invoke("ProcessConed", new object[] {
+            object[] results = Invoke("ProcessConed", new object[] {
                         strXML});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
         public void ProcessConedAsync(string strXML) {
-            this.ProcessConedAsync(strXML, null);
+            ProcessConedAsync(strXML, null);
         }
         
         /// <remarks/>
         public void ProcessConedAsync(string strXML, object userState) {
-            if ((this.ProcessConedOperationCompleted == null)) {
-                this.ProcessConedOperationCompleted = new System.Threading.SendOrPostCallback(this.OnProcessConedOperationCompleted);
+            if ((ProcessConedOperationCompleted == null)) {
+                ProcessConedOperationCompleted = new System.Threading.SendOrPostCallback(OnProcessConedOperationCompleted);
             }
-            this.InvokeAsync("ProcessConed", new object[] {
-                        strXML}, this.ProcessConedOperationCompleted, userState);
+            InvokeAsync("ProcessConed", new object[] {
+                        strXML}, ProcessConedOperationCompleted, userState);
         }
         
         private void OnProcessConedOperationCompleted(object arg) {
-            if ((this.ProcessConedCompleted != null)) {
+            if ((ProcessConedCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ProcessConedCompleted(this, new ProcessConedCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                ProcessConedCompleted(this, new ProcessConedCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("https://tempurl.org/ProcessStudentApp", RequestNamespace="https://tempurl.org/", ResponseNamespace="https://tempurl.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public string ProcessStudentApp(string strXML) {
-            object[] results = this.Invoke("ProcessStudentApp", new object[] {
+            object[] results = Invoke("ProcessStudentApp", new object[] {
                         strXML});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
         public void ProcessStudentAppAsync(string strXML) {
-            this.ProcessStudentAppAsync(strXML, null);
+            ProcessStudentAppAsync(strXML, null);
         }
         
         /// <remarks/>
         public void ProcessStudentAppAsync(string strXML, object userState) {
-            if ((this.ProcessStudentAppOperationCompleted == null)) {
-                this.ProcessStudentAppOperationCompleted = new System.Threading.SendOrPostCallback(this.OnProcessStudentAppOperationCompleted);
+            if ((ProcessStudentAppOperationCompleted == null)) {
+                ProcessStudentAppOperationCompleted = new System.Threading.SendOrPostCallback(OnProcessStudentAppOperationCompleted);
             }
-            this.InvokeAsync("ProcessStudentApp", new object[] {
-                        strXML}, this.ProcessStudentAppOperationCompleted, userState);
+            InvokeAsync("ProcessStudentApp", new object[] {
+                        strXML}, ProcessStudentAppOperationCompleted, userState);
         }
         
         private void OnProcessStudentAppOperationCompleted(object arg) {
-            if ((this.ProcessStudentAppCompleted != null)) {
+            if ((ProcessStudentAppCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ProcessStudentAppCompleted(this, new ProcessStudentAppCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                ProcessStudentAppCompleted(this, new ProcessStudentAppCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("https://tempurl.org/ProcessTestResult", RequestNamespace="https://tempurl.org/", ResponseNamespace="https://tempurl.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public string ProcessTestResult(string strXML) {
-            object[] results = this.Invoke("ProcessTestResult", new object[] {
+            object[] results = Invoke("ProcessTestResult", new object[] {
                         strXML});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
         public void ProcessTestResultAsync(string strXML) {
-            this.ProcessTestResultAsync(strXML, null);
+            ProcessTestResultAsync(strXML, null);
         }
         
         /// <remarks/>
         public void ProcessTestResultAsync(string strXML, object userState) {
-            if ((this.ProcessTestResultOperationCompleted == null)) {
-                this.ProcessTestResultOperationCompleted = new System.Threading.SendOrPostCallback(this.OnProcessTestResultOperationCompleted);
+            if ((ProcessTestResultOperationCompleted == null)) {
+                ProcessTestResultOperationCompleted = new System.Threading.SendOrPostCallback(OnProcessTestResultOperationCompleted);
             }
-            this.InvokeAsync("ProcessTestResult", new object[] {
-                        strXML}, this.ProcessTestResultOperationCompleted, userState);
+            InvokeAsync("ProcessTestResult", new object[] {
+                        strXML}, ProcessTestResultOperationCompleted, userState);
         }
         
         private void OnProcessTestResultOperationCompleted(object arg) {
-            if ((this.ProcessTestResultCompleted != null)) {
+            if ((ProcessTestResultCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ProcessTestResultCompleted(this, new ProcessTestResultCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                ProcessTestResultCompleted(this, new ProcessTestResultCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("https://tempurl.org/ProcessNR", RequestNamespace="https://tempurl.org/", ResponseNamespace="https://tempurl.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public string ProcessNR(string strXML) {
-            object[] results = this.Invoke("ProcessNR", new object[] {
+            object[] results = Invoke("ProcessNR", new object[] {
                         strXML});
             return ((string)(results[0]));
         }
         
         /// <remarks/>
         public void ProcessNRAsync(string strXML) {
-            this.ProcessNRAsync(strXML, null);
+            ProcessNRAsync(strXML, null);
         }
         
         /// <remarks/>
         public void ProcessNRAsync(string strXML, object userState) {
-            if ((this.ProcessNROperationCompleted == null)) {
-                this.ProcessNROperationCompleted = new System.Threading.SendOrPostCallback(this.OnProcessNROperationCompleted);
+            if ((ProcessNROperationCompleted == null)) {
+                ProcessNROperationCompleted = new System.Threading.SendOrPostCallback(OnProcessNROperationCompleted);
             }
-            this.InvokeAsync("ProcessNR", new object[] {
-                        strXML}, this.ProcessNROperationCompleted, userState);
+            InvokeAsync("ProcessNR", new object[] {
+                        strXML}, ProcessNROperationCompleted, userState);
         }
         
         private void OnProcessNROperationCompleted(object arg) {
-            if ((this.ProcessNRCompleted != null)) {
+            if ((ProcessNRCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.ProcessNRCompleted(this, new ProcessNRCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+                ProcessNRCompleted(this, new ProcessNRCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -236,14 +236,14 @@ namespace WebEMSOF.WebReference_emsrs {
         
         internal ProcessConedCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
-            this.results = results;
+            results = results;
         }
         
         /// <remarks/>
         public string Result {
             get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
+                RaiseExceptionIfNecessary();
+                return ((string)(results[0]));
             }
         }
     }
@@ -262,14 +262,14 @@ namespace WebEMSOF.WebReference_emsrs {
         
         internal ProcessStudentAppCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
-            this.results = results;
+            results = results;
         }
         
         /// <remarks/>
         public string Result {
             get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
+                RaiseExceptionIfNecessary();
+                return ((string)(results[0]));
             }
         }
     }
@@ -288,14 +288,14 @@ namespace WebEMSOF.WebReference_emsrs {
         
         internal ProcessTestResultCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
-            this.results = results;
+            results = results;
         }
         
         /// <remarks/>
         public string Result {
             get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
+                RaiseExceptionIfNecessary();
+                return ((string)(results[0]));
             }
         }
     }
@@ -314,14 +314,14 @@ namespace WebEMSOF.WebReference_emsrs {
         
         internal ProcessNRCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
-            this.results = results;
+            results = results;
         }
         
         /// <remarks/>
         public string Result {
             get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[0]));
+                RaiseExceptionIfNecessary();
+                return ((string)(results[0]));
             }
         }
     }

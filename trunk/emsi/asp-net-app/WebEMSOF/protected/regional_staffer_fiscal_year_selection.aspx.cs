@@ -20,14 +20,16 @@ using System.Globalization;
 using Class_db;
 namespace regional_staffer_fiscal_year_selection
 {
-    public struct p_type
+  public partial class TWebForm_regional_staffer_fiscal_year_selection: ki_web_ui.page_class
     {
-        public TClass_db db;
-    } // end p_type
 
-    public partial class TWebForm_regional_staffer_fiscal_year_selection: ki_web_ui.page_class
-    {
-        private p_type p;
+    private struct p_type
+      {
+      public TClass_db db;
+      }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         protected System.Web.UI.WebControls.Label Label_regional_staffer_name = null;
@@ -37,8 +39,7 @@ namespace regional_staffer_fiscal_year_selection
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_regional_staffer_fiscal_year_selection_PreRender;
+            PreRender += TWebForm_regional_staffer_fiscal_year_selection_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

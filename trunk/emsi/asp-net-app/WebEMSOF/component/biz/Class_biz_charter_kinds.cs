@@ -1,11 +1,13 @@
 using kix;
 using System;
 using Class_db_charter_kinds;
+
 namespace Class_biz_charter_kinds
 {
     public class TClass_biz_charter_kinds
     {
-        private TClass_db_charter_kinds db_charter_kinds = null;
+        private readonly TClass_db_charter_kinds db_charter_kinds = null;
+
         //Constructor  Create()
         public TClass_biz_charter_kinds() : base()
         {

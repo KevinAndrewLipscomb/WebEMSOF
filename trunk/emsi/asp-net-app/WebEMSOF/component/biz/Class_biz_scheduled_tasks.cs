@@ -4,7 +4,7 @@ namespace Class_biz_scheduled_tasks
   {
   public class TClass_biz_scheduled_tasks
     {
-    private Class_fs fs;
+    private readonly Class_fs fs;
 
     //Constructor  Create()
     public TClass_biz_scheduled_tasks() : base()

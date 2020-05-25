@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="new_password.aspx.cs" AutoEventWireup="True" Inherits="new_password.TWebForm_new_password" %>
+<%@ Page language="c#" codebehind="new_password.aspx.cs" AutoEventWireup="True" Inherits="new_password.TWebForm_new_password" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>

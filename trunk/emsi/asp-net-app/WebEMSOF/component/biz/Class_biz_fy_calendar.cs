@@ -1,11 +1,13 @@
 using System;
 using Class_db_fy_calendar;
 using Class_biz_milestones;
+
 namespace Class_biz_fy_calendar
 {
     public class TClass_biz_fy_calendar
     {
-        private TClass_db_fy_calendar db_fy_calendar = null;
+        private readonly TClass_db_fy_calendar db_fy_calendar = null;
+
         //Constructor  Create()
         public TClass_biz_fy_calendar() : base()
         {

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="county_dictated_deadline.aspx.cs" AutoEventWireup="True" Inherits="county_dictated_deadline.TWebForm_county_dictated_deadline" %>
+<%@ Page language="c#" codebehind="county_dictated_deadline.aspx.cs" AutoEventWireup="True" Inherits="county_dictated_deadline.TWebForm_county_dictated_deadline" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>

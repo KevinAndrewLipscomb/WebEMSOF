@@ -3,21 +3,22 @@ using System.Configuration;
 
 namespace charter_kinds
   {
-  public struct p_type
+  public partial class TWebForm_charter_kinds: ki_web_ui.page_class
     {
-    } // end p_type
 
-    public partial class TWebForm_charter_kinds: ki_web_ui.page_class
-    {
-        private p_type p;
+    private struct p_type
+      {
+        }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebForm_charter_kinds_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebForm_charter_kinds_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

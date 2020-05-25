@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace serial_indicator_control_chart
 {
-    public partial class TWebForm1: System.Web.UI.Page
+    public partial class TWebForm1: ki_web_ui.page_class
     {
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -28,7 +28,7 @@ namespace serial_indicator_control_chart
             // takes into account all scheduled leap days
             serial_indicator_rec_type datum;
             uint i;
-            ((this.Application["spcchartnet_avail"]) as AutoResetEvent).WaitOne();
+            ((Application["spcchartnet_avail"]) as AutoResetEvent).WaitOne();
             // One data point per time period
             // time periods wide
             // time distance between data points
@@ -56,7 +56,7 @@ namespace serial_indicator_control_chart
             chart.PrimaryChart.ControlLineMode = SPCChartObjects.CONTROL_LINE_VARIABLE;
             chart.PrimaryChart.DisplayChart = true;
             chart.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-            var history = new TClass_biz_equipment().SerialIndicatorData(k.Safe(this.Request["indicator"], k.safe_hint_type.ECMASCRIPT_WORD), k.Safe(this.Server.UrlDecode(this.Request["description"]), k.safe_hint_type.PUNCTUATED));
+            var history = new TClass_biz_equipment().SerialIndicatorData(k.Safe(Request["indicator"], k.safe_hint_type.ECMASCRIPT_WORD), k.Safe(Server.UrlDecode(Request["description"]), k.safe_hint_type.PUNCTUATED));
             uint history_count = (uint)(history.Count);
             if (history_count > 0)
             {
@@ -94,8 +94,8 @@ namespace serial_indicator_control_chart
             chart.RebuildChartUsingCurrentData();
             var image = new BufferedImage(chart, ImageFormat.Jpeg);
             image.JpegImageQuality = 100;
-            image.SaveImage(this.Response.OutputStream);
-            ((this.Application["spcchartnet_avail"]) as AutoResetEvent).Set();
+            image.SaveImage(Response.OutputStream);
+            ((Application["spcchartnet_avail"]) as AutoResetEvent).Set();
 
         }
 

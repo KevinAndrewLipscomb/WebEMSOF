@@ -12,7 +12,8 @@ namespace service_overview
 {
     public partial class TWebForm_service_overview: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -21,10 +22,9 @@ namespace service_overview
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_ItemDataBound);
-            this.DataGrid.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_ItemCommand);
-            this.PreRender += this.TWebForm_service_overview_PreRender;
-            //this.Load += this.Page_Load;
+            DataGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_ItemDataBound);
+            DataGrid.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_ItemCommand);
+            PreRender += TWebForm_service_overview_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="regional_staffer_fiscal_year_selection.aspx.cs" AutoEventWireup="True" Inherits="regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection"%>
+<%@ Page language="c#" codebehind="regional_staffer_fiscal_year_selection.aspx.cs" AutoEventWireup="True" Inherits="regional_staffer_fiscal_year_selection.TWebForm_regional_staffer_fiscal_year_selection"%>
 <!DOCTYPE html>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>

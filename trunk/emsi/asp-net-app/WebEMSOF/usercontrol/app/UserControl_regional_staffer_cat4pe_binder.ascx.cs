@@ -8,7 +8,8 @@ namespace UserControl_regional_staffer_cat4pe_binder
 {
     public partial class TWebUserControl_regional_staffer_cat4pe_binder: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
@@ -87,9 +88,8 @@ namespace UserControl_regional_staffer_cat4pe_binder
         // / </summary>
         private void InitializeComponent()
         {
-            this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebUserControl_regional_staffer_cat4pe_binder_PreRender;
+            TabContainer_control.ActiveTabChanged += TabContainer_control_ActiveTabChanged;
+            PreRender += TWebUserControl_regional_staffer_cat4pe_binder_PreRender;
         }
 
         private void TWebUserControl_regional_staffer_cat4pe_binder_PreRender(object sender, System.EventArgs e)

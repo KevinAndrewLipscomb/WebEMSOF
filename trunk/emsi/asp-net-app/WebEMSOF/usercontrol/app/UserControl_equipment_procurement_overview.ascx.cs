@@ -10,21 +10,22 @@ using Class_biz_emsof_requests;
 using Class_biz_fiscal_years;
 namespace UserControl_equipment_procurement_overview
 {
-    public struct p_type
+  public partial class TWebUserControl_equipment_procurement_overview: ki_web_ui.usercontrol_class
     {
-        public bool be_interactive;
+
+    private struct p_type
+      {
+      public bool be_interactive;
         public bool be_loaded;
         public bool be_sort_order_ascending;
         public TClass_biz_emsof_requests biz_emsof_requests;
         public TClass_biz_fiscal_years biz_fiscal_years;
         public string cycle;
         public string sort_order;
-    } // end p_type
+      }
 
-    public partial class TWebUserControl_equipment_procurement_overview: ki_web_ui.usercontrol_class
-    {
-        private p_type p;
-        protected System.Web.UI.WebControls.Label Label_application_name = null;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -151,11 +152,10 @@ namespace UserControl_equipment_procurement_overview
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_control.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_control_ItemDataBound);
-            this.DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_control_SortCommand);
-            this.DataGrid_control.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_control_ItemCommand);
-            this.PreRender += this.TWebUserControl_equipment_procurement_overview_PreRender;
-            //this.Load += this.Page_Load;
+            DataGrid_control.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_control_ItemDataBound);
+            DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_control_SortCommand);
+            DataGrid_control.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_control_ItemCommand);
+            PreRender += TWebUserControl_equipment_procurement_overview_PreRender;
         }
 
         private void TWebUserControl_equipment_procurement_overview_PreRender(object sender, System.EventArgs e)

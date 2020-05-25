@@ -11,7 +11,8 @@ namespace withdraw_request_item
 {
     public partial class TWebForm_withdraw_request_item: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -20,8 +21,7 @@ namespace withdraw_request_item
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_withdraw_request_item_PreRender;
+            PreRender += TWebForm_withdraw_request_item_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

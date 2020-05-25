@@ -11,7 +11,8 @@ namespace UserControl_config_binder
 {
     public partial class TWebUserControl_config_binder: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         // TSSI_1 = 1;
         // TSSI_2 = 2;
         protected void Page_Load(object sender, System.EventArgs e)
@@ -101,9 +102,8 @@ namespace UserControl_config_binder
         // / </summary>
         private void InitializeComponent()
         {
-            this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebUserControl_config_binder_PreRender;
+            TabContainer_control.ActiveTabChanged += TabContainer_control_ActiveTabChanged;
+            PreRender += TWebUserControl_config_binder_PreRender;
         }
 
         private void TWebUserControl_config_binder_PreRender(object sender, System.EventArgs e)

@@ -14,29 +14,30 @@ using System.Web.UI.WebControls;
 using Class_biz_emsof_requests;
 namespace county_unrejection
 {
-    public struct p_type
+  public partial class TWebForm_county_unrejection: ki_web_ui.page_class
     {
-        public bool be_datagrid_empty;
+
+    private struct p_type
+      {
+      public bool be_datagrid_empty;
         public bool be_sort_order_ascending;
         public TClass_biz_emsof_requests biz_emsof_requests;
         public uint num_datagrid_rows;
         public string sort_order;
-    } // end p_type
+      }
 
-    public partial class TWebForm_county_unrejection: ki_web_ui.page_class
-    {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_unrejectable_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.Datagrid_unrejectable_requests_ItemCommand);
-            this.DataGrid_unrejectable_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.Datagrid_unrejectable_requests_SortCommand);
-            this.DataGrid_unrejectable_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.Datagrid_unrejectable_requests_ItemDataBound);
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_county_unrejection_PreRender;
+            DataGrid_unrejectable_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(Datagrid_unrejectable_requests_ItemCommand);
+            DataGrid_unrejectable_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(Datagrid_unrejectable_requests_SortCommand);
+            DataGrid_unrejectable_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(Datagrid_unrejectable_requests_ItemDataBound);
+            PreRender += TWebForm_county_unrejection_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

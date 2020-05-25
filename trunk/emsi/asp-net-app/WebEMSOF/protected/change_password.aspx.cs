@@ -8,15 +8,17 @@ using System.Web.UI;
 
 namespace change_password
 {
-    public struct p_type
+  public partial class TWebForm_change_password: ki_web_ui.page_class
     {
-        public TClass_db db;
-        public TClass_db_trail db_trail;
-    } // end p_type
 
-    public partial class TWebForm_change_password: ki_web_ui.page_class
-    {
-        private p_type p;
+    private struct p_type
+      {
+      public TClass_db db;
+        public TClass_db_trail db_trail;
+      }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -25,8 +27,7 @@ namespace change_password
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebForm_change_password_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebForm_change_password_PreRender;
         }
 
     private void InjectPersistentClientSideScript()

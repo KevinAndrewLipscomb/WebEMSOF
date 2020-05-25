@@ -16,24 +16,25 @@ using Class_biz_emsof_requests;
 using Class_biz_payment_proof_methods;
 namespace add_proof_of_payment
 {
-    public struct p_type
+  public partial class TWebForm_add_proof_of_payment: ki_web_ui.page_class
     {
-        public decimal amount;
+
+    private struct p_type
+      {
+      public decimal amount;
         public TClass_biz_emsof_requests biz_emsof_requests;
         public TClass_biz_payment_proof_methods biz_payment_proof_methods;
-    } // end p_type
+      }
 
-    public partial class TWebForm_add_proof_of_payment: ki_web_ui.page_class
-    {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_add_proof_of_payment_PreRender;
+            PreRender += TWebForm_add_proof_of_payment_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
@@ -80,7 +81,7 @@ namespace add_proof_of_payment
         {
             string amount_string;
             amount_string = k.Safe(args.Value, k.safe_hint_type.REAL_NUM);
-            if (amount_string == k.EMPTY)
+            if (amount_string.Length == 0)
             {
                 args.IsValid = false;
             }

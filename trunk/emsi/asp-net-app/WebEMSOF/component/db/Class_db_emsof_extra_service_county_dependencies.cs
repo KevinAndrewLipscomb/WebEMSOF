@@ -12,7 +12,7 @@ namespace Class_db_emsof_extra_service_county_dependencies
   public class TClass_db_emsof_extra_service_county_dependencies : TClass_db
     {
 
-    private TClass_db_trail db_trail;
+    private readonly TClass_db_trail db_trail;
 
     public TClass_db_emsof_extra_service_county_dependencies() : base()
       {
@@ -26,7 +26,8 @@ namespace Class_db_emsof_extra_service_county_dependencies
       )
       {
       Open();
-      var dr = new MySqlCommand("select county_code from emsof_extra_service_county_dependency where service_id = '" + service_id + "'",connection).ExecuteReader();
+      using var my_sql_command = new MySqlCommand("select county_code from emsof_extra_service_county_dependency where service_id = '" + service_id + "'",connection);
+      var dr = my_sql_command.ExecuteReader();
       while (dr.Read())
         {
         q.Enqueue(dr["county_code"].ToString());
@@ -48,7 +49,8 @@ namespace Class_db_emsof_extra_service_county_dependencies
         }
       sql += " COMMIT";
       Open();
-      new MySqlCommand(db_trail.Saved(sql),connection).ExecuteNonQuery();
+      using var my_sql_command = new MySqlCommand(db_trail.Saved(sql),connection);
+      my_sql_command.ExecuteNonQuery();
       Close();
       }
 

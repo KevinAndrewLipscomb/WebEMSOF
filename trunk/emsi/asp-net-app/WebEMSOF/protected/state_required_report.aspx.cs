@@ -10,7 +10,7 @@ namespace state_required_report
 {
     public partial class TWebForm_state_required_report: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
@@ -23,9 +23,8 @@ namespace state_required_report
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_state_export_batch.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_state_export_batch_ItemDataBound);
-            this.PreRender += this.TWebForm_state_required_report_PreRender;
-            //this.Load += this.Page_Load;
+            DataGrid_state_export_batch.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_state_export_batch_ItemDataBound);
+            PreRender += TWebForm_state_required_report_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

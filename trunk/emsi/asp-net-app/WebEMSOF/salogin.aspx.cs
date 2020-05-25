@@ -8,16 +8,18 @@ using System.Web.UI;
 
 namespace salogin
 {
-    public struct p_type
+  public partial class TWebForm_salogin: ki_web_ui.page_class
     {
-        public TClass_biz_accounts biz_accounts;
+
+    private struct p_type
+      {
+      public TClass_biz_accounts biz_accounts;
         public TClass_biz_regions biz_regions;
         public string region_code;
-    } // end p_type
+      }
 
-    public partial class TWebForm_salogin: ki_web_ui.page_class
-    {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -26,8 +28,7 @@ namespace salogin
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_salogin_PreRender;
+            PreRender += TWebForm_salogin_PreRender;
         }
 
     private void InjectPersistentClientSideScript()

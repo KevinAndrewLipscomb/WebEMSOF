@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="add_proof_of_payment.aspx.cs" AutoEventWireup="True" Inherits="add_proof_of_payment.TWebForm_add_proof_of_payment" %>
+<%@ Page language="c#" codebehind="add_proof_of_payment.aspx.cs" AutoEventWireup="True" Inherits="add_proof_of_payment.TWebForm_add_proof_of_payment" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>

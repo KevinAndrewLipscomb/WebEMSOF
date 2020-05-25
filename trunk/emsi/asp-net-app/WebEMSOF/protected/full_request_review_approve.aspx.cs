@@ -27,7 +27,8 @@ namespace full_request_review_approve
 
     public partial class TWebForm_full_request_review_approve: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -36,14 +37,13 @@ namespace full_request_review_approve
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_items.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_items_ItemDataBound);
-            this.DataGrid_items.CancelCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_items_CancelCommand);
-            this.DataGrid_items.EditCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_items_EditCommand);
-            this.DataGrid_items.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_items_UpdateCommand);
-            this.DataGrid_proofs_of_payment.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_proofs_of_payment_ItemDataBound);
-            this.DataGrid_proofs_of_payment.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_proofs_of_payment_DeleteCommand);
-            this.PreRender += this.TWebForm_full_request_review_approve_PreRender;
-            //this.Load += this.Page_Load;
+            DataGrid_items.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_items_ItemDataBound);
+            DataGrid_items.CancelCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_items_CancelCommand);
+            DataGrid_items.EditCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_items_EditCommand);
+            DataGrid_items.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_items_UpdateCommand);
+            DataGrid_proofs_of_payment.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_proofs_of_payment_ItemDataBound);
+            DataGrid_proofs_of_payment.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_proofs_of_payment_DeleteCommand);
+            PreRender += TWebForm_full_request_review_approve_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
@@ -296,10 +296,10 @@ namespace full_request_review_approve
             actual_quantity = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_actual_quantity")) as TextBox).Text.Trim(), k.safe_hint_type.NUM);
             actual_subtotal_cost = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfFullRequestActuals())].FindControl("TextBox_actual_subtotal_cost")) as TextBox).Text.Trim(), k.safe_hint_type.REAL_NUM);
             var be_ok_to_end_edit_and_rebind = true;
-            if ((invoice_designator != k.EMPTY) && (actual_quantity != k.EMPTY) && (actual_subtotal_cost != k.EMPTY))
+            if ((invoice_designator.Length > 0) && (actual_quantity.Length > 0) && (actual_subtotal_cost.Length > 0))
               {
               var special_rules_violation = p.biz_equipment.SpecialRulesViolation(p.biz_emsof_requests.ServiceIdOf(Session["e_item"]), p.request_id, priority, p.biz_emsof_requests.EquipmentCodeOf(p.request_id, priority), actual_quantity);
-              if (special_rules_violation == k.EMPTY)
+              if (special_rules_violation.Length == 0)
                 {
                 p.biz_emsof_requests.SetActuals
                   (
@@ -363,7 +363,7 @@ namespace full_request_review_approve
         protected void Button_disapprove_Click(object sender, System.EventArgs e)
         {
             string disapproval_reason;
-            if (TextArea_disapproval_reason.Value != k.EMPTY)
+            if (TextArea_disapproval_reason.Value.Length > 0)
             {
                 disapproval_reason = k.Safe(TextArea_disapproval_reason.Value, k.safe_hint_type.PUNCTUATED);
                 p.biz_emsof_requests.Demote(Session["e_item"], Session["account_descriptor"].ToString(), disapproval_reason, k.Safe(Label_sum_of_emsof_antes.Text, k.safe_hint_type.CURRENCY_USA));

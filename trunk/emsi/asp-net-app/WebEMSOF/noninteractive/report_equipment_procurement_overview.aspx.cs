@@ -20,15 +20,17 @@ using Class_biz_fiscal_years;
 using UserControl_equipment_procurement_overview;
 namespace report_equipment_procurement_overview
 {
-    public struct p_type
+  public partial class TWebForm_report_equipment_procurement_overview: ki_web_ui.page_class
     {
-        public TClass_biz_accounts biz_accounts;
-        public TClass_biz_fiscal_years biz_fiscal_years;
-    } // end p_type
 
-    public partial class TWebForm_report_equipment_procurement_overview: ki_web_ui.page_class
-    {
-        private p_type p;
+    private struct p_type
+      {
+      public TClass_biz_accounts biz_accounts;
+        public TClass_biz_fiscal_years biz_fiscal_years;
+      }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.Label Label_application_name_2 = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -36,7 +38,6 @@ namespace report_equipment_procurement_overview
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

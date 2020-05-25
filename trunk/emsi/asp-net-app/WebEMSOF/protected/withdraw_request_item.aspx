@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="withdraw_request_item.aspx.cs" AutoEventWireup="True" Inherits="withdraw_request_item.TWebForm_withdraw_request_item" %>
+<%@ Page language="c#" codebehind="withdraw_request_item.aspx.cs" AutoEventWireup="True" Inherits="withdraw_request_item.TWebForm_withdraw_request_item" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>

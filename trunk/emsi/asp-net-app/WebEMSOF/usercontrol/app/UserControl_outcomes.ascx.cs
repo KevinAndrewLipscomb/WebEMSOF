@@ -11,7 +11,8 @@ namespace UserControl_outcomes
 {
     public partial class TWebUserControl_outcomes: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -134,8 +135,7 @@ namespace UserControl_outcomes
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_outcomes_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_outcomes_PreRender;
         }
 
         private void TWebUserControl_outcomes_PreRender(object sender, System.EventArgs e)

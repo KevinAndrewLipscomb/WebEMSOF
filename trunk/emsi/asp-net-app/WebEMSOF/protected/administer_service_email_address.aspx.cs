@@ -12,7 +12,8 @@ namespace administer_service_email_address
 {
     public partial class TWebForm_administer_service_email_address: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -21,8 +22,7 @@ namespace administer_service_email_address
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebForm_administer_service_email_address_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebForm_administer_service_email_address_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="region_dictated_appropriations.aspx.cs" AutoEventWireup="True" Inherits="region_dictated_appropriations.TWebForm_region_dictated_appropriations" %>
+<%@ Page language="c#" codebehind="region_dictated_appropriations.aspx.cs" AutoEventWireup="True" Inherits="region_dictated_appropriations.TWebForm_region_dictated_appropriations" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>
