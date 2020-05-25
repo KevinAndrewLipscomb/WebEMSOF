@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="report_fy_allocations_reimbursements_nonspends.aspx.cs" AutoEventWireup="True" Inherits="report_fy_allocations_reimbursements_nonspends.TWebForm_report_fy_allocations_reimbursements_nonspends" EnableViewState="false" %>
+<%@ Page language="c#" codebehind="report_fy_allocations_reimbursements_nonspends.aspx.cs" AutoEventWireup="True" Inherits="report_fy_allocations_reimbursements_nonspends.TWebForm_report_fy_allocations_reimbursements_nonspends" EnableViewState="false" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_common_header_bar" Src="~/usercontrol/app/UserControl_common_header_bar.ascx" %>
 <!DOCTYPE html>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>

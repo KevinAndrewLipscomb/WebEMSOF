@@ -10,7 +10,7 @@ namespace Class_biz_emsof_extra_service_county_dependencies
   public class TClass_biz_emsof_extra_service_county_dependencies
     {
 
-    private TClass_db_emsof_extra_service_county_dependencies db_emsof_extra_service_county_dependencies;
+    private readonly TClass_db_emsof_extra_service_county_dependencies db_emsof_extra_service_county_dependencies;
 
     public TClass_biz_emsof_extra_service_county_dependencies() : base()
       {

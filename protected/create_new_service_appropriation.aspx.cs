@@ -13,7 +13,8 @@ namespace create_new_service_appropriation
   {
   public partial class TWebForm_create_new_service_appropriation: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -22,8 +23,7 @@ namespace create_new_service_appropriation
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebForm_create_new_service_appropriation_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebForm_create_new_service_appropriation_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
@@ -83,7 +83,7 @@ namespace create_new_service_appropriation
 
         protected void DropDownList_services_SelectedIndexChanged(object sender, System.EventArgs e)
           {
-          if (DropDownList_services.SelectedValue == k.EMPTY)
+          if (DropDownList_services.SelectedValue.Length == 0)
             {
             RadioButtonList_match_level.ClearSelection();
             }
@@ -109,7 +109,7 @@ namespace create_new_service_appropriation
         {
             string amount_string;
             amount_string = k.Safe(args.Value, k.safe_hint_type.REAL_NUM);
-            if (amount_string == k.EMPTY)
+            if (amount_string.Length == 0)
             {
                 args.IsValid = false;
             }

@@ -52,7 +52,7 @@ namespace county_dictated_appropriations
           public string user_email_address;
           }
 
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -60,15 +60,14 @@ namespace county_dictated_appropriations
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_service_appropriations.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_service_appropriations_ItemDataBound);
-            this.DataGrid_service_appropriations.CancelCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_service_appropriations_CancelCommand);
-            this.DataGrid_service_appropriations.EditCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_service_appropriations_EditCommand);
-            this.DataGrid_service_appropriations.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_service_appropriations_SortCommand);
-            this.DataGrid_service_appropriations.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_service_appropriations_ItemCommand);
-            this.DataGrid_service_appropriations.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_service_appropriations_DeleteCommand);
-            this.DataGrid_service_appropriations.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_service_appropriations_UpdateCommand);
-            this.PreRender += this.TWebForm_county_dictated_appropriations_PreRender;
-            //this.Load += this.Page_Load;
+            DataGrid_service_appropriations.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_service_appropriations_ItemDataBound);
+            DataGrid_service_appropriations.CancelCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_service_appropriations_CancelCommand);
+            DataGrid_service_appropriations.EditCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_service_appropriations_EditCommand);
+            DataGrid_service_appropriations.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_service_appropriations_SortCommand);
+            DataGrid_service_appropriations.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_service_appropriations_ItemCommand);
+            DataGrid_service_appropriations.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_service_appropriations_DeleteCommand);
+            DataGrid_service_appropriations.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_service_appropriations_UpdateCommand);
+            PreRender += TWebForm_county_dictated_appropriations_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
@@ -303,7 +302,7 @@ namespace county_dictated_appropriations
                 Session.Add("service_name_of_appropriation_selected_for_deletion", k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfServiceName())].Text, k.safe_hint_type.ORG_NAME));
                 Session.Remove("amount_of_appropriation_selected_for_deletion");
                 var amount_of_appropriation_selected_for_deletion = k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfAppropriation())].Text, k.safe_hint_type.REAL_NUM);
-                if (amount_of_appropriation_selected_for_deletion == k.EMPTY)
+                if (amount_of_appropriation_selected_for_deletion.Length == 0)
                   {
                   amount_of_appropriation_selected_for_deletion = k.Safe((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfAppropriation())].Controls[0] as TextBox).Text, k.safe_hint_type.REAL_NUM);
                   }
@@ -393,7 +392,7 @@ namespace county_dictated_appropriations
             p.db.Open();
             appropriation_id_string = k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfId())].Text, k.safe_hint_type.NUM);
             amount_string = k.Safe(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfAppropriation())].Controls[0]) as TextBox).Text.Trim(), k.safe_hint_type.REAL_NUM);
-            if (amount_string != k.EMPTY)
+            if (amount_string.Length > 0)
             {
                 amount = decimal.Parse(amount_string);
                 if ((amount - p.saved_amount) > p.unappropriated_amount)
@@ -467,7 +466,7 @@ namespace county_dictated_appropriations
                 DropDownList_status_filter.Items.Add(new ListItem("(all)", k.EMPTY));
             }
             p.distribution_list_for_services_with_allocations = k.EMPTY;
-            if (p.status_filter != k.EMPTY)
+            if (p.status_filter.Length > 0)
             {
                 p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus(p.region_dictated_appropriation_id, ((status_type)(Convert.ToInt16(p.status_filter))), p.sort_order, p.be_sort_order_ascending, DataGrid_service_appropriations);
                 DropDownList_status_filter.SelectedValue = p.status_filter;
@@ -523,9 +522,9 @@ namespace county_dictated_appropriations
             {
                 Label_distribution_list.Text = p.biz_services.EmailTargetForCounty(p.county_code);
             }
-            TextBox_quick_message_subject.Enabled = Label_distribution_list.Text != k.EMPTY;
-            TextBox_quick_message_body.Enabled = Label_distribution_list.Text != k.EMPTY;
-            Button_send.Enabled = Label_distribution_list.Text != k.EMPTY;
+            TextBox_quick_message_subject.Enabled = Label_distribution_list.Text.Length > 0;
+            TextBox_quick_message_body.Enabled = Label_distribution_list.Text.Length > 0;
+            Button_send.Enabled = Label_distribution_list.Text.Length > 0;
 
         }
 

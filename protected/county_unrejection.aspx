@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="county_unrejection.aspx.cs" AutoEventWireup="True" Inherits="county_unrejection.TWebForm_county_unrejection" %>
+<%@ Page language="c#" codebehind="county_unrejection.aspx.cs" AutoEventWireup="True" Inherits="county_unrejection.TWebForm_county_unrejection" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>

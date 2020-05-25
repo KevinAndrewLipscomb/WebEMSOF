@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="analyses.aspx.cs" AutoEventWireup="True" Inherits="analyses.TWebForm_analyses"%>
+<%@ Page language="c#" codebehind="analyses.aspx.cs" AutoEventWireup="True" Inherits="analyses.TWebForm_analyses"%>
 <%@ Register TagPrefix="uc1" TagName="UserControl_precontent" Src="~/usercontrol/app/UserControl_precontent.ascx" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_postcontent" Src="~/usercontrol/app/UserControl_postcontent.ascx" %>
 <!DOCTYPE html>

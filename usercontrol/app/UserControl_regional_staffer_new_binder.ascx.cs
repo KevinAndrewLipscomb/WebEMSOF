@@ -14,7 +14,8 @@ namespace UserControl_regional_staffer_new_binder
 {
     public partial class TWebUserControl_regional_staffer_new_binder: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         // TSSI_2 = 2;
         protected void Page_Load(object sender, System.EventArgs e)
         {
@@ -97,9 +98,8 @@ namespace UserControl_regional_staffer_new_binder
         // / </summary>
         private void InitializeComponent()
         {
-            this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebUserControl_regional_staffer_new_binder_PreRender;
+            TabContainer_control.ActiveTabChanged += TabContainer_control_ActiveTabChanged;
+            PreRender += TWebUserControl_regional_staffer_new_binder_PreRender;
         }
 
         private void TWebUserControl_regional_staffer_new_binder_PreRender(object sender, System.EventArgs e)

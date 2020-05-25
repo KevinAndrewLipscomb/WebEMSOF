@@ -17,7 +17,7 @@ namespace UserControl_regional_staffer_old_binder
             public TClass_biz_emsof_requests biz_emsof_requests;
         }
 
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
         private void InjectPersistentClientSideScript()
         {
@@ -143,8 +143,7 @@ namespace UserControl_regional_staffer_old_binder
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebUserControl_regional_staffer_old_binder_PreRender;
+            PreRender += TWebUserControl_regional_staffer_old_binder_PreRender;
         }
 
         private void TWebUserControl_regional_staffer_old_binder_PreRender(object sender, System.EventArgs e)

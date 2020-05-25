@@ -12,8 +12,8 @@ namespace UserControl_match_level
 {
     public partial class TWebUserControl_match_level: ki_web_ui.usercontrol_class
     {
-        private p_type p;
-        protected System.Web.UI.WebControls.Label Label_application_name = null;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void Clear()
         {
             TextBox_name.Text = k.EMPTY;
@@ -107,8 +107,7 @@ namespace UserControl_match_level
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebUserControl_match_level_PreRender;
+            PreRender += TWebUserControl_match_level_PreRender;
         }
 
         private void TWebUserControl_match_level_PreRender(object sender, System.EventArgs e)
@@ -130,7 +129,7 @@ namespace UserControl_match_level
             if (Page.IsValid)
             {
                 factor = 0;
-                if (TextBox_factor.Text != k.EMPTY)
+                if (TextBox_factor.Text.Length > 0)
                 {
                     factor = decimal.Parse(k.Safe(TextBox_factor.Text, k.safe_hint_type.REAL_NUM_INCLUDING_NEGATIVE));
                 }

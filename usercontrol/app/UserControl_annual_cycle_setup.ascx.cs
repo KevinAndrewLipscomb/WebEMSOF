@@ -14,7 +14,8 @@ namespace UserControl_annual_cycle_setup
 {
     public partial class TWebUserControl_annual_cycle_setup: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -139,8 +140,7 @@ namespace UserControl_annual_cycle_setup
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_annual_cycle_setup_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_annual_cycle_setup_PreRender;
         }
 
         private void TWebUserControl_annual_cycle_setup_PreRender(object sender, System.EventArgs e)

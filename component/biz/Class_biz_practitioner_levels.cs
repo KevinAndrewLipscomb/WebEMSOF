@@ -5,7 +5,8 @@ namespace Class_biz_practitioner_levels
 {
     public class TClass_biz_practitioner_levels
     {
-        private TClass_db_practitioner_levels db_practitioner_levels = null;
+        private readonly TClass_db_practitioner_levels db_practitioner_levels = null;
+
         //Constructor  Create()
         public TClass_biz_practitioner_levels() : base()
         {

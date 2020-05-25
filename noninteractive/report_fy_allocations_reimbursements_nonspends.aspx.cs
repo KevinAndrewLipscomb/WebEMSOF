@@ -10,15 +10,17 @@ using UserControl_fy_allocations_reimbursements_returns;
 
 namespace report_fy_allocations_reimbursements_nonspends
 {
-    public struct p_type
+  public partial class TWebForm_report_fy_allocations_reimbursements_nonspends: ki_web_ui.page_class
     {
-        public TClass_biz_accounts biz_accounts;
-        public TClass_biz_fiscal_years biz_fiscal_years;
-    } // end p_type
 
-    public partial class TWebForm_report_fy_allocations_reimbursements_nonspends: ki_web_ui.page_class
-    {
-        private p_type p;
+    private struct p_type
+      {
+      public TClass_biz_accounts biz_accounts;
+        public TClass_biz_fiscal_years biz_fiscal_years;
+      }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.Label Label_application_name_2 = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -26,7 +28,6 @@ namespace report_fy_allocations_reimbursements_nonspends
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

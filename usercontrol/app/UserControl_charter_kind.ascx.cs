@@ -12,8 +12,8 @@ namespace UserControl_charter_kind
 {
     public partial class TWebUserControl_charter_kind: ki_web_ui.usercontrol_class
     {
-        private p_type p;
-        protected System.Web.UI.WebControls.Label Label_application_name = null;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void Clear()
         {
             TextBox_id.Text = k.EMPTY;
@@ -190,8 +190,7 @@ namespace UserControl_charter_kind
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_charter_kind_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_charter_kind_PreRender;
         }
 
         private void TWebUserControl_charter_kind_PreRender(object sender, System.EventArgs e)

@@ -14,7 +14,8 @@ namespace UserControl_financial_snapshot
 {
     public partial class TWebUserControl_financial_snapshot: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -144,8 +145,7 @@ namespace UserControl_financial_snapshot
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_financial_snapshot_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_financial_snapshot_PreRender;
         }
 
         private void TWebUserControl_financial_snapshot_PreRender(object sender, System.EventArgs e)

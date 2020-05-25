@@ -11,16 +11,18 @@ using UserControl_serial_indicator_equipment_quantities;
 namespace UserControl_equipment_procurement_binder
 {
     // ,UserControl3
-    public struct p_type
+  public partial class TWebUserControl_equipment_procurement_binder: ki_web_ui.usercontrol_class
     {
-        public bool be_loaded;
+
+    private struct p_type
+      {
+      public bool be_loaded;
         public string content_id;
         public uint tab_index;
-    } // end p_type
+      }
 
-    public partial class TWebUserControl_equipment_procurement_binder: ki_web_ui.usercontrol_class
-    {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         // TSSI_2 = 2;
         protected void Page_Load(object sender, System.EventArgs e)
         {
@@ -73,9 +75,8 @@ namespace UserControl_equipment_procurement_binder
         // / </summary>
         private void InitializeComponent()
         {
-            this.TabContainer_control.ActiveTabChanged += this.TabContainer_control_ActiveTabChanged;
-            this.PreRender += this.TWebUserControl_equipment_procurement_binder_PreRender;
-            //this.Load += this.Page_Load;
+            TabContainer_control.ActiveTabChanged += TabContainer_control_ActiveTabChanged;
+            PreRender += TWebUserControl_equipment_procurement_binder_PreRender;
         }
 
         private void TWebUserControl_equipment_procurement_binder_PreRender(object sender, System.EventArgs e)

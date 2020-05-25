@@ -5,7 +5,7 @@ namespace analyses
   {
   public partial class TWebForm_analyses: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -13,8 +13,7 @@ namespace analyses
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebForm_analyses_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebForm_analyses_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

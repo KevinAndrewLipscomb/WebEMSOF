@@ -18,9 +18,12 @@ namespace UserControl_fy_allocations_reimbursements_returns
     public const int TCI_RETURN = 6;
     }
 
-  public struct p_type
+  public partial class TWebUserControl_fy_allocations_reimbursements_returns: ki_web_ui.usercontrol_class
     {
-    public bool be_interactive;
+
+    private struct p_type
+      {
+      public bool be_interactive;
     public bool be_loaded;
     public bool be_sort_order_ascending;
     public TClass_biz_emsof_requests biz_emsof_requests;
@@ -30,11 +33,10 @@ namespace UserControl_fy_allocations_reimbursements_returns
     public k.decimal_nonnegative sum_of_allocations;
     public k.decimal_nonnegative sum_of_reimbursements;
     public k.decimal_nonnegative sum_of_returns;
-    }
+      }
 
-  public partial class TWebUserControl_fy_allocations_reimbursements_returns: ki_web_ui.usercontrol_class
-    {
-    private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
     private void InjectPersistentClientSideScript()
       {
       // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -161,9 +163,9 @@ namespace UserControl_fy_allocations_reimbursements_returns
     // / </summary>
     private void InitializeComponent()
       {
-      DataGrid_control.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_control_ItemDataBound);
-      DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_control_SortCommand);
-      PreRender += this.TWebUserControl_fy_allocations_reimbursements_returns_PreRender;
+      DataGrid_control.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_control_ItemDataBound);
+      DataGrid_control.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_control_SortCommand);
+      PreRender += TWebUserControl_fy_allocations_reimbursements_returns_PreRender;
       }
 
     private void TWebUserControl_fy_allocations_reimbursements_returns_PreRender(object sender, System.EventArgs e)

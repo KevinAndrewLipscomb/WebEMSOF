@@ -28,7 +28,6 @@ namespace UserControl_postcontent
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
         }
 
     } // end TWebUserControl_postcontent

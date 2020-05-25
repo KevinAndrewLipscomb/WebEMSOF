@@ -16,7 +16,8 @@ namespace all_emsof_requests
 {
     public partial class TWebForm_all_emsof_requests: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -25,11 +26,10 @@ namespace all_emsof_requests
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_requests_ItemDataBound);
-            this.DataGrid_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_requests_SortCommand);
-            this.DataGrid_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_requests_ItemCommand);
-            this.PreRender += this.TWebForm_all_emsof_requests_PreRender;
-            //this.Load += this.Page_Load;
+            DataGrid_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_requests_ItemDataBound);
+            DataGrid_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_requests_SortCommand);
+            DataGrid_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_requests_ItemCommand);
+            PreRender += TWebForm_all_emsof_requests_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

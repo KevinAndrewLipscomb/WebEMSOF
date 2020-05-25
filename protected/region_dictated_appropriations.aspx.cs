@@ -17,7 +17,8 @@ namespace region_dictated_appropriations
 {
     public partial class TWebForm_region_dictated_appropriations: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         protected System.Web.UI.WebControls.Label Label_account_descriptor = null;
@@ -27,15 +28,14 @@ namespace region_dictated_appropriations
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_county_appropriations.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_county_appropriations_ItemCommand);
-            this.DataGrid_county_appropriations.CancelCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_county_appropriations_CancelCommand);
-            this.DataGrid_county_appropriations.EditCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_county_appropriations_EditCommand);
-            this.DataGrid_county_appropriations.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_county_appropriations_SortCommand);
-            this.DataGrid_county_appropriations.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_county_appropriations_UpdateCommand);
-            this.DataGrid_county_appropriations.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_county_appropriations_DeleteCommand);
-            this.DataGrid_county_appropriations.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_county_appropriations_ItemDataBound);
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_region_dictated_appropriations_PreRender;
+            DataGrid_county_appropriations.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_ItemCommand);
+            DataGrid_county_appropriations.CancelCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_CancelCommand);
+            DataGrid_county_appropriations.EditCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_EditCommand);
+            DataGrid_county_appropriations.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_county_appropriations_SortCommand);
+            DataGrid_county_appropriations.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_UpdateCommand);
+            DataGrid_county_appropriations.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_DeleteCommand);
+            DataGrid_county_appropriations.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_county_appropriations_ItemDataBound);
+            PreRender += TWebForm_region_dictated_appropriations_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
@@ -117,7 +117,7 @@ namespace region_dictated_appropriations
             p.db.Open();
             appropriation_id_string = k.Safe(e.Item.Cells[(int)(p.tcci_id)].Text, k.safe_hint_type.NUM);
             amount_string = k.Safe(((e.Item.Cells[(int)(p.tcci_amount)].Controls[0]) as TextBox).Text.Trim(), k.safe_hint_type.REAL_NUM);
-            if (amount_string != k.EMPTY)
+            if (amount_string.Length > 0)
             {
                 amount = decimal.Parse(amount_string);
                 if ((amount - p.saved_amount) > p.unappropriated_amount)

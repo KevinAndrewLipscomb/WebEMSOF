@@ -1,4 +1,4 @@
-<%@ Page language="c#" Debug="true" Codebehind="report_equipment_procurement_overview.aspx.cs" AutoEventWireup="True" Inherits="report_equipment_procurement_overview.TWebForm_report_equipment_procurement_overview" EnableViewState="false" %>
+<%@ Page language="c#" codebehind="report_equipment_procurement_overview.aspx.cs" AutoEventWireup="True" Inherits="report_equipment_procurement_overview.TWebForm_report_equipment_procurement_overview" EnableViewState="false" %>
 <%@ Register TagPrefix="uc1" TagName="UserControl_common_header_bar" Src="~/usercontrol/app/UserControl_common_header_bar.ascx" %>
 <!DOCTYPE html>
 <%@ Register TagPrefix="uc2" TagName="UserControl_update_progress_blocker" Src="~/usercontrol/app/UserControl_update_progress_blocker.ascx" %>

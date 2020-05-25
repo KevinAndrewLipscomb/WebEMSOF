@@ -16,7 +16,8 @@ namespace request_item_detail
 {
     public partial class TWebForm_request_item_detail: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -25,8 +26,7 @@ namespace request_item_detail
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebForm_request_item_detail_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebForm_request_item_detail_PreRender;
         }
 
         private void ManageDropDownListEquipmentCategoryEnablement()
@@ -96,7 +96,7 @@ namespace request_item_detail
                 be_finalized = Session["be_finalized"].ToString() == "True";
                 // Case matters.
                 p.be_locked = !be_before_deadline || be_finalized;
-                be_new = Session["emsof_request_item_priority"].ToString() == k.EMPTY;
+                be_new = Session["emsof_request_item_priority"].ToString().Length == 0;
                 // Manage whether or not the instruction ("-- Select --") appears at the top of DropDownList_equipment_category.
                 if (be_new)
                 {
@@ -181,7 +181,7 @@ namespace request_item_detail
                     dr_user_details.Close();
                     Recalculate();
                 }
-                if (p.attachment_key == k.EMPTY)
+                if (p.attachment_key.Length == 0)
                   {
                   p.attachment_key = DateTime.Now.Ticks.ToString("D19");
                   }
@@ -244,7 +244,7 @@ namespace request_item_detail
             string special_rules_violation;
             args.IsValid = true;
             special_rules_violation = p.biz_equipment.SpecialRulesViolation(Session["service_user_id"].ToString(), Session["emsof_request_master_id"].ToString(), Session["emsof_request_item_priority"].ToString(), k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM), k.Safe(TextBox_quantity.Text, k.safe_hint_type.NUM));
-            if (special_rules_violation != k.EMPTY)
+            if (special_rules_violation.Length > 0)
             {
                 args.IsValid = false;
                 CustomValidator_special_conditions.ErrorMessage = special_rules_violation;
@@ -272,7 +272,7 @@ namespace request_item_detail
           // The following test should not be necessary because the program's logic is supposed to prevent this routine from being entered in the first place under the tested condition.  Yet it happens, and causes a crash on the call to ExecuteNonQuery.
           // Better to let the user get no response or change at all than to crash.
           //
-          if (Session["emsof_request_item_priority"].ToString() != k.EMPTY)
+          if (Session["emsof_request_item_priority"].ToString().Length > 0)
             {
             if (Page.IsValid) // Note that implicit validation runs Recalculate, which forces setting of additional_service_ante.
               {
@@ -318,7 +318,7 @@ namespace request_item_detail
           // The following test should not be necessary because the program's logic is supposed to prevent this routine from being entered in the first place under the tested condition.  Yet it happens, and causes a crash on the call to ExecuteNonQuery.
           // Better to let the user get no response or change at all than to crash.
           //
-          if (Session["emsof_request_item_priority"].ToString() != k.EMPTY)
+          if (Session["emsof_request_item_priority"].ToString().Length > 0)
             {
             if (CheckBox_delete.Checked)
               {
@@ -464,7 +464,7 @@ namespace request_item_detail
             if (dr_state_details.Read())
             {
                 life_expectancy_string = dr_state_details["life_expectancy_years"].ToString();
-                if (life_expectancy_string != k.EMPTY)
+                if (life_expectancy_string.Length > 0)
                 {
                     Label_life_expectancy.Text = "PA DOH EMSO expects this equipment to last " + life_expectancy_string + " years.";
                     Label_life_expectancy.Font.Bold = true;
@@ -522,7 +522,7 @@ namespace request_item_detail
           {
           Recalculate();
           var safe_emsof_ante = k.Safe(Label_emsof_ante.Text,k.safe_hint_type.REAL_NUM_INCLUDING_NEGATIVE);
-          args.IsValid = (safe_emsof_ante == k.EMPTY) || (decimal.Parse(safe_emsof_ante) >= 0);
+          args.IsValid = (safe_emsof_ante.Length == 0) || (decimal.Parse(safe_emsof_ante) >= 0);
           }
 
     } // end TWebForm_request_item_detail

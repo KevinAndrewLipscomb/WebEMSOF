@@ -11,7 +11,8 @@ namespace UserControl_workflow
 {
     public partial class TWebUserControl_workflow: ki_web_ui.usercontrol_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);
@@ -166,8 +167,7 @@ namespace UserControl_workflow
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_workflow_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_workflow_PreRender;
         }
 
         private void TWebUserControl_workflow_PreRender(object sender, System.EventArgs e)

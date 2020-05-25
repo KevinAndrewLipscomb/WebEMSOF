@@ -16,16 +16,18 @@ using Class_biz_appropriations;
 using Class_biz_emsof_requests;
 namespace county_dictated_deadline
 {
-    public struct p_type
+  public partial class TWebForm_county_dictated_deadline: ki_web_ui.page_class
     {
-        public TClass_biz_appropriations biz_appropriations;
+
+    private struct p_type
+      {
+      public TClass_biz_appropriations biz_appropriations;
         public TClass_biz_emsof_requests biz_emsof_requests;
         public TClass_db db;
-    } // end p_type
+      }
 
-    public partial class TWebForm_county_dictated_deadline: ki_web_ui.page_class
-    {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         protected System.Web.UI.WebControls.LinkButton LinkButton_county_dictated_appropriations = null;
@@ -35,8 +37,7 @@ namespace county_dictated_deadline
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_county_dictated_deadline_PreRender;
+            PreRender += TWebForm_county_dictated_deadline_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

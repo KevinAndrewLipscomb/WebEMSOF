@@ -22,7 +22,8 @@ namespace UserControl_serial_indicator_equipment_quantities
       public string width_in_years_max;
       }
 
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected void Page_Load(object sender, System.EventArgs e)
         {
             if (!p.be_loaded)
@@ -69,8 +70,7 @@ namespace UserControl_serial_indicator_equipment_quantities
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_serial_indicator_equipment_quantities_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_serial_indicator_equipment_quantities_PreRender;
         }
 
         private void TWebUserControl_serial_indicator_equipment_quantities_PreRender(object sender, System.EventArgs e)

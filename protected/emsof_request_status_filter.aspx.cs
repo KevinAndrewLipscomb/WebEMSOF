@@ -37,7 +37,7 @@ namespace emsof_request_status_filter
           public string user_email_address;
           }
 
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
@@ -47,11 +47,10 @@ namespace emsof_request_status_filter
         // / </summary>
         private void InitializeComponent()
         {
-            this.DataGrid_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.DataGrid_requests_ItemDataBound);
-            this.DataGrid_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(this.DataGrid_requests_SortCommand);
-            this.DataGrid_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.DataGrid_requests_ItemCommand);
-            this.PreRender += this.TWebForm_emsof_request_status_filter_PreRender;
-            //this.Load += this.Page_Load;
+            DataGrid_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_requests_ItemDataBound);
+            DataGrid_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_requests_SortCommand);
+            DataGrid_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_requests_ItemCommand);
+            PreRender += TWebForm_emsof_request_status_filter_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)

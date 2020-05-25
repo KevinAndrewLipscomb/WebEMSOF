@@ -1,10 +1,12 @@
 using System;
 using Class_db_emsof_request_return_comments;
+
 namespace Class_biz_emsof_request_return_comments
 {
     public class TClass_biz_emsof_request_return_comments
     {
-        private TClass_db_emsof_request_return_comments db_emsof_request_return_comments = null;
+        private readonly TClass_db_emsof_request_return_comments db_emsof_request_return_comments = null;
+
         //Constructor  Create()
         public TClass_biz_emsof_request_return_comments() : base()
         {

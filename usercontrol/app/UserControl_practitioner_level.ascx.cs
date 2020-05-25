@@ -9,8 +9,8 @@ namespace UserControl_practitioner_level
     // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~trivial~item.pas
     public partial class TWebUserControl_practitioner_level: ki_web_ui.usercontrol_class
     {
-        private p_type p;
-        protected System.Web.UI.WebControls.Label Label_application_name = null;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         private void Clear()
         {
             TextBox_id.Text = k.EMPTY;
@@ -202,8 +202,7 @@ namespace UserControl_practitioner_level
         // / </summary>
         private void InitializeComponent()
         {
-            this.PreRender += this.TWebUserControl_practitioner_level_PreRender;
-            //this.Load += this.Page_Load;
+            PreRender += TWebUserControl_practitioner_level_PreRender;
         }
 
         private void TWebUserControl_practitioner_level_PreRender(object sender, System.EventArgs e)

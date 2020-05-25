@@ -22,7 +22,8 @@ namespace delete_service_appropriation
 {
     public partial class TWebForm_delete_service_appropriation: ki_web_ui.page_class
     {
-        private p_type p;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
         protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
@@ -31,8 +32,7 @@ namespace delete_service_appropriation
         // / </summary>
         private void InitializeComponent()
         {
-            //this.Load += this.Page_Load;
-            this.PreRender += this.TWebForm_delete_service_appropriation_PreRender;
+            PreRender += TWebForm_delete_service_appropriation_PreRender;
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
