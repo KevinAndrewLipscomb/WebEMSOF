@@ -5,6 +5,7 @@ using kix;
 using System;
 using System.Configuration;
 using System.Drawing;
+using System.Text;
 using System.Web.UI.WebControls;
 
 namespace all_emsof_requests
@@ -12,7 +13,24 @@ namespace all_emsof_requests
   public partial class TWebForm_all_emsof_requests: ki_web_ui.page_class
     {
 
+    private struct p_type
+      {
+      public TClass_biz_accounts biz_accounts;
+      public TClass_biz_emsof_requests biz_emsof_requests;
+      public bool be_datagrid_empty;
+      public bool be_sort_order_ascending;
+      public TClass_biz_user biz_user;
+      public uint num_datagrid_rows;
+      public string sort_order;
+      }
+
+    private struct v_type
+      {
+      public StringBuilder distribution_list;
+      }
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+    private v_type v; // Volatile instance Variable container
 
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -20,9 +38,9 @@ namespace all_emsof_requests
         // / </summary>
         private void InitializeComponent()
         {
-            DataGrid_requests.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_requests_ItemDataBound);
-            DataGrid_requests.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_requests_SortCommand);
-            DataGrid_requests.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_requests_ItemCommand);
+            DataGrid_requests.ItemDataBound += new DataGridItemEventHandler(DataGrid_requests_ItemDataBound);
+            DataGrid_requests.SortCommand += new DataGridSortCommandEventHandler(DataGrid_requests_SortCommand);
+            DataGrid_requests.ItemCommand += new DataGridCommandEventHandler(DataGrid_requests_ItemCommand);
             PreRender += TWebForm_all_emsof_requests_PreRender;
         }
 
@@ -64,19 +82,25 @@ namespace all_emsof_requests
             // Required for Designer support
             InitializeComponent();
             base.OnInit(e);
+            //
+            v.distribution_list = new StringBuilder();
         }
 
         protected void Button_send_Click(object sender, System.EventArgs e)
         {
-            // from
-            // to
-            // subject
-            // body
-            // be_html
-            // cc
-            // bcc
-            // reply_to
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
+            k.SmtpMailSend
+              (
+              from:ConfigurationManager.AppSettings["sender_email_address"],
+              to:Label_distribution_list.Text,
+              subject:TextBox_quick_message_subject.Text,
+              message_string:"-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE
+              + k.NEW_LINE
+              + TextBox_quick_message_body.Text,
+              be_html:false,
+              cc:k.EMPTY,
+              bcc:p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()),
+              reply_to:p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum())
+              );
             TextBox_quick_message_subject.Text = k.EMPTY;
             TextBox_quick_message_body.Text = k.EMPTY;
             Alert(k.alert_cause_type.LOGIC, k.alert_state_type.NORMAL, "messagsnt", "Message sent", true);
@@ -140,7 +164,8 @@ namespace all_emsof_requests
                 }
                 if (e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text != "&nbsp;")
                 {
-                    p.distribution_list = p.distribution_list + e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text + k.COMMA_SPACE;
+                    v.distribution_list.Append(k.COMMA_SPACE);
+                    v.distribution_list.Append(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text);
                 }
             }
         }
@@ -158,24 +183,12 @@ namespace all_emsof_requests
             TableRow_none.Visible = p.be_datagrid_empty;
             TableRow_data.Visible = !p.be_datagrid_empty;
             Table_quick_message.Visible = !p.be_datagrid_empty;
-            Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
+            Label_distribution_list.Text = v.distribution_list.Remove(0,2).ToString(); // .TrimStart(k.COMMA_SPACE)
             // Clear aggregation vars for next bind, if any.
             Label_num_datagrid_rows.Text = p.num_datagrid_rows.ToString();
             p.num_datagrid_rows = 0;
 
         }
-
-        private struct p_type
-        {
-            public TClass_biz_accounts biz_accounts;
-            public TClass_biz_emsof_requests biz_emsof_requests;
-            public bool be_datagrid_empty;
-            public bool be_sort_order_ascending;
-            public TClass_biz_user biz_user;
-            public string distribution_list;
-            public uint num_datagrid_rows;
-            public string sort_order;
-        } // end p_type
 
     } // end TWebForm_all_emsof_requests
 
