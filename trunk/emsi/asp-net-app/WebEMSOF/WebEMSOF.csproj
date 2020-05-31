@@ -237,6 +237,7 @@
     </Compile>
     <Compile Include="protected\county_dictated_appropriations.aspx.cs">
       <DependentUpon>county_dictated_appropriations.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="protected\county_dictated_appropriations.aspx.designer.cs">
       <DependentUpon>county_dictated_appropriations.aspx</DependentUpon>
@@ -298,6 +299,7 @@
     </Compile>
     <Compile Include="protected\full_request_review_approve.aspx.cs">
       <DependentUpon>full_request_review_approve.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="protected\full_request_review_approve.aspx.designer.cs">
       <DependentUpon>full_request_review_approve.aspx</DependentUpon>

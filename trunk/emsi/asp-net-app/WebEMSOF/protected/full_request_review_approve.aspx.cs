@@ -16,17 +16,40 @@ using UserControl_attachment_explorer;
 
 namespace full_request_review_approve
   {
-  public class full_request_review_approve_Static
-    {
-    public const int TCCI_DETAIL = 2;
-    public const int TCCI_ATTACHMENT_KEY = 3;
-    public const int TCCI_ACTUALS = 4;
-    public const int TCCI_LINKBUTTONS = 5;
-    public const int TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 5;
-    }
-
     public partial class TWebForm_full_request_review_approve: ki_web_ui.page_class
     {
+
+    private static class Static
+      {
+      public const int TCCI_DETAIL = 2;
+      public const int TCCI_ATTACHMENT_KEY = 3;
+      public const int TCCI_ACTUALS = 4;
+      public const int TCCI_LINKBUTTONS = 5;
+      public const int TCCI_PROOF_OF_PAYMENT_LINKBUTTON = 5;
+      }
+
+    private struct p_type
+      {
+      public bool be_all_costs_proven;
+      public bool be_ok_to_track_payments;
+      public TClass_biz_accounts biz_accounts;
+      public TClass_biz_emsof_request_return_comments biz_emsof_request_return_comments;
+      public TClass_biz_emsof_requests biz_emsof_requests;
+      public TClass_biz_equipment biz_equipment;
+      public TClass_biz_services biz_services;
+      public TClass_biz_user biz_user;
+      public bool display_actuals;
+      public bool modify_actuals;
+      public uint num_items;
+      public uint num_proofs_of_payment;
+      public decimal parent_appropriation_amount;
+      public string request_id;
+      public status_type status;
+      public decimal sum_of_actual_costs;
+      public decimal sum_of_proven_payments;
+      public decimal total_emsof_ante;
+      }
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
         // / <summary>
@@ -382,13 +405,13 @@ namespace full_request_review_approve
         private void DataGrid_items_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
         {
             // Manage column visibility
-            e.Item.Cells[full_request_review_approve_Static.TCCI_ACTUALS].Visible = p.display_actuals;
-            e.Item.Cells[full_request_review_approve_Static.TCCI_LINKBUTTONS].Visible = p.modify_actuals;
+            e.Item.Cells[Static.TCCI_ACTUALS].Visible = p.display_actuals;
+            e.Item.Cells[Static.TCCI_LINKBUTTONS].Visible = p.modify_actuals;
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
                 (e.Item.FindControl("UserControl_attachment_explorer_control") as TWebUserControl_attachment_explorer).path =
-                  HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + e.Item.Cells[full_request_review_approve_Static.TCCI_ATTACHMENT_KEY].Text);
+                  HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + e.Item.Cells[Static.TCCI_ATTACHMENT_KEY].Text);
                 p.num_items++;
                 p.total_emsof_ante += decimal.Parse(DataBinder.Eval(e.Item.DataItem, p.biz_emsof_requests.PropertyNameOfEmsofAnte()).ToString());
             }
@@ -397,7 +420,7 @@ namespace full_request_review_approve
         private void DataGrid_proofs_of_payment_ItemDataBound(object sender, System.Web.UI.WebControls.DataGridItemEventArgs e)
         {
             // Manage column visibility
-            e.Item.Cells[full_request_review_approve_Static.TCCI_PROOF_OF_PAYMENT_LINKBUTTON].Visible = p.be_ok_to_track_payments;
+            e.Item.Cells[Static.TCCI_PROOF_OF_PAYMENT_LINKBUTTON].Visible = p.be_ok_to_track_payments;
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
@@ -424,28 +447,6 @@ namespace full_request_review_approve
 
         }
 
-        private struct p_type
-        {
-            public bool be_all_costs_proven;
-            public bool be_ok_to_track_payments;
-            public TClass_biz_accounts biz_accounts;
-            public TClass_biz_emsof_request_return_comments biz_emsof_request_return_comments;
-            public TClass_biz_emsof_requests biz_emsof_requests;
-            public TClass_biz_equipment biz_equipment;
-            public TClass_biz_services biz_services;
-            public TClass_biz_user biz_user;
-            public bool display_actuals;
-            public bool modify_actuals;
-            public uint num_items;
-            public uint num_proofs_of_payment;
-            public decimal parent_appropriation_amount;
-            public string request_id;
-            public status_type status;
-            public decimal sum_of_actual_costs;
-            public decimal sum_of_proven_payments;
-            public decimal total_emsof_ante;
-        }
-
         protected void Button_send_Click(object sender, EventArgs e)
           {
           k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], Label_distribution_list.Text, TextBox_quick_message_subject.Text, "-- From the " + Session[p.biz_user.Kind() + "_name"].ToString() + " County EMSOF Coordinator (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE + k.NEW_LINE + TextBox_quick_message_body.Text, false, k.EMPTY, p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()), p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum()));
@@ -457,4 +458,3 @@ namespace full_request_review_approve
     } // end TWebForm_full_request_review_approve
 
   }
-
