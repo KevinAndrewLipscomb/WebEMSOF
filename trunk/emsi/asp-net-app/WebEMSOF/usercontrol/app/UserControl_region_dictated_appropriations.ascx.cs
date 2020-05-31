@@ -7,6 +7,7 @@ using kix;
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -45,14 +46,19 @@ namespace UserControl_region_dictated_appropriations
       public TClass_biz_accounts biz_accounts;
       public TClass_biz_appropriations biz_appropriations;
       public TClass_biz_user biz_user;
-      public string distribution_list;
       public uint num_region_dictated_appropriations;
       public uint num_state_dictated_appropriations;
       public string sda_sort_order;
       public string sort_order;
       }
 
+    private struct v_type
+      {
+      public StringBuilder distribution_list;
+      }
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+    private v_type v; // Volatile instance Variable container
 
     private void InjectPersistentClientSideScript()
       {
@@ -177,6 +183,7 @@ namespace UserControl_region_dictated_appropriations
         p.sda_sort_order = "id%";
         p.sort_order = "name%";
         }
+      v.distribution_list = new StringBuilder();
       }
 
     // / <summary>
@@ -259,7 +266,9 @@ namespace UserControl_region_dictated_appropriations
             }
           e.Item.Cells[Static.TCI_ID].EnableViewState = true;
           //
-          p.distribution_list = p.distribution_list + e.Item.Cells[Static.TCI_EMAIL_ADDRESS].Text + k.COMMA_SPACE;
+          v.distribution_list.Append(k.COMMA_SPACE);
+          v.distribution_list.Append(e.Item.Cells[Static.TCI_EMAIL_ADDRESS].Text);
+          //
           p.num_region_dictated_appropriations++;
           }
         }
@@ -337,8 +346,8 @@ namespace UserControl_region_dictated_appropriations
       var be_datagrid_empty = (p.num_region_dictated_appropriations == 0);
       TableRow_none.Visible = be_datagrid_empty;
       TableRow_data.Visible = !be_datagrid_empty;
-      Label_distribution_list.Text = (p.distribution_list + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
-      p.distribution_list = k.EMPTY;
+      Label_distribution_list.Text = v.distribution_list.Remove(0,2).ToString(); // .TrimStart(k.COMMA_SPACE)
+      v.distribution_list.Clear();
       p.num_region_dictated_appropriations = 0;
       }
 
