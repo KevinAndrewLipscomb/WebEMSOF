@@ -1,12 +1,10 @@
 using Class_db;
-using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Configuration;
-using System.Web.UI.WebControls;
 
 namespace county_overview
-{
+  {
   public partial class TWebForm_county_overview: ki_web_ui.page_class
     {
 
@@ -17,8 +15,6 @@ namespace county_overview
 
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -48,7 +44,8 @@ namespace county_overview
                 Title = ConfigurationManager.AppSettings["application_name"] + " - county_overview";
                 p.db = new TClass_db();
                 p.db.Open();
-                dr = new MySqlCommand("SELECT be_stale_password, password_reset_email_address FROM county_user" + " where id = " + Session["county_user_id"].ToString(), p.db.connection).ExecuteReader();
+                using var mysql_command = new MySqlCommand("SELECT be_stale_password, password_reset_email_address FROM county_user" + " where id = " + Session["county_user_id"].ToString(), p.db.connection);
+                dr = mysql_command.ExecuteReader();
                 dr.Read();
                 if (dr["be_stale_password"].ToString() == "0")
                 {

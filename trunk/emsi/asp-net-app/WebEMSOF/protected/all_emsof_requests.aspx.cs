@@ -3,23 +3,17 @@ using Class_biz_emsof_requests;
 using Class_biz_user;
 using kix;
 using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
-using System.Web;
-using System.Web.SessionState;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace all_emsof_requests
-{
-    public partial class TWebForm_all_emsof_requests: ki_web_ui.page_class
+  {
+  public partial class TWebForm_all_emsof_requests: ki_web_ui.page_class
     {
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -129,7 +123,7 @@ namespace all_emsof_requests
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_datagrid_rows = p.num_datagrid_rows + 1;
+                p.num_datagrid_rows++;
                 if (p.biz_emsof_requests.BeOkToDrillDown(((status_type)(Convert.ToInt16(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusCode())].Text)))))
                 {
                     ((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusDescription())].Controls[0]) as LinkButton).Enabled = true;

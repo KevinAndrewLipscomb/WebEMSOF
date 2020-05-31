@@ -16,10 +16,9 @@ namespace request_item_detail
 {
     public partial class TWebForm_request_item_detail: ki_web_ui.page_class
     {
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -72,20 +71,21 @@ namespace request_item_detail
                 p.db_trail = new TClass_db_trail();
                 p.db.Open();
                 // Set default match_level.
-                p.match_level = decimal.Parse(new MySqlCommand("select factor" + " from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)" + " where county_dictated_appropriation.id = " + Session["county_dictated_appropriation_id"].ToString(), p.db.connection).ExecuteScalar().ToString());
+                using var mysql_command_1 = new MySqlCommand("select factor" + " from match_level join county_dictated_appropriation on (county_dictated_appropriation.match_level_id=match_level.id)" + " where county_dictated_appropriation.id = " + Session["county_dictated_appropriation_id"].ToString(), p.db.connection);
+                p.match_level = decimal.Parse(mysql_command_1.ExecuteScalar().ToString());
                 // Build cmdText_get_equipment_category_monetary_details
                 p.cmdText_get_equipment_category_monetary_details = "select life_expectancy_years," + " allowable_cost,";
                 if (decimal.Equals(p.match_level,0.60))
                 {
-                    p.cmdText_get_equipment_category_monetary_details = p.cmdText_get_equipment_category_monetary_details + "funding_level_rural as funding_level";
+                    p.cmdText_get_equipment_category_monetary_details += "funding_level_rural as funding_level";
                 }
                 else if (decimal.Equals(p.match_level,1.00))
                 {
-                    p.cmdText_get_equipment_category_monetary_details = p.cmdText_get_equipment_category_monetary_details + "allowable_cost as funding_level";
+                    p.cmdText_get_equipment_category_monetary_details += "allowable_cost as funding_level";
                 }
                 else
                 {
-                    p.cmdText_get_equipment_category_monetary_details = p.cmdText_get_equipment_category_monetary_details + "funding_level_nonrural as funding_level";
+                    p.cmdText_get_equipment_category_monetary_details += "funding_level_nonrural as funding_level";
                 }
                 p.cmdText_get_equipment_category_monetary_details = p.cmdText_get_equipment_category_monetary_details + " from eligible_provider_equipment_list" + " where fiscal_year_id = " + biz_fiscal_years.IdOfDesignator(Session["fiscal_year_designator"].ToString()) + " and code = ";
                 // Mind these indices if the query changes.
@@ -106,29 +106,31 @@ namespace request_item_detail
                 if (be_new || !p.be_locked)
                 {
                     // Determine this service's eligibility factors.
-                    dr_factors = new MySqlCommand("select (be_als_amb or be_air_amb) as be_als_amb," + " (be_als_amb or be_als_squad) as be_als_squad," + " (be_bls_amb or be_als_amb) as be_bls_amb," + " (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs" + " FROM service" + " WHERE id = " + Session["service_user_id"].ToString(), p.db.connection).ExecuteReader();
+                    using var mysql_command_2 = new MySqlCommand("select (be_als_amb or be_air_amb) as be_als_amb," + " (be_als_amb or be_als_squad) as be_als_squad," + " (be_bls_amb or be_als_amb) as be_bls_amb," + " (be_qrs or be_bls_amb or be_als_amb or be_als_squad) as be_qrs" + " FROM service" + " WHERE id = " + Session["service_user_id"].ToString(), p.db.connection);
+                    dr_factors = mysql_command_2.ExecuteReader();
                     dr_factors.Read();
                     cmdText = "SELECT code,description FROM eligible_provider_equipment_list" + " WHERE fiscal_year_id = " + biz_fiscal_years.IdOfDesignator(Session["fiscal_year_designator"].ToString()) + " and (FALSE ";
                     // Default to k.EMPTY set
                     if (dr_factors["be_als_amb"].ToString() == "1")
                     {
-                        cmdText = cmdText + "or be_eligible_als_amb = 1 ";
+                        cmdText += "or be_eligible_als_amb = 1 ";
                     }
                     if (dr_factors["be_als_squad"].ToString() == "1")
                     {
-                        cmdText = cmdText + "or be_eligible_als_squad = 1 ";
+                        cmdText += "or be_eligible_als_squad = 1 ";
                     }
                     if (dr_factors["be_bls_amb"].ToString() == "1")
                     {
-                        cmdText = cmdText + "or be_eligible_bls_amb = 1 ";
+                        cmdText += "or be_eligible_bls_amb = 1 ";
                     }
                     if (dr_factors["be_qrs"].ToString() == "1")
                     {
-                        cmdText = cmdText + "or be_eligible_qrs = 1 ";
+                        cmdText += "or be_eligible_qrs = 1 ";
                     }
-                    cmdText = cmdText + ") ORDER BY description";
+                    cmdText += ") ORDER BY description";
                     dr_factors.Close();
-                    dr_services = new MySqlCommand(cmdText, p.db.connection).ExecuteReader();
+                    using var mysql_command_3 = new MySqlCommand(cmdText, p.db.connection);
+                    dr_services = mysql_command_3.ExecuteReader();
                     while (dr_services.Read())
                     {
                         DropDownList_equipment_category.Items.Add(new ListItem(dr_services["description"].ToString(), dr_services["code"].ToString()));
@@ -159,7 +161,8 @@ namespace request_item_detail
                     p.db.Close();
                     ShowDependentData();
                     p.db.Open();
-                    dr_user_details = new MySqlCommand("select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante,attachment_key" + " from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString(), p.db.connection).ExecuteReader();
+                    using var mysql_command = new MySqlCommand("select make_model,place_kept,be_refurbished,unit_cost,quantity,additional_service_ante,emsof_ante,attachment_key" + " from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString(), p.db.connection);
+                    dr_user_details = mysql_command.ExecuteReader();
                     dr_user_details.Read();
                     p.attachment_key = dr_user_details["attachment_key"].ToString();
                     TextBox_make_model.Text = dr_user_details["make_model"].ToString();
@@ -279,7 +282,7 @@ namespace request_item_detail
               p.db.Open();
               // Update the detail record.
               // Update the master record.
-              new MySqlCommand
+              using var mysql_command = new MySqlCommand
                 (
                 p.db_trail.Saved
                   (
@@ -304,8 +307,8 @@ namespace request_item_detail
                   + "COMMIT;"
                   ),
                 p.db.connection
-                )
-                .ExecuteNonQuery();
+                );
+              mysql_command.ExecuteNonQuery();
               p.db.Close();
               BackTrack();
               }
@@ -326,7 +329,8 @@ namespace request_item_detail
               // Delete the detail record.
               // Eliminate the resulting gap in the priority sequence.
               // Update the master record.
-              new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "delete from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_detail set priority = priority - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority > " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " , num_items = num_items - 1" + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
+              using var mysql_command = new MySqlCommand(p.db_trail.Saved("START TRANSACTION" + ";" + "delete from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_detail set priority = priority - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority > " + Session["emsof_request_item_priority"].ToString() + ";" + "update emsof_request_master" + " set value = value - " + p.saved_emsof_ante.ToString() + " , shortage = shortage - " + p.saved_additional_service_ante.ToString() + " , num_items = num_items - 1" + " where id = " + Session["emsof_request_master_id"].ToString() + ";" + "COMMIT;"), p.db.connection);
+              mysql_command.ExecuteNonQuery();
               p.db.Close();
               p.fs.CondemnFolder(UserControl_attachment_explorer_control.path);
               BackTrack();
@@ -420,10 +424,11 @@ namespace request_item_detail
             p.db.Open();
             // Get the number of items entered against this request previously, and initialize this item to have a priority just lower than
             // all previous items.
-            priority_string = new MySqlCommand("select (num_items + 1) from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection).ExecuteScalar().ToString();
+            using var mysql_command_1 = new MySqlCommand("select (num_items + 1) from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection);
+            priority_string = mysql_command_1.ExecuteScalar().ToString();
             // Record the new request item.
             // Update the master record.
-            new MySqlCommand
+            using var mysql_command_2 = new MySqlCommand
               (
               p.db_trail.Saved
                 (
@@ -450,8 +455,8 @@ namespace request_item_detail
                 + "COMMIT"
                 ),
               p.db.connection
-              )
-              .ExecuteNonQuery();
+              );
+            mysql_command_2.ExecuteNonQuery();
             p.db.Close();
         }
 
@@ -460,7 +465,8 @@ namespace request_item_detail
             MySqlDataReader dr_state_details;
             string life_expectancy_string;
             p.db.Open();
-            dr_state_details = new MySqlCommand(p.cmdText_get_equipment_category_monetary_details + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM), p.db.connection).ExecuteReader();
+            using var mysql_command = new MySqlCommand(p.cmdText_get_equipment_category_monetary_details + k.Safe(DropDownList_equipment_category.SelectedValue, k.safe_hint_type.NUM), p.db.connection);
+            dr_state_details = mysql_command.ExecuteReader();
             if (dr_state_details.Read())
             {
                 life_expectancy_string = dr_state_details["life_expectancy_years"].ToString();

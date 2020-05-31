@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Drawing;
+using System.Text;
 using System.Web.UI.WebControls;
 
 namespace county_dictated_appropriations
@@ -40,7 +41,6 @@ namespace county_dictated_appropriations
           public string county_code;
           public TClass_db db;
           public TClass_db_trail db_trail;
-          public string distribution_list_for_services_with_allocations;
           public uint num_appropriations;
           public decimal region_dictated_appropriation_amount;
           public string region_dictated_appropriation_id;
@@ -52,7 +52,13 @@ namespace county_dictated_appropriations
           public string user_email_address;
           }
 
+    private struct v_type
+      {
+      public StringBuilder distribution_list_for_services_with_allocations;
+      }
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+    private v_type v; // Volatile instance Variable container
 
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -111,7 +117,8 @@ namespace county_dictated_appropriations
                 Title = ConfigurationManager.AppSettings["application_name"] + " - county_dictated_appropriations";
                 p.db.Open();
                 // Set parent appropriation labels.
-                dr_appropriation_attribs = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = '" + p.region_dictated_appropriation_id + "'", p.db.connection).ExecuteReader();
+                using var mysql_command_1 = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = '" + p.region_dictated_appropriation_id + "'", p.db.connection);
+                dr_appropriation_attribs = mysql_command_1.ExecuteReader();
                 dr_appropriation_attribs.Read();
                 Literal_county_name_2.Text = Literal_county_name.Text;
                 Literal_county_name_3.Text = Literal_county_name.Text;
@@ -123,8 +130,10 @@ namespace county_dictated_appropriations
                 dr_appropriation_attribs.Close();
                 Label_author_email_address.Text = p.user_email_address;
                 // All further rendering is deadline-dependent.
-                make_appropriations_deadline = (DateTime)(new MySqlCommand("select value" + " from fy_calendar" + " join fiscal_year on (fiscal_year.id = fiscal_year_id)" + " join milestone_code_name_map on (code = milestone_code)" + " where designator = \"" + k.Safe(Label_fiscal_year_designator.Text, k.safe_hint_type.ALPHANUM) + "\"" + " and name = \"emsof-county-dictated-appropriation-deadline\"", p.db.connection).ExecuteScalar());
-                county_dictated_deadline = (DateTime)(new MySqlCommand("select service_to_county_submission_deadline from region_dictated_appropriation" + " where id = " + p.region_dictated_appropriation_id, p.db.connection).ExecuteScalar());
+                using var mysql_command_2 = new MySqlCommand("select value" + " from fy_calendar" + " join fiscal_year on (fiscal_year.id = fiscal_year_id)" + " join milestone_code_name_map on (code = milestone_code)" + " where designator = \"" + k.Safe(Label_fiscal_year_designator.Text, k.safe_hint_type.ALPHANUM) + "\"" + " and name = \"emsof-county-dictated-appropriation-deadline\"", p.db.connection);
+                make_appropriations_deadline = (DateTime)(mysql_command_2.ExecuteScalar());
+                using var mysql_command_3 = new MySqlCommand("select service_to_county_submission_deadline from region_dictated_appropriation" + " where id = " + p.region_dictated_appropriation_id, p.db.connection);
+                county_dictated_deadline = (DateTime)(mysql_command_3.ExecuteScalar());
                 SessionSet("county_dictated_deadline", county_dictated_deadline);
                 if (DateTime.Now > make_appropriations_deadline)
                 {
@@ -163,13 +172,14 @@ namespace county_dictated_appropriations
             p.be_sort_order_ascending = true;
             p.db = new TClass_db();
             p.db_trail = new TClass_db_trail();
-            p.distribution_list_for_services_with_allocations = k.EMPTY;
             p.num_appropriations = 0;
             p.sort_order = "service_name";
             p.status_filter = k.EMPTY;
             p.sum_of_service_appropriations = 0;
             p.unappropriated_amount = 0;
             p.user_email_address = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
+            //
+            v.distribution_list_for_services_with_allocations = new StringBuilder();
         }
 
         protected void DropDownList_status_filter_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -284,12 +294,11 @@ namespace county_dictated_appropriations
 
         private void DataGrid_service_appropriations_DeleteCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
-            MySqlCommand bc;
             string id_string;
             p.db.Open();
             id_string = k.Safe(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfId())].Text, k.safe_hint_type.NUM);
             // Leaving the star out prevents inclusion of nulls in count
-            bc = new MySqlCommand("select count(master_id)" + " from emsof_request_detail" + " join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)" + " where county_dictated_appropriation_id = " + id_string, p.db.connection);
+            using var bc = new MySqlCommand("select count(master_id)" + " from emsof_request_detail" + " join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)" + " where county_dictated_appropriation_id = " + id_string, p.db.connection);
             if (bc.ExecuteScalar().ToString() != "0")
             {
                 p.db.Close();
@@ -312,7 +321,8 @@ namespace county_dictated_appropriations
             else
             {
                 // Nothing is linked to this appropriation, so go ahead and delete it.
-                new MySqlCommand(p.db_trail.Saved("delete from county_dictated_appropriation where id = " + id_string), p.db.connection).ExecuteNonQuery();
+                using var mysql_command = new MySqlCommand(p.db_trail.Saved("delete from county_dictated_appropriation where id = " + id_string), p.db.connection);
+                mysql_command.ExecuteNonQuery();
                 // Send a notification message.
                 // be_html
                 // cc
@@ -335,7 +345,7 @@ namespace county_dictated_appropriations
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_appropriations = p.num_appropriations + 1;
+                p.num_appropriations++;
                 if (!(DropDownList_status_filter.Items.FindByValue(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusCode())].Text) != null))
                 {
                     DropDownList_status_filter.Items.Add(new ListItem(((e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusDescription())].Controls[0]) as LinkButton).Text, e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfStatusCode())].Text));
@@ -376,7 +386,8 @@ namespace county_dictated_appropriations
                 }
                 if (e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text != "&nbsp;")
                 {
-                    p.distribution_list_for_services_with_allocations = p.distribution_list_for_services_with_allocations + e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text + k.COMMA_SPACE;
+                    v.distribution_list_for_services_with_allocations.Append(e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfPasswordResetEmailAddress())].Text);
+                    v.distribution_list_for_services_with_allocations.Append(k.COMMA_SPACE);
                 }
                 //--
                 // DON'T disable viewstate here since thes server needs it to repopulate bound controls when an update is made as a result of a QuickMessage checkbox change.
@@ -404,7 +415,8 @@ namespace county_dictated_appropriations
                 {
                     Table_warning_forced_amount.Visible = false;
                 }
-                new MySqlCommand(p.db_trail.Saved("update county_dictated_appropriation set amount = " + amount.ToString() + " where id = " + appropriation_id_string), p.db.connection).ExecuteNonQuery();
+                using var mysql_command = new MySqlCommand(p.db_trail.Saved("update county_dictated_appropriation set amount = " + amount.ToString() + " where id = " + appropriation_id_string), p.db.connection);
+                mysql_command.ExecuteNonQuery();
                 // be_html
                 // cc
                 // bcc
@@ -432,17 +444,18 @@ namespace county_dictated_appropriations
 
     private void BuildDistributionListAndRegisterPostBackControls()
       {
-      p.distribution_list_for_services_with_allocations = k.EMPTY;
+      v.distribution_list_for_services_with_allocations.Clear();
       TableCellCollection tcc;
       for (var i = new k.subtype<int>(0, DataGrid_service_appropriations.Items.Count); i.val < i.LAST; i.val++)
         {
         tcc = DataGrid_service_appropriations.Items[i.val].Cells;
         if ((tcc[county_dictated_appropriations_Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked)
           {
-          p.distribution_list_for_services_with_allocations += tcc[(int)p.biz_emsof_requests.TcciOfPasswordResetEmailAddress()].Text + k.COMMA_SPACE;
+          v.distribution_list_for_services_with_allocations.Append(tcc[(int)p.biz_emsof_requests.TcciOfPasswordResetEmailAddress()].Text);
+          v.distribution_list_for_services_with_allocations.Append(k.COMMA_SPACE);
           }
         }
-      Label_distribution_list.Text = p.distribution_list_for_services_with_allocations.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
+      Label_distribution_list.Text = v.distribution_list_for_services_with_allocations.ToString().TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
       }
 
         private void DataGrid_service_appropriations_CancelCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
@@ -465,7 +478,7 @@ namespace county_dictated_appropriations
             {
                 DropDownList_status_filter.Items.Add(new ListItem("(all)", k.EMPTY));
             }
-            p.distribution_list_for_services_with_allocations = k.EMPTY;
+            v.distribution_list_for_services_with_allocations.Clear();
             if (p.status_filter.Length > 0)
             {
                 p.biz_emsof_requests.BindOverviewByRegionDictatedAppropriationAndStatus(p.region_dictated_appropriation_id, ((status_type)(Convert.ToInt16(p.status_filter))), p.sort_order, p.be_sort_order_ascending, DataGrid_service_appropriations);
@@ -500,7 +513,7 @@ namespace county_dictated_appropriations
         {
             if (DropDownList_quick_message_targets.SelectedValue == "with_allocations")
             {
-                Label_distribution_list.Text = (p.distribution_list_for_services_with_allocations + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
+                Label_distribution_list.Text = (v.distribution_list_for_services_with_allocations + k.SPACE).TrimEnd(new char[] {Convert.ToChar(k.COMMA), Convert.ToChar(k.SPACE)});
             }
             else if (DropDownList_quick_message_targets.SelectedValue == "emsof_respondents")
             {

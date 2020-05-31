@@ -1,15 +1,15 @@
-using AjaxControlToolkit;
 using Class_biz_accounts;
 using Class_biz_emsof_requests;
 using Class_biz_user;
 using kix;
 using System;
 using System.Configuration;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace emsof_request_status_filter
-{
+  {
 
   public static class emsof_request_status_filter_Static
     {
@@ -29,18 +29,21 @@ namespace emsof_request_status_filter
           public TClass_biz_accounts biz_accounts;
           public TClass_biz_emsof_requests biz_emsof_requests;
           public TClass_biz_user biz_user;
-          public string cc_list;
-          public string distribution_list;
           public uint num_qualifying_requests;
           public k.int_sign_range scope;
           public string sort_order;
           public string user_email_address;
           }
 
-    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+    private struct v_type
+      {
+      public StringBuilder cc_list;
+      public StringBuilder distribution_list;
+      }
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+    private v_type v; // Volatile instance Variable container
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -92,8 +95,6 @@ namespace emsof_request_status_filter
             p.biz_user = new TClass_biz_user();
             //
             p.be_sort_order_ascending = true;
-            p.cc_list = k.EMPTY;
-            p.distribution_list = k.EMPTY;
             p.num_qualifying_requests = 0;
             p.scope = new k.int_sign_range();
             p.sort_order = "affiliate_num";
@@ -104,22 +105,24 @@ namespace emsof_request_status_filter
               p.scope.val = 1;
               Session.Remove("mode:be_for_prior_cycles");
               }
+            v.cc_list = new StringBuilder();
+            v.distribution_list = new StringBuilder();
         }
 
         protected void Button_send_Click(object sender, System.EventArgs e)
           {
-          if (p.distribution_list.Length > 0)
+          if (Label_distribution_list.Text.Length > 0)
             {
             k.SmtpMailSend
               (
               from:ConfigurationManager.AppSettings["sender_email_address"],
-              to:p.distribution_list,
+              to:Label_distribution_list.Text,
               subject:k.Safe(TextBox_quick_message_subject.Text,k.safe_hint_type.PUNCTUATED),
               message_string:"-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE
               + k.NEW_LINE
               + k.Safe(TextBox_quick_message_body.Text,k.safe_hint_type.MEMO),
               be_html:false,
-              cc:p.cc_list,
+              cc:v.cc_list.ToString(),
               bcc:p.user_email_address,
               reply_to:p.user_email_address
               );
@@ -164,27 +167,30 @@ namespace emsof_request_status_filter
 
     private void BuildDistributionListAndRegisterPostBackControls()
       {
-      p.distribution_list = k.EMPTY;
-      p.cc_list = k.EMPTY;
+      v.distribution_list.Clear();
+      v.cc_list.Clear();
       TableCellCollection tcc;
       for (var i = new k.subtype<int>(0, DataGrid_requests.Items.Count); i.val < i.LAST; i.val++)
         {
         tcc = DataGrid_requests.Items[i.val].Cells;
         if ((tcc[emsof_request_status_filter_Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked)
           {
-          p.distribution_list += tcc[(int)p.biz_emsof_requests.TcciOfPasswordResetEmailAddress()].Text + k.COMMA_SPACE;
+          v.distribution_list.Append(k.COMMA_SPACE);
+          v.distribution_list.Append(tcc[(int)p.biz_emsof_requests.TcciOfPasswordResetEmailAddress()].Text);
+          //
           var county_email_address = tcc[(int)(p.biz_emsof_requests.TcciOfCountyEmailAddress())].Text;
-          if ((county_email_address != "&nbsp;") && (!p.cc_list.Contains(county_email_address)))
+          if ((county_email_address != "&nbsp;") && (!v.cc_list.ToString().Contains(county_email_address)))
             {
-            p.cc_list += county_email_address + k.COMMA_SPACE;
+            v.cc_list.Append(county_email_address);
+            v.cc_list.Append(k.COMMA_SPACE);
             }
           }
         ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[(int)p.biz_emsof_requests.TcciOfStatusDescription()].Controls[0]) as LinkButton);
         }
-      p.distribution_list = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
-      Label_distribution_list.Text = p.distribution_list;
-      p.cc_list = p.cc_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
-      Label_cc_list.Text = p.cc_list;
+      if (v.distribution_list.Length > 0) v.distribution_list.Remove(0,2); // .TrimStart(k.COMMA_SPACE)
+      Label_distribution_list.Text = v.distribution_list.ToString();
+      if (v.cc_list.Length > 0) v.cc_list.Remove(0,2); // .TrimStart(k.COMMA_SPACE)
+      Label_cc_list.Text = v.cc_list.ToString();
       }
 
         protected void LinkButton_retransmit_to_state_Click(object sender, System.EventArgs e)
@@ -204,7 +210,7 @@ namespace emsof_request_status_filter
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_qualifying_requests = p.num_qualifying_requests + 1;
+                p.num_qualifying_requests++;
                 //--
                 // DON'T disable viewstate here since thes server needs it to repopulate bound controls when an update is made as a result of a QuickMessage checkbox change.
                 //--

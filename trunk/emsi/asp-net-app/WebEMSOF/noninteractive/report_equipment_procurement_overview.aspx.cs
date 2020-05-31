@@ -1,37 +1,26 @@
-using System.Configuration;
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-
-using System.Text;
-using System.IO;
 using Class_biz_accounts;
 using Class_biz_fiscal_years;
+using kix;
+using System;
+using System.Configuration;
+using System.IO;
+using System.Text;
+using System.Web.UI;
 using UserControl_equipment_procurement_overview;
+
 namespace report_equipment_procurement_overview
-{
+  {
   public partial class TWebForm_report_equipment_procurement_overview: ki_web_ui.page_class
     {
 
     private struct p_type
       {
       public TClass_biz_accounts biz_accounts;
-        public TClass_biz_fiscal_years biz_fiscal_years;
+      public TClass_biz_fiscal_years biz_fiscal_years;
       }
 
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.Label Label_application_name_2 = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -67,23 +56,26 @@ namespace report_equipment_procurement_overview
 
         protected override void Render(HtmlTextWriter writer)
         {
-            string body;
-            StringBuilder sb;
             // Write the HTML stream into a StringBuilder.
-            sb = new StringBuilder();
-            base.Render(new HtmlTextWriter(new StringWriter(sb)));
+            var sb = new StringBuilder();
+            using var html_text_writer = new HtmlTextWriter(new StringWriter(sb));
+            base.Render(html_text_writer);
             // //
             // writer.Write(sb.ToString());
             // //
-            body = sb.ToString();
+            var body = sb.ToString();
+            //
             // Send output stream as an email message.
-            // from
-            // to
-            // subject
-            // body
-            // be_html
+            //
             var region_code = k.Safe(Request["region_code"],k.safe_hint_type.NUM);
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], p.biz_accounts.EmailTargetByRegionAndRole(region_code,"director") + k.COMMA_SPACE + p.biz_accounts.EmailTargetByRegionAndRole(region_code,"emsof-planner"), "Report: Equipment Procurement Overview, " + p.biz_fiscal_years.DesignatorOfCurrent(), body, true);
+            k.SmtpMailSend
+              (
+              from:ConfigurationManager.AppSettings["sender_email_address"],
+              to:p.biz_accounts.EmailTargetByRegionAndRole(region_code,"director") + k.COMMA_SPACE + p.biz_accounts.EmailTargetByRegionAndRole(region_code,"emsof-planner"),
+              subject:"Report: Equipment Procurement Overview, " + p.biz_fiscal_years.DesignatorOfCurrent(),
+              message_string:body,
+              be_html:true
+              );
             Session.Abandon();
 
         }

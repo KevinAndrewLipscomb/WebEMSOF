@@ -8,16 +8,14 @@ namespace UserControl_values_to_region
     private struct p_type
       {
       public bool be_interactive;
-        public bool be_loaded;
-        public bool be_sort_order_ascending;
-        public TClass_biz_emsof_requests biz_emsof_requests;
-        public string filter;
-        public string sort_order;
+      public bool be_loaded;
+      public bool be_sort_order_ascending;
+      public TClass_biz_emsof_requests biz_emsof_requests;
+      public string sort_order;
       }
 
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.DropDownList DropDownList_filter = null;
         private void InjectPersistentClientSideScript()
         {
             // EstablishClientSideFunction(k.client_side_function_enumeral_type.EL);

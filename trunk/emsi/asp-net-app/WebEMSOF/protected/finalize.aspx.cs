@@ -12,11 +12,9 @@ namespace finalize
 {
     public partial class TWebForm_finalize: ki_web_ui.page_class
     {
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_request_overview_00 = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -67,7 +65,8 @@ namespace finalize
                     }
                     p.db.Open();
                     // Set Label_grand_total_cost.
-                    grand_total_cost_obj = new MySqlCommand("select sum(unit_cost*quantity) from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString(), p.db.connection).ExecuteScalar();
+                    using var mysql_command_1 = new MySqlCommand("select sum(unit_cost*quantity) from emsof_request_detail" + " where master_id = " + Session["emsof_request_master_id"].ToString(), p.db.connection);
+                    grand_total_cost_obj = mysql_command_1.ExecuteScalar();
                     if (grand_total_cost_obj == DBNull.Value)
                     {
                         grand_total_cost = 0;
@@ -84,15 +83,18 @@ namespace finalize
                     // Set Label_unreimbursed_amount.
                     Label_unreimbursed_amount.Text = (grand_total_cost - max_reimbursement).ToString("C");
                     // Set Label_deadline_*
-                    dr = new MySqlCommand("select value as emsof_service_purchase_completion_deadline" + " from fy_calendar" + " join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)" + " where name = \"emsof-service-purchase-completion-deadline\"" + "   and fiscal_year_id = " + biz_fiscal_years.IdOfCurrent(), p.db.connection).ExecuteReader();
+                    using var mysql_command_2 = new MySqlCommand("select value as emsof_service_purchase_completion_deadline" + " from fy_calendar" + " join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)" + " where name = \"emsof-service-purchase-completion-deadline\"" + "   and fiscal_year_id = " + biz_fiscal_years.IdOfCurrent(), p.db.connection);
+                    dr = mysql_command_2.ExecuteReader();
                     dr.Read();
                     Label_deadline_purchase_completion.Text = DateTime.Parse(dr["emsof_service_purchase_completion_deadline"].ToString()).ToString("HH:mm:ss dddd, MMMM dd, yyyy");
                     dr.Close();
-                    dr = new MySqlCommand("select value as emsof_service_invoice_submission_deadline" + " from fy_calendar" + " join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)" + " where name = \"emsof-service-invoice-submission-deadline\"" + "   and fiscal_year_id = " + biz_fiscal_years.IdOfCurrent(), p.db.connection).ExecuteReader();
+                    using var mysql_command_3 = new MySqlCommand("select value as emsof_service_invoice_submission_deadline" + " from fy_calendar" + " join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)" + " where name = \"emsof-service-invoice-submission-deadline\"" + "   and fiscal_year_id = " + biz_fiscal_years.IdOfCurrent(), p.db.connection);
+                    dr = mysql_command_3.ExecuteReader();
                     dr.Read();
                     Label_deadline_invoice_submission.Text = DateTime.Parse(dr["emsof_service_invoice_submission_deadline"].ToString()).ToString("HH:mm:ss dddd, MMMM dd, yyyy");
                     dr.Close();
-                    dr = new MySqlCommand("select value as emsof_service_canceled_check_submission_deadline" + " from fy_calendar" + " join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)" + " where name = \"emsof-service-canceled-check-submission-deadline\"" + "   and fiscal_year_id = " + biz_fiscal_years.IdOfCurrent(), p.db.connection).ExecuteReader();
+                    using var mysql_command_4 = new MySqlCommand("select value as emsof_service_canceled_check_submission_deadline" + " from fy_calendar" + " join milestone_code_name_map on (milestone_code_name_map.code=fy_calendar.milestone_code)" + " where name = \"emsof-service-canceled-check-submission-deadline\"" + "   and fiscal_year_id = " + biz_fiscal_years.IdOfCurrent(), p.db.connection);
+                    dr = mysql_command_4.ExecuteReader();
                     dr.Read();
                     Label_deadline_canceled_check_submission.Text = DateTime.Parse(dr["emsof_service_canceled_check_submission_deadline"].ToString()).ToString("HH:mm:ss dddd, MMMM dd, yyyy");
                     dr.Close();

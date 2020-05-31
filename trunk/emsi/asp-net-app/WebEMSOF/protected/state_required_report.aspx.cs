@@ -10,12 +10,21 @@ namespace state_required_report
 {
     public partial class TWebForm_state_required_report: ki_web_ui.page_class
     {
-    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
-        protected System.Web.UI.WebControls.Label Label_amount_available = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_back = null;
+    private struct p_type
+      {
+      public string amendment_num_string;
+      public bool be_datagrid_empty;
+      public bool be_replacement_rows_present;
+      public TClass_biz_appropriations biz_appropriations;
+      public TClass_biz_emsof_requests biz_emsof_requests;
+      public decimal grand_total_cost;
+      public uint num_datagrid_rows;
+      public decimal total_emsof_ante;
+      public decimal total_provider_match;
+      }
+
+    private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -98,7 +107,7 @@ namespace state_required_report
 
         protected void LinkButton_export_scratch_copy_Click(object sender, System.EventArgs e)
         {
-            ExportToExcel(Page, "WebEmsof-UNOFFICIAL-" + DateTime.Now.ToString("yyyyMMddHHmmssf"), StringOfControl(DataGrid_state_export_batch));
+            ExportToExcel("WebEmsof-UNOFFICIAL-" + DateTime.Now.ToString("yyyyMMddHHmmssf"), StringOfControl(DataGrid_state_export_batch));
         }
 
         protected void DropDownList_amendment_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -122,11 +131,11 @@ namespace state_required_report
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_datagrid_rows = p.num_datagrid_rows + 1;
+                p.num_datagrid_rows++;
                 p.be_replacement_rows_present = p.be_replacement_rows_present || (e.Item.Cells[(int)(p.biz_emsof_requests.TcciOfSrrReplacementRowIndicator())].Text.EndsWith("*"));
-                p.grand_total_cost = p.grand_total_cost + Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "total_cost"));
-                p.total_emsof_ante = p.total_emsof_ante + Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "emsof_ante"));
-                p.total_provider_match = p.total_provider_match + Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "provider_match"));
+                p.grand_total_cost += Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "total_cost"));
+                p.total_emsof_ante += Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "emsof_ante"));
+                p.total_provider_match += Convert.ToDecimal(DataBinder.Eval(e.Item.DataItem, "provider_match"));
             }
             else if ((e.Item.ItemType == ListItemType.Footer))
             {
@@ -156,19 +165,6 @@ namespace state_required_report
             p.num_datagrid_rows = 0;
 
         }
-
-        private struct p_type
-        {
-            public string amendment_num_string;
-            public bool be_datagrid_empty;
-            public bool be_replacement_rows_present;
-            public TClass_biz_appropriations biz_appropriations;
-            public TClass_biz_emsof_requests biz_emsof_requests;
-            public decimal grand_total_cost;
-            public uint num_datagrid_rows;
-            public decimal total_emsof_ante;
-            public decimal total_provider_match;
-        } // end p_type
 
     } // end TWebForm_state_required_report
 

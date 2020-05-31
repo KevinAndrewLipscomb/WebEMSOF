@@ -29,8 +29,10 @@ namespace UserControl_appropriations_available_to_county
         // Where we go next depends on how many appropriations have been made to this county.
         // Determine current fiscal year
         //
-        var max_fiscal_year_id_string = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection).ExecuteScalar().ToString();
-        var dr = new MySqlCommand
+        using var mysql_command_1 = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection);
+        var max_fiscal_year_id_string = mysql_command_1.ExecuteScalar().ToString();
+        //
+        using var mysql_command_2 = new MySqlCommand
           (
           "SELECT region_dictated_appropriation.id"
           + " , concat('$',format(region_dictated_appropriation.amount,2),' from the ',name,' ',designator,' contract (amendment ',amendment_num,')')" + " as appropriation_description"
@@ -41,8 +43,8 @@ namespace UserControl_appropriations_available_to_county
           + " WHERE county_code = " + Session["county_user_id"].ToString()
           +   " and fiscal_year_id = " + max_fiscal_year_id_string,
           p.db.connection
-          )
-          .ExecuteReader();
+          );
+        var dr = mysql_command_2.ExecuteReader();
         while (dr.Read())
           {
           RadioButtonList_appropriation.Items.Add(new ListItem(dr["appropriation_description"].ToString(), dr["id"].ToString()));

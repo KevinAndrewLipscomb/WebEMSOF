@@ -14,8 +14,6 @@ namespace administer_service_email_address
     {
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -57,7 +55,8 @@ namespace administer_service_email_address
                 Literal_service_name.Text = p.biz_services.NameOf(p.service_id);
                 p.db.Open();
                 // Preload email address fields
-                email_address = new MySqlCommand("SELECT password_reset_email_address " + "FROM service_user " + "WHERE id = '" + p.service_id + "'", p.db.connection).ExecuteScalar().ToString();
+                using var mysql_command = new MySqlCommand("SELECT password_reset_email_address " + "FROM service_user " + "WHERE id = '" + p.service_id + "'", p.db.connection);
+                email_address = mysql_command.ExecuteScalar().ToString();
                 TextBox_nominal_email_address.Text = email_address;
                 TextBox_confirmation_email_address.Text = email_address;
                 p.db.Close();

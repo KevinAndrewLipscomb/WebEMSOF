@@ -14,13 +14,11 @@ namespace change_password
     private struct p_type
       {
       public TClass_db db;
-        public TClass_db_trail db_trail;
+      public TClass_db_trail db_trail;
       }
 
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -99,7 +97,8 @@ namespace change_password
             {
                 // Commit the data to the database.
                 p.db.Open();
-                new MySqlCommand(p.db_trail.Saved("UPDATE " + Session["target_user_table"].ToString() + "_user" + " SET encoded_password_hash = SHA1('" + k.Safe(TextBox_nominal_password.Text.Trim(), k.safe_hint_type.HEX) + "')," + " be_stale_password = FALSE" + " WHERE id = \"" + Session[Session["target_user_table"].ToString() + "_user_id"].ToString() + "\""), p.db.connection).ExecuteNonQuery();
+                using var mysql_command = new MySqlCommand(p.db_trail.Saved("UPDATE " + Session["target_user_table"].ToString() + "_user" + " SET encoded_password_hash = SHA1('" + k.Safe(TextBox_nominal_password.Text.Trim(), k.safe_hint_type.HEX) + "')," + " be_stale_password = FALSE" + " WHERE id = \"" + Session[Session["target_user_table"].ToString() + "_user_id"].ToString() + "\""), p.db.connection);
+                mysql_command.ExecuteNonQuery();
                 p.db.Close();
                 BackTrack();
             }
@@ -112,13 +111,3 @@ namespace change_password
     } // end TWebForm_change_password
 
 }
-
-namespace change_password.Units
-{
-    public class change_password
-    {
-        public const string ID = "$Id: change_password.pas 2585 2008-09-25 15:17:19Z kevinanlipscomb $";
-    } // end change_password
-
-}
-

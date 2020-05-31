@@ -21,7 +21,6 @@ namespace report_fy_allocations_reimbursements_nonspends
 
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.Label Label_application_name_2 = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -57,23 +56,28 @@ namespace report_fy_allocations_reimbursements_nonspends
 
         protected override void Render(HtmlTextWriter writer)
         {
-            string body;
-            StringBuilder sb;
+            //
             // Write the HTML stream into a StringBuilder.
-            sb = new StringBuilder();
-            base.Render(new HtmlTextWriter(new StringWriter(sb)));
+            //
+            var sb = new StringBuilder();
+            using var html_text_writer = new HtmlTextWriter(new StringWriter(sb));
+            base.Render(html_text_writer);
             // //
             // writer.Write(sb.ToString());
             // //
-            body = sb.ToString();
+            var body = sb.ToString();
+            //
             // Send output stream as an email message.
-            // from
-            // to
-            // subject
-            // body
-            // be_html
+            //
             var region_code = k.Safe(Request["region_code"],k.safe_hint_type.NUM);
-            k.SmtpMailSend(ConfigurationManager.AppSettings["sender_email_address"], p.biz_accounts.EmailTargetByRegionAndRole(region_code,"director") + k.COMMA_SPACE + p.biz_accounts.EmailTargetByRegionAndRole(region_code,"emsof-planner"), "Report: Allocations-Reimbursements-Nonspends, " + p.biz_fiscal_years.DesignatorOfCurrent(), body, true);
+            k.SmtpMailSend
+              (
+              from:ConfigurationManager.AppSettings["sender_email_address"],
+              to:p.biz_accounts.EmailTargetByRegionAndRole(region_code,"director") + k.COMMA_SPACE + p.biz_accounts.EmailTargetByRegionAndRole(region_code,"emsof-planner"),
+              subject:"Report: Allocations-Reimbursements-Nonspends, " + p.biz_fiscal_years.DesignatorOfCurrent(),
+              message_string:body,
+              be_html:true
+              );
             Session.Abandon();
 
         }

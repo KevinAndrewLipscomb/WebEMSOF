@@ -6,8 +6,7 @@ namespace regional_staffer_overview
 {
     public partial class TWebForm_regional_staffer_overview: ki_web_ui.page_class
     {
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.

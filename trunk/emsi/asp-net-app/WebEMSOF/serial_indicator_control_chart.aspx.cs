@@ -26,7 +26,7 @@ namespace serial_indicator_control_chart
         {
             const int AVERAGE_NUM_MINUTES_PER_YEAR = 525948;
             // takes into account all scheduled leap days
-            serial_indicator_rec_type datum;
+            TClass_db_equipment.serial_indicator_rec_type datum;
             uint i;
             ((Application["spcchartnet_avail"]) as AutoResetEvent).WaitOne();
             // One data point per time period
@@ -41,7 +41,7 @@ namespace serial_indicator_control_chart
               {
               width_in_years.val = int.Parse(k.Safe(Request["width_in_years"],k.safe_hint_type.NUM));
               }
-            var chart = new SPCTimeVariableControlChart(SPCControlChartData.INDIVIDUAL_RANGE_CHART, 1, width_in_years.val, AVERAGE_NUM_MINUTES_PER_YEAR);
+            using var chart = new SPCTimeVariableControlChart(SPCControlChartData.INDIVIDUAL_RANGE_CHART, 1, width_in_years.val, AVERAGE_NUM_MINUTES_PER_YEAR);
             chart.Bounds = new Rectangle(0, 0, 781, 417);
             SPCControlChartData.DefaultSampleValueString = k.EMPTY;
             chart.ChartAlarmEmphasisMode = SPCChartBase.ALARM_HIGHLIGHT_SYMBOL;
@@ -62,7 +62,7 @@ namespace serial_indicator_control_chart
             {
                 for (i = 0; i <= (history_count - 1); i ++ )
                 {
-                    datum = ((serial_indicator_rec_type)(history.Dequeue()));
+                    datum = ((TClass_db_equipment.serial_indicator_rec_type)(history.Dequeue()));
                     if (i == 0)
                       {
                       chart.ChartData.SetControlLimitValues(new double[] {datum.value,datum.value,datum.value});
