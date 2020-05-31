@@ -15,19 +15,20 @@ using System.Text;
 using System.Web.UI.WebControls;
 
 namespace county_dictated_appropriations
-{
-  public static class county_dictated_appropriations_Static
-    {
-    //
-    // TCCI values for columns prior to these are defined in Class_db_emsof_requests because they are common to other pages and/or UserControls.
-    //
-    public const int TCCI_LINKBUTTON_EDIT = 15;
-    public const int TCCI_LINKBUTTON_DELETE = 16;
-    public const int TCCI_SELECT_FOR_QUICKMESSAGE = 17;
-    }
-
+  {
   public partial class TWebForm_county_dictated_appropriations: ki_web_ui.page_class
     {
+
+    private static class Static
+      {
+      //
+      // TCCI values for columns prior to these are defined in Class_db_emsof_requests because they are common to other pages and/or UserControls.
+      //
+      public const int TCCI_LINKBUTTON_EDIT = 15;
+      public const int TCCI_LINKBUTTON_DELETE = 16;
+      public const int TCCI_SELECT_FOR_QUICKMESSAGE = 17;
+      }
+
         private struct p_type
           {
           public TClass_biz_accounts biz_accounts;
@@ -340,8 +341,8 @@ namespace county_dictated_appropriations
         {
             decimal leftover_or_shortage;
             // Manage column visibility
-            e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_EDIT].Visible = p.be_county_user && p.be_before_deadline;
-            e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_DELETE].Visible = p.be_county_user && p.be_before_deadline;
+            e.Item.Cells[Static.TCCI_LINKBUTTON_EDIT].Visible = p.be_county_user && p.be_before_deadline;
+            e.Item.Cells[Static.TCCI_LINKBUTTON_DELETE].Visible = p.be_county_user && p.be_before_deadline;
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
@@ -376,8 +377,8 @@ namespace county_dictated_appropriations
                                 }
                             }
                         }
-                        ((e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_EDIT].Controls[0]) as LinkButton).Visible = false;
-                        ((e.Item.Cells[county_dictated_appropriations_Static.TCCI_LINKBUTTON_DELETE].Controls[0]) as LinkButton).Visible = false;
+                        ((e.Item.Cells[Static.TCCI_LINKBUTTON_EDIT].Controls[0]) as LinkButton).Visible = false;
+                        ((e.Item.Cells[Static.TCCI_LINKBUTTON_DELETE].Controls[0]) as LinkButton).Visible = false;
                     }
                 }
                 else
@@ -432,7 +433,7 @@ namespace county_dictated_appropriations
       {
       for (var i = new k.subtype<int>(0,DataGrid_service_appropriations.Items.Count); i.val < i.LAST; i.val++)
         {
-        (DataGrid_service_appropriations.Items[i.val].Cells[county_dictated_appropriations_Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
+        (DataGrid_service_appropriations.Items[i.val].Cells[Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
         }
       BuildDistributionListAndRegisterPostBackControls();
       }
@@ -449,7 +450,7 @@ namespace county_dictated_appropriations
       for (var i = new k.subtype<int>(0, DataGrid_service_appropriations.Items.Count); i.val < i.LAST; i.val++)
         {
         tcc = DataGrid_service_appropriations.Items[i.val].Cells;
-        if ((tcc[county_dictated_appropriations_Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked)
+        if ((tcc[Static.TCCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked)
           {
           v.distribution_list_for_services_with_allocations.Append(tcc[(int)p.biz_emsof_requests.TcciOfPasswordResetEmailAddress()].Text);
           v.distribution_list_for_services_with_allocations.Append(k.COMMA_SPACE);
