@@ -12,10 +12,9 @@ namespace service_overview
 {
     public partial class TWebForm_service_overview: ki_web_ui.page_class
     {
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -48,7 +47,8 @@ namespace service_overview
                 BeginBreadCrumbTrail();
                 p.db = new TClass_db();
                 p.db.Open();
-                be_stale_password = new MySqlCommand("SELECT be_stale_password FROM service_user where id=\"" + Session["service_user_id"].ToString() + "\"", p.db.connection).ExecuteScalar().ToString();
+                using var mysql_command_1 = new MySqlCommand("SELECT be_stale_password FROM service_user where id=\"" + Session["service_user_id"].ToString() + "\"", p.db.connection);
+                be_stale_password = mysql_command_1.ExecuteScalar().ToString();
                 if (be_stale_password == "1")
                 {
                     p.db.Close();
@@ -70,7 +70,8 @@ namespace service_overview
                 p.tcci_linkbutton = 8;
                 p.num_dg_items = 0;
                 // Set Label_profile_status
-                biz_get_profile_status = new MySqlCommand("select be_valid_profile from service where id = \"" + Session["service_user_id"].ToString() + "\"", p.db.connection).ExecuteScalar().ToString();
+                using var mysql_command_2 = new MySqlCommand("select be_valid_profile from service where id = \"" + Session["service_user_id"].ToString() + "\"", p.db.connection);
+                biz_get_profile_status = mysql_command_2.ExecuteScalar().ToString();
                 if (biz_get_profile_status == "0")
                 {
                     Label_profile_status.Text = "Needs review.";
@@ -96,7 +97,8 @@ namespace service_overview
                     Literal_relation_to_annual_survey.Text = "Your WebEMSOF profile has been accepted as your Annual Survey response.";
                     TableData_profile_printable.Visible = true;
                     // Determine current fiscal year
-                    p.max_fiscal_year_id_string = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection).ExecuteScalar().ToString();
+                    using var mysql_command_3 = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection);
+                    p.max_fiscal_year_id_string = mysql_command_3.ExecuteScalar().ToString();
                     // //
                     // // Determine temporal location with respect to deadline.
                     // //
@@ -159,7 +161,7 @@ namespace service_overview
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_dg_items = p.num_dg_items + 1;
+                p.num_dg_items++;
                 // Drop the appropriate LinkButton in the Action column.
                 if (p.be_before_deadline)
                 {
@@ -201,16 +203,10 @@ namespace service_overview
         {
             bool be_datagrid_empty;
             p.db.Open();
+            //
             // When changing this query, remember to make corresponding changes to DataGrid Index settings in Page_Load.
-            // column 0
-            // column 1
-            // column 2
-            // column 3
-            // column 4
-            // column 5
-            // column 6
-            // column 7
-            DataGrid.DataSource = new MySqlCommand
+            //
+            using var mysql_command = new MySqlCommand
               (
               "SELECT emsof_request_master.id"
               + " , designator as fy_designator"
@@ -231,15 +227,19 @@ namespace service_overview
               +   " and fiscal_year.id >= (" + p.max_fiscal_year_id_string + " - 1)"
               + " order by fy_designator desc,county_name,emsof_request_master.id desc",
               p.db.connection
-              )
-              .ExecuteReader();
+              );
+            DataGrid.DataSource = mysql_command.ExecuteReader();
             DataGrid.DataBind();
             ((MySqlDataReader)(DataGrid.DataSource)).Close();
             be_datagrid_empty = (p.num_dg_items == 0);
+            //
             // Manage control visibilities.
+            //
             Label_no_dg_items.Visible = be_datagrid_empty;
             DataGrid.Visible = !be_datagrid_empty;
+            //
             // Clear aggregation vars for next bind, if any.
+            //
             p.num_dg_items = 0;
             p.db.Close();
         }

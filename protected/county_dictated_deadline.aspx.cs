@@ -1,36 +1,24 @@
-using System.Configuration;
-
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-
-
-using Class_db;
 using Class_biz_appropriations;
 using Class_biz_emsof_requests;
+using Class_db;
+using System;
+using System.Configuration;
+using System.Web.UI.WebControls;
+
 namespace county_dictated_deadline
-{
+  {
   public partial class TWebForm_county_dictated_deadline: ki_web_ui.page_class
     {
 
     private struct p_type
       {
       public TClass_biz_appropriations biz_appropriations;
-        public TClass_biz_emsof_requests biz_emsof_requests;
-        public TClass_db db;
+      public TClass_biz_emsof_requests biz_emsof_requests;
+      public TClass_db db;
       }
 
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
-        protected System.Web.UI.WebControls.LinkButton LinkButton_county_dictated_appropriations = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -105,8 +93,8 @@ namespace county_dictated_deadline
 }
 
 namespace county_dictated_deadline.Units
-{
-    public class county_dictated_deadline
+  {
+  public class county_dictated_deadline
     {
         public const string ID = "$Id: county_dictated_deadline.pas 2492 2008-08-13 00:23:10Z kevinanlipscomb $";
     } // end county_dictated_deadline

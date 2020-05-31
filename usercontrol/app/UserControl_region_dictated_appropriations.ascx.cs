@@ -15,7 +15,7 @@ namespace UserControl_region_dictated_appropriations
   {
   public partial class TWebUserControl_region_dictated_appropriations: ki_web_ui.usercontrol_class
     {
-    public class UserControl_region_dictated_appropriations_Static
+    private static class Static
       {
       public const int SDA_TCI_ID = 0;
       public const int SDA_TCI_AMOUNT = 1;
@@ -206,7 +206,7 @@ namespace UserControl_region_dictated_appropriations
       {
       if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
-        var id = k.Safe(e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_ID].Text,k.safe_hint_type.NUM);
+        var id = k.Safe(e.Item.Cells[Static.TCI_ID].Text,k.safe_hint_type.NUM);
         if (e.CommandName == "Select")
           {
           SessionSet("region_dictated_appropriation_summary",p.biz_appropriations.RegionDictumSummary(id));
@@ -238,15 +238,15 @@ namespace UserControl_region_dictated_appropriations
         {
         if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
           {
-          link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_SELECT].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[Static.TCI_SELECT].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Drill down";
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-          link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_ADJUST].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[Static.TCI_ADJUST].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Adjust";
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-          link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_DELETE].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[Static.TCI_DELETE].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Delete";
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
@@ -257,21 +257,21 @@ namespace UserControl_region_dictated_appropriations
             {
             cell.EnableViewState = false;
             }
-          e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_ID].EnableViewState = true;
+          e.Item.Cells[Static.TCI_ID].EnableViewState = true;
           //
-          p.distribution_list = p.distribution_list + e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_EMAIL_ADDRESS].Text + k.COMMA_SPACE;
+          p.distribution_list = p.distribution_list + e.Item.Cells[Static.TCI_EMAIL_ADDRESS].Text + k.COMMA_SPACE;
           p.num_region_dictated_appropriations++;
           }
         }
       else
         {
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_SELECT].Visible = false;
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_ADJUST].Visible = false;
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_DELETE].Visible = false;
+        e.Item.Cells[Static.TCI_SELECT].Visible = false;
+        e.Item.Cells[Static.TCI_ADJUST].Visible = false;
+        e.Item.Cells[Static.TCI_DELETE].Visible = false;
         }
       if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_AMOUNT].Text = "<tt>" + e.Item.Cells[UserControl_region_dictated_appropriations_Static.TCI_AMOUNT].Text + "</tt>";
+        e.Item.Cells[Static.TCI_AMOUNT].Text = "<tt>" + e.Item.Cells[Static.TCI_AMOUNT].Text + "</tt>";
         }
       }
 
@@ -282,11 +282,11 @@ namespace UserControl_region_dictated_appropriations
         {
         if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
           {
-          link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ADJUST].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[Static.SDA_TCI_ADJUST].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Adjust";
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
-          link_button = ((e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_DELETE].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[Static.SDA_TCI_DELETE].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Delete";
           ScriptManager.GetCurrent(Page).RegisterPostBackControl(link_button);
@@ -297,20 +297,20 @@ namespace UserControl_region_dictated_appropriations
             {
             cell.EnableViewState = false;
             }
-          e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ID].EnableViewState = true;
+          e.Item.Cells[Static.SDA_TCI_ID].EnableViewState = true;
           //
           p.num_state_dictated_appropriations++;
           }
         }
       else
         {
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ADJUST].Visible = false;
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_DELETE].Visible = false;
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ATTACH_RDA].Visible = false;
+        e.Item.Cells[Static.SDA_TCI_ADJUST].Visible = false;
+        e.Item.Cells[Static.SDA_TCI_DELETE].Visible = false;
+        e.Item.Cells[Static.SDA_TCI_ATTACH_RDA].Visible = false;
         }
       if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
-        e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_AMOUNT].Text = "<tt>" + e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_AMOUNT].Text + "</tt>";
+        e.Item.Cells[Static.SDA_TCI_AMOUNT].Text = "<tt>" + e.Item.Cells[Static.SDA_TCI_AMOUNT].Text + "</tt>";
         }
       }
 
@@ -332,7 +332,7 @@ namespace UserControl_region_dictated_appropriations
     private void BindGrid()
       {
       //DataGrid_control.Columns[UserControl_region_dictated_appropriations_Static.TCI_ADJUST].Visible = p.be_ok_to_config;
-      DataGrid_control.Columns[UserControl_region_dictated_appropriations_Static.TCI_DELETE].Visible = p.be_ok_to_config;
+      DataGrid_control.Columns[Static.TCI_DELETE].Visible = p.be_ok_to_config;
       p.biz_appropriations.BindRegionDictums(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
       var be_datagrid_empty = (p.num_region_dictated_appropriations == 0);
       TableRow_none.Visible = be_datagrid_empty;
@@ -345,7 +345,7 @@ namespace UserControl_region_dictated_appropriations
     private void BindStateDictumGrid()
       {
       //DataGrid_sdas.Columns[UserControl_region_dictated_appropriations_Static.SDA_TCI_ADJUST].Visible = p.be_ok_to_config;
-      DataGrid_sdas.Columns[UserControl_region_dictated_appropriations_Static.SDA_TCI_DELETE].Visible = p.be_ok_to_config;
+      DataGrid_sdas.Columns[Static.SDA_TCI_DELETE].Visible = p.be_ok_to_config;
       //DataGrid_sdas.Columns[UserControl_region_dictated_appropriations_Static.SDA_TCI_ATTACH_COUNTY_ALLOCATION].Visible = p.be_ok_to_config;
       p.biz_appropriations.BindStateDictums(p.sda_sort_order, p.be_sda_sort_order_ascending, DataGrid_sdas);
       var be_datagrid_empty = (p.num_state_dictated_appropriations == 0);
@@ -371,7 +371,7 @@ namespace UserControl_region_dictated_appropriations
       {
       if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
-        var sda_id = k.Safe(e.Item.Cells[UserControl_region_dictated_appropriations_Static.SDA_TCI_ID].Text,k.safe_hint_type.NUM);
+        var sda_id = k.Safe(e.Item.Cells[Static.SDA_TCI_ID].Text,k.safe_hint_type.NUM);
         if (e.CommandName == "Adjust")
           {
           }

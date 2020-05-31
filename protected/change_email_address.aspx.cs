@@ -11,10 +11,9 @@ namespace change_email_address
 {
     public partial class TWebForm_change_email_address: ki_web_ui.page_class
     {
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -51,7 +50,8 @@ namespace change_email_address
                 p.db = new TClass_db();
                 p.db.Open();
                 // Preload email address fields
-                email_address = new MySqlCommand("SELECT password_reset_email_address " + "FROM " + Session["target_user_table"].ToString() + "_user " + "WHERE id = \"" + Session[Session["target_user_table"].ToString() + "_user_id"].ToString() + "\"", p.db.connection).ExecuteScalar().ToString();
+                using var mysql_command = new MySqlCommand("SELECT password_reset_email_address " + "FROM " + Session["target_user_table"].ToString() + "_user " + "WHERE id = \"" + Session[Session["target_user_table"].ToString() + "_user_id"].ToString() + "\"", p.db.connection);
+                email_address = mysql_command.ExecuteScalar().ToString();
                 TextBox_nominal_email_address.Text = email_address;
                 TextBox_confirmation_email_address.Text = email_address;
                 p.db.Close();

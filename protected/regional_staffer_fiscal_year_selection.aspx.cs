@@ -1,25 +1,12 @@
-using MySql.Data.MySqlClient;
-
-using System.Configuration;
-
-
-using kix;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Web;
-using System.Web.SessionState;
-
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Data.Common;
-using System.Globalization;
-
-
 using Class_db;
+using kix;
+using MySql.Data.MySqlClient;
+using System;
+using System.Configuration;
+using System.Web.UI.WebControls;
+
 namespace regional_staffer_fiscal_year_selection
-{
+  {
   public partial class TWebForm_regional_staffer_fiscal_year_selection: ki_web_ui.page_class
     {
 
@@ -30,9 +17,6 @@ namespace regional_staffer_fiscal_year_selection
 
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
-        protected System.Web.UI.WebControls.Label Label_regional_staffer_name = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -66,10 +50,10 @@ namespace regional_staffer_fiscal_year_selection
                     Server.Transfer("~/login.aspx");
                 }
                 Title = ConfigurationManager.AppSettings["application_name"] + " - account_overview";
-                Label_regional_staffer_name.Text = Session["regional_staffer_name"].ToString();
                 p.db = new TClass_db();
                 p.db.Open();
-                dr = new MySqlCommand("SELECT be_stale_password, password_reset_email_address FROM regional_staffer_user" + " where id = " + Session["regional_staffer_user_id"].ToString(), p.db.connection).ExecuteReader();
+                using var mysql_command_1 = new MySqlCommand("SELECT be_stale_password, password_reset_email_address FROM regional_staffer_user" + " where id = " + Session["regional_staffer_user_id"].ToString(), p.db.connection);
+                dr = mysql_command_1.ExecuteReader();
                 dr.Read();
                 if (dr["be_stale_password"].ToString() == "0")
                 {
@@ -79,8 +63,10 @@ namespace regional_staffer_fiscal_year_selection
                     dr.Close();
                     // Where we go next depends on how many appropriations have been made to this county.
                     // Determine current fiscal year
-                    max_fiscal_year_id_string = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection).ExecuteScalar().ToString();
-                    dr = new MySqlCommand("SELECT state_dictated_appropriation.id," + " concat(designator,\"  ($\",format(state_dictated_appropriation.amount,2),\" from PA DOH EMSO)\")" + " as appropriation_description" + " FROM state_dictated_appropriation" + " JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)" + " JOIN regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)" + " WHERE regional_staffer.id = " + Session["regional_staffer_user_id"].ToString() + " and fiscal_year_id >= (" + max_fiscal_year_id_string + " - 1)", p.db.connection).ExecuteReader();
+                    using var mysql_command_2 = new MySqlCommand("SELECT max(id) as max_id FROM fiscal_year", p.db.connection);
+                    max_fiscal_year_id_string = mysql_command_2.ExecuteScalar().ToString();
+                    using var mysql_command_3 = new MySqlCommand("SELECT state_dictated_appropriation.id," + " concat(designator,\"  ($\",format(state_dictated_appropriation.amount,2),\" from PA DOH EMSO)\")" + " as appropriation_description" + " FROM state_dictated_appropriation" + " JOIN fiscal_year on (fiscal_year.id = fiscal_year_id)" + " JOIN regional_staffer on (regional_staffer.region_code=state_dictated_appropriation.region_code)" + " WHERE regional_staffer.id = " + Session["regional_staffer_user_id"].ToString() + " and fiscal_year_id >= (" + max_fiscal_year_id_string + " - 1)", p.db.connection);
+                    dr = mysql_command_3.ExecuteReader();
                     while (dr.Read())
                     {
                         RadioButtonList_appropriation.Items.Add(new ListItem(dr["appropriation_description"].ToString(), dr["id"].ToString()));
@@ -135,8 +121,8 @@ namespace regional_staffer_fiscal_year_selection
 }
 
 namespace regional_staffer_fiscal_year_selection.Units
-{
-    public class regional_staffer_fiscal_year_selection
+  {
+  public class regional_staffer_fiscal_year_selection
     {
         public const string ID = "$Id: regional_staffer_fiscal_year_selection.pas 2492 2008-08-13 00:23:10Z kevinanlipscomb $";
     } // end regional_staffer_fiscal_year_selection

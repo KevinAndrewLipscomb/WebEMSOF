@@ -1,6 +1,5 @@
 // Derived from KiAspdotnetFramework/UserControl/app/UserControl~template~datagrid~sortable.ascx.cs
 
-using AjaxControlToolkit;
 using Class_biz_accounts;
 using Class_biz_counties;
 using Class_biz_user;
@@ -8,6 +7,7 @@ using kix;
 using System;
 using System.Collections;
 using System.Configuration;
+using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -17,7 +17,8 @@ namespace UserControl_counties
   {
   public partial class TWebUserControl_counties: ki_web_ui.usercontrol_class
     {
-    public class UserControl_counties_Static
+
+    private static class Static
       {
       public const int TCI_CODE = 0;
       public const int TCI_SELECT_FOR_QUICKMESSAGE = 1;
@@ -38,13 +39,18 @@ namespace UserControl_counties
       public TClass_biz_accounts biz_accounts;
       public TClass_biz_counties biz_counties;
       public TClass_biz_user biz_user;
-      public string distribution_list;
       public uint num_counties;
       public string sort_order;
       public string user_email_address;
       }
 
+    private struct v_type
+      {
+      public StringBuilder distribution_list;
+      }
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
+    private v_type v; // Volatile instance Variable container
 
     private void InjectPersistentClientSideScript()
       {
@@ -163,10 +169,10 @@ namespace UserControl_counties
         p.be_loaded = false;
         p.be_ok_to_change_details = (HttpContext.Current.User.IsInRole("director") || HttpContext.Current.User.IsInRole("emsof-coordinator"));
         p.be_sort_order_ascending = true;
-        p.distribution_list = k.EMPTY;
         p.sort_order = "name%";
         p.user_email_address = p.biz_accounts.EmailAddressByKindId(p.biz_user.Kind(), p.biz_user.IdNum());
         }
+      v.distribution_list = new StringBuilder();
       }
 
     // / <summary>
@@ -196,7 +202,7 @@ namespace UserControl_counties
       {
       for (var i = new k.subtype<int>(0,DataGrid_control.Items.Count); i.val < i.LAST; i.val++)
         {
-        (DataGrid_control.Items[i.val].Cells[UserControl_counties_Static.TCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
+        (DataGrid_control.Items[i.val].Cells[Static.TCI_SELECT_FOR_QUICKMESSAGE].FindControl("CheckBox_selected") as CheckBox).Checked = (sender as CheckBox).Checked;
         }
       BuildDistributionListAndRegisterPostBackControls();
       }
@@ -208,27 +214,28 @@ namespace UserControl_counties
 
     private void BuildDistributionListAndRegisterPostBackControls()
       {
-      p.distribution_list = k.EMPTY;
+      v.distribution_list.Clear();
       TableCellCollection tcc;
       for (var i = new k.subtype<int>(0, DataGrid_control.Items.Count); i.val < i.LAST; i.val++)
         {
         tcc = DataGrid_control.Items[i.val].Cells;
-        if ((tcc[UserControl_counties_Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked)
+        if ((tcc[Static.TCI_SELECT].FindControl("CheckBox_selected") as CheckBox).Checked)
           {
-          p.distribution_list += tcc[UserControl_counties_Static.TCI_EMAIL_ADDRESS].Text + k.COMMA_SPACE;
+          v.distribution_list.Append(k.COMMA_SPACE);
+          v.distribution_list.Append(tcc[Static.TCI_EMAIL_ADDRESS].Text);
           }
-        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_counties_Static.TCI_SELECT].Controls[0]) as LinkButton);
-        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[UserControl_counties_Static.TCI_IMITATE].Controls[0]) as LinkButton);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_SELECT].Controls[0]) as LinkButton);
+        ScriptManager.GetCurrent(Page).RegisterPostBackControl((tcc[Static.TCI_IMITATE].Controls[0]) as LinkButton);
         }
-      p.distribution_list = p.distribution_list.TrimEnd(new char[] {Convert.ToChar(k.COMMA),Convert.ToChar(k.SPACE)});
-      Label_distribution_list.Text = p.distribution_list;
+      if (v.distribution_list.Length > 0) v.distribution_list.Remove(0,2); // .TrimStart(k.COMMA_SPACE)
+      Label_distribution_list.Text = v.distribution_list.ToString();
       }
 
     private void DataGrid_control_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
       {
       if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
         {
-        var county_code = k.Safe(e.Item.Cells[UserControl_counties_Static.TCI_CODE].Text,k.safe_hint_type.NUM);
+        var county_code = k.Safe(e.Item.Cells[Static.TCI_CODE].Text,k.safe_hint_type.NUM);
         if (e.CommandName == "Edit")
           {
           SessionSet("county_summary",p.biz_counties.Summary(county_code));
@@ -236,7 +243,7 @@ namespace UserControl_counties
           }
         else if (e.CommandName == "imitate")
           {
-          var county_name = k.Safe(e.Item.Cells[UserControl_counties_Static.TCI_NAME].Text, k.safe_hint_type.ORG_NAME);
+          var county_name = k.Safe(e.Item.Cells[Static.TCI_NAME].Text, k.safe_hint_type.ORG_NAME);
           SessionSet(name:"imitator_designator",value:HttpContext.Current.User.Identity.Name);
           SessionSet("target_user_table","county");
           SessionSet("county_user_id",county_code);
@@ -254,10 +261,10 @@ namespace UserControl_counties
         {
         if (new ArrayList {ListItemType.AlternatingItem,ListItemType.Item,ListItemType.EditItem,ListItemType.SelectedItem}.Contains(e.Item.ItemType))
           {
-          link_button = ((e.Item.Cells[UserControl_counties_Static.TCI_SELECT].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[Static.TCI_SELECT].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Edit";
-          link_button = ((e.Item.Cells[UserControl_counties_Static.TCI_IMITATE].Controls[0]) as LinkButton);
+          link_button = ((e.Item.Cells[Static.TCI_IMITATE].Controls[0]) as LinkButton);
           link_button.Text = k.ExpandTildePath(link_button.Text);
           link_button.ToolTip = "Imitate";
           RequireConfirmation(link_button,"The application will now allow you to imitate a subordinate user.  When you are done imitating the subordinate user, you must log out and log back in as yourself.");
@@ -278,7 +285,7 @@ namespace UserControl_counties
         }
       else
         {
-        e.Item.Cells[UserControl_counties_Static.TCI_SELECT].Visible = false;
+        e.Item.Cells[Static.TCI_SELECT].Visible = false;
         }
       }
 
@@ -299,7 +306,7 @@ namespace UserControl_counties
 
     private void BindGrid()
       {
-      DataGrid_control.Columns[UserControl_counties_Static.TCI_SELECT].Visible = p.be_ok_to_change_details;
+      DataGrid_control.Columns[Static.TCI_SELECT].Visible = p.be_ok_to_change_details;
       p.biz_counties.BindGrid(p.sort_order, p.be_sort_order_ascending, DataGrid_control);
       p.num_counties = 0;
       BuildDistributionListAndRegisterPostBackControls();
@@ -307,12 +314,12 @@ namespace UserControl_counties
 
     protected void Button_send_Click(object sender, EventArgs e)
       {
-      if (p.distribution_list.Length > 0)
+      if (Label_distribution_list.Text.Length > 0)
         {
         k.SmtpMailSend
           (
           from:ConfigurationManager.AppSettings["sender_email_address"],
-          to:p.distribution_list,
+          to:Label_distribution_list.Text,
           subject:TextBox_quick_message_subject.Text,
           message_string:"-- From " + Session[p.biz_user.Kind() + "_name"].ToString() + " (via " + ConfigurationManager.AppSettings["application_name"] + ")" + k.NEW_LINE
             + k.NEW_LINE

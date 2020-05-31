@@ -6,8 +6,8 @@ using System.Web.Security;
 
 #pragma warning disable CA1716
 namespace Global
-{
-    public class TGlobal: System.Web.HttpApplication
+  {
+  public class TGlobal: System.Web.HttpApplication
     {
         // / <summary>
         // / Required method for Designer support -- do not modify
@@ -32,12 +32,17 @@ namespace Global
 
         }
 
-        protected void Session_Start(object sender, EventArgs e)
+    protected void Session_Start(object sender, EventArgs e)
+      {
+      if (HttpContext.Current.Request.IsAuthenticated)
         {
-            FormsAuthentication.SignOut();
-            // to force existing "remember me on this computer cookies" to expire
-
+        //
+        // The user is logged in.  We must log the user out since their stored session has been replaced with an empty new one.
+        //
+        FormsAuthentication.SignOut();
+        FormsAuthentication.RedirectToLoginPage();
         }
+      }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
@@ -73,8 +78,8 @@ namespace Global
 }
 
 namespace Global.Units
-{
-    public class Global
+  {
+  public class Global
     {
         public const string ID = "$Id: Global.pas 2761 2009-06-02 23:20:56Z KevinAnLipscomb $";
     } // end Global

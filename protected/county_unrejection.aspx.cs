@@ -118,7 +118,7 @@ namespace county_unrejection
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_datagrid_rows = p.num_datagrid_rows + 1;
+                p.num_datagrid_rows++;
             }
         }
 

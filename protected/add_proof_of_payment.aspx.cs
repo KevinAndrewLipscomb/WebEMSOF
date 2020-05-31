@@ -77,27 +77,11 @@ namespace add_proof_of_payment
             base.OnInit(e);
         }
 
-        protected void CustomValidator_amount_ServerValidate(object source, System.Web.UI.WebControls.ServerValidateEventArgs args)
-        {
-            string amount_string;
-            amount_string = k.Safe(args.Value, k.safe_hint_type.REAL_NUM);
-            if (amount_string.Length == 0)
-            {
-                args.IsValid = false;
-            }
-            else
-            {
-              try
-                {
-                p.amount = decimal.Parse(amount_string);
-                args.IsValid = (p.amount > 0);
-                }
-              catch
-                {
-                args.IsValid = false;
-                }
-            }
-        }
+    protected void CustomValidator_amount_ServerValidate(object source, ServerValidateEventArgs args)
+      {
+      var amount_string = k.Safe(args.Value, k.safe_hint_type.REAL_NUM);
+      args.IsValid = (amount_string.Length == 0) && decimal.TryParse(amount_string,out p.amount) && (p.amount > 0);
+      }
 
         protected void Button_submit_Click(object sender, System.EventArgs e)
         {

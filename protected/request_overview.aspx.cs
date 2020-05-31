@@ -5,25 +5,18 @@ using kix;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
-using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
-using System.IO;
 using System.Web;
-using System.Web.SessionState;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using WebEMSOF.component.os;
 
 namespace request_overview
-{
-    public partial class TWebForm_request_overview: ki_web_ui.page_class
+  {
+  public partial class TWebForm_request_overview: ki_web_ui.page_class
     {
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -82,9 +75,11 @@ namespace request_overview
                 p.db.Open();
                 Label_master_status.Text = Session["emsof_request_master_status"].ToString();
                 // All further rendering is deadline-dependent.
-                make_item_requests_deadline = (DateTime)(new MySqlCommand("select service_to_county_submission_deadline" + " from county_dictated_appropriation join region_dictated_appropriation" + " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " where county_dictated_appropriation.id = " + Session["county_dictated_appropriation_id"].ToString(), p.db.connection).ExecuteScalar());
+                using var mysql_command_1 = new MySqlCommand("select service_to_county_submission_deadline" + " from county_dictated_appropriation join region_dictated_appropriation" + " on (region_dictated_appropriation.id=county_dictated_appropriation.region_dictated_appropriation_id)" + " where county_dictated_appropriation.id = " + Session["county_dictated_appropriation_id"].ToString(), p.db.connection);
+                make_item_requests_deadline = (DateTime)(mysql_command_1.ExecuteScalar());
                 p.be_before_deadline = (DateTime.Now <= make_item_requests_deadline) || be_deadline_exempt;
-                p.be_finalized = "1" == new MySqlCommand("select (status_code > 2) from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection).ExecuteScalar().ToString();
+                using var mysql_command_2 = new MySqlCommand("select (status_code > 2) from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection);
+                p.be_finalized = "1" == mysql_command_2.ExecuteScalar().ToString();
                 if ((!p.be_before_deadline) || p.be_finalized)
                 {
                     Table_parent_appropriation_outer.Visible = false;
@@ -104,7 +99,8 @@ namespace request_overview
                 SessionSet("be_finalized", p.be_finalized.ToString());
                 // Determine the number of items in this request so that during the Bind call we can recognize the last item and manage the
                 // visibility of its "Decrease priority" LinkButton.  It is cheap at this point to also set Label_sum_of_emsof_antes.
-                dr = new MySqlCommand("select num_items,value from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection).ExecuteReader();
+                using var mysql_command_3 = new MySqlCommand("select num_items,value from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection);
+                dr = mysql_command_3.ExecuteReader();
                 dr.Read();
                 p.num_items = (uint)(dr["num_items"].GetHashCode());
                 if (p.be_before_deadline && (!p.be_finalized))
@@ -130,7 +126,8 @@ namespace request_overview
                 }
                 if (p.be_finalized)
                 {
-                    p.be_completely_approved = "1" == new MySqlCommand("select (status_code between 8 and 10) from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection).ExecuteScalar().ToString();
+                    using var mysql_command_4 = new MySqlCommand("select (status_code between 8 and 10) from emsof_request_master where id = " + Session["emsof_request_master_id"].ToString(), p.db.connection);
+                    p.be_completely_approved = "1" == mysql_command_4.ExecuteScalar().ToString();
                 }
                 p.db.Close();
                 Bind_items();
@@ -187,13 +184,15 @@ namespace request_overview
             if (e.CommandName == "IncreasePriority")
             {
                 p.db.Open();
-                new MySqlCommand(p.db_trail.Saved("START TRANSACTION;" + "update emsof_request_detail set priority = 0" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " - 1" + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = 0;" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
+                using var mysql_command = new MySqlCommand(p.db_trail.Saved("START TRANSACTION;" + "update emsof_request_detail set priority = 0" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " - 1" + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " - 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = 0;" + "COMMIT;"), p.db.connection);
+                mysql_command.ExecuteNonQuery();
                 p.db.Close();
             }
             else if (e.CommandName == "DecreasePriority")
             {
                 p.db.Open();
-                new MySqlCommand(p.db_trail.Saved("START TRANSACTION;" + "update emsof_request_detail set priority = 0" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " + 1" + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " + 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = 0;" + "COMMIT;"), p.db.connection).ExecuteNonQuery();
+                using var mysql_command = new MySqlCommand(p.db_trail.Saved("START TRANSACTION;" + "update emsof_request_detail set priority = 0" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " + 1" + ";" + "update emsof_request_detail set priority = " + k.Safe(e.Item.Cells[(int)(p.tcci_priority)].Text, k.safe_hint_type.NUM) + " + 1" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " and priority = 0;" + "COMMIT;"), p.db.connection);
+                mysql_command.ExecuteNonQuery();
                 p.db.Close();
             }
             else
@@ -240,7 +239,8 @@ namespace request_overview
             // column 4
             // column 5
             cmdText = "select master_id," + " priority," + " eligible_provider_equipment_list.code," + " eligible_provider_equipment_list.description as item_description," + " emsof_ante," + " item_status_code_description_map.description as status" + " from emsof_request_detail" + " join eligible_provider_equipment_list on (eligible_provider_equipment_list.code=emsof_request_detail.equipment_code)" + " join item_status_code_description_map on (item_status_code_description_map.code=emsof_request_detail.status_code)" + " where master_id = " + Session["emsof_request_master_id"].ToString() + " order by priority";
-            DataGrid_items.DataSource = new MySqlCommand(cmdText, p.db.connection).ExecuteReader();
+            using var mysql_command = new MySqlCommand(cmdText, p.db.connection);
+            DataGrid_items.DataSource = mysql_command.ExecuteReader();
             DataGrid_items.DataBind();
             ((MySqlDataReader)(DataGrid_items.DataSource)).Close();
             // Clear aggregation vars for next bind, if any.

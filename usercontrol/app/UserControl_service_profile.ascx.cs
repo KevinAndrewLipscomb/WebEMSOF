@@ -21,7 +21,6 @@ namespace UserControl_service_profile
     {
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.CustomValidator CustomValidator_emsof_contact_name = null;
         private void Clear()
         {
             TextBox_affiliate_num.Text = k.EMPTY;
@@ -887,7 +886,6 @@ namespace UserControl_service_profile
                   k.Safe(TextBox_num_ambulances.Text, k.safe_hint_type.NUM),
                   (RadioButtonList_be_dera.SelectedValue == "TRUE"),
                   k.Safe(TextBox_charter_other_kind.Text, k.safe_hint_type.PUNCTUATED).Trim(),
-                  (p.be_service_user && !p.be_profile_initially_valid),
                   ((p.be_service_user && p.be_before_submission_deadline) || (RadioButtonList_be_valid_profile.SelectedValue == "TRUE")),
                   k.Safe(TextBox_federal_tax_id.Text, k.safe_hint_type.NUM),
                   CheckBox_be_qrs_unrecognized.Checked,

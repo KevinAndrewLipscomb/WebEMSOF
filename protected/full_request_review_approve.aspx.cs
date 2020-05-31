@@ -29,8 +29,6 @@ namespace full_request_review_approve
     {
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -234,7 +232,7 @@ namespace full_request_review_approve
         {
             if (CheckBox_special_promotion.Checked)
             {
-                p.biz_emsof_requests.MarkDone(Session["e_item"], Session["account_descriptor"].ToString());
+                p.biz_emsof_requests.MarkDone(Session["e_item"]);
                 BackTrack();
             }
         }
@@ -243,7 +241,7 @@ namespace full_request_review_approve
         {
             if (CheckBox_mark_failed.Checked)
             {
-                p.biz_emsof_requests.MarkFailed(Session["e_item"], Session["account_descriptor"].ToString());
+                p.biz_emsof_requests.MarkFailed(Session["e_item"]);
                 BackTrack();
             }
         }
@@ -349,7 +347,7 @@ namespace full_request_review_approve
             {
             if (CheckBox_mark_done.Checked)
               {
-              p.biz_emsof_requests.MarkDone(Session["e_item"], Session["account_descriptor"].ToString());
+              p.biz_emsof_requests.MarkDone(Session["e_item"]);
               BackTrack();
               }
             }
@@ -391,8 +389,8 @@ namespace full_request_review_approve
                 // We are dealing with a data row, not a header or footer row.
                 (e.Item.FindControl("UserControl_attachment_explorer_control") as TWebUserControl_attachment_explorer).path =
                   HttpContext.Current.Server.MapPath("attachment/emsof_request_detail/" + e.Item.Cells[full_request_review_approve_Static.TCCI_ATTACHMENT_KEY].Text);
-                p.num_items = p.num_items + 1;
-                p.total_emsof_ante = p.total_emsof_ante + decimal.Parse(DataBinder.Eval(e.Item.DataItem, p.biz_emsof_requests.PropertyNameOfEmsofAnte()).ToString());
+                p.num_items++;
+                p.total_emsof_ante += decimal.Parse(DataBinder.Eval(e.Item.DataItem, p.biz_emsof_requests.PropertyNameOfEmsofAnte()).ToString());
             }
         }
 
@@ -403,7 +401,7 @@ namespace full_request_review_approve
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_proofs_of_payment = p.num_proofs_of_payment + 1;
+                p.num_proofs_of_payment++;
             }
         }
 

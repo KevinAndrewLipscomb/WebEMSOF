@@ -6,8 +6,7 @@ namespace Default
 {
     public partial class TWebForm_Default: ki_web_ui.page_class
     {
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
+
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
@@ -20,7 +19,7 @@ namespace Default
         {
             if (!IsPostBack)
             {
-                Title.InnerText = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - Default";
+                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - Default";
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 if (Session["target_user_table"] == null)
                   {
@@ -44,13 +43,3 @@ namespace Default
     } // end TWebForm_Default
 
 }
-
-namespace Default.Units
-{
-    public class __Default
-    {
-        public const string ID = "$Id: Default.pas 2343 2008-05-28 21:19:37Z kevinanlipscomb $";
-    } // end __Default
-
-}
-

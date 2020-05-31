@@ -3,38 +3,31 @@ using Class_db_trail;
 using kix;
 using MySql.Data.MySqlClient;
 using System;
-using System.Collections;
-using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
-using System.Web;
-using System.Web.SessionState;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace region_dictated_appropriations
-{
-    public partial class TWebForm_region_dictated_appropriations: ki_web_ui.page_class
+  {
+  public partial class TWebForm_region_dictated_appropriations: ki_web_ui.page_class
     {
+
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_precontent = null;
-        protected System.Web.UI.WebControls.PlaceHolder PlaceHolder_postcontent = null;
-        protected System.Web.UI.WebControls.Label Label_account_descriptor = null;
         // / <summary>
         // / Required method for Designer support -- do not modify
         // / the contents of this method with the code editor.
         // / </summary>
         private void InitializeComponent()
         {
-            DataGrid_county_appropriations.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_ItemCommand);
-            DataGrid_county_appropriations.CancelCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_CancelCommand);
-            DataGrid_county_appropriations.EditCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_EditCommand);
-            DataGrid_county_appropriations.SortCommand += new System.Web.UI.WebControls.DataGridSortCommandEventHandler(DataGrid_county_appropriations_SortCommand);
-            DataGrid_county_appropriations.UpdateCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_UpdateCommand);
-            DataGrid_county_appropriations.DeleteCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(DataGrid_county_appropriations_DeleteCommand);
-            DataGrid_county_appropriations.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(DataGrid_county_appropriations_ItemDataBound);
+            DataGrid_county_appropriations.ItemCommand += new DataGridCommandEventHandler(DataGrid_county_appropriations_ItemCommand);
+            DataGrid_county_appropriations.CancelCommand += new DataGridCommandEventHandler(DataGrid_county_appropriations_CancelCommand);
+            DataGrid_county_appropriations.EditCommand += new DataGridCommandEventHandler(DataGrid_county_appropriations_EditCommand);
+            DataGrid_county_appropriations.SortCommand += new DataGridSortCommandEventHandler(DataGrid_county_appropriations_SortCommand);
+            DataGrid_county_appropriations.UpdateCommand += new DataGridCommandEventHandler(DataGrid_county_appropriations_UpdateCommand);
+            DataGrid_county_appropriations.DeleteCommand += new DataGridCommandEventHandler(DataGrid_county_appropriations_DeleteCommand);
+            DataGrid_county_appropriations.ItemDataBound += new DataGridItemEventHandler(DataGrid_county_appropriations_ItemDataBound);
             PreRender += TWebForm_region_dictated_appropriations_PreRender;
         }
 
@@ -77,12 +70,12 @@ namespace region_dictated_appropriations
                 p.tcci_linkbutton_edit = 5;
                 p.tcci_linkbutton_delete = 6;
                 Title = ConfigurationManager.AppSettings["application_name"] + " - region_dictated_appropriations";
-                Label_account_descriptor.Text = Session["regional_staffer_name"].ToString();
                 p.db.Open();
                 // Disable Table_appropriations for now.
                 Table_appropriations.Visible = false;
                 // Set parent appropriation labels.
-                dr_appropriation_attribs = new MySqlCommand("select designator,amount " + "from state_dictated_appropriation " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "where state_dictated_appropriation.id = " + Session["state_dictated_appropriation_id"].ToString(), p.db.connection).ExecuteReader();
+                using var mysql_command = new MySqlCommand("select designator,amount " + "from state_dictated_appropriation " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "where state_dictated_appropriation.id = " + Session["state_dictated_appropriation_id"].ToString(), p.db.connection);
+                dr_appropriation_attribs = mysql_command.ExecuteReader();
                 dr_appropriation_attribs.Read();
                 Label_fiscal_year_designator.Text = dr_appropriation_attribs["designator"].ToString();
                 p.state_dictated_appropriation_amount = (decimal)(dr_appropriation_attribs["amount"]);
@@ -129,7 +122,8 @@ namespace region_dictated_appropriations
                 {
                     Table_warning_forced_amount.Visible = false;
                 }
-                new MySqlCommand(p.db_trail.Saved("update region_dictated_appropriation set amount = " + amount.ToString() + " where id = " + appropriation_id_string), p.db.connection).ExecuteNonQuery();
+                using var mysql_command = new MySqlCommand(p.db_trail.Saved("update region_dictated_appropriation set amount = " + amount.ToString() + " where id = " + appropriation_id_string), p.db.connection);
+                mysql_command.ExecuteNonQuery();
                 // be_html
                 // cc
                 // bcc
@@ -192,12 +186,11 @@ namespace region_dictated_appropriations
 
         private void DataGrid_county_appropriations_DeleteCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
         {
-            MySqlCommand bc;
             string id_string;
             p.db.Open();
             id_string = k.Safe(e.Item.Cells[(int)(p.tcci_id)].Text, k.safe_hint_type.NUM);
             // Leaving the star out prevents inclusion of nulls in count
-            bc = new MySqlCommand("select count(master_id)" + " from emsof_request_detail" + " join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)" + " join county_dictated_appropriation" + " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)" + " where region_dictated_appropriation_id = " + id_string, p.db.connection);
+            using var bc = new MySqlCommand("select count(master_id)" + " from emsof_request_detail" + " join emsof_request_master on (emsof_request_master.id=emsof_request_detail.master_id)" + " join county_dictated_appropriation" + " on (county_dictated_appropriation.id=emsof_request_master.county_dictated_appropriation_id)" + " where region_dictated_appropriation_id = " + id_string, p.db.connection);
             if (bc.ExecuteScalar().ToString() != "0")
             {
                 p.db.Close();
@@ -213,7 +206,8 @@ namespace region_dictated_appropriations
             else
             {
                 // Nothing is linked to this appropriation, so go ahead and delete it.
-                new MySqlCommand(p.db_trail.Saved("delete from region_dictated_appropriation where id = " + id_string), p.db.connection).ExecuteNonQuery();
+                using var mysql_command = new MySqlCommand(p.db_trail.Saved("delete from region_dictated_appropriation where id = " + id_string), p.db.connection);
+                mysql_command.ExecuteNonQuery();
                 // Send a notification message.
                 // be_html
                 // cc
@@ -235,8 +229,8 @@ namespace region_dictated_appropriations
             if ((e.Item.ItemType == ListItemType.AlternatingItem) || (e.Item.ItemType == ListItemType.EditItem) || (e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.SelectedItem))
             {
                 // We are dealing with a data row, not a header or footer row.
-                p.num_appropriations = p.num_appropriations + 1;
-                p.sum_of_county_appropriations = p.sum_of_county_appropriations + decimal.Parse(DataBinder.Eval(e.Item.DataItem, "amount").ToString());
+                p.num_appropriations++;
+                p.sum_of_county_appropriations += decimal.Parse(DataBinder.Eval(e.Item.DataItem, "amount").ToString());
             }
         }
 
@@ -254,13 +248,14 @@ namespace region_dictated_appropriations
             cmdText = "select region_dictated_appropriation.id," + " password_reset_email_address," + " county_code," + " name," + " region_dictated_appropriation.amount" + " from region_dictated_appropriation" + " join county_code_name_map on (county_code_name_map.code=county_code)" + " join county_user on (county_user.id=county_code)" + " where state_dictated_appropriation_id = " + Session["state_dictated_appropriation_id"].ToString() + " order by " + p.county_appropriations_sort_order;
             if (p.be_sort_order_ascending)
             {
-                cmdText = cmdText + " asc";
+                cmdText += " asc";
             }
             else
             {
-                cmdText = cmdText + " desc";
+                cmdText += " desc";
             }
-            DataGrid_county_appropriations.DataSource = new MySqlCommand(cmdText, p.db.connection).ExecuteReader();
+            using var mysql_command = new MySqlCommand(cmdText, p.db.connection);
+            DataGrid_county_appropriations.DataSource = mysql_command.ExecuteReader();
             DataGrid_county_appropriations.DataBind();
             ((MySqlDataReader)(DataGrid_county_appropriations.DataSource)).Close();
             be_datagrid_empty = (p.num_appropriations == 0);
