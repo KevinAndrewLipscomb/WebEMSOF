@@ -33,6 +33,7 @@ namespace region_dictated_appropriations
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - region_dictated_appropriations";
             MySqlDataReader dr_appropriation_attribs;
             if (IsPostBack)
             {
@@ -69,7 +70,6 @@ namespace region_dictated_appropriations
                 p.tcci_amount = 4;
                 p.tcci_linkbutton_edit = 5;
                 p.tcci_linkbutton_delete = 6;
-                Title = ConfigurationManager.AppSettings["application_name"] + " - region_dictated_appropriations";
                 p.db.Open();
                 // Disable Table_appropriations for now.
                 Table_appropriations.Visible = false;

@@ -17,9 +17,9 @@ namespace Default
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - Default";
             if (!IsPostBack)
             {
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - Default";
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
                 if (Session["target_user_table"] == null)
                   {

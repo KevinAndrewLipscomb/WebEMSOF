@@ -38,6 +38,7 @@ namespace salogin
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - salogin";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -51,7 +52,6 @@ namespace salogin
             }
             else
             {
-                Title = ConfigurationManager.AppSettings["application_name"] + " - salogin";
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_regions = new TClass_biz_regions();
                 RequireConfirmation(Button_new_password,"Are you sure you want a new password?");

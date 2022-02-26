@@ -26,6 +26,7 @@ namespace county_overview
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_overview";
             MySqlDataReader dr;
             string county_user_email_address;
             if (IsPostBack)
@@ -41,7 +42,6 @@ namespace county_overview
             }
             else
             {
-                Title = ConfigurationManager.AppSettings["application_name"] + " - county_overview";
                 p.db = new TClass_db();
                 p.db.Open();
                 using var mysql_command = new MySqlCommand("SELECT be_stale_password, password_reset_email_address FROM county_user" + " where id = " + Session["county_user_id"].ToString(), p.db.connection);

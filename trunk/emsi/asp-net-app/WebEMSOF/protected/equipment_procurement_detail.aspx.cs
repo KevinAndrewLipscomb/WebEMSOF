@@ -33,10 +33,10 @@ namespace equipment_procurement_detail
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - equipment_procurement_detail";
             string cycle;
             if (!IsPostBack)
             {
-                Title = ConfigurationManager.AppSettings["application_name"] + " - equipment_procurement_detail";
                 cycle = Session["equipment_procurement_cycle"].ToString();
                 p.biz_equipment.BindListControl(cycle, DropDownList_equipment);
                 p.biz_fiscal_years.BindListControl(DropDownList_cycle);

@@ -38,6 +38,7 @@ namespace state_required_report
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_required_report";
             uint i;
             uint num_active_amendments;
             if (IsPostBack)
@@ -58,7 +59,6 @@ namespace state_required_report
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_required_report";
                 // Initialize implementation-wide vars.
                 p.amendment_num_string = "0";
                 p.be_replacement_rows_present = false;

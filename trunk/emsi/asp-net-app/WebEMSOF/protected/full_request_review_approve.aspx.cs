@@ -69,6 +69,7 @@ namespace full_request_review_approve
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - full_request_review_approve";
             bool be_beyond_invoice_collection;
             DateTime timestamp;
             if (IsPostBack)
@@ -89,7 +90,6 @@ namespace full_request_review_approve
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - full_request_review_approve";
                 // Initialize class private class members.
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_emsof_request_return_comments = new TClass_biz_emsof_request_return_comments();

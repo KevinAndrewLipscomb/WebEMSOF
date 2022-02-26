@@ -30,6 +30,7 @@ namespace request_overview
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - request_overview";
             MySqlDataReader dr;
             bool be_deadline_exempt;
             decimal county_dictated_appropriation_amount;
@@ -71,7 +72,6 @@ namespace request_overview
                 p.num_items = 0;
                 p.sum_of_emsof_antes = 0;
                 be_deadline_exempt = p.biz_emsof_requests.BeDeadlineExempt(Session["emsof_request_master_id"].ToString());
-                Title = ConfigurationManager.AppSettings["application_name"] + " - request_overview";
                 p.db.Open();
                 Label_master_status.Text = Session["emsof_request_master_status"].ToString();
                 // All further rendering is deadline-dependent.

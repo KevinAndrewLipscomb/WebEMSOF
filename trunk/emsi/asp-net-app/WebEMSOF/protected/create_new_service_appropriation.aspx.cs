@@ -38,6 +38,7 @@ namespace create_new_service_appropriation
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - create_new_service_appropriation";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -56,7 +57,6 @@ namespace create_new_service_appropriation
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = ConfigurationManager.AppSettings["application_name"] + " - create_new_service_appropriation";
                 // Initialize implementation-scoped variables.
                 p.amount = 0;
                 p.db = new TClass_db();

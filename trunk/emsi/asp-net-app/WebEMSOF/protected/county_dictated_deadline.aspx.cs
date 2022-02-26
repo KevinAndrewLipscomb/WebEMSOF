@@ -30,6 +30,7 @@ namespace county_dictated_deadline
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_dictated_deadline";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -48,7 +49,6 @@ namespace county_dictated_deadline
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_dictated_deadline";
                 p.biz_appropriations = new TClass_biz_appropriations();
                 p.biz_emsof_requests = new TClass_biz_emsof_requests();
                 p.db = new TClass_db();

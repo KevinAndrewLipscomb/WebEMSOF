@@ -23,9 +23,9 @@ namespace charter_kinds
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - charter_kinds";
             if (!IsPostBack)
             {
-                Title = ConfigurationManager.AppSettings["application_name"] + " - charter_kinds";
             }
         }
 

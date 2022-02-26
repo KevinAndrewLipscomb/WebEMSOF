@@ -28,6 +28,7 @@ namespace service_overview
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - service_overview";
             string biz_get_profile_status;
             string be_stale_password;
             // make_item_requests_deadline: system.datetime;
@@ -54,7 +55,6 @@ namespace service_overview
                     p.db.Close();
                     DropCrumbAndTransferTo("change_password.aspx");
                 }
-                Title = ConfigurationManager.AppSettings["application_name"] + " - service_overview";
                 // Initialize implementation-scoped vars.
                 p.biz_fiscal_years = new TClass_biz_fiscal_years();
                 p.biz_fy_calendar = new TClass_biz_fy_calendar();

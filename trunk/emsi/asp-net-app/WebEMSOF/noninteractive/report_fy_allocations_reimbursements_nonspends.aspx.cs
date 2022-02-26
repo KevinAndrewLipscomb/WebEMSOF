@@ -32,7 +32,7 @@ namespace report_fy_allocations_reimbursements_nonspends
         protected void Page_Load(object sender, System.EventArgs e)
         {
             string url;
-            Title = ConfigurationManager.AppSettings["application_name"] + " - report_fy_allocations_reimbursements_nonspends";
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - report_fy_allocations_reimbursements_nonspends";
             Label_application_name_1.Text = ConfigurationManager.AppSettings["application_name"];
             url = "http://" + ConfigurationManager.AppSettings["host_domain_name"] + "/" + ConfigurationManager.AppSettings["application_name"];
             HyperLink_web_site.Text = url;

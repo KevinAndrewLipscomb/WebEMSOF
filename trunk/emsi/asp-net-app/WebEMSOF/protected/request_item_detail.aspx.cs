@@ -37,6 +37,7 @@ namespace request_item_detail
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - request_item_detail";
             MySqlDataReader dr_factors;
             MySqlDataReader dr_services;
             MySqlDataReader dr_user_details;
@@ -63,7 +64,6 @@ namespace request_item_detail
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - request_item_detail";
                 biz_fiscal_years = new TClass_biz_fiscal_years();
                 p.attachment_key = k.EMPTY;
                 p.biz_equipment = new TClass_biz_equipment();

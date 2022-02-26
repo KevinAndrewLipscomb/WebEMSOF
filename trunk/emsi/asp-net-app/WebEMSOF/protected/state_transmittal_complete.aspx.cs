@@ -33,6 +33,7 @@ namespace state_transmittal_complete
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_transmittal_complete";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -51,7 +52,6 @@ namespace state_transmittal_complete
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - state_transmittal_complete";
                 Label_application_name.Text = ConfigurationManager.AppSettings["application_name"];
             }
         }

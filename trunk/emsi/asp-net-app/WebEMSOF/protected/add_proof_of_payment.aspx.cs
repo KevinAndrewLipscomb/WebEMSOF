@@ -39,6 +39,7 @@ namespace add_proof_of_payment
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - add_proof_of_payment";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -60,7 +61,6 @@ namespace add_proof_of_payment
                 }
                 else
                 {
-                    Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - add_proof_of_payment";
                     p.biz_emsof_requests = new TClass_biz_emsof_requests();
                     p.biz_payment_proof_methods = new TClass_biz_payment_proof_methods();
                     Label_service_name.Text = p.biz_emsof_requests.ServiceNameOf(Session["e_item"]);

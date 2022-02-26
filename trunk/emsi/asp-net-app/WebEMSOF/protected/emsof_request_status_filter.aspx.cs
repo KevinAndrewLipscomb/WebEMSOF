@@ -58,6 +58,7 @@ namespace emsof_request_status_filter
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - emsof_request_status_filter";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -76,7 +77,6 @@ namespace emsof_request_status_filter
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - emsof_request_status_filter";
                 Label_status.Text = Session["status_of_interest"].ToString();
                 LinkButton_retransmit_to_state.Visible = (((status_type)(Session["status_of_interest"])) == Class_biz_emsof_requests.status_type.NEEDS_PA_DOH_EMSO_APPROVAL);
                 Label_author_email_address.Text = p.user_email_address;
