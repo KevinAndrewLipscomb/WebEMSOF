@@ -25,6 +25,7 @@ namespace administer_service_email_address
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - administer_service_email_address";
             string email_address;
             if (IsPostBack)
             {
@@ -44,8 +45,6 @@ namespace administer_service_email_address
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = ConfigurationManager.AppSettings["application_name"] + " - administer_service_email_address";
-                //
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_services = new TClass_biz_services();
                 p.db_trail = new TClass_db_trail();

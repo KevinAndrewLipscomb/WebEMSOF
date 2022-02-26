@@ -42,6 +42,7 @@ namespace county_unrejection
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_unrejection";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -63,7 +64,6 @@ namespace county_unrejection
                 }
                 else
                 {
-                    Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_unrejection";
                     // Initialize implementation-wide vars.
                     p.be_sort_order_ascending = true;
                     p.biz_emsof_requests = new TClass_biz_emsof_requests();

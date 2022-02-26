@@ -79,6 +79,7 @@ namespace county_dictated_appropriations
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_dictated_appropriations";
             MySqlDataReader dr_appropriation_attribs;
             DateTime county_dictated_deadline;
             DateTime make_appropriations_deadline;
@@ -115,7 +116,6 @@ namespace county_dictated_appropriations
                   LinkButton_county_dictated_deadline.Enabled = false;
                   LinkButton_new_appropriation.Visible = false;
                   }
-                Title = ConfigurationManager.AppSettings["application_name"] + " - county_dictated_appropriations";
                 p.db.Open();
                 // Set parent appropriation labels.
                 using var mysql_command_1 = new MySqlCommand("select fiscal_year.designator,region_dictated_appropriation.amount,region_code_name_map.name " + "from region_dictated_appropriation " + "join state_dictated_appropriation on (state_dictated_appropriation.id=state_dictated_appropriation_id) " + "join fiscal_year on (fiscal_year.id = fiscal_year_id) " + "join region_code_name_map on (region_code_name_map.code = region_code) " + "where region_dictated_appropriation.id = '" + p.region_dictated_appropriation_id + "'", p.db.connection);

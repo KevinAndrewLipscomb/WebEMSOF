@@ -18,6 +18,7 @@ namespace new_password
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - new_password";
             TClass_biz_accounts biz_accounts;
             string email_address;
             string temporary_password;
@@ -28,7 +29,6 @@ namespace new_password
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = ConfigurationManager.AppSettings["application_name"] + " - new_password";
                 biz_accounts = new TClass_biz_accounts();
                 Label_user_name.Text = Session[Session["target_user_table"].ToString() + "_name"].ToString();
                 if (Session["target_user_table"].ToString() == "county")

@@ -26,6 +26,7 @@ namespace finalize
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - finalize";
             MySqlDataReader dr;
             TClass_biz_fiscal_years biz_fiscal_years;
             decimal grand_total_cost;
@@ -49,7 +50,6 @@ namespace finalize
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - finalize";
                 biz_fiscal_years = new TClass_biz_fiscal_years();
                 p.db = new TClass_db();
                 if ((decimal)(Session["unused_amount"]) >= 0)

@@ -18,6 +18,7 @@ namespace profile
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - profile";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -36,7 +37,6 @@ namespace profile
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = ConfigurationManager.AppSettings["application_name"] + " - profile";
             }
         }
 

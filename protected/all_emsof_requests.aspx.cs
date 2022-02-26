@@ -46,6 +46,7 @@ namespace all_emsof_requests
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - all_emsof_requests";
             if (IsPostBack)
             {
                 if ((Session[InstanceId() + ".p"] != null))
@@ -64,7 +65,6 @@ namespace all_emsof_requests
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - all_emsof_requests";
                 // Initialize private class instance vars.
                 p.biz_accounts = new TClass_biz_accounts();
                 p.biz_emsof_requests = new TClass_biz_emsof_requests();

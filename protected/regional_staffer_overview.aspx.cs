@@ -17,9 +17,9 @@ namespace regional_staffer_overview
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - regional_staffer_overview";
             if (!IsPostBack)
             {
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - regional_staffer_overview";
                 BeginBreadCrumbTrail();
                 if (new TClass_biz_accounts().BeStalePassword(user_kind:"regional_staffer",user_id:Session["regional_staffer_user_id"].ToString()))
                   {

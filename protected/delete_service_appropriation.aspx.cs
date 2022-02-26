@@ -23,6 +23,7 @@ namespace delete_service_appropriation
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - delete_service_appropriation";
             MySqlDataReader dr;
             string service_name;
             if (IsPostBack)
@@ -43,7 +44,6 @@ namespace delete_service_appropriation
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - delete_service_appropriation";
                 p.db = new TClass_db();
                 p.db_trail = new TClass_db_trail();
                 // Set Label_service_name_*.

@@ -31,9 +31,9 @@ namespace county_detail
 
     protected void Page_Load(object sender, System.EventArgs e)
       {
+      Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_detail";
       if (!IsPostBack)
         {
-        Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - county_detail";
         Literal_county_name.Text = p.biz_counties.NameOfSummary(Session["county_summary"]);
         TextBox_email_address.Text = p.biz_counties.EmailAddressOfSummary(Session["county_summary"]);
         p.biz_match_level.BindDirectToListControl(DropDownList_default_match_level,k.EMPTY,p.biz_counties.DefaultMatchLevelIdOfSummary(Session["county_summary"]));

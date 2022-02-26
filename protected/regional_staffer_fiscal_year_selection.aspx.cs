@@ -28,6 +28,7 @@ namespace regional_staffer_fiscal_year_selection
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - account_overview";
             MySqlDataReader dr;
             string regional_staffer_user_email_address;
             string max_fiscal_year_id_string;
@@ -49,7 +50,6 @@ namespace regional_staffer_fiscal_year_selection
                     Session.Clear();
                     Server.Transfer("~/login.aspx");
                 }
-                Title = ConfigurationManager.AppSettings["application_name"] + " - account_overview";
                 p.db = new TClass_db();
                 p.db.Open();
                 using var mysql_command_1 = new MySqlCommand("SELECT be_stale_password, password_reset_email_address FROM regional_staffer_user" + " where id = " + Session["regional_staffer_user_id"].ToString(), p.db.connection);

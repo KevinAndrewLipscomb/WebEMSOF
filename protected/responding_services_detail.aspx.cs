@@ -19,9 +19,9 @@ namespace responding_services_detail
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            Title = Server.HtmlEncode(ConfigurationManager.AppSettings["application_name"]) + " - responding_services_detail";
             if (!IsPostBack)
             {
-                Title = ConfigurationManager.AppSettings["application_name"] + " - responding_services_detail";
             }
         }
 
