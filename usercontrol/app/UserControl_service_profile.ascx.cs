@@ -1292,7 +1292,7 @@ namespace UserControl_service_profile
 
     protected void CustomValidator_short_name_ServerValidate(object source, ServerValidateEventArgs args)
       {
-      var designator_with_competing_short_name = p.biz_services.DesignatorCompetingShortName(k.Safe(TextBox_affiliate_num.Text,k.safe_hint_type.NUM),k.Safe(TextBox_short_name.Text,k.safe_hint_type.MAKE_MODEL));
+      var designator_with_competing_short_name = p.biz_services.DesignatorWithCompetingShortName(k.Safe(TextBox_affiliate_num.Text,k.safe_hint_type.NUM),k.Safe(TextBox_short_name.Text,k.safe_hint_type.MAKE_MODEL));
       CustomValidator_short_name.ErrorMessage += designator_with_competing_short_name;
       args.IsValid = (designator_with_competing_short_name.Length == 0);
       }
