@@ -170,7 +170,7 @@
                     <tr>
                       <td align="right"><font class="">Website address:</font></td>
                       <td>
-                                    <tt>http://</tt><asp:TextBox runat="server" columns="40" maxlength="127" id="TextBox_website_address" enabled="False"></asp:TextBox></td>
+                                    <tt>http[s]://</tt><asp:TextBox runat="server" columns="40" maxlength="127" id="TextBox_website_address" enabled="False"></asp:TextBox></td>
                       <td nowrap="nowrap">
                     <asp:RegularExpressionValidator id="RegularExpressionValidator_website_address" runat="server" errormessage="Under the Basic ID tab, please enter a valid Website address." font-bold="True" controltovalidate="TextBox_website_address" validationexpression="[0-9a-zA-Z\-_./]+">!ERR!</asp:RegularExpressionValidator>
                     <asp:CustomValidator id="CustomValidator_website_address" runat="server" errormessage="Under the Basic ID tab, please enter a valid Website address domain name." font-bold="True" controltovalidate="TextBox_website_address" onservervalidate="CustomValidator_website_address_ServerValidate">!ERR!</asp:CustomValidator></td>
