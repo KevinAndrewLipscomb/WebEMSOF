@@ -1,5 +1,5 @@
 @REM
-@REM $Id$
+@REM $Id: deploy.bat 3074 2010-02-23 15:56:34Z KevinAnLipscomb $
 @REM
 @rmdir ready-to-deploy /s /q
 @REM      sourcedir---------------------------------------------------destdir-----------------------------------------[files]---quals---------filter--------
