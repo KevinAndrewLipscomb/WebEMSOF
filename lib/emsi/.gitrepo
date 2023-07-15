@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/KevinAndrewLipscomb/emsilib.git
+	branch = master
+	commit = c4e5d785fcb3cc8a6c150961ae11349c3f206688
+	parent = 5582d76ac5c3377148b0e8c24c0ba2025aeabbe3
+	method = merge
+	cmdver = 0.4.6
