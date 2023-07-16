@@ -1,16 +1,9 @@
-using AjaxControlToolkit;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using UserControl_equipment_procurement_overview;
 using UserControl_serial_indicator_equipment_quantities;
+
 namespace UserControl_equipment_procurement_binder
 {
-    // ,UserControl3
+  // ,UserControl3
   public partial class TWebUserControl_equipment_procurement_binder: ki_web_ui.usercontrol_class
     {
 
@@ -124,7 +117,7 @@ namespace UserControl_equipment_procurement_binder
 
 namespace UserControl_equipment_procurement_binder.Units
 {
-    public class UserControl_equipment_procurement_binder
+  public class UserControl_equipment_procurement_binder
     {
         public const int TSSI_SNAPSHOT = 0;
         public const int TSSI_SERIAL = 1;

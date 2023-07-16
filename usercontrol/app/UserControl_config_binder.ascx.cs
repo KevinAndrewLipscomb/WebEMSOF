@@ -1,15 +1,8 @@
-using AjaxControlToolkit;
-using System;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using UserControl_charter_kind;
+
 namespace UserControl_config_binder
 {
-    public partial class TWebUserControl_config_binder: ki_web_ui.usercontrol_class
+  public partial class TWebUserControl_config_binder: ki_web_ui.usercontrol_class
     {
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
@@ -136,7 +129,7 @@ namespace UserControl_config_binder
 
 namespace UserControl_config_binder.Units
 {
-    public class UserControl_config_binder
+  public class UserControl_config_binder
     {
         // ,
         // ,UserControl_1

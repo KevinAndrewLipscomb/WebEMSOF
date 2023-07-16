@@ -1,18 +1,10 @@
-using AjaxControlToolkit;
-
-
-using System;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Collections;
-
 using UserControl_annual_cycle_setup;
 using UserControl_new_service;
+
 namespace UserControl_regional_staffer_new_binder
 {
-    public partial class TWebUserControl_regional_staffer_new_binder: ki_web_ui.usercontrol_class
+  public partial class TWebUserControl_regional_staffer_new_binder: ki_web_ui.usercontrol_class
     {
     private p_type p; // Private Parcel of Page-Pertinent Process-Persistent Parameters
 
@@ -132,7 +124,7 @@ namespace UserControl_regional_staffer_new_binder
 
 namespace UserControl_regional_staffer_new_binder.Units
 {
-    public class UserControl_regional_staffer_new_binder
+  public class UserControl_regional_staffer_new_binder
     {
         // ,
         // ,UserControl_2
