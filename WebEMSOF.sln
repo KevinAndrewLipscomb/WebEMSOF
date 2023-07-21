@@ -10,8 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEMSOF", "WebEMSOF.csproj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "emsi", "lib\emsi\emsi.csproj", "{C022DAD1-A109-4DC1-B770-9C4D70B6A39A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A20C347B-5154-47B9-A275-36157BF73352} = {A20C347B-5154-47B9-A275-36157BF73352}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ki", "lib\emsi\lib\ki\ki.csproj", "{A20C347B-5154-47B9-A275-36157BF73352}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ki", "lib\ki\ki.csproj", "{A20C347B-5154-47B9-A275-36157BF73352}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
