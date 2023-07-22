@@ -16,4 +16,5 @@ packages/
 unpublished.*
 /lib/emsi
 /lib/ki
+/usercontrol/ki/
 /Web.config
