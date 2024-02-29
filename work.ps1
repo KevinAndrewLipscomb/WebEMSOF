@@ -1,5 +1,5 @@
 Set-Location "C:\Inetpub\wwwroot\WebEMSOF"
-Start-Process -WindowStyle Maximized "C:\Inetpub\wwwroot\WebEMSOF"
+Start-Process -WindowStyle Maximized "."
 Start-Process -WindowStyle Maximized WebEMSOF.sln
 IF (Test-Path "C:\Program Files\MySQL\MySQL Workbench\MySQLWorkbench.exe")
   {
